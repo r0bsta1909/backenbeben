@@ -1,77 +1,69 @@
-BACKENBEBEN — WISSENSSICHERUNG / AKTUELLER ARBEITSSTAND
-08.10.2026
+BACKENBEBEN — WISSENSSICHERUNG / 08.10.2026
 
-ZIEL
-Browser-LAN-Spiel für private Erwachsenenrunde. Kopf/Schultern des Gegners,
-eigener Arm, Gesicht als Gesundheitsanzeige, Comicstil des ursprünglichen XIII.
-Leicht verständlich, mit erlernbarer Präzision. Kein reiner Geschwindigkeitstest.
+REPOSITORY UND AUFTRAG
+https://github.com/r0bsta1909/backenbeben — öffentlich, Konto r0bsta1909.
+Nutzer autorisiert Veröffentlichung und regelmäßige Pushes geprüfter Meilensteine.
+Release v0.2.0 bewahrt den früheren Stand. Keine fremden Referenzfotos, lokalen
+Runtimes, Konfigurationen, Zugangsdaten oder rohen Matchlogs veröffentlichen.
+Kein unbeaufsichtigter Dauer-Sync: Änderungen im Rahmen der Projektarbeit prüfen
+und gezielt committen/pushen. GitHub Actions prüft Regeln, Arm und Gewebe.
 
-NUTZERFEEDBACK / OBERSTE PRIORITÄT
-Prototyp 02 ist technisch spielbar, aber komplett unverständlich. Handausrichtung
-wirkt konfus, der Arm schwebt frei, Körper/Hand/Gesicht sind räumlich schlecht lesbar.
-Technische Testpässe sind KEINE Freigabe des Spielgefühls. Neue Referenzbilder und
-Asset-Gauntlet V3 wurden erstellt; der Nutzer hat jetzt die Umsetzung autorisiert.
-Erst aktuellen Stand auf öffentliches GitHub sichern, dann umsetzen, geprüfte
-Zwischenstände regelmäßig pushen. Repository: r0bsta1909/backenbeben.
+OBERSTE PRODUKTPRIORITÄT
+Nutzer empfand Prototyp 02 als komplett unverständlich: Hand schwebte, räumliche
+Orientierung fehlte. V3 soll durch Körperanschluss, Anatomie und sichtbare Handseite
+verständlich werden. Automatisierte Tests ersetzen diese menschliche Abnahme nicht.
+Stilziel: ursprüngliches XIII / europäischer Actioncomic; drei selbst erzeugte
+Referenztafeln samt Prompts unter docs/art-direction-v3/.
 
-AKTUELL IMPLEMENTIERT
-Godot Web Compatibility, eigener Python/aiohttp-Host, lokale Balancekonsole,
-LAN-IP-Ausgabe, Audio-Buffer-Fallback für unsicheres LAN-HTTP ohne AudioWorklet.
-Serverseitige Bewertung gesampelter 3D-Handregionen, eigene vereinfachte Fouls,
-Probeschwung, Brace, KO, Revanche, Emotes, Wiederverbindung für 30 Sekunden.
-NumPy-XPBD-Gewebegitter in ProcessPool-Workern, aufgezeichnete Treffersequenzen.
-Replay und Live-Präsentation teilen Daten; kein unabhängiger Solve pro Browser.
+AKTUELLER CODE
+V3 ist im Default-Webbuild integriert. Vollständige Figur, zwei Arme, Fingerknochen,
+Lid-/Mund-/Wangen-Shapes; Blender-Quelle assets-source/character-v3.blend.
+Regenerieren: scripts/create_character_v3.py mit lokalem Blender ausführen.
+Arm-Labor: game/asset_lab.tscn. Prüfclips: python server/arm.py.
+Host: server/host.py; Simulation: arm.py, contact_v3.py, tissue.py.
+Darstellung: character_view.gd, main.gd, toon.gdshader.
+Eingabe/Replay: combat.js; LAN-Audio/Verteidigung: browser_support.js.
 
-EINSTIEG INS REPO
-server/host.py: HTTP, WebSocket, Phasen, Sitzungen, Worker, Admin.
-server/contact.py: gesampelter Kontakt gegen Höhenfeld; ersetzt V1-Endpunktwertung.
-server/tissue.py: XPBD-Gewebe und Aufzeichnung. server/rules.py: Schaden/Balance.
-game/main.gd: Szene, Modelle, Spiegel, Verletzungen, Renderer-Brücke.
-game/combat.js: V2-Mauseingabe, Replay und Pose-Transport.
-game/browser_support.js: LAN-Audio und Verteidigungsanzeige.
-scripts/create_assets.py: bisherige prozedurale Blender-Modelle.
-docs/ASSET_GAUNTLET_V3.txt: der autorisierte neue Arbeitsplan.
+VERBINDLICHE ENTSCHEIDUNGEN
+Ein Körperrig für Ego, Gegner und Replay. Export in Metern, historische Arena
+skaliert einheitlich mit Faktor 4. Arm-Solver läuft ausschließlich autoritativ
+in Python; Godot stellt empfangene Gelenkpositionen dar. Keine zweite Treffer-
+entscheidung im Browser. Gelenkmotoren mit Trägheit, Dämpfung und Drehmomentgrenze.
+Mausziehen -> Schwungbogen/Höhe; Mausrad -> ein Handwinkel. Rechte Taste verteidigt.
+Kontakt gegen Dreiecksmesh inklusive Verletzungszustand; acht Handregion-Probes.
+Kontaktproxies und Gelenke sind ein vereinfachtes Spielmodell, keine vollständige
+Biomechanik. Details und Grenzen: docs/V3_IMPLEMENTATION.txt.
 
-ENTSCHEIDUNGEN UND GRENZEN
-Einheitlicher Stil und eine hochwertige Basisfigur zuerst. Keine weiteren Kugel-
-Konstruktionsmodelle als fertige Assets verkaufen. Neues vollständiges Torso-/Armrig,
-konstante Knochenlängen, sinnvolle Grenzen, sichtbare Unterarmdrehung. IK allein
-ist keine Physik; Motoren/Trägheit/Kollisionen gesondert prüfen.
-Altes Haut-Höhenfeld passt nicht als alleinige Kontaktwahrheit für gedrehte Köpfe.
-Keine medizinische Validierung. Verletzungen und Schwellung sind stilisiert.
-13 Unit-Tests bestanden. Zwei echte Browser auf demselben PC über LAN-HTTP geprüft,
-kein physischer Zweit-PC. Menschliche Verständlichkeit wurde vom Nutzer beanstandet.
-Historische V1-Browsertests verwenden ein veraltetes Eingabeprotokoll.
+PRÜFUNG / BEKANNTE GRENZEN
+22 Unit-Tests bestanden. Vollständiges LAN-Duell in zwei realen Browserkontexten
+besteht mit Brace, gleichem Replay, Audiofallback, Wiederverbindung, KO und Revanche.
+Finale Vordergrund-Messung mit sichtbarem Egoarm: 7,0–7,1 ms p95 bei 1080p.
+Details und frühere Messungen stehen unter docs/validation/. Keine menschliche Verständlichkeitsabnahme und kein
+physischer zweiter LAN-PC. Visuelle Fehler beim Ärmel-Skinning wurden entdeckt:
+verdeckte Haut unter dem undurchsichtigen Ärmel wird nicht mehr gerendert.
 
-REFERENZEN
-Drei neue PNGs unter docs/art-direction-v3/, dazu dokumentierte Prompts.
-XIII-Fremdbilder lagen nur lokal als Referenz vor und werden nicht mitverteilt.
-Bilder sind Gestaltungsvorschläge, keine metrisch validierten Anatomiepläne.
+NÄCHSTE SCHRITTE
+V3 nicht als Release veröffentlichen: Nutzer hat Verständlichkeit und Grafik abgelehnt.
+Danach menschlichen Test gemäß G7 durchführen: Palmenseite erkennen, Reichweite
+sehen, Winkelkorrektur verstehen. Feedback kann weitere Modell-/Rigarbeit auslösen.
+Niemals einen grünen Export als endgültige Grafik- oder Spielgefühlsfreigabe ausgeben.
 
-NÄCHSTER ARBEITSSCHRITT
-G0: einheitlicher Maßstab, Kamera, Körperblockout und vollständige Armkette.
-Dann G1/G2 Rig und Dynamik prüfen, erst anschließend Kopf/Hand final modellieren.
-Keine neue freie Winkelsteuerung blind auf schönere Assets übertragen.
+WEITERE DOKUMENTE
+ASSET_GAUNTLET_V3.txt: autorisierter Ablauf und Abnahmekriterien.
+KONZEPT.txt / PHYSIK_HAND_REPLAY_PLAN.txt: ursprüngliche Designentscheidungen.
+BACKLOG.txt: Turniere, Freilose, Turnier-UI, ElevenLabs, Crowd, absurde Werbung.
+Diese Themen bleiben zurückgestellt. TOOLCHAIN.txt: lokale Blender/Godot/MCP-Tools.
+SPIELEN.txt: Start und Bedienung. Alte V1-Browsertests sind historisch; V3-Netzwerktest
+prüft das aktuelle Protokoll einschließlich expliziter Ablehnung alter Clients.
 
-ZURÜCKGESTELLT
-Turniere ohne künstliche Teilnehmerobergrenze, Freilose, Turnier-UI, ElevenLabs-
-Kommentar/Sound/Crowd und absurde Werbeausstattung. Siehe BACKLOG.txt.
 
-GITHUB-WORKFLOW
-Öffentliches main mit geprüften Meilensteinen. Vor jedem Push Tests/visuelle Befunde
-und Grenzen in docs festhalten. Kleine zusammenhängende Commits, keine Force-Pushes.
-Ungeprüfte Zwischenarbeit lokal sichern und als solche kennzeichnen, nicht als
-fertiges Gate ausgeben. Dies gilt für die laufende Arbeit; kein unsichtbarer
-Dauer-Sync oder zeitgesteuerter Upload beliebiger neuer Dateien.
-Runtime-Builds als Release-Pakete, nicht als ständig wachsende WASM-Gitgeschichte.
-Vor Veröffentlichungen Dateiliste auf Secrets, lokale Identifikatoren und fremde
-Referenzmedien prüfen. Keine Zugangsdaten oder private Konfiguration committen.
-
-MEILENSTEIN V3-A / 08.10.2026
-Öffentliches Repository und Release v0.2.0 sind erstellt; GitHub CI grün.
-Neue editierbare Körper-/Arm-/Hand-/Gesichtsquelle: character-v3.blend.
-Generator: scripts/create_character_v3.py; Runtime-Ansicht: character_view.gd.
-Arm-Labor: game/asset_lab.tscn, aufgezeichnete acht Posen aus server/arm.py.
-17 Tests grün. Auswärts gerichteter Ellbogenpol korrigiert Pultkollision.
-Motor-/Längen-/FPS-Prüfungen grün; visuelle Gates und Matchintegration offen.
-Der aktuelle Default-Webbuild bleibt bis zur Integration Prototyp 02.
+NUTZERABNAHME 08.10.2026 — DURCHGEFALLEN
+"Weiterhin unverständlich". Neue Referenzen zeigen den seitlichen Kontakt.
+V3 trifft frontal; die Frontprojektion der Kollision ist dafür das falsche Modell.
+Grafik und Anatomie erreichen die verbindliche Comicreferenz nicht. G4/G5/G7 offen
+bzw. durchgefallen; technische Tests sind kein Gegenbeweis. Kein v0.3.0-Release.
+Nächster Gauntlet: seitliche Wangenkollision und vollständige Handbasis,
+körpergebundener seitlicher Schwung, danach Anatomie/Comiclook, TV-Bühne mit
+Referee/Auffängern und reproduzierbare KO-Zusammenbruchanimation.
+Der bisherige KO ist nur eine Entscheidung mit einfacher Figurenneigung.
+Turniere, ElevenLabs und Werbung bleiben zurückgestellt.

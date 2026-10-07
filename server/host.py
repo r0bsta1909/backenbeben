@@ -3,7 +3,18 @@ import argparse, asyncio, copy, json, math, secrets, socket, time, webbrowser, i
 from pathlib import Path
 from aiohttp import web, WSMsgType
 from rules import DEFAULTS, RANGES, apply_hit
-from contact import score_contact, bot_stroke
+from contact_v3 import score as v3_score, input_target, collision as arm_collision
+from arm import Arm, DT, lab_collision
+
+def bot_stroke():
+    return {'version':3,'points':[[.19+.34*i/60,.60,800*i/60,0,-10,0] for i in range(61)]}
+
+def skin_state(player):
+    return (min(1,player.get('zones',{}).get('L',0)/75),min(1,player.get('zones',{}).get('R',0)/75),max(0,min(1,(player.get('damage',0)-50)/40)))
+
+def score_contact(data,defender=None):
+    if data.get("version")!=3:raise ValueError("Veraltete Spielversion. Seite neu laden.")
+    return v3_score(dict(data,_skin_state=skin_state(defender or {})))
 from tissue import simulate
 from concurrent.futures import ProcessPoolExecutor
 ROOT = Path(__file__).resolve().parents[1]
@@ -108,9 +119,25 @@ async def command(c, d):
     me=next((i for i,p in enumerate(room['players']) if p['id']==c['id']),-1)
     if me<0: return
     now=time.monotonic()
+    if action=='pose':
+        if room['phase']!='aim' or room['turn']!=me:return
+        values=[d.get(k) for k in ['x','y','progress','tilt']]
+        if any(isinstance(v,bool) or not isinstance(v,(int,float)) or not math.isfinite(v) for v in values):raise ValueError('Ungültige Armhaltung.')
+        x,y,progress,tilt=values
+        if not(0<=x<=1 and 0<=y<=1 and 0<=progress<=1 and -45<=tilt<=45):raise ValueError('Armziel außerhalb der Grenzen.')
+        if c.get('arm_turn')!=room['turn_id'] or d.get('restart') is True:
+            c['arm']=Arm(input_target(x,y,0));c['arm_turn']=room['turn_id'];c['arm_time']=now-1/15
+        arm=c['arm'];steps=max(1,min(24,round((now-c['arm_time'])/DT)));c['arm_time']=now
+        for _ in range(steps):pose=arm.step(input_target(x,y,progress),arm_collision(tilt,skin_state(room["players"][1-me])))
+        for uid in room['members']:
+            other=CLIENTS.get(uid)
+            if other and not other['ws'].closed:
+                try:await other['ws'].send_json({'type':'arm_pose','attacker':me,'pose':pose,'tilt':tilt})
+                except ConnectionError:pass
+        return
     if action=='practice':
         if room['phase']!='aim' or room['turn']!=me or d.get('turn_id')!=room['turn_id']: raise ValueError('Du bist nicht am Zug.')
-        preview=score_contact(d)
+        preview=score_contact(d,room["players"][1-me])
         room['practice_done']=True;room['diagnosis']='Probe: '+preview['diagnosis']
         event(room,'practice',diagnosis=room['diagnosis']);await broadcast(room);return
     if action=='skip_replay' and room['phase']=='replay':
@@ -122,7 +149,7 @@ async def command(c, d):
         if room['phase']!='aim' or room['turn']!=me or d.get('turn_id')!=room['turn_id']:
             raise ValueError('Dieser Schlag ist nicht an der Reihe.')
         if not room.get('practice_done'):raise ValueError('Zuerst den Probeschwung auf EINS ausführen.')
-        scored=score_contact(d)
+        scored=score_contact(d,room["players"][1-me])
         room['solve']=asyncio.get_running_loop().run_in_executor(POOL,simulate,scored,False)
         room['pending']=scored; room['brace']=None; room['brace_result']=''; room['phase']='windup'; room['deadline']=now+WINDUP_SECONDS
         event(room,'windup',attacker=me); await broadcast(room)
@@ -216,7 +243,7 @@ async def tick(app):
         for r in list(ROOMS.values()):
             phase=r['phase']
             if phase=='aim' and r['players'][r['turn']]['bot'] and r['deadline']-now < r['settings']['turn_seconds']-2.0:
-                r['pending']=score_contact(bot_stroke());r['solve']=asyncio.get_running_loop().run_in_executor(POOL,simulate,r['pending'],False)
+                r['pending']=score_contact(bot_stroke(),r['players'][1-r['turn']]);r['solve']=asyncio.get_running_loop().run_in_executor(POOL,simulate,r['pending'],False)
                 r['phase']='windup';r['deadline']=now+WINDUP_SECONDS;r['brace']=None;r['brace_result']='';event(r,'windup',attacker=r['turn']);await broadcast(r)
             elif phase in ('windup','resolving') and now>=r['deadline']:
                 if not r['solve'].done():
@@ -246,7 +273,7 @@ async def tick(app):
                 event(r,'hit',target=target,damage=damage,quality=r['pending']['quality'],braced=braced,
                       side=r['pending']['side'],ko=ko,foul=r['pending'].get('foul',False),diagnosis=r['diagnosis'],replay_id=rid)
                 record(dict(kind='hit',room=r['id'],match=r['match_id'],turn=r['turn_id'],revision=r['revision'],
-                            attacker=r['turn'],scored={k:v for k,v in r['pending'].items() if k!='path'},damage=damage,braced=braced,solve_ms=clip['solve_ms']))
+                            attacker=r['turn'],scored={k:v for k,v in r['pending'].items() if k not in ('path','arm_path')},damage=damage,braced=braced,solve_ms=clip['solve_ms']))
                 r['phase']='impact';r['deadline']=now+clip['duration']
                 await broadcast(r)
             elif phase=='impact' and now>=r['deadline']:
@@ -268,7 +295,7 @@ async def tick(app):
                     event(r,'turn')
                 await broadcast(r)
             elif phase=='aim' and now>=r['deadline']:
-                r['pending']=score_contact({'points':[[.05,.8,0,0,0,.24],[.1,.8,300,0,0,.24]]});r['solve']=asyncio.get_running_loop().run_in_executor(POOL,simulate,r['pending'],False);r['phase']='windup';r['deadline']=now;r['brace']=None
+                r['pending']=score_contact({'version':3,'points':[[.05,.98,0,0,0,0],[.1,.98,300,0,0,0]]});r['solve']=asyncio.get_running_loop().run_in_executor(POOL,simulate,r['pending'],False);r['phase']='windup';r['deadline']=now;r['brace']=None
             elif now-last>.2: await broadcast(r)
         if now-last>.2:last=now
 

@@ -1,0 +1,8 @@
+{
+  "practice_required": true,
+  "duplicate_rejected": true,
+  "foul_disqualification": true,
+  "rematch_clears_fouls": true,
+  "out_of_range_rejected": true,
+  "legacy_scoring_rejected": true
+}

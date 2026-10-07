@@ -1,0 +1,82 @@
+{
+  "errors": [],
+  "hits": [
+    {
+      "kind": "hit",
+      "target": 1,
+      "damage": 17.52,
+      "quality": 0.599,
+      "braced": true,
+      "side": "R",
+      "ko": false,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen."
+    },
+    {
+      "kind": "hit",
+      "target": 0,
+      "damage": 27.3,
+      "quality": 0.6066,
+      "braced": false,
+      "side": "R",
+      "ko": false,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen."
+    },
+    {
+      "kind": "hit",
+      "target": 1,
+      "damage": 10.44,
+      "quality": 0.2319,
+      "braced": false,
+      "side": "R",
+      "ko": false,
+      "foul": false,
+      "diagnosis": "Gestreift. Handfl\u00e4che flacher zur Wange stellen."
+    },
+    {
+      "kind": "hit",
+      "target": 0,
+      "damage": 27.22,
+      "quality": 0.6048,
+      "braced": false,
+      "side": "R",
+      "ko": true,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen."
+    }
+  ],
+  "single_tilt_control": true,
+  "recorded_arm_frames": 329,
+  "clip_hash": "528926b482f5970d995e827d54de3ebe52943b31125c22459a42e06376256cf1",
+  "replay": {
+    "frameCount": 337,
+    "peak": 0.02,
+    "time": 0.49998,
+    "frame": 59,
+    "deformation": 0.01995199999999997
+  },
+  "replay_frame_ms_p95": 27.799999999999272,
+  "viewport": [
+    1920,
+    1080
+  ],
+  "resume": true,
+  "winner": 1,
+  "audio": {
+    "mode": "buffer-fallback",
+    "played": 6,
+    "unlocked": true
+  },
+  "rematch": true,
+  "leave": true,
+  "stats": {
+    "dragging": false,
+    "fps": 80,
+    "muted": false,
+    "physics_active": false,
+    "physics_time": -1,
+    "samples": 0
+  },
+  "performance_note": "Earlier integration-run timing, superseded by v3-performance.json after culling and cache corrections."
+}

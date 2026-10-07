@@ -14,7 +14,8 @@ def cross(a,b):return [a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[
 def volume(a,b,c,d):return dot(sub(b,a),cross(sub(c,a),sub(d,a)))/6
 
 class Tissue:
-    def __init__(self):
+    def __init__(self,surface_fn=surface):
+        surface=surface_fn
         self.rest=[[X0+x*DX,Y0+y*DY,surface(X0+x*DX,Y0+y*DY)-layer*.095] for layer in range(2) for y in range(NY) for x in range(NX)]
         self.p=[v[:] for v in self.rest];self.v=[[0.,0.,0.] for _ in self.p]
         self.w=[0. if i>=NX*NY or i%NX in (0,NX-1) or i//NX in (0,NY-1) else 1. for i in range(len(self.p))]
@@ -65,7 +66,12 @@ class Tissue:
         self.v=(p-old)/dt
 
 def simulate(scored,braced=False):
-    start=time.perf_counter();tissue=Tissue();tissue.prepare();frames=[];dt=1/240
+    start=time.perf_counter()
+    if scored.get('version')==3:
+        from contact_v3 import surface as mesh_surface
+        tissue=Tissue(lambda x,y:mesh_surface(x,y,skin_state=tuple(scored.get("skin_state",(0,0,0)))) or .02)
+    else:tissue=Tissue()
+    tissue.prepare();frames=[];dt=1/240
     strength=(.35+.65*scored.get('normal_speed',0)) if scored.get('contact_class')!='miss' else 0.
     # A glancing or fingertip contact couples less of the driven hand impulse.
     if scored.get('contact_class')=='tips':strength*=.35
@@ -87,5 +93,5 @@ def simulate(scored,braced=False):
             frames.append([round(head,5),round(jaw,5),*offsets])
     return dict(fps=120,duration=2.8,contact=.5,nx=NX,ny=NY,scale=.0001,
                 frames=frames,peak=round(peak,5),solve_ms=round((time.perf_counter()-start)*1000,1),
-                footprint=scored.get('footprint',[]),path=scored.get('path',[]),
+                version=scored.get('version',2),arm_path=scored.get('arm_path',[]),footprint=scored.get('footprint',[]),path=scored.get('path',[]),
                 contact_time=scored.get('contact_time',0),position=centre,diagnosis=scored.get('diagnosis',''))

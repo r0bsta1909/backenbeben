@@ -6,13 +6,19 @@ Der Look orientiert sich an kantiger Comicgrafik und dem ursprünglichen XIII.
 
 ## Aktueller Stand
 
-Prototyp 02 funktioniert technisch: Training, LAN-Duell, Handkontakt, Gewebeverformung,
-Replay, diegetische Verletzungen, Emotes und lokales Balancing. **Das Spielgefühl und
-die räumliche Verständlichkeit sind noch nicht zufriedenstellend.** Der nächste Schritt
-ist eine neue Figur mit körpergebundenem Arm gemäß dem [Asset-Gauntlet V3](docs/ASSET_GAUNTLET_V3.txt).
-Die Konzeptbilder zeigen das Ziel, nicht den bereits erreichten Spielzustand.
+Prototyp 03 integriert eine neue vollständige 3D-Figur und einen körpergebundenen,
+serverseitig angetriebenen Arm. Mausziehen bewegt einen erreichbaren Schwungbogen;
+das Mausrad kippt die Handfläche. Meshkontakt, Gesichtsverformung und Replay teilen
+aufgezeichnete Zustände. Training, LAN-Duell, Anspannen, Emotes und Balancing bleiben erhalten.
 
-![Zielbild für die neue Egoansicht](docs/art-direction-v3/03-first-person.png)
+**V3 ist im Nutzertest durchgefallen: Handkontakt zu frontal, Steuerung unverständlich, Grafik weit vom Stilziel entfernt. Dieser Stand ist ein verworfener Zwischenstand, kein fertiges Release. Die Überarbeitung läuft.**
+Der frühere Prototyp 02 bleibt als Release v0.2.0 erhalten. Der
+[Asset-Gauntlet V3](docs/ASSET_GAUNTLET_V3.txt) und der
+[Implementierungsstand mit Grenzen](docs/V3_IMPLEMENTATION.txt) unterscheiden technische
+Tests von Spielgefühlsfreigabe. Die [Konzeptbilder](docs/art-direction-v3/03-first-person.png)
+zeigen weiterhin das gestalterische Ziel.
+
+![Tatsächliches V3-Replay im Browser](docs/validation/v3-contact-replay.png)
 
 ## Spielen unter Windows
 
@@ -36,9 +42,11 @@ Netzwerk freigeben; `ALLOW_LAN.bat` richtet eine begrenzte Regel für Port 8765 
 - Python 3.12; Abhängigkeiten in `server/requirements.txt` und `tests/requirements.txt`.
 - Lokale Portable-Tools sind absichtlich nicht in Git. Verzeichnislayout: [Toolchain](docs/TOOLCHAIN.txt).
 - `BUILD_GAME.bat` exportiert `game/` nach `build/web/`.
-- `scripts/create_assets.py` reproduziert den Prototyp-02-Assetstand.
+- `scripts/create_character_v3.py` erzeugt die neue editierbare Blender-Figur und GLB.
+- `python server/arm.py` erzeugt acht Prüfclips; `game/asset_lab.tscn` zeigt sie.
+- `scripts/create_assets.py` erhält den historischen Prototyp-02-Assetstand.
 - `python -m unittest discover -s tests -p "test_*.py"` prüft Regeln und Physik.
-- Aktuelle Integrationstests: `tests/v2_browser_gauntlet.py` und `tests/v2_network_gauntlet.py`
+- Aktuelle Integrationstests: `tests/v3_browser_gauntlet.py` und `tests/v3_network_gauntlet.py`
   gegen einen separaten Host auf Port 8877. Playwright und Chrome werden dafür benötigt.
 
 ## Wissenssicherung

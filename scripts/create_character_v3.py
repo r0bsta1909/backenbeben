@@ -3,7 +3,7 @@
 Authoring helpers use Godot coordinates (X right, Y up, Z face forward), then
 convert once to Blender. Sources, rig, morphs and collision landmarks ship together.
 """
-import bpy, math, json
+import bpy, bmesh, math, json
 from pathlib import Path
 from mathutils import Vector
 
@@ -123,13 +123,13 @@ head_parts=[face]
 for s,suffix in [(-1,'L'),(1,'R')]:
     head_parts.append(ell('Ear'+suffix,(s*.110,.069,-.002),(.018,.038,.020),skin))
     head_parts.append(curve('EarFold'+suffix,[(s*.116,.092,.014),(s*.124,.083,.017),(s*.122,.055,.017),(s*.112,.047,.012)],.0028,seam))
-    ev=[(s*.045,.104,.073)];ef=[]
+    ev=[(s*.045,.104,.076)];ef=[]
     for i in range(64):
         a=math.tau*i/64;dx=.019*math.cos(a);dy=.0075*math.sin(a)
         ev.append((s*.045+dx,.104+dy,.05+math.sqrt(max(.00002,.023**2-dx*dx-dy*dy))))
     for i in range(64):ef.append((0,1+i,1+(i+1)%64))
     eye=mesh('Eye'+suffix,ev,ef,white)
-    head_parts.extend([eye,ell('Iris'+suffix,(s*.045,.104,.071),(.0065,.0065,.001),iris),ell('Pupil'+suffix,(s*.045,.104,.073),(.003,.004,.001),ink)])
+    head_parts.extend([eye,ell('Iris'+suffix,(s*.045,.104,.074),(.0065,.0065,.001),iris),ell('Pupil'+suffix,(s*.045,.104,.076),(.003,.004,.001),ink)])
     # Quad annulus ties the visible slit to the socket; upper and lower lid shapes
     # close over the eyeball without scaling the eyeball itself.
     lv=[];lf=[];M=64
@@ -171,8 +171,8 @@ head_parts.append(mesh('HairCap',hv,hf,hair))
 
 body=loft('Shirt',[((0,-.60,-.014),.175,.096),((0,-.51,-.012),.188,.106),((0,-.36,0),.22,.120),((0,-.23,0),.245,.124),((0,-.17,0),.24,.103),((0,-.125,0),.145,.070),((0,-.105,0),.054,.048)],shirt,64)
 neck=loft('Neck',[((0,-.18,0),.070,.060),((0,-.12,0),.057,.05),((0,-.06,-.008),.049,.043)],skin)
-curve('Collar',[(-.070,-.12,.048),(-.045,-.148,.077),(0,-.161,.086),(.045,-.148,.077),(.070,-.12,.048)],.006,ink)
-curve('CollarTrim',[(-.065,-.13,.052),(-.039,-.151,.078),(0,-.165,.086),(.039,-.151,.078),(.065,-.13,.052)],.0017,trim)
+curve('Collar',[(-.085,-.136,.074),(-.060,-.175,.107),(0,-.195,.124),(.060,-.175,.107),(.085,-.136,.074)],.006,ink)
+curve('CollarTrim',[(-.084,-.144,.080),(-.059,-.182,.112),(0,-.203,.126),(.059,-.182,.112),(.084,-.144,.080)],.0017,trim)
 
 # Rest skeleton, including clavicle, upper arm, two forearm twist sections and
 # fully articulated digits. Constant-length bones are exported into GLB.
@@ -212,10 +212,15 @@ for sign,side in [(-1,'R'),(1,'L')]:
     bpy.ops.object.select_all(action='DESELECT')
     for o in parts:o.select_set(True)
     bpy.context.view_layer.objects.active=arm;bpy.ops.object.join()
-    rem=arm.modifiers.new('Weld finger webs and thenar','REMESH');rem.mode='VOXEL';rem.voxel_size=.0024;rem.use_smooth_shade=True
+    rem=arm.modifiers.new('Weld finger webs and thenar','REMESH');rem.mode='VOXEL';rem.voxel_size=.0018;rem.use_smooth_shade=True
     bpy.ops.object.modifier_apply(modifier=rem.name)
     sm=arm.modifiers.new('Relax joint transitions','SMOOTH');sm.factor=.45;sm.iterations=3;bpy.ops.object.modifier_apply(modifier=sm.name)
-    dec=arm.modifiers.new('Web silhouette budget','DECIMATE');dec.ratio=.42;bpy.ops.object.modifier_apply(modifier=dec.name)
+    dec=arm.modifiers.new('Web silhouette budget','DECIMATE');dec.ratio=.13;bpy.ops.object.modifier_apply(modifier=dec.name)
+    # Skin beneath the opaque sleeve is not rendered. This prevents differently
+    # blended cloth/skin layers from fighting during shoulder rotation.
+    bm=bmesh.new();bm.from_mesh(arm.data);upper=(el-sh).normalized()
+    hidden=[f for f in bm.faces if all((G(v.co)-sh).dot(upper)<.101 for v in f.verts)]
+    bmesh.ops.delete(bm,geom=hidden,context='FACES');bm.to_mesh(arm.data);bm.free()
     arm_objects[arm.name]=(arm,None)
     sleeve=loft('Sleeve.'+side,[(sh+direction*.010,.065,.060),(sh+direction*.070,.073,.063),(sh+direction*.115,.064,.056)],shirt)
     arm_objects[sleeve.name]=(sleeve,'upper_arm.'+side)
@@ -226,7 +231,7 @@ for sign,side in [(-1,'R'),(1,'L')]:
     landmarks[side]={'shoulder':list(sh),'elbow':list(el),'wrist':list(wr),'palm_center':list(palm),'palm_normal':[0,0,1],'finger_direction':list(direction),'upper_length':(el-sh).length,'forearm_length':(wr-el).length,'palm_offset':.054}
 
 # Weld shirt and sleeves before rig binding: no exposed shoulder caps or seams.
-shoulder_caps=[ell('ShoulderCloth'+side,tuple(bones['upper_arm.'+side][0]),(.077,.066,.068),shirt) for side in ['R','L']]
+shoulder_caps=[ell('ShoulderCloth'+side,tuple(bones['upper_arm.'+side][0]),(.070,.045,.070),shirt) for side in ['R','L']]
 cloth=[body]+shoulder_caps+[o for o in bpy.context.scene.objects if o.name.startswith('Sleeve.')]
 bpy.ops.object.select_all(action='DESELECT')
 for o in cloth:o.select_set(True)
@@ -234,7 +239,7 @@ bpy.context.view_layer.objects.active=body;bpy.ops.object.join()
 rem=body.modifiers.new('Continuous shirt and sleeve seams','REMESH');rem.mode='VOXEL';rem.voxel_size=.0035;rem.use_smooth_shade=True
 bpy.ops.object.modifier_apply(modifier=rem.name)
 sm=body.modifiers.new('Tailored shoulder transition','SMOOTH');sm.factor=.6;sm.iterations=5;bpy.ops.object.modifier_apply(modifier=sm.name)
-dec=body.modifiers.new('Cloth budget','DECIMATE');dec.ratio=.3;bpy.ops.object.modifier_apply(modifier=dec.name)
+dec=body.modifiers.new('Cloth budget','DECIMATE');dec.ratio=.055;bpy.ops.object.modifier_apply(modifier=dec.name)
 
 bpy.ops.object.select_all(action='DESELECT');bpy.ops.object.armature_add()
 rig=bpy.context.object;rig.name='CharacterRig';bpy.ops.object.mode_set(mode='EDIT');rig.data.edit_bones.remove(rig.data.edit_bones[0])
@@ -257,9 +262,12 @@ for obj in [o for o in bpy.context.scene.objects if o.type=='MESH']:
     if candidates:
         groups={name:obj.vertex_groups.new(name=name) for name in candidates}
         for v in obj.data.vertices:
-            p=G(v.co);rank=sorted((distance(p,Vector(bones[k][0]),Vector(bones[k][1])),k) for k in candidates)
+            p=G(v.co)
+            if obj==body and (p.y<-.29 or abs(p.x)<.15):
+                groups['chest'].add([v.index],1,'REPLACE');continue
+            rank=sorted((distance(p,Vector(bones[k][0]),Vector(bones[k][1])),k) for k in candidates)
             # Smooth joints but no bleeding from neighbouring fingers.
-            chosen=rank[:2] if obj==body or rank[0][1].startswith(('upper','forearm')) else rank[:1]
+            chosen=rank[:2] if obj==body or rank[0][1].startswith(('upper','forearm','hand')) else rank[:1]
             weights=[1/(d+.008)**4 for d,k in chosen];total=sum(weights)
             for (d,k),w in zip(chosen,weights):groups[k].add([v.index],w/total,'REPLACE')
     else:
@@ -276,7 +284,7 @@ for obj in [o for o in bpy.context.scene.objects if o.type=='MESH']:
             p=G(obj.data.vertices[obj.data.loops[li].vertex_index].co);obj.data.uv_layers.active.data[li].uv=(p.x+.5,p.y+.8)
     bpy.ops.object.mode_set(mode='EDIT');bpy.ops.mesh.select_all(action='SELECT');bpy.ops.mesh.normals_make_consistent(inside=False);bpy.ops.object.mode_set(mode='OBJECT')
 
-meta={'version':3,'units':'metres','axes':'Godot: +X right, +Y up, +Z face forward; Blender: X, -Z, Y','render_scale_legacy':4,'torso_anchor':[0,-.36,0],'camera_anchor':[0,.115,.78],'arms':landmarks,'bones':{k:{'head':list(a),'tail':list(b),'parent':p} for k,(a,b,p) in bones.items()},'cheek_surface':[-.065,.04,.078],'contact_regions':[['heel',0,-.039],['palm',-.018,-.012],['palm',.018,-.012],['palm',0,.013],['finger',-.015,.053],['finger',.015,.053],['tip',-.015,.104],['tip',.015,.097]]}
+meta={'version':3,'units':'metres','axes':'Godot: +X right, +Y up, +Z face forward; Blender: X, -Z, Y','render_scale_legacy':4,'torso_anchor':[0,-.36,0],'camera_anchor':[0,.115,.78],'arms':landmarks,'bones':{k:{'head':list(a),'tail':list(b),'parent':p} for k,(a,b,p) in bones.items()},'cheek_surface':[-.065,.04,.078],'contact_regions':[['heel',0,-.039],['palm',-.018,-.012],['palm',.018,-.012],['palm',0,.013],['finger',-.015,.083],['finger',.015,.080],['tip',-.015,.136],['tip',.015,.125]]}
 (OUT/'character_v3.json').write_text(json.dumps(meta,indent=2),encoding='utf-8')
 bpy.ops.object.select_all(action='DESELECT')
 for o in bpy.context.scene.objects:

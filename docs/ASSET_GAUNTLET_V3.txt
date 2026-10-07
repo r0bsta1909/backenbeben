@@ -1,6 +1,7 @@
 BACKENBEBEN — ASSETS FÜR RÄUMLICH VERSTÄNDLICHES SPIELGEFÜHL
 08.10.2026 / Plan auf Grundlage des Nutzerfeedbacks zu Prototyp 02
-Status: Referenzbilder erzeugt und gesichtet, Umsetzung dieses Plans noch offen.
+Status: V3 technisch implementiert und geprüft. Menschliche Abnahme offen.
+Aktueller Nachweis und Vereinfachungen: docs/V3_IMPLEMENTATION.txt.
 
 LEITENTSCHEIDUNG
 Zuerst einen überzeugenden Körper mit angebundenem Arm und lesbarer Hand bauen.
@@ -222,3 +223,15 @@ Fertige Lieferungen: Blender-Quellen, GLBs, Materialien, Rig-/Kollisionsmetadate
 Prüfanimationen, Godot-Testszene, Webbuild, Messprotokoll und dokumentierte Grenzen.
 Technischen Stand und menschliche Spielgefühlsfreigabe separat kennzeichnen.
 Turniere, ElevenLabs und Werbeausstattung bleiben im bestehenden Backlog.
+
+
+NUTZERABNAHME 08.10.2026 — DURCHGEFALLEN
+"Weiterhin unverständlich". Neue Referenzen zeigen den seitlichen Kontakt.
+V3 trifft frontal; die Frontprojektion der Kollision ist dafür das falsche Modell.
+Grafik und Anatomie erreichen die verbindliche Comicreferenz nicht. G4/G5/G7 offen
+bzw. durchgefallen; technische Tests sind kein Gegenbeweis. Kein v0.3.0-Release.
+Nächster Gauntlet: seitliche Wangenkollision und vollständige Handbasis,
+körpergebundener seitlicher Schwung, danach Anatomie/Comiclook, TV-Bühne mit
+Referee/Auffängern und reproduzierbare KO-Zusammenbruchanimation.
+Der bisherige KO ist nur eine Entscheidung mit einfacher Figurenneigung.
+Turniere, ElevenLabs und Werbung bleiben zurückgestellt.

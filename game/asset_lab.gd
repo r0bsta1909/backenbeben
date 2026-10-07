@@ -7,6 +7,7 @@ var elapsed := 0.0
 var case_name := "contact"
 var view_name := "ego"
 var label: Label
+var batch_index := 0
 
 func _ready() -> void:
 	clips=JSON.parse_string(FileAccess.get_file_as_string("res://assets/arm_lab_clips.json"))
@@ -37,4 +38,7 @@ func _process(delta: float) -> void:
 	if elapsed>2 and OS.get_cmdline_user_args().has("capture"):
 		await RenderingServer.frame_post_draw
 		get_viewport().get_texture().get_image().save_png("res://../logs/lab-"+case_name+"-"+view_name+".png")
-		get_tree().quit()
+		if OS.get_cmdline_user_args().has("batch") and batch_index<clips.cases.size()-1:
+			batch_index+=1;case_name=clips.cases.keys()[batch_index];elapsed=0
+			label.text="ARM LAB / "+case_name+" / "+view_name
+		else:get_tree().quit()

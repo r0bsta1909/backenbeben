@@ -4,12 +4,21 @@ var model: Node3D
 var skeleton: Skeleton3D
 var metadata: Dictionary
 var unit_scale := 1.0
+var has_pose := false
+var last_elbow := Vector3.INF
+var last_wrist := Vector3.INF
+var last_tilt := Vector2.INF
+var is_first_person := false
 
 func _ready() -> void:
 	metadata = JSON.parse_string(FileAccess.get_file_as_string("res://assets/character_v3.json"))
 	model = load("res://assets/character_v3.glb").instantiate()
 	add_child(model)
 	skeleton = model.find_children("*", "Skeleton3D", true, false)[0]
+	# Compatibility uses the imported rest AABB for skinned meshes. The own arm
+	# starts outside the camera but can reach into it; include the whole rig reach.
+	for part in model.find_children("*","MeshInstance3D",true,false):
+		part.extra_cull_margin=.8
 
 func orient_bone(bone_name: String, start: Vector3, finish: Vector3, twist := 0.0) -> void:
 	var index := skeleton.find_bone(bone_name)
@@ -25,11 +34,18 @@ func orient_bone(bone_name: String, start: Vector3, finish: Vector3, twist := 0.
 func vector(a: Array) -> Vector3:
 	return Vector3(float(a[0]),float(a[1]),float(a[2]))
 
+func reset_pose() -> void:
+	if has_pose and is_instance_valid(skeleton):
+		skeleton.clear_bones_global_pose_override()
+		has_pose=false
+
 func apply_arm(pose: Dictionary, yaw := 0.0, pitch := 0.0, side := "R") -> void:
 	if not is_instance_valid(skeleton) or not pose.has("wrist"):return
 	var shoulder := to_local(vector(pose.shoulder)*unit_scale)
 	var elbow := to_local(vector(pose.elbow)*unit_scale)
 	var wrist := to_local(vector(pose.wrist)*unit_scale)
+	if has_pose and elbow.distance_squared_to(last_elbow)<0.000000000001 and wrist.distance_squared_to(last_wrist)<0.000000000001 and last_tilt==Vector2(yaw,pitch):return
+	has_pose=true;last_elbow=elbow;last_wrist=wrist;last_tilt=Vector2(yaw,pitch)
 	orient_bone("upper_arm."+side,shoulder,elbow)
 	orient_bone("forearm."+side,elbow,elbow.lerp(wrist,.5),deg_to_rad(yaw)*.45)
 	orient_bone("forearm_twist."+side,elbow.lerp(wrist,.5),wrist,deg_to_rad(yaw)*.85)
@@ -37,6 +53,8 @@ func apply_arm(pose: Dictionary, yaw := 0.0, pitch := 0.0, side := "R") -> void:
 	orient_bone("hand."+side,wrist,wrist+fingers*.1,deg_to_rad(yaw))
 
 func first_person(enabled: bool) -> void:
+	if enabled==is_first_person:return
+	is_first_person=enabled
 	for node in model.find_children("*","MeshInstance3D",true,false):
 		var n := str(node.name)
 		if n in ["Face","Neck","HairCap","MouthLine","MouthInterior","Teeth"] or n.begins_with("Eye") or n.begins_with("Iris") or n.begins_with("Pupil") or n.begins_with("Ear") or n.begins_with("Lids") or n.begins_with("Brow") or n.begins_with("Nostril"):

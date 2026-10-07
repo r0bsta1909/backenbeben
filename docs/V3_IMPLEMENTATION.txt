@@ -1,0 +1,90 @@
+BACKENBEBEN — V3 IMPLEMENTIERUNG / 08.10.2026
+
+ARCHITEKTUR
+Ein Blender-Charakter besitzt Brustkorb, Schlüsselbeine, Oberarme, Ellbogen,
+zweigeteilte Unterarme, Handgelenke und Fingerknochen. CharacterView stellt dieses
+Rig als Gegner, eigenen Körper und im Replay dar. Die Egoansicht blendet den
+eigenen Kopf aus; der Arm wird weder abgeschnitten noch separat vergrößert.
+
+Blender-Quellen und Metadaten verwenden Meter. Die bestehende Arena verwendet
+historische Darstellungseinheiten: 4 Einheiten entsprechen einem Meter.
+CharacterView übernimmt genau diese einheitliche Skalierung. Der Host-Arm rechnet
+in Metern, Kontakt/Gewebegitter in Darstellungseinheiten. Umrechnung nur an den
+Schnittstellen; Kopf und Hand erhalten keinen voneinander abweichenden Maßstab.
+
+server/arm.py enthält den einzigen autoritativen Arm-Solver. IK liefert Zielwinkel,
+drei gedämpfte Gelenkmotoren integrieren mit 240 Hz, Trägheit, Drehmoment- und
+Geschwindigkeitsgrenzen. Ein fester äußerer Ellbogenpol verhindert den Wechsel
+der Beugeebene. Kollision begrenzt die Gelenkbewegung durch Rücksuche und baut
+einwärts gerichtete Geschwindigkeit ab. Das ist ein vereinfachtes angetriebenes
+Gelenkmodell, keine medizinische Muskel-/Sehnensimulation.
+
+Der Browser sendet Mausziele, der Host sendet vollständige Posen. Godot berechnet
+keine unabhängige Trefferwahrheit. Replay enthält Körperwurzel, Schulter, Ellbogen,
+Handgelenk, Gelenkwinkel und Handneigung einschließlich der Rückführung. Es wird
+zwischen gespeicherten Zuständen interpoliert. Beide Clients laden denselben Clip.
+
+KONTAKT
+Das exportierte Dreiecksmesh des Gesichts ersetzt in V3 das alte Rest-Höhenfeld.
+Die Projektionsabfrage berücksichtigt Kopfrotation und dieselben bleibenden
+Schwellungs-/Kieferparameter wie der Vertexshader. Acht benannte Messstellen
+repräsentieren Handballen, Handfläche, Finger und Spitzen der exportierten Hand.
+Diese Kontaktproxies sind eine Vereinfachung; sie sind kein vollständiger
+dreidimensionaler Weichkörper-Solve für jede Hautpore und jeden Finger.
+Der Prototyp schlägt auf einen vor dem Kontakt ruhenden Kopf. Danach folgen
+aufgezeichnetes XPBD-Gewebe, gedämpfte Kopfbewegung und Kieferreaktion.
+
+STEUERUNG
+Linke Taste halten und von links nach rechts ziehen: erreichbarer Schwungbogen.
+Die vertikale Mausposition bestimmt die Höhe. Das Mausrad kippt die Handfläche;
+keine zusätzliche freie Tiefe und keine rechte Dreiachsen-Drehsteuerung.
+Probe berührt ohne Schaden, danach folgt der bewertete Schlag. Rechts/Leertaste
+bleibt die Verteidigung beim grünen Signal. Der Handrücken trägt Fingernägel;
+Handflächenfalten unterscheiden die Treffseite. Keine automatische Winkelkorrektur
+im Treffer-Solver. Die Ausgangshaltung ist lediglich ein reproduzierbarer Start.
+
+GAUNTLET-STATUS
+G0/G1: Körper, Rig, acht Poseclips, maßstäbliche Testszene und Kameras implementiert.
+       Längen geprüft. Schulter-/Ärmelüberschneidungen im Render gefunden und
+       korrigiert: verdeckte Haut unter dem undurchsichtigen Ärmel entfällt.
+G2:    Fester Schritt, Drehmomente, Ruhe, Hindernisdruck und 30/60/144-FPS-
+       Unabhängigkeit durch Tests geprüft. Kopf/Pult-Proxies im Labor.
+G3/G4: Neuer Kopf mit Lid-/Mundschleifen und Shapes, zusammenhängende Arme/Hände,
+       Toon-Material und eigene Blender-Quelle. Visuelle Endabnahme noch offen.
+G5/G6: Meshkontakt, verletzungsabhängige Oberfläche, vollständige aufgezeichnete
+       Armkette und neue gemeinsame Darstellung im Web integriert.
+G7:    Automatisierte Browser-/LAN-Prüfung bestanden. Menschliche Verständlichkeit
+       und echte Zwei-PC-LAN-Probe sind weiterhin NICHT bestanden/behauptet.
+
+OFFENE QUALITÄTSGRENZEN
+Die Referenzbilder bleiben das gestalterische Ziel, keine Behauptung über die
+Qualität des aktuellen Renders. Der Charakter ist ein selbst erstelltes
+prozedurales Ausgangsmodell. Weitere künstlerische Anatomie-/Topologiearbeit
+kann nach dem Spieltest nötig sein. Acht Handmessstellen und vereinfachte
+Gelenkdynamik sind ausdrücklich keine vollständige biomechanische Simulation.
+Turniere, ElevenLabs und Werbung bleiben außerhalb dieser Umsetzung.
+
+ABSCHLUSSMESSUNG / TECHNISCHER SPIELTESTSTAND
+22 Unit-Tests, BAT-Kaltstart und vollständiger Zwei-Browser-LAN-Durchlauf bestanden.
+Fouls/DQ, Duplikate, ungültige Werte und veraltete Versionen separat geprüft.
+Messung mit tatsächlich sichtbarem Egoarm nach Korrektur des Skinned-Mesh-Cullings:
+1920x1080, Chrome/ANGLE, NVIDIA RTX 2080, Ryzen 5 3600, zwei Browserkontexte.
+Vordergrund-Client: p95 Ruhe 7,1 ms; Armbewegung 7,0; Treffer 7,0; laufendes und
+pausiertes Replay jeweils 7,0 ms. Kein physischer Zweit-PC. Rohzahlen ohne private
+Sitzungsdaten unter docs/validation/v3-performance.json.
+Unsichtbarer Spiegel wird im Replay nicht gerendert. Stabile Posen werden nicht
+unnötig erneut geskinnt. Vollständige 3D-Geometrie bleibt erhalten.
+Ego-/Seitenbilder der acht Laborposen erzeugt; Extremansichten gesichtet.
+Menschliche Verständlichkeits-/Grafikabnahme ausstehend. Release deshalb Spielteststand.
+
+
+NUTZERABNAHME 08.10.2026 — DURCHGEFALLEN
+"Weiterhin unverständlich". Neue Referenzen zeigen den seitlichen Kontakt.
+V3 trifft frontal; die Frontprojektion der Kollision ist dafür das falsche Modell.
+Grafik und Anatomie erreichen die verbindliche Comicreferenz nicht. G4/G5/G7 offen
+bzw. durchgefallen; technische Tests sind kein Gegenbeweis. Kein v0.3.0-Release.
+Nächster Gauntlet: seitliche Wangenkollision und vollständige Handbasis,
+körpergebundener seitlicher Schwung, danach Anatomie/Comiclook, TV-Bühne mit
+Referee/Auffängern und reproduzierbare KO-Zusammenbruchanimation.
+Der bisherige KO ist nur eine Entscheidung mit einfacher Figurenneigung.
+Turniere, ElevenLabs und Werbung bleiben zurückgestellt.
