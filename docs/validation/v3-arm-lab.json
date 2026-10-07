@@ -1,0 +1,72 @@
+{
+  "stage": "G0-G2 technical candidate; visual acceptance open",
+  "report": {
+    "ready": {
+      "max_length_error_m": 5.551115123125783e-17,
+      "collision_steps": 0,
+      "max_torque_Nm": 0.0,
+      "terminal_speed_rad_s": 0.0,
+      "finite": true
+    },
+    "windup": {
+      "max_length_error_m": 1.6653345369377348e-16,
+      "collision_steps": 0,
+      "max_torque_Nm": 38.0,
+      "terminal_speed_rad_s": 4.8215399926578226e-14,
+      "finite": true
+    },
+    "half_reach": {
+      "max_length_error_m": 1.1102230246251565e-16,
+      "collision_steps": 0,
+      "max_torque_Nm": 38.0,
+      "terminal_speed_rad_s": 2.4107699963289113e-14,
+      "finite": true
+    },
+    "contact": {
+      "max_length_error_m": 1.6653345369377348e-16,
+      "collision_steps": 0,
+      "max_torque_Nm": 38.0,
+      "terminal_speed_rad_s": 1.2053849981644556e-14,
+      "finite": true
+    },
+    "return": {
+      "max_length_error_m": 5.551115123125783e-17,
+      "collision_steps": 0,
+      "max_torque_Nm": 0.0,
+      "terminal_speed_rad_s": 0.0,
+      "finite": true
+    },
+    "unreachable": {
+      "max_length_error_m": 1.6653345369377348e-16,
+      "collision_steps": 0,
+      "max_torque_Nm": 42.0,
+      "terminal_speed_rad_s": 6.026924990822281e-15,
+      "finite": true
+    },
+    "table": {
+      "max_length_error_m": 5.551115123125783e-17,
+      "collision_steps": 700,
+      "max_torque_Nm": 38.0,
+      "terminal_speed_rad_s": 0.0,
+      "finite": true
+    },
+    "behind_head": {
+      "max_length_error_m": 1.1102230246251565e-16,
+      "collision_steps": 690,
+      "max_torque_Nm": 42.0,
+      "terminal_speed_rad_s": 0.0,
+      "finite": true
+    }
+  },
+  "tests": 17,
+  "fixed_step_fps": [
+    30,
+    60,
+    144
+  ],
+  "limitations": [
+    "Rigid head/table proxy; mesh contact integration still pending",
+    "No human readability acceptance",
+    "Shoulder skinning and face still under visual iteration"
+  ]
+}

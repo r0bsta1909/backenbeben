@@ -66,3 +66,12 @@ Dauer-Sync oder zeitgesteuerter Upload beliebiger neuer Dateien.
 Runtime-Builds als Release-Pakete, nicht als ständig wachsende WASM-Gitgeschichte.
 Vor Veröffentlichungen Dateiliste auf Secrets, lokale Identifikatoren und fremde
 Referenzmedien prüfen. Keine Zugangsdaten oder private Konfiguration committen.
+
+MEILENSTEIN V3-A / 08.10.2026
+Öffentliches Repository und Release v0.2.0 sind erstellt; GitHub CI grün.
+Neue editierbare Körper-/Arm-/Hand-/Gesichtsquelle: character-v3.blend.
+Generator: scripts/create_character_v3.py; Runtime-Ansicht: character_view.gd.
+Arm-Labor: game/asset_lab.tscn, aufgezeichnete acht Posen aus server/arm.py.
+17 Tests grün. Auswärts gerichteter Ellbogenpol korrigiert Pultkollision.
+Motor-/Längen-/FPS-Prüfungen grün; visuelle Gates und Matchintegration offen.
+Der aktuelle Default-Webbuild bleibt bis zur Integration Prototyp 02.
