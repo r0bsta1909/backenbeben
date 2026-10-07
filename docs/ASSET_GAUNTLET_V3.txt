@@ -1,0 +1,224 @@
+BACKENBEBEN — ASSETS FÜR RÄUMLICH VERSTÄNDLICHES SPIELGEFÜHL
+08.10.2026 / Plan auf Grundlage des Nutzerfeedbacks zu Prototyp 02
+Status: Referenzbilder erzeugt und gesichtet, Umsetzung dieses Plans noch offen.
+
+LEITENTSCHEIDUNG
+Zuerst einen überzeugenden Körper mit angebundenem Arm und lesbarer Hand bauen.
+Die bisherige frei verschiebbare Hand ist kein geeignetes Fundament für das
+gewünschte Spielgefühl. Mehr Polygonzahl oder zusätzliche Bedienhinweise allein
+beheben die fehlende Beziehung zwischen Hand, Körper und Gegner nicht.
+Eine Figur mit gutem Rig und klarer Silhouette hat Vorrang vor Varianten,
+weiterer Arena-Dekoration und zusätzlichen Verletzungseffekten.
+
+REFERENZBILDER / ART DIRECTION
+docs/art-direction-v3/01-character-face.png
+  Hauptreferenz für Kopf, Proportionen, Schulterbreite und Kleidung.
+  Menschliche Augengröße, echte Augenhöhlen, zusammenhängende Wangenflächen,
+  klare Nase/Kiefer-Silhouette und geschlossene Lippen mit erkennbarem Volumen.
+  Gegenüber Prototyp 02 weniger kugelige Einzelteile und weniger Maskottchenwirkung.
+docs/art-direction-v3/02-hand-connected-arm.png
+  Hauptreferenz für Handvolumen, Handrücken, Knöchel und Übergänge der Gelenke.
+  Unten: sichtbare Verbindung über Schulter, Oberarm, Ellbogen und Unterarm.
+  Die gespreizte/angewinkelte Handstudie oben rechts ist eine Formstudie,
+  nicht die verbindliche offene Schlagpose. Dafür Finger geschlossen halten.
+docs/art-direction-v3/03-first-person.png
+  Ziel für Kameranähe, lesbare Tiefe und Herkunft des eigenen Arms am Bildrand.
+  Gegnerkopf, eigene Hand und Pult teilen denselben sichtbaren Raum.
+  Untere Seitenansichten prüfen Körperanschluss und Reichweite.
+
+Stil: ursprüngliches XIII / europäischer Actioncomic, auf glaubwürdigen 3D-Formen.
+Kräftige Silhouetten, sparsame Innenlinien, zwei bis drei klare Schattenstufen,
+warme Haut und gedämpfte Trikots. Nase, Handrücken und Wange bleiben auch ohne
+schwarze Kontur als räumliche Formen erkennbar. Keine großäugige Puppenanatomie.
+Groteske Persönlichkeit später über Gesichtszüge, Ausdruck und Asymmetrie.
+Die Referenzen sind stilistisch verbindliche Zielvorschläge, keine metrischen
+Orthografien. Perspektive, einzelne Fingerstellungen und Proportionen zwischen
+Panels müssen im Blender-Modell vereinheitlicht werden. Die Bilder belegen
+weder eine funktionierende Gelenkkette noch eine physikalisch korrekte Bewegung.
+Originalprompts und Erzeugungsweg: docs/art-direction-v3/PROMPTS.txt.
+
+WAS KONKRET GEBAUT WERDEN MUSS
+1. Ein gemeinsamer Charakterkörper bis mindestens zur Hüfte: Brustkorb, Hals,
+   Schultergürtel und beide vollständigen Arme. Im Match darf davon viel
+   außerhalb des Bildes liegen; im Rig und Replay ist es dennoch vorhanden.
+2. Ein hochwertiger Basiskopf mit geschlossenen Augenlidern, Mundinnenraum,
+   Kiefer, Zähnen als einfachem Innenmesh und sinnvoll getrennten Augäpfeln.
+   Gesichtshaut mit Deformationsschleifen um Mund, Augen und Wangen.
+3. Durchgehende Arm-/Handhaut: lesbarer Ellbogen, Unterarmverjüngung,
+   Handwurzel, Handballen, Knöchel, Daumenansatz und genau fünf Finger.
+   Fingersegmente mit funktionalen Gelenken, keine Perlenketten aus Kugeln.
+4. Ein Rig für Körper und beide Arme, Gesichtsrig und einfache Augensteuerung.
+   Gemeinsame Basis für Egoansicht, Gegenüber und Replay.
+5. Haut-/Kleidungs-/Augenmaterialien, kontrollierte Toon-Beleuchtung, echte
+   Kontaktschatten und ein neutrales Beleuchtungssetup für Formprüfungen.
+6. Zum Modell passende Kollisionsformen und Kontaktmarkierungen, exportiert
+   mit demselben Maßstab und derselben Pose wie das sichtbare Mesh.
+7. Kleine Prüfanimationen und eine Asset-Testszene. Diese sind erforderliche
+   Liefergegenstände, nicht erst ein nachträglicher Qualitätstest.
+
+RIG UND BEWEGUNG — VERBINDLICHER ANSATZ
+Kette: Körperwurzel -> Brustkorb -> Schlüsselbein/Schulter -> Oberarm ->
+Ellbogen -> Unterarm mit verteiltem Twist -> Handgelenk -> Hand/Finger.
+Der Ellbogen beugt; die Unterarmdrehung wird über mehrere Gewichte/Bones verteilt.
+Sie darf nicht als unbeschränkte Drehung allein am Handgelenk erscheinen.
+Die Schulter kann begrenzt mitgehen, der Körper bleibt am Standplatz verankert.
+Knochenlängen bleiben konstant. Kein Stretch, um ein unerreichbares Mausziel
+doch noch zu erreichen. Eine definierte Ellbogenrichtung verhindert Umklappen.
+Grenzen werden pro Rig im Pose-Labor festgelegt; nicht als medizinisch exakte
+Standardwinkel behauptet. Linke und rechte Seite getrennt prüfen.
+
+Die Eingabe erzeugt eine gewünschte Handbewegung innerhalb des erreichbaren
+Raums. Ein Solver berechnet die passende Gelenkhaltung. Das ist zunächst IK,
+also eine geometrische Lösung, noch keine Physik.
+Für das Bewegungsgefühl kommt ein angetriebenes Gelenkmodell hinzu: begrenzte
+Beschleunigung/Drehmomente, Masse/Trägheit und Dämpfung. Bei Kontakt stoppt oder
+weicht die tatsächliche Hand kontrolliert zurück; der Motor drückt sie nicht
+durch Gesicht oder Pult. Das freie Eingabeziel darf weiterlaufen, der Arm nicht.
+Eine Gelenkpose wird pro Simulationsschritt von genau einem finalen Solver
+besessen. Keine konkurrierenden Animation-, IK- und Physikschreibzugriffe.
+
+Technikversuch vor Festlegung: Godot-Skelettmodifier für Zielpose und Limits;
+physikalischer Proxy mit begrenzten Gelenken/Motoren für die dynamische Pose.
+Godot beschreibt SkeletonModifier3D für eigene IK, Constraints und Skelettphysik:
+https://docs.godotengine.org/en/stable/classes/class_skeletonmodifier3d.html
+Generic6DOFJoint3D erlaubt begrenzte/gesperrte Achsen zwischen Physikkörpern:
+https://docs.godotengine.org/en/stable/classes/class_generic6dofjoint3d.html
+Das sind mögliche Bausteine, keine Zusage, dass deren Kombination schon stabil
+ist. Der Versuch muss auf unserer installierten Godot-Version und im Web laufen.
+
+SCHNITTSTELLE ZUR SPÄTEREN EINGABE
+Die aktuelle freie Winkel-/Tiefensteuerung wird nicht unverändert auf das neue
+Modell gesetzt. Zuerst muss die Armbewegung in der Testszene verständlich sein.
+Danach Eingabeentwurf: ein erreichbarer Schwungbogen und ein klar begrenzter
+Handwinkel. Keine drei unabhängigen versteckten Rotationsmodi im Einstieg.
+Pronation/Supination wird am gesamten Unterarm sichtbar; Drehung um die
+Handfläche, Fingerneigung und Reichweite erhalten eindeutige Bezugspunkte.
+Die Hand richtet sich nicht heimlich perfekt am Gegner aus. Der Spieler kann
+falsch treffen, muss die Fehlstellung aber bereits vor dem Treffer sehen können.
+Richtung und Stärke der Korrektur bleiben bei Kamerawinkelwechsel konsistent.
+Das ist Teil der späteren Integration, noch keine fertige neue Tastenbelegung.
+
+ASSETVERTRAG
+- Einheit: ein Meter; Mesh-/Armature-Skalen vor Export bereinigen.
+- Konsistente Pose und Achsen in Blender und Godot dokumentieren.
+- Benannte Referenzpunkte: torso_anchor, shoulder, elbow, wrist, palm_center,
+  palm_normal, finger_direction, cheek_surface und camera_anchor.
+- Palmennormale aus dem Modell exportieren, nicht durch einen nachträglichen
+  pauschalen 180-Grad-Drehfix in der Laufzeit erraten.
+- Armproportionen, Reichweite und Fingerlängen aus genau diesem Rig beziehen.
+- Separates Kollisionsmesh/konvexe Proxyformen für Handfläche/Handballen/Finger;
+  Kapseln für Armsegmente. Blickdiagnose und Serverwertung müssen dieselbe Pose
+  und dieselben Kontaktregionen verwenden.
+- Sichtbarer Handkontakt gewinnt gegen ein altes Bildschirmziel oder grobes
+  Restpose-Höhenfeld. Liegt zwischen Hand und Wange Luft, gibt es keinen Treffer.
+- Alle Körpervarianten des ersten Durchlaufs benutzen dieselben Proportionen.
+- .blend-Quelle, GLB, Materialtexturen, Rig-Metadaten, Prüfclips und Testszene
+  zusammen versionieren. Keine ausschließlichen Blender-Constraints voraussetzen:
+  Exportiertes Ergebnis im Godot-Webbuild prüfen, Procedural Rig dort implementieren.
+
+GAUNTLET / GATES
+Schleife je Gate: Hypothese -> kleiner überprüfbarer Stand -> technische und
+visuelle Prüfung -> Fehlerliste -> korrigieren -> betroffene Prüfung wiederholen.
+Status ist offen. Keine Freigabe durch einen fehlerfreien Export allein.
+Ein technischer Pass ersetzt keine menschliche Verständlichkeitsprüfung.
+
+G0 — MASSSTAB, KAMERA, BLOCKOUT
+Lieferung: neutraler Oberkörper mit kompletter Armkette und Gegnerkopf in
+einfacher grauer Form; Pult und dieselbe Kamera wie später im Match.
+Prüfung: Ruhe, Ausholen, halbe Reichweite, Kontakt und Rückführung jeweils
+frontal, seitlich, von oben und aus Egoansicht. Mindestens 16:9 und 16:10.
+Pass: Handgröße passt zum Gesicht; Schulteranschluss stimmt aus jeder Sicht;
+Gegner erreichbar ohne Knochenstreckung; eigener Arm verlässt das Bild sinnvoll
+am Körperrand. Das Pult erzwingt keine unmögliche Armhaltung.
+Bei Fail: Proportionen/Kamera korrigieren, noch nicht Details modellieren.
+
+G1 — SPIELRELEVANTE HAND UND ARMKETTE
+Lieferung: endgültige grobe Anatomie, editierbares Rig, Twist-Verteilung,
+Gelenkgrenzen und mindestens acht gespeicherte Extrem-/Alltagspose-Prüfungen.
+Pass: konstante Segmentlängen (Prüftoleranz 0,5 %), kein Ellbogen-Flip und
+kein Kollaps von Schulter, Ellbogen oder Handgelenk. Kein Durchdringen des
+eigenen Brustkorbs. Unerreichbare Ziele enden am Reichweitenlimit.
+Linke/rechte Hand sowie offene, entspannte und Kontaktpose funktionieren.
+Eine reine IK-Demo zählt hier als Rig-Pass, ausdrücklich nicht als Physik-Pass.
+
+G2 — PHYSIK UND KONTAKT IM ARM-LABOR
+Lieferung: angetriebener Arm mit Kollision gegen Pult und starres Kopfproxy.
+Tests: langsame Annäherung, schneller Schwung, abruptes Umkehren, Mausziel
+hinter dem Kopf, längeres Drücken gegen Hindernis, Start an einer Gelenkgrenze.
+Pass: keine sichtbare Durchdringung, keine Überstreckung, kein Aufschaukeln,
+Rückführung in Ruhe; bei Kontakt bleibt die sichtbare Hand am Kollisionsort.
+Feste Simulationsschritte; Unterschiede bei 30/60/144 Render-FPS messen.
+Beschleunigung und Kraft begrenzen. Kein kameraseitiges Teleportieren als Fix.
+Erst wenn dies stabil ist, erhält die Armkette feinere Details.
+
+G3 — GESICHT UND HAUTTOPOLOGIE
+Lieferung: sauber modellierter Kopf entsprechend Referenz 01, retopologisierte
+Haut, Gesichtsknochen/Shapes für Lid, Lippe und Kiefer, Skinning an Hals/Schulter.
+Prüfung in neutralem Graumaterial: Front, Profil, Dreiviertel, extremes Close-up,
+Blinzeln, offener Mund, asymmetrisches Grinsen und gedrückte Wange.
+Pass: Augen sitzen in Lidern statt auf dem Gesicht; keine sichtbaren Nähte,
+Löcher, getrennten Wangen oder schwebenden Lippen. Silhouette trägt den Charakter
+auch ohne Ink-Shader. Im Kontaktbereich ausreichend gleichmäßige Geometriedichte.
+
+G4 — XIII-STIL UND RÄUMLICHE LESBARKEIT
+Lieferung: fertige Materialien und kontrollierte Licht-/Konturkonfiguration
+auf tatsächlichen 3D-Assets in Godot, nicht nur ein schönes Blender-Still.
+Test: Palmenseite/Handrücken, verkantete/flache Hand und Abstand zur Wange in
+Graustufen, bei unterschiedlichen Hautfarben, vorne/seitlich und in Bewegung.
+Pass: Handflächenorientierung und Abstand sind ohne Winkelzahlen erkennbar;
+harte Schatten verdecken nicht die Form. Konturen bleiben bei Bewegung stabil.
+Oberflächentextur darf die Bewegungslesbarkeit nicht überdecken.
+Bei Fail: Form, Licht oder Kamera ändern, nicht weitere Hilfetexte hinzufügen.
+
+G5 — HAUTREAKTION UND GLEICHE GEOMETRIE IN DER WERTUNG
+Lieferung: neue Haut an ein angepasstes Simulationsgitter gebunden; Hand- und
+Kopfkontakt derselben 3D-Pose; saubere Übertragung auf sichtbare Haut und Wunden.
+Tests: flache Hand, Fingerspitzen, Handballen zuerst und Streifer, jeweils mit
+Kontaktmarkierung in Normalgeschwindigkeit und 0,1x-Zeitlupe.
+Pass: erste sichtbare Berührung, Kontaktregion und Wertung passen zusammen.
+Fingerspitzen werden nicht als volle Fläche gewertet. Wange bewegt sich lokal;
+Schädel/Augen bleiben stabil verankert, Kiefer bewegt sich um sein Gelenk.
+Temporäre Eindellung und bleibende Schwellung getrennt schalt-/prüfbar.
+Kein eingefrorenes Höhenfeld als alleinige Prüfung eines gedrehten Kopfes.
+
+G6 — EGOANSICHT, GEGENÜBER UND REPLAY
+Lieferung: dieselbe vollständige Körperpose aus allen drei Perspektiven;
+Ego-Kamera blendet nur eigene störende Geometrie aus, ändert nicht die Reichweite.
+Replay zeichnet auch Körperwurzel, Schulter, Ellbogen, Hand und Gesicht auf.
+Pass: kein anderer Arm im Replay; kein Schnitt an der Unterarmmitte; keine
+abweichende Handorientierung zwischen Spieler und Gegner. Spiegel zeigt dieselbe
+Figur. Rückwärts-Scrubbing und Pause rekonstruieren sämtliche relevanten Posen.
+Host bleibt autoritativ. Falls der Arm-Labor-Solver in Godot läuft, muss er vor
+Integration auch am Host ausgeführt werden können; keine zweite unabhängige
+Kontaktwahrheit in Python. Dies ist eine explizite Architekturprüfung in G6.
+
+G7 — VERSTÄNDLICHKEIT UND WEB-LEISTUNG
+Menschlicher Test an der echten Spielansicht, ohne mündliches Coaching:
+Kann eine neue Person zeigen, welche Seite der Hand trifft, ob die Hand die
+Wange erreicht und wie sie eine Verkantung korrigieren würde?
+Danach drei kontrollierte Probeversuche. Fehler sollen am Modell verständlich
+werden; eine technische Prozentzahl allein ist kein bestandener Test.
+Ein Anfangsziel ist vier von fünf korrekt erkannte Posen; kleine Stichprobe
+offen dokumentieren. Nutzerfeedback "weiter unverständlich" blockiert die
+Spielgefühlsfreigabe auch dann, wenn alle technischen Tests grün sind.
+Parallel: zwei Browser, LAN-HTTP, Audiofallback, 1080p, Spiegel und Replay.
+Startziel auf dokumentierter Hardware: p95 Renderzeit <=16,7 ms. Separate
+Messung für Ruhe, bewegten Arm, Kontakt und Replay; Ladezeit ebenfalls berichten.
+Bei Überschreitung unnötige Materialien/Details reduzieren und erneut messen.
+Gelenkkette und funktionale Silhouette bleiben erhalten.
+
+STARTBUDGETS — NACH G0/G1 AM REALEN BUILD ANPASSEN
+Ein hochwertiger Basischarakter zuerst. Als Arbeitsrahmen etwa 20–35k Dreiecke
+für Kopf/Hals, 10–20k für beide Hände und 15–30k für Arme/Torso/Kleidung.
+Texturen zunächst bis 2k; Kontur, Schattierung und Normalen sorgfältiger behandeln
+als Mikroporen. Dies sind Produktionsbudgets, keine gemessenen Anforderungen.
+Spiegelauflösung/Updatehäufigkeit separat budgetieren. Keine Abhängigkeit von
+desktop-exklusiven Renderfunktionen, die unser Browserziel nicht darstellen kann.
+
+REIHENFOLGE UND ABSCHLUSS
+Referenzen -> Raum/Kamera -> Arm-Rig -> Arm-Physik -> finaler Kopf/Hand ->
+Comic-Materialien -> Kontakt/Gewebe -> gemeinsame Perspektiven -> Spieltest.
+Fertige Lieferungen: Blender-Quellen, GLBs, Materialien, Rig-/Kollisionsmetadaten,
+Prüfanimationen, Godot-Testszene, Webbuild, Messprotokoll und dokumentierte Grenzen.
+Technischen Stand und menschliche Spielgefühlsfreigabe separat kennzeichnen.
+Turniere, ElevenLabs und Werbeausstattung bleiben im bestehenden Backlog.

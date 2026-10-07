@@ -1,0 +1,38 @@
+BACKENBEBEN — ZURÜCKGESTELLTE ERWEITERUNGEN
+Stand: 07.10.2026. Nutzerwünsche protokolliert; noch nicht implementieren.
+Vorrang: spielbarer, geprüfter Kernprototyp einschließlich Handkontakt, Physik,
+Replay und verständlicher Bedienung. Danach diese Erweiterungen aufgreifen.
+
+TURNIERE
+- Mehrspielerturniere mit unterschiedlichen Formaten: Single Elimination,
+  Double Elimination, Jeder gegen jeden, Schweizer System, Gruppen + Playoffs.
+- Keine künstliche maximale Teilnehmerzahl. Teilnehmerliste und Spielplan
+  dynamisch verwalten; reale Host-Ressourcen begrenzen gleichzeitige Matches.
+  Unbegrenzte Teilnehmerlogik ist keine Zusage unendlicher Serverkapazität.
+- Ungerade Teilnehmerzahlen automatisch behandeln. Gemeint sind Freilose;
+  eine Wildcard ist eigentlich ein zusätzlicher Startplatz. Beide Begriffe
+  bei der späteren Umsetzung sauber unterscheiden.
+- K.-o.-Raster brauchen auch bei manchen geraden Zahlen Freilose:
+  nächste Zweierpotenz minus Teilnehmerzahl, z.B. sechs Teilnehmer: zwei.
+  Bei Schweizer Runden Freilose fair verteilen, keine unnötigen Wiederholungen.
+- Übersichtliche UI: aktuelles Match, nächstes eigenes Match, Gegner,
+  ausstehende Paarungen, Runden, Ergebnisse und Weiterkommen. Suchbare Liste
+  zusätzlich zum zoombaren Baum; große Turniere nicht auf einen Bildschirm quetschen.
+- Abbruch, verspäteter Beitritt, Wiederverbindung und Ausscheiden später
+  pro Format ausdrücklich festlegen.
+
+AUDIO MIT ELEVENLABS
+- Stilgerechte Soundeffekte, enthusiastischer fiktiver Sportkommentator,
+  Crowd mit unterschiedlichen Reaktionen.
+- API-Anbindung erst in dieser Ausbaustufe planen und einrichten.
+- Bevorzugte Richtung: Varianten vorproduzieren und lokal cachen; Ereignisse
+  wählen passende Clips. Kommentar, Crowd und Treffer getrennt mischen.
+- Kein API-Schlüssel im Browser. Aktuell keine API-Nutzung oder neuen Kosten.
+
+FIKTIVE ABSURDE WERBUNG
+- Arena, Pult, Kleidung, Spiegelrahmen und spätere Replay-Einblendungen.
+- Beispielrichtungen: "BackenGold", "Kiefer & Söhne — Wir richten das",
+  "WATSCH-O-MAT". Eigene Marken und überzeichnete Comicgestaltung.
+- Gesicht, Kontakt und notwendige Spielhinweise müssen gut erkennbar bleiben.
+
+Diese Datei ist ein Backlog, keine Liste bereits vorhandener Funktionen.

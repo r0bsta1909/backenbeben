@@ -1,0 +1,201 @@
+BACKENBEBEN — HANDKONTAKT, PHYSIK UND REPLAY
+Planungsstand: 07.10.2026. Ursprünglicher freigegebener Plan.
+Inzwischen als Prototyp 02 umgesetzt; tatsächliche Architektur, geprüfte Gates
+und verbleibende Grenzen stehen am Anfang von GAUNTLET.txt. Die folgenden
+Abschnitte bleiben als Planungsprotokoll erhalten.
+
+ZIEL UND IST-STAND
+Der nächste Prototyp soll Handpositionierung als erlernbare Fertigkeit und
+nachvollziehbare physikalische Reaktionen zeigen. Der bisherige Stand bewertet
+eine 2D-Mausgeste und verändert vorgegebene Gesichtsformen. Getrennte Gesichtsteile
+und Morphs sind keine Gewebesimulation; ein Replay fehlt bislang.
+Ziel ist eine plausible, messbar stabile Echtzeitsimulation. Medizinisch exakte
+Materialdaten, Verletzungsprognosen und anatomische Validierung sind nicht gegeben.
+Comicproportionen bleiben erhalten. Keine Behauptung, der ganze Kopf sei weich.
+
+RECHERCHE / REGELBASIS
+Power Slap: flache offene Hand; Finger und Handfläche treffen gemeinsam.
+Der Handballen darf nicht zuerst einschlagen. Trefferzone seitlich zwischen
+Kinn und Augenlinie, mit ausgeschlossenen empfindlichen Bereichen. Ansage der
+Hand und Zählung 1–3 bestimmt die Anzahl der Probeschwünge. Clubbing, Stepping
+und relevantes Flinching sind Fouls. Gewertet werden Wirkung des Schlages und
+Reaktion/Erholung des Empfängers im Zehn-Punkte-System.
+Quelle: https://www.powerslap.com/rules/
+
+SlapFIGHT hat ein eigenes Regelwerk: zwei vorbereitende Schwünge, Schlag auf
+drei; abweichende Runden- und Strafregelungen. Es gibt damit keine einzige
+hier übernommene universelle "Weltmeisterschaftsregel".
+Quelle: https://www.slapfight.live/rules
+
+Das verlinkte Video lässt sich über YouTubes öffentliche Metadaten als
+"SHE’S GONNA BE A PROBLEM!!! 👀 | Power Slap 20: Blackburn vs Gema | FULL MATCH"
+von Power Slap identifizieren. Abruf/Abspielen war nicht zuverlässig möglich.
+Keine verifizierte Einzelbildanalyse, kein behauptetes Bewegungs- oder Zeitcodeprotokoll.
+https://www.youtube.com/watch?v=ILbVV6aVyDU
+
+EIGENE DESIGNENTSCHEIDUNGEN — KEINE VERBANDSREGELN
+Ein einziges verständliches Spielprofil zuerst: Ausrichten, angesagter Ablauf,
+Probeschwung, Kontakt, Wertung, Replay, Erholung, Rollenwechsel.
+Zunächst feste Zählung zwei: ein Probeschwung und anschließend echter Schlag.
+Andere Zählungen und vollständige Verbandspresets gehören nicht in dieses Gate.
+Feste Körper-/Fußposition spart zusätzliche Eingaben. Schlaghand vorher wählen.
+Regelkonformität, physische Wirkung und Rundensieg separat berechnen.
+Regelwidrige harte Treffer dürfen keinen spielerischen Vorteil durch KO-Schaden
+geben: sichtbare Reaktion ist möglich, Wertung und dauerhafter Spielschaden werden
+bei einem Angreiferfoul verworfen. Erstes Foul kostet den Schlag, Wiederholung
+führt zur Disqualifikation. Das ist bewusst eine vereinfachte Spielregel.
+Bei regulärem Kampfende zählen gültige Trefferwirkung und Erholung pro Runde;
+Kosmetik wie Blutmenge ist kein eigener Punktelieferant.
+
+MAUSSTEUERUNG — ERSTER SPIELBARER ENTWURF
+1. Ausrichten: Maus bewegt die Hand zum Gesicht; Mausrad stellt Reichweite ein.
+   Rechte Taste halten + Maus kippt/dreht das Handgelenk in zwei Achsen.
+   Die verbleibende Rotation folgt einer begrenzten anatomischen Armhaltung.
+   Keine sechs unabhängigen Regler und kein automatisches perfektes Ausrichten.
+2. Probeschwung: linke Taste halten und einen Bogen führen. Die Hand folgt einer
+   begrenzten 3D-Armbewegung. Vorschau zeigt Reichweite, nicht den perfekten Schlag.
+   Leichte Ausrichtungskontakte sind getrennt von einem kraftvollen Kontakt.
+   Versehentlicher harter Kontakt verbraucht den Versuch; kein kostenloses Üben
+   mit voller Kraft am Gesicht des Gegners.
+3. Echter Schwung: gleiche Bewegung im angesagten Takt. Mausweg, Tempo,
+   Reichweite und Handwinkel beeinflussen den Kontakt. Rechte Taste erlaubt
+   auch während des Ziehens eine Handgelenkkorrektur; im ersten UX-Gate prüfen,
+   ob dieser Zweitasten-Griff verständlich genug ist.
+4. Der Kollisionszeitpunkt entscheidet, nicht die Position beim Loslassen.
+   Loslassen beendet den Antrieb; Kontakt begrenzt die Handbewegung. Pro Versuch
+   nur ein Treffer, kein Durchziehen durch den Schädel und kein Mehrfachschaden.
+
+Der Einstieg lautet: "Hand ausrichten — Bogen ziehen — flach treffen".
+Meisterschaft entsteht durch wiederholbare Kontaktfläche, Timing und kontrolliertes
+Tempo. Maximales Mausreißen sättigt die erlaubte Energie und gewinnt nicht automatisch.
+Geringe Sensitivität und unterschiedliche DPI dürfen kein prinzipieller Nachteil sein.
+Trainingsmodus zeigt eine Kreide-Kontaktspur plus verständliche Rückmeldung:
+"nur Fingerspitzen", "Handballen zuerst", "schräg gestreift", "sauber getroffen".
+Diese Diagnose ersetzt eine schwer verständliche einzige Prozentzahl.
+Nur Fingerspitzen ist zunächst eine Kontaktklasse; Foulentscheidung hängt zusätzlich
+vom gewählten Regelprofil ab. Winkel- und Zeittoleranzen sind zu kalibrierende
+Spielparameter und keine behaupteten offiziellen Messgrenzen.
+
+ANSPANNEN
+Bleibt eine ausdrücklich spielerische Timingmechanik. Rechte Taste ist beim
+Empfänger nur während der klar angezeigten Empfangsphase zuständig; keine
+Handsteuerung in dieser Rolle. Sichtbare Zustände: gesperrt, vorbereiten,
+jetzt anspannen, verbraucht. Früher Versuch verbraucht die Aktion.
+Gutes Timing verändert begrenzt Halssteifigkeit/Dämpfung und Erholung, erzeugt
+aber kein Ausweichen und keine frei erfundene vollständige Schadensimmunität.
+Der spätere Realismusmodus kann diesen Timingbonus abschalten.
+
+KONTAKTMODELL
+Hand in zentrale Handfläche, Fingerpolster, Fingerspitzen, Handballen und
+Handkante unterteilen. Kollisionen über den zurückgelegten Weg prüfen, damit
+schnelle Schläge nicht zwischen zwei Simulationsschritten hindurchspringen.
+Erfassen: erste Kontaktregion, zeitliche Überlappung der Regionen, Kontaktfläche,
+Winkel zur lokalen Gesichtsoberfläche, normale/tangentiale Geschwindigkeit,
+erlaubte Zielzone und Phase. Kein bloßer Distanztest zum Bildschirmziel mehr.
+Breiter flacher Kontakt verteilt den Impuls, streifender Kontakt gleitet ab.
+Die Kraft hängt von begrenztem Handantrieb und Kontakt ab; keine medizinische
+Schadensformel aus realen Newtonwerten ableiten. Spielgesundheit bleibt abstrakt.
+
+ASSETS UND PHYSIK
+- Neues zusammenhängendes Gesichtsmesh mit brauchbarer Topologie; Lippen,
+  Mundinnenraum, Augenlider und Halsübergang für Nahaufnahme und Replay.
+- Starrer Schädel als Kollisionsgrenze; Augen am Schädel verankert. Kiefer mit
+  begrenztem Gelenk. Kopf/Hals mit begrenzter federnder Bewegung.
+- Grobes volumetrisches Simulationsgitter für Wangen, Lippen und Unterkinn;
+  feineres sichtbares Mesh folgt dessen Bewegung. Regionale Steifigkeit und
+  Dämpfung, Verankerung am Schädel, Volumenerhalt und Kollisionsgrenzen.
+- Geriggte offene Hand und Unterarm mit Kontaktregionen und begrenztem Gelenk.
+- Kurzfristige Eindellung, seitliche Bewegung und abklingende Schwingung werden
+  simuliert. Hämatome, Cuts, Blut und bleibende Schwellung sind ein getrenntes
+  Verletzungssystem. Kieferverletzung verändert Gelenkgrenzen statt Knochen
+  gummiartig zu dehnen. Keine aufwendige Fraktursimulation in diesem Prototyp.
+
+Technischer Kandidat: XPBD für das grobe Gewebevolumen. Das Verfahren behandelt
+Nachgiebigkeit und reduziert die Abhängigkeit der Steifigkeit von Zeitschritt
+und Iterationszahl. Es liefert allein keine anatomische Validität.
+Primärquelle: https://mmacklin.com/xpbd.pdf
+Godot SoftBody3D/Jolt als Vergleich im ersten Technikversuch; die Dokumentation
+beschreibt deformierbare Netze und empfiehlt Jolt. Ein beliebiges weiches
+Oberflächenmesh ist noch kein ausreichend begrenztes Gesichtsmodell.
+https://docs.godotengine.org/en/stable/classes/class_softbody3d.html
+
+HOST, LAN UND REPLAY
+Autorität bleibt beim Host. Bevorzugte Architektur für den Technikversuch:
+lokaler headless Godot-Worker simuliert Kontakt und Gewebe; bestehender Python-
+Server betreut Lobby, Browserdateien, Admin und transportiert Matchereignisse.
+Worker nur lokal erreichbar; Start/Stop zusammen mit START_HOST.bat. Bei
+Workerfehler Match kontrolliert pausieren statt widersprüchliche Resultate senden.
+Vor endgültiger Festlegung Latenz, Startzuverlässigkeit und Webdarstellung messen.
+Browser visualisieren Hostzustände; eigene Vorhersage darf keine Treffer werten.
+Ausstehende Eingaben begrenzen, Samplezeiten validieren, doppelte Versuche abweisen.
+
+Replay speichert tatsächlich verwendete Hand-, Kopf-, Kiefer- und Gewebestände
+samt Kontakt und Verletzungsereignissen. Nicht nur Eingabe/Seed speichern und
+auf jedem Browser eine vermeintlich identische Physik neu ausführen.
+Startbudget: 0,5 Sekunden vor Kontakt und 2,5 Sekunden danach; 120 gespeicherte
+Zustände/s, interpoliert. Physik zunächst 240 Schritte/s im Kontaktversuch;
+diese Werte sind zu messende Budgets, keine bereits erreichte Leistungszusage.
+Beispiel für 200 Gitterpunkte: 200 * 3 Koordinaten * 2 Bytes * 120 * 3 =
+432.000 Bytes pro Gewebegitter ohne weitere Daten. Quantisierung und Fehler messen.
+Spiegel nutzt dieselben Zustände, nicht einen weiteren unabhängigen Solver.
+
+Replay: seitliche Dreiviertelansicht, Frontansicht, Pause, Zeitleiste,
+Geschwindigkeit 0,1x / 0,25x / 1x. Kontaktspur/Regionen als zuschaltbare Lernhilfe.
+Deformation muss auch beim Einzelbildschritt sichtbar sein. Kein Kamerawackeln,
+das eine fehlende Verformung kaschiert. Host hält die nächste Spielphase an;
+beide können gemeinsam überspringen, ein festes Zeitlimit beendet das Replay.
+Nach Wiederverbindung aktuellen Zustand und Replaykennung nachliefern.
+
+GAUNTLET — UMSETZUNGSREIHENFOLGE UND ABNAHME
+Pro Gate: Hypothese -> kleinster prüfbarer Stand -> messen/ansehen -> korrigieren
+-> betroffene Prüfungen wiederholen. Erst nach Bestehen zum nächsten Gate.
+Alle folgenden Kriterien sind geplante Prüfungen, keine abgeschlossenen Tests.
+
+P0 Kontaktlabor und Technikentscheidung
+Starre Testhand gegen Schädel/Wangenprobe, noch keine neue Arena.
+Flach, Fingerspitzen, Handballen zuerst, Streifer, verbotene Zone, Fehlschlag.
+Jeweils langsame/schnelle Bewegung und unterschiedliche Eingabesampleraten.
+Bestehen: erwartete Kontaktklasse in allen festgelegten Fällen, kein Tunneln,
+kein doppelter Treffer; Worker startet/stoppt und liefert gültige Zustände.
+
+P1 Gesicht und physikalische Reaktion
+Neue Blender-Assets, Gitterbindung, Gelenke, Materialzonen und Kollisionen.
+Gleicher Impuls bei 30/60/144 Render-FPS: vergleichbare maximale Auslenkung
+(Starttoleranz 5%). Nachschwingen klingt ab, keine unkontrollierte Energiezunahme.
+Keine sichtbaren Löcher, getrennten Wangen oder Durchdringung des Schädels.
+Im Ruheversuch Rückkehr nahe Ausgangslage; bleibende Schwellung separat abschaltbar.
+
+P2 Mausgefühl und Regeln
+Kontaktmodell ersetzt Bildschirm-Endpunktwertung. Eingaben, Ansage, Probeschwung,
+Fouls und Anspannen verständlich integrieren. Kleine feste Trainingsfolge.
+Menschlicher Test: neue Person erzielt nach Erklärung innerhalb einer Minute
+einen sauberen Treffer und kann einen Fehlkontakt anhand der Rückmeldung erklären.
+Wiederholte Versuche müssen Verbesserung zulassen; reine Geschwindigkeit reicht nicht.
+Automatisierte Eingaben prüfen Mechanik, ersetzen diese Spielbarkeitsprüfung nicht.
+
+P3 Replay
+Aufgezeichnete Verformung und Kontaktpunkt in Zeitlupe/Einzelbildern vergleichen.
+Host und Gast erhalten dieselbe Replaykennung und dieselben Quelldaten.
+Scrubbing vor/zurück stellt Zustand einschließlich Wunden ohne Doppelereignisse her.
+Kein neuer Zufall, keine abweichende Physikberechnung beim Abspielen.
+
+P4 Vollständiger LAN-Durchlauf und Performance
+Zwei Browser über LAN-HTTP: Start, Audio, Eingaben, Brace, Foul, KO, Replay,
+Skip, Revanche, Disconnect/Reconnect. Anschließend echter zweiter PC, falls verfügbar.
+Renderziel 60 FPS bei 1080p auf dokumentiertem Testgerät; CPU-/Netzwerkbudgets
+und schlechteste Framezeiten berichten. Aktuelle Hardware vorher protokollieren.
+Bei Budgetüberschreitung Gitter/Übertragungsrate reduzieren und Qualität erneut
+prüfen; Physik nicht stillschweigend durch eine feste Animation ersetzen.
+
+P5 Abschluss
+Reproduzierbarer Build, Blender-Quellen, Testbefunde und Anleitung aktualisiert.
+Technischer Abschluss und menschlicher Spieltest getrennt dokumentiert.
+Danach erst zurückgestellte Erweiterungen aus BACKLOG.txt aufnehmen.
+
+BETROFFENE BEREICHE BEI DER SPÄTEREN UMSETZUNG
+assets-source und scripts/create_assets.py: neue Rig-/Gewebequellen.
+game/main.gd sowie eigene Kontakt-/Physik-/Replaymodule: Darstellung und Simulation.
+server/host.py und server/rules.py: Phasen, autoritative Wertung, Workeranbindung.
+game/web_shell.html und browser_support.js: Eingabehilfe, Zustände, Replaybedienung.
+Start-/Buildskripte und Tests: Worker, Export, Kontaktfälle und LAN-Regression.
+Bestehende LAN-IP-Ausgabe und HTTP-Audiofallback ausdrücklich regressionsprüfen.

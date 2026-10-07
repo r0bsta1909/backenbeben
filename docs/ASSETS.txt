@@ -1,0 +1,42 @@
+BACKENBEBEN / Asset-Schnittstelle
+
+Originale prozedurale Modelle, erzeugt mit Blender 4.5.14 LTS.
+Reproduzierbar: blender.exe --background --python scripts/create_assets.py
+Quellen: assets-source/fighter.blend, assets-source/hand.blend.
+GLB: game/assets/fighter.glb und hand.glb.
+Eigene synthetische Audioeffekte: slap.wav, bell.wav (44100 Hz mono PCM16).
+
+Koordinaten nach glTF-Export: Godot Y oben, Front +Z. Fighter steht von
+y=-1.30 bis etwa y=1.03. Kopfzentrum y=.25. Schulterbreite 1.86,
+Kopfbreite ca 1.16 inklusive Ohren. Kamera von +Z auf den Ursprung.
+
+PROTOTYP 02: Face ist jetzt eine zusammenhängende, voxelverschweißte Hautoberfläche
+inklusive Wangen, Kinn, Hals, Nase und Ohren. Die alten getrennten Wangen/Jaw-
+Konstruktionsmeshes und Face-Blendshapes werden beim Export zusammengeführt.
+Editierbare Gruppen: SkullAnchor, SoftCheekL/R, JawHinge, NeckAnchor.
+Augen, Lippen, Mundinnenraum, Brauen und Dekorationen bleiben separate Teile.
+face_surface.json enthält 9x7 aus der Blender-Haut geraycastete Oberflächenhöhen
+in Godot-Achsen. Hostkontakt, Gewebegitter und Shader verwenden dieselbe Domäne.
+Der Shader erhält 63 simulierte Oberflächenverschiebungen; 63 weitere tiefe
+Gitterpunkte dienen im Host als starre Verankerung. Kopf und Kiefer werden
+über begrenzte gedämpfte Bewegungen ergänzt. Keine Laufzeit-Blendshape-Animation
+als Ersatz für das Gewebenachschwingen.
+L/R sind Welt-X links/rechts aus Sicht der Frontkamera.
+
+Verletzungen sind separat sichtbar schaltbar: BruiseL, BruiseR,
+CutL, CutR, BloodLip, BloodDrip. Initial alle ausblenden, dann nach
+Schaden einblenden. Die Quelldatei zeigt sie zur Asset-Inspektion.
+Skin, Hair, Shirt sind anpassbare Materialnamen. SkinShadow/Lip bleiben
+Akzentfarben. Ink bildet feste Augen-, Mund- und Faltenlinien.
+Keine Outline-Hülle: Silhouettenkontur kann im Godot-Shader ergänzt werden.
+
+Hand: Palm, Wrist, Forearm, WristWrap, ThumbBase/Tip,
+Finger0..3Proximal/Tip; zusammen genau fünf Finger inklusive Daumen.
+Ausgestreckte Finger +Y, Unterarm -Y; Handfläche zeigt +Z.
+Gesamthöhe ca 1.7, Breite ca .65. Modellursprung in Handfläche. HandRig mit Forearm/Palm/Finger-Bones und
+Vertexgewichten; Laufzeit treibt die Handgelenkhaltung. Die Finger bleiben
+für den erlaubten offenen Schlag in einer festen Grundhaltung.
+
+Prüfung: Blender Export exit 0; Godot-Import/Export und echter Browser geprüft.
+Aktuelle Nahaufnahme: logs/v2-physics-peak.png. Blender-Quellen sind gespeichert.
+Keine externen Texturen, Lizenzabhängigkeiten oder Laufzeitdownloads.

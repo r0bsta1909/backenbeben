@@ -1,0 +1,9 @@
+* text=auto
+*.py text eol=lf
+*.gd text eol=lf
+*.js text eol=lf
+*.bat text eol=crlf
+*.png binary
+*.glb binary
+*.blend binary
+*.wav binary

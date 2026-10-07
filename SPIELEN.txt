@@ -1,0 +1,102 @@
+BACKENBEBEN — SPIELBARER PROTOTYP 02
+
+START
+1. START_HOST.bat doppelklicken.
+2. Der Browser öffnet http://localhost:8765. Beim ersten Laden kurz warten.
+3. TRAINING GEGEN BRUNO startet sofort ein vollständiges Duell gegen den Bot.
+4. Für zwei Menschen wählen beide LAN-DUELL BEITRETEN. Der Host zeigt die
+   LAN-Adresse in der Lobby, z.B. http://192.168.1.100:8765.
+5. Gäste öffnen diese Adresse auf einem PC im selben Netzwerk. Es ist keine
+   Installation beim Gast nötig. Chrome/Edge/Firefox mit WebGL2 verwenden.
+
+Falls Windows den Zugriff abfragt, das private Netzwerk erlauben.
+Falls ein anderer LAN-PC nicht verbinden kann, ALLOW_LAN.bat einmal ausführen.
+Diese optionale Datei fragt Windows-Administratorrechte ausschließlich für eine
+Firewallregel ab: TCP 8765, privates Netz, lokales Subnetz, Spiel-Pythonprogramm.
+Spielserver und Browser laufen anschließend normal ohne Windows-Elevation.
+Nicht für öffentliche Internet-Server gedacht. Keine Portweiterleitung erforderlich.
+
+STEUERUNG — PROTOTYP 02
+Ausrichten: rechte Maustaste halten + Maus bewegen dreht/kippt das Handgelenk.
+Mausrad verändert die Reichweite. HAND NEUTRAL setzt die Haltung zurück.
+EINS / Probe: links außen neben dem Gesicht die linke Taste halten und über
+seine linke Wange ziehen. Die Probe erfolgt mit Abstand; die Diagnose zeigt
+sauberen Kontakt, Fingerspitzen, Streifer oder einen möglichen Regelverstoß.
+ZWEI / Schlag: denselben Bogen erneut ziehen. Der räumliche Kontakt während des
+Schwungs zählt, nicht der Ort des Loslassens. Tempo sättigt, flache Ausrichtung
+und Reichweite entscheiden mit. Kein Modus "Halten & zielen" mehr.
+Abwehr: Grau = gesperrt, Gelb = warten, Grün = JETZT ANSPANNEN.
+Beim Empfang einmal rechts klicken, Leertaste oder den grünen Button drücken.
+Die Ankündigung dauert 1,4 Sekunden; das grüne Fenster standardmäßig 450 ms.
+Nur der erste Versuch zählt; frühes Drücken verbraucht ihn. Angreifer nutzen
+rechts zum Ausrichten, Empfänger zum Anspannen.
+Replay: nach jedem Treffer Zeitlupe (0,1x/0,25x/1x), Pause, Einzelbild,
+Zeitleiste, Front-/Dreiviertelansicht und Kontaktspur. Die Anzeige nennt die
+verbleibende Replayzeit. Nach 12 Sekunden geht es weiter; beide Spieler können
+vorher WEITER wählen. Im Training reicht die eigene Zustimmung.
+Emotes: in der Erholung nach dem Replay 1, 2 oder 3 beziehungsweise Buttons.
+M: eigenen Pultspiegel vergrößern/verkleinern. TON AN/AUS schaltet den Ton.
+? STEUERUNG erklärt die Eingaben auch im Spiel.
+
+REGELN
+Abwechselnde Schläge, fünf Schlagpaare oder vorheriger KO.
+Eigenes vereinfachtes Regelprofil: Handballen zuerst oder verbotene Trefferzone
+sind Fouls. Erstes Foul: Schlag ohne Spielschaden; zweites Foul: Disqualifikation.
+Fingerspitzen und Streifer haben weniger Wirkung. Gültige Trefferwirkung zählt
+für die Punkteentscheidung. Blutmenge gibt keine Punkte.
+Das Gesicht bleibt die Gesundheitsanzeige. Der neue Gewebesolver erzeugt lokale
+Eindellung und abklingende Bewegung. Dauerhafte Wunden/Schwellung bleiben separat.
+Replay und Live-Treffer verwenden dieselben vom Host berechneten Zustände.
+Das ist ein vereinfachtes physikbasiertes Modell, keine medizinische Simulation.
+Nach vollständiger Eingabe kündigt der Host den Schlag an. Bei ausgelastetem
+Rechner erscheint kurz "Kontakt wird berechnet", bis die Sequenz bereitsteht.
+Revanche: beide zustimmen; im Training sofort. Erstschlagrecht wechselt.
+Bei Verbindungsabbruch bleibt der Platz 30 Sekunden reserviert. Derselbe
+Browser-Tab verbindet automatisch wieder; auch Neuladen setzt das Match fort.
+Nach Ablauf der Frist oder ausdrücklich ZUR LOBBY ein neues Duell beginnen.
+
+INDIVIDUALISIERUNG
+Kampfname, vier Hautfarben, drei Haarfarben und vier Trikotfarben.
+Auswahl wird in der Lobby angezeigt und zum Gegner übertragen.
+Alle Varianten besitzen dieselben spielrelevanten Trefferzonen.
+
+BALANCING
+Im Host-Terminal eingeben oder im lokalen Browser BALANCING öffnen:
+  help
+  get
+  set base_damage 25
+  set brace_window_ms 450
+  set brace_reduction 0.35
+  set recovery 6
+  set ko_threshold 100
+  set turn_seconds 25
+  set max_pairs 5
+  save
+  load
+  status
+  reset
+Änderungen gelten ab dem nächsten Match/der nächsten Revanche.
+save/load verwendet server/balance.json. reset beendet laufende Matches.
+Nur der lokale Host erhält Web-Adminzugriff. LAN-Gäste können nicht administrieren.
+Treffer und Ergebnisse werden in logs/matches.jsonl protokolliert.
+
+BEENDEN
+Im Host-Terminal Strg+C drücken, danach Browser schließen.
+Bei belegtem Port den bereits laufenden Host beenden. Alternativer Port:
+START_HOST.bat --port 8766 (LAN-Firewallregel dann entsprechend anpassen).
+
+WEITERENTWICKLUNG
+START_GODOT.bat öffnet das editierbare Godot-Projekt.
+BUILD_GAME.bat aktualisiert den Browser-Build. Browser danach neu laden.
+START_BLENDER.bat öffnet Blender mit projektlokaler MCP-Brücke.
+assets-source/fighter.blend und hand.blend sind die editierbaren Modelle.
+scripts/create_assets.py erzeugt Modelle und eigene Sounds reproduzierbar.
+Der Godot-Editor zeigt die 3D-Szene; Match-UI und Netzwerk werden im Web getestet.
+Das fertige Spiel benötigt weder Blender noch Godot-Editor noch Internetzugriff.
+Der Host nutzt die lokale Python-Laufzeit inklusive NumPy 2.2.6 für Physik.
+Nach einem Update: bisherigen Host mit Strg+C beenden, START_HOST.bat starten
+und beide Browser mit Strg+F5 neu laden.
+
+PRÜFNACHWEISE
+docs/GAUNTLET.txt erklärt die geprüften Gates und die verbleibende menschliche
+Abnahme. Automatisierte Tests unter tests/, Ergebnisse und Bilder unter logs/.

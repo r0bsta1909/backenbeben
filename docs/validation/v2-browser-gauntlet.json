@@ -1,0 +1,69 @@
+{
+  "errors": [],
+  "hits": [
+    {
+      "kind": "hit",
+      "target": 1,
+      "damage": 23.32,
+      "quality": 0.7974,
+      "braced": true,
+      "side": "L",
+      "ko": false,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 Handfl\u00e4che und Finger"
+    },
+    {
+      "kind": "hit",
+      "target": 0,
+      "damage": 38.54,
+      "quality": 0.8564,
+      "braced": false,
+      "side": "L",
+      "ko": false,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 Handfl\u00e4che und Finger"
+    },
+    {
+      "kind": "hit",
+      "target": 1,
+      "damage": 38.54,
+      "quality": 0.8564,
+      "braced": false,
+      "side": "L",
+      "ko": true,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 Handfl\u00e4che und Finger"
+    }
+  ],
+  "wrist_and_reach_controls": true,
+  "clip_hash": "0e7b54878d5f64e0c9423406f86db76abb5effa1b4e3a2eba16d66a4c7163bdc",
+  "replay": {
+    "frameCount": 337,
+    "peak": 0.0182,
+    "time": 0.49998,
+    "frame": 59,
+    "deformation": 0.018156319999999972
+  },
+  "replay_frame_ms_p95": 7,
+  "viewport": [
+    1920,
+    1080
+  ],
+  "resume": true,
+  "winner": 0,
+  "audio": {
+    "mode": "buffer-fallback",
+    "played": 5,
+    "unlocked": true
+  },
+  "rematch": true,
+  "leave": true,
+  "stats": {
+    "dragging": false,
+    "fps": 143,
+    "muted": false,
+    "physics_active": false,
+    "physics_time": -1,
+    "samples": 0
+  }
+}

@@ -1,0 +1,49 @@
+LOKALE ENTWICKLUNGSUMGEBUNG — 07.10.2026
+
+Installiert im Projektordner:
+- Blender 4.5.14 LTS, portable ZIP, offizieller Blender-Download.
+- Godot 4.7.2 stable, Windows x64, offizieller godot-builds-Release.
+- Passende Web-Exportvorlagen, normal/dynamic, debug/release, mit/ohne Threads.
+- MCP for Blender 2.1.9, isolierte Python-3.12.14-Umgebung.
+- Zum MCP-Paket gehörendes Add-on 1.8, Protokoll 13.
+- Abhängigkeiten: tools/blender-mcp/requirements-lock.txt.
+
+START_BLENDER.bat öffnet Blender und lädt das lokale Add-on automatisch.
+Die Brücke lauscht ausschließlich auf 127.0.0.1:9876.
+START_GODOT.bat öffnet das Godot-Projekt unter game/ im Editor.
+Godot verwendet den portablen editor_data-Ordner. Blender-Konfiguration und
+Skripte liegen ebenfalls im Projekt. MCP-Telemetrie ist deaktiviert.
+
+Codex-Verbindung ist in .codex/config.toml eingetragen; eine lesbare Kopie liegt
+in tools/blender-mcp/codex-config.toml. Neue MCP-Tools können einen Neustart bzw.
+erneutes Laden des Projekts in Codex benötigen. Diese laufende Unterhaltung hat
+keine nachträglich eingeblendeten Blender-Tools; der Test nutzte einen MCP-Client.
+Zum späteren Modellieren zuerst START_BLENDER.bat starten.
+Bei Verschieben des Projektordners absolute Pfade in der MCP-Konfiguration ändern.
+
+ERFOLGREICH GEPRÜFT
+Blender: Headless-Start, Version 4.5.14 LTS.
+Godot: Headless-Versionsabfrage 4.7.2.stable.official.ed1daf0bf.
+MCP: initialize, list_tools, get_scene_info; Antwort mit Cube, Camera, Light.
+Beleg: tools/mcp-smoke.json. Kein isError.
+Blender-ZIP gegen offiziellen SHA256-Manifest geprüft.
+Godot-ZIP und Exportarchiv gegen GitHub-Asset-Digests geprüft.
+Installierte Add-on-Datei stammt aus dem installierten MCP-Paket.
+
+PROTOTYP-ERGÄNZUNG
+Realer Web-Export, GLB-Import und Browser-Rendering sind inzwischen geprüft.
+START_HOST.bat startet den fertigen autoritativen Spielhost samt Browser.
+20 Netzwerkduelle und ein komplettes Duell mit echten Mauszügen in zwei
+Chrome-Kontexten erfolgreich. Details: docs/GAUNTLET.txt und logs/.
+Noch offen ist eine menschliche Spielabnahme mit zwei physischen LAN-PCs.
+Zusätzliche lokale Laufzeit: aiohttp 3.14.4; Browsertests: Playwright 1.63.0.
+
+Die Archive bleiben für reproduzierbares Setup unter tools/downloads liegen.
+MCP-Add-on wird projektlokal per Startskript geladen; eine Upstream-Meldung
+„addon not found in any Blender addons folder“ bezieht sich auf die Standardpfade.
+Der tatsächliche Verbindungs-/Versionscheck und die Szenenabfrage waren erfolgreich.
+
+PROTOTYP 02
+Host-Physik: NumPy 2.2.6 in der vorhandenen isolierten Python-Laufzeit.
+Version in server/requirements.txt festgehalten. Zwei lokale ProcessPool-Worker
+werden vom Host verwaltet; kein weiterer Netzwerkdienst und keine neuen Ports.

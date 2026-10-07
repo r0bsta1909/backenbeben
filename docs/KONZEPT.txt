@@ -1,0 +1,190 @@
+BACKENBEBEN — WORLD SLAP CHAMPIONSHIP
+Brainstorming und Gauntlet-Plan • 07.10.2026 • Vorschlag v0.1
+
+VISION
+Ein kurzes, absichtlich überzeichnetes LAN-Duell: Zwei erwachsene Comicfiguren
+stehen sich am Pult gegenüber. Im Bild dominieren gegnerische Schultern und Kopf,
+die eigene Hand und ein kleiner Spiegel. Jeder Schlag verändert die Persönlichkeit
+des Gesichts. Die Pointe ist das trotzige Grinsen, das nicht mehr ganz funktioniert.
+Arbeitstitel-Alternativen: BACKENBEBEN / SLAP INTERNATIONAL / WORLD WIDE WATSCHEN.
+Ton: dreckige Sportübertragung, groteske Charaktere, trockene Kommentatoren.
+Zielgruppe: private Erwachsenenrunde; „18+“ als Tonvorgabe, keine behauptete Einstufung.
+
+REFERENZANALYSE — ALLE FÜNF LOKALEN BILDER GESICHTET
+2003-xiii_2481600.jpg: breite schwarze Silhouetten, kantige Nasen/Wangen,
+wenige harte Schattenflächen. Beste Hauptreferenz für Gesichter und Hände.
+comic game art.jpg: wärmere Palette, feinere Innenlinien und Oberflächendetails.
+Für die Arena geeignet; das Gesicht sollte ruhiger und leichter lesbar bleiben.
+P16-221025-302.jpg: Schulterrotation, geöffnetes Handprofil und Wangenkontakt.
+Pose und Silhouette übernehmen; Identitäten, Marken und Logos nicht nachbauen.
+screenshot-2024-11-10-at-5-46-17-pm.png: Pult als räumlicher Anker, Bühnenlicht,
+Publikum als dunkle Masse. Hilfreich für die reduzierte Ego-Komposition.
+slap-fighting.webp: Kompression um Mund und Wange, Asymmetrie und Hautverzögerung.
+Als Bewegungsreferenz nutzen: Kontaktkompression → seitlicher Zug → Rückschwingen.
+
+WEITERE BILDREFERENZEN UND EIGENE ABLEITUNG
+XIII 2003, Comic-Knalleffekt und klare Ego-Hand:
+https://www.mobygames.com/game/11251/xiii/promo/group-52393/image-455143/
+MadWorld, offizielle Galerie:
+https://www.platinumgames.com/works/madworld
+Ableitung: rote Akzente für Blut und Kontaktmoment; kein durchgängiges Monochrom,
+weil Hautfarbe, Blutergüsse und Schwellungen auch Informationen transportieren.
+Guilty Gear Strive, offizieller Bild-/Videoauftritt:
+https://www.arcsystemworks.com/game/guilty-gear-strive/
+Nahaufnahme:
+https://news.xbox.com/en-us/2023/03/07/guilty-gear-strive-xbox-gamepass/
+Ableitung: starke Augenbrauen, lesbare Mundformen, kurze extreme Kontaktposen.
+Die Kombination bleibt eigenständig: europäische Comiczeichnung mit grotesker
+Sportshow. Referenzbilder sind Gestaltungshilfe, keine fertigen Spielassets.
+
+CORE LOOP — ZIELDAUER 2–4 MINUTEN PRO DUELL
+Lobby → Charakter wählen → Platz am Pult → kurzer Münzwurf → abwechselnde Schläge
+→ Treffer lesen → gegebenenfalls provozieren → KO oder Punkteentscheidung → Revanche.
+Erster Prototyp: 3 Schlagpaare. Bei Gleichstand ein zusätzliches Paar.
+Die Eröffnung wechselt zwischen Revanchen; Erstschlagvorteil wird gemessen.
+Später: 4–8 Personen im Turnier, jeweils zwei aktiv, andere als Zuschauer.
+Weltmeisterschaft entsteht zunächst durch Inszenierung und LAN-Turnierbaum.
+Länderwahl rein kosmetisch; keine nationalen Attributboni.
+
+EASY TO LEARN, HARD TO MASTER
+Angriff: linke Maustaste halten, seitlich ausholen, über die Wange schwingen,
+am Kontakt loslassen. Handpose zeigt die verfügbare Spannung. Drei kurze
+Trainingsversuche erklären die gesamte Eingabe.
+Schwungqualität: normalisierte Strecke, gleichmäßiger Bogen, Zielgenauigkeit,
+Release-Zeitpunkt. Tempo sättigt früh; extrem hohe DPI erzeugen keinen Schadensbonus.
+Kamera bleibt stabil, die Maus steuert den Arm. Linkshand-/Rechtshandmodus spiegeln
+die Geste. Empfindlichkeit und kurze Kalibrierung gehören zum ersten Prototyp.
+Meisterschaft: konstante präzise Schläge, Tempo variieren, gegnerische Anspannung
+lesen. Kein zufälliger kritischer Treffer; Fehler müssen sichtbar erklärbar sein.
+Alternative für A/B-Test: halten lädt Schlag, Maus zielt, Loslassen löst aus.
+Diese einfachere Variante ist auch ein möglicher Zugänglichkeitsmodus.
+
+Verteidigung: rechte Maustaste im kurzen, angekündigten Kontaktfenster antippen,
+um sich anzuspannen. Das reduziert Taumeln moderat, verhindert nicht jeden Treffer.
+Dauerhalten verbraucht das Fenster; danach Erholungszeit. Kein Button-Mashing.
+Keine freie Ausweichbewegung im MVP: Gesicht und Trefferbereich bleiben lesbar.
+Beide Mechaniken werden als Spielregeln entworfen, nicht als Sport-Simulation.
+
+DAS GESICHT ALS HEALTH-ANZEIGE
+Intern zwei getrennte Zustände: bleibende Beschädigung und kurzzeitige Benommenheit.
+Beschädigung verändert Wangen, Augenlider, Lippen und Kiefer; Benommenheit zeigt
+sich durch Blickverlust, verzögertes Blinzeln, Kopfhaltung und Atmung.
+KO tritt bei klarer Benommenheitsschwelle ein. Bleibende Verletzungen senken
+die Reserve begrenzt. Sichtbare Eskalation muss vor dem KO warnen.
+Keine Zahlen oder Health-Balken im normalen Match; Diagnosewerte im Adminmodus.
+
+Stufe 0: klare Augen, symmetrischer Mund, selbstsichere Haltung.
+Stufe 1: Rötung, kleine Schramme, leichtes Zucken.
+Stufe 2: dunkler Bluterguss, dicke Lippe, asymmetrische Wange.
+Stufe 3: zugeschwollenes Augenlid, aufgerissene Braue, lockerer Kiefer.
+Stufe 4: deutliche Kieferfehlstellung, instabiler Blick, kurz vor dem KO.
+Kieferbruch als spätes stilisiertes Schadensereignis: Pose, Sprache und Emotes
+verändern sich. Keine zusätzliche anatomische Simulation erforderlich.
+Verletzungen nicht nur über Farbe codieren: Form, Animation und Ton helfen bei
+unterschiedlichen Hauttönen. Bärte dürfen das Schadensbild nicht verdecken.
+Blut: kleine Spritzer, einzelne Tropfen, Flecken am Kragen/Pult. Gesicht bleibt
+lesbar. Schwellungen wachsen während der kurzen Erholung, nicht erst nach Minuten.
+Augenschwellung schränkt die eigene Sicht höchstens am Rand leicht ein;
+dauerhafte starke Sichtblockade würde Rückstände unnötig vergrößern.
+
+EIGENES GESICHT — DREI VARIANTEN
+A, Empfehlung: kleiner angeschrägter Spiegel im Pult. Blick nach unten zwischen
+Schlägen, kurzer Fokus per Mittelklick oder Taste. Bild zeigt denselben Schadensstand.
+B: Hallenmonitor mit Live-Nahaufnahme, billig und gut für Zuschauer, weniger intim.
+C: Sekundant hält nach jedem Schlag einen Handspiegel hoch, humorvoll, aber unterbricht.
+Technik für A: separate Kamera rendert nur den eigenen Kopf in ein kleines
+Viewport-Texture. Kein kompletter Echtzeit-Reflexionsrenderer nötig.
+Früh testen: verstehen Spieler ohne HUD, wie knapp sie vor einem KO stehen?
+
+EMOTES UND INDIVIDUALISIERUNG
+Nach überstandenem Treffer ein kurzes Zeitfenster: „War das alles?“, Kussmund,
+Staub von der Wange wischen, stummes Anstarren, schiefes Grinsen.
+Emote maximal etwa 1 Sekunde, optional, ohne Schadensbonus oder Zeitverlängerung.
+Verletzung modifiziert die Animation: geschwollene Lippe stört Kussmund,
+verletzter Kiefer macht aus dem Spruch unverständliches Nuscheln.
+MVP: ein neutrales Basisgesicht, Hauttöne, Frisur, Bart, Augenbrauen, Shirtfarbe,
+Nickname. Alle Köpfe teilen Trefferzonen und spielrelevante Werte.
+Später: Nasen-/Kieferformen innerhalb begrenzter Morphs, Zahnlücke, Ohren,
+Narben, Handschmuck als kosmetische Variante ohne verdeckte Trefferzonen.
+
+ART- UND ASSET-PIPELINE
+Blender: gemeinsamer Basiskopf mit stabiler Topologie und Arm/Hand-Rig.
+Shape Keys getrennt für Mimik, Kontaktdeformation und dauerhafte Schäden:
+cheek_compress_L/R, cheek_drag_L/R, eye_swollen_L/R, lip_swollen,
+jaw_offset, bruise_morph und Grundemotes. Extreme Kombinationen begrenzen.
+Blutergüsse/Cuts über UV-Masken und Materialmischung; für Web keine Abhängigkeit
+von Renderer-spezifischen Decals. Export als GLB, Quellstände als .blend behalten.
+Godot: Compatibility Renderer, einfache Cel-Stufen, dunkle Umrisshülle,
+gemalte Innenlinien, ruhiger Hintergrund. Outline an Hals und Augen gezielt prüfen.
+Zielbudget als Ausgangspunkt: Kopf 15–25k Dreiecke, Hand/Arm 8–12k,
+wenige Materialien, 1k/2k-Texturen. Tatsächliche Browsermessung entscheidet.
+Erst einen überzeugenden Kopf bauen, dann Individualisierung ableiten.
+
+ARCHITEKTUR FÜR PC-HOST UND LAN-BROWSER
+Godot 4, GDScript, Web-Export mit Compatibility/WebGL2 und zunächst Single Thread.
+Browser sind Clients. Auf dem Host läuft ein nativer autoritativer Server;
+WebSocket verbindet die Browser, HTTP liefert ausschließlich den Exportordner.
+Server kontrolliert Phasen, gültige Gesten, Schaden, KO und Matchzustand.
+Lokale Hand reagiert sofort; bestätigtes Trefferereignis synchronisiert beide Seiten.
+Keine Browser-zu-Browser-Hostpflicht, keine UDP-Annahme im Webclient.
+START_HOST.bat soll später Server starten, Bereitschaft abwarten, LAN-Adresse
+anzeigen und den lokalen Browser mit Spiel-Adminrolle öffnen.
+„Admin“ bedeutet hier vorläufig Spielverwaltung, keine Windows-Elevation.
+Adminzugang nur auf dem Host, Gastlinks ohne Adminrechte. Keine Tokens in Logs.
+Balancing-Terminal: get/set, preset save/load, reset match, simulate, export log.
+Parameter versionieren; Änderungen standardmäßig erst im nächsten Match anwenden.
+Beispiele: slap.base_damage, swing.speed_cap, brace.window_ms,
+brace.reduction, recovery.rate, ko.threshold, turn.timeout.
+Exportlogs: Eingabequalität, Treffpunkt, Schaden, Benommenheit, Matchdauer,
+Startspieler, Ergebnis, Parameterrevision und Netzwerkzeiten.
+
+MVP UND SPÄTER
+MVP: ein Pult, ein Kopf mit Varianten, ein Arm, ein Duell, drei Emotes,
+vier Schadensstufen plus KO, Spiegel, LAN-Join und Adminparameter.
+Später: Turnier, Zuschauer, Replays, weitere Köpfe, Arenawechsel, Kommentatoren.
+Keine Karriere, Accounts oder Matchmaking für den ersten spielbaren Stand.
+
+GAUNTLET-LOOP — UMSETZUNGSPLAN, NOCH KEIN IMPLEMENTIERUNGSAUFTRAG
+Bauen → technische Prüfung → zwei Personen spielen → Beobachtungen/Logs →
+größten Fehler beheben → dieselben Abnahmekriterien erneut prüfen.
+Jeder Durchlauf hält Build, Hypothese, Parameterstand, Ergebnis und Entscheidung fest.
+Ein Gate wird nur mit Evidenz grün. Bei Fehlschlag bleibt die Arbeit an diesem Gate.
+Menschliche Spieltests werden nicht durch behaupteten „Spielspaß“ ersetzt.
+
+G0 TOOLCHAIN: Blender startet, MCP-Szenenabfrage klappt, Godot startet,
+Web-Template vorhanden. Beleg: Versionen und Smoke-Test-Protokoll.
+G1 SCHLAGGEFÜHL: grauer Kopf und Hand; zwei Eingabevarianten testen.
+Gate: 4/5 neue Tester treffen nach höchstens 60 Sekunden gezielt; Wiederholungen
+derselben normalisierten Geste liefern gleiche Bewertung. DPI/FPS vergleichen.
+G2 GESICHT: ein fertiger Comic-Kopf, Schaden, Spiegel, ein verletzungsabhängiges Emote.
+Gate: Tester ordnen vier Schadensbilder ohne Zahlen zuverlässig; keine kaputten
+Morph-Kombinationen, Trefferzonen bleiben bei kosmetischen Varianten gleich.
+G3 LAN: zwei getrennte PCs im selben Netz, echte Browserclients, autoritativer Host.
+Gate: 20 vollständige Matches ohne widersprüchliches Ergebnis; doppelte/ungültige
+Schlagpakete, Tabwechsel, Verbindungsabbruch und Wiederverbindung definiert behandeln.
+G4 BALANCE: Adminterminal und reproduzierbare Matchlogs.
+Gate: starke Spieler schlagen Anfänger erkennbar öfter; Erstschlagvorteil messen,
+Richtwert 45–55% bei vergleichbarer Stärke, ausreichend Matches samt Unsicherheit.
+Kein Maximum-DPI-, Dauerblock- oder Emote-Spam-Vorteil. Ziel 2–4 Minuten.
+G5 PRÄSENTATION: Blut, Sound, kurze Kontaktpause, Erholung, Revanche, Individualisierung.
+Gate: lesbares Gesicht bei allen Skins; auf dokumentiertem Ziel-PC möglichst
+60 FPS bei 1080p, p95-Framezeit messen; reduzierte Effekte bei Bedarf.
+G6 LAN-ABEND: frische Projektkopie, Ein-Klick-Host, Gäste per URL, Turnier erst jetzt.
+Gate: kalter Start ohne Editor/Internet, mehrere Revanchen, klare Fehlermeldungen,
+sauberes Beenden und erneuter Start. Test auf zweitem PC bleibt echte Abnahme.
+
+RISIKEN UND FRÜHE ENTSCHEIDUNGEN
+Schöne Deformation ohne gutes Schlaggefühl reicht nicht: G1 vor Asset-Ausbau.
+Unsichtbarer KO-Zustand wäre unfair: G2 muss die diegetische Lesbarkeit belegen.
+Starkes Schadenshandicap erzeugt Abwärtsspiralen: Effekte zunächst hauptsächlich
+visuell, mechanische Nachteile klein und begrenzt.
+Web-Shading und Spiegel früh im Browser testen, nicht nur im Editor.
+MCP ist Werkzeug für Assetproduktion; es gehört nicht zur Laufzeit des Spiels.
+
+TECHNISCHE QUELLEN
+https://docs.godotengine.org/en/stable/tutorials/export/exporting_for_web.html
+https://docs.godotengine.org/en/stable/tutorials/networking/websocket.html
+https://download.blender.org/release/Blender4.5/
+https://godotengine.org/download/windows/
+https://github.com/ahujasid/mcp-for-blender
+https://developers.openai.com/codex/mcp/

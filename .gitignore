@@ -1,0 +1,22 @@
+tools/
+build/
+dist/
+.codex/
+.agents/
+.venv/
+.env
+.env.*
+!.env.example
+game/.godot/
+logs/
+__pycache__/
+*.pyc
+*.blend1
+*.blend2
+server/balance.json
+# Local third-party visual references, not redistribution assets.
+/2003-xiii_2481600.jpg
+/comic game art.jpg
+/P16-221025-302.jpg
+/screenshot-2024-11-10-at-5-46-17-pm.png
+/slap-fighting.webp

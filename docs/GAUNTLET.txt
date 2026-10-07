@@ -1,0 +1,182 @@
+BACKENBEBEN — PROTOTYP 02 / HANDKONTAKT, PHYSIK, REPLAY
+07.10.2026, technischer Abschluss dieser Ausbaustufe.
+
+P0 KONTAKTLABOR — BESTANDEN
+Räumliche Handregionen und fester 240-Hz-Sweep ersetzen die Endpunktwertung.
+Flach, Fingerspitzen, Streifer, Handballen zuerst, verbotene Zone und Fehlschlag
+getestet. Wenige/viele Eingabesamples ergeben dieselbe Kontaktklasse.
+Host validiert Werte, Reihenfolge, Grenzen und Zug-ID. Die Kontaktfläche stammt
+jetzt aus dem exportierten Blender-Mesh, nicht aus der alten Bildschirmzone.
+
+P1 ASSETS / GEWEBE — TECHNISCH UND VISUELL GEPRÜFT
+Zusammenhängendes Face-Mesh, editierbare Hautgruppen, Mundinnenraum und HandRig.
+.blend-Quellen und GLBs neu erzeugt; Godot importiert/exportiert ohne Fehler.
+126 Gitterpunkte (63 Oberfläche, 63 tiefe Verankerung), tetraedrische Volumen-
+und Abstandsbeschränkungen, XPBD mit festem Schritt 1/240 s.
+Aufzeichnung: 337 Zustände bei 120 Hz, 2,8 Sekunden pro Treffer.
+Regression: keine NaN/Infinity, feste Anker bleiben fest, keine invertierten
+Tetraeder im getesteten Treffer; lokale Volumenverhältnisse etwa 0,889–1,123.
+Maximale Auslenkung im Referenzfall 0,0226 Szeneneinheiten, am Ende Rückkehr
+zur Ruhe. Der Solver hat Materialnachgiebigkeit, kein exakt inkompressibles Gewebe.
+logs/physics-gate.json enthält die Messung; 13 Unit-Tests insgesamt bestanden.
+Gleiche aufgezeichnete Zeitpunkte liefern bei 30/60/144 Render-FPS identische
+Zustände. Ein langsamer Renderer kann trotzdem kurze Spitzen überspringen.
+
+P2 STEUERUNG / REGELN — AUTOMATISIERT BESTANDEN
+Echte Maus-/Tastatureingaben im Browser: Handgelenk, Reichweite, Neutralstellung,
+Probeschwung, Schlag, rechtzeitiges Anspannen und Emote. Keine synthetischen
+Schlag-RPCs im Browser-Durchlauf. Separater Protokolltest prüft verpflichtende
+Probe, doppelte Pakete, Bereichsverletzungen, zwei Fouls -> Disqualifikation,
+kein Spielschaden aus einem Foul und Rücksetzen bei Revanche.
+Menschliche Lernkurve/Erklärung innerhalb einer Minute bleibt eine Spielabnahme;
+ein automatisierter Test kann diese qualitative Frage nicht beantworten.
+
+P3 REPLAY — BESTANDEN
+Zwei Clients erhalten identische Clipdaten (Hash in v2-browser-gauntlet.json).
+Zeitlupe, pausiertes Scrubbing, Kamerawahl und sichtbare Gewebeverschiebung im
+Browser geprüft. Kein neuer Physiklauf beim Abspielen. Wunden folgen vor/nach
+Kontakt gespeicherten Spielerzuständen. Neuladen im Replay stellt Sitzplatz,
+Match und denselben Clip wieder her. Gemeinsam überspringen funktioniert.
+
+P4 LAN / START / PERFORMANCE — BESTANDEN AUF DIESEM RECHNER
+Zwei getrennte Chrome-Kontexte über http://192.168.1.100:8877, tatsächlich
+unsicherer LAN-HTTP-Kontext, AudioWorklet-Fallback aktiv und Ton abgespielt.
+Vollständiges Match mit gültigen Treffern, Anspannen, KO, Revanche und Verlassen.
+Keine JavaScript-/Godot-Konsolenfehler. Wiederverbindungsfehler beim ersten
+Durchlauf gefunden und behoben; vollständiger Durchlauf danach erfolgreich.
+1920x1080: Replay-rAF-Framezeit p95 7 ms im letzten Test, Godot ca. 143 FPS.
+Testgerät: AMD Ryzen 5 3600, NVIDIA GeForce RTX 2080, Windows, Chrome headless
+mit WebGL. Das ist kein Leistungsversprechen für andere Rechner oder Browser.
+.bat-Kaltstart, reale LAN-IP, Build-Ressourcen und gesperrter Quellcodepfad geprüft.
+Kein physischer zweiter LAN-PC verfügbar; dieser Nachweis bleibt offen.
+
+ARCHITEKTURENTSCHEIDUNGEN GEGENÜBER DEM PLAN
+Der erste reine Python-Solver war mit rund 6,4 Sekunden zu langsam. NumPy plus
+lokaler ProcessPool erreicht im Referenztest rund 1,5 Sekunden. Deshalb kein
+zusätzlicher Godot-Worker/Netzwerkdienst: der bestehende Host verwaltet die Worker.
+Der Kontakt wird aus der abgeschlossenen Eingabe berechnet. Die Ankündigung
+überbrückt den Solve; danach spielen Live-Ansicht und Replay dieselbe Sequenz.
+Bei längerer Berechnung zeigt die UI einen eigenen Zustand. Das ist kein
+kontinuierlich über LAN gekoppelter Vollkörper-Physikserver.
+Anspannen reduziert den Kopfimpuls im linearen Kopfmodell und Spielschaden;
+es erzeugt kein Ausweichen. Die Finger haben eine feste offene Grundhaltung.
+Kontaktprüfung nutzt ein grobes Haut-Höhenfeld und mehrere Handproben, keine
+hochaufgelöste Kontakt-/Frakturanalyse. Verletzungsdarstellung bleibt stilisiert.
+
+DATEIEN / REPRODUKTION
+Unit: tools/blender-mcp/venv/Scripts/python.exe -m unittest discover -s tests -p test_*.py
+Host für Integration: START_HOST.bat --port 8877 --no-browser --no-console
+Browser: tests/v2_browser_gauntlet.py
+Protokoll: tests/v2_network_gauntlet.py
+Start: tests/launcher_smoke.py
+Ergebnisse: logs/physics-gate.json, logs/v2-browser-gauntlet.json,
+logs/v2-network-gauntlet.json, logs/launcher.log.
+Bild: logs/v2-physics-peak.png; Quellen: assets-source/*.blend.
+Die älteren browser_gauntlet/lan_browser_regression/netzwerk-Skripte unten
+belegen Prototyp 01 und sind wegen des neuen Eingabeprotokolls nicht aktuell.
+
+--- HISTORISCHER NACHWEIS: PROTOTYP 01 ---
+
+BACKENBEBEN — GAUNTLET / PROTOTYP 01
+07.10.2026
+
+SCHEMA
+Hypothese → kleinster spielbarer Stand → Messung/Spielprüfung → Fehlerbehebung
+→ Wiederholung betroffener Prüfungen → nächstes Gate.
+Technische Funktionsprüfung und menschliche Designabnahme sind getrennt.
+
+G0 / TOOLCHAIN — TECHNISCH BESTANDEN
+Blender 4.5.14 LTS + MCP, Godot 4.7.2, Web-Templates und lokale Python-Laufzeit.
+MCP-Szenenabfrage bereits im Setup erfolgreich. Godot-Import/Export erfolgreich.
+Keine Laufzeitdownloads; alle Modelle, Sounds und Browserdateien liegen lokal.
+
+G1 / SCHLAGREGELN — TECHNISCH BESTANDEN
+Deterministische Serverbewertung mit festen normalisierten Trefferzonen.
+Unit-Tests: unterschiedliche Samplezahlen, Fehlschlag, Tempo-Sättigung,
+NaN/rückwärts laufende Zeit, kurze Geste, Abwehr, KO und einfache Eingabe.
+Erster Browsertest: Software-Rendering und Screenshot-Wartezeit führten zum
+Zug-Timeout; deshalb nicht als funktionierender Maus-Schlag gewertet.
+Korrektur im Test: reguläres Chrome-WebGL und Eingabe direkt nach Zugbeginn.
+Danach echter Mauszug erfolgreich, Trefferbewertung und Schaden im Serverlog.
+
+G2 / GESICHT & ASSETS — TECHNISCH UND VISUELL GEPRÜFT
+Eigene Blender-Büste, offene Hand mit fünf Fingern, .blend-Quellen, GLB-Exporte.
+Vier Face-Morphs, seitenspezifische Hämatome/Cuts, Blut, Schwellungen, Kieferpose.
+Godot-Cel-Shader mit harten Farbstufen und dunklen Konturen.
+Eigener Kopf als zweite Szene im Pultspiegel. Keine fremden Bilder als Spielassets.
+Gefundene Mängel: Spiegel anfangs beschnitten; M zoomte die Hauptkamera;
+Verletzungen erschienen beidseitig; Emotes verwendeten denselben Bewegungsimpuls.
+Korrekturen: eigener beweglicher Spiegel, Schadenssummen pro Seite, unterschiedliche
+Lippen-/Brauenreaktionen und verletzungsabhängige Sprüche.
+Letzte Politur: Spiegel höher gesetzt, kleinere Beschriftung, Hautfarbe auch auf
+der eigenen Hand, Blutpartikel auf Trefferseite, Schlagbewegung am Kontaktevent.
+
+G3 / NETZWERK — TECHNISCH BESTANDEN
+Autoritativer aiohttp-Host, Browser über WebSocket; HTTP liefert nur build/web.
+20 vollständige automatisierte Netzwerkduelle: übereinstimmende Endstände,
+ungültige und doppelte Pakete abgewiesen, Revanche setzt Schaden zurück und
+wechselt Erstschlagrecht, Abbruch des Gegners wird sauber signalisiert.
+Zusätzlich vollständiges Duell in zwei separaten echten Chrome-Browserkontexten:
+alle Schläge über Maus, kein synthetischer Schlag-RPC im Browser-End-to-End-Test.
+LAN-IP des Host-PCs erreicht den Health-Endpunkt. Gastzugriff über diese Adresse
+erhält admin=false und HTTP 403 beim Admin-POST (logs/lan-access.json).
+Kein physischer Zweit-PC getestet.
+
+G4 / ADMIN & BALANCE — FUNKTION BESTANDEN, DESIGNABNAHME OFFEN
+Host-Terminal und lokale Browserkonsole; begrenzte/validierte Parameter,
+Versionierung pro Match, save/load und reset. Fremde Origin wird abgewiesen.
+Browser-Test änderte Schaden und prüfte neue Revision erst bei der Revanche.
+20 identische perfekte Angriffsabläufe gewinnt erwartbar der Erstschläger;
+daraus wird ausdrücklich keine faire menschliche Siegquote abgeleitet.
+Revanchen wechseln das Startrecht. Abwehr kann einen Schlag abschwächen.
+Echte Messung von Skill-Unterschied und Erstschlagvorteil bleibt Spieltestaufgabe.
+
+G5 / PRÄSENTATION — TECHNISCH BESTANDEN
+Kampfname, Haut-/Haar-/Trikotfarbe, drei Emotes, zwei eigene Audioeffekte,
+Comic-Impact, Handbewegung, KO-Pose und Revanche-UI.
+Zwei-Browser-Test erfolgreich: Abwehr tatsächlich braced=true, Emote übertragen,
+Schäden und Resultat auf beiden Clients synchron, keine Browserfehler.
+Performance-Messung: logs/browser-gauntlet.json (Godot-FPS und rAF p95).
+Letzter Messpunkt nach Rückkehr in die Lobby: 144 Godot-FPS, rAF p95 7 ms
+bei 1280x800 in Chrome auf diesem PC. Kein Nachweis für 1080p oder alle Matchphasen.
+rAF ist die Browser-Framezeit, keine GPU-Profilermessung. Werte gelten für diesen
+Host und Testbrowser; keine Zusage für beliebige LAN-PCs.
+
+G6 / START & AUSLIEFERUNG — AUTOMATISIERTE ABNAHME
+START_HOST.bat startet den Python-Host und öffnet standardmäßig den Browser.
+Kaltstart-Test startet dieselbe BAT auf Port 8766 ohne Browser/Terminaleingabe,
+prüft Health und sämtliche Kern-Exportdateien sowie gesperrten Source-Zugriff.
+Dieser BAT-Kaltstart-Test ist erfolgreich abgeschlossen; danach Testprozess beendet.
+Build über BUILD_GAME.bat, Quellbearbeitung über START_GODOT.bat.
+Optionale ALLOW_LAN.bat richtet eine schmale private Firewallfreigabe ein;
+keine automatische Änderung der Windows-Firewall während der Entwicklung.
+
+NOCH OFFENE MENSCHLICHE ABNAHME
+- Fünf neue Spieler: Zielgerichteter Treffer innerhalb einer Minute.
+- Vier Schadensstufen ohne Zahlen richtig einschätzen, auch bei allen Hautfarben.
+- Zwei physische LAN-PCs: Firewall, Netzwerkqualität und vollständiger Spieleabend.
+- Wiederholte Paarungen mit wechselndem Erstschlagrecht; Siegquoten und Spaß prüfen.
+Diese Punkte sind nicht mit Testbots oder Screenshots als bestanden ausgegeben.
+Der technische spielbare Prototyp ist unabhängig davon ausführbar.
+
+BELEGE
+logs/browser-gauntlet.json / logs/network-gauntlet.json
+logs/gauntlet-lobby.png / gauntlet-mirror.png / gauntlet-damage.png / gauntlet-result.png
+logs/build.log / logs/launcher.log / logs/matches.jsonl
+tests/test_rules.py / network_gauntlet.py / browser_gauntlet.py / launcher_smoke.py
+
+KORREKTURSCHLEIFE / LAN-START UND ABWEHR
+Nutzerrückmeldung: Terminal zeigte nur IP-Platzhalter; LAN-Browser brach beim
+AudioWorklet-addModule-Aufruf ab; Anspannzeitpunkt war nicht verständlich.
+Ursache: frühere Browsertests liefen auf localhost (sicherer Browserkontext).
+Der LAN-Test prüfte zuvor nur HTTP/API, nicht den tatsächlichen Engine-Start.
+Korrektur: echte IPv4-LAN-Adressen im Terminal, Audio-Buffer-Fallback bei LAN-HTTP
+mit Godot-Dummy-Audiotreiber; normale Godot-Audiowiedergabe bleibt auf localhost.
+Abwehr jetzt mit 1,4 s Ankündigung, 450 ms Standardfenster, flüssiger Timing-Leiste,
+gesperrtem/aktivem Button und serverbestätigtem Erfolg/verbrauchtem Versuch.
+Nachweis: tests/lan_browser_regression.py auf echter HTTP-LAN-IP, ohne Browser-
+Sicherheitsausnahmen: secure=false, worklet=false, Spiel gestartet, fünf Sounds
+abgespielt, früher Versuch nicht abgewehrt, grüner Versuch tatsächlich abgewehrt.
+Auch localhost erneut gestartet. Keine Browserfehler.
+Beleg: logs/lan-browser-regression.json und logs/brace-too-early.png.
+Für vorhandene Sitzungen: Host neu starten und beide Browser mit Strg+F5 neu laden.

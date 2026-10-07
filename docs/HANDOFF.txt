@@ -1,0 +1,68 @@
+BACKENBEBEN — WISSENSSICHERUNG / AKTUELLER ARBEITSSTAND
+08.10.2026
+
+ZIEL
+Browser-LAN-Spiel für private Erwachsenenrunde. Kopf/Schultern des Gegners,
+eigener Arm, Gesicht als Gesundheitsanzeige, Comicstil des ursprünglichen XIII.
+Leicht verständlich, mit erlernbarer Präzision. Kein reiner Geschwindigkeitstest.
+
+NUTZERFEEDBACK / OBERSTE PRIORITÄT
+Prototyp 02 ist technisch spielbar, aber komplett unverständlich. Handausrichtung
+wirkt konfus, der Arm schwebt frei, Körper/Hand/Gesicht sind räumlich schlecht lesbar.
+Technische Testpässe sind KEINE Freigabe des Spielgefühls. Neue Referenzbilder und
+Asset-Gauntlet V3 wurden erstellt; der Nutzer hat jetzt die Umsetzung autorisiert.
+Erst aktuellen Stand auf öffentliches GitHub sichern, dann umsetzen, geprüfte
+Zwischenstände regelmäßig pushen. Repository: r0bsta1909/backenbeben.
+
+AKTUELL IMPLEMENTIERT
+Godot Web Compatibility, eigener Python/aiohttp-Host, lokale Balancekonsole,
+LAN-IP-Ausgabe, Audio-Buffer-Fallback für unsicheres LAN-HTTP ohne AudioWorklet.
+Serverseitige Bewertung gesampelter 3D-Handregionen, eigene vereinfachte Fouls,
+Probeschwung, Brace, KO, Revanche, Emotes, Wiederverbindung für 30 Sekunden.
+NumPy-XPBD-Gewebegitter in ProcessPool-Workern, aufgezeichnete Treffersequenzen.
+Replay und Live-Präsentation teilen Daten; kein unabhängiger Solve pro Browser.
+
+EINSTIEG INS REPO
+server/host.py: HTTP, WebSocket, Phasen, Sitzungen, Worker, Admin.
+server/contact.py: gesampelter Kontakt gegen Höhenfeld; ersetzt V1-Endpunktwertung.
+server/tissue.py: XPBD-Gewebe und Aufzeichnung. server/rules.py: Schaden/Balance.
+game/main.gd: Szene, Modelle, Spiegel, Verletzungen, Renderer-Brücke.
+game/combat.js: V2-Mauseingabe, Replay und Pose-Transport.
+game/browser_support.js: LAN-Audio und Verteidigungsanzeige.
+scripts/create_assets.py: bisherige prozedurale Blender-Modelle.
+docs/ASSET_GAUNTLET_V3.txt: der autorisierte neue Arbeitsplan.
+
+ENTSCHEIDUNGEN UND GRENZEN
+Einheitlicher Stil und eine hochwertige Basisfigur zuerst. Keine weiteren Kugel-
+Konstruktionsmodelle als fertige Assets verkaufen. Neues vollständiges Torso-/Armrig,
+konstante Knochenlängen, sinnvolle Grenzen, sichtbare Unterarmdrehung. IK allein
+ist keine Physik; Motoren/Trägheit/Kollisionen gesondert prüfen.
+Altes Haut-Höhenfeld passt nicht als alleinige Kontaktwahrheit für gedrehte Köpfe.
+Keine medizinische Validierung. Verletzungen und Schwellung sind stilisiert.
+13 Unit-Tests bestanden. Zwei echte Browser auf demselben PC über LAN-HTTP geprüft,
+kein physischer Zweit-PC. Menschliche Verständlichkeit wurde vom Nutzer beanstandet.
+Historische V1-Browsertests verwenden ein veraltetes Eingabeprotokoll.
+
+REFERENZEN
+Drei neue PNGs unter docs/art-direction-v3/, dazu dokumentierte Prompts.
+XIII-Fremdbilder lagen nur lokal als Referenz vor und werden nicht mitverteilt.
+Bilder sind Gestaltungsvorschläge, keine metrisch validierten Anatomiepläne.
+
+NÄCHSTER ARBEITSSCHRITT
+G0: einheitlicher Maßstab, Kamera, Körperblockout und vollständige Armkette.
+Dann G1/G2 Rig und Dynamik prüfen, erst anschließend Kopf/Hand final modellieren.
+Keine neue freie Winkelsteuerung blind auf schönere Assets übertragen.
+
+ZURÜCKGESTELLT
+Turniere ohne künstliche Teilnehmerobergrenze, Freilose, Turnier-UI, ElevenLabs-
+Kommentar/Sound/Crowd und absurde Werbeausstattung. Siehe BACKLOG.txt.
+
+GITHUB-WORKFLOW
+Öffentliches main mit geprüften Meilensteinen. Vor jedem Push Tests/visuelle Befunde
+und Grenzen in docs festhalten. Kleine zusammenhängende Commits, keine Force-Pushes.
+Ungeprüfte Zwischenarbeit lokal sichern und als solche kennzeichnen, nicht als
+fertiges Gate ausgeben. Dies gilt für die laufende Arbeit; kein unsichtbarer
+Dauer-Sync oder zeitgesteuerter Upload beliebiger neuer Dateien.
+Runtime-Builds als Release-Pakete, nicht als ständig wachsende WASM-Gitgeschichte.
+Vor Veröffentlichungen Dateiliste auf Secrets, lokale Identifikatoren und fremde
+Referenzmedien prüfen. Keine Zugangsdaten oder private Konfiguration committen.

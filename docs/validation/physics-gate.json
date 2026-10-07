@@ -1,0 +1,21 @@
+{
+  "fps": 120,
+  "duration": 2.8,
+  "contact": 0.5,
+  "nx": 9,
+  "ny": 7,
+  "scale": 0.0001,
+  "peak": 0.0226,
+  "solve_ms": 1293.2,
+  "contact_time": 0.3416666666666667,
+  "position": [
+    -0.3513043478260868,
+    0.21800000000000003,
+    0.3153418949275362
+  ],
+  "diagnosis": "Sauber \u2013 Handfl\u00e4che und Finger",
+  "volume_ratio_range": [
+    0.8892719082236838,
+    1.1227100263157896
+  ]
+}
