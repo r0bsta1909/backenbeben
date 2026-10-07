@@ -1,0 +1,49 @@
+BACKENBEBEN — SEITLICHER SCHLAG / TV / KO, 08.10.2026
+Verbindlicher Auslöser: Nutzer lehnt V3 ausdrücklich als unverständlich und
+stilistisch unzureichend ab. V3 bleibt verworfener technischer Zwischenstand.
+
+Quellen (eigene Auswertung, keine fremden Bilder im Repository):
+https://www.powerslap.com/rules/ (Version 1.04)
+Ziel ist die seitliche Gesichtsfläche. Offene Hand, Handfläche oberhalb des
+Handballens und Finger gemeinsam; Handballen zuerst ist unzulässig.
+Ausrichten, angesagte Zählfolge und kontrollierte Vorbereitung sind getrennte
+Phasen. Mindestens zwei Auffänger stehen auf der Bühne.
+https://www.powerslap.com/news/power-slap-7-the-bell-vs-phillips-results/
+Berichtet Rückwärtstaumeln in die Arme der Auffänger und anschließenden Abbruch.
+https://www.rcs.live/work/power-slap
+Primärquelle des Broadcast-Grafikdienstleisters: Echtzeit-Kampfuhr,
+Kämpfervergleich und Titelgrafiken. Nutzerbilder zeigen rot/blaue Namensfelder,
+zentralen Runden-/Zeitblock und sichtbare Schlagrecht-Markierung.
+Das verlinkte YouTube-Video konnte über den Webreader nicht geladen werden;
+keine Behauptung einer vollständigen Videosichtung.
+
+Gauntlet der Überarbeitung:
+L0: Seitliche Kontaktbasis, Wangenmesh statt frontaler Z-Höhenabfrage.
+L1: Schulter-/Brustkorbbewegung, konstanter Arm, verteilte Unterarmdrehung.
+L2: Reale Browserbilder bei Erstkontakt, Ego/Dreiviertel; keine Freigabe nur per Test.
+L3: Kopf-/Haar-/Handanatomie und Stoffformen gegen Comicreferenz überarbeiten.
+L4: TV-Bühne, gepolstertes Pult, Tiefenstaffelung, Referee/Auffänger, Scorebug.
+L5: KO-Körpertrack, feste Füße, einknickende Knie, Auffangen; Replay rückwärtsfest.
+L6: LAN-Protokoll, Miss/Foul/sauber/KO, Revanche, zwei Browser, Web-Leistung.
+L7: Stil und räumliche Lesbarkeit anhand tatsächlicher Bilder prüfen.
+Offene Mängel bleiben offen, bis die entsprechende Prüfung bestanden ist.
+
+Aktuell experimentell implementiert: seitlicher Dreiecksmeshkontakt, explizite
+Finger-/Palmennormale, gedämpfte Brustkorbdrehung, angepasster Gewebeimpuls,
+neue Haarsträhnen/Augen/Kiefer/Inkdetails und KO-Track mit Beinrig.
+KO ist eine stilisierte angetriebene Körperreaktion, kein vollständiger Ragdoll.
+Kontaktmodell verwendet weiterhin acht Probes; keine vollflächige Hand-Weichhaut.
+TV-Bühne, Offizielle, Scorebug und TV-Totale sind integriert.
+LAN-/KO-Integration wurde geprüft; endgültige Stil-/Bildfreigabe bleibt offen.
+25 Unit-Tests, inklusive unveränderter Trefferstärke bei nachträglicher Mausbewegung.
+Der aktuell anatomische Kopf und die Hände basieren auf CC0-MakeHuman-Assets;
+Blender-Bearbeitung und Herkunft: assets-source/makehuman/PROVENANCE.txt.
+
+WEITERE PRÜFKORREKTUREN
+Der Kreisbogen beginnt näher am eigenen Körper und läuft seitlich zur Wange.
+Nach Kontakt zählt nur die tatsächliche Geschwindigkeit zur Haut, nicht die
+gesamte spätere Mausstrecke. Gewebe ruht vor Kontakt exakt: stabilisierte
+Jacobi-Korrekturen, 12 Iterationen, unveränderte Volumengrenzen im Regressionstest.
+Auffanghände folgen den transformierten Achselpositionen; Füße bleiben beim
+Einknicken am Boden. Das ist noch kein physikalisch gelöster Zweipersonenkontakt.
+ArmSkin.R und ArmSkin.L sind jeweils ein zusammenhängendes Mesh; in Blender geprüft.

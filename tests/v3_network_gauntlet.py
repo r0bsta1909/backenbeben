@@ -24,7 +24,7 @@ async def main():
             s=await phase(a,'aim');attacker=a if s['turn']==0 else b
             points=bot_stroke()['points']
             if s['turn']==0:
-                for p in points:p[1]=.35;p[4]=-35
+                for p in points:p[1]=.35;p[4]=35
             await attacker.send_json({'version':3,'action':'slap','turn_id':s['turn_id'],'points':points})
             notice=await receive(attacker,lambda d:d.get('type')=='notice')
             assert 'Probeschwung' in notice['text'];report['practice_required']=True

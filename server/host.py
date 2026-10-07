@@ -3,7 +3,8 @@ import argparse, asyncio, copy, json, math, secrets, socket, time, webbrowser, i
 from pathlib import Path
 from aiohttp import web, WSMsgType
 from rules import DEFAULTS, RANGES, apply_hit
-from contact_v3 import score as v3_score, input_target, collision as arm_collision
+from body import collapse_track
+from contact_v3 import score as v3_score, input_target, collision as arm_collision, decorate as decorate_arm
 from arm import Arm, DT, lab_collision
 
 def bot_stroke():
@@ -128,7 +129,10 @@ async def command(c, d):
         if c.get('arm_turn')!=room['turn_id'] or d.get('restart') is True:
             c['arm']=Arm(input_target(x,y,0));c['arm_turn']=room['turn_id'];c['arm_time']=now-1/15
         arm=c['arm'];steps=max(1,min(24,round((now-c['arm_time'])/DT)));c['arm_time']=now
-        for _ in range(steps):pose=arm.step(input_target(x,y,progress),arm_collision(tilt,skin_state(room["players"][1-me])))
+        for _ in range(steps):
+            arm.drive_torso(.20-.30*max(0,min(1,(x-.19)/.34)))
+            pose=arm.step(input_target(x,y,progress),arm_collision(tilt,skin_state(room["players"][1-me])))
+        pose=decorate_arm(pose,tilt)
         for uid in room['members']:
             other=CLIENTS.get(uid)
             if other and not other['ws'].closed:
@@ -267,7 +271,7 @@ async def tick(app):
                     for frame in clip['frames']:frame[0]=round(frame[0]*.65,5)
                 rid=secrets.token_hex(10);r['replay_id']=rid;r['replay_skip']=[]
                 clip.update(id=rid,target=target,attacker=r['turn'],before=before,after=copy.deepcopy(r['players']),
-                            turn=r['turn_id'],braced=braced,contact_class=r['pending']['contact_class'])
+                            turn=r['turn_id'],braced=braced,ko=ko,body_frames=collapse_track(ko),contact_class=r['pending']['contact_class'])
                 REPLAYS[rid]=clip
                 while len(REPLAYS)>32:REPLAYS.pop(next(iter(REPLAYS)))
                 event(r,'hit',target=target,damage=damage,quality=r['pending']['quality'],braced=braced,

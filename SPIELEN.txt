@@ -107,3 +107,7 @@ Maus höher/tiefer bewegt die Treffhöhe. Mausrad kippt die flache Hand.
 Erst Probe ohne Schaden, dann denselben Schwung als Schlag. Keine freie Tiefenachse.
 Rechts/Leertaste nur als Empfänger beim grünen Signal zum Anspannen.
 Der Arm und die Hände stammen jetzt aus einem gemeinsamen vollständigen 3D-Rig.
+
+SEITLICHER UMBAU: Linke Taste halten und MAUS NACH LINKS bewegen.
+Die sichtbare rechte Hand schwingt ebenfalls nach links. Mausrad kippt die Finger.
+Replay besitzt zusätzlich TV-TOTALE für Körperstand und KO.

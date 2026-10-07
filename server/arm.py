@@ -41,28 +41,38 @@ def forward(q):
 
 class Arm:
     def __init__(self,target=(.27,-.04,.27)):
+        self.torso_yaw=0.;self.torso_velocity=0.
         self.q=target_angles(target);self.velocity=[0.,0.,0.];self.blocked=False;self.peak_torque=0.
+    def rotate(self,p,angle):
+        x,y,z=p;c=math.cos(angle);s=math.sin(angle);z-=.525
+        return (c*x+s*z,y,-s*x+c*z+.525)
+    def joints(self,q):
+        return tuple(self.rotate(p,self.torso_yaw) for p in forward(q))
+    def drive_torso(self,target):
+        torque=clamp(60*(target-self.torso_yaw)-12*self.torso_velocity,-12,12)
+        self.torso_velocity=clamp(self.torso_velocity+torque*.5*DT,-1,1)
+        self.torso_yaw=clamp(self.torso_yaw+self.torso_velocity*DT,-.14,.24)
     def step(self,target,collides=None):
-        desired=target_angles(target);old=self.q[:];self.blocked=False
+        desired=target_angles(self.rotate(target,-self.torso_yaw));old=self.q[:];self.blocked=False
         for i in range(3):
             torque=clamp(95*(desired[i]-self.q[i])-7*self.velocity[i],-MAX_TORQUE[i],MAX_TORQUE[i])
             self.peak_torque=max(self.peak_torque,abs(torque))
             self.velocity[i]=clamp(self.velocity[i]+torque/INERTIA[i]*DT,-11,11)
             self.q[i]=clamp(self.q[i]+self.velocity[i]*DT,*LIMITS[i])
             if self.q[i] in LIMITS[i]:self.velocity[i]=0.
-        if collides and collides(*forward(self.q)):
+        if collides and collides(*self.joints(self.q)):
             # Conservative bisection in joint space; all intermediate poses keep
             # bone lengths. Remove inward kinetic energy instead of accumulating it.
             proposed=self.q[:];lo=0.;hi=1.
             for _ in range(12):
                 t=(lo+hi)/2;candidate=[a+(b-a)*t for a,b in zip(old,proposed)]
-                if collides(*forward(candidate)):hi=t
+                if collides(*self.joints(candidate)):hi=t
                 else:lo=t
             self.q=[a+(b-a)*lo for a,b in zip(old,proposed)];self.velocity=[0.,0.,0.];self.blocked=True
         return self.pose()
     def pose(self):
-        elbow,wrist=forward(self.q)
-        return {'root':[0,0,.525],'shoulder':list(SHOULDER),'elbow':list(elbow),'wrist':list(wrist),'angles':self.q[:],'blocked':self.blocked}
+        elbow,wrist=self.joints(self.q)
+        return {'root':[0,0,.525],'shoulder':list(self.rotate(SHOULDER,self.torso_yaw)),'torso_yaw':self.torso_yaw,'elbow':list(elbow),'wrist':list(wrist),'angles':self.q[:],'blocked':self.blocked}
 
 def lab_collision(elbow,wrist):
     # Conservative rigid head and table proxies, with a 25 mm hand thickness.
@@ -73,12 +83,13 @@ def lab_collision(elbow,wrist):
     return head or table or forearm_table
 
 def laboratory():
-    cases={'ready':(.27,-.04,.27),'windup':(.40,.01,.39),'half_reach':(.12,-.015,.23),'contact':(-.05,-.02,.15),'return':(.27,-.04,.27),'unreachable':(-2,2,-2),'table':(.02,-.5,.17),'behind_head':(0,.04,-.2)}
+    from contact_v3 import input_target,decorate,collision
+    cases={'ready':input_target(.19,.6,0),'windup':(.46,-.01,.30),'half_reach':input_target(.26,.6,.3),'contact':input_target(.42,.6,1),'return':input_target(.19,.6,0),'unreachable':(-2,2,-2),'table':(.02,-.5,.17),'behind_head':(0,.04,-.2)}
     clips={};report={}
     for name,target in cases.items():
-        arm=Arm();frames=[];max_length_error=0.;blocked=0
+        arm=Arm(input_target(.19,.6,0));frames=[];max_length_error=0.;blocked=0
         for step in range(720):
-            pose=arm.step(target,lab_collision);blocked+=pose['blocked']
+            pose=decorate(arm.step(target,collision(-10)),-10);blocked+=pose['blocked']
             max_length_error=max(max_length_error,abs(math.dist(pose['shoulder'],pose['elbow'])-L1),abs(math.dist(pose['elbow'],pose['wrist'])-L2))
             if step%4==0:frames.append(pose)
         clips[name]=frames

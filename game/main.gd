@@ -8,6 +8,8 @@ var physics_materials: Dictionary = {}
 var fighter: Node3D
 var reflection: Node3D
 var hand: Node3D
+var officials: Array = []
+var officials_frame: Array = []
 var opponent_hand: Node3D
 var camera: Camera3D
 var state: Dictionary = {}
@@ -38,7 +40,7 @@ var emote_player := -1
 var emote_kind := 0
 var emote_remaining := 0.0
 var skins := [Color("cf946f"), Color("986345"), Color("683f30"), Color("e5b69a")]
-var shirts := [Color("c24336"), Color("276f80"), Color("deb64c"), Color("534979")]
+var shirts := [Color("6e242b"), Color("26354b"), Color("deb64c"), Color("534979")]
 var hairs := [Color("221b22"), Color("6b3624"), Color("b8afa0")]
 
 func _ready() -> void:
@@ -50,12 +52,13 @@ func _ready() -> void:
 	hand.position = Vector3(0,0,2.1)
 	hand.rotation.y = PI
 	hand.first_person(true)
-	var lab_data: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/arm_lab_clips.json"))
-	hand.apply_arm(lab_data.cases.ready[0],0.0,-5.0)
+	var ready_pose: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/lateral_ready.json"))
+	hand.apply_arm(ready_pose,0.0,-10.0)
 	prepare_materials(hand)
 	opponent_hand = Node3D.new()
 	add_child(opponent_hand)
 	build_mirror()
+	build_officials()
 	slap_audio = AudioStreamPlayer.new()
 	slap_audio.stream = load("res://assets/slap.wav")
 	slap_audio.volume_db = -7
@@ -129,7 +132,7 @@ func build_arena() -> void:
 	env.background_color = Color("131a29")
 	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	env.ambient_light_color = Color("a4b6cb")
-	env.ambient_light_energy = 0.65
+	env.ambient_light_energy = 0.32
 	world.environment = env
 	add_child(world)
 	var key := DirectionalLight3D.new()
@@ -144,30 +147,14 @@ func build_arena() -> void:
 	rim.omni_range = 6.0
 	add_child(rim)
 	camera = Camera3D.new()
-	camera.position = Vector3(0,.46,2.2)
-	camera.fov = 58
+	camera.position = Vector3(0,.55,2.65)
+	camera.fov = 55
 	add_child(camera)
 	camera.look_at(Vector3.ZERO)
 	camera.current = true
-	box(Vector3(0,-1.14,0.65), Vector3(2.3,.18,.8), Color("222732"))
-	box(Vector3(0,-1.04,.98), Vector3(2.1,.035,.02), Color("d6b359"))
-	box(Vector3(0,-1.75,.65), Vector3(.8,1.05,.5), Color("171d29"))
-	box(Vector3(0,-1.7,.915), Vector3(.5,.65,.02), Color("b53530"))
-	box(Vector3(0,0,-2.5), Vector3(12,8,.1), Color("101725"))
-	for x in [-3.0, 3.0]:
-		box(Vector3(x,0,-1.8), Vector3(.08,6,.1), Color("42647d"))
-		for y in range(-2,4):
-			box(Vector3(x,y,-1.7), Vector3(.25,.08,.15), Color("d3ab4d"))
-	for x in range(-6,7):
-		var p := MeshInstance3D.new()
-		var s := SphereMesh.new()
-		s.radius=.19;s.height=.45
-		p.mesh=s;p.material_override=material(Color("29303c"))
-		p.position=Vector3(x*.53,-.85,-1.8)
-		add_child(p)
-		box(Vector3(x*.53,-1.27,-1.8),Vector3(.43,.55,.3),Color("242b36"))
-	sign3d("WORLD SLAP CHAMPIONSHIP",Vector3(0,1.75,-2.3),18,Color("736852"))
-	sign3d("BB",Vector3(0,-1.68,1.0),44,Color("f6d885"))
+	var stage := Node3D.new()
+	stage.set_script(load("res://broadcast_stage.gd"))
+	add_child(stage)
 
 func prepare_materials(root: Node) -> void:
 	physics_materials[root.get_instance_id()] = []
@@ -177,8 +164,8 @@ func prepare_materials(root: Node) -> void:
 		for i in range(node.mesh.get_surface_count()):
 			var m = node.mesh.surface_get_material(i)
 			if m:
-				var tissue_part: bool = str(node.name) in ["Face","MouthLine","LidsL","LidsR"]
-				var head_part: bool = str(node.name) in ["Face","MouthLine","MouthInterior","Teeth","LidsL","LidsR","EyeL","EyeR","IrisL","IrisR","PupilL","PupilR","BrowL","BrowR","HairCap","EarL","EarR","EarFoldL","EarFoldR","NostrilL","NostrilR"]
+				var tissue_part: bool = str(node.name) in ["Face","FaceInk","MouthLine","LidsL","LidsR"]
+				var head_part: bool = str(node.name) in ["Face","FaceInk","MouthLine","MouthInterior","Teeth","LidsL","LidsR","EyeL","EyeR","IrisL","IrisR","PupilL","PupilR","BrowL","BrowR","HairCap","EarL","EarR","EarFoldL","EarFoldR","NostrilL","NostrilR"]
 				var material_key: String = m.resource_name+str(tissue_part)+str(head_part)+str(node.name=="Face")+str(node.position)
 				if shared_materials.has(material_key):
 					node.set_surface_override_material(i,shared_materials[material_key])
@@ -191,8 +178,8 @@ func prepare_materials(root: Node) -> void:
 				copy.set_shader_parameter("part_origin",node.position)
 				copy.set_shader_parameter("geometry_scale",4.0)
 				copy.set_shader_parameter("face_skin",str(node.name)=="Face")
-				copy.set_shader_parameter("tissue",str(node.name) in ["Face","MouthLine","LidsL","LidsR"])
-				copy.set_shader_parameter("head_part",str(node.name) in ["Face","MouthLine","MouthInterior","Teeth","LidsL","LidsR","EyeL","EyeR","IrisL","IrisR","PupilL","PupilR","BrowL","BrowR","HairCap","EarL","EarR","EarFoldL","EarFoldR","NostrilL","NostrilR"])
+				copy.set_shader_parameter("tissue",str(node.name) in ["Face","FaceInk","MouthLine","LidsL","LidsR"])
+				copy.set_shader_parameter("head_part",str(node.name) in ["Face","FaceInk","MouthLine","MouthInterior","Teeth","LidsL","LidsR","EyeL","EyeR","IrisL","IrisR","PupilL","PupilR","BrowL","BrowR","HairCap","EarL","EarR","EarFoldL","EarFoldR","NostrilL","NostrilR"])
 				physics_materials[root.get_instance_id()].append(copy)
 				node.set_surface_override_material(i, copy)
 				mat_cache[str(node.get_instance_id())+":"+str(i)] = m.resource_name
@@ -274,7 +261,7 @@ func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 				var shape := str(node.mesh.get_blend_shape_name(i))
 				var amount := 0.0
 				if shape=="grin" and emote_active:amount=.8
-				if shape=="blink":amount=clampf((sin(clock_time*1.1)-.99)*100,0,1)
+				if shape=="blink":amount=1.0 if physics_frame.get("ko",false) and float(physics_frame.get("time",0))>.65 else clampf((sin(clock_time*1.1)-.99)*100,0,1)
 				if shape=="swelling": amount=ratio
 				if shape=="jaw_broken": amount=clampf((damage-50)/40,0,1)
 				if shape=="cheek_hit_L" and data.get("side","L")=="L": amount=impact if is_enemy else 0
@@ -297,8 +284,7 @@ func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 		if n.begins_with("Brow"):
 			node.position=node.get_meta("base_position")+Vector3(0,.04 if emote_active and emote_kind==1 else 0,0)
 	root.rotation=Vector3.ZERO
-	if is_enemy and state.get("phase", "")=="over" and state.get("winner",-1)==you:
-		root.rotation.z=lerpf(root.rotation.z,-.65,0.8)
+
 
 func _process(delta: float) -> void:
 	clock_time+=delta
@@ -315,6 +301,7 @@ func _process(delta: float) -> void:
 			state=parsed.state;you=int(parsed.you)
 			if int(state.match_id)!=last_match:
 				last_match=int(state.match_id);last_event=-1
+				for view in [fighter,hand,reflection]:view.reset_all()
 				play_sound(bell_audio,"bell")
 			if int(state.event_id)!=last_event:
 				last_event=int(state.event_id)
@@ -423,9 +410,10 @@ func drive_recorded_physics() -> void:
 			m.set_shader_parameter("jaw_angle",float(physics_frame.get("jaw",0)) if affected else 0.0)
 	mirror_mount.visible=not replaying
 	mirror_viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED if replaying else SubViewport.UPDATE_ALWAYS
-	var side_view: bool = replaying and physics_frame.get("camera","")=="side"
-	camera.position=Vector3(3,.55,1.1) if side_view else Vector3(0,.46,2.2)
-	camera.look_at(Vector3(0,-.12,1.0) if side_view else Vector3(0,.15,0))
+	var wide_view: bool = replaying and physics_frame.get("camera","")=="wide"
+	var side_view: bool = replaying and physics_frame.get("camera","") in ["side","wide"]
+	camera.position=Vector3(8.5,1.8,5.5) if wide_view else Vector3(3,.55,1.1) if side_view else Vector3(0,.55,2.65)
+	camera.look_at(Vector3(0,-3.0,.4) if wide_view else Vector3(0,-.12,1.0) if side_view else Vector3(0,.15,0))
 	hand.visible=true
 	hand.first_person(not side_view)
 	var arm_data: Variant = physics_frame.get("arm") if active else hand_pose.get("arm")
@@ -439,7 +427,14 @@ func drive_recorded_physics() -> void:
 			hand.reset_pose()
 			for key in ["root","shoulder","elbow","wrist"]:
 				pose[key]=[-float(pose[key][0]),float(pose[key][1]),.525-float(pose[key][2])]
+			for key in ["finger_direction","palm_normal"]:
+				if pose.has(key):pose[key]=[-float(pose[key][0]),float(pose[key][1]),-float(pose[key][2])]
 			fighter.apply_arm(pose,0.0,float(arm_data.get("tilt",-5)))
+	update_officials(physics_frame.get("body",[0,0,0,0,0]) if active else [0,0,0,0,0])
+	if active:
+		var body_frame: Array=physics_frame.get("body",[0,0,0,0,0])
+		var target_view: Node3D=fighter if replaying or int(physics_frame.target)!=you else reflection
+		target_view.apply_collapse(body_frame)
 	if contact_marks.is_empty():
 		for i in range(8):
 			var dot_mesh := MeshInstance3D.new()
@@ -458,3 +453,37 @@ func zero_cage() -> Array:
 	var result: Array=[]
 	result.resize(63);result.fill(Vector3.ZERO)
 	return result
+
+func build_officials() -> void:
+	for i in range(3):
+		var actor := new_character()
+		actor.position=Vector3((-1.55 if i==0 else 1.55) if i<2 else -2.7,0,-1.55 if i<2 else -.1)
+		actor.rotation.y=.22 if i==0 else -.22
+		prepare_materials(actor)
+		for node in actor.find_children("*","MeshInstance3D",true,false):
+			for j in range(node.mesh.get_surface_count()):
+				var m=node.get_surface_override_material(j)
+				var base: String=mat_cache.get(str(node.get_instance_id())+":"+str(j),"")
+				if base=="Shirt":m.set_shader_parameter("base_color",Color("191d24"))
+				if base=="Skin":m.set_shader_parameter("base_color",skins[1].darkened(.20))
+				if base=="Hair":m.set_shader_parameter("base_color",Color("28262b") if i==0 else Color("58504b"))
+			if i==0 and str(node.name)=="HairCap":node.visible=false
+		actor.set_meta("home",actor.position)
+		officials.append(actor)
+
+func update_officials(body: Array) -> void:
+	if body==officials_frame:return
+	officials_frame=body.duplicate()
+	for i in range(officials.size()):
+		var actor: Node3D=officials[i]
+		actor.position=actor.get_meta("home")
+		var catch_amount: float=float(body[4]) if body.size()>4 else 0.0
+		if i<2:
+			actor.position.x*=1.0-catch_amount*.25
+			actor.apply_collapse([catch_amount*.05,0,catch_amount*.12,0,0])
+			var hip := Vector3(0,-.6,0)
+			var drop := Vector3(0,-float(body[0]),-float(body[1]))
+			var bend := Basis(Vector3.FORWARD,float(body[3]))*Basis(Vector3.RIGHT,-float(body[2]))
+			var armpit := Vector3(-.18 if i==0 else .18,-.25,.025)
+			var support := (hip+drop+bend*(armpit-hip))*4.0
+			actor.reach_toward(support,"L" if i==0 else "R",catch_amount,Vector3.RIGHT if i==0 else Vector3.LEFT)

@@ -88,3 +88,22 @@ körpergebundener seitlicher Schwung, danach Anatomie/Comiclook, TV-Bühne mit
 Referee/Auffängern und reproduzierbare KO-Zusammenbruchanimation.
 Der bisherige KO ist nur eine Entscheidung mit einfacher Figurenneigung.
 Turniere, ElevenLabs und Werbung bleiben zurückgestellt.
+
+
+SEITLICHER UMBAU — AKTUELLER ENTWICKLUNGSSTAND
+Maßgeblich ist jetzt docs/LATERAL_REWORK.txt. Mausbewegung nach links erzeugt
+einen seitlichen Schwung nach links. Livepose/Replay tragen Palmennormale,
+Fingerrichtung und Brustkorbdrehung. Kollisionsabfrage läuft seitlich auf dem
+Dreiecksmesh. Trefferstärke aus tatsächlicher Annäherungsgeschwindigkeit.
+Kopf und Hände ersetzen den ursprünglichen prozeduralen Platzhalter durch
+in Blender angepasste CC0-MakeHuman-Topologie; Herkunft/Lizenz sind gesichert.
+Beinrig und server/body.py liefern den gespeicherten KO-Track; kein Ragdoll.
+Bühne: game/broadcast_stage.gd; Offizielle und Auffangbewegung: main.gd.
+TV-Totale im Replay ergänzt die Kontaktansicht.
+25 Unit-Tests bestanden. LAN-Duell mit KO, Rückwärtsscrubbing, Wiederverbindung,
+Revanche und Audiofallback bestanden; keine Browserfehler. Aktueller separater
+Foul-/Protokolltest bestanden. Gemessener 1080p-Zwischenstand 7–14 ms p95.
+Nach den letzten Assetkorrekturen Bilder und Totale nochmals prüfen.
+Stil ist noch nicht auf Referenzniveau. Handgelenkübergang, Stoff/Haare,
+Licht/Tiefenstaffelung, Auffangkontakt und Kontaktdiagnose weiter verfeinern.
+Kein fertiges v0.3.0-Release veröffentlichen; Goal bleibt aktiv.

@@ -12,9 +12,9 @@ async def main():
   await a.wait_for_timeout(2000)
   await a.screenshot(path='logs/v3-ready-final.png')
   async def stroke():
-   await a.mouse.move(1920*.19,1080*.6);await a.mouse.down()
+   await a.mouse.move(1920*.8,1080*.6);await a.mouse.down()
    for i in range(12):
-    await a.mouse.move(1920*(.19+.34*(i+1)/12),1080*.6);await a.wait_for_timeout(8)
+    await a.mouse.move(1920*(.8-.34/1.5*(i+1)/12),1080*.6);await a.wait_for_timeout(8)
    await a.mouse.up()
   await stroke();await a.wait_for_function('state.practice_done');await stroke();await a.wait_for_function("state.phase==='replay'",timeout=15000)
   await a.locator('#replaySeek').evaluate("e=>{e.value=.53;e.dispatchEvent(new Event('input'))}");await a.locator('#replayCamera').select_option('side');await a.wait_for_timeout(1200)

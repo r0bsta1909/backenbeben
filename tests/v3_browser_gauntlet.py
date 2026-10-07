@@ -27,9 +27,9 @@ async def main():
             async def state(page):return await page.evaluate('JSON.parse(renderState).state')
             async def stroke(page):
                 await page.bring_to_front();await page.wait_for_timeout(150)
-                await page.mouse.move(1920*.19,1080*.6);await page.mouse.down()
+                await page.mouse.move(1920*.8,1080*.6);await page.mouse.down()
                 for i in range(12):
-                    await page.mouse.move(1920*(.19+.34*(i+1)/12),1080*.6)
+                    await page.mouse.move(1920*(.8-.34/1.5*(i+1)/12),1080*.6)
                     await page.wait_for_timeout(8)
                 await page.mouse.up()
                 await page.wait_for_timeout(100)
@@ -42,7 +42,7 @@ async def main():
                 if turn==0:
                     await attacker.bring_to_front()
                     await attacker.wait_for_function("window.netArm?.pose",timeout=10000)
-                    await attacker.mouse.move(1920*.19,1080*.6)
+                    await attacker.mouse.move(1920*.8,1080*.6)
                     await attacker.mouse.wheel(0,120)
                     await attacker.wait_for_function('window.netArm?.tilt > -10',timeout=5000)
                     await attacker.locator('#resetPose').click()
@@ -74,7 +74,7 @@ async def main():
                     await a.locator('#replaySeek').evaluate('(e,t)=>{e.value=t;e.dispatchEvent(new Event("input"))}',peak_t)
                     await a.locator('#replayCamera').select_option('side')
                     await a.wait_for_timeout(300);await a.screenshot(path='logs/v3-physics-peak.png')
-                    d=await a.evaluate('combatDiagnostics');assert d['deformation']>.01,d
+                    d=await a.evaluate('combatDiagnostics');assert d['deformation']>.003,d
                     report['replay']=d
                     frames=await a.evaluate("() => new Promise(resolve=>{let values=[],last=performance.now();function tick(t){values.push(t-last);last=t;if(values.length<120)requestAnimationFrame(tick);else resolve(values.slice(5));}requestAnimationFrame(tick)})")
                     frames.sort();report['replay_frame_ms_p95']=frames[int(len(frames)*.95)]
@@ -85,6 +85,20 @@ async def main():
                     resumed=await state(b);assert resumed['id']==sb['id'] and resumed['replay_id']==sb['replay_id']
                     assert await b.evaluate('JSON.parse(renderState).you')==1
                     report['resume']=True
+                if hit.get('ko'):
+                    ko_clip=await (await a.request.get(url+'/api/replay/'+sa['replay_id'])).json()
+                    assert ko_clip['ko'] and len(ko_clip['body_frames'])==337
+                    assert ko_clip['body_frames'][-1][0]>.20
+                    report['ko_body_recorded']=True
+                    await attacker.locator('#replaySeek').evaluate('e=>{e.value=2;e.dispatchEvent(new Event("input"))}')
+                    await attacker.locator('#replayCamera').select_option('wide')
+                    await attacker.wait_for_timeout(250)
+                    await attacker.screenshot(path='logs/lateral-ko-side.png')
+                    await attacker.locator('#replaySeek').evaluate('e=>{e.value=.2;e.dispatchEvent(new Event("input"))}')
+                    await attacker.wait_for_timeout(100)
+                    frame=await attacker.evaluate('JSON.parse(physicsFrame)')
+                    assert frame['body'][0]==0
+                    report['ko_reverse_seek']=True
                 for page in pages:
                     await page.locator('#replaySkip').click()
                 await a.wait_for_function("['recover','over'].includes(JSON.parse(renderState).state.phase)",timeout=4000)

@@ -36,8 +36,11 @@ class Tissue:
         self.ei=np.array([e[0] for e in self.edges]);self.ej=np.array([e[1] for e in self.edges]);self.el=np.array([e[2] for e in self.edges])
         self.ti=np.array([t[0] for t in self.tets]);self.tv=np.array([t[1] for t in self.tets])
         self.degree=np.maximum(1,np.bincount(np.r_[self.ei,self.ej],minlength=len(self.p)))[:,None]
+        self.volume_degree=np.maximum(1,np.bincount(self.ti.ravel(),minlength=len(self.p)))[:,None]
     def step(self,dt,force=None):
-        np=self.np;p=self.p;w=self.w;old=p.copy()
+        np=self.np;p=self.p;w=self.w
+        if force is None and np.max(np.abs(self.v))<1e-9 and np.max(np.abs(p-self.rest))<1e-9:return
+        old=p.copy()
         if force:
             centre,impulse=force
             fall=np.exp(-np.sum((self.rest[:,:2]-centre[:2])**2,axis=1)/.025)*w
@@ -45,22 +48,24 @@ class Tissue:
         self.v*=math.exp(-6*dt)
         p+=self.v*dt
         le=np.zeros(len(self.ei));lv=np.zeros(len(self.ti))
-        alpha=.00006/(dt*dt);av=.000000000003/(dt*dt)
-        for iteration in range(4):
+        alpha=.00006/(dt*dt);av=.000000000001/(dt*dt)
+        for iteration in range(12):
             diff=p[self.ei]-p[self.ej];dist=np.maximum(1e-9,np.linalg.norm(diff,axis=1))
-            dl=(-(dist-self.el)-alpha*le)/(w[self.ei]+w[self.ej]+alpha);le+=dl
+            error=dist-self.el;error=np.where(np.abs(error)<1e-10,0.,error)
+            dl=(-error-alpha*le)/(w[self.ei]+w[self.ej]+alpha);le+=dl
             corr=diff*(dl/dist)[:,None];delta=np.zeros_like(p)
             np.add.at(delta,self.ei,corr*w[self.ei,None]);np.add.at(delta,self.ej,-corr*w[self.ej,None])
-            p+=delta/np.sqrt(self.degree)
+            p+=delta/self.degree
             q=p[self.ti];a,b,c,d=[q[:,i] for i in range(4)]
             gb=np.cross(c-a,d-a)/6;gc=np.cross(d-a,b-a)/6;gd=np.cross(b-a,c-a)/6
             grads=np.stack((-gb-gc-gd,gb,gc,gd),axis=1)
             vols=np.sum((b-a)*np.cross(c-a,d-a),axis=1)/6
             denom=av+np.sum(w[self.ti]*np.sum(grads*grads,axis=2),axis=1)
-            dl=(-(vols-self.tv)-av*lv)/denom;lv+=dl
+            error=vols-self.tv;error=np.where(np.abs(error)<1e-12,0.,error)
+            dl=(-error-av*lv)/denom;lv+=dl
             delta[:]=0
             np.add.at(delta,self.ti.ravel(),(grads*(dl[:,None]*w[self.ti])[:,:,None]).reshape(-1,3))
-            p+=delta/np.sqrt(self.degree)
+            p+=1.7*delta/self.volume_degree
             p[:,2]=np.maximum(self.rest[:,2]-.065,p[:,2])
             p[w==0]=self.rest[w==0]
         self.v=(p-old)/dt
@@ -71,6 +76,10 @@ def simulate(scored,braced=False):
         from contact_v3 import surface as mesh_surface
         tissue=Tissue(lambda x,y:mesh_surface(x,y,skin_state=tuple(scored.get("skin_state",(0,0,0)))) or .02)
     else:tissue=Tissue()
+    if scored.get('version')==3:
+        # Lateral cheeks may slide; anchoring their outer surface would suppress
+        # the entire side impact. Deep layer and upper/lower boundaries stay fixed.
+        tissue.w=[0. if i>=NX*NY or i//NX in (0,NY-1) else 1. for i in range(len(tissue.p))]
     tissue.prepare();frames=[];dt=1/240
     strength=(.35+.65*scored.get('normal_speed',0)) if scored.get('contact_class')!='miss' else 0.
     # A glancing or fingertip contact couples less of the driven hand impulse.
@@ -81,7 +90,8 @@ def simulate(scored,braced=False):
     for step in range(673):
         t=step*dt
         forcing=step==120
-        impulse=[side*strength*6.3,0.,-strength*22.0] if forcing else None
+        direction=scored.get('normal',[side*.28,0.,-1.])
+        impulse=[float(n)*strength*22.0 for n in direction] if forcing else None
         tissue.step(dt,(centre,impulse) if impulse else None)
         hv+=((-90*(1.5 if braced else 1)*head-12*hv)+(side*strength*600 if forcing else 0))*dt;head+=hv*dt
         jv+=(-140*jaw-14*jv+(strength*450 if forcing else 0))*dt;jaw=max(-.04,min(.22,jaw+jv*dt))

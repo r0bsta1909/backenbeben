@@ -48,6 +48,9 @@ void fragment() {
     if(face_skin) {
         float injury=skin_position.x<0.0?injury_left:injury_right;
         vec2 q=vec2(abs(skin_position.x),skin_position.y);
+        float beard=(1.0-smoothstep(-.12,.0,q.y))*smoothstep(.05,.22,skin_position.z);
+        float grain=fract(sin(dot(floor(skin_position.xy*650.0),vec2(12.9898,78.233)))*43758.5453);
+        color=mix(color,color*vec3(.55,.57,.61),beard*(.32+.20*step(.76,grain)));
         float patch=exp(-pow((q.x-.27)/.13,2.0)-pow((q.y-.15)/.13,2.0))*smoothstep(.12,.27,skin_position.z);
         color=mix(color,vec3(.22,.085,.19),patch*smoothstep(.12,.85,injury)*.8);
         float cut=(1.0-smoothstep(.004,.012,abs(q.y-(.20-.4*(q.x-.25)))))*smoothstep(.15,.19,q.x)*(1.0-smoothstep(.34,.37,q.x));
