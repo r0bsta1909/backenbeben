@@ -42,10 +42,17 @@ class AttachmentTests(unittest.TestCase):
 
  def test_forearm_frame_is_continuous_through_former_axis_switch(self):
   from arm_hand_attachment import forearm_frame
-  arm=Arm();previous=None
-  for yaw in np.linspace(-1.65,1.65,1001):
-   frame=forearm_frame(arm,[yaw,-.4,1.3])
-   np.testing.assert_allclose(frame.T@frame,np.eye(3),atol=1e-12)
-   self.assertGreater(np.linalg.det(frame),.999999)
-   if previous is not None:self.assertLess(np.linalg.norm(rotation_log(frame@previous.T)),.00331)
-   previous=frame
+  arm=Arm();peaks=[]
+  for count in [1001,2001]:
+   previous=None;peak=0.
+   for yaw in np.linspace(-1.65,1.65,count):
+    frame=forearm_frame(arm,[yaw,-.4,1.3])
+    np.testing.assert_allclose(frame.T@frame,np.eye(3),atol=1e-12)
+    self.assertGreater(np.linalg.det(frame),.999999)
+    if previous is not None:peak=max(peak,np.linalg.norm(rotation_log(frame@previous.T)))
+    previous=frame
+   peaks.append(peak)
+  # The elbow pole now moves with reach, so angular speed is not constant.
+  # A genuine frame discontinuity would persist when the yaw step is halved.
+  self.assertLess(peaks[0],.02)
+  self.assertLess(peaks[1],peaks[0]*.55)

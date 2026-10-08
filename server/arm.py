@@ -32,9 +32,15 @@ def forward(q):
     yaw,el,flex=q
     def vector(a,length):return (math.sin(yaw)*math.cos(a)*length,math.sin(a)*length,-math.cos(yaw)*math.cos(a)*length)
     elbow=add(SHOULDER,vector(el,L1));wrist=add(elbow,vector(el+flex,L2))
-    # Fixed outward pole: move the elbow out beside the ribcage, not through the
+    # Moderate outward pole: retain upward forearm reach in the ready pose.
+    # Move the elbow out beside the ribcage, not through the
     # table. Rotation about shoulder->wrist preserves both segment lengths.
-    axis=unit(sub(wrist,SHOULDER));v=sub(elbow,SHOULDER);angle=-math.radians(68)
+    # Raise the elbow smoothly as the hand approaches the table/cheek.
+    # A low fixed pole alone catches the forearm on the padded table.
+    reach=clamp((.28-wrist[2])/.10,0.,1.)
+    reach=reach*reach*(3-2*reach)
+    axis=unit(sub(wrist,SHOULDER));v=sub(elbow,SHOULDER)
+    angle=-math.radians(35+33*reach)
     cross=(axis[1]*v[2]-axis[2]*v[1],axis[2]*v[0]-axis[0]*v[2],axis[0]*v[1]-axis[1]*v[0])
     elbow=add(SHOULDER,add(add(mul(v,math.cos(angle)),mul(cross,math.sin(angle))),mul(axis,dot(axis,v)*(1-math.cos(angle)))))
     return elbow,wrist

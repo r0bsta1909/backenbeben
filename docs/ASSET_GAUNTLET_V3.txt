@@ -398,3 +398,23 @@ Ein lokaler Vergleich, keine reine GPU-Zeit oder plattformuebergreifende Zusage.
 Nachweis validation/mirror-render.json. Sichtbare naechste Geometrie-/Rigaufgabe:
 stark geknicktes Handgelenk in der Ego-Bereitpose, unter neuem Licht deutlicher.
 Gesamtstil und menschliche Bedienverstaendlichkeit weiterhin nicht abgenommen.
+
+ELLBOGENEBENE PASST SICH DER ANNAEHERUNG AN
+Feste 68-Grad-Aussendrehung verursachte rund 68.7 Grad Handgelenkknick in der
+Bereitschaftspose. Jetzt 35 Grad in Bereitschaft, smoothstep-Anhebung auf 68 Grad
+zwischen lokalem wrist.z=.28 und .18 m. Schulter-/Handgelenkposition bleiben durch
+die Polrotation unveraendert, beide Segmentlaengen erhalten. Ready-Knick 38.1 Grad.
+Erster Versuch mit dauerhaft 35 Grad fiel an der Pultkollision durch und wurde
+verworfen. Kontinuierliche Anhebung erhaelt den geprueften Standardkontakt.
+67 Pythonpruefungen bestanden, einschliesslich unveraenderter Kontaktklassen,
+Pultfreiheit, Laengen und gekoppelt-numerischem Jacobianabgleich. Neuer Test
+fordert <45 Grad Ready-Knick. Kontinuitaetstest prueft Schrittverfeinerung statt
+konstanter Winkelgeschwindigkeit, da die Polbewegung diese nun bewusst veraendert.
+Arm-Laborclips/lateral_ready neu generiert. Blender-Skinning zu Hostkontakt an
+vier Posen maximal 0.358 Mikrometer Abweichung, VALIDATION_PASS. Webexport und
+Browserkameras/Mausrad/Replay bestanden, keine Fehler. Testhost 8877 neu gestartet.
+Seitenbild selbst gesichtet: Unterarm steht in Bereitschaft aufrechter; sichtbare
+Falten-/Schattenartefakte an der Handwurzel bleiben. Kein kompletter Schulter-
+Dynamiksolver: Polanhebung ist weiterhin eine positionsabhaengige kinematische
+Regel. Stil, Physik und menschliche Verstaendlichkeitsabnahme bleiben offen.
+Nachweise validation/elbow-reach.json und elbow-reach-ready.png.

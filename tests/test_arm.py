@@ -9,6 +9,14 @@ class ArmTests(unittest.TestCase):
             elbow,wrist=forward(target_angles(target))
             self.assertAlmostEqual(math.dist(SHOULDER,elbow),L1,places=12)
             self.assertAlmostEqual(math.dist(elbow,wrist),L2,places=12)
+    def test_ready_pose_keeps_wrist_under_45_degrees(self):
+        from contact_v3 import input_target,hand_frame,table_collision
+        pose=Arm(input_target(.19,.6,0)).pose()
+        finger,_=hand_frame(-15,pose)
+        forearm=[w-e for w,e in zip(pose['wrist'],pose['elbow'])]
+        cosine=sum(f*v for f,v in zip(finger,forearm))/math.sqrt(sum(v*v for v in forearm))
+        self.assertGreater(cosine,math.cos(math.radians(45)))
+        self.assertFalse(table_collision(pose['elbow'],pose['wrist']))
     def test_motor_settles_and_limits_torque(self):
         arm=Arm()
         for _ in range(1440):arm.step((.12,-.015,.23))

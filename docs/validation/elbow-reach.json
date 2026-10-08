@@ -1,0 +1,19 @@
+{
+  "ready_wrist_angle_deg": 38.11692057259987,
+  "python_tests_passed": 67,
+  "blender_contact_skinning_max_error_m": 3.5749202497701025e-07,
+  "browser": {
+    "mirror_visibility_updates": true,
+    "pose_camera_and_wheel": true,
+    "crowd_reaction_and_rewind": true,
+    "jump_to_contact": true,
+    "side_camera": true,
+    "marker_toggle": true,
+    "no_stale_markers": true,
+    "errors": []
+  },
+  "limitations": [
+    "Reach-driven elbow pole is a kinematic rule, not independent shoulder dynamics.",
+    "Wrist surface folds remain visible under shadows."
+  ]
+}
