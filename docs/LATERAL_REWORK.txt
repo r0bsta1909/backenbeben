@@ -128,3 +128,17 @@ und dessen Korrektur: docs/HAND_CONTACT_SURFACE.txt. 30 Unit-Tests und beide
 LAN-Gauntlets bestanden. Neues lokales Entwicklungspaket geprüft, kein Release.
 Nächste offene Schwerpunkte: gekoppelte Nachgiebigkeit von Hand und Gesicht,
 natürlichere Auffangreaktion und menschliche Verständlichkeit/Stilprüfung.
+
+HAARFORM: GANZER SCHEITEL STATT FRONTALER STREIFEN
+Der Generator legt breite, geschlossene und verjuengte Straehnen entlang der
+realen Kopfoberflaeche ueber Scheitel, Seiten und Hinterkopf. Deterministische
+Variation und flache Facetten brechen die vorige glatte Kappensilhouette auf.
+Erster Versuch hatte deutlich abstehende schlaufenartige Spitzen; diese wurden
+wieder zur Kopfoberflaeche gefuehrt. Die Anordnung wirkt weiterhin zu regelmaessig
+und ist keine abgeschlossene Freigabe des Referenzlooks.
+Blenderquelle, GLB und Quellvorschau erneuert. 88,873 Polygone im Gesamtasset.
+Assetvalidierung bestanden: beide Armhaeute zusammenhaengend, Gewichte gueltig,
+114 Kontaktpunkte auf dem unveraenderten Handmesh. Browserbuild erfolgreich;
+Kontakt-Replay, Kamerasprung und Markierungsschalter ohne Browserfehler.
+Echter Browsernachweis: docs/validation/hair-crown-contact.png und .json.
+Diese gezielte Grafikpruefung ersetzt keine erneute menschliche G7-Abnahme.

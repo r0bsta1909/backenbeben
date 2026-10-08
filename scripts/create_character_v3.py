@@ -148,18 +148,44 @@ for v in bm.verts:
         q.y=hairline(q)
         v.co=B(q)
 bm.to_mesh(cap.data);bm.free()
+# Broad tapered locks cover the whole crown instead of only the frontal strip.
+# Each lock follows the real scalp, with a lifted ridge and an irregular tip.
+# Deterministic variation keeps the silhouette reproducible across exports.
+import random
+rng=random.Random(1909)
 locks=[]
-for i in range(26):
-    row=i//13;column=i%13
-    x=(-.076+column*.0126)*(1-row*.19);y=.164+row*.019+.003*math.sin(i*1.7)
-    root=Vector(skinpoint(x,y,.003));tip=root+Vector((.018,.019+(i%5)*.002,-.022))
-    vv=[]
-    for k in range(5):
-        t=k/4;c=root.lerp(tip,t);c.z+=math.sin(t*math.pi)*.008
-        w=.009*(1-t)+.0002
-        vv.extend([tuple(c+Vector((-w,0,0))),tuple(c+Vector((0,.003,.003))),tuple(c+Vector((w,0,0)))])
-    ff=[(k*3+j,k*3+j+1,(k+1)*3+j+1,(k+1)*3+j) for k in range(4) for j in range(2)]
-    locks.append(mesh('HairLock',vv,ff,hair))
+scalp_center=Vector((0,.115,-.005))
+def scalp(theta,elevation):
+    direction=Vector((math.sin(theta)*math.cos(elevation),math.sin(elevation),math.cos(theta)*math.cos(elevation)))
+    hit=bvh.ray_cast(scalp_center+direction*.4,-direction)[0]
+    return hit,direction
+for row,elevation in enumerate([.23,.46,.69,.92,1.15,1.36]):
+    count=max(8,24-row*3)
+    for column in range(count):
+        theta=column*math.tau/count+row*.19+rng.uniform(-.045,.045)
+        base,normal=scalp(theta,elevation)
+        if base is None or base.y<hairline(base)-.003:continue
+        width=rng.uniform(.007,.011)*(1-row*.045)
+        lift=rng.uniform(.005,.011) if row<3 else rng.uniform(.009,.016)
+        sweep=rng.uniform(.12,.23);rise=rng.uniform(.17,.28)
+        vv=[]
+        for k in range(6):
+            t=k/5
+            center,n=scalp(theta+sweep*t,min(1.54,elevation+rise*t))
+            if center is None:center=base;n=normal
+            center+=n*(.003+lift*math.sin(t*math.pi))
+            across=Vector((math.cos(theta+sweep*t),0,-math.sin(theta+sweep*t)))
+            w=width*(1-t)**.65+.00015
+            # A broad central facet, shaded edges, and a closed underside.
+            vv.extend([tuple(center-across*w),tuple(center-across*w*.25+n*(.002*(1-t))),
+                       tuple(center+across*w*.25+n*(.002*(1-t))),tuple(center+across*w),tuple(center-n*.001)])
+        ff=[]
+        for k in range(5):
+            for j in range(5):ff.append((k*5+j,k*5+(j+1)%5,(k+1)*5+(j+1)%5,(k+1)*5+j))
+        ff.extend([tuple(reversed(range(5))),tuple(25+j for j in range(5))])
+        lock=mesh('HairLock',vv,ff,hair)
+        for poly in lock.data.polygons:poly.use_smooth=False
+        locks.append(lock)
 bpy.ops.object.select_all(action='DESELECT')
 for o in [cap]+locks:o.select_set(True)
 bpy.context.view_layer.objects.active=cap;bpy.ops.object.join();head_parts.append(cap)
