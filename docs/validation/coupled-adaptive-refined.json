@@ -1,0 +1,74 @@
+{
+  "960": {
+    "reference": true,
+    "iterations": 192,
+    "units": "metres, kilograms, seconds",
+    "fps": 960,
+    "speed": 1.0,
+    "peak_deformation_m": 0.004992013683818577,
+    "residual_tolerance_m": 2.5e-06,
+    "residual_peaks": {
+      "edge_m": 2.4562067530401554e-06,
+      "volume_m3": 2.2447606962448906e-10,
+      "volume_equivalent_m": 2.5113521972905955e-07
+    },
+    "minimum_gap_m": 0.0,
+    "contact_steps": 14,
+    "final_hand_velocity": [
+      0.6652186076190736,
+      0.0,
+      0.0
+    ],
+    "solve_ms": 3725.9118000001763,
+    "iterations_mean": 14.753246753246753,
+    "iterations_max": 52
+  },
+  "1920": {
+    "reference": true,
+    "iterations": 192,
+    "units": "metres, kilograms, seconds",
+    "fps": 1920,
+    "speed": 1.0,
+    "peak_deformation_m": 0.005447306659511055,
+    "residual_tolerance_m": 6.25e-07,
+    "residual_peaks": {
+      "edge_m": 6.177163347769683e-07,
+      "volume_m3": 9.390580128980665e-11,
+      "volume_equivalent_m": 1.0853591377376977e-07
+    },
+    "minimum_gap_m": 0.0,
+    "contact_steps": 29,
+    "final_hand_velocity": [
+      0.7900441246081336,
+      0.0,
+      0.0
+    ],
+    "solve_ms": 4102.7706999993825,
+    "iterations_mean": 9.2987012987013,
+    "iterations_max": 20
+  },
+  "3840": {
+    "reference": true,
+    "iterations": 192,
+    "units": "metres, kilograms, seconds",
+    "fps": 3840,
+    "speed": 1.0,
+    "peak_deformation_m": 0.005707851455141015,
+    "residual_tolerance_m": 1.5625e-07,
+    "residual_peaks": {
+      "edge_m": 1.507932647117885e-07,
+      "volume_m3": 3.70845506932322e-11,
+      "volume_equivalent_m": 4.249064684525306e-08
+    },
+    "minimum_gap_m": 0.0,
+    "contact_steps": 58,
+    "final_hand_velocity": [
+      0.8583710841286774,
+      0.0,
+      0.0
+    ],
+    "solve_ms": 4817.0546000001195,
+    "iterations_mean": 5.472312703583062,
+    "iterations_max": 8
+  }
+}

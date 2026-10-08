@@ -17,3 +17,12 @@ class ReferenceTests(unittest.TestCase):
   self.assertEqual(result['contact_steps'],0)
   for residual in result['residual_peaks'].values():self.assertLess(residual,1e-12)
   self.assertEqual(result['final_hand_velocity'],[0.,0.,0.])
+
+ def test_adaptive_contact_stops_only_after_residual_target(self):
+  r=run(fps=480,duration=.03,reference=True,iterations=192,volume_compliance=1e-9,tolerance=1e-5)
+  self.assertGreater(r['contact_steps'],0)
+  self.assertLessEqual(r['residual_peaks']['edge_m'],1e-5)
+  self.assertLessEqual(r['residual_peaks']['volume_equivalent_m'],1e-5)
+  self.assertGreater(max(r['iteration_counts']),4)
+  self.assertLess(max(r['iteration_counts']),192)
+  self.assertGreaterEqual(r['minimum_gap_m'],-1e-12)

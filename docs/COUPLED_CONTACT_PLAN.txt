@@ -96,3 +96,24 @@ Naechste Versuche: feinere zeitliche Referenz fuer den kurzen Kontakt und
 adaptive Iterationsabbruchkriterien; anschliessend bedingte Substeps waehrend
 Kontakt. Materialwerte nicht zum Kaschieren numerischer Fehler nachstimmen.
 Nachweise: validation/coupled-residuals.json und coupled-soft-residuals.json.
+
+ADAPTIVER ABBRUCH UND ZEITLICHE VERFEINERUNG
+Referenzsolver prueft alle vier Durchlaeufe Kantenresiduum und aequivalentes
+Volumenresiduum. Optionaler Abbruch erst unter beiden Laengentoleranzen;
+Maximaldurchlaeufe bleiben begrenzt. Verwendete Iterationszahlen werden gemessen.
+Neuer Kontakt-Regressionsfall erreicht die Toleranz mit mehr als vier und weniger
+als 192 Durchlaeufen, ohne negative Kontaktluecke. Alle drei Referenztests bestanden.
+480 Hz / 1e-5 m Toleranz: 4.277 mm Peak vs 4.283 mm bei fixen 192 Iterationen;
+3.27 s vs 20.37 s Laufzeit fuer denselben 0.08-s-Pruefzeitraum. Lokale Messung.
+
+Strengere Toleranz proportional dt^2 (kein Nachstimmen von Materialwerten):
+960 Hz: 4.992 mm Peak, Rueckprall 0.665 m/s, 3.73 s Rechenzeit.
+1920 Hz: 5.447 mm, 0.790 m/s, 4.10 s.
+3840 Hz: 5.708 mm, 0.858 m/s, 4.82 s.
+Alle gemessenen Residuen liegen unter den jeweils gesetzten Toleranzen.
+Die letzte Verfeinerung aendert Peak noch um 4.8% und Rueckprall um 8.6%.
+Dies zeigt Annaeherung, aber keine vollstaendige Konvergenz oder Echtzeitfaehigkeit.
+Nachweise: validation/coupled-adaptive*.json. Noch nicht im Match aktiv.
+Naechster Schritt: Referenzlauf mit weiter halbiertem dt sowie Profilierung der
+vielen kleinen NumPy-Aufrufe. Erst danach schnellerer Solver mit gleicher
+Residual-/Kontaktpruefung; Handfeder und Flaechenkontakt weiterhin erforderlich.

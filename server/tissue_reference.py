@@ -26,7 +26,7 @@ class ReferenceTissue(Tissue):
         self.v*=math.exp(-6*dt);p+=self.v*dt
         le=np.zeros(len(self.ei));lv=np.zeros(len(self.ti))
         alpha=self.edge_compliance/(dt*dt);av=self.volume_compliance/(dt*dt)
-        for _ in range(self.iterations):
+        for iteration in range(self.iterations):
             for ids in self.edge_batches:
                 i=self.ei[ids];j=self.ej[ids]
                 diff=p[i]-p[j];dist=np.maximum(1e-12,np.linalg.norm(diff,axis=1))
@@ -44,6 +44,16 @@ class ReferenceTissue(Tissue):
                 dl=(-error-av*lv[ids])/denom;lv[ids]+=dl
                 p[indices]+=gradients*(dl[:,None]*w[indices])[:,:,None]
             if project_contact is not None:project_contact(self)
+            self.iterations_used=iteration+1
+            tolerance=getattr(self,'residual_tolerance',None)
+            if tolerance is not None and (iteration+1)%4==0:
+                residuals=self.measure_residuals(le,lv,alpha,av)
+                if max(residuals['edge_m'],residuals['volume_equivalent_m'])<=tolerance:break
+        self.residuals=self.measure_residuals(le,lv,alpha,av)
+        self.v=(p-old)/dt
+
+    def measure_residuals(self,le,lv,alpha,av):
+        p=self.p
         # Measure the actual compliant equation, not deformation alone.
         edge_residual=np.linalg.norm(p[self.ei]-p[self.ej],axis=1)-self.el+alpha*le
         q=p[self.ti];a,b,c,d=[q[:,i] for i in range(4)]
@@ -51,7 +61,6 @@ class ReferenceTissue(Tissue):
         gradients=np.stack((-gb-gc-gd,gb,gc,gd),axis=1)
         volume_residual=np.sum((b-a)*np.cross(c-a,d-a),axis=1)/6-self.tv+av*lv
         gradient_norm=np.sqrt(np.sum(gradients*gradients,axis=(1,2)))
-        self.residuals={'edge_m':float(np.max(np.abs(edge_residual))),
+        return {'edge_m':float(np.max(np.abs(edge_residual))),
                         'volume_m3':float(np.max(np.abs(volume_residual))),
                         'volume_equivalent_m':float(np.max(np.abs(volume_residual)/np.maximum(gradient_norm,1e-15)))}
-        self.v=(p-old)/dt

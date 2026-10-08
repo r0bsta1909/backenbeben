@@ -183,3 +183,8 @@ Physikreferenz misst nun explizite Kanten-/Volumenresiduen. Hohe Iterationszahl
 reduziert diese, behebt aber die dynamische Schrittweitenabhaengigkeit noch
 nicht. Messdaten/naechste Schritte in COUPLED_CONTACT_PLAN.txt. Spielpfad
 unveraendert; keine Freigabe der experimentellen Kontaktkopplung.
+
+Adaptiver Residuenabbruch im Referenzlabor senkt 480-Hz-Rechenzeit 20.4->3.3 s
+bei fast gleichem Peak. Verfeinerung bis 3840 Hz zeigt Annaeherung, aber noch
+keine Freigabe. Drei Referenztests bestanden. Naechster Schritt: feinere
+Referenz/Profilierung, dann beschleunigen ohne Konvergenzpruefung aufzugeben.
