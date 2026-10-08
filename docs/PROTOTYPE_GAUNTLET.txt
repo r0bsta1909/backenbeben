@@ -41,7 +41,9 @@ G4 GEMEINSAME BEWEGUNG / KONTAKT — OFFEN
 Ein durchgehender aktiver Pfad fuer Arm, Hand, Trefferwertung, Gewebereaktion,
 Nachbewegung und Replay. Kontaktgeometrie aus sichtbarem Export. Keine Teleports,
 Durchdringung oder kuenstliches Rueckfedern. Sichtbarer Kontakt entspricht Wertung.
-Aktuell: Match nutzt alten Gewebepfad; neue Kopplung/CCD/Impulse nur Labor.
+Aktuell: normaler Matchstart nutzt alten Gewebepfad. --physics coupled liefert
+vollstaendige gekoppelte Kontakt-/Gewebe-/Arm-Replays im echten Browserkampf,
+ist wegen Laufzeit und verbleibender Modellgrenzen noch nicht Standard.
 Freie anisotrope Rotation nicht mit Kontaktsuche integriert. Das ist NICHT fertig.
 Geeignete Laborbausteine zu einem spielbaren Clip verbinden; konkurrierende alte
 Wege erst nach nachgewiesener Gleichwertigkeit/Verbesserung abloesen.
@@ -213,3 +215,28 @@ Belege validation/coupled-recovery.json und coupled-recovery-rest.png.
 Der neue Kontakt-Rueckholpfad bleibt Integrationskandidat: noch kein kompletter
 Gewebeclip im Matchdefault, Laufzeit weiterhin offen. Naechster Schritt ist der
 vollstaendige Replayadapter samt Gewebenachlauf und dessen Matchpruefung.
+
+G4 VOLLSTAENDIGER GEKOPPELTER CLIP IM BROWSER UND LAN
+server/coupled_replay.py liefert das reale Spielschema:337 Frames/120Hz,17x17
+seitliches Gewebe, unveraenderte Kontaktaufzeichnung plus kontinuierliche Arm-
+Rueckholung. Nachlauf rekonstruiert letzten Gewebezustand und Geschwindigkeit
+und integriert weiter, statt die Verformung an der Schnittstelle zu loeschen.
+Head/Kiefer bleiben stilisierte Federn; Start nach Ende des verankerten Kontakts.
+Tests pruefen Schema, Ruhe vorKontakt und gezielt gestoerten Nachlaufzustand.
+117 Python-Tests bestanden. Hostoption --physics coupled aktiviert Adapter fuer
+gezielte reale Spielpruefung; normaler Start bleibt vorlaeufig legacy. README
+beschreibt Option und zusaetzliche requirements-lab.txt (auch Paketallowlist).
+Browser-Replaycheck --expect-coupled --visual-contact erfolgreich, errors[];
+Backend aus oeffentlicher Replay-API bestaetigt (erster Testzugriff auf gekapselte
+JS-Variable war falsch und wurde korrigiert). Echte neun Kontaktansichten inkl.
+Rigabgleich bestanden, Seitenansicht gesichtet. solve4885.8ms, Peak.006351 Render-
+einheiten, Wristbindung8.34um. Beleg validation/coupled-match-browser.json.
+Zwei Browserclients ueber LAN-HTTP:3 Treffer bisKO mit beschleunigter45/60/60-
+Testbalance, identische Clips, Resume, KO-Ruecklauf, Emote, Rematch und Leave
+bestanden. Backend nochmals aus gespeicherter Replay-API bestaetigt. solve5200.6ms,
+Replay-p95 Frame14ms bei1920x1080, errors[]. Beleg coupled-lan-duel.json.
+Entwicklungshost8877 laeuft jetzt bewusst mit --physics coupled, Execsession34470.
+Kein Releasepakettest, keine neue menschliche Abnahme und kein voller G4-Pass:
+Trefferberechnung muss deutlich schneller werden; Kontaktwertung/Headreaktion
+bleiben teilweise bisheriges Modell. Naechster Schritt ist Laufzeit des jetzt
+spielbaren Pfades, keine weitere isolierte Physikfunktion.

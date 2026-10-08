@@ -40,6 +40,13 @@ async def main():
    print(await page.evaluate('JSON.stringify({state,actions:sentActions})'));print(errors)
    await page.screenshot(path='logs/contact-view-failure.png')
    await browser.close();raise
+  coupled_evidence=None
+  if '--expect-coupled' in sys.argv:
+   await page.wait_for_function('JSON.parse(physicsFrame).side_cage.nx===17')
+   replay_id=await page.evaluate('state.replay_id')
+   recorded=await (await page.request.get('http://localhost:8877/api/replay/'+replay_id)).json()
+   assert recorded['physics_backend']=='coupled'
+   coupled_evidence={'backend':recorded['physics_backend'],'solve_ms':recorded['solve_ms'],'peak':recorded['peak'],'contact_diagnostics':recorded['contact_diagnostics']}
   await page.locator('#replayImpact').click()
   await page.wait_for_function("JSON.parse(physicsFrame).camera==='side' && JSON.parse(physicsFrame).time===.5")
   assert await page.locator('#contactLegend').is_visible()
@@ -79,6 +86,7 @@ async def main():
   await page.wait_for_function('godotStats?.crowd_active===false')
   assert not errors,errors
   report={'idle_material_uploads_skipped':True,'mirror_visibility_updates':True,'pose_camera_and_wheel':True,'crowd_reaction_and_rewind':True,'jump_to_contact':True,'side_camera':True,'marker_toggle':True,'no_stale_markers':True,'errors':errors}
+  if coupled_evidence:report['coupled']=coupled_evidence
   Path('logs/contact-view.json').write_text(json.dumps(report,indent=2));print(json.dumps(report))
   await browser.close()
 asyncio.run(main())

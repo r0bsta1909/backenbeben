@@ -1,0 +1,22 @@
+{
+  "idle_material_uploads_skipped": true,
+  "mirror_visibility_updates": true,
+  "pose_camera_and_wheel": true,
+  "crowd_reaction_and_rewind": true,
+  "jump_to_contact": true,
+  "side_camera": true,
+  "marker_toggle": true,
+  "no_stale_markers": true,
+  "errors": [],
+  "coupled": {
+    "backend": "coupled",
+    "solve_ms": 4885.8,
+    "peak": 0.006351,
+    "contact_diagnostics": {
+      "maximum_wrist_separation_m": 8.341491171278043e-06,
+      "maximum_penetration_m": 2.890339055029504e-06,
+      "unconverged_steps": 14,
+      "maximum_material_residual_m": 0.0001783381489089158
+    }
+  }
+}

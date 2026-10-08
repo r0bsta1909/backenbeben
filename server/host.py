@@ -380,7 +380,11 @@ async def lifecycle(app):
 
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--port',type=int,default=8765);parser.add_argument('--no-browser',action='store_true');parser.add_argument('--no-console',action='store_true');args=parser.parse_args()
+    global simulate
+    parser=argparse.ArgumentParser();parser.add_argument('--port',type=int,default=8765);parser.add_argument('--no-browser',action='store_true');parser.add_argument('--no-console',action='store_true');parser.add_argument('--physics',choices=['legacy','coupled'],default='legacy');args=parser.parse_args()
+    if args.physics=='coupled':
+        from coupled_replay import simulate as coupled_simulate
+        simulate=coupled_simulate
     if not (ROOT/'build/web/index.pck').exists():raise SystemExit('Web-Build fehlt. Zuerst BUILD_GAME.bat ausführen.')
     app=web.Application(client_max_size=32768);app.cleanup_ctx.append(lifecycle)
     app.router.add_get('/api/replay/{rid}',replay);app.router.add_get('/ws',socket_handler);app.router.add_get('/api/info',info);app.router.add_post('/api/admin',admin);app.router.add_get('/health',health);app.router.add_get('/',index)

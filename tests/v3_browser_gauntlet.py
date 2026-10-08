@@ -68,6 +68,7 @@ async def main():
                     clip=await (await a.request.get(url+'/api/replay/'+sa['replay_id'])).json()
                     clip_b=await (await b.request.get(url+'/api/replay/'+sb['replay_id'])).json()
                     assert clip==clip_b
+                    report['physics_backend']=clip.get('physics_backend','legacy')
                     assert clip['version']==3 and len(clip['arm_path'])>100
                     report['recorded_arm_frames']=len(clip['arm_path'])
                     report['clip_hash']=hashlib.sha256(json.dumps(clip,sort_keys=True).encode()).hexdigest()

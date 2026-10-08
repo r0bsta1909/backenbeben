@@ -55,6 +55,15 @@ Netzwerk freigeben; `ALLOW_LAN.bat` richtet eine begrenzte Regel für Port 8765 
 - Aktuelle Integrationstests: `tests/v3_browser_gauntlet.py` und `tests/v3_network_gauntlet.py`
   gegen einen separaten Host auf Port 8877. Playwright und Chrome werden dafür benötigt.
 
+Der gekoppelte Kontaktpfad kann gezielt mit
+`python server/host.py --port 8877 --no-browser --no-console --physics coupled`
+geprüft werden. Dafür zusätzlich `server/requirements-lab.txt` installieren.
+Er liefert vollständige Browser-Replays mit seitlichem Gewebe und durchgehender
+Arm-Rückholung. Die Berechnung benötigt derzeit mehrere Sekunden pro Treffer;
+Kopf/Kiefer bleiben eine stilisierte Reaktion. Der normale Start verwendet bis
+zur vollständigen Abnahme weiterhin den bisherigen Pfad. Der gezielte Browsercheck
+lautet `python tests/replay_contact_view.py --expect-coupled --visual-contact`.
+
 ## Wissenssicherung
 
 Beginne bei [HANDOFF](docs/HANDOFF.txt): Produktziel, Nutzerfeedback, Architektur,
@@ -68,5 +77,5 @@ Imagegen erzeugt. Lizenzhinweise für den mitgelieferten Godot-Webruntime stehen
 `third-party/`. Kopf und Hände verwenden in Blender angepasste CC0-Topologie von
 MakeHuman; Quelldaten und Herkunft liegen unter `assets-source/makehuman/`. Für eigene Projektinhalte wurde bisher keine zusätzliche Lizenz gewählt.
 
-Die Kontaktwertung verwendet inzwischen 114 aus der sichtbaren Hand exportierte
+Die Kontaktwertung verwendet inzwischen 116 aus der sichtbaren Hand exportierte
 Oberflächenpunkte. [Geometrieprüfung, Integration und Grenzen](docs/HAND_CONTACT_SURFACE.txt).

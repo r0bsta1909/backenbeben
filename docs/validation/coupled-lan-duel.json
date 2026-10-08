@@ -1,0 +1,63 @@
+{
+  "errors": [],
+  "configuration": {
+    "base_damage": 45,
+    "ko_threshold": 60,
+    "turn_seconds": 60
+  },
+  "hits": [
+    {
+      "kind": "hit",
+      "target": 1,
+      "damage": 23.77,
+      "quality": 0.8125,
+      "braced": true,
+      "side": "R",
+      "ko": false,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen."
+    },
+    {
+      "kind": "hit",
+      "target": 0,
+      "damage": 34.04,
+      "quality": 0.7564,
+      "braced": false,
+      "side": "R",
+      "ko": false,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen."
+    },
+    {
+      "kind": "hit",
+      "target": 1,
+      "damage": 30.76,
+      "quality": 0.6835,
+      "braced": false,
+      "side": "R",
+      "ko": true,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen."
+    }
+  ],
+  "recorded_arm_frames": 517,
+  "replay_frame_ms_p95": 14,
+  "viewport": [
+    1920,
+    1080
+  ],
+  "resume": true,
+  "ko_body_recorded": true,
+  "ko_reverse_seek": true,
+  "winner": 0,
+  "audio": {
+    "mode": "buffer-fallback",
+    "played": 5,
+    "unlocked": true
+  },
+  "rematch": true,
+  "leave": true,
+  "physics_backend": "coupled",
+  "solve_ms": 5200.6,
+  "scope": "Two real browser contexts via LAN HTTP on one machine, coupled host option, accelerated KO settings. Not release-package validation."
+}
