@@ -22,3 +22,11 @@ class EnergyTests(unittest.TestCase):
   hand.rotation=rotation_increment([.2,-.7,.4])
   after=mechanical_energy(cage,hand,[0.,0.,0.],hand.rotation@omega)
   self.assertAlmostEqual(before['hand_rotation'],after['hand_rotation'],places=12)
+
+ def test_rigid_attachment_axes_have_no_spring_energy(self):
+  cage,hand=self.setup_model()
+  bond=SimpleNamespace(error=lambda:np.array([1e-7,0.,0.,.2,0.,0.]),compliance=np.array([0.,0.,0.,2.,2.,2.]))
+  with np.errstate(divide='raise',invalid='raise'):
+   energy=mechanical_energy(cage,hand,[0.,0.,0.],[0.,0.,0.],bond)
+  self.assertAlmostEqual(energy['attachment'],.01)
+  self.assertTrue(np.isfinite(energy['total']))

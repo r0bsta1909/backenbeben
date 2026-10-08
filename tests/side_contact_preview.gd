@@ -18,7 +18,9 @@ func verify() -> void:
 		var offsets: Array=peak.offsets.duplicate()
 		if mode=="rest":offsets.fill(0.0)
 		scene.physics_frame={"id":mode,"time":peak.time,"replay":true,"target":1,"camera":"side","offsets":offsets,"side_cage":record.side_cage}
-		scene.drive_recorded_physics();scene.hand.visible=false
+		if peak.get("arm") is Dictionary:
+			scene.physics_frame["arm"]={"pose":peak.arm}
+		scene.drive_recorded_physics();scene.hand.visible=peak.get("arm") is Dictionary
 		scene.camera.position=Vector3(2.2,.25,1.6);scene.camera.look_at(Vector3(.12,.05,.15))
 		await process_frame
 		await RenderingServer.frame_post_draw

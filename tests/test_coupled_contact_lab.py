@@ -35,3 +35,14 @@ class CoupledLabTests(unittest.TestCase):
   self.assertEqual(still['initial_velocity'],[0.,0.,0.])
   self.assertLess(still['peak_deformation_m'],1e-12)
 
+ def test_coupled_arm_replay_preserves_contact_orientation(self):
+  import numpy as np
+  from run_side_contact_lab import run
+  result=run(attached=True,duration=1/960,iterations=1024,residual_tolerance=1e-8)
+  self.assertLess(result['maximum_wrist_separation_m'],1e-7)
+  pose=result['frames'][0]['arm']
+  finger=np.asarray(pose['finger_direction']);normal=np.asarray(pose['palm_normal'])
+  self.assertAlmostEqual(float(finger@finger),1.,places=10)
+  self.assertAlmostEqual(float(normal@normal),1.,places=10)
+  self.assertAlmostEqual(float(finger@normal),0.,places=10)
+  self.assertLess(normal[0],-.8)

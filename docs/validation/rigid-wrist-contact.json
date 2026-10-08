@@ -1,0 +1,75 @@
+{
+  "initial_energy_j": {
+    "hand_translation": 0.0540519494970139,
+    "hand_rotation": 0.00016212135310157957,
+    "tissue_kinetic": 0.0,
+    "tissue_edges": 0.0,
+    "tissue_volumes": 0.0,
+    "arm_kinetic": 0.630693302591353,
+    "attachment": 0.0,
+    "total": 0.6849073734414685
+  },
+  "final_energy_j": {
+    "hand_translation": 0.06458542795021416,
+    "hand_rotation": 0.0007876205617646847,
+    "tissue_kinetic": 3.1275640120904825e-24,
+    "tissue_edges": 2.51041077571462e-22,
+    "tissue_volumes": 4.212346240477404e-26,
+    "arm_kinetic": 0.4031971911767838,
+    "attachment": 3.956814474075495e-06,
+    "total": 0.46857419650323673
+  },
+  "explicit_damping_loss_j": 2.9526813417330825e-05,
+  "residual_tolerance_m": 1e-06,
+  "initial_velocity": [
+    -0.7522507075516383,
+    -0.024216357162598623,
+    -0.184688000875316
+  ],
+  "initial_angular_velocity": [
+    -0.6349708670997218,
+    -0.5723096265352489,
+    -0.128048930530045
+  ],
+  "iterations_cap": 64,
+  "unconverged_steps": 14,
+  "maximum_material_residual_m": 0.00012022550651693133,
+  "compiled_embedding": true,
+  "attached": true,
+  "initial_penetration_m": 0.0,
+  "maximum_wrist_separation_m": 5.746858514677818e-06,
+  "maximum_bond_residual_m": 5.575346464864461e-06,
+  "initial_joint_velocity": [
+    -1.3758598325057396,
+    1.537916621342285,
+    -3.7056652145125817
+  ],
+  "final_joint_velocity": [
+    1.4816006716971852,
+    0.9523024405367764,
+    -2.8046545248960797
+  ],
+  "fps": 960,
+  "duration": 0.06,
+  "hand_samples": 116,
+  "peak_active_contacts": 4,
+  "peak_deformation_m": 0.001355305231305478,
+  "maximum_penetration_m": 1.9242697801204384e-06,
+  "final_velocity": [
+    0.7155838301772377,
+    -0.14846121014209124,
+    -0.4283864110654195
+  ],
+  "final_angular_velocity": [
+    -0.6737531873509248,
+    -2.9543782482315133,
+    -0.06227676733106707
+  ],
+  "solve_ms": 4121.683299999859,
+  "limits": [
+    "diagonal joint inertia, stationary torso, no active muscle drive",
+    "laboratory box inertia",
+    "no friction",
+    "not active in matches"
+  ]
+}

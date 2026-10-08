@@ -16,15 +16,18 @@ def rotation_log(rotation):
     if axis[np.argmax(np.abs(axis))]<0:axis=-axis
     return axis*angle
 
+def cross3(a,b):
+    return np.array([a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]])
+
 def forearm_frame(arm,q):
     elbow,wrist=map(np.asarray,arm.joints(q));axis=wrist-elbow;axis/=np.linalg.norm(axis)
     # The bent arm defines its own continuous plane. Switching a world helper
     # axis at a threshold would inject a discontinuous wrist rotation.
     shoulder=np.asarray(arm.rotate(SHOULDER,arm.torso_yaw))
-    normal=np.cross(axis,elbow-shoulder);length=np.linalg.norm(normal)
+    normal=cross3(axis,elbow-shoulder);length=np.linalg.norm(normal)
     if length<1e-10:raise ValueError('Forearm frame requires a bent arm')
     normal/=length
-    return np.column_stack((np.cross(axis,normal),axis,normal))
+    return np.column_stack((cross3(axis,normal),axis,normal))
 
 class ArmHandAttachment:
     def __init__(self,hand,arm,position_compliance=2e-5,angle_compliance=2e-3):

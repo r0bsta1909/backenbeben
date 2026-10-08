@@ -1039,3 +1039,22 @@ Konkrete verbleibende Arbeit: kontinuierlichen Arm-/Handpfad samt Rueckholung au
 gekoppeltem Kontakt aufbauen, Bindungsluecke beherrschen und Laufzeit unter das
 Schlagvorbereitungsfenster bringen. Keine weitere losgeloeste Physikfunktion.
 Alter Matchpfad bleibt aktiv; G4 weiterhin OFFEN, keine volle Kopplung behauptet.
+
+G4 STARRE WRISTBINDUNG UND GEMEINSAME RENDERVORSCHAU
+Im Integrationskern translatorische Bindungscompliance auf0 gesetzt: anatomisches
+Handgelenk darf rotieren, Hand/Unterarm sollen nicht auseinanderfedern. Gemessene
+maximale Bindungsluecke von2.21mm auf5.75um gesunken, Peakgewebe1.355mm. Energie-
+auswertung idealer Bindungsachsen korrigiert: keine Federenergie auf Achsen ohne
+Compliance; Bindungsrestfehler wird weiterhin separat berichtet. Keine NaN/Inf.
+Profilierung zeigte hohe Kosten generischer numpy.cross-Aufrufe fuer einzelne
+3D-Vektoren; durch algebraisch identische Skalarkreuzprodukte ersetzt. Neuer
+unprofilierter Durchlauf4.12s fuer60ms, weiterhin nicht schnell genug; unterschiedliche
+Profilierungsbedingungen verhindern pauschale Prozentbeschleunigungsbehauptung.
+113 Tests bestanden inkl. starrer Bindung/Energie/echter Handorientierung.
+Kontaktframes enthalten jetzt Finger-/Handflaechennormale aus der geloesten starren
+Handrotation. Native Vorschau verwendet diese Pose auf echtem Character-Skelett
+zusammen mit seitlichem Gewebefeld:4804 veraenderte Farbkanaele, Bild gesichtet.
+Beleg validation/coupled-arm-contact.png und rigid-wrist-contact.json. Es handelt
+sich um Kontaktvorschau, nicht den aktivierten Matchpfad oder fertigen Gesamtclip.
+14 Schritte bleiben ueber1um numerischer Restfehlertoleranz. Naechste Integration:
+kontinuierlicher Kontakt-/Rueckholclip; danach Laufzeit und reale Matchpruefung.
