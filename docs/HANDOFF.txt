@@ -1895,3 +1895,23 @@ schematischeralsReferenz. KEINEArt-/menschlicheBedienabnahme. Goalbleibtoffen.
 NAECHSTER PRODUKTSCHRITT: groesste sichtbareLuecken beiFiguren/Gesichtern und
 Verstaendlichkeit amaktuellenReferenzvergleich priorisieren,keineweitere
 Mikrooptimierungsserie. CheckoutHost8877Session30515 bleibt;Pakettesthostbeendet.
+
+G3 HANDNEIGUNG DIREKT AM GESPEICHERTEN PROBEKONTAKT VERGLEICHEN
+KonkreteLuecke: MausradverliessKontaktstandbild zurAusholhaltung,keindirekter
+Neigungsvergleich. JetztbleibtAnsichtstehen; expliziteMausradneigung bewertet
+identischegespeicherteMausbahn neuaufHost. AlleSamplesbekommendiegewaehlteNeigung,
+keineautomatischeAusrichtung. Originalprobe bleibtunveraendert undperButton
+wiederherstellbar. NeueNeigung giltfuernächsten realgezogenenSchwung;dessen
+andereMausbahn kannanders treffen. Vorschau istgeometrischeProbe,keinGewebereplay.
+ProtokollprueftZug/Angreifer/Probe-ID/finiteGrenzen undbegrenztAnfragen;Client
+verwirftveralteteAntworten,entprelltWheel undwiederholtausbleibendeAntworten.
+6gezieltePythonTests PASS. Browser1366x768:flacherStartundFingerspitzenfall,
+Originalwiederherstellung,exaktesgerendertesRig,keineSchaeden,neueechteProbe
+uebernimmtgewaehlteNeigung PASS. Tips -21 -> -18 -> -15 ergibtflacheHand ohne
+Kamerasprung. Front/Seite gesichtet,Originalbutton nachSichtpruefung nachoben.
+GanzerLAN-Kampf5Treffer PASS inkl.KO/Ruecklauf/Anspannen/Resume/Revanche,errors[].
+Beleg validation/practice-comparison.json undzweiAnsichten; tests/practice_still.py
+optional--tips. MenschlicheVerstaendlichkeit NICHTalsbestandenmarkiert.
+Quellhost8877Session83200. OeffentlichesV10Paket enthaeltdiesenNeuschrittnicht.
+Goalaktiv. NaechstersichtbarerSchwerpunktG2:ReferenzvergleichGesichter/Helfer/
+Oberflaechen undnatuerlicheFigurenwirkung;nichterneutSolvermikrooptimierungen.

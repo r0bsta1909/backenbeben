@@ -29,6 +29,11 @@ HAND VON DER SEITE ANSEHEN wechselt die Kamera zum Prüfen der Haltung; auch
 in dieser Ansicht bleibt die Eingabe ein Zug nach links.
 EINS / Probe: erster Schwung ohne Schaden. Anschließend die Kontaktdiagnose
 lesen: Handfläche, Fingerspitzen, Streifer oder Foul. Haltung bei Bedarf ändern.
+PROBE AM KONTAKT ANSEHEN zeigt deine gespeicherte Probe von der Seite.
+Dort kippt das Mausrad die Hand zum Vergleich: gleiche Mausbahn, neue Neigung,
+neu vom Host bewertet und ohne Schaden. URSPRÜNGLICHE HANDHALTUNG stellt die
+Probe wieder her. Ein neuer Zug mit gedrückter Maustaste beendet den Vergleich;
+dafür gilt die zuletzt gewählte Neigung. Seine neue Mausbahn kann anders treffen.
 NOCH EINMAL OHNE SCHADEN ÜBEN macht den nächsten Schwung erneut zur Probe.
 Die Zugzeit läuft dabei weiter; anschließend zählt der nächste Schwung als Schlag.
 ZWEI / Schlag: erneut nach links ziehen. Der erste räumliche Kontakt zählt,

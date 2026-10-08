@@ -18,3 +18,13 @@ def wheel_hint(data,preview,scorer):
     delta=max(candidates)[1]
     direction='nach unten (zu dir)' if delta>0 else 'nach oben (von dir weg)'
     return 'Tipp fuer diese Probe: Mausrad eine Rastung '+direction+'. Danach Noch einmal ueben waehlen und erneut ziehen.'
+
+
+def tilted_probe(data,tilt):
+    """Same saved mouse path, explicitly chosen constant wrist tilt; no auto-fit."""
+    import math
+    if isinstance(tilt,bool) or not isinstance(tilt,(int,float)) or not math.isfinite(tilt) or not -45<=tilt<=45:
+        raise ValueError('Ungültige Handneigung.')
+    changed=deepcopy(data)
+    for point in changed['points']:point[4]=tilt
+    return changed

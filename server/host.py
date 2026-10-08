@@ -69,7 +69,7 @@ def new_room(client, training):
 
 def public(room):
     now=time.monotonic()
-    return {k: room[k] for k in ('id','players','phase','turn','turn_id','hits','event','event_id','match_id','winner','training','revision')} | {'remaining':max(0.,room['deadline']-now),'max_pairs':room['settings']['max_pairs'], 'windup_seconds':WINDUP_SECONDS, 'brace_window_ms':room['settings']['brace_window_ms'], 'brace_used':room['brace'] is not None, 'brace_result':room.get('brace_result',''), 'practice_done':room.get('practice_done',False), 'replay_id':room.get('replay_id'), 'replay_skip':room.get('replay_skip',[]), 'diagnosis':room.get('diagnosis',''), 'practice_pose':room.get('practice_pose') if room.get('practice_done') else None}
+    return {k: room[k] for k in ('id','players','phase','turn','turn_id','hits','event','event_id','match_id','winner','training','revision')} | {'remaining':max(0.,room['deadline']-now),'max_pairs':room['settings']['max_pairs'], 'windup_seconds':WINDUP_SECONDS, 'brace_window_ms':room['settings']['brace_window_ms'], 'brace_used':room['brace'] is not None, 'brace_result':room.get('brace_result',''), 'practice_done':room.get('practice_done',False), 'replay_id':room.get('replay_id'), 'replay_skip':room.get('replay_skip',[]), 'diagnosis':room.get('diagnosis',''), 'practice_pose':room.get('practice_pose') if room.get('practice_done') else None, 'practice_id':room.get('practice_id') if room.get('practice_done') else None}
 
 
 async def broadcast(room):
@@ -151,6 +151,17 @@ async def command(c, d):
                 try:await other['ws'].send_json({'type':'arm_pose','attacker':me,'pose':pose,'tilt':tilt})
                 except ConnectionError:pass
         return
+    if action=='inspect_practice':
+        if room['phase']!='aim' or room['turn']!=me or not room.get('practice_done') or d.get('turn_id')!=room['turn_id'] or d.get('practice_id')!=room.get('practice_id'):return
+        from practice_guidance import tilted_probe
+        candidate=tilted_probe(room['practice_data'],d.get('tilt'))
+        if now-c.get('last_practice_inspection',0)<.12:return
+        c['last_practice_inspection']=now
+        preview=score_contact(candidate,room['players'][1-me])
+        records=preview.get('arm_path',[])
+        moment=min(records,key=lambda r:abs(r['time']-preview['contact_time'])) if records else None
+        await c['ws'].send_json({'type':'practice_preview','turn_id':room['turn_id'],'practice_id':room['practice_id'],'tilt':d['tilt'],'arm':dict(moment,attacker=me) if moment else None,'diagnosis':preview['diagnosis']})
+        return
     if action=='practice':
         if room['phase']!='aim' or room['turn']!=me or d.get('turn_id')!=room['turn_id']: raise ValueError('Du bist nicht am Zug.')
         preview=score_contact(d,room["players"][1-me])
@@ -158,6 +169,7 @@ async def command(c, d):
         hint=wheel_hint(d,preview,lambda candidate:score_contact(candidate,room['players'][1-me]))
         records=preview.get('arm_path',[])
         moment=min(records,key=lambda r:abs(r['time']-preview['contact_time'])) if records else None
+        room['practice_data']=copy.deepcopy(d);room['practice_id']=secrets.token_hex(6)
         room['practice_pose']=dict(moment,attacker=me) if moment else None
         room['practice_done']=True;room['diagnosis']='Probe: '+preview['diagnosis']+' '+hint
         event(room,'practice',diagnosis=room['diagnosis']);await broadcast(room);return

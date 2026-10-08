@@ -37,6 +37,8 @@ Kontakt) pruefen, zunaechst OHNE Kontaktmarker; Marker nur zur Geometriekontroll
 Mausradwirkung, Handhaltung und Anspannfenster klar. Neue Spieler sollen treffen,
 Fehler erkennen und Haltung gezielt korrigieren koennen. Menschliche Abnahme bleibt
 eigenstaendiges Gate; zuletzt 'Weiterhin unverstaendlich', nicht bestanden.
+Aktuell: Mausradvergleich derselben Probe direkt am Kontakt ohne Kamerasprung,
+Hostbewertung/Originalwiederherstellung geprueft (validation/practice-comparison.json).
 
 G4 GEMEINSAME BEWEGUNG / KONTAKT — OFFEN
 Ein durchgehender aktiver Pfad fuer Arm, Hand, Trefferwertung, Gewebereaktion,
