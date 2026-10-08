@@ -6,12 +6,12 @@ Der Look orientiert sich an kantiger Comicgrafik und dem ursprünglichen XIII.
 
 ## Aktueller Stand
 
-Der aktuelle [Prototyp 06](https://github.com/r0bsta1909/backenbeben/releases/tag/v0.6.0-dev.20261008)
+Der aktuelle [Prototyp 07](https://github.com/r0bsta1909/backenbeben/releases/tag/v0.7.0-dev.20261008)
 enthält anatomische Arm-/Handmodelle, körpergebundene seitliche Schläge und vom Host
 aufgezeichnete Kontakt-/Gesichtsreplays. Weitere schadensfreie Probeschwünge sind
 wählbar; Verletzungen und geschwollene Augen erscheinen auch im eigenen Spiegel.
-Der Kontaktimpuls steuert die Wirkung, der gemessene Drehimpuls die vereinfachte
-Kopfantwort. Modellierte Stofffalten und Zuschauer ergänzen die Comicfiguren.
+Der Kontaktimpuls steuert die Wirkung; Kopfverschiebung und seitliche Drehung
+sind mit dem Gewebe gekoppelt. Modellierte Stofffalten und Zuschauer ergänzen die Comicfiguren.
 
 Standardkampf, KO, Replay-Rücklauf, Wiedereinstieg und Revanche sind mit zwei
 Browserclients geprüft. Das Hostpaket wurde außerhalb des Projekts mit frischer
@@ -56,21 +56,20 @@ Netzwerk freigeben; `ALLOW_LAN.bat` richtet eine begrenzte Regel für Port 8765 
 - Aktuelle Integrationstests: `tests/v3_browser_gauntlet.py` und `tests/v3_network_gauntlet.py`
   gegen einen separaten Host auf Port 8877. Playwright und Chrome werden dafür benötigt.
 
-Der normale Hoststart im aktuellen Quellstand verwendet `coupled-moving`: Kopfverschiebung, Kopf-Yaw,
+Der normale Hoststart im aktuellen Quellstand verwendet `coupled-spatial`: Kopfverschiebung und drei Rotationsachsen,
 Gewebe und Hand bleiben während Kontakt, Auslauf und Rückholung verbunden.
-Das veröffentlichte Paket 06 enthält noch den vorherigen `coupled`-Pfad. Für einen separaten
+Das veröffentlichte Paket 07 enthält noch den vorherigen `coupled-moving`-Pfad mit seitlicher Drehung. Für einen separaten
 Testhost:
-`python server/host.py --port 8877 --no-browser --no-console --physics coupled-moving`
+`python server/host.py --port 8877 --no-browser --no-console --physics coupled-spatial`
 Nach einem Update einmal `SETUP_HOST.bat` ausführen; die benötigte Kompilierung
 ist jetzt in `server/requirements.txt` enthalten.
 Er liefert vollständige Browser-Replays mit seitlichem Gewebe und durchgehender
 Arm-Rückholung. Die Rechenworker werden beim Hoststart vorbereitet; der geprüfte Browser-Treffer
-benötigte im beweglichen Pfad rund 2,4 Sekunden. Drei Verschiebungsachsen und die Yaw-Drehung sind gekoppelt;
-Pitch und Roll bleiben fest. Halsparameter sind Prototyp-Abstimmungen und die
-Kieferreaktion ist stilisiert. `--physics coupled` erhält den vorherigen
+benötigte im beweglichen Pfad rund 3 Sekunden. Drei Verschiebungs- und drei Rotationsachsen sind gekoppelt. Halsparameter sind Prototyp-Abstimmungen und die
+Kieferreaktion ist stilisiert. `--physics coupled-moving` erhält den vorherigen Yaw-Pfad. `--physics coupled` erhält den vorherigen
 verankerten Kontaktpfad zum Vergleich. `--physics legacy` hält den bisherigen Pfad für technische Vergleiche verfügbar.
 Der gezielte Browsercheck
-lautet `python tests/replay_contact_view.py --expect-moving --inspect-timeout --visual-contact`.
+lautet `python tests/replay_contact_view.py --expect-moving --expect-spatial --inspect-timeout --visual-contact`.
 
 ## Wissenssicherung
 

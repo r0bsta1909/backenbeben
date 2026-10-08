@@ -429,7 +429,7 @@ async def lifecycle(app):
 
 def main():
     global simulate,PHYSICS_BACKEND
-    parser=argparse.ArgumentParser();parser.add_argument('--port',type=int,default=8765);parser.add_argument('--no-browser',action='store_true');parser.add_argument('--no-console',action='store_true');parser.add_argument('--physics',choices=['legacy','coupled','coupled-moving','coupled-spatial'],default='coupled-moving');args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--port',type=int,default=8765);parser.add_argument('--no-browser',action='store_true');parser.add_argument('--no-console',action='store_true');parser.add_argument('--physics',choices=['legacy','coupled','coupled-moving','coupled-spatial'],default='coupled-spatial');args=parser.parse_args()
     PHYSICS_BACKEND=args.physics
     if args.physics in ('coupled','coupled-moving','coupled-spatial'):
         try:

@@ -28,15 +28,15 @@ Vorhanden: standardmaessig gekoppelter Arm-/Hand-/Gewebeclip mit Rueckholung,
 Belege: validation/coupled-variants.json, compiled-game-replay.json.
 Die Wirkungsstaerke nutzt den geloesten Normalimpuls; Flaechenabdeckung und
 Foulklassifikation stammen weiterhin aus der ersten Kontaktgeometrie.
-Quellstandard coupled-moving koppelt dreiKopftranslationen undYaw waehrend Kontakt,
+Quellstandard coupled-spatial koppelt dreiTranslationen unddreiRotationen waehrend Kontakt,
 Auslauf und Rueckholung. Nachweise: validation/moving-head-integration.json,
-moving-head-replay-variants.json und moving-head-default.json.
+spatial-head-replay-variants.json und spatial-head-integration.json.
 Aktive Replaybedienung verlaengert die Betrachtungszeit begrenzt auf45Sekunden.
 Reproduzierter LAN-Testtimeout: Replay bereits beendet; synthetische Eingaben
 umgingen die Fristverlaengerung. Test korrigiert, voller Kampf bestanden.
 Aeltere Fehler ohne Snapshot bleiben historisch nicht eindeutig zugeordnet.
 Anspannlatenz auf Testhardware um21% reduziert; Beleg brace-latency.json.
-Offen im normalen Pfad: Pitch/Roll fest,Halsparameter nurPrototypabstimmung,
+Offen im normalen Pfad: diagonaleEulertraegheit,Halsparameter nurPrototypabstimmung,
 Kiefer stilisiert.
 Gefuehrter KO, numerische Kontaktrestfehler;
 keine vollstaendige anatomische Traegheits-/Reibungs-/Verletzungssimulation.

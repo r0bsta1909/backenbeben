@@ -1563,3 +1563,13 @@ Beleg validation/spatial-head-integration.json/spatial-head-front.png.
 Host8877 aktuellcoupled-spatial,Session20874. NAECHSTES StandardbalanceDuell
 undDefaultentscheidung;keineweiterenisoliertenMechanikbausteinevordieserAbnahme.
 ParameterweiterPrototyp/EulerDiagonaltraegheit,keinevollstaendigeAnatomie.
+
+G4 SPATIAL ALS QUELLSTANDARD
+StandardbalanceDuell10TrefferPASS inkl.Anspannen,Verletzungsruecklauf,
+identischerReplays,Resume,Ergebnis,Revanche,errors[]. Defaultaufcoupled-spatial
+umgestellt. START_HOST.bat ohnePhysicsOverride neugestartet;Browsercheck
+fordertspatial_rotation=trueundbestehtProbe/Replay/Spiegel/Kameras,errors[].
+Beleg validation/spatial-head-default.json. READMEundStatusaktualisiert,
+DownloadlinkkorrigiertaufV07;PaketV07weiteralterYawPfad. Host8877Default
+Session2909. NaechsteProduktprioritaetwiederG3Lesbarkeit/G2Bewegung;kein
+weitererPhysiklaborausbauohneProduktnutzen. Anatomie/Reibungweiteroffen.
