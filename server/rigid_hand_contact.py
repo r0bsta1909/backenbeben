@@ -47,3 +47,38 @@ class RigidHandContact:
     def penetration(self,cage):
         points=self.points();embeddings=self.embedding(points,cage.p,cage.geometry['triangles'])
         return max([max(0.,-float((p-e['position'])@e['normal'])) for p,e in zip(points,embeddings) if e is not None],default=0.)
+
+    def resolve_velocity(self,cage,velocity,angular_velocity,contact_margin=1e-7,
+                         tolerance=1e-10,max_iterations=2048):
+        """Non-mutating velocity solve on current touching/penetrating samples.
+
+        Compact shared tissue nodes before constructing the laboratory system.
+        Caller handles positional penetration and time-of-impact separately.
+        """
+        from contact_velocity_system import resolve_contacts
+        if not np.isfinite(contact_margin) or contact_margin<0:
+            raise ValueError('Invalid contact margin')
+        points=self.points()
+        embeddings=self.embedding(points,cage.p,cage.geometry['triangles'])
+        contacts=[]
+        for i,e in enumerate(embeddings):
+            if e is None:continue
+            gap=float((points[i]-e['weights']@cage.p[e['indices']])@e['normal'])
+            if gap<=contact_margin:contacts.append((i,e,gap))
+        if not contacts:
+            return dict(velocity=np.array(velocity,dtype=float),angular_velocity=np.array(angular_velocity,dtype=float),
+                node_velocities=cage.v.copy(),impulses=np.zeros(0),sample_indices=[],
+                residual_m_s=0.,converged=True,iterations=0,maximum_penetration_m=0.)
+        ids=np.unique(np.concatenate([e['indices'] for _,e,_ in contacts]))
+        mapping={int(node):j for j,node in enumerate(ids)}
+        weights=np.zeros((len(contacts),len(ids)))
+        for row,(_,e,_) in enumerate(contacts):
+            for node,weight in zip(e['indices'],e['weights']):weights[row,mapping[int(node)]]+=weight
+        samples=[i for i,_,_ in contacts]
+        result=resolve_contacts(velocity,angular_velocity,self.rotation,self.local[samples],
+            self.inverse_mass,self.inverse_inertia,cage.v[ids],cage.w[ids],weights,
+            [e['normal'] for _,e,_ in contacts],tolerance,max_iterations)
+        velocities=cage.v.copy();velocities[ids]=result['node_velocities']
+        result.update(node_velocities=velocities,sample_indices=samples,
+                      maximum_penetration_m=max(0.,max(-gap for _,_,gap in contacts)))
+        return result

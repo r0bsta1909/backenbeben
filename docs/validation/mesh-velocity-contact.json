@@ -1,0 +1,40 @@
+{
+  "residual_m_s": 9.630903630153398e-09,
+  "converged": true,
+  "iterations": 143,
+  "sample_indices": [
+    16,
+    17,
+    18,
+    23,
+    28,
+    33,
+    39,
+    96,
+    102,
+    107,
+    111
+  ],
+  "maximum_penetration_m": 0.004621613414702614,
+  "hand_samples": 116,
+  "active_impulses": 11,
+  "energy_before_j": 0.09,
+  "energy_after_j": 0.08408751516456545,
+  "solve_ms": 16.603300005954225,
+  "final_velocity": [
+    -0.9343057240374987,
+    -0.025601704818925205,
+    0.01660470171595677
+  ],
+  "final_angular_velocity": [
+    0.06506753820081385,
+    1.6963471838703867,
+    0.2410297757130191
+  ],
+  "limits": [
+    "snapshot only; no TOI",
+    "initial penetration reported, not corrected",
+    "free rigid hand; no arm reaction",
+    "not active match physics"
+  ]
+}

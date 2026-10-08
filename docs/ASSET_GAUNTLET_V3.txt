@@ -649,3 +649,22 @@ anschliessend ergaenzter Gewebeknotentest mit allen sechs Modultests bestanden.
 Dichte Matrizen sind ein Referenz-Laborpfad, kein Echtzeitnachweis fuer 116 Samples.
 Nur bereits festgestellte Kontakte; TOI und Einbindung in den gekoppelten Clip
 weiterhin offen. Keine Aenderung am aktiven Match oder visueller Abnahme.
+
+IMPULSSOLVER AN EXPORTIERTE HAND UND WANGE ANGEBUNDEN
+RigidHandContact.resolve_velocity bettet alle Samples in aktuelle Wangendreiecke,
+waehlt beruehrende/ueberlappende Samples und komprimiert gemeinsam verwendete
+Gewebeknoten fuer resolve_contacts. Rueckgabe enthaelt vollstaendige Knotengeschwin-
+digkeiten, Sampleindices, Impulse, Konvergenz und maximale Ueberlappung. Methode
+veraendert weder Handpose noch Cagezustand; keine automatische Zweitkorrektur im
+bestehenden XPBD-Clip. Getrennte Samples erhalten keinen Impuls.
+Realer Exportfall mit 116 Samples: naechster gespeicherter Armpose-Snapshot lag
+noch vor Kontakt. Audit verschiebt deshalb explizit 5 mm in negativer X-Richtung;
+KEIN TOI-Nachweis. Dann 11 Kontakte/Impulse, 4.622 mm vorhandene Ueberlappung,
+143 Iterationen, Rest 9.63e-9 m/s, Energie .09 -> .0840875 J, Laufzeit ca.16.6 ms.
+Ueberlappung wird gemeldet, nicht behoben. Freie Hand ohne Armreaktion in diesem
+Geschwindigkeitstest. Noch kein kompletter Aufprall oder Echtzeitnachweis.
+Reproduzieren: python scripts/audit_mesh_velocity_contact.py; Bericht
+validation/mesh-velocity-contact.json. Regression prueft echte Meshkontakte,
+Nichtmutation und kontaktfreie Bewegung. Naechstes Gate: kontinuierliche
+Kontaktzeitbestimmung statt kontrollierter Ueberlappung; danach gemeinsame
+Zeitintegration mit Gewebe/Arm. Matchsolver und visuelle Abnahme unveraendert.
