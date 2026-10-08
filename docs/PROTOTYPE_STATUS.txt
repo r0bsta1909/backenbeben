@@ -84,3 +84,15 @@ Bilder gesichtet. Beleg validation/helper-gaze-face-uv.json/png.
 Weiter gefuehrte Bewegung, keine physikalische Griffsimulation; Gesamtstil,
 menschliche Verstaendlichkeit und Zwei-PC-Nachweis bleiben offen.
 Host8877 Checkout Session18596. V08-Download enthaelt diese Korrekturen nicht.
+
+G3 ARMKETTE IM DREIVIERTELBILD SICHTBAR
+Replaypanel verdeckte in der bisherigen Dreiviertelkamera Ellbogen/Oberarm.
+Kamera weiter zur Seite gesetzt und Ziel gesenkt; Schulter bis Kontakt bleiben
+nun oberhalb des Panels sichtbar. Gleiche Kamera fuer Probestandbild.
+15 Browserkontaktansichten/Replay geprueft, errors[]. Probestandbild1366x768
+mit echtem Mauszug: Hostpose entspricht Rig, Kamerawechsel/Radexit/keinSchaden
+bestanden. Beide Spielbilder gesichtet; Belege validation/arm-framing.json,
+arm-framing-replay.png und arm-framing-practice.png. Erste Pruefung erwartete
+noch exakt alte Kamera-x=3 und lief in Timeout; Erwartung auf3.5 aktualisiert,
+sonstige Assertions erhalten. Keine neue menschliche Abnahme ableiten.
+Goal aktiv; Host8877 aktueller Checkout. V08-Paket weiterhin historisch.

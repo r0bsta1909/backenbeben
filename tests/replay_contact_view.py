@@ -14,7 +14,7 @@ async def main():
   await page.wait_for_function("document.getElementById('posePanel').dataset.mode==='practice'")
   await page.screenshot(path='logs/guidance-practice.png')
   await page.locator('#poseCamera').click()
-  await page.wait_for_function('godotStats?.camera_position?.[0]===3')
+  await page.wait_for_function('godotStats?.camera_position?.[0]===3.5')
   assert await page.locator('#poseCamera').get_attribute('aria-pressed')=='true'
   await page.wait_for_timeout(150)
   hidden_draws=await page.evaluate('godotStats.mirror_draw_requests')

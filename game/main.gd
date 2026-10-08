@@ -468,9 +468,9 @@ func drive_recorded_physics() -> void:
 	var side_view: bool = inspecting or (replaying and physics_frame.get("camera","") in ["side","wide"])
 	mirror_mount.visible=not (replaying or inspecting)
 	if replaying or inspecting:mirror_viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED
-	camera.position=Vector3(4.8,.8,1.05) if wide_view else Vector3(3,.55,1.1) if side_view else Vector3(.30,.55,2.65)
+	camera.position=Vector3(4.8,.8,1.05) if wide_view else Vector3(3.5,.65,1.1) if side_view else Vector3(.30,.55,2.65)
 	camera.fov=65.0 if wide_view else 55.0
-	camera.look_at(Vector3(0,-2.0,1.05) if wide_view else Vector3(0,-.12,1.0) if side_view else Vector3(.22,-.18,0))
+	camera.look_at(Vector3(0,-2.0,1.05) if wide_view else Vector3(0,-.45,1.0) if side_view else Vector3(.22,-.18,0))
 	hand.visible=true
 	hand.first_person(not side_view)
 	var defending_view: Node3D=fighter

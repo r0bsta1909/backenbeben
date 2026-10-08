@@ -23,7 +23,7 @@ async def main():
   if tips:assert 'Fingerspitzen' in await page.evaluate('state.diagnosis')
   await page.locator('#inspectPractice').click()
   await page.wait_for_function('JSON.stringify(JSON.parse(handPose).arm)===JSON.stringify(state.practice_pose)')
-  await page.wait_for_function('godotStats?.camera_position?.[0]===3')
+  await page.wait_for_function('godotStats?.camera_position?.[0]===3.5')
   await page.wait_for_function('["shoulder","elbow","wrist"].every(k=>godotStats.rendered_arm?.[k]?.every((v,i)=>Math.abs(v-state.practice_pose.pose[k][i])<1e-5))')
   assert 'STANDBILD' in await page.locator('#poseTitle').inner_text()
   await page.screenshot(path=f'logs/practice-still{suffix}-side.png')
