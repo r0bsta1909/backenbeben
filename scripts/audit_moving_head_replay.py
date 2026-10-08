@@ -37,6 +37,11 @@ for name,y,tilt,skin in CASES:
   if valid.any():gap=min(gap,float(np.min(np.sum((points[valid]-positions[valid])*normals[valid],axis=1))))
  assert gap>=-2e-6,(name,gap) # Quantized shader/replay reconstruction, 2 micrometers.
  assert wrist_angle<=WRIST_LIMIT+1e-6,(name,wrist_angle)
- rows.append({'case':name,'spatial':spatial,'friction_coefficient':.2 if friction else 0.,'max_rotation_rad':np.max(np.abs(clip['head_rotations']),axis=0).tolist(),'solve_ms':clip['solve_ms'],'minimum_recorded_recovery_gap_m':gap if math.isfinite(gap) else None,'maximum_wrist_deg':math.degrees(wrist_angle),'tail_pin_error_m':clip['head_response']['tail_pin_error_m'],'max_yaw_rad':max(abs(f[0]) for f in clip['frames'])})
+ contact_end=clip['arm_path'][-325]['pose'];first_recovery=clip['arm_path'][-324]['pose']
+ first_wrist_step=float(np.linalg.norm(np.asarray(first_recovery['wrist'])-contact_end['wrist']))
+ first_normal_step=math.acos(float(np.clip(np.dot(first_recovery['palm_normal'],contact_end['palm_normal']),-1,1)))
+ assert first_wrist_step<.005,(name,'release position jump',first_wrist_step)
+ assert first_normal_step<math.radians(2),(name,'release rotation jump',first_normal_step)
+ rows.append({'case':name,'first_recovery_wrist_step_m':first_wrist_step,'first_recovery_normal_step_deg':math.degrees(first_normal_step),'spatial':spatial,'friction_coefficient':.2 if friction else 0.,'max_rotation_rad':np.max(np.abs(clip['head_rotations']),axis=0).tolist(),'solve_ms':clip['solve_ms'],'minimum_recorded_recovery_gap_m':gap if math.isfinite(gap) else None,'maximum_wrist_deg':math.degrees(wrist_angle),'tail_pin_error_m':clip['head_response']['tail_pin_error_m'],'max_yaw_rad':max(abs(f[0]) for f in clip['frames'])})
  print(json.dumps(rows[-1]),flush=True)
 (ROOT/('docs/validation/friction-replay-variants.json' if friction else 'docs/validation/spatial-head-replay-variants.json' if spatial else 'docs/validation/moving-head-replay-variants.json')).write_text(json.dumps(rows,indent=2)+'\n')

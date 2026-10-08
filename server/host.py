@@ -8,7 +8,7 @@ from contact_v3 import score as v3_score, input_target, collision as arm_collisi
 from arm import Arm, DT, lab_collision
 
 def bot_stroke():
-    return {'version':3,'points':[[.19+.34*i/60,.60,800*i/60,0,-15,0] for i in range(61)]}
+    return {'version':3,'points':[[.19+.34*i/60,.60,800*i/60,0,-18,0] for i in range(61)]}
 
 def skin_state(player):
     return (min(1,player.get('zones',{}).get('L',0)/75),min(1,player.get('zones',{}).get('R',0)/75),max(0,min(1,(player.get('damage',0)-50)/40)))

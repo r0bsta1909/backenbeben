@@ -4,7 +4,7 @@ from playwright.async_api import async_playwright
 async def main():
  tips="--tips" in sys.argv
  suffix="-tips" if tips else ""
- tilt=-21 if tips else -15
+ tilt=-24 if tips else -18
  async with async_playwright() as p:
   browser=await p.chromium.launch(executable_path=r'C:\Program Files\Google\Chrome\Application\chrome.exe',headless=True)
   page=await browser.new_page(viewport={'width':1366,'height':768});errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
@@ -14,7 +14,7 @@ async def main():
   if tips:
    await page.mouse.move(1366*.8,768*.6)
    for _ in range(2):await page.mouse.wheel(0,-120);await page.wait_for_timeout(100)
-   await page.wait_for_function('netArm?.tilt===-21')
+   await page.wait_for_function('netArm?.tilt===-24')
   await page.mouse.move(1366*.8,768*.6);await page.mouse.down()
   for i in range(12):
    await page.mouse.move(1366*(.8-.34/1.5*(i+1)/12),768*.6);await page.wait_for_timeout(8)
@@ -38,7 +38,7 @@ async def main():
   await page.wait_for_function('["shoulder","elbow","wrist"].every(k=>godotStats.rendered_arm?.[k]?.every((v,i)=>Math.abs(v-JSON.parse(handPose).arm.pose[k][i])<1e-5))')
   if tips:
    await page.mouse.wheel(0,120)
-   await page.wait_for_function('JSON.parse(handPose).arm?.tilt===-15')
+   await page.wait_for_function('JSON.parse(handPose).arm?.tilt===-18')
    assert 'flachen Hand' in await page.locator('#contactVerdict').inner_text()
   await page.screenshot(path=f'logs/practice-compare{suffix}-front.png')
   await page.locator('#poseCamera').click();await page.wait_for_function('godotStats?.camera_position?.[0]===3.5')

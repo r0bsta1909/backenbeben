@@ -36,7 +36,10 @@ def recover(scored,contact,collision_surface=None):
     for tick in range(1,325):
         elapsed=tick*DT
         arm.drive_torso(0.)
-        blend=smooth(elapsed/.24);lower=smooth((elapsed-.22)/.55)
+        # Begin the withdrawal target immediately. The joint motor still bounds
+        # acceleration/torque; a zero-slope target delayed clearance while the
+        # moving head could catch the released hand during a grazing contact.
+        blend=1-math.exp(-elapsed/.09);lower=smooth((elapsed-.22)/.55)
         target=release+(np.array([.40,-.07,.30])-release)*blend+np.array([-.06,-.60,.16])*lower
         # Continue the outgoing angular velocity, damping it before returning
         # to the controlled posture. The initial orientation is never reset.

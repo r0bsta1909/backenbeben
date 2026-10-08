@@ -24,7 +24,9 @@ Ziel: docs/art-direction-v3/01-character-face.png, 02-hand-connected-arm.png,
 03-first-person.png und Nutzerscreenshots. Ego/Seite/Replay pruefen: keine Loecher,
 Deformationsspitzen, abgetrennten Glieder; natuerliche Schulter-/Aermeluebergaenge.
 Aktuell: verbundene Aermel mit abfallender Schulterform und erhobener Schlagpose
-geprueft (validation/shoulder-tailoring.json). Proportionen/Gesamtstil bleiben offen.
+geprueft (validation/shoulder-tailoring.json). Augen/Brauen und Unterkiefer sind
+ueberarbeitet; Kiefer/Kontakt gemeinsam geprueft (validation/jaw-shape-contact.json).
+Proportionen/Gesamtstil bleiben offen.
 
 G3 VERSTAENDLICHER SEITLICHER SCHLAG — HOECHSTE SICHTBARE PRIORITAET / OFFEN
 Ausholen, Ausrichten, Probe und Schlag mit gemeinsamer koerpergebundener Bewegung.

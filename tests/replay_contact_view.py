@@ -23,10 +23,10 @@ async def main():
   assert await page.evaluate('godotStats.mirror_draw_requests')==hidden_draws
   assert await page.evaluate('godotStats.physics_material_updates')==idle_updates
   await page.mouse.move(1536,648);await page.mouse.wheel(0,120)
-  await page.wait_for_function('window.netArm?.tilt===-12')
+  await page.wait_for_function('window.netArm?.tilt===-15')
   await page.screenshot(path='logs/pose-inspection.png')
   await page.locator('#resetPose').click()
-  await page.wait_for_function('window.netArm?.tilt===-15')
+  await page.wait_for_function('window.netArm?.tilt===-18')
   await page.locator('#poseCamera').click()
   await page.wait_for_function('godotStats?.camera_position?.[0]<1')
   await page.wait_for_function('(n)=>godotStats.mirror_draw_requests>n',arg=hidden_draws)

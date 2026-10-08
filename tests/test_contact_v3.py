@@ -5,8 +5,8 @@ from contact_v3 import score,surface,side_surface,probes,hand_frame,WRIST_LIMIT
 from arm import L1,L2
 from tissue import simulate
 
-def stroke(y=.6,tilt=-15,count=41):
-    return {'version':3,'points':[[.19+.34*i/(count-1),y,800*i/(count-1),0,tilt,0] for i in range(count)]}
+def stroke(y=.6,tilt=-18,count=41,duration=800):
+    return {'version':3,'points':[[.19+.34*i/(count-1),y,duration*i/(count-1),0,tilt,0] for i in range(count)]}
 
 class MeshContactTests(unittest.TestCase):
     def test_forearm_table_edge_between_clear_endpoints(self):
@@ -33,7 +33,7 @@ class MeshContactTests(unittest.TestCase):
         self.assertEqual(arm.velocity,[0.,0.,0.])
 
     def test_regions_from_actual_arm(self):
-        for y,tilt,expected in [(.6,-15,'flat'),(.6,-10,'glance'),(.6,-20,'tips'),(.1,0,'zone'),(.35,35,'heel')]:
+        for y,tilt,expected in [(.6,-18,'flat'),(.6,-12,'glance'),(.6,-24,'tips'),(.1,0,'zone'),(.35,35,'heel')]:
             with self.subTest(expected=expected):self.assertEqual(score(stroke(y,tilt))['contact_class'],expected)
     def test_pose_record_has_no_stretch_or_penetration_at_contact(self):
         result=score(stroke())
@@ -119,7 +119,8 @@ class MeshContactTests(unittest.TestCase):
         self.assertEqual(damage,0);self.assertFalse(ko)
 
     def test_replay_keeps_full_arm_and_tissue(self):
-        scored=score(stroke());clip=simulate(scored)
+        # Explicit firm 700 ms stroke; retain the visible-deformation threshold.
+        scored=score(stroke(duration=700));clip=simulate(scored)
         self.assertEqual(clip['arm_path'],scored['arm_path'])
         self.assertEqual(clip['version'],3)
         self.assertTrue(all(v==0 for frame in clip['frames'][:60] for v in frame[2:]),'Skin must remain still before impact')

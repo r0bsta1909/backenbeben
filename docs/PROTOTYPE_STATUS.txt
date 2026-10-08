@@ -320,3 +320,29 @@ Gesamtstil/Gesichtsproportionen/menschlicheVerstaendlichkeit weiterOFFEN.
 NaechsterG2Schwerpunkt: Kopfsilhouette/Kiefer undGesichtscharakter amReferenz-
 vergleich pruefen;Aenderungen anKontaktflaechen mitphysikalischemExportabgleichen.
 Goalaktiv,keineGesamtabnahme.
+
+G2/G3/G4 KANTIGERER UNTERKIEFER MIT KONSISTENTEM KONTAKT
+Unterkieferbreite lokal erhoeht; Topologie17113Gesichtsvertices unveraendert.
+UntererQuerschnitt y=-.04m:13.39->15.00cm;oberesGesicht y>.07m exaktunveraendert.
+Blend/GLB/Kollisionsmesh gemeinsamregeneriert. Referenz-/Spiegel-/Seitenbilder
+gesichtet. Die neueForm veraendert echteKontaktklassen: sichtbarerStart/Reset
+jetzt-18Grad (vorher-15),Mausradweiter3Grad. Referenzfaelle flat-18,glance-12,
+tips-24. KeineKlassifikations/Kollisions/Konvergenzgrenzen gelockert. Fixture-
+Eingaben explizit aktualisiert; LegacyDeformationsnachweis nutztkraeftigen700ms
+Schlag statt800ms bei weiterhin>3mmSchwelle. Anleitung/Bot/Browserkonsistent.
+ZusaetzlicherRückholtest fand3.25mmDurchdringung beiStreifer: dasanfangszu langsam
+anlaufendeRueckholziel liessHandstehenwaehrendKopfweiterlief. Ziel laeuftnun
+exponentiellmit90msZeitkonstante sofortan; Gelenkmotor/Drehmomentgrenzen und
+Kontaktaufzeichnungunveraendert. SenkenbleibtverzoegertnachFreiraum.
+SiebenVariantenx324Rueckholposen PASS; minimalerAbstand.751mm,ersterSchrittmax
+2.326mm/.524Grad; keineTischkollision,Wrist<=85Grad. Nachweisistfallbezogen,
+keineuniverselleKollisions-/Anatomiegarantie. ErgaenzteUebergangsassertionen.
+Final165PythonTestsPASS,AssetvalidierungPASS,32VerletzungsrenderPASS,RestUVPASS.
+15echteBrowseransichtenPASS,ProbevergleichmitMausPASS;ganzerLAN-Kampf9Treffer
+bisKO/Replay/Resume/RevanchePASS,errors[],p95=22ms aufTestrechner.
+Beleg validation/jaw-shape-contact.json unddreiSpielbilder. Quellhost8877
+Session51992. V10DownloadvorProbevergleich/Augen/Kiefer;nochkeinneuesPaket.
+Goalaktiv. NaechsterG5-Schritt: erreichbarenKOmitNORMALERSpielbalance pruefen;
+bisherigerStandardpaketkampf10Treffer endeteohneKO,KO-Testsmitbeschleunigter
+Testbalance. Das ersetztkeinenNachweisderErreichbarkeitimnormalenSpiel.
+Gesamtstil/menschlicheVerstaendlichkeit/physikalischeModellgrenzenweiteroffen.

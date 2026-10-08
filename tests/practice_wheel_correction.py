@@ -9,7 +9,7 @@ async def main():
   await page.locator('#training').click();await page.wait_for_function("state?.phase==='aim'")
   await page.mouse.move(1536,648)
   for _ in range(2):await page.mouse.wheel(0,-120);await page.wait_for_timeout(100)
-  await page.wait_for_function('netArm?.tilt===-21')
+  await page.wait_for_function('netArm?.tilt===-24')
   async def stroke():
    old=await page.evaluate('state.event_id')
    await page.mouse.move(1536,648);await page.mouse.down()
@@ -19,7 +19,7 @@ async def main():
   await stroke()
   before=await page.locator('#contactVerdict').inner_text()
   assert 'nach unten' in before,before
-  history=[before];tilt=-21
+  history=[before];tilt=-24
   for attempt in range(3):
    current=history[-1]
    if 'Sauber' in current:break
@@ -35,6 +35,6 @@ async def main():
   assert await page.evaluate("state.hits===0 && state.phase==='aim' && state.event.kind==='practice'")
   await page.screenshot(path='logs/practice-wheel-correction.png')
   assert not errors,errors
-  Path('logs/practice-wheel-correction.json').write_text(json.dumps({'before':before,'after':after,'genuine_pointer_and_wheel':True,'tilt_before':-21,'tilt_after':tilt,'diagnosis_history':history,'no_damage':True,'errors':errors},indent=2))
+  Path('logs/practice-wheel-correction.json').write_text(json.dumps({'before':before,'after':after,'genuine_pointer_and_wheel':True,'tilt_before':-24,'tilt_after':tilt,'diagnosis_history':history,'no_damage':True,'errors':errors},indent=2))
   await browser.close()
 asyncio.run(main())

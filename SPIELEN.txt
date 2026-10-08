@@ -29,6 +29,7 @@ HAND VON DER SEITE ANSEHEN wechselt die Kamera zum Prüfen der Haltung; auch
 in dieser Ansicht bleibt die Eingabe ein Zug nach links.
 EINS / Probe: erster Schwung ohne Schaden. Anschließend die Kontaktdiagnose
 lesen: Handfläche, Fingerspitzen, Streifer oder Foul. Haltung bei Bedarf ändern.
+Die Start- und Rücksetzstellung ist −18°; das Mausrad ändert sie in 3°-Schritten.
 PROBE AM KONTAKT ANSEHEN zeigt deine gespeicherte Probe von der Seite.
 Dort kippt das Mausrad die Hand zum Vergleich: gleiche Mausbahn, neue Neigung,
 neu vom Host bewertet und ohne Schaden. URSPRÜNGLICHE HANDHALTUNG stellt die

@@ -82,8 +82,9 @@ for line in (SRC/'makehuman/caucasian-male-young.target').read_text().splitlines
     if len(fields)==4 and fields[0].isdigit():raw[int(fields[0])]+=Vector(tuple(map(float,fields[1:])))
 def head_transform(v):
     x,y,z=v
-    # Broaden lower jaw slightly while preserving authored eyelid/mouth loops.
+    # Broaden the lower jaw toward the square comic reference, preserving eyelid topology.
     width=1+.13*math.exp(-((y-7.25)/.35)**2)
+    width+=.17*math.exp(-((y-7.15)/.20)**2)*(1-smoothstep(7.35,7.62,y))
     p=Vector((x*.13*width,(y-8.2164)*.13+.09,z*.105-.058))
     if p.y<-.05:
         blend=1-smoothstep(-.11,-.05,p.y)

@@ -57,7 +57,7 @@ func _ready() -> void:
 	hand.rotation.y = PI
 	hand.first_person(true)
 	var ready_pose: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/lateral_ready.json"))
-	hand.apply_arm(ready_pose,0.0,-15.0)
+	hand.apply_arm(ready_pose,0.0,-18.0)
 	prepare_materials(hand)
 	opponent_hand = Node3D.new()
 	add_child(opponent_hand)
