@@ -1,0 +1,29 @@
+Arena: beauftragter Fuenf-Punkte-Feinschliff, 2026-10-08
+
+Warme lokale Tischbeleuchtung und aufgehelltes mattes Pultmaterial.
+Abgerundete Plattform/Matte, durchgehende Einfassung, gerundete Stufen mit
+geschlossenen Setzstufen. Obere Stufenpositionen und Tischhoehe erhalten.
+Gemeinsames Toon-Licht fuer Werbung, reduzierte Emission, ruhigerer Druckton
+und vier kleine Schildbefestigungen. Originaltexturen erhalten.
+Dezente prozedurale Abriebspuren an Standbereichen, Stufen und lackiertem Metall.
+Bodenschatten mit getrennter Kontakt-/weicher Schlagschattenkomponente;
+Weltversatz wird aus jeder Kamera projiziert, Weichheit passt zur Bildgroesse.
+
+Visuelle Iteration: erste geglaettete Fasen erzeugten Dreiecksschatten auf den
+grossen Deckflaechen. Flaechen mit getrennten flachen Normalen korrigiert und
+erneut gerendert. Zu starkes lokales Licht reduziert. In Nahaufnahme fehlende
+Setzstufen erkannt und geschlossen, ohne die Trittoberkanten zu verschieben.
+
+ARENA_PLATFORM_BAKE_OK, ARENA_HYBRID_PASS, native Aufnahmen aller vier Kameras,
+Arena ohne Figuren, Pult, Werbefassade und neuer Stufendetailansicht erfolgreich.
+Native Spielkamera, Arena ohne Figuren, Pult, Fassade und Stufen visuell gesichtet.
+Isolierter Web-Export erfolgreich; Chromium prueft Kameras 4/1/2/3 und Browser-
+Fehlerprotokoll. Letzter Browserbericht liegt lokal in logs/arena-web-preview.
+Abschliessende Fassung mit geschlossenen Stufen: vier Browseransichten bestanden,
+errors[], sechs Sponsorflaechen, 2D-Kulisse, p95-Frameintervalle lokal 16.67 ms.
+Keine Match-/Figurenarbeit und keine Aenderung der Serverphysik.
+Lokale Frameintervalle sind keine Leistungszusage fuer andere Hardware.
+Frei verschobene Designkameras koennen die fixe gemalte Perspektive nicht
+rekonstruieren; verbindlich sind die vier voreingestellten Ansichten.
+Kleine Originalfotovorlage Hoenhorst begrenzt weiterhin die Nahaufloesung.
+Optische Nutzerfreigabe bleibt offen; gruenes Rendering ersetzt sie nicht.

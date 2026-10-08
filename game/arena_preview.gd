@@ -64,6 +64,9 @@ func _ready() -> void:
 	fill.light_color=Color("fff0d5");fill.light_energy=.35;fill.omni_range=16;add_child(fill)
 	var rim:=DirectionalLight3D.new();rim.rotation_degrees=Vector3(-30,145,0)
 	rim.light_color=Color("afbac4");rim.light_energy=.30;add_child(rim)
+	var table_wash:=OmniLight3D.new();table_wash.position=Vector3(-1,-2,2.2)
+	table_wash.light_color=Color("ffe0b3");table_wash.light_energy=.22;table_wash.omni_range=6
+	add_child(table_wash)
 	stage=load("res://arena_platform.tscn").instantiate();add_child(stage)
 	person(0);person(2.1)
 	camera=Camera3D.new();camera.near=.08;camera.far=100;add_child(camera);camera.current=true
@@ -91,11 +94,15 @@ func update_ground_shadow() -> void:
 	var points: PackedVector2Array=[]
 	for p in [Vector3(-7,-6.20,-4.95),Vector3(7,-6.20,-4.95),Vector3(7,-6.20,7.05),Vector3(-7,-6.20,7.05)]:
 		if camera.is_position_behind(p):ground_shadow.hide();return
-		points.append(camera.unproject_position(p)+Vector2(6,10))
+		points.append(camera.unproject_position(p))
 	ground_shadow.show()
 	var clockwise: float=(points[1]-points[0]).cross(points[2]-points[1])
 	ground_shadow.material.set_shader_parameter("orientation",signf(clockwise))
 	ground_shadow.material.set_shader_parameter("viewport_size",get_viewport().get_visible_rect().size)
+	var center:=Vector3(0,-6.20,1.05)
+	var offset:=camera.unproject_position(center+Vector3(.40,0,.65))-camera.unproject_position(center)
+	ground_shadow.material.set_shader_parameter("cast_offset",offset)
+	ground_shadow.material.set_shader_parameter("softness",clampf(points[0].distance_to(points[1])*.018,5,22))
 	for i in range(4):ground_shadow.material.set_shader_parameter("p%d"%i,points[i])
 
 func _process(delta: float) -> void:

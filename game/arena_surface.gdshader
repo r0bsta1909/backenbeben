@@ -3,6 +3,7 @@ render_mode specular_disabled, ambient_light_disabled;
 uniform vec4 base_color : source_color = vec4(.4,.35,.3,1.0);
 uniform bool instance_color = false;
 uniform int surface_kind = 0;
+uniform float wear_amount = 0.0;
 varying vec3 position_world;
 float hash(vec3 p) { return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453); }
 float soft_noise(vec2 p) {
@@ -43,6 +44,17 @@ void fragment() {
     }
     if(surface_kind==5) {
         color*=.97+soft_noise(p.xz*18.0)*.04;
+    }
+    if(wear_amount>0.0) {
+        float patches=smoothstep(.48,.78,soft_noise(p.xz*2.8+vec2(p.y*3.0)));
+        float streak=1.0-smoothstep(.015,.08,abs(sin(p.x*7.2+p.z*1.7)));
+        float wear=patches*streak;
+        if(surface_kind==4) {
+            float feet=exp(-dot(p.xz-vec2(.55,0.0),p.xz-vec2(.55,0.0))*2.0)
+                      +exp(-dot(p.xz-vec2(-.55,2.1),p.xz-vec2(-.55,2.1))*2.0);
+            wear=wear*.35+feet*soft_noise(p.xz*6.0)*.40;
+        }
+        color=mix(color,color*1.16+vec3(.01,.008,.005),wear*wear_amount);
     }
     float edge=smoothstep(.03,.20,dot(normalize(NORMAL),normalize(VIEW)));
     ALBEDO=mix(vec3(.013,.015,.020),color,edge);

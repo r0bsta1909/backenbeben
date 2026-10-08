@@ -1,6 +1,35 @@
 extends "res://arena_final.gd"
 ## Only the actual competition platform and padded table are volumetric.
 ## Architecture and spectators belong to the painted background, not this tree.
+func bevel_box(size: Vector3, bevel: float, corner: float) -> ArrayMesh:
+	var surface:=SurfaceTool.new();surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var rings: Array[PackedVector3Array]=[]
+	for profile in [Vector2(-size.y/2,bevel),Vector2(-size.y/2+bevel,0),Vector2(size.y/2-bevel,0),Vector2(size.y/2,bevel)]:
+		var points:=PackedVector3Array()
+		var radius: float=maxf(corner-profile.y,.005)
+		for quadrant in range(4):
+			var cx: float=(size.x/2-profile.y-radius)*(1 if quadrant==0 or quadrant==3 else -1)
+			var cz: float=(size.z/2-profile.y-radius)*(1 if quadrant<2 else -1)
+			for segment in range(5):
+				var angle: float=quadrant*PI/2+segment*PI/8
+				points.append(Vector3(cx+cos(angle)*radius,profile.x,cz+sin(angle)*radius))
+		rings.append(points)
+	for row in range(3):
+		for n in range(20):
+			var next: int=(n+1)%20
+			for p in [rings[row][n],rings[row][next],rings[row+1][next],rings[row][n],rings[row+1][next],rings[row+1][n]]:surface.add_vertex(p)
+	surface.set_smooth_group(-1)
+	for n in range(20):
+		var next: int=(n+1)%20
+		for p in [Vector3(0,size.y/2,0),rings[3][n],rings[3][next],Vector3(0,-size.y/2,0),rings[0][next],rings[0][n]]:surface.add_vertex(p)
+	surface.generate_normals();surface.index()
+	return surface.commit()
+
+func worn_material(node: MeshInstance3D, color: Color, kind: int, amount: float) -> void:
+	var material: ShaderMaterial=finished_material(color,kind,false,false).duplicate()
+	material.set_shader_parameter("wear_amount",amount)
+	node.material_override=material
+
 func ring_mesh(rings: Array, ellipse: Vector2) -> ArrayMesh:
 	var surface:=SurfaceTool.new();surface.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var segments:=64
@@ -32,16 +61,45 @@ func podium() -> void:
 	for x in [-.28,.28]:beam(Vector3(x,-4.99,.92),Vector3(x,-1.49,.92),.009,Color("6c3733"))
 	for x in [-.45,.45]:
 		for z in [.42,.88]:round_part("FootFixing",Vector3(x,-5.029,z),Vector3(.055,.018,.055),"7d8079")
-	find_child("PodiumTop",true,false).material_override=finished_material(Color("434643"),5,false,false)
+	worn_material(find_child("PodiumTop",true,false),Color("50544e"),5,.08)
+	worn_material(find_child("PodiumBody",true,false),Color("303839"),6,.08)
+	worn_material(find_child("PodiumFoot",true,false),Color("272e30"),6,.12)
+	find_child("PodiumRedBand",true,false).material_override=finished_material(Color("883c38"),0,false,false)
 
 func stage_deck() -> void:
 	super.stage_deck()
+	var platform: MeshInstance3D=find_child("Platform",true,false)
+	platform.mesh=bevel_box(Vector3(14,1,12),.065,.18)
+	worn_material(platform,Color("252d32"),6,.13)
+	for edge in find_children("DeckEdge*","MeshInstance3D",true,false):
+		remove_child(edge);edge.free()
+	var trim:=part("RoundedDeckTrim",Vector3(0,-5.205,1.05),Vector3(14.01,.045,12.01),"8b806b")
+	trim.mesh=bevel_box(Vector3(14.01,.045,12.01),.012,.17)
+	worn_material(trim,Color("8b806b"),6,.10)
 	var mat_node: MeshInstance3D=find_child("RubberMat",true,false)
-	mat_node.material_override=finished_material(Color("656c68"),4,false,false)
+	mat_node.mesh=bevel_box(Vector3(13.9,.03,11.9),.008,.15)
+	worn_material(mat_node,Color("656c68"),4,.30)
+	for step in find_children("AccessStep*","MeshInstance3D",true,false):
+		var top: float=step.position.y+.11
+		var height: float=top+6.20
+		step.position.y=(top-6.20)/2
+		step.mesh=bevel_box(Vector3(.50,height,2.2),.025,.05)
+		worn_material(step,Color("494b48"),6,.22)
+	for lip in find_children("StepLip*","MeshInstance3D",true,false):worn_material(lip,Color("b6a184"),6,.20)
 	for id in ["FloorAdiHash","FloorTooth"]:
 		var print_material: ShaderMaterial=find_child(id,true,false).material_override
 		print_material.set_shader_parameter("substrate_color",Color("656c68"))
-		print_material.set_shader_parameter("substrate_mix",.20 if id=="FloorAdiHash" else .16)
+		print_material.set_shader_parameter("substrate_mix",.25 if id=="FloorAdiHash" else .30)
+		print_material.set_shader_parameter("ink_aging",.12)
+	for id in ["FasciaKoenig","FasciaVersino","FasciaHoenhorst"]:
+		var print_material: ShaderMaterial=find_child(id,true,false).material_override
+		print_material.set_shader_parameter("substrate_color",Color("4d514b"))
+		print_material.set_shader_parameter("substrate_mix",.20 if id=="FasciaHoenhorst" else .08)
+		print_material.set_shader_parameter("ink_aging",.06)
+	for y in [-6.07,-5.33]:
+		for z in [2.30,4.30]:
+			var fixing:=round_part("PlaqueFixing",Vector3(7.05,y,z),Vector3(.028,.014,.028),"80796b")
+			fixing.rotation.z=PI/2
 	# Small corner marks locate the feet without turning the mat into a signboard.
 	for z in [0.0,2.1]:
 		for side in [-1.0,1.0]:

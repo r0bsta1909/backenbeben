@@ -76,6 +76,20 @@ Spielansicht: Arena-Design/11-arena-spielansicht.png im Workspace.
 Vier Kameras nativ und im Browser geprueft. Der Stand ist zur optischen
 Sichtpruefung bereit; keine neue menschliche Freigabe vorweggenommen.
 
+FUENF-PUNKTE-FEINSCHLIFF
+1. Tisch: waermeres lokales Fuelllicht und besser lesbare Anthrazittoene.
+2. Podest: kleine echte Fasen/Rundungen, durchgehende Metall-Einfassung,
+   gerundete Stufen mit geschlossenen Setzstufen bis zur Unterkante.
+3. Werbung: gemeinsames abgestuftes Licht, weniger Eigenleuchten, dezente
+   Untergrundbeimischung und kleine Befestigungen am Hoenhorst-Schild.
+4. Gebrauch: sparsame prozedurale Abriebspuren an Standbereichen, Stufen,
+   Pultfuss und Kanten. Kein starker Schmutz und keine Beschaedigung der Motive.
+5. Bodenschatten: enger Kontaktschatten plus weich versetzter Schlagschatten;
+   Versatz aus Weltkoordinaten projiziert, Weichheit folgt der Bildgroesse.
+Aktuelle Bilder: Arena-Design/12-arena-feinschliff.png und
+12-arena-spielansicht.png im Workspace. 12-arena-tischdetail.png zeigt das Pult.
+Tischhoehe, Matchstart und Serverphysik bleiben unveraendert.
+
 HISTORISCH
 arena_finished.tscn, bake_arena.gd und tests/arena_finished.gd gehoeren zur
 Voll-3D-Fassung. Die aktuelle Vorschau instanziert diese Szene nicht.
