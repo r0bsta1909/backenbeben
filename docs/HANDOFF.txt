@@ -1465,3 +1465,11 @@ AktuelleHandneigung plusStartwert angezeigt ohneTrefferguete zu behaupten.
 Browserablauf prueft Probe->Schlag->erneuteProbe,ohneSchaden,danachReplay PASS.
 BeideZustaende alsSpielbildergesichtet. Beleg validation/input-guidance.json und
 zwei guidance-Bilder. MenschlicheVerstaendlichkeitsabnahme bleibtOFFEN.
+
+G3 BEDIENPANEL IN KLEINEREN PC-FENSTERN
+Kompaktes Layout unter800pxHoehe,begrenztePanelhoehe undinternerScroll;
+Replaybuttons duerfenumbrechen. Browserpruefung1920x1080/1366x768/1280x720:
+PanelimViewport,Zuruecksetzen/Kameraechteklickbar,errors[].720pSichtpruefung
+zeigtePhasenhinweisueberlagerung;Panelnachuntenversetzt,erneutbestanden.
+Belege validation/compact-guidance.json/compact-guidance-720p.png.
+Keine neue menschlicheAbnahme; Gesamtzielweiteroffen.
