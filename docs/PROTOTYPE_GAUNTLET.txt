@@ -92,3 +92,15 @@ Kontakt wie Andruecken wirken. Kein visuelles PASS. Naechster konkreter Eingriff
 Schulter/Ellbogen/Hand-Kette und Reichweite gemeinsam korrigieren, nicht nur
 Palmnormalen drehen. Kontaktflaeche muss an derselben Wange bleiben; vor/bei/nach
 Kontakt erneut ohne Marker pruefen. Screenshots lokal logs/contact-audit-*.png.
+
+G3 ERSTER ELLBOGENVERSUCH
+Aktiver FK-Pole am Kontakt von68 auf78 Grad angehoben, Ready bleibt35 Grad,
+weicher Reichweitenuebergang und beide Segmentlaengen bleiben erhalten.
+Staerkere Varianten100/85 Grad verworfen: Handgelenkbegrenzung veraenderte
+Kontaktklassen,100 Grad auch Standardtreffer/Gewebepeak. Tests nicht abgeschwaecht.
+Moderate78-Grad-Variante:109 Python-Tests bestanden, Browserkontakt-Audit inkl.
+neun markerfreien Ansichten und Replayassertions erfolgreich, errors[]. Eigener
+Testhost8877 neu gestartet (Execsession89740). Arm-Pruefclips regeneriert.
+Totale gesichtet: sichtbare Aenderung klein, weiterhin stark abgewinkelte Wirkung.
+Kein G3-PASS. Naechster Eingriff muss Reichweite/Koerperstellung/Kameraperspektive
+zusammen betrachten, nicht Pole beliebig weiterdrehen. Neuer Goal bleibt aktiv.

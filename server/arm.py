@@ -40,7 +40,7 @@ def forward(q):
     reach=clamp((.28-wrist[2])/.10,0.,1.)
     reach=reach*reach*(3-2*reach)
     axis=unit(sub(wrist,SHOULDER));v=sub(elbow,SHOULDER)
-    angle=-math.radians(35+33*reach)
+    angle=-math.radians(35+43*reach)
     cross=(axis[1]*v[2]-axis[2]*v[1],axis[2]*v[0]-axis[0]*v[2],axis[0]*v[1]-axis[1]*v[0])
     elbow=add(SHOULDER,add(add(mul(v,math.cos(angle)),mul(cross,math.sin(angle))),mul(axis,dot(axis,v)*(1-math.cos(angle)))))
     return elbow,wrist
