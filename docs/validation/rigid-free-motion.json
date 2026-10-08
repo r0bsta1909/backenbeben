@@ -1,0 +1,16 @@
+{
+  "duration_s": 2.0,
+  "steps": 480,
+  "initial_energy_j": 0.043045832137664664,
+  "max_energy_error_j": 4.909267437014364e-14,
+  "max_world_angular_momentum_error": 1.3894405713050006e-14,
+  "max_orthogonality_error": 8.557117238818533e-15,
+  "max_newton_iterations": 3,
+  "angular_velocity_change_rad_s": 5.779843469014669,
+  "limits": [
+    "torque-free isolated body",
+    "no contact or arm torque",
+    "phase error remains",
+    "not active in matches"
+  ]
+}

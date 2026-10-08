@@ -621,3 +621,19 @@ Gemessener warmer Gesamtaufprall25.6 ms statt67.7 ms im vorigen Lauf; vollstaend
 Referenzsweep208.7 ms. Initialer JIT-Aufruf1249.98 ms separat erfasst. Einzelmessung,
 kein vollstaendiger Echtzeitnachweis. Kein Fortschritt beim noch offenen
 fortlaufenden Material-/Armzeitverlauf oder visueller Abnahme durch diesen Schritt.
+
+FREIE ANISOTROPE STARRKOERPERROTATION
+rigid_free_motion.advance_free_rotation loest Euler-Gleichung im Koerpersystem
+mit implizitem Mittelpunkt/Newton und kombiniert sie mit Cayley-Orientierungsupdate.
+Dadurch passen diskrete Orientierung und Koerperdrehimpuls zusammen; Energie und
+Welt-Drehimpuls bleiben bis Solvertoleranz erhalten. Keine konstante Winkelgeschwin-
+digkeit fuer asymmetrische freie Hand mehr im isolierten Integrationsbaustein.
+2s/480 Schritte, I=diag(.001,.003,.002): maxEnergiefehler4.91e-14 J,
+maxWelt-Drehimpulsfehler1.39e-14, Orthogonalitaetsfehler8.56e-15, maximal3 Newton-
+Iterationen. Winkelgeschwindigkeit aendert sich um5.78 rad/s. Bericht
+validation/rigid-free-motion.json. 109 Tests bestanden: Erhaltung, Zeitumkehr,
+quadratische Phasenkonvergenz gegen kugelsymmetrische analytische Rotation,
+ungueltige Traegheit und explizite Nichtkonvergenz. Es bleibt diskreter Phasenfehler.
+Noch NICHT mit Kontaktsuche verbunden: deren konstante Weltwinkelgeschwindigkeit
+muss durch geeignete Bewegungsauswertung und sichere Geschwindigkeitsschranke
+ersetzt werden. Kein Arm-/Gewebedrehmoment, kein aktiver Matchsolver geaendert.
