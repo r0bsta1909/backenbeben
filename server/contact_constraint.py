@@ -110,3 +110,19 @@ def advance_attachment_midpoint(hand, arm, hand_velocity, arm_velocity,
     midpoint_va = (midpoint_a - a) / half
     return (2 * midpoint_h - h, 2 * midpoint_a - a,
             2 * midpoint_vh - vh, 2 * midpoint_va - va)
+
+
+def resolve_inelastic_contact_velocity(hand_velocity, node_velocities,
+                                      inverse_hand_mass, inverse_node_masses,
+                                      weights, normal):
+    """Zero closing normal velocity at an already established point contact.
+
+    Caller must establish touching/impact first: this function has no geometry
+    and must not be applied to separated approaching objects. Frictionless,
+    restitution zero; tangent velocity is preserved. Returned multiplier is
+    impulse in Ns. This particle primitive does not include rigid rotation.
+    """
+    # The mass-weighted unilateral projection is identical in velocity space;
+    # dt=1 and zero compliance make its multiplier a velocity impulse.
+    return project_contact(hand_velocity, node_velocities, inverse_hand_mass,
+                           inverse_node_masses, weights, normal, 1., 0., 0.)

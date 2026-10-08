@@ -606,3 +606,18 @@ und moegliche Durchdringung erzeugen. Match und gekoppelter Laborclip bleiben
 unveraendert. Naechstes Gate ist ein kontrollierter Feder-Aufprall mit getrennter
 inelastischer Kontaktbehandlung gegen Impuls-/Energiebilanz, vor jeder Uebertragung
 auf nichtlineare Gewebefedern und Gelenkrotationen.
+
+GETRENNTER INELASTISCHER IMPULS NACH FEDERSCHRITT
+resolve_inelastic_contact_velocity projiziert nur schliessende Normalgeschwindigkeit
+an bereits festgestelltem Kontakt. Reibungsfrei, Restitution null; liefert Ns.
+Massen und baryzentrische Gewichte verwenden dieselbe validierte unilaterale
+Projektion wie Positionskontakt. Auf getrennte Koerper darf sie NICHT angewandt
+werden: Geometrie/TOI muss der Aufrufer bestimmen. Noch keine Starrkoerperrotation.
+Kontrollierter Test: konservativer 3D-Federschritt, dann konstruierter Beruehrkontakt
+gegen drei ungleich schwere Knoten. Impuls entspricht -v_rel/(w_hand+sum(a_i^2*w_i));
+Verlust entspricht .5*v_rel^2/(w_hand+sum(a_i^2*w_i)). Gesamtimpuls erhalten,
+relative Normalgeschwindigkeit null, Tangentialgeschwindigkeit unveraendert.
+Weitere Tests: trennende Bewegung ohne Impuls, feste Oberflaeche ohne Rueckprall.
+Dies beweist nur den einzelnen linearen Aufprall, nicht einen vollstaendigen
+Feder-Kontakt-Zeitverlauf. Kontaktzeitbestimmung, wiederholte Kontakte, Rotation,
+Materialkopplung und Echtzeitintegration weiterhin offen. Spielsolver unveraendert.
