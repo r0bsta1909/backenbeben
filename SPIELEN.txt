@@ -30,12 +30,13 @@ in dieser Ansicht bleibt die Eingabe ein Zug nach links.
 EINS / Probe: erster Schwung ohne Schaden. Anschließend die Kontaktdiagnose
 lesen: Handfläche, Fingerspitzen, Streifer oder Foul. Haltung bei Bedarf ändern.
 Die Start- und Rücksetzstellung ist −18°; das Mausrad ändert sie in 3°-Schritten.
-PROBE AM KONTAKT ANSEHEN zeigt deine gespeicherte Probe von der Seite.
+Nach jeder Probe erscheint automatisch der gespeicherte Kontakt von der Seite.
+PROBE AM KONTAKT ANSEHEN öffnet ihn später bei Bedarf erneut.
 Dort kippt das Mausrad die Hand zum Vergleich: gleiche Mausbahn, neue Neigung,
 neu vom Host bewertet und ohne Schaden. URSPRÜNGLICHE HANDHALTUNG stellt die
 Probe wieder her. Ein neuer Zug mit gedrückter Maustaste beendet den Vergleich;
 dafür gilt die zuletzt gewählte Neigung. Seine neue Mausbahn kann anders treffen.
-NOCH EINMAL OHNE SCHADEN ÜBEN macht den nächsten Schwung erneut zur Probe.
+ERNEUT OHNE SCHADEN ÜBEN macht den nächsten Schwung erneut zur Probe.
 Die Zugzeit läuft dabei weiter; anschließend zählt der nächste Schwung als Schlag.
 ZWEI / Schlag: erneut nach links ziehen. Der erste räumliche Kontakt zählt,
 nicht die Stelle, an der du die Taste loslässt. Tempo und Handhaltung wirken mit.

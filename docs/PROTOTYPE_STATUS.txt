@@ -405,3 +405,17 @@ validation/skin-light-style.json unddreiBilder. KeinePhysik-/Geometrieaenderung.
 Gesamtstil/BedienabnahmeweiterOFFEN; V11DownloadvorBrauen/Bart/Farbkorrektur.
 Goalaktiv. NaechsterSchrittG3: Probe-undHandneigungsbedienung alszusammenhaengenden
 Einstieg pruefen, besonders Blickwechsel zwischenHand,Wange,SeitenansichtundText.
+
+G3 PROBE ZEIGT AUTOMATISCH DEN SEITLICHEN KONTAKT
+Jede neueeigeneProbe oeffnetdirektgespeicherteKontaktpose inDreiviertelansicht.
+MausradvergleichtweiterdieselbeBahn, keineautomatischeHandkorrektur. Benutzer
+kannEgoansicht/aktuelleHaltung waehlen; naechsterZugzaehltalsSchlag explizit
+angezeigt. ErneutohneSchadenueben vorKamerabuttons platziert, bei1366x768sichtbar.
+RealerFingerspitzen-TestPASS:automatischeAnsicht, Originalpose/gerendertesRig,
+-24->-21->-18Mausradvergleich bisflacheHand, Originalwiederherstellung, neueechte
+Probe mitgewaehlterNeigung, keinSchaden. KompaktesEndlayoutgesichtet.
+GanzerStandard-KO-Kampfinkl.Replay/Anspannen/Resume/RevanchePASS,errors[].
+SPIELEN aktualisiert. Beleg validation/automatic-practice-view.json/png.
+MenschlicheVerstaendlichkeitsabnahmebleibtoffen. V11PaketvordiesenAenderungen.
+Goalaktiv; naechsterSchrittG3: nahtlosenWechselvomKontaktvergleichzumSchwung
+pruefen, insbesondereKamerarueckkehrundraeumlicheOrientierung.

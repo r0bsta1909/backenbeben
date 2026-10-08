@@ -4,11 +4,12 @@ const canvas=document.getElementById('canvas');
 const panel=document.createElement('aside');panel.id='posePanel';panel.className='panel';
 panel.innerHTML='<div id="poseSteps"><span id="practiceStep">1 · PROBE</span><span id="strikeStep">2 · SCHLAG</span></div><h3 id="poseTitle">PROBESCHWUNG</h3><p id="gestureCue"><b>LINKE MAUSTASTE HALTEN</b><br>Dann nach links ziehen und loslassen.</p><p id="poseInputHint">↑ ↓ Maus: Treffhöhe<br>↕ Mausrad: Handfläche kippen</p><div id="poseReadout"></div><p id="contactVerdict">Nach links ziehen: Die rechte Hand schwingt seitlich zur Wange.</p><button id="originalPractice" hidden>URSPRÜNGLICHE HANDHALTUNG</button><button id="poseCamera" aria-pressed="false">HAND VON DER SEITE ANSEHEN</button><p id="poseCameraHint" hidden>Auch hier: nach links ziehen. Die Ansicht ändert nur die Kamera.</p><button id="inspectPractice" hidden>PROBE AM KONTAKT ANSEHEN</button><p id="practiceStillHint" hidden>Die neue Neigung gilt für deinen nächsten Schwung.</p><button id="repeatPractice" hidden>NOCH EINMAL OHNE SCHADEN ÜBEN</button><button id="resetPose">HALTUNG ZURÜCKSETZEN</button>';
 document.body.append(panel);
+panel.insertBefore(document.getElementById("repeatPractice"),document.getElementById("poseCamera"));
 const replayPanel=document.createElement('aside');replayPanel.id='replayPanel';replayPanel.className='panel';
 replayPanel.innerHTML='<div class="row"><strong>REPLAY · KONTAKTLABOR</strong><span id="replayTime"></span></div><input id="replaySeek" aria-label="Replay-Zeit" type="range" min="0" max="2.8" step="0.008333" value="0"><div class="row"><button id="replayPlay">PAUSE</button><button id="replayStep">+ EIN BILD</button><select id="replaySpeed" aria-label="Replay-Geschwindigkeit"><option value="0.1">0,1×</option><option value="0.25" selected>0,25×</option><option value="1">1×</option></select><select id="replayCamera" aria-label="Replay-Kamera"><option value="front">FRONT</option><option value="side">DREIVIERTEL</option><option value="wide">TV · TOTALE</option></select><button id="replayImpact">ZUM TREFFER</button><button id="replayContact">PUNKTE AN</button><button id="replaySkip">WEITER</button></div><p id="replayVerdict"></p><div id="contactLegend" hidden><span style="color:#59dfbe">● Handfläche</span> · <span style="color:#ffd078">● Finger</span> · <span style="color:#ee93b3">● Handballen</span></div>';
 document.body.append(replayPanel);
 const style=document.createElement('style');style.textContent=`#posePanel{position:fixed;left:25px;top:25%;width:220px;padding:18px;z-index:4;border-left:3px solid #e8c167}#posePanel small{color:#e8c167;font-size:10px;letter-spacing:1px}#posePanel h3{margin:10px 0}#poseSteps{display:flex;gap:6px;font-size:11px;font-weight:bold}#poseSteps span{padding:7px;border:1px solid #626872;color:#949ba6}#poseSteps [aria-current="step"]{background:#e8c167;color:#151920;border-color:#e8c167}#posePanel[data-mode="strike"] #poseSteps [aria-current="step"]{background:#f29a83;border-color:#f29a83}#posePanel #gestureCue{font-size:13px;color:#fff;border-top:1px solid #50545a;padding-top:12px}#posePanel[data-dragging="true"] #gestureCue{color:#e8c167}#posePanel p{font-size:12px;line-height:1.65;color:#bec6d0}#poseReadout{font:12px/1.8 monospace;color:#e8c167}#contactVerdict{min-height:40px}#replayPanel{position:fixed;bottom:162px;left:50%;transform:translateX(-50%);width:min(760px,90vw);padding:16px;z-index:6}#replayPanel strong{font-size:12px;color:#e8c167}#replayPanel .row{align-items:center;justify-content:space-between}#replayPanel input{padding:0;width:100%;accent-color:#e8c167}#replayPanel select{width:auto;font-size:10px}#replayPanel button{font-size:10px;padding:10px}#replayPanel p{font-size:12px;margin-bottom:0;color:#e8c167}#posePanel{max-height:calc(75vh - 100px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}#replayPanel .row{flex-wrap:wrap}@media(max-height:800px){#posePanel{top:215px;left:16px;width:215px;max-height:calc(100vh - 295px);padding:12px}#posePanel h3{font-size:16px;margin:8px 0}#posePanel p{line-height:1.4;margin:8px 0}#posePanel button{padding:8px;font-size:10px}#replayPanel{bottom:125px;padding:12px}}#posePanel[hidden],#replayPanel[hidden]{display:none}`;document.head.append(style);
-let originX=.8,inspectPose=false,inspectPractice=false,repeatPractice=false;
+let originX=.8,inspectPose=false,inspectPractice=false,repeatPractice=false,lastShownPractice='';
 let inspectTilt=-18,practicePreview=null,previewSent='',previewChanged=0,previewRequestTime=0;
 window.onPracticePreview=d=>{if(inspectPractice&&d.practice_id===state.practice_id&&d.turn_id===state.turn_id&&d.tilt===inspectTilt)practicePreview=d;};
 let yaw=0,pitch=-18,depth=0,mouse=[.19,.60],points=[],drag=false,rotate=false,start=0,length=0,previous=mouse.slice(),lastSend=0;
@@ -90,6 +91,10 @@ function frame(now){
    if(key!==phaseKey){phaseKey=key;phaseStart=now;drag=false;rotate=false;if(state.phase==='aim'){repeatPractice=false;length=0;mouse=[.19,.60];window.netArm=null;inspectPose=false;inspectPractice=false;}if(state.phase==='impact'){phaseStart=now-(2.8-state.remaining)*1000;hitSound=false;}if(state.phase==='replay'){replayT=0;playing=true;}}
    if(state.replay_id&&clip?.id!==state.replay_id&&loading!==state.replay_id)fetchClip(state.replay_id);
    if(ownTurn()){
+      if(state.practice_id&&state.practice_pose&&state.practice_id!==lastShownPractice&&!drag){
+         lastShownPractice=state.practice_id;inspectPractice=true;inspectPose=true;
+         inspectTilt=state.practice_pose.tilt;practicePreview=null;previewSent='';
+      }
       const strikes=state.practice_done&&!repeatPractice;
       panel.dataset.mode=strikes?'strike':'practice';panel.dataset.dragging=String(drag);
       document.getElementById('practiceStep').setAttribute('aria-current',strikes?'false':'step');
@@ -97,7 +102,7 @@ function frame(now){
       document.getElementById('poseTitle').textContent=strikes?'NÄCHSTER ZUG ZÄHLT':'ÜBEN · OHNE SCHADEN';
       document.getElementById('gestureCue').innerHTML=drag?'<b>← WEITER NACH LINKS ZIEHEN</b><br>Loslassen '+(strikes?'führt den Schlag aus.':'wertet nur die Probe aus.'):'<b>LINKE MAUSTASTE HALTEN</b><br>Dann nach links ziehen und loslassen.';
       document.getElementById('poseReadout').textContent=window.netArm?.pose?.wrist_limited?'HANDGELENK AM ANSCHLAG':'Handneigung: '+pitch+'° · Start: −18°';
-      const repeatButton=document.getElementById('repeatPractice');repeatButton.hidden=!state.practice_done;repeatButton.disabled=drag||repeatPractice;repeatButton.textContent=repeatPractice?'NÄCHSTER SCHWUNG: NUR PROBE':'NOCH EINMAL OHNE SCHADEN ÜBEN';
+      const repeatButton=document.getElementById('repeatPractice');repeatButton.hidden=!state.practice_done;repeatButton.disabled=drag||repeatPractice;repeatButton.textContent=repeatPractice?'NÄCHSTER SCHWUNG: NUR PROBE':'ERNEUT OHNE SCHADEN ÜBEN';
       const viewButton=document.getElementById('poseCamera');viewButton.textContent=inspectPose?'ZURÜCK ZUR EGOANSICHT':'HAND VON DER SEITE ANSEHEN';viewButton.setAttribute('aria-pressed',String(inspectPose));viewButton.disabled=drag;
       document.getElementById('poseCameraHint').hidden=!inspectPose||inspectPractice;
       document.getElementById('poseInputHint').hidden=inspectPractice;
@@ -114,7 +119,7 @@ function frame(now){
          document.getElementById('gestureCue').innerHTML='<b>MAUSRAD: HAND HIER KIPPEN</b><br>Gleicher Probeschwung, andere Handneigung. Ohne Schaden.';
          document.getElementById('poseReadout').textContent='Probe: '+state.practice_pose.tilt+'° · Vergleich: '+inspectTilt+'°';
          document.getElementById('phaseTitle').textContent='PROBE VERGLEICHEN';
-         document.getElementById('phaseHint').textContent='Maustaste halten und ziehen startet einen neuen Schwung.';
+         document.getElementById('phaseHint').textContent=strikes?'Nächster Schwung zählt. Oder erneut ohne Schaden üben.':'Nächster Schwung bleibt eine Probe ohne Schaden.';
          if(changed)document.getElementById('contactVerdict').textContent=ready?'Vergleich: '+practicePreview.diagnosis:'Handkontakt wird neu geprüft …';
          const requestKey=state.practice_id+':'+inspectTilt;
          if(changed&&(previewSent!==requestKey||(!ready&&now-previewRequestTime>750))&&now-previewChanged>180){previewSent=requestKey;previewRequestTime=now;sendAction({action:'inspect_practice',turn_id:state.turn_id,practice_id:state.practice_id,tilt:inspectTilt});}

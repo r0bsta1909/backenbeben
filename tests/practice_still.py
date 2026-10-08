@@ -21,7 +21,7 @@ async def main():
   await page.mouse.up();await page.wait_for_function('state.practice_pose?.pose')
   recorded=await page.evaluate('state.practice_pose')
   if tips:assert 'Fingerspitzen' in await page.evaluate('state.diagnosis')
-  await page.locator('#inspectPractice').click()
+  # New probe automatically exposes the actual contact from the side.
   await page.wait_for_function('JSON.stringify(JSON.parse(handPose).arm)===JSON.stringify(state.practice_pose)')
   await page.wait_for_function('godotStats?.camera_position?.[0]===3.5')
   await page.wait_for_function('["shoulder","elbow","wrist"].every(k=>godotStats.rendered_arm?.[k]?.every((v,i)=>Math.abs(v-state.practice_pose.pose[k][i])<1e-5))')
@@ -59,6 +59,6 @@ async def main():
   assert await page.evaluate('state.practice_pose.tilt')==tilt+3
   assert await page.evaluate('state.hits===0 && state.players.every(p=>p.damage===0)')
   assert not errors,errors
-  Path(f'logs/practice-still{suffix}.json').write_text(json.dumps({'viewport':[1366,768],'msaa_3d':await page.evaluate('godotStats.msaa_3d'),'host_recorded_pose':recorded,'actual_rig_matches':True,'side_and_front':True,'wheel_compares_same_probe':True,'original_restore':True,'comparison_rig_matches':True,'next_actual_probe_uses_selected_tilt':True,'saved_probe_unchanged':True,'repeat_exits':True,'no_damage':True,'errors':errors},indent=2))
+  Path(f'logs/practice-still{suffix}.json').write_text(json.dumps({'viewport':[1366,768],'msaa_3d':await page.evaluate('godotStats.msaa_3d'),'host_recorded_pose':recorded,'automatic_contact_view':True,'actual_rig_matches':True,'side_and_front':True,'wheel_compares_same_probe':True,'original_restore':True,'comparison_rig_matches':True,'next_actual_probe_uses_selected_tilt':True,'saved_probe_unchanged':True,'repeat_exits':True,'no_damage':True,'errors':errors},indent=2))
   await browser.close()
 asyncio.run(main())
