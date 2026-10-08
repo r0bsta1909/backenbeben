@@ -120,3 +120,8 @@ und dessen Korrektur: docs/HAND_CONTACT_SURFACE.txt. 30 Unit-Tests und beide
 LAN-Gauntlets bestanden. Neues lokales Entwicklungspaket geprüft, kein Release.
 Nächste offene Schwerpunkte: gekoppelte Nachgiebigkeit von Hand und Gesicht,
 natürlichere Auffangreaktion und menschliche Verständlichkeit/Stilprüfung.
+
+Aktueller Physiknachtrag: keine kuenstliche Mindestkraft/Mindestschaden bei
+Geschwindigkeit null; flaechengewichtete 3D-Druckverteilung. 32 Unit-Tests und
+beide LAN-Gauntlets bestanden. Details und verbleibende Vereinfachungen in
+HAND_CONTACT_SURFACE.txt. Stil, gekoppelte Handnachgiebigkeit und G7 offen.

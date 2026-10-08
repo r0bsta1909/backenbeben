@@ -59,6 +59,16 @@ class MeshContactTests(unittest.TestCase):
         a,b=score(original),score(extended)
         self.assertAlmostEqual(a['normal_speed'],b['normal_speed'],places=8)
         self.assertAlmostEqual(a['quality'],b['quality'],places=8)
+    def test_stationary_contact_has_no_invented_impulse_or_damage(self):
+        from rules import apply_hit,DEFAULTS
+        scored=score(stroke());scored.update(normal_speed=0.,impact_speed_m_s=0.,quality=0.)
+        clip=simulate(scored)
+        self.assertEqual(clip['peak'],0)
+        self.assertTrue(all(value==0 for frame in clip['frames'] for value in frame))
+        player={'damage':0.,'stun':0.}
+        damage,ko=apply_hit(player,scored,DEFAULTS)
+        self.assertEqual(damage,0);self.assertFalse(ko)
+
     def test_replay_keeps_full_arm_and_tissue(self):
         scored=score(stroke());clip=simulate(scored)
         self.assertEqual(clip['arm_path'],scored['arm_path'])

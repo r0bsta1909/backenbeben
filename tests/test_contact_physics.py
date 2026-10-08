@@ -29,6 +29,19 @@ class ContactTests(unittest.TestCase):
         flat=simulate(score_contact(self.stroke()))
         tips=simulate(score_contact(self.stroke(pitch=-50)))
         self.assertLess(tips['peak'],flat['peak']*.8)
+    def test_pressure_follows_real_three_dimensional_footprint(self):
+        model=Tissue();model.prepare()
+        a,b=3*9+2,3*9+6
+        left=model.contact_distribution([[*model.rest[a],'palm',.001]])
+        right=model.contact_distribution([[*model.rest[b],'finger',.001]])
+        self.assertEqual(int(np.argmax(left)),a)
+        self.assertEqual(int(np.argmax(right)),b)
+        self.assertTrue(np.all(left[model.w==0]==0))
+        behind=model.contact_distribution([[model.rest[a,0],model.rest[a,1],model.rest[a,2]-.25,'palm',.001]])
+        self.assertAlmostEqual(float(left.sum()),1.,places=10)
+        self.assertAlmostEqual(float(right.sum()),1.,places=10)
+        self.assertFalse(np.allclose(behind,left), 'Depth must affect load distribution')
+
     def test_replay_physics(self):
         s=score_contact(self.stroke());r=simulate(s)
         self.assertGreater(r['peak'],.01);self.assertLessEqual(r['peak'],.0651)

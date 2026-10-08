@@ -37,13 +37,24 @@ class Tissue:
         self.ti=np.array([t[0] for t in self.tets]);self.tv=np.array([t[1] for t in self.tets])
         self.degree=np.maximum(1,np.bincount(np.r_[self.ei,self.ej],minlength=len(self.p)))[:,None]
         self.volume_degree=np.maximum(1,np.bincount(self.ti.ravel(),minlength=len(self.p)))[:,None]
+    def contact_distribution(self,footprint):
+        """Area-weighted pressure footprint on the actual 3D cage, including depth."""
+        if not footprint:return None
+        np=self.np;points=np.array([p[:3] for p in footprint])
+        areas=np.array([p[4] if len(p)>4 else 1. for p in footprint],dtype=float)
+        if areas.sum()<=0:return None
+        distances=np.sum((self.rest[:,None,:]-points[None,:,:])**2,axis=2)
+        kernels=np.exp(-distances/.018)*(self.w>0)[:,None]
+        kernels/=np.maximum(kernels.sum(axis=0,keepdims=True),1e-12)
+        return kernels@areas/areas.sum()
+
     def step(self,dt,force=None):
         np=self.np;p=self.p;w=self.w
         if force is None and np.max(np.abs(self.v))<1e-9 and np.max(np.abs(p-self.rest))<1e-9:return
         old=p.copy()
         if force:
-            centre,impulse=force
-            fall=np.exp(-np.sum((self.rest[:,:2]-centre[:2])**2,axis=1)/.025)*w
+            centre,impulse=force[:2]
+            fall=force[2] if len(force)>2 and force[2] is not None else np.exp(-np.sum((self.rest[:,:2]-centre[:2])**2,axis=1)/.025)*w
             self.v+=fall[:,None]*np.array(impulse)
         self.v*=math.exp(-6*dt)
         p+=self.v*dt
@@ -82,17 +93,25 @@ def simulate(scored,braced=False):
         tissue.w=[0. if i>=NX*NY or i//NX in (0,NY-1) else 1. for i in range(len(tissue.p))]
     tissue.prepare();frames=[];dt=1/240
     strength=(.35+.65*scored.get('normal_speed',0)) if scored.get('contact_class')!='miss' else 0.
+    if scored.get('version')==3:
+        area=scored.get('contact_area_m2',scored.get('palm_area_m2',0)+scored.get('finger_area_m2',0))
+        strength=max(0.,min(1.,scored.get('normal_speed',0)))*min(1.,area/.0015)
+        if scored.get('contact_class')=='miss':strength=0.
     # A glancing or fingertip contact couples less of the driven hand impulse.
     if scored.get('contact_class')=='tips':strength*=.35
     elif scored.get('contact_class')=='glance':strength*=.60
     centre=scored.get('position',[0,.2,.35]);side=-1 if centre[0]<0 else 1
+    distribution=tissue.contact_distribution(scored.get('footprint',[])) if scored.get('version')==3 else None
     head=0.;hv=0.;jaw=0.;jv=0.;peak=0.
     for step in range(673):
         t=step*dt
         forcing=step==120
         direction=scored.get('normal',[side*.28,0.,-1.])
-        impulse=[float(n)*strength*22.0 for n in direction] if forcing else None
-        tissue.step(dt,(centre,impulse) if impulse else None)
+        # V3 uses a partition-of-unity footprint: one total gameplay impulse,
+        # rather than duplicating an impulse independently at every nearby node.
+        impulse_scale=88.0 if scored.get('version')==3 else 22.0
+        impulse=[float(n)*strength*impulse_scale for n in direction] if forcing and strength>0 else None
+        tissue.step(dt,(centre,impulse,distribution) if impulse else None)
         hv+=((-90*(1.5 if braced else 1)*head-12*hv)+(side*strength*600 if forcing else 0))*dt;head+=hv*dt
         jv+=(-140*jaw-14*jv+(strength*450 if forcing else 0))*dt;jaw=max(-.04,min(.22,jaw+jv*dt))
         if step%2==0:
@@ -104,4 +123,5 @@ def simulate(scored,braced=False):
     return dict(fps=120,duration=2.8,contact=.5,nx=NX,ny=NY,scale=.0001,
                 frames=frames,peak=round(peak,5),solve_ms=round((time.perf_counter()-start)*1000,1),
                 version=scored.get('version',2),arm_path=scored.get('arm_path',[]),footprint=scored.get('footprint',[]),path=scored.get('path',[]),
-                contact_time=scored.get('contact_time',0),position=centre,diagnosis=scored.get('diagnosis',''))
+                contact_time=scored.get('contact_time',0),position=centre,diagnosis=scored.get('diagnosis',''),
+                impact_speed_m_s=scored.get('impact_speed_m_s',0),contact_area_m2=scored.get('contact_area_m2',0))

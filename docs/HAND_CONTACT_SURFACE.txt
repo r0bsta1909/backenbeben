@@ -65,3 +65,19 @@ bestanden; keine Browserfehler. Zweibrowser-Replay p95 13.9 ms auf RTX 2080.
 Lokales Entwicklungspaket v0.3.0-dev-surface enthält die neue JSON-Datei;
 aus isoliert entpacktem Servercode sauberer Treffer erfolgreich berechnet.
 Kein fertiges Release und keine menschliche Stil-/Verständlichkeitsfreigabe.
+
+DRUCKVERTEILUNG UND NULLGESCHWINDIGKEIT
+Die V3-Wertung hat keinen Mindestschaden mehr: Geschwindigkeit null ergibt
+Qualitaet null, Schaden null und keine Gewebe-/Kopfbewegung. Die Referenz fuer
+die normierte Spielgeschwindigkeit ist 1.1 m/s; dies ist eine Balancevorgabe.
+Der Kontakt-Footprint enthaelt pro Punkt die projizierte Rasterflaeche in m2.
+Die Gewebelast wird anhand der dreidimensionalen Entfernung zu diesen Punkten
+und ihrer Flaeche auf bewegliche Kaefigknoten verteilt. Pro Kontakt normierte
+Gewichte verhindern, dass mehr Knoten dieselbe Last mehrfach erhalten.
+Der Faktor 88 bezeichnet einen kalibrierten Geschwindigkeitsimpuls im
+vereinfachten Solver, keine gemessenen Newtonsekunden. Die Normierung beweist
+keine Energieerhaltung. Rueckwirkung auf eine nachgiebige Hand fehlt weiterhin.
+32 Unit-Tests sowie Zweibrowser-LAN- und Netzwerkregel-Gauntlet bestanden.
+Aktueller LAN-Test: keine Browserfehler, Replay p95 13.9 ms; K.o., Wiederbeitritt,
+Rueckwaertsscrubbing und Revanche erfolgreich. Nachweise: pressure-lan.json
+und pressure-contact.png in docs/validation. Keine menschliche Abnahme.

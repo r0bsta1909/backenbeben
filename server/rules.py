@@ -36,7 +36,7 @@ def score_gesture(data):
             'side': 'L' if x < .5 else 'R', 'duration': duration, 'hit': precision > .05}
 
 def apply_hit(player, scored, settings, braced=False):
-    damage = settings['base_damage'] * max(.05,scored['quality']) if scored['hit'] else 0.
+    damage = settings['base_damage'] * max(0.,min(1.,scored['quality'])) if scored['hit'] else 0.
     damage *= 1.-settings['brace_reduction'] if braced else 1.
     player['damage'] = round(min(120., player['damage'] + damage), 3)
     player['stun'] = round(min(80., player['stun'] + damage*.55), 3)
