@@ -1529,3 +1529,16 @@ NAECHSTER VERBINDLICHER SCHRITT: SpatialHeadAttachment-Zustand inKontakt+Tail
 integrieren,Anglesaufzeichnen,Shader-/InverseTransformation angleBlendgleich,
 Rueckholoberflaeche+Browseransichtenpruefen. KeineweitereisolierteLaborkette.
 AktuellesSpielweiter3Translationen+Yaw,Pitch/Rollfest.
+
+G4 DREIACHSIGE KOPFROTATION DURCH KONTAKT/TAIL/SHADER
+SpatialHeadAttachment optional in simulate_contact(spatial_head=True),
+moving_head_replay.simulate(spatial=True). DreiWinkel/Geschwindigkeitenwerden
+imKontaktaufgezeichnet,imTailvollstaendigfortgesetzt,head_rotations337Frames
+transportiert. InverseShaderblend30Fixpunktiterationen;ShaderRx,Ry(-yaw),Rz
+plusTranslation. Normalpfad spatial=False bleibtbisherigergepruefterStandard.
+149TestsPASS inkl.HalsblendRoundtrip1e-12 undvollstaendigem3AchsenClip;
+WebexportPASS. ErsterClipPeakwinkel .033/.067/.044rad,Tailpin1.13e-7m.
+Parameterabstimmung/diagonaleEulertraegheiten weiterhinPrototyp,keineAnatomie.
+OFFEN ALS NAECHSTES: spatial-ClipimBrowserwirklichrendern,7VariantenRueckholung
+mitvollerRotationrekonstruieren,Laufzeitmessen,erst dannDefaultentscheiden.
+KeineGesamtabnahmeausUnitTests. Host52990nochaltergeladenerServer,Webbuildneu.

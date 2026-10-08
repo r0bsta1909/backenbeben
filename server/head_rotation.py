@@ -38,3 +38,43 @@ def project_spatial_pins(points,weights,rest,ids,angles,inverse_inertias,positio
             position[axis]-=inverse_mass*delta
             angles+=inverse_inertias*gradient*delta
     return angles
+
+
+from head_attachment import HeadAttachment
+
+class SpatialHeadAttachment(HeadAttachment):
+    """Prototype generalized-coordinate neck; diagonal Euler inertias are tuned."""
+    def __init__(self,cage,braced=False,translation=True):
+        super().__init__(cage,braced,translation)
+        self.angles=np.zeros(3);self.angular_velocity=np.zeros(3);self.old_angles=np.zeros(3)
+        self.inverse_inertias=np.array([1/.022,self.inverse_inertia,1/.022])
+        self.angular_stiffness=np.array([2.2,self.stiffness,2.2])
+        if braced:self.angular_stiffness[[0,2]]*=1.5
+        self.angular_multipliers=np.zeros(3)
+    def begin_step(self,dt):
+        self.old_angles=self.angles.copy();self.angular_multipliers[:]=0.
+        super().begin_step(dt)
+        self.angular_velocity*=np.exp(-.216*self.inverse_inertias*dt)
+        self.angles+=self.angular_velocity*dt
+        self.angle=float(self.angles[1])
+    def project(self,dt):
+        project_spatial_pins(self.cage.p,self.cage.w,self.cage.rest,self.ids,self.angles,self.inverse_inertias,self.position,self.inverse_mass)
+        if self.inverse_mass:
+            alpha=1/(self.linear_stiffness*dt*dt)
+            delta=(-self.position-alpha*self.linear_multiplier)/(self.inverse_mass+alpha)
+            self.linear_multiplier+=delta;self.position+=self.inverse_mass*delta
+        alpha=1/(self.angular_stiffness*dt*dt)
+        delta=(-self.angles-alpha*self.angular_multipliers)/(self.inverse_inertias+alpha)
+        self.angular_multipliers+=delta;self.angles+=self.inverse_inertias*delta
+        self.angle=float(self.angles[1])
+    def finish_step(self,dt):
+        super().finish_step(dt)
+        self.angular_velocity=(self.angles-self.old_angles)/dt
+        self.velocity=float(self.angular_velocity[1])
+    def residual(self):
+        rotation=rotation_and_derivatives(self.angles)[0]
+        target=self.cage.rest[self.ids]@rotation.T+self.position
+        return float(np.max(np.linalg.norm(self.cage.p[self.ids]-target,axis=1)))
+    def energy(self):
+        linear=(.5*np.sum(self.linear_velocity**2)/self.inverse_mass+.5*np.sum(self.linear_stiffness*self.position**2)) if self.inverse_mass else 0.
+        return linear+.5*np.sum(self.angular_velocity**2/self.inverse_inertias)+.5*np.sum(self.angular_stiffness*self.angles**2)

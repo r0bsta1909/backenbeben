@@ -460,6 +460,7 @@ func drive_recorded_physics() -> void:
 			m.set_shader_parameter("cage_deformed",affected)
 			m.set_shader_parameter("cage",offsets if affected else empty_cage)
 			m.set_shader_parameter("head_offset",fighter.vector(physics_frame.get("head_offset",[0,0,0])) if affected else Vector3.ZERO)
+			m.set_shader_parameter("head_rotation",fighter.vector(physics_frame.get("head_rotation",[0,0,0])) if affected else Vector3.ZERO)
 			m.set_shader_parameter("head_angle",float(physics_frame.get("head",0)) if affected else 0.0)
 			m.set_shader_parameter("jaw_angle",float(physics_frame.get("jaw",0)) if affected else 0.0)
 	var wide_view: bool = replaying and physics_frame.get("camera","")=="wide"

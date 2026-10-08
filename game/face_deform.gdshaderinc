@@ -4,6 +4,7 @@ uniform bool tissue = false;
 uniform bool cage_deformed = true;
 uniform bool head_part = false;
 uniform float head_angle = 0.0;
+uniform vec3 head_rotation=vec3(0.0);
 uniform vec3 head_offset = vec3(0.0);
 uniform float jaw_angle = 0.0;
 uniform float injury_left = 0.0;
@@ -34,8 +35,12 @@ vec3 deform_face(vec3 p) {
     }
     if(head_part) {
         float head_blend=smoothstep(-0.55,-0.12,p.y);
+        float pitch=head_rotation.x*head_blend;
+        p.yz=mat2(vec2(cos(pitch),sin(pitch)),vec2(-sin(pitch),cos(pitch)))*p.yz;
         float a=head_angle*head_blend;
         p.xz=mat2(vec2(cos(a),sin(a)),vec2(-sin(a),cos(a)))*p.xz;
+        float roll=head_rotation.z*head_blend;
+        p.xy=mat2(vec2(cos(roll),sin(roll)),vec2(-sin(roll),cos(roll)))*p.xy;
         p+=head_offset*head_blend;
     }
     return p;
@@ -43,7 +48,7 @@ vec3 deform_face(vec3 p) {
 vec3 deform_face_normal(vec3 p, vec3 normal) {
     vec3 n=normalize(normal);
     bool skin_changes=tissue && (cage_deformed || jaw_angle!=0.0 || injury_left!=0.0 || injury_right!=0.0 || injury_jaw!=0.0);
-    if (!skin_changes && (!head_part || (head_angle==0.0 && length(head_offset)==0.0))) { return n; }
+    if (!skin_changes && (!head_part || (head_angle==0.0 && length(head_rotation)==0.0 && length(head_offset)==0.0))) { return n; }
     vec3 helper=abs(n.y)<.9 ? vec3(0.,1.,0.) : vec3(1.,0.,0.);
     vec3 tangent=normalize(cross(helper,n));
     vec3 bitangent=cross(n,tangent);

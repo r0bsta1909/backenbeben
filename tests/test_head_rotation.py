@@ -30,4 +30,20 @@ class SpatialHeadTests(unittest.TestCase):
   yaw=project_mobile_pins(q,w,rest,ids,.1,50.,other,.2)
   np.testing.assert_allclose(p,q,atol=1e-14);np.testing.assert_allclose(position,other,atol=1e-14)
   self.assertAlmostEqual(angles[1],yaw,places=14)
+ def test_spatial_shader_inverse_in_neck_blend(self):
+  from moving_head_replay import local_offsets_spatial
+  rest=np.array([[.03,-.10,.07],[-.06,-.06,.08],[.08,.1,.1]])
+  angles=np.array([.08,-.1,.06]);position=np.array([.003,.002,-.004])
+  blend=np.clip((rest[:,1]*4+.55)/.43,0,1);blend=blend*blend*(3-2*blend)
+  world=np.array([rotation_and_derivatives(angles*b)[0]@v+position*b for v,b in zip(rest,blend)])
+  np.testing.assert_allclose(local_offsets_spatial(world,rest,angles,position),0,atol=1e-12)
+ def test_spatial_full_clip_preserves_three_axes(self):
+  from contact_v3 import score
+  from moving_head_replay import simulate
+  scored=score({'version':3,'points':[[.19+.34*i/40,.6,800*i/40,0,-15,0] for i in range(41)]})
+  clip=simulate(scored,spatial=True)
+  self.assertEqual(len(clip['head_rotations']),337)
+  self.assertTrue(np.all(np.max(np.abs(clip['head_rotations']),axis=0)>1e-5))
+  self.assertLess(clip['head_response']['tail_pin_error_m'],1e-5)
+  self.assertLess(np.max(np.abs(clip['head_rotations'][-1])),.001)
 if __name__=='__main__':unittest.main()
