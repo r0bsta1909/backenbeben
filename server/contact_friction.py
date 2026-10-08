@@ -1,4 +1,4 @@
-"""Tangential XPBD block primitive; integration into hand/sheet remains pending.
+"""Tangential XPBD block and experimental hand/sheet projection.
 
 Solve min 0.5*j.T*K*j + displacement.T*j with ||j|| <= mu*lambda_n.
 K includes both bodies' inverse masses and rotational responses. Multipliers
@@ -28,3 +28,53 @@ def tangent_correction(displacement, effective_inverse_mass, normal_multiplier, 
         if np.linalg.norm(trial)>cap:lo=mid
         else:hi=mid
     return -np.linalg.solve(K+hi*np.eye(2),d)
+
+
+class HandSheetFriction:
+    """Per-substep material anchors; called after the normal contact projection.
+
+    Only the compiled normal solver exposes stable triangle identifiers.
+    Normal and tangential impulses remain separate for contact scoring.
+    """
+    def __init__(self,hand,coefficient):
+        if not np.isfinite(coefficient) or coefficient<0:raise ValueError('Invalid friction coefficient')
+        self.hand=hand;self.coefficient=coefficient
+
+    def begin_step(self,cage):
+        self.old_points=self.hand.points().copy();self.old_nodes=cage.p.copy()
+        self.keys=np.full(len(self.old_points),-1,dtype=int)
+        self.weights=np.zeros((len(self.old_points),3))
+        self.multipliers=np.zeros_like(self.old_points)
+        self.impulse=np.zeros(3);self.moment=np.zeros(3);self.residual=0.;self.max_cone_error=0.
+
+    def project(self,cage,dt):
+        from contact_embedding_compiled import intersections
+        from contact_constraint import rotation_increment
+        hand=self.hand;triangles=cage.geometry['triangles']
+        best,weights,_,normals=intersections(hand.points(),cage.p,triangles)
+        self.residual=0.
+        for i,triangle in enumerate(best):
+            if triangle<0 or triangle!=hand.triangle_keys[i]:
+                self.keys[i]=-1;self.multipliers[i]=0.;continue
+            ids=triangles[triangle];n=normals[i]
+            if self.keys[i]!=triangle:
+                self.keys[i]=triangle;self.weights[i]=weights[i];self.multipliers[i]=0.
+            a=self.weights[i]
+            # Deterministic tangent frame, with accumulated multiplier in world space.
+            axis=np.eye(3)[np.argmin(np.abs(n))]
+            t0=np.cross(n,axis);t0/=np.linalg.norm(t0);T=np.array([t0,np.cross(n,t0)])
+            r=hand.rotation@hand.local[i];surface=a@cage.p[ids]
+            displacement=(hand.center+r-self.old_points[i])-(surface-a@self.old_nodes[ids])
+            inertia=hand.rotation@hand.inverse_inertia@hand.rotation.T
+            angular=np.cross(r,T)
+            K=np.eye(2)*(hand.inverse_mass+np.sum(cage.w[ids]*a*a))+angular@inertia@angular.T
+            previous=T@self.multipliers[i]
+            updated=tangent_correction(T@displacement-K@previous,K,float(hand.multipliers[i]),self.coefficient)
+            delta=T.T@(updated-previous)
+            self.residual=max(self.residual,float(np.linalg.norm(K@(updated-previous))))
+            self.multipliers[i]=T.T@updated
+            self.max_cone_error=max(self.max_cone_error,float(np.linalg.norm(updated)-self.coefficient*hand.multipliers[i]))
+            hand.center+=hand.inverse_mass*delta
+            hand.rotation=rotation_increment(inertia@np.cross(r,delta))@hand.rotation
+            cage.p[ids]-=(cage.w[ids]*a)[:,None]*delta
+            self.impulse+=delta/dt;self.moment+=np.cross(surface,delta/dt)

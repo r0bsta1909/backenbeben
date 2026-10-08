@@ -31,4 +31,27 @@ class FrictionBlockTests(unittest.TestCase):
    with self.assertRaises(ValueError):tangent_correction([1,1],K,1,.5)
   with self.assertRaises(ValueError):tangent_correction([1,float('nan')],np.eye(2),1,.5)
   with self.assertRaises(ValueError):tangent_correction([1,1],np.eye(2),1,-.5)
+
+
+class HandSheetFrictionTests(unittest.TestCase):
+ def test_equal_opposite_contact_and_reset(self):
+  import sys
+  from pathlib import Path
+  from types import SimpleNamespace
+  sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'server'))
+  from rigid_hand_compiled import CompiledRigidHandContact
+  from contact_friction import HandSheetFriction
+  cage=SimpleNamespace(p=np.array([[0.,-1.,-1.],[0.,1.,-1.],[0.,0.,1.]]),w=np.ones(3),geometry={'triangles':np.array([[0,1,2]])})
+  hand=CompiledRigidHandContact([[-.01,0.,0.]],[1.],mass=1.)
+  friction=HandSheetFriction(hand,.5);friction.begin_step(cage)
+  hand.center[1]+=.01;hand.begin_step();hand.project(cage,.01)
+  before=hand.center.copy()+cage.p.sum(axis=0)
+  friction.project(cage,.01)
+  np.testing.assert_allclose(hand.center+cage.p.sum(axis=0),before,atol=1e-12)
+  self.assertLess(friction.impulse[1],0)
+  self.assertLessEqual(np.linalg.norm(friction.multipliers[0]),.5*hand.multipliers[0]+1e-12)
+  friction.begin_step(cage)
+  np.testing.assert_array_equal(friction.multipliers,np.zeros((1,3)))
+  np.testing.assert_array_equal(friction.keys,[-1])
+
 if __name__=='__main__':unittest.main()

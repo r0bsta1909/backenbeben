@@ -1788,3 +1788,22 @@ Mit mu0 bisherigenPfad exakt vergleichen; reale seitlicheSchlaege, Kontakt-
 wechsel, Energie, Rueckholung und Browserclip pruefen. Maximal ein weiterer
 reiner Labor-Meilenstein, danach Integrationsentscheidung gemaessGauntlet.
 Goalaktiv. V09 und aktivesSpiel weiterhin ohneReibung, nichtandersbehaupten.
+
+G4 REIBUNG IN KONTAKTITERATION GEKOPPELT / NOCH KEIN SPIELDEFAULT
+HandSheetFriction nachNormalprojektion eingebunden, Vorpositionsanker proStep,
+materialfeste baryzentrischeGewichte, Welt-Tangentialmultiplikatoren, Reset bei
+Dreieckswechsel. Gegenkorrektur aufHandtranslation/Rotation unddreiGewebeknoten;
+Normalimpuls fuerWertung bleibtseparat. Reibungsresiduum inAbbruchpruefung.
+simulate_contact(...,friction_coefficient=.2) aktiviert Kandidat,Default0 bleibt.
+SechsTests PASS inkl.echterDreieckskontakt/equal-oppositeKorrektur/Reset.
+RealerSchlag mit raeumlichemKopf,12.5ms/12Steps/32Iterationen: mu0 Framesexakt
+identisch,mu.2 endlich/Coulombgrenzebestanden,Endenergie .54061->.47252J.
+ABER Rechenzeit13.85s,12von12Stepsnichtkonvergent,Reibungsrest84.9um,
+Penetration4.58um,Wrist33.9um. KeineEnergiegesamtgarantie oderGameplayfreigabe.
+Reproduktion scripts/audit_friction_contact.py; --duration .06 --iterations 64
+fuer Vollintervall. Beleg validation/friction-coupling.json.
+ZweiterLabor-Meilenstein: Integrationsentscheidung KEIN DEFAULT wegenkonkreter
+Laufzeit/Restfehler. NAECHSTES dieseBlocker beheben (kompilierterTangentialblock,
+Restfehler/Kontaktwechsel pruefen), dannvollstaendigenmoving_head_replay.encode
+mitKandidat/Rueckholung pruefen undimBrowser integrieren. Keineweiteren isolierten
+Physikfeatures. AktiverHost/V09 weiterhinreibungsfrei. Goalaktiv.
