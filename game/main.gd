@@ -139,7 +139,11 @@ func build_arena() -> void:
 	var key := DirectionalLight3D.new()
 	key.rotation_degrees = Vector3(-30, -35, 0)
 	key.light_color = Color("ffe1b2")
-	key.light_energy = .65
+	key.light_energy = .85
+	key.shadow_enabled = true
+	key.directional_shadow_max_distance = 18.0
+	key.shadow_bias = .1
+	key.shadow_normal_bias = 2.0
 	add_child(key)
 	var rim := OmniLight3D.new()
 	rim.position = Vector3(-2, 1, -0.5)

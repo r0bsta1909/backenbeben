@@ -356,3 +356,28 @@ Screenshot selbst gesichtet: Seitenansicht macht die Positionen kontrollierbar,
 zeigt aber weiterhin grobe Gesichtsschattierung und unzureichende Stilqualitaet.
 Kein bestandenes menschliches Verstaendlichkeitsgate. Koerperphysik bleibt
 approximiert; gekoppelte Laborphysik noch nicht im Match und nicht echtzeitfaehig.
+
+GESICHTSPROJEKTION UND ECHTE COMIC-BELEUCHTUNG
+Frontal erzeugte Gesichtsbemalung wurde bislang auf seitliche Schlaefen/Wangen
+gezogen. Maskierung jetzt zusaetzlich mit lokaler Oberflaechennormale (.35..80),
+Staerke .45 statt .88, keine Ersetzung der raeumlichen Schattierung durch .96.
+Bartkorn abgeschwaecht. Bemalung bleibt Projektionsnaeherung, keine UV-Neumalung.
+Toon-Material nicht mehr unshaded: light() wertet reale Lichtquelle und deren
+ATTENUATION mit drei Stufen aus; kleine kuehle Grundhelligkeit als Emission.
+Hauptlicht wirft Schatten, Energie .85, Reichweite 18. Erste Bias-Werte .025/.35
+zeigten Selbstschattenstreifen; .1/2.0 reduzieren diese sichtbar. Screenshot
+zeigt jetzt Finger-/Nasen-/Gesichtsvolumen, aber auch noch grobe Handgelenkfalten.
+Godot-Quelle: https://docs.godotengine.org/en/4.6/tutorials/shaders/shader_reference/spatial_shader.html
+GPU-Test tests/toon_shadow.gd: unsichtbarer Schattenwerfer dunkelt 287 Pixel
+der Toon-Oberflaeche ab, echter OpenGL-Renderer, keine Fehler im finalen Lauf.
+Erster Test nahm feste Fensterpixelzahl an und lief ausserhalb des tatsaechlichen
+160-Pixel-Bildes; korrigiert auf Image-Abmessungen. Dieser Lauf ist kein Nachweis.
+Browser: Trainingskamera/Mausrad/Reset und Kontaktreplay bestanden, keine Fehler.
+Bildnachweise face-light-inspection.png und face-light-contact.png selbst gesichtet.
+Kein bestandenes Stilgate. Aktive Gewebephysik weiterhin einseitig approximiert;
+normalenbasierte Schattierung folgt Gewebedeformation noch nicht vollstaendig.
+Leistungsmessung ohne parallelen GPU-Test, zwei 1920x1080-Ansichten/RTX 2080:
+RAFp95 bis 23.5 ms (vorher 15.8), bewegtes Replay 16.1 ms; Median rund 15 ms,
+Godot-Stichprobe 76 fps. Beleuchtung/Schatten verursachen deutliche Mehrkosten.
+60-Hz-Budget deshalb nicht durchgaengig bestanden; weitere Optimierung offen.
+Keine reine GPU-Zeitmessung. Werte: validation/face-light.json.
