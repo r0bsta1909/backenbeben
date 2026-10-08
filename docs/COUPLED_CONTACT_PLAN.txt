@@ -183,3 +183,19 @@ Sechs Kontakt-/Federtests und fuenf Gewebetests bestanden. Nachweis:
 validation/arm-attachment.json. Noch nicht im Spiel aktiv.
 Naechster Schritt: flaechenbasierte Einbettung mehrerer Handpunkte und danach
 Anbindung der Gegenreaktion an die echten Armkoordinaten statt freien Proxy.
+
+FLAECHENEINBETTUNG: GEOMETRIEGATE DURCHGEFALLEN
+contact_embedding.py bildet Seitenstrahlen auf Dreiecke des Frontkaefigs ab.
+Baryzentrische Gewichte rekonstruieren den getroffenen Punkt exakt und folgen
+bewegten Knoten. Fehlende Abdeckung liefert explizit None, keinen Ersatzpunkt.
+Zwei Tests pruefen Rekonstruktion, Deformationsmitnahme, fehlende Abdeckung und
+vordersten Schnitt. Beide bestanden. Noch keine Matchintegration.
+Audit am sauberen Standardschlag: 15/15 echte Meshkontakte abgedeckt, aber
+Abweichung Kaefig/Originalgesicht bis 11.75 mm; Fingerbereiche etwa 10-12 mm,
+Handflaeche etwa 1.2-4.5 mm. Nachweis: validation/cage-embedding-audit.json.
+Damit ist die geometrische Voraussetzung fuer sichtbaren Flaechenkontakt nicht
+erfuellt. Mehr gekoppelte Punkte auf diesem Raster wuerden den falschen Abstand
+nur genauer loesen. Naechste Aufgabe: seitlich ausgerichteten Gewebekaefig aus
+der echten Wangenoberflaeche erzeugen und erneut gegen die Meshkontakte messen.
+Auch die sichtbare Deformationsabbildung muss dann dieselbe Geometrie verwenden;
+kein unsichtbares Verschieben der Hand zur Kompensation des Fehlers.

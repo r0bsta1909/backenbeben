@@ -207,3 +207,8 @@ Laborkopplung um nachgiebige Verbindung Hand/Armproxy erweitert. Reaktion
 wirkt auf beide Massen, Ruhezustand exakt. Elf gezielte Tests bestanden.
 Noch kein Anschluss an Gelenkarm; Flaechenkontakt und Gelenkrueckwirkung
 sind die naechsten Schritte. Siehe COUPLED_CONTACT_PLAN.txt.
+
+Flaecheneinbettung implementiert und geometrisch geprueft. 15/15 Kontaktpunkte
+abgedeckt, aber Frontkaefig bis 11.75 mm von sichtbarer Wange entfernt.
+Naechste Aufgabe ist deshalb seitlicher Gewebekaefig plus passende sichtbare
+Deformationsabbildung, vor Mehrpunktkopplung. Zwei Einbettungstests bestanden.

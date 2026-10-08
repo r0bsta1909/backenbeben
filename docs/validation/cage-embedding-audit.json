@@ -1,0 +1,82 @@
+{
+  "contacts": 15,
+  "covered": 15,
+  "max_error_m": 0.011746560130582007,
+  "samples": [
+    {
+      "region": "palm",
+      "covered": true,
+      "error_m": 0.0024340484307393967
+    },
+    {
+      "region": "palm",
+      "covered": true,
+      "error_m": 0.0025528257480963573
+    },
+    {
+      "region": "palm",
+      "covered": true,
+      "error_m": 0.0011827192998402625
+    },
+    {
+      "region": "palm",
+      "covered": true,
+      "error_m": 0.0031803976319162847
+    },
+    {
+      "region": "palm",
+      "covered": true,
+      "error_m": 0.003714486434283154
+    },
+    {
+      "region": "palm",
+      "covered": true,
+      "error_m": 0.004177990187270483
+    },
+    {
+      "region": "palm",
+      "covered": true,
+      "error_m": 0.003926546350951549
+    },
+    {
+      "region": "palm",
+      "covered": true,
+      "error_m": 0.004499543289592192
+    },
+    {
+      "region": "finger",
+      "covered": true,
+      "error_m": 0.011264983649114282
+    },
+    {
+      "region": "finger",
+      "covered": true,
+      "error_m": 0.011746560130582007
+    },
+    {
+      "region": "finger",
+      "covered": true,
+      "error_m": 0.011607448019989267
+    },
+    {
+      "region": "finger",
+      "covered": true,
+      "error_m": 0.010704643495354327
+    },
+    {
+      "region": "finger",
+      "covered": true,
+      "error_m": 0.010272384878573987
+    },
+    {
+      "region": "tip",
+      "covered": true,
+      "error_m": 0.010514167925625678
+    },
+    {
+      "region": "tip",
+      "covered": true,
+      "error_m": 0.010315372725871713
+    }
+  ]
+}
