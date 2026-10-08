@@ -107,3 +107,16 @@ p95 Replay 13.9 ms auf RTX 2080. Neue KO-Totale stammt jetzt wieder direkt
 aus diesem realen LAN-Match (kein nachträglich geladener Replay-Prüfaufbau).
 Nächste offene Punkte: räumliche Kontaktdiagnose am Modell, feinere Hand-/Haut-
 Kontaktfläche und natürlichere Auffangreaktion. Menschliche Abnahme weiter offen.
+
+KONTAKTANSICHT IM REPLAY
+"Zum Treffer" pausiert exakt bei Kontakt und wechselt auf die Seitenkamera.
+Handflächen-, Finger- und Handballenpunkte werden türkis/gelb/rosa unterschieden;
+eine Legende benennt die Regionen. Hilfspunkte sind durch die Hand sichtbar,
+zeigen Kontaktpunkte, keine angeblich vollflächig berechnete Berührungsfläche.
+Seitlicher Oberflächenoffset entlang X ersetzt den alten frontalen Z-Offset.
+Punkte werden nur im engen Kontaktfenster gezeigt; keine schwebenden Marker
+vor dem Treffer oder beim später bereits weggedrehten/verformten Kopf.
+Gezielter realer Browser-Trainingstest bestanden: Sprung, Kamera, Markierung an/aus,
+Ausblenden nach Kontakt, keine Browserfehler. Bild und Report unter docs/validation/.
+Test: tests/replay_contact_view.py gegen den eigenen Host auf Port 8877.
+Nächster physikalischer Schwerpunkt bleibt die grobe Abtastung der Handfläche.

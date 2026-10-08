@@ -101,3 +101,8 @@ mit gemeinsamer 85-Grad-Spielgrenze korrigiert. Alle 26 Unit-Tests und beide
 LAN-Gauntlets bestanden; Livepose-Gleichheit der Grenze explizit geprüft.
 Server-Testhost muss für diese Änderung neu gestartet werden; eigener Testhost
 auf 8877 wurde neu gestartet. Produktionshost startet den neuen Code erst neu.
+
+Replaykontakt ist jetzt direkt erreichbar und nach Handregion eingefärbt.
+Gezielter Browsertest und echtes Spielbild: docs/validation/contact-view.*.
+Die acht Kontaktpunkte bleiben eine explizite Vereinfachung, keine fertige
+flächenbasierte Hand-/Hautkollision. Nächster sinnvoller Physikschwerpunkt.

@@ -451,15 +451,21 @@ func drive_recorded_physics() -> void:
 		for i in range(8):
 			var dot_mesh := MeshInstance3D.new()
 			var sphere := SphereMesh.new()
-			sphere.radius=.012;sphere.height=.024
-			dot_mesh.mesh=sphere;dot_mesh.material_override=material(Color("f6e1a0"),true)
+			sphere.radius=.018;sphere.height=.036
+			dot_mesh.mesh=sphere
+			var contact_material := material(Color("59dfbe"),true)
+			contact_material.no_depth_test=true
+			dot_mesh.material_override=contact_material
 			add_child(dot_mesh);contact_marks.append(dot_mesh)
 	var footprint: Array=physics_frame.get("footprint",[])
 	for i in range(contact_marks.size()):
 		contact_marks[i].visible=i<footprint.size()
 		if i<footprint.size():
 			var p: Array=footprint[i]
-			contact_marks[i].position=Vector3(float(p[0]),float(p[1]),float(p[2])+.023)
+			# The target surface is lateral: offset along X, not toward the camera.
+			contact_marks[i].position=Vector3(float(p[0])+.012,float(p[1]),float(p[2]))
+			var region: String=str(p[3])
+			contact_marks[i].material_override.albedo_color=Color("59dfbe") if region=="palm" else Color("ee93b3") if region=="heel" else Color("ffd078")
 
 func zero_cage() -> Array:
 	var result: Array=[]

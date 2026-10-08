@@ -1,0 +1,37 @@
+"""Exercise contact-view controls against a real training replay on port 8877."""
+import asyncio,json
+from pathlib import Path
+from playwright.async_api import async_playwright
+async def main():
+ async with async_playwright() as p:
+  browser=await p.chromium.launch(executable_path=r'C:\Program Files\Google\Chrome\Application\chrome.exe',headless=True)
+  page=await browser.new_page(viewport={'width':1920,'height':1080});errors=[]
+  page.on('pageerror',lambda e:errors.append(str(e)))
+  page.on('console',lambda m:errors.append(m.text) if m.type=='error' else None)
+  await page.goto('http://localhost:8877');await page.wait_for_function('window.gameReady',timeout=60000)
+  await page.locator('#training').click();await page.wait_for_function("state?.phase==='aim'")
+  async def stroke():
+   await page.mouse.move(1536,648);await page.mouse.down()
+   for i in range(12):
+    await page.mouse.move(1920*(.8-.34/1.5*(i+1)/12),648);await page.wait_for_timeout(8)
+   await page.mouse.up()
+  await stroke();await page.wait_for_function('state.practice_done');await stroke()
+  await page.wait_for_function("state.phase==='replay'",timeout=20000)
+  await page.locator('#replayImpact').click()
+  await page.wait_for_function("JSON.parse(physicsFrame).camera==='side' && JSON.parse(physicsFrame).time===.5")
+  assert await page.locator('#contactLegend').is_visible()
+  frame=await page.evaluate('JSON.parse(physicsFrame)');assert frame['footprint']
+  await page.wait_for_timeout(300);await page.screenshot(path='logs/contact-view.png')
+  await page.locator('#replayContact').click()
+  await page.wait_for_function('JSON.parse(physicsFrame).footprint.length===0')
+  assert not await page.locator('#contactLegend').is_visible()
+  await page.locator('#replayImpact').click()
+  await page.locator('#replaySeek').evaluate('e=>{e.value=.7;e.dispatchEvent(new Event("input"))}')
+  await page.wait_for_function('JSON.parse(physicsFrame).time>.6')
+  assert not await page.locator('#contactLegend').is_visible()
+  assert not (await page.evaluate('JSON.parse(physicsFrame)'))['footprint']
+  assert not errors,errors
+  report={'jump_to_contact':True,'side_camera':True,'marker_toggle':True,'no_stale_markers':True,'errors':errors}
+  Path('logs/contact-view.json').write_text(json.dumps(report,indent=2));print(json.dumps(report))
+  await browser.close()
+asyncio.run(main())
