@@ -6,7 +6,7 @@ Der Look orientiert sich an kantiger Comicgrafik und dem ursprünglichen XIII.
 
 ## Aktueller Stand
 
-Der aktuelle [Prototyp 12](https://github.com/r0bsta1909/backenbeben/releases/tag/v0.12.0-dev.20261008)
+Der aktuelle [Prototyp 13](https://github.com/r0bsta1909/backenbeben/releases/tag/v0.13.0-dev.20261008)
 enthält anatomische Arm-/Handmodelle, körpergebundene seitliche Schläge und vom Host
 aufgezeichnete Kontakt-/Gesichtsreplays. Weitere schadensfreie Probeschwünge sind
 wählbar; Verletzungen und geschwollene Augen erscheinen auch im eigenen Spiegel.
@@ -83,10 +83,14 @@ Hoststart vorbereitet. Laufzeit und numerische Restfehler sind in den
 
 Für technische Vergleiche bleiben `--physics coupled-spatial` (ohne Reibung),
 `--physics coupled-moving` (nur Yaw), `--physics coupled` (verankerter Kopf)
-und `--physics legacy` verfügbar. Der öffentliche Download Prototyp 12 verwendet
+und `--physics legacy` verfügbar. Der öffentliche Download Prototyp 13 verwendet
 standardmäßig den gekoppelten Kontakt mit Reibung.
 Der gezielte Browsercheck
 lautet `python tests/replay_contact_view.py --expect-moving --expect-spatial --inspect-timeout --visual-contact`.
+
+Der vertiefte Kragen macht den Hals sichtbar. Im K.-o.-Replay folgen Front- und
+Dreiviertelkamera dem absinkenden Kopf; die Totale bleibt fest. Der Build bricht
+auch bei Godot-Skriptfehlern mit irreführendem Exitcode 0 ab.
 
 ## Wissenssicherung
 
