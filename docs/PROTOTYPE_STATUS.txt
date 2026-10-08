@@ -31,7 +31,7 @@ Vorhanden: standardmaessig gekoppelter Arm-/Hand-/Gewebeclip mit Rueckholung,
 Belege: validation/coupled-variants.json, compiled-game-replay.json.
 Die Wirkungsstaerke nutzt den geloesten Normalimpuls; Flaechenabdeckung und
 Foulklassifikation stammen weiterhin aus der ersten Kontaktgeometrie.
-Quellstandard coupled-spatial koppelt dreiTranslationen unddreiRotationen waehrend Kontakt,
+Quellstandard coupled-friction koppelt tangentiale Reibung, dreiTranslationen unddreiRotationen waehrend Kontakt,
 Auslauf und Rueckholung. Nachweise: validation/moving-head-integration.json,
 spatial-head-replay-variants.json und spatial-head-integration.json.
 Aktive Replaybedienung verlaengert die Betrachtungszeit begrenzt auf45Sekunden.
@@ -215,3 +215,21 @@ Integrationsschritt erledigt,keineweitereisolierteLaborkette. NAECHSTES Standard
 Duell/Restfehlervergleich und Defaultentscheidung; keineanatomischeKalibrierung
 behaupten. AktiveHosts: normal8877Session18596,experimentell8881Session64436,
 V09Paket8880Session18599. OeffentlichesV09enthaeltReibungnochNICHT. Goalaktiv.
+
+G4 REIBUNG ALS QUELLSTANDARD / KONVERGENZVERGLEICH
+Standardduell10Treffer mitgekoppelterReibung bestanden,errors[],Anspannen,
+Replayruecklauf,Resume/Revanche. Vergleich identischer60msSchlaege bei64/128/256
+Iterationen ohneparallelenBrowserlauf: Reibung64Impuls1.01296Ns,256=1.00888Ns,
+Abweichung0.405%; Materialrest233/50/11.6um,Reibungsrest42.2/13.5/.489um.
+Kontaktzeiten1.67/2.70/4.44s aufTestrechner. Auch reibungsfreierVergleich
+hatRestfehler; HoehereCaps erreichen1umZielnichtinallenSchritten.
+Entscheidung: coupled-friction mitbisherigem64Cap alsPrototypstandard.
+KeineToleranzenangehoben,keineanatomischeKalibrierungbehauptet. MehrGenauigkeit
+hatdeutlichenLatenzpreis bei<.5%Impulsabweichung indiesemVergleichsfall.
+NormalerSTART_HOST.bat OHNEPhysicsOverride neu gestartet;vollerKO-Browserkampf
+mitReibungsassertion,Anspannen/Lidern,Ruecklauf,Resume/Revanche bestanden.
+Beleg validation/friction-default.json;Reproduktion audit_friction_convergence.py.
+READMEbereinigt,DefaultinHostaktualisiert. V09Download bleibtvorReibung/Licht/
+Lid/Trikotdetails; keinneuesPaket indiesemSchritt. Goalweiteroffen,insbesondere
+Gesamtstil/menschlicheAbnahme,Physikgrenzen undZwei-PC-Test.
+AktiverCheckoutHost8877Session63488. Testhosts8880/8881 beendet.

@@ -60,18 +60,22 @@ Netzwerk freigeben; `ALLOW_LAN.bat` richtet eine begrenzte Regel für Port 8765 
 - Aktuelle Integrationstests: `tests/v3_browser_gauntlet.py` und `tests/v3_network_gauntlet.py`
   gegen einen separaten Host auf Port 8877. Playwright und Chrome werden dafür benötigt.
 
-Der normale Hoststart im aktuellen Quellstand verwendet `coupled-spatial`: Kopfverschiebung und drei Rotationsachsen,
-Gewebe und Hand bleiben während Kontakt, Auslauf und Rückholung verbunden.
-Das veröffentlichte Paket 07 enthält noch den vorherigen `coupled-moving`-Pfad mit seitlicher Drehung. Für einen separaten
-Testhost:
-`python server/host.py --port 8877 --no-browser --no-console --physics coupled-spatial`
-Nach einem Update einmal `SETUP_HOST.bat` ausführen; die benötigte Kompilierung
-ist jetzt in `server/requirements.txt` enthalten.
-Er liefert vollständige Browser-Replays mit seitlichem Gewebe und durchgehender
-Arm-Rückholung. Die Rechenworker werden beim Hoststart vorbereitet; der geprüfte Browser-Treffer
-benötigte im beweglichen Pfad rund 3 Sekunden. Drei Verschiebungs- und drei Rotationsachsen sind gekoppelt. Halsparameter sind Prototyp-Abstimmungen und die
-Kieferreaktion ist stilisiert. `--physics coupled-moving` erhält den vorherigen Yaw-Pfad. `--physics coupled` erhält den vorherigen
-verankerten Kontaktpfad zum Vergleich. `--physics legacy` hält den bisherigen Pfad für technische Vergleiche verfügbar.
+Der normale Hoststart im aktuellen Quellstand verwendet `coupled-friction`:
+Kopfverschiebung, drei Rotationsachsen und tangentiale Hand-Gewebe-Reibung werden
+gekoppelt berechnet. Der Reibungskoeffizient 0,2 und die Halsparameter sind
+Prototypabstimmungen; die Kieferreaktion und der KO bleiben vereinfacht.
+Kontakt, Auslauf und Arm-Rückholung verwenden dieselbe Aufzeichnung.
+
+Ein separater Testhost lässt sich mit
+`python server/host.py --port 8877 --no-browser --no-console` starten.
+Nach einem Update einmal `SETUP_HOST.bat` ausführen. Die Rechenworker werden beim
+Hoststart vorbereitet. Laufzeit und numerische Restfehler sind in den
+[Vergleichsmessungen](docs/validation/friction-default.json) dokumentiert.
+
+Für technische Vergleiche bleiben `--physics coupled-spatial` (ohne Reibung),
+`--physics coupled-moving` (nur Yaw), `--physics coupled` (verankerter Kopf)
+und `--physics legacy` verfügbar. Der öffentliche Download Prototyp 09 enthält
+noch den Stand ohne Reibung.
 Der gezielte Browsercheck
 lautet `python tests/replay_contact_view.py --expect-moving --expect-spatial --inspect-timeout --visual-contact`.
 

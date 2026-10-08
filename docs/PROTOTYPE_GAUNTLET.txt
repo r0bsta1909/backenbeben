@@ -47,7 +47,8 @@ Batchstart und vollstaendiger LAN-Standardkampf sind geprueft. Legacy bleibt nur
 Vergleichsoption. Head-/Kieferreaktion und Kontaktwertung haben noch Modellgrenzen.
 Drei Kopftranslationen und drei Eulerrotationen sind im Quellstandard integriert;
 Kontakt, Auslauf, Shader und Rueckholung nutzen dieselbe Aufzeichnung. Offene
-Grenzen: diagonale generalisierte Traegheit, Prototyp-Halsparameter, Reibung,
+Tangentiale Reibung ist im Quellstandard integriert (validation/friction-default.json).
+Grenzen: diagonale generalisierte Traegheit, Prototyp-Hals-/Reibungsparameter,
 stilisierter Kiefer und gefuehrter KO. Das ist keine fertige anatomische Simulation.
 Geeignete Laborbausteine zu einem spielbaren Clip verbinden; konkurrierende alte
 Wege erst nach nachgewiesener Gleichwertigkeit/Verbesserung abloesen.
