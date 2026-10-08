@@ -5,7 +5,7 @@ Diese Uebersicht trennt Liefergegenstaende, vorhandene Nachweise und offene Arbe
 G1 / INVENTAR
 Quelle: game/, server/, scripts/, tests/; Blender: assets-source/character-v3.blend.
 Gauntlet und historische Entscheidungen: PROTOTYPE_GAUNTLET.txt, HANDOFF.txt.
-Aktueller Spielstand ist als experimentelles v0.6-Hostpaket veroeffentlicht.
+Aktueller Spielstand ist als experimentelles v0.7-Hostpaket veroeffentlicht.
 
 G2 / FIGUREN UND COMICSTIL — OFFEN
 Vorhanden: anatomischer Kopf, Arme/Haende, vollstaendiges Rig, Haargeometrie,
@@ -59,8 +59,8 @@ Audio auf LAN-HTTP, zwei Browserkontexte, Resume und Admin geprueft.
 Zwei Browserkontexte auf einem PC sind kein Test auf zwei physischen PCs.
 
 G8 / AUSLIEFERUNG — OFFEN FUER ENDSTAND
-v0.6-Prerelease mit aktuellen Assets/Bedienung/Verletzungen und Drehimpulsreaktion
+v0.7-Prerelease mit Kopftranslation/Yaw, Helferpose und neuer Bedienfuehrung
 in frischer Umgebung
-geprueft, heruntergeladen und SHA256 verglichen. Beleg: validation/v06-package.json.
+geprueft, heruntergeladen und SHA256 verglichen. Beleg: validation/v07-package.json.
 Ein als abgeschlossen abgenommener Endstand fehlt weiterhin.
 Turniere, ElevenLabs und Werbung bleiben wie vereinbart zurueckgestellt.

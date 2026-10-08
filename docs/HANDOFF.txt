@@ -1473,3 +1473,13 @@ PanelimViewport,Zuruecksetzen/Kameraechteklickbar,errors[].720pSichtpruefung
 zeigtePhasenhinweisueberlagerung;Panelnachuntenversetzt,erneutbestanden.
 Belege validation/compact-guidance.json/compact-guidance-720p.png.
 Keine neue menschlicheAbnahme; Gesamtzielweiteroffen.
+
+G8 PROTOTYP07 ALS GEPRUEFTES PRERELEASE
+Quelle41ce4f1;61Dateien,21271314Bytes. Frisch ausserhalbCheckout entpackt,eigene
+venv mitportablePython3.12 erstellt,Paketsetup installiertRequirements.
+AlleZIPDateien bytegleichmitlaufenderInstallation. KO4Treffer undStandard10
+bestanden inkl.Anspannen,Replay,Verletzungsruecklauf,Resume,Revanche,errors[].
+GitHubRelease v0.7.0-dev.20261008 veroeffentlicht,heruntergeladen,SHA256gleich.
+Beleg validation/v07-package.json. Host8877 JETZT ausfrischemPaket,Session90663;
+Entwicklungsserver beendet. Paketpfad lokal logs/v07-location.txt.
+Weiterhinexperimentell: Art-/Bedienabnahme,Zwei-PC-Nachweis,Physikgrenzenoffen.
