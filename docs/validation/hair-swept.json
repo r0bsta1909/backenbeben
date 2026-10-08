@@ -1,0 +1,15 @@
+{
+  "asset_validation": true,
+  "web_export": true,
+  "browser_replay": {
+    "jump_to_contact": true,
+    "side_camera": true,
+    "marker_toggle": true,
+    "no_stale_markers": true,
+    "errors": []
+  },
+  "runtime_preview": "hair-swept-runtime.png",
+  "total_polygons": 88379,
+  "contact_geometry_changed": false,
+  "style_accepted": false
+}

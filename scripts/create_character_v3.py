@@ -148,44 +148,50 @@ for v in bm.verts:
         q.y=hairline(q)
         v.co=B(q)
 bm.to_mesh(cap.data);bm.free()
-# Broad tapered locks cover the whole crown instead of only the frontal strip.
-# Each lock follows the real scalp, with a lifted ridge and an irregular tip.
-# Deterministic variation keeps the silhouette reproducible across exports.
+# Irregular swept wedges, rooted beneath the scalp rather than arched loops.
+# A golden-angle distribution avoids visible horizontal rows of identical locks.
 import random
 rng=random.Random(1909)
 locks=[]
 scalp_center=Vector((0,.115,-.005))
-def scalp(theta,elevation):
-    direction=Vector((math.sin(theta)*math.cos(elevation),math.sin(elevation),math.cos(theta)*math.cos(elevation)))
-    hit=bvh.ray_cast(scalp_center+direction*.4,-direction)[0]
-    return hit,direction
-for row,elevation in enumerate([.23,.46,.69,.92,1.15,1.36]):
-    count=max(8,24-row*3)
-    for column in range(count):
-        theta=column*math.tau/count+row*.19+rng.uniform(-.045,.045)
-        base,normal=scalp(theta,elevation)
-        if base is None or base.y<hairline(base)-.003:continue
-        width=rng.uniform(.007,.011)*(1-row*.045)
-        lift=rng.uniform(.005,.011) if row<3 else rng.uniform(.009,.016)
-        sweep=rng.uniform(.12,.23);rise=rng.uniform(.17,.28)
-        vv=[]
-        for k in range(6):
-            t=k/5
-            center,n=scalp(theta+sweep*t,min(1.54,elevation+rise*t))
-            if center is None:center=base;n=normal
-            center+=n*(.003+lift*math.sin(t*math.pi))
-            across=Vector((math.cos(theta+sweep*t),0,-math.sin(theta+sweep*t)))
-            w=width*(1-t)**.65+.00015
-            # A broad central facet, shaded edges, and a closed underside.
-            vv.extend([tuple(center-across*w),tuple(center-across*w*.25+n*(.002*(1-t))),
-                       tuple(center+across*w*.25+n*(.002*(1-t))),tuple(center+across*w),tuple(center-n*.001)])
-        ff=[]
-        for k in range(5):
-            for j in range(5):ff.append((k*5+j,k*5+(j+1)%5,(k+1)*5+(j+1)%5,(k+1)*5+j))
-        ff.extend([tuple(reversed(range(5))),tuple(25+j for j in range(5))])
-        lock=mesh('HairLock',vv,ff,hair)
-        for poly in lock.data.polygons:poly.use_smooth=False
-        locks.append(lock)
+
+def scalp_direction(direction):
+    direction=direction.normalized()
+    return bvh.ray_cast(scalp_center+direction*.4,-direction)[0],direction
+
+for index in range(76):
+    theta=index*2.3999632297+rng.uniform(-.18,.18)
+    elevation=math.asin(.10+.88*(index+.5)/76)
+    base,normal=scalp_direction(Vector((math.sin(theta)*math.cos(elevation),math.sin(elevation),math.cos(theta)*math.cos(elevation))))
+    if base is None or base.y<hairline(base)-.003:continue
+    comb=Vector((-.8,.08,-.6))
+    tangent=(comb-normal*comb.dot(normal)).normalized()
+    width=rng.uniform(.010,.018)
+    length=rng.uniform(.034,.057)
+    lift=rng.uniform(.006,.011)
+    if base.z>.035 and base.y>.17:
+        width*=1.2;length*=1.2;lift*=1.25
+    vv=[]
+    for t in [0.,.30,.62,.84]:
+        center,n=scalp_direction(base+tangent*length*t-scalp_center)
+        if center is None:center=base;n=normal
+        # Root is hidden by the cap. The lifted tip does not curve back to it.
+        center+=n*(-.001+lift*t)
+        across=n.cross(tangent).normalized()
+        w=width*(1-t)**.8
+        ridge=.0015*(1-t)
+        vv.extend([tuple(center-across*w),tuple(center-across*w*.22+n*ridge),
+                   tuple(center+across*w*.22+n*ridge),tuple(center+across*w),tuple(center-n*.002)])
+    tip,n=scalp_direction(base+tangent*length-scalp_center)
+    if tip is None:tip=base+tangent*length;n=normal
+    vv.append(tuple(tip+n*(lift-.001)))
+    ff=[tuple(reversed(range(5)))]
+    for k in range(3):
+        for j in range(5):ff.append((k*5+j,k*5+(j+1)%5,(k+1)*5+(j+1)%5,(k+1)*5+j))
+    for j in range(5):ff.append((15+j,15+(j+1)%5,20))
+    lock=mesh('HairLock',vv,ff,hair)
+    for poly in lock.data.polygons:poly.use_smooth=False
+    locks.append(lock)
 bpy.ops.object.select_all(action='DESELECT')
 for o in [cap]+locks:o.select_set(True)
 bpy.context.view_layer.objects.active=cap;bpy.ops.object.join();head_parts.append(cap)

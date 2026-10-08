@@ -378,3 +378,22 @@ Auswertung profilieren und den numerischen Referenzpfad fuer jeden weiteren
 kompilierten Schritt erhalten. Grafik/Anatomie/Spielverstaendlichkeit weiter
 offen; bisherige Laborfortschritte ersetzen keine visuelle oder menschliche
 Abnahme des gewuenschten Spiels.
+
+SICHTBARE HAARGEOMETRIE UEBERARBEITET
+create_character_v3.py ersetzt regelmaessige Reihen bogenfoermiger Haarbueschel
+durch unregelmaessig verteilte Keile mit gemeinsamer Kaemmrichtung. Wurzeln
+liegen unter der Kopfhautkappe, zugespitzte Enden kehren nicht bogenfoermig zur
+Kappe zurueck. Golden-Angle-Verteilung statt horizontaler Reihen; groessere
+Frontstraehnen, geschlossene Unterseiten, deterministisch Seed 1909.
+Blenderquelle, GLB und echte Quellvorschau neu erzeugt; 88,379 Gesamtpolygone.
+Gesichts-Kollisionsmesh, Handkontaktpunkte und Rig-Metadaten unveraendert.
+CHARACTER_ASSET_VALIDATION_PASS und Webexport bestanden. Browser-Kontaktreplay:
+Sprung zum Treffer, Seitenkamera, Marker-Umschaltung, keine alten Marker und
+keine Browserfehler. Native Spielshader-Vorschau selbst gesichtet und abgelegt:
+validation/hair-swept-runtime.png. Sichtbare Haarschlaufen entfernt, Silhouette
+kantiger/zusammenhaengender; kein Ersatzbild statt 3D-Render verwendet.
+Stilgate weiterhin offen: Gesichtsschraffur, Schulterformen, schematisches
+Publikum sowie gespreizte Finger in der Kontaktpose erreichen die Referenz
+noch nicht. Naechste sichtbare Prioritaet ist die flache, geschlossene
+Schlaghand samt gemeinsam aktualisierter Kontaktgeometrie; keine kosmetische
+Pose, die vom Scoring abweicht. Neue Laborphysik weiterhin nicht im Match.
