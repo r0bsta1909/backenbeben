@@ -1500,3 +1500,13 @@ beideSeiten/vierHautfarben0/35/75/0 inkl.exaktemResetPASS. Bildgesichtet:
 feineKoernungausGesichtstexturbleibt;naechsterAnsatzTextur,nichtfertigerStil.
 Beleg validation/skin-ink.json/png. Host8877 wiederCheckout,Session52990;
 V07Paketserverbeendet. OeffentlichesPaketunveraendert. Gesamtzieloffen.
+
+G2 GESICHTSTEXTUR V2 IN SPIEL
+Built-inImagegen bearbeitetv1 zuv2:Papierkoernung/Bartpunkte entfernt,
+Konturen/Framing erhalten. VersioniertePNG plusPromptgesichert. main.gd und
+Charaktergeneratornutzenv2. Webbuild/15Kontaktansichten/Verletzungsrender
+beideSeiten/vierFarben/exakterResetPASS. Bildgesichtet:Stippleweg.
+WICHTIG NAECHSTER SCHRITT: bestehendecharacter-v3.blend undGLB enthalten
+nochaltegepackteTextur;Generatoraktualisiert,NeuerzeugungnochOFFEN.
+RuntimeShadernutztv2 bereitsdirekt. Beleg validation/face-ink-v2.json/png.
+KeinGesamt-Artabschluss,Goalaktiv. Host52990weiterCheckout.

@@ -510,9 +510,9 @@ for obj in [o for o in bpy.context.scene.objects if o.type=='MESH']:
 
 # The paint guide uses a fixed front projection; keep it editable and packed in
 # the Blender source. Runtime adds its own light and injury layers to this ink.
-if (OUT/'face_ink_v1.png').exists():
+if (OUT/'face_ink_v2.png').exists():
     face_material=skin.copy();face_material.name='FaceSkin'
-    image=bpy.data.images.load(str(OUT/'face_ink_v1.png'));image.pack()
+    image=bpy.data.images.load(str(OUT/'face_ink_v2.png'));image.pack()
     tex=face_material.node_tree.nodes.new('ShaderNodeTexImage');tex.image=image
     face_material.node_tree.links.new(tex.outputs['Color'],face_material.node_tree.nodes.get('Principled BSDF').inputs['Base Color'])
     face.data.materials[0]=face_material
