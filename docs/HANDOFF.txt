@@ -1483,3 +1483,12 @@ GitHubRelease v0.7.0-dev.20261008 veroeffentlicht,heruntergeladen,SHA256gleich.
 Beleg validation/v07-package.json. Host8877 JETZT ausfrischemPaket,Session90663;
 Entwicklungsserver beendet. Paketpfad lokal logs/v07-location.txt.
 Weiterhinexperimentell: Art-/Bedienabnahme,Zwei-PC-Nachweis,Physikgrenzenoffen.
+
+G7 SETUP-PYTHONAUSWAHL ROBUSTER
+Setup validiertPython3.12 bevorvenv/Pip. Launcherohne3.12 blockiertweitere
+Kandidaten nichtmehr;PATH undCheckoutportablewerdengeprueft. Expliziter
+-PythonPath plus-CheckOnly. Falschebestehendevenv wirdnichtgeloescht,sondern
+mitUmbenennungshinweisabgelehnt. IsolierteAuswahltestsPASS;komplettfrische
+InstallationdurchScript inkl.venvErzeugung/Pip/ImportsPASS. Beleg
+validation/setup-selection.json. SPIELEN-Versionstitelneutralisiert.
+OeffentlichesV07bleibtunveraendert,vorgenannteSetupkorrektur nuraktuellerQuellstand.

@@ -1,7 +1,10 @@
-BACKENBEBEN — EXPERIMENTELLER PROTOTYP 05
+BACKENBEBEN — EXPERIMENTELLER PROTOTYP
 
 START
 1. Beim ersten Einrichten Python 3.12 installieren und SETUP_HOST.bat ausführen.
+   Bei einer portablen Installation kann Python explizit angegeben werden:
+   powershell -File scripts/setup-host.ps1 -PythonPath C:\Pfad\python.exe
+   Das Setup prüft Python 3.12 vor der Installation.
    Die Einrichtung benötigt Internet; danach läuft das Spiel im lokalen Netz.
 2. START_HOST.bat doppelklicken. Der erste Start bereitet die Physik vor.
 3. Der Browser öffnet http://localhost:8765. Beim ersten Laden kurz warten.
