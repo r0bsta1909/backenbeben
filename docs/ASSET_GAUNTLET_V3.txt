@@ -888,3 +888,16 @@ Schulteranbindung,seitlicherEllbogenabstand,stetigerUebergang,Ruecklauf PASS.
 Webexport und15Kontaktansichten PASS,errors[]. Frontbild gesichtet: seitliche
 EllbogenSilhouette korrigiert. Beleg validation/helper-rest-pose.json/png.
 Keine vollstaendige Helferanimation oderArtabnahme; Goalweiteraktiv.
+
+G2 SCHULTERFORM UND AERMELANSATZ
+Schmalere Aermelquerschnitte, lokal geglaetteter verbundener Armlochbereich,
+abfallende Schulterlinie und anschliessende Rundung ersetzen hochstehende
+Aermelkappen. Erster Formversuch zeigte weiter eine Kerbe und wurde verworfen.
+Blender-Gruppenreferenz nach Modifieranwendung neu aufgeloest; Export erfolgreich.
+Blenderquelle/GLB/Vorschau aktualisiert; Shirt zusammenhaengend12274Vertices,
+geschlossene Schlaghand/116Kontaktpunkte PASS, Kollisionsdateien unveraendert.
+Webbuild und15Browserkontaktansichten PASS: echte Knochen-/Kopfshaderdaten,
+Probe/Replay/Spiegel/Ruecklauf,errors[]. Front-/Weitwinkelkontakt gesichtet:
+Schulterkappen reduziert, erhobener Aermel verbunden; Gesamtfiguren weiterhin
+steifer als Referenz. Beleg validation/shoulder-tailoring.json/png.
+KeineArt- odermenschlicheBedienabnahme,Goalweiteraktiv. Host8877Checkout.

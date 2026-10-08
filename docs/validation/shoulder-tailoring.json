@@ -1,0 +1,41 @@
+{
+  "repeat_practice_without_damage": true,
+  "idle_material_uploads_skipped": true,
+  "mirror_visibility_updates": true,
+  "pose_camera_and_wheel": true,
+  "crowd_reaction_and_rewind": true,
+  "jump_to_contact": true,
+  "side_camera": true,
+  "marker_toggle": true,
+  "no_stale_markers": true,
+  "errors": [],
+  "inspection_survives_original_deadline": false,
+  "coupled": {
+    "backend": "coupled-moving",
+    "solve_ms": 3132.7,
+    "peak": 0.037247999999999996,
+    "contact_diagnostics": {
+      "maximum_wrist_separation_m": 1.3482534431010035e-05,
+      "maximum_penetration_m": 4.080926193077899e-06,
+      "unconverged_steps": 13,
+      "maximum_material_residual_m": 0.00035584063673104556
+    },
+    "head_response": {
+      "model": "coupled-yaw-through-contact-and-tail",
+      "braced": false,
+      "tail_pin_error_m": 1.1425518861400334e-07,
+      "spatial_rotation": true,
+      "translation": true,
+      "parameters": "prototype tuning, three translations and three Euler rotations; diagonal generalized inertia"
+    },
+    "maximum_head_yaw_rad": 0.08719
+  },
+  "asset_validation": {
+    "connected_shirt_vertices": 12274,
+    "contact_points": 116,
+    "closed_strike_hand": true,
+    "character_validation": true
+  },
+  "visual_review": "Blender preview and actual front/wide contact inspected. Raised rest sleeve caps removed; connected garment retained in raised-arm pose. Overall figure/style and human readability acceptance remain open.",
+  "changes": "Narrowed sleeve sections, smoothed joined armholes, sloping clavicle silhouette, rounded garment before authored folds."
+}

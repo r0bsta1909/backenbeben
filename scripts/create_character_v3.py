@@ -201,7 +201,7 @@ bpy.context.view_layer.objects.active=cap;bpy.ops.object.join();head_parts.appen
 head_parts.append(ell('MouthInterior',(0,-.025,.075),(.026,.009,.010),ink))
 head_parts.append(ell('Teeth',(0,-.026,.081),(.023,.004,.003),white))
 
-body=loft('Shirt',[((0,-.60,-.014),.175,.096),((0,-.51,-.012),.188,.106),((0,-.36,0),.22,.120),((0,-.23,0),.218,.117),((0,-.145,0),.218,.085),((0,-.125,0),.145,.070),((0,-.105,0),.054,.048)],shirt,64)
+body=loft('Shirt',[((0,-.60,-.014),.175,.096),((0,-.51,-.012),.188,.106),((0,-.36,0),.22,.120),((0,-.23,0),.218,.117),((0,-.150,0),.205,.085),((0,-.125,0),.135,.070),((0,-.105,0),.054,.048)],shirt,64)
 neck=loft('Neck',[((0,-.18,0),.070,.060),((0,-.12,0),.057,.05),((0,-.06,-.008),.049,.043)],skin)
 # A true crew-neck rim follows the neck opening instead of floating on the chest.
 collar_points=[(.056*math.cos(i*math.tau/48),-.107-.005*max(0,math.sin(i*math.tau/48)),.050*math.sin(i*math.tau/48)) for i in range(49)]
@@ -364,7 +364,7 @@ for sign,side in [(-1,'R'),(1,'L')]:
     arm_objects[arm.name]=(arm,None)
     # Sleeve sections stay perpendicular to the humerus. The inset root bends
     # toward the chest; using that bend as its frame creates a raised horn.
-    sleeve=loft('Sleeve.'+side,[(Vector((sign*.180,-.150,0)),.040,.060),(sh+upper*.020,.067,.060),(sh+upper*.080,.063,.056),(sh+upper*.135,.058,.051)],shirt,section_axis=upper)
+    sleeve=loft('Sleeve.'+side,[(Vector((sign*.175,-.158,0)),.042,.058),(sh-upper*.005,.057,.057),(sh+upper*.035,.061,.058),(sh+upper*.080,.058,.054),(sh+upper*.135,.054,.049)],shirt,section_axis=upper)
     arm_objects[sleeve.name]=(sleeve,'upper_arm.'+side)
     landmarks[side]={'shoulder':list(sh),'elbow':list(el),'wrist':list(wr),'palm_center':list(palm),'palm_normal':[0,0,1],'finger_direction':list(direction),'upper_length':(el-sh).length,'forearm_length':(wr-el).length,'palm_offset':.054}
 
@@ -382,6 +382,20 @@ bpy.context.view_layer.objects.active=body;bpy.ops.object.join()
 rem=body.modifiers.new('Continuous shirt and sleeve seams','REMESH');rem.mode='VOXEL';rem.voxel_size=.0035;rem.use_smooth_shade=True
 bpy.ops.object.modifier_apply(modifier=rem.name)
 sm=body.modifiers.new('Tailored shoulder transition','SMOOTH');sm.factor=.6;sm.iterations=5;bpy.ops.object.modifier_apply(modifier=sm.name)
+shoulder_group=body.vertex_groups.new(name='ShoulderTransition')
+for v in body.data.vertices:
+    p=G(v.co);weight=smoothstep(.10,.17,abs(p.x))*(1-smoothstep(.27,.34,abs(p.x)))*smoothstep(-.30,-.22,p.y)
+    if weight>0:shoulder_group.add([v.index],weight,'REPLACE')
+sm=body.modifiers.new('Soft cloth armhole','SMOOTH');sm.factor=.8;sm.iterations=60;sm.vertex_group=shoulder_group.name;bpy.ops.object.modifier_apply(modifier=sm.name)
+body.vertex_groups.remove(body.vertex_groups['ShoulderTransition'])
+# A relaxed T-shirt follows the clavicle slope; suppress raised sleeve caps.
+for v in body.data.vertices:
+    p=G(v.co)
+    ceiling=-.105-.23*abs(p.x)
+    if abs(p.x)>.09 and p.y>ceiling:
+        p.y=ceiling;v.co=B(p)
+sm=body.modifiers.new('Round tailored shoulder surface','SMOOTH');sm.factor=.7;sm.iterations=16;bpy.ops.object.modifier_apply(modifier=sm.name)
+
 # Authored tension folds: tapered ridges from the armholes, a few broad chest
 # diagonals and short compressed hem folds. Avoid uniform sine-wave ribbing.
 cloth_folds=[
