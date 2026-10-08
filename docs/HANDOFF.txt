@@ -133,3 +133,7 @@ regelmaessig. Details in LATERAL_REWORK.txt, G4/G5/G7 weiterhin offen.
 Arena-Lichtstaffelung verbessert und im Browser geprueft. Tribuenen verschwinden
 nicht mehr im Schwarz. Frameabstaende p95 13.9-14.0 ms auf RTX 2080; Details
 und echte Bilder in LATERAL_REWORK.txt / docs/validation/arena-light-*.
+
+Auffaengerfehler korrigiert: Armansatz folgt jetzt der gebeugten Schulter statt
+der Ruheposition. Godot-Regression und LAN-KO bestanden; dokumentierte
+physikalische Kopplung der Helfer bleibt offen. Siehe LATERAL_REWORK.txt.

@@ -122,14 +122,23 @@ func apply_collapse(frame: Array) -> void:
 		orient_bone("shin."+side,knee,ankle)
 		orient_bone("foot."+side,ankle,vector(foot.tail))
 
+func collapsed_point(rest_point: Vector3) -> Vector3:
+	if last_body.size()<5:return rest_point
+	var hip := vector(metadata.bones.root.head)
+	var offset := Vector3(0,-float(last_body[0]),-float(last_body[1]))
+	var bend := Basis(Vector3.FORWARD,float(last_body[3]))*Basis(Vector3.RIGHT,-float(last_body[2]))
+	return hip+offset+bend*(rest_point-hip)
+
 func reach_toward(world_target: Vector3, side: String, amount: float, world_normal := Vector3.BACK) -> void:
 	if amount<.001:
 		skeleton.clear_bones_global_pose_override()
 		return
 	var upper: Dictionary=metadata.bones["upper_arm."+side]
 	var fore: Dictionary=metadata.bones["forearm_twist."+side]
-	var shoulder := vector(upper.head)
-	var wrist := vector(fore.tail).lerp(to_local(world_target),amount)
+	# The helper's chest has already bent with apply_collapse. Arm overrides are
+	# skeleton-global, so their origins must follow that same body transform.
+	var shoulder := collapsed_point(vector(upper.head))
+	var wrist := collapsed_point(vector(fore.tail)).lerp(to_local(world_target),amount)
 	var delta := wrist-shoulder
 	var a: float=metadata.arms[side].upper_length
 	var b: float=metadata.arms[side].forearm_length

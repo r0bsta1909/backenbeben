@@ -155,3 +155,17 @@ nicht isolierte GPU-Renderzeit; keine Zusage fuer andere Hardware.
 Bild und Messung: docs/validation/arena-light-contact.png und
 arena-light-performance.json. Publikum weiterhin einfache Silhouetten;
 Referenzqualitaet und menschliche Spielgefuehlsabnahme bleiben offen.
+
+AUFFAENGER: SCHULTERANSCHLUSS BEIM BEUGEN
+reach_toward verwendete bisher die Ruheposition der Schulter, obwohl
+apply_collapse den Oberkoerper des Helfers bereits bewegte. Da die Armoverrides
+im globalen Skelettkoordinatenraum liegen, konnte der Arm vom Oberkoerper
+abweichen. Schulter und Ausgangshand folgen jetzt derselben Koerpertransformation.
+Direkter Godot-Regressionstest prueft drei Beugeposen und das Zuruecksetzen:
+godot --headless --path game --script ../tests/catcher_pose.gd
+Ergebnis CATCHER_SHOULDER_POSE_PASS. Browserbuild und vollstaendiger
+Zweibrowser-LAN-Test einschliesslich KO, Replay, Rueckwaertssuche und Revanche
+bestanden; keine Browserfehler. KO-Totale visuell geprueft und gesichert unter
+docs/validation/catcher-ko-wide.png. Helferarme bleiben eine animierte IK-Loesung,
+keine wechselseitige physikalische Abstuetzung. Handkontakt und Koerpergewicht
+muessen fuer eine natuerliche Auffangbewegung weiter gekoppelt werden.
