@@ -37,11 +37,18 @@ def run(fps=960,duration=.06,attached=False,compiled_embedding=True,iterations=6
     cage=CompiledSideTissue();cage.prepare();cage.iterations=iterations;cage.residual_tolerance=1e-6
     velocity=np.array([-1.,0.,0.]);angular_velocity=np.zeros(3);dt=1/fps
     if attached:
-        future=np.asarray(arm.q)+joint_velocity*dt
-        future_rotation=forearm_frame(arm,future)@bond.relative_rotation
-        future_center=np.asarray(arm.joints(future)[1])-future_rotation@bond.local_wrist
-        velocity=(future_center-hand.center)/dt
-        angular_velocity=rotation_vector(future_rotation@hand.rotation.T)/dt
+        # Initial physical state must not change when the solver dt changes.
+        # Differentiate the arm path at a fixed symmetric probe interval.
+        probe=1e-6
+        before=np.asarray(arm.q)-joint_velocity*probe
+        after=np.asarray(arm.q)+joint_velocity*probe
+        before_rotation=forearm_frame(arm,before)@bond.relative_rotation
+        after_rotation=forearm_frame(arm,after)@bond.relative_rotation
+        before_center=np.asarray(arm.joints(before)[1])-before_rotation@bond.local_wrist
+        after_center=np.asarray(arm.joints(after)[1])-after_rotation@bond.local_wrist
+        velocity=(after_center-before_center)/(2*probe)
+        angular_velocity=rotation_vector(after_rotation@before_rotation.T)/(2*probe)
+    initial_velocity=velocity.copy();initial_angular_velocity=angular_velocity.copy()
     initial_penetration=hand.penetration(cage)
     frames=[];peak=0.;penetration=0.;contacts=0;wrist_error=0.;bond_residual=0.;iteration_counts=[];unconverged=0;material_residual=0.;started=time.perf_counter()
     for step in range(round(duration*fps)):
@@ -69,7 +76,7 @@ def run(fps=960,duration=.06,attached=False,compiled_embedding=True,iterations=6
         peak=max(peak,float(np.max(np.linalg.norm(cage.p-cage.rest,axis=1))))
         penetration=max(penetration,hand.penetration(cage));contacts=max(contacts,hand.last_contacts)
         frames.append({'time':(step+1)*dt,'offsets':cage.replay_offsets(),'center':hand.center.tolist(),'rotation':hand.rotation.tolist(),'arm':arm.pose() if attached else None})
-    return {'iterations_cap':iterations,'iteration_counts':iteration_counts,'unconverged_steps':unconverged,'maximum_material_residual_m':material_residual,'compiled_embedding':compiled_embedding,'attached':attached,'initial_penetration_m':initial_penetration,'maximum_wrist_separation_m':wrist_error,'maximum_bond_residual_m':bond_residual,'initial_joint_velocity':initial_joint_velocity.tolist() if attached else None,'final_joint_velocity':joint_velocity.tolist() if attached else None,'fps':fps,'duration':duration,'hand_samples':len(points),'peak_active_contacts':contacts,
+    return {'initial_velocity':initial_velocity.tolist(),'initial_angular_velocity':initial_angular_velocity.tolist(),'iterations_cap':iterations,'iteration_counts':iteration_counts,'unconverged_steps':unconverged,'maximum_material_residual_m':material_residual,'compiled_embedding':compiled_embedding,'attached':attached,'initial_penetration_m':initial_penetration,'maximum_wrist_separation_m':wrist_error,'maximum_bond_residual_m':bond_residual,'initial_joint_velocity':initial_joint_velocity.tolist() if attached else None,'final_joint_velocity':joint_velocity.tolist() if attached else None,'fps':fps,'duration':duration,'hand_samples':len(points),'peak_active_contacts':contacts,
             'peak_deformation_m':peak,'maximum_penetration_m':penetration,'final_velocity':velocity.tolist(),
             'final_angular_velocity':angular_velocity.tolist(),'solve_ms':(time.perf_counter()-started)*1000,
             'side_cage':cage.replay_geometry(),'frames':frames,'hand_local':hand.local.tolist(),

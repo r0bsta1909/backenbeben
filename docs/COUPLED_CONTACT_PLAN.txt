@@ -365,3 +365,25 @@ Auswertung profilieren und den numerischen Referenzpfad fuer jeden weiteren
 kompilierten Schritt erhalten. Grafik/Anatomie/Spielverstaendlichkeit weiter
 offen; bisherige Laborfortschritte ersetzen keine visuelle oder menschliche
 Abnahme des gewuenschten Spiels.
+
+GEKOPPELTES LABOR: ZEITSCHRITTVERGLEICH MIT IDENTISCHEN ANFANGSDATEN
+run_side_contact_lab schaetzte Anfangsgeschwindigkeiten bislang ueber solver-dt.
+Dadurch aenderten sich Anfangszustand UND Integrationsschritt gemeinsam.
+Jetzt zentrale Ableitung mit festem 1e-6-s-Probeintervall; Anfangs-Linear-, Winkel-
+und Gelenkgeschwindigkeit werden protokolliert. Neuer Regressionstest vergleicht
+960/1920 Hz bei Dauer null bitgleich. Vollsuite 68 Tests bestanden.
+Audit scripts/audit_contact_timestep.py vergleicht aktuell 960/1920/3840 Hz ueber
+identische 0.0125 s, 116 aktuelle Handsamples, Limit 384, Residualtoleranz 1e-6 m.
+Alle drei Laeufe innerhalb der Einzelschritt-Toleranz. Handpositionsdifferenz
+960->1920: .524 mm, 1920->3840: .345 mm; Gewebe-Maxdifferenz .177/.157 mm.
+Endgeschwindigkeitsdifferenz steigt jedoch .0266 -> .0571 m/s. Deshalb KEIN
+bestandener Nachweis der Zeitschrittunabhaengigkeit. Peak-Gewebe 1.057/1.125/
+1.220 mm; lokale Laufzeiten 7.92/4.46/2.89 s fuer nur 12.5 ms simulierte Zeit.
+Vorpruefung 480 Hz verfehlte Toleranz in allen sechs Schritten (Material bis
+9.44e-6 m). Dieser nicht konvergierte Vergleich bleibt ausdruecklich als
+contact-timestep-initial.json erhalten, nicht als Genauigkeitsnachweis.
+Hauptnachweis validation/contact-timestep.json. Naechster Untersuchungsbereich:
+Einfluss fester Positionsresidualtoleranz auf Geschwindigkeiten bei dt-Verfeinerung;
+gegebenenfalls Toleranz verfeinern und Iterationskonvergenz separat nachweisen.
+Weiterhin kurze einzelne Aufprallsituation, keine Reibung/Muskelantriebe,
+diagonale Gelenkinertia, keine anatomische Kalibrierung. Matchsolver unveraendert.

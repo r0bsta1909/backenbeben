@@ -11,3 +11,11 @@ class CoupledLabTests(unittest.TestCase):
   self.assertLessEqual(result['maximum_material_residual_m'],1e-6)
   self.assertLessEqual(result['maximum_bond_residual_m'],1e-6)
   self.assertLessEqual(result['maximum_penetration_m'],1e-6)
+
+ def test_initial_physical_state_is_independent_of_timestep(self):
+  from run_side_contact_lab import run
+  a=run(fps=960,duration=0,attached=True)
+  b=run(fps=1920,duration=0,attached=True)
+  for key in ['initial_velocity','initial_angular_velocity','initial_joint_velocity','hand_local']:
+   self.assertEqual(a[key],b[key])
+  self.assertLess(a['initial_velocity'][0],-.9)
