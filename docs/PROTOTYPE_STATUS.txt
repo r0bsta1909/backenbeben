@@ -1,0 +1,51 @@
+BACKENBEBEN — AKTUELLER ABNAHMESTAND
+Gesamtziel OFFEN. Verbindlicher Umfang: PROTOTYPE_GAUNTLET.txt.
+Diese Uebersicht trennt Liefergegenstaende, vorhandene Nachweise und offene Arbeit.
+
+G1 / INVENTAR
+Quelle: game/, server/, scripts/, tests/; Blender: assets-source/character-v3.blend.
+Gauntlet und historische Entscheidungen: PROTOTYPE_GAUNTLET.txt, HANDOFF.txt.
+Aktueller Quellstand ist neuer als das veroeffentlichte v0.4-Hostpaket.
+
+G2 / FIGUREN UND COMICSTIL — OFFEN
+Vorhanden: anatomischer Kopf, Arme/Haende, vollstaendiges Rig, Haargeometrie,
+Kleidung, Toonmaterialien, vier Haut-/vier Trikot-/drei Haarfarben.
+Belege: validation/anatomical-arms.json, face-hair-style.json; Blenderquelle.
+Offen: Referenzlook als Gesamtbild, Kleidung und Publikum weiter ausarbeiten.
+Technischer Export oder bestandener Rendercheck ersetzt keine Artabnahme.
+
+G3 / SEITLICHER KONTAKT UND BEDIENUNG — OFFEN
+Vorhanden: koerpergebundener Schwung, echte Handkontaktpunkte, Probe/Schlag,
+weitere freiwillige Probe, Seitenkamera, Mausrad, gruenes Anspannfenster.
+Belege: validation/repeat-practice.json, anatomical-arm-front/side.png.
+Letzte menschliche Rueckmeldung: weiterhin unverstaendlich; keine neue Abnahme.
+
+G4 / PHYSIK — OFFEN
+Vorhanden: standardmaessig gekoppelter Arm-/Hand-/Gewebeclip mit Rueckholung,
+120Hz-Replay, identische Hostaufzeichnung fuer beide Clients.
+Belege: validation/coupled-variants.json, compiled-game-replay.json.
+Offen: Kontaktwertung noch teilweise initiale Geometrie statt geloester Wirkung;
+Kopf/Kiefer stilisierte Federn, gefuehrter KO, numerische Kontaktrestfehler;
+keine vollstaendige anatomische Traegheits-/Reibungs-/Verletzungssimulation.
+Lidschwellung ist visuelle Zustandsanzeige, nicht Teil des Kontaktkaefigs.
+
+G5 / DUELL UND GESICHT ALS HEALTH — TECHNISCHE TEILE GEPRUEFT, ABNAHME OFFEN
+Lobby, Varianten, LAN/Training, Abwehr, Verletzungen/Spiegel, Emotes,
+Punkteentscheidung/KO und Revanche vorhanden. Augen schwellen seitenspezifisch.
+Belege: validation/fresh-package-duels.json, swollen-eyes.json.
+Diegetische Lesbarkeit weiterhin gesondert menschlich beurteilen.
+
+G6 / KO UND UEBERTRAGUNG — OFFEN
+Vorhanden: gefuehrter Zusammenbruch, Helfer, Replaykameras, Ergebnisgrafik,
+Arena und reagierendes Publikum. Kein automatischer KO bei jedem sauberen Schlag.
+Offen: Gesamtqualitaet von Figuren, Bewegung und TV-Inszenierung.
+
+G7 / LAN UND START — EIN-PC-PRUEFUNG BESTANDEN, ZWEI-PC-NACHWEIS OFFEN
+Frisches Paket ausserhalb Checkout mit eigener venv gestartet; echte LAN-URLs,
+Audio auf LAN-HTTP, zwei Browserkontexte, Resume und Admin geprueft.
+Zwei Browserkontexte auf einem PC sind kein Test auf zwei physischen PCs.
+
+G8 / AUSLIEFERUNG — OFFEN FUER ENDSTAND
+v0.4-Prerelease heruntergeladen und SHA256 gegen geprueftes Paket verglichen.
+Neuere Assets/Bedienung/Verletzungen sind auf main; abschliessendes Paket fehlt.
+Turniere, ElevenLabs und Werbung bleiben wie vereinbart zurueckgestellt.

@@ -1232,3 +1232,15 @@ ist. Helle/dunkle schwere Verletzung mit korrektem Spiegel gesichtet. Webbuild
 und Browserkontakt-/Wiederholprobe-/Replay-/Spiegelcheck PASS,errors[]. Belege
 validation/swollen-eyes.json und swollen-eye-light/dark.png. Keine neue menschliche
 Abnahme oder Gesamtabnahme; Goal/Gates weiterhin offen.
+
+G5 AKTUELLE ASSETS IN VOLLSTAENDIGEN KAMPFPRUEFUNGEN
+Godot-Diagnostik liest injury_left/right/jaw aus den tatsaechlichen Face- und
+Spiegel-ShaderMaterialien. LAN-Gauntlet prueft bei JEDEM Treffer aufgezeichneten
+Zustand nachKontakt und anschliessend vorKontakt gegen das dargestellte Gesicht.
+Nach Revanche beide Clients: Face- und Spiegelmaterialparameter alle null.
+Beschleunigter KO-Kampf3Treffer und Standardkampf10Treffer/Punkte bestanden,
+inkl.Resume/identischerReplays/KO-Ruecklauf/Rematch/Leave,errors[]. Beleg
+validation/injury-full-duels.json. Zwei Browserkontexte auf einem PC, keine
+Zwei-PC-Abnahme. Neue Uebersicht PROTOTYPE_STATUS.txt trennt Liefergegenstaende,
+Belege und offene Arbeit. Neue menschliche Verstaendlichkeitsfrage gestellt;
+Antwort noch ausstehend, frueheren negativen Befund nicht als bestanden ersetzen.

@@ -1,0 +1,35 @@
+{
+  "scope": "Two actual browser contexts on one PC over LAN HTTP; current source/assets. Material values read from visible face and mirror ShaderMaterials.",
+  "standard": {
+    "configuration": {
+      "base_damage": 25,
+      "ko_threshold": 100,
+      "turn_seconds": 25
+    },
+    "physics_backend": "coupled",
+    "injury_material_rewind": true,
+    "rematch_material_reset": true,
+    "rematch": true,
+    "resume": true,
+    "replay_frame_ms_p95": 14,
+    "errors": [],
+    "hits": 10,
+    "knockout": false
+  },
+  "ko": {
+    "configuration": {
+      "base_damage": 45,
+      "ko_threshold": 60,
+      "turn_seconds": 60
+    },
+    "physics_backend": "coupled",
+    "injury_material_rewind": true,
+    "rematch_material_reset": true,
+    "rematch": true,
+    "resume": true,
+    "replay_frame_ms_p95": 14,
+    "errors": [],
+    "hits": 3,
+    "knockout": true
+  }
+}

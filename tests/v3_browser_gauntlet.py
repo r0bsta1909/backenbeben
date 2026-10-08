@@ -88,6 +88,13 @@ async def main():
                     resumed=await state(b);assert resumed['id']==sb['id'] and resumed['replay_id']==sb['replay_id']
                     assert await b.evaluate('JSON.parse(renderState).you')==1
                     report['resume']=True
+                health_clip=await (await a.request.get(url+'/api/replay/'+sa['replay_id'])).json()
+                for moment,key in [(0.9,'after'),(0.2,'before')]:
+                    player=health_clip[key][health_clip['target']]
+                    expected=[min(1,player['zones'].get(side,0)/75) for side in ['L','R']]+[max(0,min(1,(player['damage']-50)/40))]
+                    await a.locator('#replaySeek').evaluate('(e,t)=>{e.value=t;e.dispatchEvent(new Event("input"))}',moment)
+                    await a.wait_for_function('(wanted)=>godotStats.face_injury?.every((v,i)=>Math.abs(v-wanted[i])<1e-5)',arg=expected,timeout=3000)
+                report['injury_material_rewind']=True
                 if hit.get('ko'):
                     ko_clip=await (await a.request.get(url+'/api/replay/'+sa['replay_id'])).json()
                     assert ko_clip['ko'] and len(ko_clip['body_frames'])==337
@@ -116,6 +123,9 @@ async def main():
             await a.locator('#rematch').click();await b.locator('#rematch').click()
             await a.wait_for_function("JSON.parse(renderState).state.phase==='aim'")
             rematch=await state(a);assert rematch['turn']==1 and all(p['damage']==0 and p['fouls']==0 for p in rematch['players'])
+            for page in pages:
+                await page.wait_for_function('godotStats.face_injury?.every(v=>v===0) && godotStats.mirror_injury?.every(v=>v===0)',timeout=3000)
+            report['rematch_material_reset']=True
             report['rematch']=True
             await b.locator('#lobbyButton').click()
             await a.wait_for_function("JSON.parse(renderState).state.phase==='disconnected'")
