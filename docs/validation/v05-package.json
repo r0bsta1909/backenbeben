@@ -1,0 +1,19 @@
+{
+  "sha256": "5115dbd4ff5ee1c2d4a877f98a8e2602e9a67d392b58ff06f62254af159b0f66",
+  "bytes": 21023842,
+  "fresh_environment": true,
+  "outside_checkout": true,
+  "package_ko_hits": 3,
+  "checks": {
+    "errors": [],
+    "physics_backend": "coupled",
+    "injury_material_rewind": true,
+    "rematch_material_reset": true,
+    "ko_body_recorded": true,
+    "ko_reverse_seek": true,
+    "resume": true,
+    "rematch": true,
+    "leave": true
+  },
+  "scope": "Two browser contexts on one physical PC over LAN HTTP. Full standard duel previously checked from same gameplay source; this independent package run used accelerated KO balance."
+}
