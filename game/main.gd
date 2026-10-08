@@ -460,6 +460,7 @@ func drive_recorded_physics() -> void:
 	camera.look_at(Vector3(0,-3.0,.4) if wide_view else Vector3(0,-.12,1.0) if side_view else Vector3(.22,-.18,0))
 	hand.visible=true
 	hand.first_person(not side_view)
+	var defending_view: Node3D=fighter
 	var arm_data: Variant = physics_frame.get("arm") if active else hand_pose.get("arm")
 	if arm_data is Dictionary and arm_data.get("pose") is Dictionary:
 		var attacking_self: bool = replaying or (int(physics_frame.get("target",1-you))!=you if active else int(arm_data.get("attacker",you))==you)
@@ -468,6 +469,7 @@ func drive_recorded_physics() -> void:
 			fighter.reset_pose()
 			hand.apply_arm(pose,0.0,float(arm_data.get("tilt",-5)))
 		else:
+			defending_view=hand
 			hand.reset_pose()
 			for key in ["root","shoulder","elbow","wrist"]:
 				pose[key]=[-float(pose[key][0]),float(pose[key][1]),.525-float(pose[key][2])]
@@ -479,6 +481,8 @@ func drive_recorded_physics() -> void:
 		var body_frame: Array=physics_frame.get("body",[0,0,0,0,0])
 		var target_view: Node3D=fighter if replaying or int(physics_frame.target)!=you else reflection
 		target_view.apply_collapse(body_frame)
+	var guard_body: Array=physics_frame.get("body",[0,0,0,0,0])
+	defending_view.pose_defender(1.0-smoothstep(.02,.25,float(guard_body[0])))
 	if contact_marks.is_empty():
 		var contact_surface: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/hand_contact_surface_v3.json"))
 		for i in range(contact_surface.samples.size()):

@@ -475,3 +475,23 @@ Rueckkampf mit zurueckgesetztem Schaden/Fouls, Verlassen. Keine Browserfehler.
 Test erhoeht zeitweise Schaden/senkt K.o.-Schwelle; danach Standardwerte 25/100/25
 wiederhergestellt. Kein Nachweis fuer zwei physische PCs oder menschliche Bedienung.
 Nachweis validation/current-assets-lan.json. Peak-Replaybild selbst gesichtet.
+
+EMPFAENGERHALTUNG MIT HAENDEN HINTER DEM KOERPER
+character_view.pose_defender fuehrt beide Handgelenke hinter die Huefte statt
+in der seitlich abgespreizten Modell-Grundpose zu verbleiben. Zweigliedrige IK
+bewahrt Ober-/Unterarmlaengen; Schulter und Ziele folgen collapsed_point des
+Rumpfes. Finger leicht entspannt. Bei gespeichertem Absinken zwischen .02 und
+.25 m wird die Haltung graduell geloest. Absolute Clipwerte, kein Delta-Drift.
+Angriffsuebergang entfernt defensive Overrides und erzwingt neue Armpose;
+Reset/Rematch loescht den Haltungscache. main weist die Haltung dem Empfaenger
+zu; Helfer behalten ihren bestehenden Greifablauf. Unveraenderte Pose gecacht.
+Tests/defender_pose.gd bestanden: beide Armlaengen, Schulteranschluss bei
+Rumpfbewegung, Handgelenke hinter Koerper, Rueckspulen, Angriffswechsel, Reset.
+Webexport und Browser-Kamera/Mausrad/Kontaktreplay bestanden, keine Fehler.
+Totale selbst gesichtet: Arme des Empfaengers jetzt hinter dem Rumpf gebeugt.
+Gesteuerte Animation, keine physikalische Armfreigabe oder Ganzkoerper-Ragdoll;
+keine vollstaendige Kollisionspruefung von Haut gegen Bekleidung. Stil-/Gameplay-
+Abnahme bleibt offen. Bildnachweis validation/defender-replay.png.
+Zwei-Client-LAN-Gauntlet mit neuer Haltung ebenfalls bestanden: Rollenwechsel,
+identische Clips, Resume, K.o.-Rueckspulen, Rueckkampf, Verlassen und HTTP-Audio.
+Keine Browserfehler, Test-Balancing wiederhergestellt. validation/defender-pose.json.

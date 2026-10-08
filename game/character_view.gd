@@ -5,6 +5,8 @@ var skeleton: Skeleton3D
 var metadata: Dictionary
 var unit_scale := 1.0
 var has_pose := false
+var defender_pose_active := false
+var last_defender_pose: Array = []
 var last_elbow := Vector3.INF
 var last_wrist := Vector3.INF
 var last_tilt := Vector2.INF
@@ -64,6 +66,13 @@ func reset_pose() -> void:
 
 func apply_arm(pose: Dictionary, yaw := 0.0, pitch := 0.0, side := "R") -> void:
 	if not is_instance_valid(skeleton) or not pose.has("wrist"):return
+	if defender_pose_active:
+		skeleton.clear_bones_global_pose_override()
+		skeleton.reset_bone_poses()
+		defender_pose_active=false
+		last_defender_pose=[]
+		last_body=[]
+		last_wrist=Vector3.INF
 	apply_finger_relax(float(pose.get("finger_relax",0.0)),side)
 	var shoulder := to_local(vector(pose.shoulder)*unit_scale)
 	var elbow := to_local(vector(pose.elbow)*unit_scale)
@@ -181,7 +190,40 @@ func reach_toward(world_target: Vector3, side: String, amount: float, world_norm
 	orient_surface("forearm_twist."+side,elbow.lerp(wrist,.5),wrist,normal)
 	orient_surface("hand."+side,wrist,wrist+Vector3.UP*.1,normal)
 
+func pose_defender(amount := 1.0) -> void:
+	var key: Array=[last_body.duplicate(),amount]
+	if defender_pose_active and key==last_defender_pose:return
+	last_defender_pose=key
+	defender_pose_active=true
+	for side in ["R","L"]:
+		var sign_side: float=1.0 if side=="L" else -1.0
+		var shoulder_rest := vector(metadata.bones["upper_arm."+side].head)
+		var wrist_rest := vector(metadata.bones["forearm_twist."+side].tail)
+		var shoulder := collapsed_point(shoulder_rest)
+		var wrist := collapsed_point(wrist_rest.lerp(Vector3(sign_side*.12,-.49,-.17),amount))
+		var axis := (wrist-shoulder).normalized()
+		var a: float=metadata.arms[side].upper_length
+		var b: float=metadata.arms[side].forearm_length
+		var reach := clampf(shoulder.distance_to(wrist),absf(a-b)+.001,a+b-.001)
+		wrist=shoulder+axis*reach
+		var pole_rest := Vector3(sign_side,-.35,0)
+		var pole := (collapsed_point(shoulder_rest+pole_rest)-shoulder).normalized()
+		pole=(pole-axis*pole.dot(axis)).normalized()
+		var along := (a*a-b*b+reach*reach)/(2*reach)
+		var elbow := shoulder+axis*along+pole*sqrt(maxf(0,a*a-along*along))
+		var finger_rest := (vector(metadata.bones["hand."+side].tail)-wrist_rest).normalized()
+		var finger := finger_rest.lerp(Vector3(sign_side*.15,-1,0).normalized(),amount).normalized()
+		finger=(collapsed_point(wrist_rest+finger)-collapsed_point(wrist_rest)).normalized()
+		var normal := (collapsed_point(wrist_rest+Vector3.BACK)-collapsed_point(wrist_rest)).normalized()
+		orient_bone("upper_arm."+side,shoulder,elbow)
+		orient_surface("forearm."+side,elbow,elbow.lerp(wrist,.5),normal)
+		orient_surface("forearm_twist."+side,elbow.lerp(wrist,.5),wrist,normal)
+		orient_surface("hand."+side,wrist,wrist+finger*.1,normal)
+		apply_finger_relax(amount*.45,side)
+
 func reset_all() -> void:
+	defender_pose_active=false
+	last_defender_pose=[]
 	set_eye_closure(0.0)
 	skeleton.clear_bones_global_pose_override()
 	skeleton.reset_bone_poses()
