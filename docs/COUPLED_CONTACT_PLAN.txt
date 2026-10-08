@@ -1,0 +1,43 @@
+HAND / GEWEBE: KOPPLUNGSGAUNTLET
+Status: Kontaktprimitive experimentell implementiert, noch NICHT im Match aktiv.
+
+Befund am aktuellen Code:
+- Arm arbeitet in Metern, Gewebekaefig in vierfachen Render-Einheiten.
+- Tissue.w ist bisher eine 0/1-Beweglichkeitsmaske statt kalibrierter inverser Masse.
+- Faktor 88 setzt einseitig Geschwindigkeiten; Hand reagiert nicht darauf.
+- Das Gewebe benutzt feste tiefe Knoten, Kopf/Jaw separate Federn.
+Diese Voraussetzungen verbieten, den neuen Kontakt einfach zusaetzlich auf den
+alten Kick anzuwenden: das wuerde Last doppeln und Einheiten vermischen.
+
+Grundlage (Primaerquellen, 08.10.2026):
+https://matthias-research.github.io/pages/publications/XPBD.pdf
+Macklin, Mueller, Chentanez 2016, Gleichungen 17/18: akkumulierte Multiplikatoren
+und Nachgiebigkeit pro Substep. Originalimplementierung, kein fremder Code.
+https://matthias-research.github.io/pages/publications/PBDBodies.pdf
+Publikationsfund fuer spaetere starre/weiche Kopplung; PDF-Abruf fehlgeschlagen,
+Details daraus noch nicht als verifizierte Implementierungsgrundlage verwenden.
+
+server/contact_constraint.py projiziert einen einseitigen Normalkontakt zwischen
+Handpunkt und gewichtetem Gewebepunkt. Positionen in Metern, inverse Massen in
+1/kg; Normalenrichtung Gewebe -> Hand. Beide Seiten werden korrigiert. Lambda
+wird pro Substep zurueckgesetzt, innerhalb der Iterationen akkumuliert und auf
+nichtnegative Werte begrenzt. Keine Reibung/Restitution/Armrotation integriert.
+Vier Tests bestanden: ungleiche Massen und Schwerpunkterhaltung der isolierten
+Korrektur, kein Anziehen bei Abstand, fixiertes Gewebe, nachgiebiger Kontakt,
+stabile Wiederholung innerhalb eines Substeps, zwei fixierte Seiten.
+Das beweist weder Energieerhaltung des Gesamtspiels noch anatomische Genauigkeit.
+
+Verbindliche naechste Schritte:
+1. Separates 240-Hz-Labor mit SI-Kaefig und expliziten Testmassen. Lastkick dort
+   vollstaendig entfernen. Vergleich ohne Kontakt / mit ruhendem Kontakt.
+2. Handproxy ueber endliche Nachgiebigkeit an die motorisierte Armhaltung binden;
+   Rueckwirkung darf nicht durch einen anschliessenden Pose-Override verschwinden.
+3. Kontaktgewichte aus geometrischer Einbettung in die aktuelle Gewebeoberflaeche,
+   keine unveraenderte Druck-Gaussverteilung als behauptete baryzentrische Flaeche.
+4. Handoffsets und Gewebeknoten gemeinsam aufzeichnen; Renderkonvertierung nur
+   am Ausgang. Sichtbare Handdeformation und Kontaktflaeche muessen uebereinstimmen.
+5. Durchdringung, Nullenergie-Ruhe, Massenverhaeltnisse, Schrittweitenvergleich,
+   Kontaktloesung sowie CPU-Budget messen. Erst dann Matchsolver umschalten.
+6. Reale Browserbilder, LAN-Gleichheit, Reversesuche und menschliche G7-Pruefung.
+Bestehenden Matchpfad erst nach bestandenem Vergleich ersetzen. Das Ziel bleibt
+eine sichtbare gegenseitige Reaktion, nicht nur ein zusaetzlicher Effektparameter.

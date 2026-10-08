@@ -163,3 +163,8 @@ v0.3.0-dev.20261008 (Quellstand 09676cc). 35 Python-Tests bestanden;
 entpacktes Paket im echten Browser geprueft, inklusive Kontakt und
 Finger-Reversesuche. SHA256/Pruefgrenzen: validation/current-package.json.
 Kein Abschluss des Goals: Stil, gekoppelte Physik und G7 bleiben offen.
+
+Kopplungsarbeit begonnen: experimentelle SI-XPBD-Kontaktprimitive mit vier
+bestandenen Tests. Noch NICHT im Match aktiv. Befund, Einheitenprobleme und
+naechste Integrationsschritte: COUPLED_CONTACT_PLAN.txt. Naechster Schritt:
+SI-Labor mit Handproxy und Kaefig ohne bisherigen einseitigen Lastkick.
