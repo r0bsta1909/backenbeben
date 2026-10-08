@@ -1399,3 +1399,19 @@ Offen: Standardduell/Timingursache/Defaultentscheidung; festeTranslation,nurYaw,
 Kieferstilisiert,kalibrierteAnatomie undnumerischeRestfehler. KeineGesamtabnahme.
 Host8877 JETZT Checkout mit --physics coupled-moving,Session37411. V06PaketHost
 beendet; oeffentlichesV06 enthaelt weiterhin vorherigengeprueftenDefaultpfad.
+
+G4/G5 BEWEGLICHER KOPF ALS QUELLSTANDARD / REPLAYBETRACHTUNG
+Standardduell10Treffer mitcoupled-moving bestanden inkl.Materialruecklauf/
+Revanche. AktiveReplaybedienung (Pause/Spulen/Kamera/Marker) sendet gebremste
+inspect_replay-Aktion; Host verlaengert12s abBedienung,insgesamtmax45s. Veraltete
+IDs/beendeteReplays/abgegebeneWeiterstimmen koennen nichtverlaengern. Gemeinsames
+Weiter bleibtsofortig. DreiTimingtests PASS. EchterBrowser wartetbis<3s,bedient,
+prueftVerlaengerung>10s undueberlebturspruenglicheFrist;15Ansichten/ReplayPASS.
+Default imQuellhost nun coupled-moving; Batch ohnePhysicsOverride neu gestartet
+undvollerLAN-KO-KampfPASS inkl.AnspannenSolverflag/identischeClips/Ruecklauf/
+Resume/Revanche,errors[]. Beleg validation/moving-head-default.json.
+ErsterhistorischerTimeout weiterhin nichtursacheneindeutig belegt; nichtals
+bewiesenerShaderfehler oderbewiesenerFristfehler ausgeben. Folgelaeufe bestanden.
+README/SPIELEN/Status aktualisiert. OeffentlichesV06 bleibtvorigerDefault.
+Host8877 CheckoutOHNEOverride,Session42933. Goalweiteroffen: PhysiknurYaw/
+Translationfest,kalibrierteAnatomie,Kiefer/KOstilisiert,Art-/Bedienabnahmeoffen.

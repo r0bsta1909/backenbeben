@@ -109,3 +109,7 @@ Hostpaket enthalten. Zum Spielen braucht man weder Blender noch Godot-Editor.
 Nach einem Update den bisherigen Host mit Strg+C beenden, START_HOST.bat
 starten und beide Browser mit Strg+F5 neu laden.
 Prüfstand und offene Anforderungen: docs/PROTOTYPE_GAUNTLET.txt im Repository.
+
+Replay: Pausieren, Spulen und Kamerwechsel geben erneut bis zu 12 Sekunden
+Betrachtungszeit, insgesamt hoechstens 45 Sekunden pro Replay. Mit WEITER
+setzen beide Spieler gemeinsam sofort fort (im Training reicht ein Klick).

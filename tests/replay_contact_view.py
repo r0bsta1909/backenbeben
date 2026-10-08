@@ -54,6 +54,12 @@ async def main():
    recorded=await (await page.request.get('http://localhost:8877/api/replay/'+replay_id)).json()
    assert recorded['physics_backend']==('coupled-moving' if '--expect-moving' in sys.argv else 'coupled')
    coupled_evidence={'backend':recorded['physics_backend'],'solve_ms':recorded['solve_ms'],'peak':recorded['peak'],'contact_diagnostics':recorded['contact_diagnostics'],'head_response':recorded.get('head_response'),'maximum_head_yaw_rad':max(abs(f[0]) for f in recorded['frames'])}
+  if '--inspect-timeout' in sys.argv:
+   await page.wait_for_function("state.phase==='replay' && state.remaining<3",timeout=15000)
+   await page.locator('#replayImpact').click()
+   await page.wait_for_function("state.phase==='replay' && state.remaining>10",timeout=3000)
+   await page.wait_for_timeout(4000)
+   assert await page.evaluate("state.phase==='replay'"), 'Inspection expired at original deadline'
   await page.locator('#replayImpact').click()
   await page.wait_for_function("JSON.parse(physicsFrame).camera==='side' && JSON.parse(physicsFrame).time===.5")
   assert await page.locator('#contactLegend').is_visible()
@@ -92,7 +98,7 @@ async def main():
   await page.wait_for_function('JSON.parse(physicsFrame).arm.pose.finger_relax===0')
   await page.wait_for_function('godotStats?.crowd_active===false')
   assert not errors,errors
-  report={'repeat_practice_without_damage':True,'idle_material_uploads_skipped':True,'mirror_visibility_updates':True,'pose_camera_and_wheel':True,'crowd_reaction_and_rewind':True,'jump_to_contact':True,'side_camera':True,'marker_toggle':True,'no_stale_markers':True,'errors':errors}
+  report={'repeat_practice_without_damage':True,'idle_material_uploads_skipped':True,'mirror_visibility_updates':True,'pose_camera_and_wheel':True,'crowd_reaction_and_rewind':True,'jump_to_contact':True,'side_camera':True,'marker_toggle':True,'no_stale_markers':True,'errors':errors,'inspection_survives_original_deadline':'--inspect-timeout' in sys.argv}
   if coupled_evidence:report['coupled']=coupled_evidence
   Path('logs/contact-view.json').write_text(json.dumps(report,indent=2));print(json.dumps(report))
   await browser.close()

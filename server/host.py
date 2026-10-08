@@ -144,6 +144,11 @@ async def command(c, d):
         preview=score_contact(d,room["players"][1-me])
         room['practice_done']=True;room['diagnosis']='Probe: '+preview['diagnosis']
         event(room,'practice',diagnosis=room['diagnosis']);await broadcast(room);return
+    if action=='inspect_replay':
+        from replay_timing import extend_inspection
+        if me not in room.get('replay_skip',[]) and extend_inspection(room,d.get('replay_id'),now):
+            await broadcast(room)
+        return
     if action=='skip_replay' and room['phase']=='replay':
         ready=room.setdefault('replay_skip',[])
         if me not in ready:ready.append(me)
@@ -292,7 +297,8 @@ async def tick(app):
                 r['phase']='impact';r['deadline']=now+clip['duration']
                 await broadcast(r)
             elif phase=='impact' and now>=r['deadline']:
-                r['phase']='replay';r['deadline']=now+12.;await broadcast(r)
+                from replay_timing import REPLAY_SECONDS,MAX_REPLAY_SECONDS
+                r['phase']='replay';r['deadline']=now+REPLAY_SECONDS;r['replay_limit']=now+MAX_REPLAY_SECONDS;await broadcast(r)
             elif phase=='replay' and now>=r['deadline']:
                 if r['winner']>=0:
                     r['phase']='over';r['deadline']=0
@@ -408,7 +414,7 @@ async def lifecycle(app):
 
 def main():
     global simulate
-    parser=argparse.ArgumentParser();parser.add_argument('--port',type=int,default=8765);parser.add_argument('--no-browser',action='store_true');parser.add_argument('--no-console',action='store_true');parser.add_argument('--physics',choices=['legacy','coupled','coupled-moving'],default='coupled');args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--port',type=int,default=8765);parser.add_argument('--no-browser',action='store_true');parser.add_argument('--no-console',action='store_true');parser.add_argument('--physics',choices=['legacy','coupled','coupled-moving'],default='coupled-moving');args=parser.parse_args()
     if args.physics in ('coupled','coupled-moving'):
         try:
             if args.physics=='coupled-moving':

@@ -45,6 +45,13 @@ document.getElementById('replayCamera').onchange=e=>camera=e.target.value;
 document.getElementById('replayContact').onclick=()=>showContact=!showContact;
 document.getElementById('replayImpact').onclick=()=>{if(!clip)return;playing=false;replayT=clip.contact;showContact=true;camera='side';document.getElementById('replayCamera').value=camera;};
 document.getElementById('replaySkip').onclick=()=>sendAction({action:'skip_replay'});
+let lastInspection=0;
+function keepReplayForInspection(e){
+ if(state?.phase!=='replay'||!clip||e.target.id==='replaySkip')return;
+ const now=performance.now();if(now-lastInspection<500)return;lastInspection=now;
+ sendAction({action:'inspect_replay',replay_id:state.replay_id});
+}
+for(const event of ['input','change','click'])replayPanel.addEventListener(event,keepReplayForInspection);
 function armAt(t){
  const path=clip.arm_path;if(!path?.length)return null;
  const time=clip.contact_time+(t-clip.contact);
