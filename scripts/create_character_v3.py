@@ -199,7 +199,7 @@ bpy.context.view_layer.objects.active=cap;bpy.ops.object.join();head_parts.appen
 head_parts.append(ell('MouthInterior',(0,-.025,.075),(.026,.009,.010),ink))
 head_parts.append(ell('Teeth',(0,-.026,.081),(.023,.004,.003),white))
 
-body=loft('Shirt',[((0,-.60,-.014),.175,.096),((0,-.51,-.012),.188,.106),((0,-.36,0),.22,.120),((0,-.23,0),.245,.124),((0,-.17,0),.24,.103),((0,-.125,0),.145,.070),((0,-.105,0),.054,.048)],shirt,64)
+body=loft('Shirt',[((0,-.60,-.014),.175,.096),((0,-.51,-.012),.188,.106),((0,-.36,0),.22,.120),((0,-.23,0),.218,.117),((0,-.17,0),.218,.098),((0,-.125,0),.145,.070),((0,-.105,0),.054,.048)],shirt,64)
 neck=loft('Neck',[((0,-.18,0),.070,.060),((0,-.12,0),.057,.05),((0,-.06,-.008),.049,.043)],skin)
 # A true crew-neck rim follows the neck opening instead of floating on the chest.
 collar_points=[(.056*math.cos(i*math.tau/48),-.107-.005*max(0,math.sin(i*math.tau/48)),.050*math.sin(i*math.tau/48)) for i in range(49)]
@@ -372,8 +372,11 @@ for obj in [o for o in bpy.context.scene.objects if o.type=='MESH']:
             p=G(v.co)
             if obj==body:
                 # Smooth armhole ownership: no horizontal cut through the sleeve.
-                arm_weight=smoothstep(.145,.265,abs(p.x))*(1-smoothstep(.285,.365,-p.y))
                 side='L' if p.x>0 else 'R'
+                shoulder=Vector(bones['upper_arm.'+side][0])
+                upper_axis=(Vector(bones['upper_arm.'+side][1])-shoulder).normalized()
+                along=(p-shoulder).dot(upper_axis)
+                arm_weight=smoothstep(-.035,.075,along)*smoothstep(.16,.23,abs(p.x))*(1-smoothstep(.31,.39,-p.y))
                 groups['chest'].add([v.index],1-arm_weight,'REPLACE')
                 groups['upper_arm.'+side].add([v.index],arm_weight,'REPLACE')
                 continue

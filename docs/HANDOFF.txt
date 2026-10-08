@@ -929,3 +929,16 @@ Schulter-/Aermelformen verbleiben: Modell/Weights weiterhin visuell zu verbesser
 Kein Nachweis, dass XIII-Artziel oder menschliche Verstaendlichkeit erreicht ist.
 Diese Aenderung betrifft sichtbare Kinematik; neuer physikalischer Laborpfad
 weiterhin separat und nicht in Match integriert.
+
+ERSTE SCHULTERFORM-KORREKTUR IM BLENDER-ASSET
+Obere Torso-Loftbreite von .245/.240 auf .218 m reduziert, Tiefe leicht reduziert.
+Shirtgewicht folgt nun Projektion auf Oberarmachse plus weichem Armlochbereich,
+nicht allein horizontaler X-Position. Quelle, GLB und Blender-Vorschau regeneriert.
+Export87985 Polygone, Shirt7732 Vertices in einer Komponente; Character-/Closed-
+Hand-/Kontaktvalidator PASS mit unveraenderten116 Kontakt-Samples. Handkontakt-
+JSON und Gesichts-Kollisionsdaten im Gitdiff unveraendert. Webbuild erfolgreich.
+Browser replay_contact_view alle Assertions bestanden, errors[]. Neue Seiten-
+ansicht pose-inspection.png gesichtet: Schulterverlauf schmaler; Aermelform und
+Armlochschatten weiterhin steif/kantig. Kein fertiger Referenzlook behauptet.
+Naechster visueller Schritt: Aermeluebergang bei angehobenem und abgesenktem Arm
+gezielt formen/pruefen; nicht nur weitere Polygonzahl oder UI-Hinweise erhoehen.
