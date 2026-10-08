@@ -1,0 +1,27 @@
+{
+  "render_check": "Four skin variants: healthy, moderate, severe, restored healthy. Final healthy image equals initial image byte-for-byte including mirror.",
+  "scope": "Visual lid edema and periorbital bruising driven by existing side damage; no change to physical collision cage or scoring.",
+  "browser": {
+    "repeat_practice_without_damage": true,
+    "idle_material_uploads_skipped": true,
+    "mirror_visibility_updates": true,
+    "pose_camera_and_wheel": true,
+    "crowd_reaction_and_rewind": true,
+    "jump_to_contact": true,
+    "side_camera": true,
+    "marker_toggle": true,
+    "no_stale_markers": true,
+    "errors": [],
+    "coupled": {
+      "backend": "coupled",
+      "solve_ms": 1394.5,
+      "peak": 0.005647999999999999,
+      "contact_diagnostics": {
+        "maximum_wrist_separation_m": 7.579995703145355e-06,
+        "maximum_penetration_m": 3.7731477403923112e-06,
+        "unconverged_steps": 14,
+        "maximum_material_residual_m": 0.00015898748839523623
+      }
+    }
+  }
+}

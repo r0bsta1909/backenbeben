@@ -19,6 +19,11 @@ vec3 deform_face(vec3 p) {
         p += side_cage_enabled ? side_displacement(p) : displacement(p)*front;
         float swelling = (p.x<0.0?injury_left:injury_right)*exp(-pow((abs(p.x)-0.28)/0.17,2.0)-pow((p.y-0.17)/0.2,2.0))*front;
         p.z += swelling*0.035;
+        // Local lid swelling narrows the struck eye; the eyeball stays rigid.
+        float eye_injury=smoothstep(.25,1.0,p.x<0.0?injury_left:injury_right);
+        float lid=exp(-pow(abs((abs(p.x)-.1524)/.074),4.0)-pow(abs((p.y-.36)/.065),4.0))*front;
+        p.y+=(.36-p.y)*lid*eye_injury*.82;
+        p.z+=lid*eye_injury*.018;
         float jaw = (1.0-smoothstep(-0.30,0.03,p.y))*smoothstep(-0.52,-0.3,p.y)*front;
         vec2 hinge=p.yz-vec2(-0.056,-0.096);
         float opening=jaw*jaw_angle;

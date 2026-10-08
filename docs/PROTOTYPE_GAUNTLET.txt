@@ -355,3 +355,18 @@ nennt dies. Phasewechsel loescht lokale Probewahl. Echter Browsercheck erweitert
 erste Probe, Button, zweite Probe mit Eventpractice/hits0/phaseaim, danach Schlag
 und vollstaendige Replaykontrollen PASS, errors[]. Beleg repeat-practice.json.
 Keine neue menschliche Verstaendlichkeitsabnahme; G3 bleibt offen.
+
+G2/G5 GESCHWOLLENE AUGEN ALS SICHTBARE VERLETZUNGSSTUFE
+Seitlicher Schaden verengt jetzt das betroffene Lid und faerbt die Augenregion;
+Augapfel bleibt starr, Gegenseite bleibt offen. Gemeinsame Deformation fuer Haut
+und Kontur, gleiche Parameter fuer Gegner und eigenen Spiegel. Es handelt sich
+um visuelle Zustandsanzeige, nicht anatomisch geloeste Verletzungsphysik; Kontakt-
+kaefig/Wertung unveraendert. Erster Shaderentwurf erzeugte bei negativen Basen
+von pow(x,4) ungueltige Geometrie; abs korrigiert, Render danach erneut gesichtet.
+Neuer reproduzierbarer Test tests/injury_preview.gd rendert4Hautvarianten mit
+0/35/75/0Seitenschaden; gesunder Endzustand pixelgleich zum Anfang inkl.Spiegels.
+Native Vorschau benoetigt explizites Viewportupdate, da Hauptprozess angehalten
+ist. Helle/dunkle schwere Verletzung mit korrektem Spiegel gesichtet. Webbuild
+und Browserkontakt-/Wiederholprobe-/Replay-/Spiegelcheck PASS,errors[]. Belege
+validation/swollen-eyes.json und swollen-eye-light/dark.png. Keine neue menschliche
+Abnahme oder Gesamtabnahme; Goal/Gates weiterhin offen.
