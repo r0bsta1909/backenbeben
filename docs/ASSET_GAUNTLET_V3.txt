@@ -276,3 +276,20 @@ Historische Laborprofile mit 114 Punkten beschreiben den vorherigen Handstand;
 weitere Physik-/Konvergenzmessungen muessen die aktuelle 113-Punkte-Hand nutzen.
 Stil-/Spielgefuehl-Abnahme weiterhin offen. Schulterformen, Gesichtsschraffur,
 Publikum und neue gekoppelte Echtzeitphysik bleiben weitere Arbeitsfelder.
+
+SCHULTER-/AERMELUEBERGANG UEBERARBEITET
+Separate ellipsoidfoermige Schulterpolster entfernt. Aermelquerschnitte laufen
+jetzt entlang einer gekruemmten Verbindung aus dem Rumpf in den Oberarm.
+Erster Versuch mit Wurzel direkt am Schultergelenk war visuell durchgefallen:
+harte sichtbare Rohrenden. Wurzel danach in den Rumpf bei x=+/-0.165,y=-0.205
+gelegt, Uebergang erneut exportiert und im Browser geprueft.
+Endstand bildet ein zusammenhaengendes Kleidungsmesh (7,802 Vertices);
+Assetvalidator prueft jetzt auch Shirt-Konnektivitaet. 88,190 Gesamtpolygone.
+Handkontaktmesh, Fingerknochen und Gesichts-Kollisionsmesh unveraendert.
+Assetpruefung, Webexport und Browser-Kontaktreplay bestanden; keine Browser-
+fehler. Kontaktpose und Rueckfuehrpose selbst gesichtet. Screenshot:
+validation/shoulder-continuous-recovery.png; Nachweis shoulder-continuous.json.
+Neue Kleidung im Webbuild aktiv. Schulterpolster/harte Rohrenden entfernt,
+aber Falten und Schattierung noch grob. Kein bestandenes Stilgate und keine
+menschliche Gameplay-Abnahme. Weitere sichtbare Prioritaeten sind Gesicht/
+Materialwirkung und TV-Umgebung; gekoppelte Laborphysik bleibt separat offen.

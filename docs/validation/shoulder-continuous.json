@@ -1,0 +1,16 @@
+{
+  "asset_validation": true,
+  "shirt_connected_components": 1,
+  "shirt_vertices": 7802,
+  "total_polygons": 88190,
+  "contact_samples_unchanged": 113,
+  "web_export": true,
+  "browser_replay": {
+    "jump_to_contact": true,
+    "side_camera": true,
+    "marker_toggle": true,
+    "no_stale_markers": true,
+    "errors": []
+  },
+  "style_accepted": false
+}

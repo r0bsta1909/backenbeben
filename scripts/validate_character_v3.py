@@ -1,6 +1,6 @@
 """Run with Blender -b assets-source/character-v3.blend --python this_file."""
 import bpy,bmesh
-for name in ['ArmSkin.R','ArmSkin.L']:
+for name in ['ArmSkin.R','ArmSkin.L','Shirt']:
  o=bpy.data.objects[name];bm=bmesh.new();bm.from_mesh(o.data);seen=set();sizes=[]
  for start in bm.verts:
   if start in seen:continue
