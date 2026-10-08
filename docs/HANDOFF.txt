@@ -1605,3 +1605,18 @@ Probe/Replay/Spiegel/Ruecklauf,errors[]. Front-/Weitwinkelkontakt gesichtet:
 Schulterkappen reduziert, erhobener Aermel verbunden; Gesamtfiguren weiterhin
 steifer als Referenz. Beleg validation/shoulder-tailoring.json/png.
 KeineArt- odermenschlicheBedienabnahme,Goalweiteraktiv. Host8877Checkout.
+
+G8 PROTOTYP08 FRISCH GEPRUEFT UND VEROEFFENTLICHT
+Quelle c24b7bc1a29c0e84e6a7b50c475249f82ae9569f,64Dateien,23713923Bytes.
+SHA256 b63ffd99a35104b6c234306202159a0ab5e05515a9d5d25bcecd9a65ba8dd499.
+Setup mit explizitemPython3.12 erzeugt frischevenv ausserhalbCheckout. Alle64
+Dateien bytegleich zur laufendenInstallation. START_HOST ohnePhysicsOverride:
+dreiKopfachsen,KO3Treffer undStandard10Treffer,Anspannen,identischeClips,Resume,
+Verletzungsruecklauf,KO-Ruecklauf,Revanche PASS,errors[]. Replayp95je14ms.
+153QuelltestsPASS. GitHubReleasev0.8.0-dev.20261008 erstellt,DownloadSHAidentisch.
+Beleg validation/v08-package.json. README/Status/Plan aufneuesPaketabgeglichen.
+Host8877 laeuftJETZT AUS PAKET Temp/backenbeben-v08-rn9jkj0y,Session88801.
+Vor weiterenQuelltests CheckoutHost wiederstarten. GesamtzielweiterOFFEN:
+Figurenbewegung/Referenzlook,physikalischeModellgrenzen,menschlicheBedienabnahme.
+NaechsterProduktdurchlauf: auffaelligsteFiguren-/Helferbewegung imKOundSchwung
+verbessern; keineweitereisoliertePhysiklaborkette. Zwei-PC-Nachweisweiteroffen.

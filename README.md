@@ -6,12 +6,13 @@ Der Look orientiert sich an kantiger Comicgrafik und dem ursprünglichen XIII.
 
 ## Aktueller Stand
 
-Der aktuelle [Prototyp 07](https://github.com/r0bsta1909/backenbeben/releases/tag/v0.7.0-dev.20261008)
+Der aktuelle [Prototyp 08](https://github.com/r0bsta1909/backenbeben/releases/tag/v0.8.0-dev.20261008)
 enthält anatomische Arm-/Handmodelle, körpergebundene seitliche Schläge und vom Host
 aufgezeichnete Kontakt-/Gesichtsreplays. Weitere schadensfreie Probeschwünge sind
 wählbar; Verletzungen und geschwollene Augen erscheinen auch im eigenen Spiegel.
-Der Kontaktimpuls steuert die Wirkung; Kopfverschiebung und seitliche Drehung
-sind mit dem Gewebe gekoppelt. Modellierte Stofffalten und Zuschauer ergänzen die Comicfiguren.
+Der Kontaktimpuls steuert die Wirkung; Kopfverschiebung und Drehung um drei Achsen
+sind mit dem Gewebe gekoppelt. Eine konkretere Mausradhilfe begleitet die Proben; Gesichtstextur und
+Schulterform sind überarbeitet. Modellierte Stofffalten und Zuschauer ergänzen die Comicfiguren.
 
 Standardkampf, KO, Replay-Rücklauf, Wiedereinstieg und Revanche sind mit zwei
 Browserclients geprüft. Das Hostpaket wurde außerhalb des Projekts mit frischer
@@ -25,7 +26,7 @@ Kopf/Kiefer, Wertung und KO verwenden teilweise vereinfachte Modelle. Der
 [verbindliche Gauntlet](docs/PROTOTYPE_GAUNTLET.txt) nennen die offenen Anforderungen.
 Die [Konzeptbilder](docs/art-direction-v3/03-first-person.png) bleiben das Stilziel.
 
-![Seitlicher Kontakt im aktuellen Browserprototyp](docs/validation/official-composition-wide.png)
+![Seitlicher Kontakt im aktuellen Browserprototyp](docs/validation/shoulder-tailoring.png)
 
 ## Spielen unter Windows
 

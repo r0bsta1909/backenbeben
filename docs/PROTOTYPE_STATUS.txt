@@ -5,8 +5,8 @@ Diese Uebersicht trennt Liefergegenstaende, vorhandene Nachweise und offene Arbe
 G1 / INVENTAR
 Quelle: game/, server/, scripts/, tests/; Blender: assets-source/character-v3.blend.
 Gauntlet und historische Entscheidungen: PROTOTYPE_GAUNTLET.txt, HANDOFF.txt.
-Oeffentliches v0.7-Hostpaket ist aelter als der aktuelle Quellstand: drei Kopfachsen,
-Gesichtstextur V2, konkrete Mausradhilfe und Schulterkorrektur fehlen im Archiv.
+Oeffentliches v0.8-Hostpaket enthaelt drei Kopfachsen, Gesichtstextur V2, konkrete
+Mausradhilfe und Schulterkorrektur. Frische Paketpruefung: validation/v08-package.json.
 
 G2 / FIGUREN UND COMICSTIL — OFFEN
 Vorhanden: anatomischer Kopf, Arme/Haende, vollstaendiges Rig, Haargeometrie,
