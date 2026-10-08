@@ -377,23 +377,24 @@ for obj in [o for o in bpy.context.scene.objects if o.type=='MESH']:
                 groups['chest'].add([v.index],1-arm_weight,'REPLACE')
                 groups['upper_arm.'+side].add([v.index],arm_weight,'REPLACE')
                 continue
+            rank=sorted((distance(p,Vector(bones[k][0]),Vector(bones[k][1])),k) for k in candidates)
+            chosen=rank[:2] if rank[0][1].startswith(('upper','forearm','hand')) else rank[:1]
+            values=[1/(d+.008)**4 for d,k in chosen];total=sum(values)
+            weights={k:w/total for (d,k),w in zip(chosen,values)}
             if obj.name.startswith('ArmSkin.'):
                 side=obj.name[-1]
                 wrist=Vector(bones['hand.'+side][0])
                 axis=(Vector(bones['hand.'+side][1])-wrist).normalized()
                 along=(p-wrist).dot(axis)
-                # Explicit longitudinal wrist blend prevents nearest-bone weights
-                # from collapsing a sharp ring when the palm turns upright.
-                if -.045 < along < .035:
-                    hand_weight=smoothstep(-.045,.035,along)
-                    groups['hand.'+side].add([v.index],hand_weight,'REPLACE')
-                    groups['forearm_twist.'+side].add([v.index],1-hand_weight,'REPLACE')
-                    continue
-            rank=sorted((distance(p,Vector(bones[k][0]),Vector(bones[k][1])),k) for k in candidates)
-            # Smooth joints but no bleeding from neighbouring fingers.
-            chosen=rank[:2] if obj==body or rank[0][1].startswith(('upper','forearm','hand')) else rank[:1]
-            weights=[1/(d+.008)**4 for d,k in chosen];total=sum(weights)
-            for (d,k),w in zip(chosen,weights):groups[k].add([v.index],w/total,'REPLACE')
+                # Blend the wrist rule into neighbouring skinning; hard branch
+                # boundaries previously stretched single edges by up to 10x.
+                blend=smoothstep(-.075,-.045,along)*(1-smoothstep(.035,.060,along))
+                hand_weight=smoothstep(-.045,.035,along)
+                weights={k:w*(1-blend) for k,w in weights.items()}
+                for k,w in [('hand.'+side,hand_weight),('forearm_twist.'+side,1-hand_weight)]:
+                    weights[k]=weights.get(k,0)+blend*w
+            for k,w in weights.items():
+                if w>1e-8:groups[k].add([v.index],w,'REPLACE')
     else:
         group=obj.vertex_groups.new(name=fixed);group.add(list(range(len(obj.data.vertices))),1,'REPLACE')
     mod=obj.modifiers.new('Character skeleton','ARMATURE');mod.object=rig;obj.parent=rig

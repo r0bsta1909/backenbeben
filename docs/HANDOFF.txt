@@ -561,3 +561,22 @@ Falten-/Schattenartefakte an der Handwurzel bleiben. Kein kompletter Schulter-
 Dynamiksolver: Polanhebung ist weiterhin eine positionsabhaengige kinematische
 Regel. Stil, Physik und menschliche Verstaendlichkeitsabnahme bleiben offen.
 Nachweise validation/elbow-reach.json und elbow-reach-ready.png.
+
+HANDWURZEL: HARTE SKINNINGGRENZE ENTFERNT
+Ursache der Zacken messbar in Blender: explizite Wrist-Gewichtung endete bei
+along=-.045/.035 abrupt und sprang auf naechste-Knochen-Gewichtung. Kanten in
+vier Posen bis 10.37x Ruhelaenge gestreckt. Jetzt weiche Ein-/Ausblendung der
+Wrist-Regel ueber -.075..-.045 bzw. .035...060 m, normierte Gewichtsmischung.
+Identische Topologie/88,190 Polygone; Blenderquelle, Preview und GLB neu exportiert.
+Maximale Kantenstreckung in denselben vier Posen jetzt 2.74x; p95 maximal 1.34x.
+Das ist ein lokaler Verzerrungsnachweis, keine anatomische Materialvalidierung.
+Neuer Audit scripts/audit_wrist_skinning.py kombiniert Blender-Hostkontaktabgleich
+mit Regressionsgrenzen <3x Einzelkante / <1.5x p95 im untersuchten Wrist-Bereich.
+Beide Arme erhalten dieselbe Regel; quantitativer Posen-Audit bisher rechte Hand.
+116 exportierte Kontaktsamples (vorher 113): Gewichte beeinflussen Thumb-Ausschluss.
+Kontaktwerte nicht von alter Tabelle weiterverwendet; Testhost neu gestartet.
+Assetvalidator, Blender-Skinningabgleich, 67 Pythontests und Browserreplay bestanden.
+Bereitschaftsbild nach Export selbst gesichtet: gezackte Querfalte deutlich geglaettet.
+Kontaktklassen des Standardtests unveraendert. Geometrie bleibt in starken Posen
+verzerrt; perfekter Artstyle/physikalisches Hautmodell damit nicht nachgewiesen.
+Nachweise validation/wrist-blend.json und wrist-blend-ready.png.

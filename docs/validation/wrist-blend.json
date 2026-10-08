@@ -1,0 +1,76 @@
+{
+  "before": [
+    {
+      "edges": 8039,
+      "max_edge_stretch": 4.457682541849469,
+      "p95_edge_stretch": 1.1660011766969245
+    },
+    {
+      "edges": 8039,
+      "max_edge_stretch": 9.313052105372106,
+      "p95_edge_stretch": 1.3668896291816748
+    },
+    {
+      "edges": 8039,
+      "max_edge_stretch": 10.3700271588154,
+      "p95_edge_stretch": 1.4192415204579913
+    },
+    {
+      "edges": 8039,
+      "max_edge_stretch": 4.670856890711666,
+      "p95_edge_stretch": 1.1681700390869187
+    }
+  ],
+  "after": [
+    {
+      "edges": 8039,
+      "max_edge_stretch": 2.042455032588795,
+      "p95_edge_stretch": 1.1314042746464934
+    },
+    {
+      "edges": 8039,
+      "max_edge_stretch": 2.5654950451670313,
+      "p95_edge_stretch": 1.294316733483746
+    },
+    {
+      "edges": 8039,
+      "max_edge_stretch": 2.7398957754441815,
+      "p95_edge_stretch": 1.338730155099001
+    },
+    {
+      "edges": 8039,
+      "max_edge_stretch": 1.9838279354615216,
+      "p95_edge_stretch": 1.137330010231063
+    }
+  ],
+  "contact_skinning": [
+    {
+      "maximum_error_m": 2.4601022870986247e-07,
+      "mean_error_m": 1.4187888137018184e-07
+    },
+    {
+      "maximum_error_m": 2.2463222491266332e-07,
+      "mean_error_m": 9.213308597486973e-08
+    },
+    {
+      "maximum_error_m": 2.287662675855125e-07,
+      "mean_error_m": 9.278167814277192e-08
+    },
+    {
+      "maximum_error_m": 2.640492490927778e-07,
+      "mean_error_m": 1.4236318415037616e-07
+    }
+  ],
+  "python_tests_passed": 67,
+  "contact_samples": 116,
+  "browser": {
+    "mirror_visibility_updates": true,
+    "pose_camera_and_wheel": true,
+    "crowd_reaction_and_rewind": true,
+    "jump_to_contact": true,
+    "side_camera": true,
+    "marker_toggle": true,
+    "no_stale_markers": true,
+    "errors": []
+  }
+}
