@@ -2152,3 +2152,17 @@ historisches Browserpaket vor Ausschnitt und nativem Parser-/Buildfix.
 Goal aktiv; Gesamtstil/Menschabnahme weiter offen. Naechster G2/G4-Schritt:
 Kopf-/Halsverbindung bei deutlicher Nachbewegung und KO markerfrei pruefen,
 nicht allein neutrale Frontansicht als Beleg fuer alle Posen verwenden.
+
+G4 KO-KAMERA UND HALS IN BEWEGUNG
+Markerfreie KO-Aufnahmen bei .75/1.3/2.4s aus Front/Seite/Totale erzeugt.
+Front2.4 und Seite1.3 visuell geprueft: Hals/Kragen zusammenhaengend; vorher
+sank der Kopf hinter die Replaybedienung. Front/Seite folgen jetzt zu80% dem
+aufgezeichneten Kollaps am Kopfursprung; Totale unveraendert. Keine Aenderung
+an Koerper-/Kontaktphysik. Pausen bleiben stabil, Ruecklauf stellt die originale
+Kontaktkamera exakt wieder her (tests/ko_camera.gd PASS). Frischer Webbuild und
+vollstaendiger Standardkampf bisKO/Replay/Resume/Revanche PASS, Exit0.
+Beleg validation/ko-camera-follow.json und zwei markerfreie Aufnahmen.
+Gefuehrter Kollaps bleibt vereinfachte Animation, keine vollstaendige Ragdoll.
+Goal aktiv. Naechster Gesamtprodukt-Schritt: Helferabstand und Kopfueberdeckung
+im KO pruefen, dann aktuellen Asset-/Build-/Kamerastand ins Release integrieren.
+V12 liegt weiterhin vor Crewneck/Buildguard/Kamera. Menschabnahme offen.

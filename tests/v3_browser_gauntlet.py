@@ -161,6 +161,18 @@ async def main():
                     assert ko_clip['ko'] and len(ko_clip['body_frames'])==337
                     assert ko_clip['body_frames'][-1][0]>.20
                     report['ko_body_recorded']=True
+                    if '--inspect-ko-views' in sys.argv:
+                        if (await attacker.locator('#replayContact').inner_text())=='PUNKTE AN':await attacker.locator('#replayContact').click()
+                        report['ko_views']=[]
+                        for camera in ['front','side','wide']:
+                            await attacker.locator('#replayCamera').select_option(camera)
+                            for moment in [.75,1.3,2.4]:
+                                await attacker.locator('#replaySeek').evaluate('(e,t)=>{e.value=t;e.dispatchEvent(new Event("input",{bubbles:true}))}',moment)
+                                await attacker.wait_for_function('(t)=>Math.abs(godotStats.physics_time-t)<.02',arg=moment)
+                                await attacker.wait_for_timeout(100)
+                                await attacker.screenshot(path=f'logs/ko-view-{camera}-{moment}.png')
+                                report['ko_views'].append({'camera':camera,'time':moment,'actual_time':await attacker.evaluate('godotStats.physics_time'),'markers':False})
+
                     await attacker.locator('#replaySeek').evaluate('e=>{e.value=2;e.dispatchEvent(new Event("input",{bubbles:true}))}')
                     await attacker.locator('#replayCamera').select_option('wide')
                     await attacker.wait_for_timeout(250)

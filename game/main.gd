@@ -548,6 +548,10 @@ func drive_recorded_physics() -> void:
 		var body_frame: Array=physics_frame.get("body",[0,0,0,0,0])
 		var target_view: Node3D=fighter if replaying or int(physics_frame.target)!=you else reflection
 		target_view.apply_collapse(body_frame)
+		if replaying and bool(physics_frame.get("ko",false)) and not wide_view:
+			# Follow the recorded collapse, never wall-clock interpolation: reverse
+			# seeking restores the exact contact framing and leaves physical poses intact.
+			camera.position+=fighter.global_basis*fighter.collapsed_point(Vector3.ZERO)*.8
 	var guard_body: Array=physics_frame.get("body",[0,0,0,0,0])
 	defending_view.pose_defender(1.0-smoothstep(.02,.25,float(guard_body[0])))
 	if contact_marks.is_empty():
