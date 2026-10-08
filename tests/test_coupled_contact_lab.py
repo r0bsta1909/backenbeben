@@ -19,4 +19,19 @@ class CoupledLabTests(unittest.TestCase):
   b=run(fps=1920,duration=0,attached=True)
   for key in ['initial_velocity','initial_angular_velocity','initial_joint_velocity','hand_local']:
    self.assertEqual(a[key],b[key])
-  self.assertLess(a['initial_velocity'][0],-.9)
+  self.assertLess(a['initial_velocity'][0],0.)
+
+ def test_real_strike_velocity_is_used_without_mutating_input(self):
+  import copy
+  from contact_v3 import score
+  from coupled_contact import simulate_contact
+  scored=score({'version':3,'points':[[.19+.34*i/40,.6,800*i/40,0,-15,0] for i in range(41)]})
+  before=copy.deepcopy(scored)
+  result=simulate_contact(scored,attached=True,duration=0)
+  self.assertEqual(result['initial_joint_velocity'],scored['impact_joint_velocity'])
+  self.assertEqual(scored,before)
+  scored['impact_joint_velocity']=[0.,0.,0.]
+  still=simulate_contact(scored,attached=True,duration=1/960)
+  self.assertEqual(still['initial_velocity'],[0.,0.,0.])
+  self.assertLess(still['peak_deformation_m'],1e-12)
+

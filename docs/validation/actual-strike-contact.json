@@ -1,0 +1,76 @@
+{
+  "initial_energy_j": {
+    "hand_translation": 0.0540519494970139,
+    "hand_rotation": 0.00016212135310157957,
+    "tissue_kinetic": 0.0,
+    "tissue_edges": 0.0,
+    "tissue_volumes": 0.0,
+    "arm_kinetic": 0.630693302591353,
+    "attachment": 0.0,
+    "total": 0.6849073734414685
+  },
+  "final_energy_j": {
+    "hand_translation": 0.0732919054259966,
+    "hand_rotation": 0.0007205202853848319,
+    "tissue_kinetic": 3.531215188867855e-24,
+    "tissue_edges": 2.443384448441053e-22,
+    "tissue_volumes": 4.191695577561201e-26,
+    "arm_kinetic": 0.425585034883159,
+    "attachment": 0.00010294964589005548,
+    "total": 0.4997004102404305
+  },
+  "explicit_damping_loss_j": 9.108470139131815e-06,
+  "residual_tolerance_m": 1e-06,
+  "initial_velocity": [
+    -0.7522507075516383,
+    -0.024216357162598623,
+    -0.184688000875316
+  ],
+  "initial_angular_velocity": [
+    -0.6349708670997218,
+    -0.5723096265352489,
+    -0.128048930530045
+  ],
+  "iterations_cap": 64,
+  "unconverged_steps": 19,
+  "maximum_material_residual_m": 6.054400127785515e-05,
+  "compiled_embedding": true,
+  "attached": true,
+  "initial_penetration_m": 0.0,
+  "maximum_wrist_separation_m": 0.002212419006371979,
+  "maximum_bond_residual_m": 1.932182879378283e-06,
+  "initial_joint_velocity": [
+    -1.3758598325057396,
+    1.537916621342285,
+    -3.7056652145125817
+  ],
+  "final_joint_velocity": [
+    1.6327234631064425,
+    1.0626761415189234,
+    -2.570236261119412
+  ],
+  "fps": 960,
+  "duration": 0.06,
+  "hand_samples": 116,
+  "peak_active_contacts": 4,
+  "peak_deformation_m": 0.0010155861363074694,
+  "maximum_penetration_m": 3.575456409937592e-06,
+  "final_velocity": [
+    0.8121697161990848,
+    -0.035106258907389165,
+    -0.3917938327844389
+  ],
+  "final_angular_velocity": [
+    -0.4208487756402537,
+    -2.9808786436518355,
+    -0.1974749513722828
+  ],
+  "solve_ms": 6801.860699997633,
+  "limits": [
+    "diagonal joint inertia, stationary torso, no active muscle drive",
+    "laboratory box inertia",
+    "no friction",
+    "not active in matches"
+  ],
+  "source": "Actual score(stroke()) incoming joint velocity; no imposed laboratory strike velocity"
+}

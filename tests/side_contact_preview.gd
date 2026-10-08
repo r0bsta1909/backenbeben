@@ -1,7 +1,10 @@
 extends SceneTree
 func _initialize() -> void:call_deferred("verify")
 func verify() -> void:
-	var record: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://../logs/side-contact-lab.json"))
+	var record_path := "res://../logs/side-contact-lab.json"
+	for arg in OS.get_cmdline_user_args():
+		if arg.begins_with("--record="):record_path=arg.trim_prefix("--record=")
+	var record: Dictionary=JSON.parse_string(FileAccess.get_file_as_string(record_path))
 	var scene=load("res://main.tscn").instantiate();root.add_child(scene);scene.set_process(false)
 	root.size=Vector2i(1280,960)
 	scene.apply_fighter(scene.fighter,{"skin":0,"shirt":0,"hair":0},true)

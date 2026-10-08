@@ -154,3 +154,24 @@ errors[]. Beleg validation/standard-duel.json. Individuelle Teststeuerung und
 Markerpruefung ersetzen weiterhin keine menschliche Bedienbarkeitsabnahme.
 Naechster wesentlicher Integrationsschritt bleibt G4: aktive seitliche Gewebereaktion
 an dieselbe Kontaktgeometrie anschliessen; nicht weitere isolierte Laborbausteine.
+
+G4 ECHTE SCHLAGDATEN AN GEKOPPELTEN KONTAKT UEBERGEBEN
+score zeichnet incoming Gelenk-/Wristgeschwindigkeit vor dem kinematischen
+Kontaktstopp auf. Gekoppelter Kern aus Skript nach server/coupled_contact.py
+extrahiert; nimmt scored entgegen und nutzt echte Gelenkgeschwindigkeiten sowie
+skin_state. Alte feste Laboranregung entfernt. Skript bleibt reproduzierbarer
+Aufrufer. Eingangszustand unveraendert, Stillstand erzeugt keine Deformation;
+111 Python-Tests bestanden. Historischer dt-Test prueft weiterhin identischen
+Anfangszustand, die auf erfundener1m/s-Laboranregung beruhende -.9m/s-Grenze durch
+explizite Gleichheit mit aufgezeichneten Gelenkgeschwindigkeiten ersetzt.
+Beleg validation/actual-strike-contact.json:60ms Kontakt,116 Samples,1.016mm Peak,
+6.80s Berechnung,2.21mm maximale Wristbindungsluecke,19 Schritte ueber1um Restfehler.
+Native Godot-Vorschau des realen Offsetfelds:6293 geaenderte Farbkanaele, sichtbarer
+Gesichtsshader geprueft; Vorschau zeigt keine gekoppelte Armbewegung und ist kein
+Matchnachweis. Ein einzelner einmaliger Geschwindigkeitsimpuls wurde ebenfalls
+geprueft: nur4.25um Verformung, daher nicht als Ersatz aktiviert.
+INTEGRATIONSENTSCHEIDUNG: neuen Kern noch nicht als Matchdefault aktivieren.
+Konkrete verbleibende Arbeit: kontinuierlichen Arm-/Handpfad samt Rueckholung aus
+gekoppeltem Kontakt aufbauen, Bindungsluecke beherrschen und Laufzeit unter das
+Schlagvorbereitungsfenster bringen. Keine weitere losgeloeste Physikfunktion.
+Alter Matchpfad bleibt aktiv; G4 weiterhin OFFEN, keine volle Kopplung behauptet.
