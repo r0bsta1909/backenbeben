@@ -10,7 +10,7 @@ META=json.loads((Path(__file__).resolve().parents[1]/'game/assets/character_v3.j
 L1=META['arms']['R']['upper_length']; L2=META['arms']['R']['forearm_length']
 SHOULDER=(.235,-.16,.525)
 DT=1/240
-LIMITS=((-1.65,1.65),(-1.1,1.3),(.09,2.55))
+LIMITS=((-1.65,1.65),(-1.55,1.3),(.09,2.55))
 INERTIA=(.14,.16,.045); MAX_TORQUE=(38.,42.,20.)
 
 def add(a,b):return tuple(x+y for x,y in zip(a,b))

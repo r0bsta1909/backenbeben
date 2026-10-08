@@ -1,0 +1,24 @@
+{
+  "scope": "Coupled contact plus driven recovery; integration candidate, not match default",
+  "transition_wrist_step_m": 0.002664636940772718,
+  "transition_palm_step_deg": 0.6993744815902636,
+  "final_wrist_m": [
+    0.34738235763916875,
+    -0.6678163341611624,
+    0.45538910581085373
+  ],
+  "final_finger_direction": [
+    0.3071966205365568,
+    -0.8756801670389234,
+    -0.3725781547348132
+  ],
+  "rendered_joint_tolerance_m": 1e-05,
+  "rendered_times_after_transition_s": [
+    0,
+    0.04,
+    0.2,
+    0.6,
+    1.35
+  ],
+  "python_tests": 115
+}

@@ -194,3 +194,22 @@ Beleg validation/coupled-arm-contact.png und rigid-wrist-contact.json. Es handel
 sich um Kontaktvorschau, nicht den aktivierten Matchpfad oder fertigen Gesamtclip.
 14 Schritte bleiben ueber1um numerischer Restfehlertoleranz. Naechste Integration:
 kontinuierlicher Kontakt-/Rueckholclip; danach Laufzeit und reale Matchpruefung.
+
+G4 KONTAKT IN DURCHGEHENDE RUECKHOLUNG UEBERFUEHRT
+server/coupled_recovery.py behaelt Schlagpfad bisKontakt und geloeste Kontaktframes
+unveraendert; startet Rueckholung mit letzten Gelenkgeschwindigkeiten und echter
+Handorientierung. Auslaufende Winkelgeschwindigkeit wird gedaempft, Haltung erst
+nach Freiziehen zur Ruheausrichtung gefuehrt. Kollisionspruefung verwendet dieselbe
+jeweilige Handorientierung wie das sichtbare Mesh. Posegrenzen/Segmentlaengen und
+Face-/Pultfreiheit im gesamten Rueckholabschnitt geprueft. Kein Reset auf alten Clip.
+Erste Endpose blieb vorBauch: Schulter-Minimum-1.1rad verhinderte abgesenkten Arm.
+Minimum auf-1.55rad erweitert, restliche Gelenk-/Drehmomentgrenzen unveraendert.
+Finale Hand(.347,-.668,.455)m, Finger zeigen entlang Unterarm nachunten. Fuenf
+native Spielrenderpunkte mit tatsaechlichem Skelettabgleich<1e-5m bestanden.
+Endpose visuell gesichtet; keine Referenzstilabnahme daraus abgeleitet.
+115 Python-Tests bestanden, Armpruefclips regeneriert (kein Datendiff), Webbuild
+und Browser-Replaycheck erfolgreich, errors[]. Testhost8877 Execsession10448.
+Belege validation/coupled-recovery.json und coupled-recovery-rest.png.
+Der neue Kontakt-Rueckholpfad bleibt Integrationskandidat: noch kein kompletter
+Gewebeclip im Matchdefault, Laufzeit weiterhin offen. Naechster Schritt ist der
+vollstaendige Replayadapter samt Gewebenachlauf und dessen Matchpruefung.
