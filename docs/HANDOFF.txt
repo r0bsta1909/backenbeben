@@ -2102,3 +2102,19 @@ Browserfehler leer. Beleg validation/cpu-phase-profile.json.
 Goal aktiv. Naechster Schritt: Renderkosten und Konkurrenz zweier Browser auf
 demselben Rechner trennen; keine weitere Optimierung dieser CPU-Abschnitte auf
 Verdacht. V11-Download bleibt historisch, Gesamtziel weiterhin offen.
+
+G8 EIN BROWSER AUF DEM SPIELERRECHNER
+Gemeinsame Frameinstrumentierung in tests/browser_phase_profile.js extrahiert;
+LAN-Test und neuer single_browser_performance.py nutzen denselben Code.
+Ein Headless-Chrome1920x1080 plus lokaler Host, Standardtraining mit echten
+Mauszuegen und Bot:5Treffer beobachtet, beide Rollen und laufendes Replay erfasst.
+Ryzen53600/RTX2080/15.9GiB. Median13.9ms; p95 Idle/Schwung/Replay20.9ms,
+Angreifer-Impact34.8ms, Empfaenger20.9ms. Angreifermax66ms (1Frame>50ms).
+Vorher zwei Browser: Angreiferp95 62.6ms. Unterschiedliche reale Schlaege;
+keine isolierte GPU-Ursachenmessung, keine allgemeine60FPS-Garantie.
+Beleg validation/single-browser-performance.json. Keine Grafikqualitaet reduziert.
+Der Zweicliententest misst deutlich andere gemeinsame Rechnerlast. Weitere
+CPU-Optimierung auf Verdacht wird zugunsten des Gesamtprodukts zurueckgestellt.
+Goal aktiv. Naechster Schritt: aktuelles zusammenhaengendes Paket mit Stil-,
+Probe-, Bereitmachen- und Renderkorrekturen bauen/frisch pruefen. V11 liegt
+vor diesen Aenderungen. Menschliche Bedien-/Stilabnahme bleibt eigenstaendig offen.
