@@ -5,12 +5,12 @@ from contact_v3 import score,surface,side_surface,probes,hand_frame,WRIST_LIMIT
 from arm import L1,L2
 from tissue import simulate
 
-def stroke(y=.6,tilt=-10,count=41):
+def stroke(y=.6,tilt=-15,count=41):
     return {'version':3,'points':[[.19+.34*i/(count-1),y,800*i/(count-1),0,tilt,0] for i in range(count)]}
 
 class MeshContactTests(unittest.TestCase):
     def test_regions_from_actual_arm(self):
-        for y,tilt,expected in [(.6,-10,'flat'),(.6,-20,'tips'),(.1,0,'zone'),(.35,35,'heel')]:
+        for y,tilt,expected in [(.6,-15,'flat'),(.6,-10,'glance'),(.6,-20,'tips'),(.1,0,'zone'),(.35,35,'heel')]:
             with self.subTest(expected=expected):self.assertEqual(score(stroke(y,tilt))['contact_class'],expected)
     def test_pose_record_has_no_stretch_or_penetration_at_contact(self):
         result=score(stroke())
@@ -55,7 +55,7 @@ class MeshContactTests(unittest.TestCase):
     def test_motion_after_contact_cannot_increase_impact(self):
         original=stroke()
         extended=stroke()
-        extended['points'].append([.9,.6,1100,0,-10,0])
+        extended['points'].append([.9,.6,1100,0,-15,0])
         a,b=score(original),score(extended)
         self.assertAlmostEqual(a['normal_speed'],b['normal_speed'],places=8)
         self.assertAlmostEqual(a['quality'],b['quality'],places=8)

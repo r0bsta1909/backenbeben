@@ -9,6 +9,7 @@ async def main():
   page.on('pageerror',lambda e:errors.append(str(e)))
   page.on('console',lambda m:errors.append(m.text) if m.type=='error' else None)
   await page.goto('http://localhost:8877');await page.wait_for_function('window.gameReady',timeout=60000)
+  await page.evaluate("()=>{window.sentActions=[];const original=sendAction;sendAction=d=>{sentActions.push(d);original(d)}}")
   await page.locator('#training').click();await page.wait_for_function("state?.phase==='aim'")
   async def stroke():
    await page.mouse.move(1536,648);await page.mouse.down()
@@ -16,7 +17,11 @@ async def main():
     await page.mouse.move(1920*(.8-.34/1.5*(i+1)/12),648);await page.wait_for_timeout(8)
    await page.mouse.up()
   await stroke();await page.wait_for_function('state.practice_done');await stroke()
-  await page.wait_for_function("state.phase==='replay'",timeout=20000)
+  try:await page.wait_for_function("state.phase==='replay'",timeout=20000)
+  except Exception:
+   print(await page.evaluate('JSON.stringify({state,actions:sentActions})'));print(errors)
+   await page.screenshot(path='logs/contact-view-failure.png')
+   await browser.close();raise
   await page.locator('#replayImpact').click()
   await page.wait_for_function("JSON.parse(physicsFrame).camera==='side' && JSON.parse(physicsFrame).time===.5")
   assert await page.locator('#contactLegend').is_visible()

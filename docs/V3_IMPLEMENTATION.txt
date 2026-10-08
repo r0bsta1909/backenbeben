@@ -107,3 +107,11 @@ Nach den letzten Assetkorrekturen Bilder und Totale nochmals prüfen.
 Stil ist noch nicht auf Referenzniveau. Handgelenkübergang, Stoff/Haare,
 Licht/Tiefenstaffelung, Auffangkontakt und Kontaktdiagnose weiter verfeinern.
 Kein fertiges v0.3.0-Release veröffentlichen; Goal bleibt aktiv.
+
+AKTUELL: Die frühere Acht-Punkte-Kollision ist ersetzt. Livepose, Wertung und
+Replay verwenden 114 direkt aus dem Handmesh exportierte Punkte einschließlich
+korrekter Skinningtransformation. Details, Gameplaygrenzen, Performanceproblem
+und dessen Korrektur: docs/HAND_CONTACT_SURFACE.txt. 30 Unit-Tests und beide
+LAN-Gauntlets bestanden. Neues lokales Entwicklungspaket geprüft, kein Release.
+Nächste offene Schwerpunkte: gekoppelte Nachgiebigkeit von Hand und Gesicht,
+natürlichere Auffangreaktion und menschliche Verständlichkeit/Stilprüfung.

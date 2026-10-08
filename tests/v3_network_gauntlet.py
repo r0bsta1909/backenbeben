@@ -3,7 +3,7 @@ import asyncio,json,sys,math
 from pathlib import Path
 import aiohttp
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'server'))
-def bot_stroke():return {'points':[[.19+.34*i/40,.60,800*i/40,0,-10,0] for i in range(41)]}
+def bot_stroke():return {'points':[[.19+.34*i/40,.60,800*i/40,0,-15,0] for i in range(41)]}
 
 async def receive(ws,predicate,timeout=20):
     async with asyncio.timeout(timeout):

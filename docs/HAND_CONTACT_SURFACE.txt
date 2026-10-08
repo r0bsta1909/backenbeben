@@ -1,4 +1,4 @@
-HAND CONTACT SURFACE — Kandidat, noch nicht in der Matchwertung
+HAND CONTACT SURFACE — integriert und technisch geprüft
 
 Die acht bisherigen Platzhalter wurden gegen ArmSkin.R in der aktuellen
 character-v3.blend vermessen. Drei Finger-/Spitzenpunkte treffen kein Dreieck.
@@ -22,10 +22,10 @@ muss explizit bleiben; eine abweichende Quad-Diagonale ist keine gleiche Fläche
 server/hand_surface.py rekonstruiert die Punkte mit gemischter Hand-/Unterarm-
 Transformation wie das Skinning. Finger bleiben relativ zur Hand in Ruhepose.
 Zwei neue Tests prüfen Restrekonstruktion und endliche körpergebundene Punkte
-bei extremen Winkeln. Vollständiger Vergleich mit gerenderten gebeugten
-Dreiecken bleibt für die Integration erforderlich.
+bei extremen Winkeln. Der zusätzliche Vergleich mit ausgewerteten gebeugten
+Blender-Dreiecken ist im Integrationsergebnis unten dokumentiert.
 
-Nächste Schritte in Reihenfolge:
+Abgearbeiteter Integrationsplan:
 1. Seitliche Oberflächenabfragen für 114 Punkte effizient bündeln.
 2. Kontaktgewichtung über projizierte Fläche statt bisher palm_count / 3.
 3. Sauber/Finger/Handballen anhand realer geometrischer Fälle neu prüfen;
@@ -35,5 +35,33 @@ Nächste Schritte in Reihenfolge:
    sichtbaren Handmesh prüfen, inklusive Handgelenkblend.
 6. LAN- und Leistungsprüfung; erst danach neuen Kontaktstand freigeben.
 
-Aktuell bleibt contact_v3.py unverändert bei acht Punkten. Der neue Datensatz
-und Transformationshelfer sind absichtlich noch kein aktiver Gameplaywechsel.
+INTEGRATION ABGESCHLOSSEN (technischer Stand)
+Livepose, Matchwertung und Replay verwenden die 114 Meshpunkte gemeinsam.
+Die Grundneigung beträgt jetzt -15 Grad, passend zum gemeinsamen Kontakt von
+Handfläche und Fingern im tatsächlichen Modell. Sauberer Kontakt verlangt im
+vereinfachten Spielprofil mindestens 4.5 cm² Handflächen- und 1.6 cm² Finger-
+Rasterfläche; Erstkontakt mit dem Handballen bleibt gesondert bewertet.
+Diese Flächengrenzen sind Gameplayparameter, keine Behauptung über medizinische
+oder offizielle Sportnormen. Die Kontaktzone umfasst 8.75 mm Abstand zur Haut
+als vereinfachtes Nachgiebigkeitsband; die Hand wird am Erstkontakt gestoppt.
+Eine vollständig gekoppelte verformbare Hand-/Gesichtssimulation fehlt weiterhin.
+
+Der Export speichert zusätzlich gewichtete lokale Dreieckspositionen. Nur
+interpolierte Knochengewichte verursachten bis 0.175 mm Drift. Der korrigierte
+Vergleich mit tatsächlich ausgewerteten Blender-Dreiecken ergab in vier Posen
+maximal 0.000232 mm Abweichung. Reproduktion:
+python scripts/generate_contact_skinning_cases.py
+Blender -b assets-source/character-v3.blend --python scripts/validate_contact_skinning.py
+
+Rays verwenden vorberechnete baryzentrische Koeffizienten, 0.015-Renderunit-Zellen
+und konservative lokale Tiefengrenzen. Referenztests vergleichen dieselben
+Dreiecke und bestätigen, dass die Vorauswahl keine möglichen Kontakte verliert.
+Frühe Implementierungen überlasteten den Host; sie wurden vor Veröffentlichung
+ersetzt. Warm gemessen: freie 24-Substep-Pose ca. 2 ms, blockierte ca. 59–67 ms.
+Das sind lokale Messwerte, keine allgemeine Leistungszusage für andere Rechner.
+
+30 Unit-Tests bestanden. Kontaktansicht-Browsertest und beide LAN-Gauntlets
+bestanden; keine Browserfehler. Zweibrowser-Replay p95 13.9 ms auf RTX 2080.
+Lokales Entwicklungspaket v0.3.0-dev-surface enthält die neue JSON-Datei;
+aus isoliert entpacktem Servercode sauberer Treffer erfolgreich berechnet.
+Kein fertiges Release und keine menschliche Stil-/Verständlichkeitsfreigabe.

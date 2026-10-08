@@ -39,7 +39,8 @@ for row in range(2,22):
   thumb_weight=sum(w*sum(g.weight for g in obj.data.vertices[i].groups if obj.vertex_groups[g.group].name.startswith('thumb')) for w,i in zip(weights,ids))
   if thumb_weight>.35:continue
   blend=max(0,min(1,sum(w*hand_weight(i) for w,i in zip(weights,ids))))
-  samples.append({'region':region,'local':[round(u,7),round(along,7),round((hit-centre).dot(normal),7)],'hand_weight':round(blend,7),'area_m2':spacing*spacing,'triangle':index})
+  hand_local=[sum(w*hand_weight(i)*(verts[i]-wrist).dot(axis) for w,i in zip(weights,ids)) for axis in [width,finger,normal]]
+  samples.append({'hand_local':[round(v,9) for v in hand_local],'region':region,'local':[round(u,7),round(along,7),round((hit-centre).dot(normal),7)],'hand_weight':round(blend,7),'area_m2':spacing*spacing,'triangle':index})
 assert len(samples)>40
 out={'version':1,'units':'metres','source':'character-v3.blend / ArmSkin.R','spacing_m':spacing,'basis':{'wrist':list(wrist),'finger':list(finger),'normal':list(normal),'width':list(width)},'samples':samples}
 (ROOT/'game/assets/hand_contact_surface_v3.json').write_text(json.dumps(out,separators=(',',':')),encoding='utf8')

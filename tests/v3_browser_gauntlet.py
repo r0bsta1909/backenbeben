@@ -44,7 +44,7 @@ async def main():
                     await attacker.wait_for_function("window.netArm?.pose",timeout=10000)
                     await attacker.mouse.move(1920*.8,1080*.6)
                     await attacker.mouse.wheel(0,120)
-                    await attacker.wait_for_function('window.netArm?.tilt > -10',timeout=5000)
+                    await attacker.wait_for_function('window.netArm?.tilt > -15',timeout=5000)
                     await attacker.locator('#resetPose').click()
                     report['single_tilt_control']=True
                 await stroke(attacker)

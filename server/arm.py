@@ -89,7 +89,7 @@ def laboratory():
     for name,target in cases.items():
         arm=Arm(input_target(.19,.6,0));frames=[];max_length_error=0.;blocked=0
         for step in range(720):
-            pose=decorate(arm.step(target,collision(-10)),-10);blocked+=pose['blocked']
+            pose=decorate(arm.step(target,collision(-15)),-15);blocked+=pose['blocked']
             max_length_error=max(max_length_error,abs(math.dist(pose['shoulder'],pose['elbow'])-L1),abs(math.dist(pose['elbow'],pose['wrist'])-L2))
             if step%4==0:frames.append(pose)
         clips[name]=frames
@@ -99,4 +99,7 @@ def laboratory():
 if __name__=='__main__':
     result=laboratory();path=Path(__file__).resolve().parents[1]/'game/assets/arm_lab_clips.json'
     path.write_text(json.dumps(result,separators=(',',':')),encoding='utf-8')
+    from contact_v3 import decorate,input_target
+    ready=decorate(Arm(input_target(.19,.6,0)).pose(),-15)
+    (path.parent/'lateral_ready.json').write_text(json.dumps(ready),encoding='utf-8')
     print(json.dumps(result['report'],indent=2))

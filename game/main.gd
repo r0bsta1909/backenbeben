@@ -53,7 +53,7 @@ func _ready() -> void:
 	hand.rotation.y = PI
 	hand.first_person(true)
 	var ready_pose: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/lateral_ready.json"))
-	hand.apply_arm(ready_pose,0.0,-10.0)
+	hand.apply_arm(ready_pose,0.0,-15.0)
 	prepare_materials(hand)
 	opponent_hand = Node3D.new()
 	add_child(opponent_hand)
@@ -448,7 +448,8 @@ func drive_recorded_physics() -> void:
 		var target_view: Node3D=fighter if replaying or int(physics_frame.target)!=you else reflection
 		target_view.apply_collapse(body_frame)
 	if contact_marks.is_empty():
-		for i in range(8):
+		var contact_surface: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/hand_contact_surface_v3.json"))
+		for i in range(contact_surface.samples.size()):
 			var dot_mesh := MeshInstance3D.new()
 			var sphere := SphereMesh.new()
 			sphere.radius=.018;sphere.height=.036

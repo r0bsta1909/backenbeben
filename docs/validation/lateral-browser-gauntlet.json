@@ -4,62 +4,50 @@
     {
       "kind": "hit",
       "target": 1,
-      "damage": 16.11,
-      "quality": 0.5509,
+      "damage": 18.46,
+      "quality": 0.6312,
       "braced": true,
       "side": "R",
       "ko": false,
       "foul": false,
       "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
-      "replay_id": "94043fe829aaa9ffc7e8"
+      "replay_id": "9a6b972e69b1956ccc3b"
     },
     {
       "kind": "hit",
       "target": 0,
-      "damage": 23.9,
-      "quality": 0.5312,
+      "damage": 27.99,
+      "quality": 0.6221,
       "braced": false,
       "side": "R",
       "ko": false,
       "foul": false,
       "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
-      "replay_id": "65ba3d2662f6f28c24bb"
+      "replay_id": "3bc8cd14f73c0a027b46"
     },
     {
       "kind": "hit",
       "target": 1,
-      "damage": 25.49,
-      "quality": 0.5665,
-      "braced": false,
-      "side": "R",
-      "ko": false,
-      "foul": false,
-      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
-      "replay_id": "314538ea7816c33fbaaf"
-    },
-    {
-      "kind": "hit",
-      "target": 0,
-      "damage": 23.94,
-      "quality": 0.5319,
+      "damage": 28.12,
+      "quality": 0.6249,
       "braced": false,
       "side": "R",
       "ko": true,
       "foul": false,
       "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
-      "replay_id": "f8562b6585b81df7a0aa"
+      "replay_id": "913670ef6008d339433a"
     }
   ],
   "single_tilt_control": true,
-  "recorded_arm_frames": 352,
-  "clip_hash": "fb29376ba408fea421d6f898b9fae0276ab25ae37d9d151e97f5cc15980785a0",
+  "recorded_arm_frames": 348,
+  "clip_hash": "8cf76c9ed15aa6c76b2915b159aefa0cc5883492600a6ac81b060df92e105d96",
   "replay": {
-    "clipId": "94043fe829aaa9ffc7e8",
+    "clipId": "9a6b972e69b1956ccc3b",
     "frameCount": 337,
-    "peak": 0.009,
-    "time": 0.508313,
-    "frame": 60,
-    "deformation": 0.008988044
+    "peak": 0.0064,
+    "time": 0.49998,
+    "frame": 59,
+    "deformation": 0.006384639999999991
   },
   "replay_frame_ms_p95": 13.900000000001455,
   "viewport": [
@@ -69,10 +57,10 @@
   "resume": true,
   "ko_body_recorded": true,
   "ko_reverse_seek": true,
-  "winner": 1,
+  "winner": 0,
   "audio": {
     "mode": "buffer-fallback",
-    "played": 6,
+    "played": 5,
     "unlocked": true
   },
   "rematch": true,
@@ -80,7 +68,7 @@
   "stats": {
     "arm_data": true,
     "dragging": false,
-    "fps": 103,
+    "fps": 95,
     "hand_wrist": "(-0.473, -0.643, 0.02)",
     "muted": false,
     "physics_active": false,

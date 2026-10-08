@@ -1,0 +1,62 @@
+[
+  {
+    "packet": 0,
+    "milliseconds": 2.28,
+    "blocked": false
+  },
+  {
+    "packet": 1,
+    "milliseconds": 2.07,
+    "blocked": false
+  },
+  {
+    "packet": 2,
+    "milliseconds": 2.43,
+    "blocked": false
+  },
+  {
+    "packet": 3,
+    "milliseconds": 1.94,
+    "blocked": false
+  },
+  {
+    "packet": 4,
+    "milliseconds": 2.56,
+    "blocked": false
+  },
+  {
+    "packet": 5,
+    "milliseconds": 59.57,
+    "blocked": true
+  },
+  {
+    "packet": 6,
+    "milliseconds": 58.64,
+    "blocked": true
+  },
+  {
+    "packet": 7,
+    "milliseconds": 59.64,
+    "blocked": true
+  },
+  {
+    "packet": 8,
+    "milliseconds": 62.86,
+    "blocked": true
+  },
+  {
+    "packet": 9,
+    "milliseconds": 62.13,
+    "blocked": true
+  },
+  {
+    "packet": 10,
+    "milliseconds": 63.99,
+    "blocked": true
+  },
+  {
+    "packet": 11,
+    "milliseconds": 66.53,
+    "blocked": true
+  }
+]

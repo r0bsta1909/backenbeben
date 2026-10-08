@@ -120,3 +120,11 @@ Gezielter realer Browser-Trainingstest bestanden: Sprung, Kamera, Markierung an/
 Ausblenden nach Kontakt, keine Browserfehler. Bild und Report unter docs/validation/.
 Test: tests/replay_contact_view.py gegen den eigenen Host auf Port 8877.
 Nächster physikalischer Schwerpunkt bleibt die grobe Abtastung der Handfläche.
+
+AKTUELL: Die frühere Acht-Punkte-Kollision ist ersetzt. Livepose, Wertung und
+Replay verwenden 114 direkt aus dem Handmesh exportierte Punkte einschließlich
+korrekter Skinningtransformation. Details, Gameplaygrenzen, Performanceproblem
+und dessen Korrektur: docs/HAND_CONTACT_SURFACE.txt. 30 Unit-Tests und beide
+LAN-Gauntlets bestanden. Neues lokales Entwicklungspaket geprüft, kein Release.
+Nächste offene Schwerpunkte: gekoppelte Nachgiebigkeit von Hand und Gesicht,
+natürlichere Auffangreaktion und menschliche Verständlichkeit/Stilprüfung.

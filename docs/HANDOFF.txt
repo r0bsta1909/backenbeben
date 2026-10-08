@@ -112,3 +112,11 @@ Kontaktmesh-Audit: drei alte Probes liegen nicht auf der echten Hand.
 Noch nicht in Matchwertung aktiv. Konkreter Integrationsplan und Nachweise:
 docs/HAND_CONTACT_SURFACE.txt. Nächste Aktion: gebündelte seitliche Abfragen
 und Flächengewichtung vorbereiten, anschließend gemeinsam aktivieren.
+
+AKTUELL: Die frühere Acht-Punkte-Kollision ist ersetzt. Livepose, Wertung und
+Replay verwenden 114 direkt aus dem Handmesh exportierte Punkte einschließlich
+korrekter Skinningtransformation. Details, Gameplaygrenzen, Performanceproblem
+und dessen Korrektur: docs/HAND_CONTACT_SURFACE.txt. 30 Unit-Tests und beide
+LAN-Gauntlets bestanden. Neues lokales Entwicklungspaket geprüft, kein Release.
+Nächste offene Schwerpunkte: gekoppelte Nachgiebigkeit von Hand und Gesicht,
+natürlichere Auffangreaktion und menschliche Verständlichkeit/Stilprüfung.

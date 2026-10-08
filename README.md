@@ -67,3 +67,6 @@ und rohe Matchlogs werden nicht veröffentlicht. Die neuen Konzeptbilder wurden 
 Imagegen erzeugt. Lizenzhinweise für den mitgelieferten Godot-Webruntime stehen unter
 `third-party/`. Kopf und Hände verwenden in Blender angepasste CC0-Topologie von
 MakeHuman; Quelldaten und Herkunft liegen unter `assets-source/makehuman/`. Für eigene Projektinhalte wurde bisher keine zusätzliche Lizenz gewählt.
+
+Die Kontaktwertung verwendet inzwischen 114 aus der sichtbaren Hand exportierte
+Oberflächenpunkte. [Geometrieprüfung, Integration und Grenzen](docs/HAND_CONTACT_SURFACE.txt).

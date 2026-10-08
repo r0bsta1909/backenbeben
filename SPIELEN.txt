@@ -111,3 +111,7 @@ Der Arm und die Hände stammen jetzt aus einem gemeinsamen vollständigen 3D-Rig
 SEITLICHER UMBAU: Linke Taste halten und MAUS NACH LINKS bewegen.
 Die sichtbare rechte Hand schwingt ebenfalls nach links. Mausrad kippt die Finger.
 Replay besitzt zusätzlich TV-TOTALE für Körperstand und KO.
+
+Replay: "Zum Treffer" pausiert am Kontakt und öffnet die Seitenkamera.
+Türkis zeigt Handflächenkontakt, Gelb Finger, Rosa den Handballen. Die Punkte
+sind eine zuschaltbare Prüfhilfe. "Punkte an/aus" blendet sie ein oder aus.
