@@ -35,6 +35,7 @@ var js_timer := 0.0
 var appearance_timer := 0.0
 var particles: Array = []
 var mirror_mount: Node3D
+var recorded_side_texture: ImageTexture
 var mirror_dirty := true
 var mirror_draw_requests := 0
 var mirror_viewport: SubViewport
@@ -452,7 +453,8 @@ func drive_recorded_physics() -> void:
 		for i in range(mini(63,values.size()/3)):
 			offsets[i]=Vector3(float(values[i*3]),float(values[i*3+1]),float(values[i*3+2]))
 	var side_data: Dictionary = physics_frame.get("side_cage",{})
-	var side_texture: ImageTexture = preload("res://side_cage_view.gd").texture_for(side_data,physics_frame.get("offsets",[]))
+	var side_texture: ImageTexture = preload("res://side_cage_view.gd").texture_for(side_data,physics_frame.get("offsets",[]),recorded_side_texture)
+	if side_texture!=null:recorded_side_texture=side_texture
 	var replaying: bool = physics_frame.get("replay",false)
 	for root in [fighter,reflection]:
 		var affected: bool = active and (replaying if root==fighter else false)

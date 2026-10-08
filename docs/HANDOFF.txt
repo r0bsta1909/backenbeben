@@ -2060,3 +2060,15 @@ Standardduell5TrefferbisKO/Anspannen/Replayruecklauf/Resume/RevanchePASS,errors[
 Beleg validation/phase-performance.json. MessungschliesstNachweisluecke, nicht
 Leistungsabnahme. Goalaktiv. NaechsterkonkreterEngpass: RenderpfadbeimImpact
 inkl.Gesichts-/Spiegelaktualisierungprofilieren; keinisolierterSolveroptimierungsloop.
+
+G8 DEFORMATIONSTEXTUR WIEDERVERWENDEN
+side_cage_view.texture_for akzeptiertvorherigeImageTexture undaktualisiertbei
+gleicherGroesse perupdate; sonstNeuanlage. mainhaeltRessourceproSzene. Keine
+Gewebepunkte/Replayframes/Shaderqualitaet reduziert. Native32Uploads bytegenau
+gegenfrischeTexturen, identischeRessource, Resize/InvalidPASS.
+WebexportundStandardduell6TrefferbisKO/Replayruecklauf/Resume/RevanchePASS,errors[].
+Impactp9562.5ms vs62.6msvorher: KEINnachgewiesenerFramezeitgewinn. Replayp95
+41.7msvs34.9ms;unterschiedlicheechteKampfe,keinkontrolliertesAB,keineSpeedupzusage.
+Beleg validation/side-texture-reuse.json; testside_cage_reuse.gd.
+Goalaktiv. NaechsterSchritt: ImpactmessungnachAngreifer/Empfaengertrennen und
+Spiegel-Neuzeichnungenzaehlen,bevorweitereOptimierung. V11Downloadunveraendert.
