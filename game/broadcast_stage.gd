@@ -16,7 +16,49 @@ func beam(a: Vector3,b: Vector3,r: float,c: Color) -> void:
 	o.quaternion=Quaternion(Vector3.UP,direction)
 func label(text: String,p: Vector3,size: int,c: Color) -> void:
 	var l := Label3D.new();l.text=text;l.position=p;l.font_size=size;l.pixel_size=.006;l.modulate=c;l.outline_size=4;add_child(l)
+var crowd_parts: Dictionary = {"head":[],"torso":[],"limb":[]}
+var crowd_rng := RandomNumberGenerator.new()
+func crowd_part(kind: String, pose: Transform3D, center: Vector3, size: Vector3, color: Color) -> void:
+	crowd_parts[kind].append([pose*Transform3D(Basis.from_scale(size),center),color])
+func crowd_limb(pose: Transform3D, a: Vector3, b: Vector3, radius: float, color: Color) -> void:
+	var basis := Basis(Quaternion(Vector3.UP,(b-a).normalized()))*Basis.from_scale(Vector3(radius,a.distance_to(b)*.5,radius))
+	crowd_parts.limb.append([pose*Transform3D(basis,(a+b)*.5),color])
+func spectator(position: Vector3, yaw: float) -> void:
+	var height := crowd_rng.randf_range(.90,1.15)
+	var width := crowd_rng.randf_range(.88,1.12)
+	var pose := Transform3D(Basis(Vector3.UP,yaw+crowd_rng.randf_range(-.16,.16))*Basis.from_scale(Vector3(width,height,1)),position)
+	var shirts: Array[Color]=[Color("202a39"),Color("33282e"),Color("272d2a"),Color("30343b"),Color("24212d")]
+	var skins: Array[Color]=[Color("625044"),Color("514237"),Color("40352f"),Color("6a584d")]
+	var shirt: Color=shirts[crowd_rng.randi_range(0,shirts.size()-1)]
+	var skin: Color=skins[crowd_rng.randi_range(0,skins.size()-1)]
+	crowd_part("torso",pose,Vector3(0,.01,0),Vector3(.22,.25,.14),shirt)
+	crowd_part("limb",pose,Vector3(0,.30,0),Vector3(.052,.055,.052),skin)
+	crowd_part("head",pose,Vector3(crowd_rng.randf_range(-.025,.025),.47,.01),Vector3(.108,.145,.10),skin)
+	var clapping := crowd_rng.randf()<.24
+	for side in [-1.0,1.0]:
+		var shoulder := Vector3(side*.17,.20,0)
+		var elbow := Vector3(side*.235,-.015,.045)
+		var hand := Vector3(side*(.045 if clapping else .115),.25 if clapping else -.105,.20)
+		crowd_limb(pose,shoulder,elbow,.057,shirt)
+		crowd_limb(pose,elbow,hand,.037,skin)
+		crowd_part("head",pose,hand,Vector3(.044,.052,.033),skin)
+func finish_crowd() -> void:
+	for kind in crowd_parts:
+		var primitive: PrimitiveMesh
+		if kind=="head":
+			var sphere := SphereMesh.new();sphere.radius=1;sphere.height=2;sphere.radial_segments=10;sphere.rings=5;primitive=sphere
+		else:
+			var cylinder := CylinderMesh.new();cylinder.height=2;cylinder.radial_segments=8
+			cylinder.top_radius=.8 if kind=="torso" else 1.0;cylinder.bottom_radius=.58 if kind=="torso" else 1.0;primitive=cylinder
+		var batch := MultiMesh.new();batch.transform_format=MultiMesh.TRANSFORM_3D;batch.use_colors=true;batch.mesh=primitive;batch.instance_count=crowd_parts[kind].size()
+		for i in range(batch.instance_count):
+			batch.set_instance_transform(i,crowd_parts[kind][i][0]);batch.set_instance_color(i,crowd_parts[kind][i][1])
+		var instance := MultiMeshInstance3D.new();instance.name="Crowd_"+kind;instance.multimesh=batch
+		var material := mat(Color(.48,.50,.58));material.vertex_color_use_as_albedo=true
+		instance.material_override=material;add_child(instance)
+
 func _ready() -> void:
+	crowd_rng.seed=1909
 	cube(Vector3(0,-5.5,0),Vector3(16,.25,15),Color("292d35"))
 	cube(Vector3(0,-.7,-7),Vector3(16,10,.15),Color("292e3a"))
 	# Enclose the arena for the broadcast side cameras as well as the ego view.
@@ -28,11 +70,7 @@ func _ready() -> void:
 			beam(Vector3(side*6.25,level-.05,-6),Vector3(side*6.25,level-.05,6),.035,Color("4c4d56"))
 			for seat in range(20):
 				var z: float=-5.5+seat*.56
-				var head := MeshInstance3D.new();var shape := SphereMesh.new()
-				shape.radius=.115;shape.height=.29;shape.radial_segments=8;shape.rings=4
-				head.mesh=shape;head.material_override=mat(Color("2b2830"))
-				head.position=Vector3(side*6.7,level+.45+(seat%3)*.06,z);add_child(head)
-				cube(Vector3(side*6.7,level+.07,z),Vector3(.24,.51,.33),Color("20242c"))
+				spectator(Vector3(side*6.7,level,z+crowd_rng.randf_range(-.045,.045)),-side*PI*.5)
 	# Practical arena washes illuminate the architecture behind the competitors.
 	# Character toon shading stays separate; these lights give the venue depth.
 	for side in [-1.0,1.0]:
@@ -67,9 +105,8 @@ LEAGUE",Vector3(x*.70,.2,-3.85),23,Color("afa295"))
 		beam(Vector3(-7,y-.05,-4.5),Vector3(7,y-.05,-4.5),.035,Color("5b5d65"))
 		for i in range(31):
 			var x := (i-15)*.44
-			var head := MeshInstance3D.new();var sphere := SphereMesh.new();sphere.radius=.115;sphere.height=.29;sphere.radial_segments=8;sphere.rings=4
-			head.mesh=sphere;head.material_override=mat(Color("37313a").lightened((i%5)*.02));head.position=Vector3(x,y+.45+(i%3)*.08,-5.0);add_child(head)
-			cube(Vector3(x,y+.07,-5),Vector3(.33,.51,.24),Color("252a34").lightened((i%4)*.013))
+			spectator(Vector3(x,y,-5.0+crowd_rng.randf_range(-.06,.06)),atan2(-x,5.0)*.35)
+	finish_crowd()
 	# Broad black padding and a narrow pedestal leave both competitors readable.
 	cube(Vector3(0,-1.14,.65),Vector3(2.15,.20,.72),Color("15161a"))
 	cube(Vector3(0,-1.025,.65),Vector3(2.10,.035,.68),Color("333339"))

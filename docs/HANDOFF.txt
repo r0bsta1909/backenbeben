@@ -436,3 +436,27 @@ Neue Kleidung im Webbuild aktiv. Schulterpolster/harte Rohrenden entfernt,
 aber Falten und Schattierung noch grob. Kein bestandenes Stilgate und keine
 menschliche Gameplay-Abnahme. Weitere sichtbare Prioritaeten sind Gesicht/
 Materialwirkung und TV-Umgebung; gekoppelte Laborphysik bleibt separat offen.
+
+TV-UMGEBUNG: ZUSCHAUERSILHOUETTEN
+broadcast_stage.gd ersetzt Kopf/Kasten-Platzhalter durch 142 stilisierte
+Oberkoerper mit Schultern, Hals, Armen und Haenden. Deterministische Variation
+von Groesse, Breite, Kopfversatz, Bekleidung und Hauttoenen; ein Teil haelt die
+Haende vor der Brust. Seitenraenge schauen zur Buehne. Drei MultiMesh-Gruppen
+teilen Kopf-, Rumpf- und Gliedmassengeometrie. Keine 142 neuen Charakterrigs.
+Publikumsmaterial nach Sichtpruefung abgedunkelt; Duell soll Vordergrund bleiben.
+Webexport und Browser-Kontaktreplay bestanden, keine Browserfehler. Lokaler
+Zwei-Ansichten-Test auf RTX 2080: requestAnimationFrame-p95 hoechstens 15.7 ms;
+keine reine GPU-Zeitmessung und kein Versprechen fuer andere Rechner.
+Screenshot selbst gesichtet: validation/crowd-silhouette-runtime.png.
+Messwerte: validation/crowd-silhouette.json. Figuren bleiben bewusst einfache
+Hintergrundgeometrie, noch statisch. Keine fertige TV-Inszenierungsabnahme.
+Recherche erneuert: offizielle Veranstalterseite zur Buehne und Bildsuche zu
+UFC-Power-Slap-Buehnenfotos. Keine Fotos/Logos als Spielassets uebernommen.
+https://www.powerslap.com/news/conor-mcgregor-takes-the-power-slap-stage-who-wants-a-clatter/
+https://www.ufc.com/news/power-slap-2-live-and-free-wednesday-may-24-rumble
+https://www.ufc.com.br/news/preview-every-title-fight-power-slap-2-static-wolverine-the-machine
+Die UFC-Seite war beim direkten Textabruf 403; die Bildsuche lieferte die
+Buehnenabbildung/-beschreibung. Veranstalterartikel direkt lesbar, einzelne
+Bilddatei nicht abrufbar. Abgeleitete eigene Gestaltungsentscheidung: helles
+Duell, dunklere Zuschauersilhouetten, sichtbare Traversen/Leuchten. Weiter offen:
+Publikumsreaktionen, Material-/Lichtabstimmung, Gesichtsstil und Spielgefuehl.
