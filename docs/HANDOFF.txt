@@ -141,3 +141,7 @@ physikalische Kopplung der Helfer bleibt offen. Siehe LATERAL_REWORK.txt.
 Rueckzug des Schlagarms aufgezeichnet: seitlich loesen, dann absenken statt
 hohe Messpose im KO halten. 33 Tests und LAN-KO bestanden. Offene Hand bleibt
 eine Vereinfachung; Details und Spielbild in LATERAL_REWORK.txt.
+
+Finger entspannen nach seitlichem Rueckzug; vor/am Treffer unveraendert offen.
+Importgrundrotationen erhalten, Godot-Rigtest und Browser-Reversesuche bestanden.
+Details in LATERAL_REWORK.txt. Physikalische Handnachgiebigkeit weiter offen.

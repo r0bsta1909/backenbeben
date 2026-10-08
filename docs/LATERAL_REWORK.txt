@@ -181,3 +181,17 @@ Endlage, Beruhigung, Abstand zur Wange; bestehende Tests pruefen Knochenlaengen.
 visuell geprueft: docs/validation/recovery-ko-wide.png. Die Hand bleibt noch
 in offener Schlagorientierung; Fingerentspannung, vollstaendige Koerperkollision
 und gekoppelte Handnachgiebigkeit sind damit nicht erledigt.
+
+FINGERENTSPANNUNG NACH DEM RUECKZUG
+Der Host zeichnet einen geglaetteten Entspannungswert auf. Er beginnt fruehestens
+0.4 s nach Kontakt und nur bei seitlich zurueckgezogener Hand. Vier Finger beugen
+sich leicht ueber ihre drei exportierten Glieder; Daumen unveraendert. Vor und
+beim Kontakt bleibt die gewertete offene Meshoberflaeche unveraendert.
+Importierte Grundrotationen werden erhalten. Ein erster Versuch setzte diese
+beim Oeffnen faelschlich auf Identitaet; der direkte Rigtest fand 12 mm Drift.
+Korrektur: relative Beugung auf der gespeicherten Grundrotation. Godot-Test
+(tests/finger_relax.gd) bestaetigt Bewegung, exaktes Wiederoeffnen und Reset.
+33 Unit-Tests bestanden. Browserkontakt-Test erweitert: Entspannung bei 1.8 s,
+Rueckwaertssuche zum Kontakt setzt sie auf null; keine Browserfehler.
+Echtes Spielbild in der Totale: docs/validation/finger-recovery.png.
+Dies ist eine aufgezeichnete Riganimation, keine Fingergelenk-Physiksimulation.

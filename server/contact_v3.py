@@ -191,6 +191,8 @@ def score(data):
         blend=max(0.,min(1.,(elapsed-.22)/.55));blend=blend*blend*(3-2*blend)
         target=(.40+.02*blend,-.07-.38*blend,.30)
         pose=arm.step(target,collision(return_tilt,skin_state))
+        relax=max(0.,min(1.,(elapsed-.4)/.5)) if pose['wrist'][0]>.30 else 0.
+        pose['finger_relax']=relax*relax*(3-2*relax)
         records.append({'time':round(final_t+tick*DT,6),'pose':decorate(pose,return_tilt),'tilt':return_tilt})
     base={'version':3,'skin_state':skin_state,'quality':0.,'precision':0.,'side':'L','duration':duration,'hit':False,'foul':False,'diagnosis':'Daneben – den Bogen weiter über die Wange führen.','contact_class':'miss','position':[0,.16,.3],'path':[],'arm_path':records,'footprint':[],'contact_time':duration/1000,'normal_speed':0.,'impact_speed_m_s':0.,'coverage':0.}
     if not hit:return base

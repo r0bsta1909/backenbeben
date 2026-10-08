@@ -10,12 +10,16 @@ var last_wrist := Vector3.INF
 var last_tilt := Vector2.INF
 var is_first_person := false
 var last_body: Array = []
+var finger_rest_rotations: Dictionary = {}
 
 func _ready() -> void:
 	metadata = JSON.parse_string(FileAccess.get_file_as_string("res://assets/character_v3.json"))
 	model = load("res://assets/character_v3.glb").instantiate()
 	add_child(model)
 	skeleton = model.find_children("*", "Skeleton3D", true, false)[0]
+	for index in range(skeleton.get_bone_count()):
+		if skeleton.get_bone_name(index).begins_with("finger"):
+			finger_rest_rotations[index]=skeleton.get_bone_pose_rotation(index)
 	# Compatibility uses the imported rest AABB for skinned meshes. The own arm
 	# starts outside the camera but can reach into it; include the whole rig reach.
 	for part in model.find_children("*","MeshInstance3D",true,false):
@@ -50,11 +54,13 @@ func vector(a: Array) -> Vector3:
 func reset_pose() -> void:
 	if has_pose and is_instance_valid(skeleton):
 		skeleton.clear_bones_global_pose_override()
+		skeleton.reset_bone_poses()
 		last_body=[]
 		has_pose=false
 
 func apply_arm(pose: Dictionary, yaw := 0.0, pitch := 0.0, side := "R") -> void:
 	if not is_instance_valid(skeleton) or not pose.has("wrist"):return
+	apply_finger_relax(float(pose.get("finger_relax",0.0)),side)
 	var shoulder := to_local(vector(pose.shoulder)*unit_scale)
 	var elbow := to_local(vector(pose.elbow)*unit_scale)
 	var wrist := to_local(vector(pose.wrist)*unit_scale)
@@ -84,6 +90,20 @@ func apply_arm(pose: Dictionary, yaw := 0.0, pitch := 0.0, side := "R") -> void:
 		skeleton.set_bone_global_pose_override(idx,Transform3D(target*source.inverse()*rest.basis,wrist),1.0,true)
 	else:
 		orient_bone("hand."+side,wrist,wrist+fingers*.1,deg_to_rad(yaw))
+
+func apply_finger_relax(amount: float, side: String) -> void:
+	# Local phalanx rotations preserve the exported finger lengths. Only used
+	# after cheek clearance; the contact pose remains exactly the rest surface.
+	for digit in range(4):
+		for segment in range(3):
+			var name := "finger%d_%d.%s" % [digit,segment,side]
+			var index := skeleton.find_bone(name)
+			var ref: Dictionary=metadata.bones[name]
+			var direction := (vector(ref.tail)-vector(ref.head)).normalized()
+			var axis := direction.cross(Vector3.BACK).normalized()
+			axis=(skeleton.get_bone_global_rest(index).basis.inverse()*axis).normalized()
+			var angle: float=[.25,.38,.20][segment]*(.85+digit*.10)*clampf(amount,0,1)
+			skeleton.set_bone_pose_rotation(index,finger_rest_rotations[index]*Quaternion(axis,angle))
 
 func first_person(enabled: bool) -> void:
 	if enabled==is_first_person:return
@@ -156,5 +176,6 @@ func reach_toward(world_target: Vector3, side: String, amount: float, world_norm
 
 func reset_all() -> void:
 	skeleton.clear_bones_global_pose_override()
+	skeleton.reset_bone_poses()
 	has_pose=false
 	last_body=[]

@@ -49,6 +49,7 @@ function armAt(t){
  let a=path[0],b=a;for(let i=1;i<path.length;i++){b=path[i];if(b.time>=time)break;a=b;}
  const f=clamp((time-a.time)/Math.max(.000001,b.time-a.time),0,1),pose={};
  for(const k of ['root','shoulder','elbow','wrist','angles','finger_direction','palm_normal'])pose[k]=a.pose[k].map((v,i)=>v+(b.pose[k][i]-v)*f);
+ pose.finger_relax=(a.pose.finger_relax||0)+((b.pose.finger_relax||0)-(a.pose.finger_relax||0))*f;
  pose.torso_yaw=(a.pose.torso_yaw||0)+((b.pose.torso_yaw||0)-(a.pose.torso_yaw||0))*f;
  return {pose,tilt:a.tilt+(b.tilt-a.tilt)*f};
 }

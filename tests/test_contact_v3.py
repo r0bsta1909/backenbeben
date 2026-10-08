@@ -49,6 +49,10 @@ class MeshContactTests(unittest.TestCase):
         self.assertGreater(final['wrist'][0],.38)
         self.assertLess(final['wrist'][1],-.29)
         self.assertFalse(final['blocked'])
+        self.assertEqual(final['finger_relax'],1.)
+        for record in result['arm_path']:
+            if record['time']<=result['contact_time']+.4:
+                self.assertEqual(record['pose'].get('finger_relax',0),0)
         previous=result['arm_path'][-25]['pose']
         self.assertLess(math.dist(final['wrist'],previous['wrist']),.01)
         for record in result['arm_path']:
