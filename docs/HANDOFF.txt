@@ -982,3 +982,16 @@ Armverlauf und seitliche Handlage besser lesbar, keine Crowdverdeckung des Konta
 Webbuild und Replayaudit erfolgreich, errors[]. Kein G3-Gesamtpass: menschliche
 Verstaendlichkeit, Bewegungsablauf und Referenzstil weiterhin offen. Test prueft
 Gelenkpositionen, nicht jede deformierte Hautoberflaeche. Goal bleibt aktiv.
+
+G3 RUECKHOLBEWEGUNG NACH KONTAKT
+Das motorische Rueckholziel startet jetzt an der wirklichen Kontaktposition und
+faehrt mit stetiger quintischer Rampe in240ms nach aussen. Danach bleibt der
+vorhandene Absenkpfad aktiv. Kein sofortiger Zielwechsel um mehrere Dezimeter.
+Standardtrajektorie: Wristweg nach40ms8.71mm, nach240ms336.15mm. Neuer Regressionstest
+begrenzt fruehes Wegspringen und verlangt anschliessendes Freiziehen. Alle110
+Python-Tests bestehen, Browser-Replayaudit mit9 markerfreien Ansichten und
+Rigabgleich ebenfalls, errors[]. Seitenansicht40ms nachKontakt visuell gesichtet:
+Hand bleibt nahe der Wange, kein sofortiges starkes Zurueckreissen. Keine neue
+physikalische Kopplung behauptet: Kontakt stoppt Gelenkgeschwindigkeit weiterhin
+kinematisch; Gewebe-/Handimpulsintegration und Referenzstil bleiben offen.
+Testhost8877 neu gestartet, Execsession91882. Goal bleibt aktiv.

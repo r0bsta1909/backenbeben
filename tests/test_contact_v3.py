@@ -83,6 +83,15 @@ class MeshContactTests(unittest.TestCase):
             gaps=[x-side_surface(y,z) for _,x,y,z in probes(record['pose'],record['tilt']) if side_surface(y,z) is not None]
             if gaps:self.assertGreaterEqual(min(gaps),-.0001)
 
+    def test_recovery_does_not_snap_away_from_contact(self):
+        result=score(stroke())
+        path=result['arm_path'];contact=result['contact_time']
+        impact=min(path,key=lambda r:abs(r['time']-contact))['pose']['wrist']
+        early=min(path,key=lambda r:abs(r['time']-contact-.04))['pose']['wrist']
+        cleared=min(path,key=lambda r:abs(r['time']-contact-.24))['pose']['wrist']
+        self.assertLess(math.dist(impact,early),.025)
+        self.assertGreater(math.dist(impact,cleared),.20)
+
     def test_mesh_rotates_and_swelling_changes_collision(self):
         difference=sum(abs(surface(x,y)-surface(x,y,.2)) for x,y in [(.1,.1),(.2,.2),(.3,.1)])
         self.assertGreater(difference,.003)

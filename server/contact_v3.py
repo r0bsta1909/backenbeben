@@ -206,11 +206,16 @@ def score(data):
     final_t=records[-1]['time'];return_tilt=records[-1]['tilt']
     # Withdraw outside the cheek first, then lower beside the torso. Returning
     # to the measuring pose left the open hand raised throughout the KO replay.
+    release_wrist=tuple(arm.pose()['wrist'])
     for tick in range(1,325):
         arm.drive_torso(0.)
         elapsed=tick*DT
         blend=max(0.,min(1.,(elapsed-.22)/.55));blend=blend*blend*(3-2*blend)
-        target=(.40+.02*blend,-.07-.38*blend,.30)
+        withdraw=min(1.,elapsed/.24)
+        withdraw=withdraw*withdraw*withdraw*(10-15*withdraw+6*withdraw*withdraw)
+        clearance=(.40,-.07,.30)
+        target=tuple(a+(b-a)*withdraw for a,b in zip(release_wrist,clearance))
+        target=(target[0]+.02*blend,target[1]-.38*blend,target[2])
         pose=arm.step(target,collision(return_tilt,skin_state))
         relax=max(0.,min(1.,(elapsed-.4)/.5)) if pose['wrist'][0]>.30 else 0.
         pose['finger_relax']=relax*relax*(3-2*relax)
