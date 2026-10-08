@@ -22,8 +22,8 @@ def material(name, color):
     return m
 skin=material('Skin',(.64,.34,.21)); shirt=material('Shirt',(.025,.065,.105))
 ink=material('Ink',(.012,.016,.026)); hair=material('Hair',(.034,.022,.024))
-lip=material('Lip',(.42,.18,.135)); white=material('EyeWhite',(.78,.75,.64))
-iris=material('Iris',(.12,.20,.14)); seam=material('SkinShadow',(.32,.16,.11))
+lip=material('Lip',(.42,.18,.135)); white=material('EyeWhite',(.55,.51,.43))
+iris=material('Iris',(.12,.14,.10)); seam=material('SkinShadow',(.32,.16,.11))
 trim=material('ShirtTrim',(.70,.46,.14)); nail=material('Nail',(.68,.43,.31))
 
 def mesh(name, verts, faces, mat):
@@ -121,10 +121,31 @@ head_parts=[face]
 for sign,suffix in [(-1,'L'),(1,'R')]:
     ex=sign*.293125*.13;ey=.09;ez=1.30435*.105-.058
     head_parts.append(ell('Eye'+suffix,(ex,ey,ez),(.012,.012,.012),white))
-    head_parts.append(ell('Iris'+suffix,(ex,ey,ez+.0114),(.0045,.0045,.001),iris))
+    head_parts.append(ell('Iris'+suffix,(ex,ey,ez+.0114),(.0056,.0056,.001),iris))
     head_parts.append(ell('Pupil'+suffix,(ex,ey,ez+.0122),(.0022,.0027,.0005),ink))
-    pts=[skinpoint(sign*x,y) for x,y in [(.017,.106),(.028,.111),(.044,.116),(.060,.108)]]
-    head_parts.append(curve('Brow'+suffix,pts,.0028,hair))
+    # Rest-space upper-lid occlusion, invariant under head/eye skinning.
+    # UV2.x stores normalized eyeball height; UV2.y is deliberately unused.
+    for eye_part in head_parts[-3:-1]:
+        socket_uv=eye_part.data.uv_layers.new(name='EyeSocket')
+        for loop in eye_part.data.loops:
+            height=G(eye_part.data.vertices[loop.vertex_index].co).y
+            socket_uv.data[loop.index].uv=(max(0,min(1,.5+(height-ey)/.024)),.5)
+        eye_part.data.uv_layers.active_index=0
+    # A tapered skin-hugging brow ribbon, not a constant-radius tube.
+    stations=[(.017,.106,.0015),(.022,.108,.0030),(.031,.111,.0031),(.041,.113,.0028),(.051,.110,.0021),(.060,.106,.0010),(.064,.104,.00015)]
+    brow_vertices=[];brow_faces=[]
+    rows=[]
+    for a,b in zip(stations,stations[1:]):
+        for step in range(3):
+            t=step/3;rows.append(tuple(a[i]*(1-t)+b[i]*t for i in range(3)))
+    rows.append(stations[-1])
+    for x,y,width in rows:
+        for dy,offset in [(-width,.0009),(width,.0009),(width,.0002),(-width,.0002)]:
+            brow_vertices.append(skinpoint(sign*x,y+dy,offset))
+    for j in range(len(rows)-1):
+        for i in range(4):brow_faces.append((j*4+i,j*4+(i+1)%4,(j+1)*4+(i+1)%4,(j+1)*4+i))
+    brow_faces.extend([(3,2,1,0),tuple((len(rows)-1)*4+i for i in range(4))])
+    head_parts.append(mesh('Brow'+suffix,brow_vertices,brow_faces,hair))
 # Scalp follows the real head. Short swept clumps vary in length and direction.
 def hairline(p):
     ear_notch=.025*math.exp(-((p.z-.020)/.035)**2)*smoothstep(.075,.10,abs(p.x))

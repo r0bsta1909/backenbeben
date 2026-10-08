@@ -301,3 +301,22 @@ optional--tips. MenschlicheVerstaendlichkeit NICHTalsbestandenmarkiert.
 Quellhost8877Session83200. OeffentlichesV10Paket enthaeltdiesenNeuschrittnicht.
 Goalaktiv. NaechstersichtbarerSchwerpunktG2:ReferenzvergleichGesichter/Helfer/
 Oberflaechen undnatuerlicheFigurenwirkung;nichterneutSolvermikrooptimierungen.
+
+G2 AUGEN UND BRAUEN AN REFERENZ ANGEPASST
+Referenz01-character-face erneutgesichtet: groessereIris,zurueckhaltendesAugenweiss,
+Oberlidschatten stattauffaellighellerAugen. Blenderquelle: Irisradius4.5->5.6mm,
+ruhigereOlive-/Augenweissfarben; BrauenhautnaheverjuengtegeschlosseneBaender
+stattgleichdickerRoehren. Gesamt89872Polygone. GLB/Blend/Previewneugeneriert.
+AugenUV2.x traegtnormierteRuhehoehe fuerangedeutetenOberlidschatten; folgtSkinning,
+keinedynamischeLid-Lichtsimulation. Importtest4Meshesmax2.98e-8,24Augenmaterialien
+beiKaempfern/Spiegel/Helfern korrektaktiv. KeineKontakt-/Gewebegeometriegeaendert.
+AssetvalidierungPASS;32Haut/Seite/Verletzung/ResetRenderPASS;Anspannlidrollen/
+Ruecklauf/KO-TestPASS. Gesunde/dunkleVerletzungs-/Anspannbildergesichtet.
+BrowserProbevergleichPASS;ganzerLAN-Kampf6TrefferPASS inkl.KO/Replay/Resume/
+Revanche,errors[],Replayp95=34.8ms in diesemLauf (keineLeistungsabnahme).
+Beleg validation/eye-brow-style.json unddreiBilder. AktiveQuelle/Webbuildaktuell,
+Host8877Session83200. OeffentlichesV10Paket weiterhinvorProbevergleich/Augen.
+Gesamtstil/Gesichtsproportionen/menschlicheVerstaendlichkeit weiterOFFEN.
+NaechsterG2Schwerpunkt: Kopfsilhouette/Kiefer undGesichtscharakter amReferenz-
+vergleich pruefen;Aenderungen anKontaktflaechen mitphysikalischemExportabgleichen.
+Goalaktiv,keineGesamtabnahme.

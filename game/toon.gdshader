@@ -5,6 +5,7 @@ uniform vec3 part_origin = vec3(0.0);
 uniform float geometry_scale = 1.0;
 uniform bool face_skin = false;
 uniform bool hair_surface = false;
+uniform bool eye_surface = false;
 uniform sampler2D face_ink : source_color,filter_linear_mipmap,repeat_disable;
 varying vec3 skin_position;
 varying float front_paint_weight;
@@ -25,6 +26,10 @@ void fragment() {
     float d = dot(world_normal, normalize(vec3(-0.5,0.7,0.8)));
     float edge = smoothstep(0.06, 0.20, dot(n, normalize(VIEW)));
     vec3 color=base_color.rgb;
+    if(eye_surface) {
+        // Painted socket shadow follows authored UV2, never the camera/world axes.
+        color*=1.0-.60*smoothstep(.45,.88,UV2.x);
+    }
     if(hair_surface) {
         color+=vec3(.045,.026,.012)*smoothstep(.15,.75,d);
         vec3 h=skin_position/geometry_scale;

@@ -195,6 +195,7 @@ func prepare_materials(root: Node) -> void:
 				copy.set_shader_parameter("geometry_scale",4.0)
 				copy.set_shader_parameter("face_skin",str(node.name)=="Face")
 				copy.set_shader_parameter("hair_surface",m.resource_name=="Hair")
+				copy.set_shader_parameter("eye_surface",m.resource_name in ["EyeWhite","Iris"])
 				if str(node.name)=="Face":copy.set_shader_parameter("face_ink",load("res://assets/face_ink_v2.png"))
 				copy.set_shader_parameter("tissue",str(node.name) in ["Face","FaceInk","MouthLine","LidsL","LidsR"])
 				copy.set_shader_parameter("head_part",str(node.name) in ["Face","FaceInk","MouthLine","MouthInterior","Teeth","LidsL","LidsR","EyeL","EyeR","IrisL","IrisR","PupilL","PupilR","BrowL","BrowR","HairCap","EarL","EarR","EarFoldL","EarFoldR","NostrilL","NostrilR"])
