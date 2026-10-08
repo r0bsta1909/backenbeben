@@ -1,4 +1,4 @@
-"""Three-axis head attachment math; not yet selected by the game solver.
+"""Three-axis head attachment math used by the spatial game solver.
 Angles are pitch (+X), shader yaw (-Y), roll (+Z), applied in that order.
 """
 import numpy as np

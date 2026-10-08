@@ -233,3 +233,19 @@ READMEbereinigt,DefaultinHostaktualisiert. V09Download bleibtvorReibung/Licht/
 Lid/Trikotdetails; keinneuesPaket indiesemSchritt. Goalweiteroffen,insbesondere
 Gesamtstil/menschlicheAbnahme,Physikgrenzen undZwei-PC-Test.
 AktiverCheckoutHost8877Session63488. Testhosts8880/8881 beendet.
+
+G4/G8 REPLAY-UMRECHNUNG BESCHLEUNIGT OHNE DATENREDUKTION
+Profil des aufgewärmten Reibungsreplays: local_offsets_spatial groesster einzelner
+Pythonzeitanteil(.604sSelf/.768sGesamt). Gleiche30Fixpunktiterationen proVertex
+kompiliert,keineFrames/Vertices/Toleranzen entfernt. Referenzfunktion erhalten.
+SiebengezielteTests PASS inkl.Shader-Roundtrip,20x289VertexReferenzvergleiche.
+DreivollstaendigeReplayvergleiche: frames,head_positions,head_rotations,arm_path,
+score_update,friction EXAKTgleich;MedianSolver3503.4->2937.0ms.
+Je3realeWebSocketSchlaege mitkorrektemAnspannen vor/nachHostneustart:
+Median5.2467->4.5675s bisImpact(~12.9%);Normalimpuls/Wertung exaktgleich.
+Wartezeit bleibtspuerbar,keineLatenzgesamtabnahme. Beleg validation/
+spatial-inverse-performance.json; Reproduktion measure_spatial_inverse.py und
+measure_brace_latency.py. VeralteteDocstring zuKopfsolveraktivierung korrigiert.
+AktiverNormalhost8877Session2501 mitneuemCode. V09Downloadweiterhistorisch.
+Goalaktiv; naechsterEngpass lautProfil Materialresiduen(.737sGesamt), danach
+Spiel-/Paketintegration bewerten stattunbeschraenkteMikrooptimierung.

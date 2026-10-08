@@ -50,6 +50,13 @@ class SpatialHeadTests(unittest.TestCase):
   blend=np.clip((rest[:,1]*4+.55)/.43,0,1);blend=blend*blend*(3-2*blend)
   world=np.array([rotation_and_derivatives(angles*b)[0]@v+position*b for v,b in zip(rest,blend)])
   np.testing.assert_allclose(local_offsets_spatial(world,rest,angles,position),0,atol=1e-12)
+ def test_compiled_replay_inverse_matches_reference(self):
+  from moving_head_replay import local_offsets_spatial,local_offsets_spatial_reference
+  rng=np.random.default_rng(91)
+  rest=rng.uniform([-.1,-.16,-.04],[.1,.2,.12],size=(289,3))
+  for _ in range(20):
+   points=rest+rng.normal(0,.002,rest.shape);angles=rng.uniform(-.2,.2,3);position=rng.uniform(-.005,.005,3)
+   np.testing.assert_allclose(local_offsets_spatial(points,rest,angles,position),local_offsets_spatial_reference(points,rest,angles,position),atol=1e-12,rtol=0)
  def test_spatial_full_clip_preserves_three_axes(self):
   from contact_v3 import score
   from moving_head_replay import simulate

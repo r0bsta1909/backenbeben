@@ -1,0 +1,72 @@
+{
+  "replay_comparison": {
+    "runs": [
+      {
+        "reference_ms": 3431.4,
+        "optimized_ms": 2884.1,
+        "recordings_identical": true
+      },
+      {
+        "reference_ms": 3503.4,
+        "optimized_ms": 2937.0,
+        "recordings_identical": true
+      },
+      {
+        "reference_ms": 3636.3,
+        "optimized_ms": 3009.9,
+        "recordings_identical": true
+      }
+    ],
+    "reference_median_ms": 3503.4,
+    "optimized_median_ms": 2937.0
+  },
+  "network_before": {
+    "trials": [
+      {
+        "seconds_to_impact": 5.241045500006294,
+        "solve_ms": 4000.8,
+        "normal_impulse_ns": 1.0133145361808191,
+        "quality": 0.5067
+      },
+      {
+        "seconds_to_impact": 5.314749299999676,
+        "solve_ms": 4115.0,
+        "normal_impulse_ns": 1.0133145361808191,
+        "quality": 0.5067
+      },
+      {
+        "seconds_to_impact": 5.246716499998001,
+        "solve_ms": 4047.4,
+        "normal_impulse_ns": 1.0133145361808191,
+        "quality": 0.5067
+      }
+    ],
+    "median_seconds": 5.246716499998001
+  },
+  "network_after": {
+    "trials": [
+      {
+        "seconds_to_impact": 4.542841299989959,
+        "solve_ms": 3330.3,
+        "normal_impulse_ns": 1.0133145361808191,
+        "quality": 0.5067
+      },
+      {
+        "seconds_to_impact": 4.695631599999615,
+        "solve_ms": 3446.3,
+        "normal_impulse_ns": 1.0133145361808191,
+        "quality": 0.5067
+      },
+      {
+        "seconds_to_impact": 4.567488600005163,
+        "solve_ms": 3323.7,
+        "normal_impulse_ns": 1.0133145361808191,
+        "quality": 0.5067
+      }
+    ],
+    "median_seconds": 4.567488600005163
+  },
+  "network_improvement_percent": 12.945770940608226,
+  "targeted_tests": 7,
+  "limits": "Same 30 inverse iterations and full recorded clip. Hardware-specific timing; remaining latency is still material. No overall style/physics acceptance."
+}

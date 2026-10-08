@@ -24,7 +24,7 @@ def local_offsets(points,rest,angle,position=None):
 
 
 
-def local_offsets_spatial(points,rest,angles,position):
+def local_offsets_spatial_reference(points,rest,angles,position):
     local=points.copy()
     for _ in range(30):
         blend=np.clip((local[:,1]*4+.55)/.43,0.,1.);blend=blend*blend*(3-2*blend)
@@ -34,6 +34,10 @@ def local_offsets_spatial(points,rest,angles,position):
         xx=c[:,1]*x+t[:,1]*z;zz=-t[:,1]*x+c[:,1]*z
         local=np.column_stack((xx,c[:,0]*y+t[:,0]*zz,-t[:,0]*y+c[:,0]*zz))
     return ((local-rest)*4).ravel()
+
+def local_offsets_spatial(points,rest,angles,position):
+    from spatial_replay_compiled import invert_spatial_offsets
+    return invert_spatial_offsets(np.asarray(points),np.asarray(rest),np.asarray(angles),np.asarray(position))
 
 def simulate(scored,braced=False,spatial=False,friction_coefficient=0.):
     started=time.perf_counter()
