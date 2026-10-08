@@ -5,10 +5,14 @@ from tissue import Tissue,NX,NY
 from contact_v3 import surface
 from contact_constraint import project_contact
 
-def run(speed=1.,fps=240,duration=.5,reference=False,iterations=12,volume_compliance=1e-15,tolerance=None):
+def run(speed=1.,fps=240,duration=.5,reference=False,iterations=12,volume_compliance=1e-15,tolerance=None,compiled=False):
     started=time.perf_counter()
     from tissue_reference import ReferenceTissue
-    tissue=(ReferenceTissue if reference else Tissue)(lambda x,y:surface(x,y) or .02)
+    cls=ReferenceTissue if reference else Tissue
+    if compiled:
+        from tissue_compiled import CompiledTissue
+        cls=CompiledTissue
+    tissue=cls(lambda x,y:surface(x,y) or .02)
     tissue.w=[0. if i>=NX*NY or i//NX in (0,NY-1) else 1/.003 for i in range(len(tissue.p))]
     tissue.prepare();tissue.iterations=iterations;tissue.residual_tolerance=tolerance
     tissue.rest/=4;tissue.p/=4;tissue.el/=4;tissue.tv/=64
@@ -31,7 +35,7 @@ def run(speed=1.,fps=240,duration=.5,reference=False,iterations=12,volume_compli
         peak=max(peak,float(np.max(np.linalg.norm(tissue.p-tissue.rest,axis=1))))
         contacts+=multiplier>0
         frames.append({'time':(step+1)*dt,'hand':hand.tolist(),'contact_node':tissue.p[index].tolist(),'gap':gap,'lambda':multiplier})
-    return {'reference':reference,'iterations':iterations,'units':'metres, kilograms, seconds','fps':fps,'speed':speed,'peak_deformation_m':peak,
+    return {'compiled':compiled,'reference':reference,'iterations':iterations,'units':'metres, kilograms, seconds','fps':fps,'speed':speed,'peak_deformation_m':peak,
             'iteration_counts':iteration_counts,'residual_tolerance_m':tolerance,'residual_peaks':residual_peaks,'minimum_gap_m':min_gap,'contact_steps':contacts,'final_hand_velocity':velocity.tolist(),
             'solve_ms':(time.perf_counter()-started)*1000,'frames':frames}
 

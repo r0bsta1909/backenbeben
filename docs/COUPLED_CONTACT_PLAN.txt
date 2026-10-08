@@ -145,3 +145,24 @@ Zusaetzliche Cacheimplementierung deshalb verworfen; Referenzsolver bleibt
 auf dem zuvor geprueften Stand. Messung: validation/batch-optimization.json.
 Naechste Richtung: kompilierter numerischer Kernel, separat gegen den erhaltenen
 NumPy-Referenzpfad vergleichen. Keine weiteren Mikro-Caches ohne Messbeleg.
+
+OPTIONALER KOMPILIERTER MATERIALKERN
+server/tissue_compiled.py nutzt Numba 0.61.2 ohne fastmath/Parallelmodus fuer
+Kanten- und Volumendurchlaeufe. Die originale Gruppenreihenfolge bleibt erhalten.
+Kontakt, Residuen, Abbruch und Aufzeichnung werden unveraendert gemeinsam genutzt.
+Installation nur fuer Labor: uv pip install --python <Projektpython>
+-r server/requirements-lab.txt. Matchhost benoetigt diese Abhaengigkeit nicht.
+Reproduktion ueber coupled_lab.run(..., reference=True, compiled=True).
+
+960 Hz, 0.03 s, adaptive Toleranz 2.5e-6 m:
+Referenz 1993 ms; erster JIT-Lauf inklusive Kompilierung 6918 ms; warmer Lauf
+422 ms. Hand-/Kontaktpositionen maximal 2.8e-17 m abweichend, identische
+Iterationszahlen. Kein Echtzeitversprechen: selbst der warme Lauf ist noch
+langsamer als die simulierte Zeit. Kaltstart muss vor einem Match abgefangen
+werden, falls diese Variante spaeter integriert wird.
+Fuenf Gewebetests bestanden. Zusaetzlicher Vergleich prueft alle Kaefigknoten
+und beide Multiplikatorfelder nach 12 Durchlaeufen mit gestoerter Ausgangslage.
+Ohne optionales Numba wird nur dieser Kompiliertest explizit uebersprungen.
+Nachweis: validation/compiled-contact.json. Noch keine Matchintegration.
+Naechste Aufgabe: Profil des warmen Gesamtloops, danach Arm-Hand-Feder und
+mehrpunktiger Kontakt; Kaltstart und Paketabhaengigkeiten vor Freigabe loesen.

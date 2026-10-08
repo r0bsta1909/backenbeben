@@ -197,3 +197,8 @@ bestanden; Solver noch nicht im Spiel. Details: COUPLED_CONTACT_PLAN.txt.
 Gruppen-Cache-Optimierung untersucht und verworfen: nur 1.4% lokaler Unterschied,
 kein belastbarer Speedgewinn. Referenzcode unveraendert. Naechste Richtung ist
 ein kompilierter Kernel mit Vergleich gegen die bestehende Referenz.
+
+Optionaler Numba-Materialkern implementiert (requirements-lab.txt). Vergleich
+inklusive aller Knoten/Multiplikatoren bestanden. Warm 422 ms statt 1993 ms
+im 0.03-s-Lauf; Kaltkompilierung rund 6.9 s. Fuenf Gewebetests bestanden.
+Noch nicht im Spiel aktiv; Details in COUPLED_CONTACT_PLAN.txt.

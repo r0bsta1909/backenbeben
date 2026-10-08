@@ -1,0 +1,7 @@
+{
+  "reference_ms": 1993.4795000008307,
+  "compiled_cold_ms": 6917.799699996976,
+  "compiled_warm_ms": 422.1078000009584,
+  "max_position_difference_m": 2.7755575615628914e-17,
+  "same_iteration_counts": true
+}

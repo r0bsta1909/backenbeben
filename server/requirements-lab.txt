@@ -1,0 +1,2 @@
+# Optional experimental acceleration; not required by the match host.
+numba==0.61.2
