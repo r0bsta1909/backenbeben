@@ -255,9 +255,9 @@ func injury_material_state(actor: Node3D) -> Array:
 	var material: ShaderMaterial=face.get_surface_override_material(0)
 	return [material.get_shader_parameter("injury_left"),material.get_shader_parameter("injury_right"),material.get_shader_parameter("injury_jaw")]
 
-func head_offset_state(actor: Node3D) -> Array:
+func head_offset_state(actor: Node3D, parameter := "head_offset") -> Array:
 	var material: ShaderMaterial=actor.face_mesh.get_surface_override_material(0)
-	var value: Vector3=material.get_shader_parameter("head_offset")
+	var value: Vector3=material.get_shader_parameter(parameter)
 	return [value.x,value.y,value.z]
 
 func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
@@ -348,7 +348,7 @@ func _process(delta: float) -> void:
 			JavaScriptBridge.eval("window.contactSound=false")
 		mirror_focus=bool(JavaScriptBridge.eval("window.mirrorFocus || false",true))
 		AudioServer.set_bus_mute(0,bool(JavaScriptBridge.eval("window.muted || false",true)))
-		JavaScriptBridge.eval("window.godotStats="+JSON.stringify({"fps":Engine.get_frames_per_second(),"face_head_offset":head_offset_state(fighter),"face_injury":injury_material_state(fighter),"mirror_injury":injury_material_state(reflection),"arm_data":hand_pose.has("arm"),"rendered_arm":hand.arm_world_joints(),"hand_wrist":str(hand.skeleton.get_bone_global_pose(hand.skeleton.find_bone("hand.R")).origin),"dragging":dragging,"samples":gesture.size(),"physics_time":physics_frame.get("time",-1),"physics_active":physics_frame.has("id"),"crowd_active":arena_stage.crowd_was_active,"camera_position":[camera.position.x,camera.position.y,camera.position.z],"mirror_draw_requests":mirror_draw_requests,"physics_material_updates":physics_material_updates,"muted":AudioServer.is_bus_mute(0)}))
+		JavaScriptBridge.eval("window.godotStats="+JSON.stringify({"fps":Engine.get_frames_per_second(),"face_head_offset":head_offset_state(fighter),"face_head_rotation":head_offset_state(fighter,"head_rotation"),"face_injury":injury_material_state(fighter),"mirror_injury":injury_material_state(reflection),"arm_data":hand_pose.has("arm"),"rendered_arm":hand.arm_world_joints(),"hand_wrist":str(hand.skeleton.get_bone_global_pose(hand.skeleton.find_bone("hand.R")).origin),"dragging":dragging,"samples":gesture.size(),"physics_time":physics_frame.get("time",-1),"physics_active":physics_frame.has("id"),"crowd_active":arena_stage.crowd_was_active,"camera_position":[camera.position.x,camera.position.y,camera.position.z],"mirror_draw_requests":mirror_draw_requests,"physics_material_updates":physics_material_updates,"muted":AudioServer.is_bus_mute(0)}))
 	if appearance_timer>=.08:
 		appearance_timer=0
 		if state.has("players") and state.players.size()>1:

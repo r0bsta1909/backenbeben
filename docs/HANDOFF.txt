@@ -1552,3 +1552,14 @@ Erneuter7VariantenlaufPASS,Peakwinkelgleichbis1e-6,Laufzeitca2.8s.
 Belege spatial-head-replay-variants.json/spatial-head-performance.json.
 NAECHSTES: gezielterHostmitspatial=True,echteBrowserkontaktansichtenundDuell;
 nochkeineDefaultfreigabe. Host52990weiteraltergeladenerYawStandard.
+
+G4 SPATIAL IM ECHTEN BROWSER UND LAN-DUELL
+ExpliziterHost --physics coupled-spatial inklusiveWorkerWarmup undfrueher
+Anspannneuberechnung. Standardweitercoupled-moving.150TestsPASS.
+15Browseransichten: tatsächlicheFaceShaderRotationen stimmenmitReplaydaten
+ueberein,FrontNeigunggesichtet,errors[]. VollerLAN-KO-TestPASS inkl.Anspannen,
+identischerClips,Verletzungsruecklauf,Resume,KO,RevancheundRotationResetNull.
+Beleg validation/spatial-head-integration.json/spatial-head-front.png.
+Host8877 aktuellcoupled-spatial,Session20874. NAECHSTES StandardbalanceDuell
+undDefaultentscheidung;keineweiterenisoliertenMechanikbausteinevordieserAbnahme.
+ParameterweiterPrototyp/EulerDiagonaltraegheit,keinevollstaendigeAnatomie.

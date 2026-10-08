@@ -58,6 +58,7 @@ async def main():
    replay_id=await page.evaluate('state.replay_id')
    recorded=await (await page.request.get('http://localhost:8877/api/replay/'+replay_id)).json()
    assert recorded['physics_backend']==('coupled-moving' if '--expect-moving' in sys.argv else 'coupled')
+   if '--expect-spatial' in sys.argv:assert recorded['head_response']['spatial_rotation'] is True
    coupled_evidence={'backend':recorded['physics_backend'],'solve_ms':recorded['solve_ms'],'peak':recorded['peak'],'contact_diagnostics':recorded['contact_diagnostics'],'head_response':recorded.get('head_response'),'maximum_head_yaw_rad':max(abs(f[0]) for f in recorded['frames'])}
   if '--inspect-timeout' in sys.argv:
    await page.wait_for_function("state.phase==='replay' && state.remaining<3",timeout=15000)
@@ -83,8 +84,9 @@ async def main():
      await page.wait_for_function('(s)=>{const f=JSON.parse(physicsFrame);return f.camera===s.view && Math.abs(f.time-s.time)<.002 && f.footprint.length===0}',arg={'view':view,'time':moment})
      await page.wait_for_timeout(200)
      await page.screenshot(path=f'logs/contact-audit-{view}-{label}.png')
-     record=await page.evaluate('({frame:JSON.parse(physicsFrame),rendered:godotStats.rendered_arm,head_offset:godotStats.face_head_offset})')
+     record=await page.evaluate('({frame:JSON.parse(physicsFrame),rendered:godotStats.rendered_arm,head_offset:godotStats.face_head_offset,head_rotation:godotStats.face_head_rotation})')
      record.update(camera=view,moment=label);audit.append(record)
+     assert max(abs(a-b) for a,b in zip(record['head_rotation'],record['frame'].get('head_rotation',[0,0,0])))<1e-5
      assert max(abs(a-b) for a,b in zip(record['head_offset'],record['frame'].get('head_offset',[0,0,0])))<1e-5
      for joint in ('shoulder','elbow','wrist'):
       assert max(abs(a-b) for a,b in zip(record['frame']['arm']['pose'][joint],record['rendered'][joint]))<1e-5,(view,label,joint,record)

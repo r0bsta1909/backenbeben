@@ -73,6 +73,7 @@ async def main():
                         assert clip['physics_backend']=='coupled-moving'
                         assert clip['head_response']['braced']==clip['braced']
                         assert clip['head_response']['translation'] is True
+                        if '--expect-spatial' in sys.argv:assert clip['head_response']['spatial_rotation'] is True
                         assert len(clip['head_positions'])==len(clip['frames'])
                         report['moving_head_brace_consistent']=True
                     if clip.get('physics_backend') in ('coupled','coupled-moving'):
@@ -140,7 +141,7 @@ async def main():
             await a.wait_for_function("JSON.parse(renderState).state.phase==='aim'")
             rematch=await state(a);assert rematch['turn']==1 and all(p['damage']==0 and p['fouls']==0 for p in rematch['players'])
             for page in pages:
-                await page.wait_for_function('godotStats.face_injury?.every(v=>v===0) && godotStats.mirror_injury?.every(v=>v===0) && godotStats.face_head_offset?.every(v=>v===0)',timeout=3000)
+                await page.wait_for_function('godotStats.face_injury?.every(v=>v===0) && godotStats.mirror_injury?.every(v=>v===0) && godotStats.face_head_offset?.every(v=>v===0) && godotStats.face_head_rotation?.every(v=>v===0)',timeout=3000)
             report['rematch_material_reset']=True
             report['rematch']=True
             await b.locator('#lobbyButton').click()
