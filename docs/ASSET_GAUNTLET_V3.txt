@@ -437,3 +437,22 @@ Bereitschaftsbild nach Export selbst gesichtet: gezackte Querfalte deutlich gegl
 Kontaktklassen des Standardtests unveraendert. Geometrie bleibt in starken Posen
 verzerrt; perfekter Artstyle/physikalisches Hautmodell damit nicht nachgewiesen.
 Nachweise validation/wrist-blend.json und wrist-blend-ready.png.
+
+BELEUCHTUNGSNORMALEN FOLGEN GESICHTSVERFORMUNG
+Haut und Kontur teilen face_deform.gdshaderinc. Positionsabbildung bleibt dieselbe;
+Normalen werden nun durch symmetrische Tangentenproben dieser Abbildung bestimmt
+(epsilon .001 Render-Einheiten = .25 mm bei Skalierung 4). Normalisierte Kreuzung
+der verformten Tangenten; bei degenerierter Flaeche Rueckfall auf Ursprungsnormale.
+Kontur wird entlang korrigierter Normale aufgeweitet. Unveraenderte Flaechen ohne
+Kopfrotation/Verletzung/Kieferbewegung/aktiven Cage ueberspringen die Zusatzproben.
+GPU-Pruefung tests/face_normal_render.gd testet echte Shaderausgabe gegen
+analytische Werte fuer Identitaet, 60-Grad-Kopfdrehung und lineare Gewebescherung.
+Erster Lauf bestanden. Dies prueft Beleuchtung, nicht Materialphysik oder
+anatomische Richtigkeit des weiterhin approximierten Match-Gewebemodells.
+Finaler GPU-Lauf mit Ruhepfad ebenfalls bestanden, keine Rendererfehler.
+Webexport und Browser-Kamera/Mausrad/Replays bestanden, keine Browserfehler.
+Replaybild selbst gesichtet. Zwei Ansichten RTX 2080: RAF-p95 16.5 ms Treffer,
+16.1 ms bewegtes Replay; 22.6 ms beim Ziehen/Berechnen. Der Ruhepfad beseitigt
+diese Ausreisser nicht nachweisbar; 60-Hz-Budget nicht durchgehend erfuellt.
+Mediane etwa 15 ms. Nachweis validation/face-normals.json. Keine reine GPU-Zeit,
+kein perfektes Stilgate und keine Abnahme des gesamten Physikmodells.

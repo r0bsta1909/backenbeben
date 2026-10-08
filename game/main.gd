@@ -442,6 +442,7 @@ func drive_recorded_physics() -> void:
 				m.set_shader_parameter("side_cage_texture",side_texture)
 				var bounds: Array=side_data.get("bounds",[-.44,.56,-.10,.40])
 				m.set_shader_parameter("side_cage_bounds",Vector4(bounds[0],bounds[1],bounds[2],bounds[3]))
+			m.set_shader_parameter("cage_deformed",affected)
 			m.set_shader_parameter("cage",offsets if affected else empty_cage)
 			m.set_shader_parameter("head_angle",float(physics_frame.get("head",0)) if affected else 0.0)
 			m.set_shader_parameter("jaw_angle",float(physics_frame.get("jaw",0)) if affected else 0.0)
