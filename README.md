@@ -6,7 +6,7 @@ Der Look orientiert sich an kantiger Comicgrafik und dem ursprünglichen XIII.
 
 ## Aktueller Stand
 
-Der aktuelle [Prototyp 10](https://github.com/r0bsta1909/backenbeben/releases/tag/v0.10.0-dev.20261008)
+Der aktuelle [Prototyp 11](https://github.com/r0bsta1909/backenbeben/releases/tag/v0.11.0-dev.20261008)
 enthält anatomische Arm-/Handmodelle, körpergebundene seitliche Schläge und vom Host
 aufgezeichnete Kontakt-/Gesichtsreplays. Weitere schadensfreie Probeschwünge sind
 wählbar; Verletzungen und geschwollene Augen erscheinen auch im eigenen Spiegel.
@@ -19,6 +19,9 @@ bleiben bei Kopfdrehungen verbunden. Modellierte Stofffalten und Zuschauer ergä
 ergänzt Stofflinien, ruhigere Helferbeleuchtung und sichtbares Anspannen der Augenlider.
 Tangentiale Reibung ist in den Hand-/Gewebekontakt integriert; die Berechnung wurde
 beschleunigt, ohne Replayframes oder Solverprüfungen zu reduzieren.
+Die Handneigung lässt sich direkt an der gespeicherten Probe vergleichen. Augen,
+Brauen und Unterkiefer wurden überarbeitet; Startneigung ist −18°. Die Standardbalance
+mit Grundschaden 35 ermöglicht K. o. durch mehrere starke Treffer.
 
 Standardkampf, KO, Replay-Rücklauf, Wiedereinstieg und Revanche sind mit zwei
 Browserclients geprüft. Das Hostpaket wurde außerhalb des Projekts mit frischer
@@ -32,7 +35,7 @@ Kopf/Kiefer, Wertung und KO verwenden teilweise vereinfachte Modelle. Der
 [verbindliche Gauntlet](docs/PROTOTYPE_GAUNTLET.txt) nennen die offenen Anforderungen.
 Die [Konzeptbilder](docs/art-direction-v3/03-first-person.png) bleiben das Stilziel.
 
-![Seitlicher Kontakt im aktuellen Browserprototyp](docs/validation/shoulder-tailoring.png)
+![Seitlicher Kontakt im aktuellen Browserprototyp](docs/validation/jaw-shape-contact.png)
 
 ## Spielen unter Windows
 
@@ -77,8 +80,8 @@ Hoststart vorbereitet. Laufzeit und numerische Restfehler sind in den
 
 Für technische Vergleiche bleiben `--physics coupled-spatial` (ohne Reibung),
 `--physics coupled-moving` (nur Yaw), `--physics coupled` (verankerter Kopf)
-und `--physics legacy` verfügbar. Der öffentliche Download Prototyp 10 enthält
-noch den Stand ohne Reibung.
+und `--physics legacy` verfügbar. Der öffentliche Download Prototyp 11 verwendet
+standardmäßig den gekoppelten Kontakt mit Reibung.
 Der gezielte Browsercheck
 lautet `python tests/replay_contact_view.py --expect-moving --expect-spatial --inspect-timeout --visual-contact`.
 
