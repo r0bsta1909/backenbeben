@@ -397,3 +397,25 @@ Publikum sowie gespreizte Finger in der Kontaktpose erreichen die Referenz
 noch nicht. Naechste sichtbare Prioritaet ist die flache, geschlossene
 Schlaghand samt gemeinsam aktualisierter Kontaktgeometrie; keine kosmetische
 Pose, die vom Scoring abweicht. Neue Laborphysik weiterhin nicht im Match.
+
+SCHLAGHAND: FINGER ANATOMISCH ZUSAMMENGEFUEHRT
+Vier Finger im Quellenmesh um ihre eigenen Grundgelenke in gemeinsame
+Laengsrichtung gedreht. Daumen und Tiefenkruemmung bleiben erhalten; Uebergang
+an den Fingerzwischenraeumen weich gewichtet. Dieselbe Transformation erzeugt
+Mesh, Fingerknochen und Nagelpositionen. Kontaktpunkte danach neu aus der
+fertigen remeshten Haut abgetastet: jetzt 113 statt 114. Keine rein visuelle
+Fingerpose mit veralteter Hostkollision. Beide Haende geaendert.
+Fingerknochenlaengen maximal 6.05e-8 m anders (Exportpraezision); seitliche
+Spreizung der projizierten Fingerachsen praktisch null. Haut/Kontaktvergleich
+in Blenderpose <=0.21 Mikrometer. Assetvalidator prueft nun zusaetzlich die
+parallelen Fingerachsen. Einzelne Finger bleiben als Formen erkennbar; das
+Gate behauptet nicht, dass jede Fingerseitenflaeche die Nachbarflaeche beruehrt.
+Alle 66 Python-Tests, erweiterte Blender-Assetpruefung, Skinningvergleich,
+Godot-Fingerentspannung/Reset, Webexport und Browser-Kontaktreplay bestanden.
+Eigener Testhost auf 8877 neu gestartet, damit neue Hostdaten geladen sind.
+Vorschau selbst gesichtet: validation/hand-adduction-contact.png. Nachweis:
+validation/hand-adduction.json. Neue Geometrie ist in der Webfassung aktiv.
+Historische Laborprofile mit 114 Punkten beschreiben den vorherigen Handstand;
+weitere Physik-/Konvergenzmessungen muessen die aktuelle 113-Punkte-Hand nutzen.
+Stil-/Spielgefuehl-Abnahme weiterhin offen. Schulterformen, Gesichtsschraffur,
+Publikum und neue gekoppelte Echtzeitphysik bleiben weitere Arbeitsfelder.

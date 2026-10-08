@@ -251,9 +251,28 @@ for sign,side in [(-1,'R'),(1,'L')]:
     source_normal=source_width.cross(source_finger)*sign
     target_normal=(Vector((0,0,1))-direction*direction.z).normalized()
     target_width=direction.cross(target_normal)*sign
-    def hand_transform(v):
+    def hand_transform_raw(v):
         d=v-source_wrist
         return wr+direction*(d.dot(source_finger)*.095)+target_width*(d.dot(source_width)*.080)+target_normal*(d.dot(source_normal)*.095)
+    # Adduct the four fingers around their own knuckles. Keep depth/curl and
+    # thumb anatomy; this is the exported rest mesh, not a visual-only pose.
+    digit_guides=[]
+    for digit in range(1,6):
+        points=[hand_transform_raw(joint(f'finger-{digit}-{k}')) for k in range(1,5)]
+        axis=points[-1]-points[0]
+        planar=(axis-target_normal*axis.dot(target_normal)).normalized()
+        rotation=planar.rotation_difference(direction)
+        digit_guides.append((digit,points,rotation))
+    def hand_transform(v):
+        p=hand_transform_raw(v)
+        if (p-wr).dot(direction)<.075:return p
+        def segment_distance(a,b):
+            delta=b-a;t=max(0.,min(1.,(p-a).dot(delta)/delta.length_squared))
+            return (p-(a+delta*t)).length_squared
+        digit,points,rotation=min(digit_guides,key=lambda guide:min(segment_distance(a,b) for a,b in zip(guide[1][:-1],guide[1][1:])))
+        if digit==1:return p
+        base=points[0];blend=smoothstep(-.012,.014,(p-base).dot(direction))
+        return p.lerp(base+rotation@(p-base),blend)
     hand_faces=[f for f in groups['body'] if all(sign*raw[i].x>4.3 and (raw[i]-source_wrist).dot(source_finger)>-.14 for i in f)]
     indices=sorted(set(i for f in hand_faces for i in f));lookup={old:new for new,old in enumerate(indices)}
     edge_count={}

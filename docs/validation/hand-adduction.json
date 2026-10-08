@@ -1,0 +1,12 @@
+{
+  "contact_samples": 113,
+  "maximum_skinning_error_m": 3.5749202497701025e-07,
+  "maximum_finger_bone_length_change_m": 6.046295611406016e-08,
+  "python_tests_passed": 66,
+  "asset_validation": true,
+  "parallel_finger_validation": true,
+  "finger_relax_reset": true,
+  "web_export": true,
+  "browser_replay_errors": [],
+  "style_accepted": false
+}

@@ -47,4 +47,14 @@ for sample in contact['samples']:
  assert distance<.000001, ('off-surface contact',sample,distance)
  assert 0<=sample['hand_weight']<=1
 print('CONTACT_SURFACE_VALIDATION_PASS',len(contact['samples']))
+metadata=json.loads((root/'game/assets/character_v3.json').read_text())
+for side in ['R','L']:
+ finger=Vector(metadata['arms'][side]['finger_direction']).normalized()
+ normal=Vector((0,0,1));normal=(normal-finger*normal.dot(finger)).normalized()
+ for digit in range(4):
+  base=Vector(metadata['bones'][f'finger{digit}_0.{side}']['head'])
+  tip=Vector(metadata['bones'][f'finger{digit}_2.{side}']['tail'])
+  axis=tip-base;axis=(axis-normal*axis.dot(normal)).normalized()
+  assert axis.dot(finger)>.99999, ('spread striking finger',side,digit)
+print('CLOSED_STRIKE_HAND_VALIDATION_PASS')
 print('CHARACTER_ASSET_VALIDATION_PASS')
