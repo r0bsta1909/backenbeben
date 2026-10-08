@@ -1750,3 +1750,15 @@ auch nach350msPause,Clipflag korrekt,Resume/Verletzungsruecklauf/Revanche,errors
 Spielbild bei.4s gesichtet: leichtverengte,weiteroffeneAugen. Beleg validation/
 brace-expression.json/png. KeineMuskelphysik odermenschlicheAbnahme behauptet.
 V09-Paket bleibt vor Licht-/Lidkorrektur. Goalaktiv; Checkout8877Session18596.
+
+G2 TRIKOTLINIEN AUF DER TATSAECHLICHEN STOFFOBERFLAECHE
+Acht kurze Faltenstriche und zwei vordere Armlochlinien auf finales dezimiertes
+Trikot projiziert. Baryzentrische Uebertragung der geglaetteten Brust/Oberarm-
+Riggewichte haelt Linien beim Heben/Biegen am Stoff. Blenderquelle, GLB und
+Vorschau erneuert; insgesamt89772Polygone. Kollisions-/Landmarkendateien
+unveraendert. Assetvalidierung und Webbuild bestanden.15Browseransichten/
+Probe/Replay bestanden,errors[]. Nativer101PosenKoerpertest mit Ruecklauf
+bestanden; Kontakt/Rueckholung und geneigterKoerper gesichtet. NativeVorschau
+nutztDefaultfarben. Beleg validation/cloth-ink.json pluszweiBilder.
+Linien bewusst sparsam; keineStoffsimulation oderGesamtstilabnahme.
+Goalaktiv; V09-Paketweiterhistorisch vorLicht/Lid/Trikotdetails.

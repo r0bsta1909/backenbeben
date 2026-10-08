@@ -534,6 +534,41 @@ for v in body.data.vertices:
     arm_sum=sum(g.weight for g in v.groups if body.vertex_groups[g.group].name.startswith('upper_arm.'))
     body.vertex_groups['chest'].add([v.index],max(0.,1-arm_sum),'REPLACE')
 
+# Sparse garment ink follows the final cloth surface and its smoothed weights.
+# Sampling the actual triangles avoids detached lines when the shoulder rises.
+from mathutils.geometry import barycentric_transform
+body.data.calc_loop_triangles()
+cloth_triangles=[tuple(t.vertices) for t in body.data.loop_triangles]
+cloth_vertices=[G(v.co) for v in body.data.vertices]
+cloth_bvh=BVHTree.FromPolygons(cloth_vertices,cloth_triangles,all_triangles=True)
+cloth_groups=['chest','upper_arm.R','upper_arm.L']
+cloth_weights=[]
+for v in body.data.vertices:
+    weights={body.vertex_groups[g.group].name:g.weight for g in v.groups}
+    cloth_weights.append(Vector([weights.get(name,0.) for name in cloth_groups]))
+ink_paths=[]
+for a,b,height,width in cloth_folds:
+    dx,dy=b[0]-a[0],b[1]-a[1];length=math.hypot(dx,dy)
+    ink_paths.append([(a[0]+dx*t-dy/length*width*.65,a[1]+dy*t+dx/length*width*.65) for t in [.14,.24,.34,.44,.54,.64,.74,.84]])
+for sign in [-1,1]:
+    ink_paths.append([(sign*x,y) for x,y in [(.195,-.175),(.205,-.195),(.212,-.22),(.211,-.245),(.199,-.27)]])
+for index,path in enumerate(ink_paths):
+    points=[]
+    for x,y in path:
+        hit,normal,triangle,distance_hit=cloth_bvh.ray_cast(Vector((x,y,.35)),Vector((0,0,-1)),.6)
+        if hit is not None:points.append(hit+normal*.00055)
+    if len(points)<3:continue
+    detail=curve('ClothInk%02d'%index,points,.00048,ink)
+    groups=[detail.vertex_groups.new(name=name) for name in cloth_groups]
+    for v in detail.data.vertices:
+        hit,normal,triangle,distance_hit=cloth_bvh.find_nearest(G(v.co))
+        ia,ib,ic=cloth_triangles[triangle]
+        weights=barycentric_transform(hit,cloth_vertices[ia],cloth_vertices[ib],cloth_vertices[ic],cloth_weights[ia],cloth_weights[ib],cloth_weights[ic])
+        weights=Vector([max(0.,w) for w in weights]);weights/=sum(weights)
+        for group,weight in zip(groups,weights):
+            if weight>1e-8:group.add([v.index],weight,'REPLACE')
+    mod=detail.modifiers.new('Follow garment weights','ARMATURE');mod.object=rig;detail.parent=rig
+
 # Recalculate all face normals (lofts and annuli have different winding axes).
 for obj in [o for o in bpy.context.scene.objects if o.type=='MESH']:
     bpy.ops.object.select_all(action='DESELECT');obj.select_set(True);bpy.context.view_layer.objects.active=obj
