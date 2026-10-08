@@ -34,7 +34,9 @@ Nach jeder Probe erscheint automatisch der gespeicherte Kontakt von der Seite.
 PROBE AM KONTAKT ANSEHEN öffnet ihn später bei Bedarf erneut.
 Dort kippt das Mausrad die Hand zum Vergleich: gleiche Mausbahn, neue Neigung,
 neu vom Host bewertet und ohne Schaden. URSPRÜNGLICHE HANDHALTUNG stellt die
-Probe wieder her. Ein neuer Zug mit gedrückter Maustaste beendet den Vergleich;
+Probe wieder her. ZUM SCHLAG BEREITMACHEN kehrt ohne Treffer zur Egoansicht
+und Ausholhaltung zurück; die gewählte Neigung bleibt erhalten.
+Ein neuer Zug mit gedrückter Maustaste beendet den Vergleich;
 dafür gilt die zuletzt gewählte Neigung. Seine neue Mausbahn kann anders treffen.
 ERNEUT OHNE SCHADEN ÜBEN macht den nächsten Schwung erneut zur Probe.
 Die Zugzeit läuft dabei weiter; anschließend zählt der nächste Schwung als Schlag.

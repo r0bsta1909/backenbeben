@@ -2033,3 +2033,16 @@ SPIELEN aktualisiert. Beleg validation/automatic-practice-view.json/png.
 MenschlicheVerstaendlichkeitsabnahmebleibtoffen. V11PaketvordiesenAenderungen.
 Goalaktiv; naechsterSchrittG3: nahtlosenWechselvomKontaktvergleichzumSchwung
 pruefen, insbesondereKamerarueckkehrundraeumlicheOrientierung.
+
+G3 EXPLIZIT ZUM SCHLAG BEREITMACHEN
+Kontaktvergleich hatnunexplizitenVorbereitungsschritt: Egoansicht, neueHostpose
+amAusholstart, gewaehlteNeigungbleibt. KlickloestkeinenSchlag aus. Erneutueben
+nutztdenselbenRueckweg. DirekterMauszugausVergleichbleibtmoeglichwieangekuendigt.
+ZweiBrowserfaelle flat/tips PASS: Vergleich/Original/Neigung/weitereProbe/kein
+Schaden. FlatprueftzusaetzlichWrist>10cmvomKontaktentfernt undgerenderte
+Schulter/Ellbogen/Wrist innerhalb1e-5m zurfrischenHostpose. Egoansichtgesichtet.
+WebexportPASS;Beleg validation/practice-ready.json/png;Anleitungaktualisiert.
+BewussterAnsichtsmoduswechsel, keinephysikalischeRueckholanimation behauptet.
+MenschlicheAbnahmeweiteroffen. V11weiterhistorischesPaket. Goalaktiv.
+NaechsterG8Schritt: fehlendenvollstaendigenLeistungsnachweis fuerIdle/Schwung/
+Impact/Replay imaktuellenSpiel erheben; bisherigeMessungbetrafvorallemReplay.

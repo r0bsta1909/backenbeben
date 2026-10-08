@@ -37,8 +37,12 @@ window.addEventListener('pointerup',e=>{
 });
 canvas.addEventListener('wheel',e=>{if(!ownTurn())return;e.preventDefault();if(inspectPractice){inspectTilt=clamp(inspectTilt+Math.sign(e.deltaY)*3,-45,45);pitch=inspectTilt;previewSent='';previewChanged=performance.now();}else pitch=clamp(pitch+Math.sign(e.deltaY)*3,-45,45);},{passive:false});
 window.addEventListener('blur',()=>{drag=false;rotate=false;});
-document.getElementById('repeatPractice').onclick=()=>{if(ownTurn()&&!drag){repeatPractice=true;inspectPractice=false;}canvas.focus();};
-document.getElementById('inspectPractice').onclick=()=>{if(ownTurn()&&!drag&&state.practice_pose){inspectPractice=!inspectPractice;if(inspectPractice){inspectPose=true;inspectTilt=state.practice_pose.tilt;practicePreview=null;previewSent='';}}canvas.focus();};
+function prepareSwing(){
+ inspectPractice=false;inspectPose=false;length=0;mouse=[.19,mouse[1]];
+ sendAction({action:'pose',x:mouse[0],y:mouse[1],progress:0,tilt:pitch,restart:true});
+}
+document.getElementById('repeatPractice').onclick=()=>{if(ownTurn()&&!drag){repeatPractice=true;prepareSwing();}canvas.focus();};
+document.getElementById('inspectPractice').onclick=()=>{if(ownTurn()&&!drag&&state.practice_pose){if(inspectPractice){prepareSwing();}else{inspectPractice=true;inspectPose=true;inspectTilt=state.practice_pose.tilt;practicePreview=null;previewSent='';}}canvas.focus();};
 document.getElementById('poseCamera').onclick=()=>{if(ownTurn()&&!drag)inspectPose=!inspectPose;canvas.focus();};
 document.getElementById('originalPractice').onclick=()=>{if(!ownTurn()||!inspectPractice||!state.practice_pose)return;inspectTilt=state.practice_pose.tilt;pitch=inspectTilt;practicePreview=null;previewSent='';canvas.focus();};
 document.getElementById('resetPose').onclick=()=>{yaw=0;pitch=-18;depth=0;inspectPractice=false;canvas.focus();};
@@ -106,7 +110,7 @@ function frame(now){
       const viewButton=document.getElementById('poseCamera');viewButton.textContent=inspectPose?'ZURÜCK ZUR EGOANSICHT':'HAND VON DER SEITE ANSEHEN';viewButton.setAttribute('aria-pressed',String(inspectPose));viewButton.disabled=drag;
       document.getElementById('poseCameraHint').hidden=!inspectPose||inspectPractice;
       document.getElementById('poseInputHint').hidden=inspectPractice;
-      const probeButton=document.getElementById('inspectPractice');probeButton.hidden=!state.practice_pose;probeButton.disabled=drag;probeButton.setAttribute('aria-pressed',String(inspectPractice));probeButton.textContent=inspectPractice?'ZURÜCK ZUR AKTUELLEN HALTUNG':'PROBE AM KONTAKT ANSEHEN';
+      const probeButton=document.getElementById('inspectPractice');probeButton.hidden=!state.practice_pose;probeButton.disabled=drag;probeButton.setAttribute('aria-pressed',String(inspectPractice));probeButton.textContent=inspectPractice?'ZUM SCHLAG BEREITMACHEN':'PROBE AM KONTAKT ANSEHEN';
       document.getElementById('practiceStillHint').hidden=!inspectPractice;
       document.getElementById('originalPractice').hidden=!inspectPractice||inspectTilt===state.practice_pose?.tilt;
       document.getElementById('contactVerdict').textContent=state.diagnosis||'Ziel: die ganze Handfläche seitlich an die Wange. Die Probe zeigt, welcher Teil zuerst trifft.';
