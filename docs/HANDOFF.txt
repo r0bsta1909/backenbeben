@@ -850,3 +850,19 @@ separate Rotationsdiagnose; Impulsantwort dort weiterhin aus linearem Sweep.
 Keine Handflaechen-/Kantenkollision zwischen Samples, keine beschleunigte Bahn,
 kein vollstaendiger Kontaktzeitverlauf. Naechstes Gate: Rotationsereignis an
 Kontaktfilter/Impulssolver uebergeben und wiederholte Ereignisse behandeln.
+
+ROTATIONSKONTAKT MIT IMPULSANTWORT VERBUNDEN
+hand_impact_event.first_hand_impact verbindet konservative Naeherung, fortgeschrittene
+Handrotation/Position und Wangendreiecke mit resolve_velocity. Eingaben bleiben
+unveraendert. Status clear/unresolved/nonclosing_proximity/impact unterscheidet
+freie Bewegung, ungeklaerte Suche, trennende Naehe und wirksamen Aufprall.
+Echter Mesh-Audit verwendet jetzt diese verbundene Rotationsantwort: -1 m/s,
+2 rad/s um Y, Event .000317646 s, Sample111, keine gemessene Durchdringung.
+Energie direkt vor/nach Impuls bei gleicher Orientierung .090291 -> .0890782 J.
+Kontaktgeschwindigkeitsrest0, eine Impulsiteration; gesamte Referenzsuche ca.209 ms.
+Keine nachtraegliche Uebertragung des alten linearen Snapshot-Impulses.
+Tests pruefen Nichtmutation, Zeitpunkt, feste Flaeche, freie und trennende Faelle.
+Suchbahn hat konstante Weltgeschwindigkeiten; das ist KEINE freie anisotrope
+Starrkoerperintegration. Material-/Armbewegung und verbleibendes Zeitintervall
+werden noch nicht integriert. Ereigniskette mit anhaltendem Kontakt und geeignete
+Dynamikintegration bleiben offen; im aktiven Match weiterhin nicht verwendet.

@@ -12,29 +12,27 @@
     "sample_index": 111,
     "triangle_index": 355,
     "iterations": 10,
-    "status": "proximity",
-    "solve_ms": 203.8821000023745
+    "status": "proximity"
   },
-  "sweep_ms": 15.835899997910019,
-  "contact_fraction": 0.06010395294037726,
-  "contact_time_s": 0.0003005197647018863,
+  "contact_fraction": 0.06352914296555097,
+  "contact_time_s": 0.00031764571482775485,
   "hand_samples": 116,
   "active_impulses": 1,
-  "energy_before_j": 0.09,
-  "energy_after_j": 0.08864368312178596,
-  "solve_ms": 6.66800000180956,
+  "energy_before_j": 0.090291,
+  "energy_after_j": 0.08907822429647239,
+  "solve_ms": 208.97949999925913,
   "final_velocity": [
-    -0.9849298124642881,
-    -0.0009422669916699914,
-    0.002613332018691791
+    -0.9857565055524572,
+    -0.000890577813457871,
+    0.002469974577928431
   ],
   "final_angular_velocity": [
-    0.05911035382431826,
-    0.5026948712152361,
-    -0.353004386278057
+    0.05583813842890673,
+    2.4751807336853746,
+    -0.3336383178643442
   ],
   "limits": [
-    "impulse snapshot uses linear sweep; rotational proximity measured separately",
+    "constant world velocity sweep, not free rigid body integration",
     "single first-impact snapshot; no full timeline",
     "free rigid hand; no arm reaction",
     "not active match physics"
