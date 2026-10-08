@@ -41,8 +41,15 @@ void fragment() {
         float injury=skin_position.x<0.0?injury_left:injury_right;
         vec2 q=vec2(abs(skin_position.x),skin_position.y);
         float beard=(1.0-smoothstep(-.12,.0,q.y))*smoothstep(.05,.22,skin_position.z);
-        float grain=fract(sin(dot(floor(skin_position.xy*650.0),vec2(12.9898,78.233)))*43758.5453);
-        color=mix(color,color*vec3(.55,.57,.61),beard*(.20+.07*step(.76,grain)));
+        // Broad beard tone instead of subpixel random stippling. Ink lines stay
+        // attached to the rest surface and fade below pixel resolution.
+        float hatch_phase=(skin_position.x+skin_position.y*.65)*105.0;
+        float footprint=fwidth(hatch_phase);
+        float hatch=smoothstep(.72,.94,sin(hatch_phase));
+        hatch*=1.0-smoothstep(.7,2.2,footprint);
+        float shadow_ink=1.0-smoothstep(.05,.45,d);
+        color=mix(color,color*vec3(.55,.57,.61),beard*.20);
+        color*=1.0-beard*shadow_ink*hatch*.14;
         vec2 bruise_distance=(q-vec2(.27,.15))/.13;
         float patch=exp(-dot(bruise_distance,bruise_distance))*smoothstep(.12,.27,skin_position.z);
         color=mix(color,vec3(.22,.085,.19),patch*smoothstep(.12,.85,injury)*.8);

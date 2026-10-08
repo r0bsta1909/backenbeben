@@ -1492,3 +1492,11 @@ mitUmbenennungshinweisabgelehnt. IsolierteAuswahltestsPASS;komplettfrische
 InstallationdurchScript inkl.venvErzeugung/Pip/ImportsPASS. Beleg
 validation/setup-selection.json. SPIELEN-Versionstitelneutralisiert.
 OeffentlichesV07bleibtunveraendert,vorgenannteSetupkorrektur nuraktuellerQuellstand.
+
+G2 HAUTSHADER-PUNKTMUSTER ENTFERNT
+ZufaelligesBartstipple durchbreitenTon undaufloesungsabhaengigausblendende
+Schattenschraffurersetzt. Webbuild/15KontaktansichtenPASS;Verletzungsrender
+beideSeiten/vierHautfarben0/35/75/0 inkl.exaktemResetPASS. Bildgesichtet:
+feineKoernungausGesichtstexturbleibt;naechsterAnsatzTextur,nichtfertigerStil.
+Beleg validation/skin-ink.json/png. Host8877 wiederCheckout,Session52990;
+V07Paketserverbeendet. OeffentlichesPaketunveraendert. Gesamtzieloffen.
