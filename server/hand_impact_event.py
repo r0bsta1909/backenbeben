@@ -10,10 +10,10 @@ from contact_constraint import rotation_increment
 
 
 def first_hand_impact(hand,cage,velocity,angular_velocity,duration,
-                      distance_tolerance=1e-8,velocity_tolerance=1e-8):
+                      distance_tolerance=1e-8,velocity_tolerance=1e-8,distance_query=None):
     v=np.asarray(velocity,dtype=float);omega=np.asarray(angular_velocity,dtype=float)
     proximity=first_rigid_proximity(hand.center,hand.rotation,hand.local,v,omega,
-        cage.p,cage.v,cage.geometry['triangles'],duration,distance_tolerance)
+        cage.p,cage.v,cage.geometry['triangles'],duration,distance_tolerance,distance_query=distance_query)
     if proximity['status']!='proximity':return dict(status=proximity['status'],proximity=proximity)
     time=proximity['time_s']
     impact_hand=copy(hand);impact_hand.center=hand.center+v*time

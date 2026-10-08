@@ -10,6 +10,7 @@ from rigid_hand_contact import RigidHandContact
 from contact_energy import mechanical_energy
 from hand_impact_event import first_hand_impact
 from contact_rotational_sweep import first_rigid_proximity
+from contact_distance_compiled import nearest_triangle_distance_compiled
 
 
 def run():
@@ -24,10 +25,16 @@ def run():
     reference=first_rigid_proximity(hand.center,hand.rotation,hand.local,velocity,omega,
         cage.p,cage.v,cage.geometry['triangles'],.005,use_bounds=False)
     reference_ms=(time.perf_counter()-reference_started)*1000
+    compile_started=time.perf_counter()
+    nearest_triangle_distance_compiled(hand.points(),cage.p,cage.geometry['triangles'])
+    warmup_ms=(time.perf_counter()-compile_started)*1000
     started=time.perf_counter()
-    event=first_hand_impact(hand,cage,velocity,omega,.005)
+    event=first_hand_impact(hand,cage,velocity,omega,.005,distance_query=nearest_triangle_distance_compiled)
     elapsed=time.perf_counter()-started
-    if event['proximity']!=reference:raise AssertionError('Pruned sweep differs from full reference')
+    for key in ('status','sample_index','triangle_index','iterations'):
+        if event['proximity'][key]!=reference[key]:raise AssertionError('Compiled event differs')
+    np.testing.assert_allclose([event['proximity'][k] for k in ('time_s','distance_m')],
+        [reference[k] for k in ('time_s','distance_m')],atol=1e-12,rtol=0)
     if event['status']!='impact':raise AssertionError(event['status'])
     np.testing.assert_array_equal(cage.p,oldp);np.testing.assert_array_equal(cage.v,oldv)
     np.testing.assert_array_equal(hand.center,oldcenter);np.testing.assert_array_equal(hand.rotation,oldrotation)
@@ -37,7 +44,7 @@ def run():
     cage.v=result['node_velocities']
     after=mechanical_energy(cage,hand,result['velocity'],result['angular_velocity'])['total']
     report={k:v for k,v in result.items() if k not in ('node_velocities','velocity','angular_velocity','impulses')}
-    report.update(full_sweep_reference_ms=reference_ms,identical_to_full_sweep=True,rotational_proximity=event['proximity'],contact_fraction=event['proximity']['time_s']/.005,contact_time_s=event['proximity']['time_s'],hand_samples=len(points),active_impulses=int(np.count_nonzero(result['impulses']>0)),
+    report.update(jit_warmup_ms=warmup_ms,full_sweep_reference_ms=reference_ms,matches_full_sweep_within_1e_minus12=True,rotational_proximity=event['proximity'],contact_fraction=event['proximity']['time_s']/.005,contact_time_s=event['proximity']['time_s'],hand_samples=len(points),active_impulses=int(np.count_nonzero(result['impulses']>0)),
         energy_before_j=before,energy_after_j=after,solve_ms=elapsed*1000,
         final_velocity=result['velocity'].tolist(),final_angular_velocity=result['angular_velocity'].tolist(),
         limits=['constant world velocity sweep, not free rigid body integration','single first-impact snapshot; no full timeline','free rigid hand; no arm reaction','not active match physics'])

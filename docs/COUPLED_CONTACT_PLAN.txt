@@ -607,3 +607,17 @@ Gemessener Referenzsweep196.2 ms, optimierter Sweep inklusive Impulsantwort67.7 
 Ein Lauf, kein allgemeiner Benchmark und noch kein Echtzeitnachweis. Energie und
 Impulsresultat unveraendert. Audit erfasst Referenzzeit und Identitaetspruefung.
 Fortlaufende Kontaktdynamik, Gewebe-/Armzeitintegration und visuelle Abnahme offen.
+
+OPTIONAL KOMPILIERTE ABSTANDSPRUEFUNG
+contact_distance_compiled implementiert dieselbe Dreiecksflaechen-/Kantendistanz
+mit Numba, ohne Fast-Math oder parallele Reduktion. Laufende AABB-Untergrenze
+verwirft nur Kandidaten jenseits bester bisheriger Distanz. Punkt-/Dreiecksreihenfolge
+bleibt fuer Gleichstaende erhalten. Backend als distance_query injizierbar;
+Standard bleibt NumPy, keine neue Pflichtabhaengigkeit fuer das aktive Spiel.
+40 deterministische Zufallsfaelle einschliesslich degenerierter Dreiecke sowie
+Gleichstaende gegen Referenz geprueft. Echter Rotationskontakt: Zeit/Distanz
+innerhalb1e-12, gleiche Indices, Status und Iterationen; Impulsantwort unveraendert.
+Gemessener warmer Gesamtaufprall25.6 ms statt67.7 ms im vorigen Lauf; vollstaendiger
+Referenzsweep208.7 ms. Initialer JIT-Aufruf1249.98 ms separat erfasst. Einzelmessung,
+kein vollstaendiger Echtzeitnachweis. Kein Fortschritt beim noch offenen
+fortlaufenden Material-/Armzeitverlauf oder visueller Abnahme durch diesen Schritt.

@@ -50,7 +50,7 @@ def nearest_triangle_distance_bounded(points,nodes,triangles):
 
 def first_rigid_proximity(center,orientation,local_points,velocity,angular_velocity,
                           nodes,node_velocities,triangles,duration,
-                          distance_tolerance=1e-8,max_iterations=4096,use_bounds=True):
+                          distance_tolerance=1e-8,max_iterations=4096,use_bounds=True,distance_query=None):
     center=np.asarray(center,dtype=float);R=np.asarray(orientation,dtype=float)
     local=np.asarray(local_points,dtype=float);v=np.asarray(velocity,dtype=float)
     omega=np.asarray(angular_velocity,dtype=float);nodes=np.asarray(nodes,dtype=float)
@@ -68,8 +68,8 @@ def first_rigid_proximity(center,orientation,local_points,velocity,angular_veloc
     for iteration in range(max_iterations):
         rotation=rotation_increment(omega*time)@R
         points=local@rotation.T+center+v*time
-        distance_query=nearest_triangle_distance_bounded if use_bounds else nearest_triangle_distance
-        distance,sample,triangle=distance_query(points,nodes+nv*time,tri)
+        query=distance_query or (nearest_triangle_distance_bounded if use_bounds else nearest_triangle_distance)
+        distance,sample,triangle=query(points,nodes+nv*time,tri)
         result=dict(time_s=time,distance_m=distance,sample_index=sample,triangle_index=triangle,iterations=iteration+1)
         if distance<=distance_tolerance:return dict(result,status='proximity')
         remaining=duration-time
