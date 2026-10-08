@@ -1,0 +1,290 @@
+{
+  "9x7": {
+    "nodes": 126,
+    "tetrahedra": 210,
+    "y_bounds": [
+      -0.11,
+      0.14
+    ],
+    "z_bounds": [
+      -0.025,
+      0.1
+    ],
+    "cases": [
+      {
+        "height": 0.5,
+        "tilt": -15,
+        "class": "glance",
+        "contacts": 10,
+        "missing": 0,
+        "max_error_m": 0.002458124753702079
+      },
+      {
+        "height": 0.6,
+        "tilt": -30,
+        "class": "tips",
+        "contacts": 4,
+        "missing": 0,
+        "max_error_m": 0.0012714110501228643
+      },
+      {
+        "height": 0.6,
+        "tilt": -15,
+        "class": "flat",
+        "contacts": 15,
+        "missing": 0,
+        "max_error_m": 0.002363532983740771
+      },
+      {
+        "height": 0.6,
+        "tilt": 0,
+        "class": "glance",
+        "contacts": 7,
+        "missing": 0,
+        "max_error_m": 0.0023432310262747197
+      },
+      {
+        "height": 0.6,
+        "tilt": 15,
+        "class": "glance",
+        "contacts": 8,
+        "missing": 0,
+        "max_error_m": 0.0027523082565235613
+      },
+      {
+        "height": 0.6,
+        "tilt": 30,
+        "class": "glance",
+        "contacts": 18,
+        "missing": 0,
+        "max_error_m": 0.003094347523459509
+      },
+      {
+        "height": 0.7,
+        "tilt": -30,
+        "class": "tips",
+        "contacts": 3,
+        "missing": 0,
+        "max_error_m": 0.0010604997515455683
+      },
+      {
+        "height": 0.7,
+        "tilt": -15,
+        "class": "tips",
+        "contacts": 4,
+        "missing": 0,
+        "max_error_m": 0.0007670963685408733
+      },
+      {
+        "height": 0.7,
+        "tilt": 0,
+        "class": "flat",
+        "contacts": 23,
+        "missing": 0,
+        "max_error_m": 0.0035240998541506557
+      },
+      {
+        "height": 0.7,
+        "tilt": 15,
+        "class": "glance",
+        "contacts": 15,
+        "missing": 0,
+        "max_error_m": 0.002406870312196552
+      }
+    ],
+    "missing": 0,
+    "max_error_m": 0.0035240998541506557
+  },
+  "17x17": {
+    "nodes": 578,
+    "tetrahedra": 1155,
+    "y_bounds": [
+      -0.11,
+      0.14
+    ],
+    "z_bounds": [
+      -0.025,
+      0.1
+    ],
+    "cases": [
+      {
+        "height": 0.5,
+        "tilt": -15,
+        "class": "glance",
+        "contacts": 10,
+        "missing": 0,
+        "max_error_m": 0.0011652523757313266
+      },
+      {
+        "height": 0.6,
+        "tilt": -30,
+        "class": "tips",
+        "contacts": 4,
+        "missing": 0,
+        "max_error_m": 0.0003674614540930543
+      },
+      {
+        "height": 0.6,
+        "tilt": -15,
+        "class": "flat",
+        "contacts": 15,
+        "missing": 0,
+        "max_error_m": 0.0009593512061209647
+      },
+      {
+        "height": 0.6,
+        "tilt": 0,
+        "class": "glance",
+        "contacts": 7,
+        "missing": 0,
+        "max_error_m": 0.0010460728837789063
+      },
+      {
+        "height": 0.6,
+        "tilt": 15,
+        "class": "glance",
+        "contacts": 8,
+        "missing": 0,
+        "max_error_m": 0.0010089631977526492
+      },
+      {
+        "height": 0.6,
+        "tilt": 30,
+        "class": "glance",
+        "contacts": 18,
+        "missing": 0,
+        "max_error_m": 0.0010506377519987065
+      },
+      {
+        "height": 0.7,
+        "tilt": -30,
+        "class": "tips",
+        "contacts": 3,
+        "missing": 0,
+        "max_error_m": 0.0003944938413993071
+      },
+      {
+        "height": 0.7,
+        "tilt": -15,
+        "class": "tips",
+        "contacts": 4,
+        "missing": 0,
+        "max_error_m": 0.0005078533673656543
+      },
+      {
+        "height": 0.7,
+        "tilt": 0,
+        "class": "flat",
+        "contacts": 23,
+        "missing": 0,
+        "max_error_m": 0.0011812478381006963
+      },
+      {
+        "height": 0.7,
+        "tilt": 15,
+        "class": "glance",
+        "contacts": 15,
+        "missing": 0,
+        "max_error_m": 0.0010205409985203223
+      }
+    ],
+    "missing": 0,
+    "max_error_m": 0.0011812478381006963
+  },
+  "33x25": {
+    "nodes": 1650,
+    "tetrahedra": 3510,
+    "y_bounds": [
+      -0.11,
+      0.14
+    ],
+    "z_bounds": [
+      -0.025,
+      0.1
+    ],
+    "cases": [
+      {
+        "height": 0.5,
+        "tilt": -15,
+        "class": "glance",
+        "contacts": 10,
+        "missing": 0,
+        "max_error_m": 0.000396716925010851
+      },
+      {
+        "height": 0.6,
+        "tilt": -30,
+        "class": "tips",
+        "contacts": 4,
+        "missing": 0,
+        "max_error_m": 0.00010567131959551834
+      },
+      {
+        "height": 0.6,
+        "tilt": -15,
+        "class": "flat",
+        "contacts": 15,
+        "missing": 0,
+        "max_error_m": 0.0005034287156239076
+      },
+      {
+        "height": 0.6,
+        "tilt": 0,
+        "class": "glance",
+        "contacts": 7,
+        "missing": 0,
+        "max_error_m": 0.0005659362808795032
+      },
+      {
+        "height": 0.6,
+        "tilt": 15,
+        "class": "glance",
+        "contacts": 8,
+        "missing": 0,
+        "max_error_m": 0.0005647196706683871
+      },
+      {
+        "height": 0.6,
+        "tilt": 30,
+        "class": "glance",
+        "contacts": 18,
+        "missing": 0,
+        "max_error_m": 0.000455120264259104
+      },
+      {
+        "height": 0.7,
+        "tilt": -30,
+        "class": "tips",
+        "contacts": 3,
+        "missing": 0,
+        "max_error_m": 0.00015719832561431057
+      },
+      {
+        "height": 0.7,
+        "tilt": -15,
+        "class": "tips",
+        "contacts": 4,
+        "missing": 0,
+        "max_error_m": 0.0002908696975928854
+      },
+      {
+        "height": 0.7,
+        "tilt": 0,
+        "class": "flat",
+        "contacts": 23,
+        "missing": 0,
+        "max_error_m": 0.0006065400408814398
+      },
+      {
+        "height": 0.7,
+        "tilt": 15,
+        "class": "glance",
+        "contacts": 15,
+        "missing": 0,
+        "max_error_m": 0.0005548598447544656
+      }
+    ],
+    "missing": 0,
+    "max_error_m": 0.0006065400408814398
+  }
+}

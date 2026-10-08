@@ -212,3 +212,21 @@ Flaecheneinbettung implementiert und geometrisch geprueft. 15/15 Kontaktpunkte
 abgedeckt, aber Frontkaefig bis 11.75 mm von sichtbarer Wange entfernt.
 Naechste Aufgabe ist deshalb seitlicher Gewebekaefig plus passende sichtbare
 Deformationsabbildung, vor Mehrpunktkopplung. Zwei Einbettungstests bestanden.
+
+SEITLICHER GEWEBEKAEFIG: GEOMETRIE UND SOLVERANSCHLUSS
+side_cage.py tastet die tatsaechliche seitliche Gesichtsoberflaeche ab, in SI.
+Unbedeckte Rasterpunkte werden weder trianguliert noch mit Masse versehen.
+Rasterbereich y=-0.110..0.140 m, z=-0.025..0.100 m; Tiefe 0.020 m.
+Reproduzierbarer Audit: scripts/audit_side_cage.py, zehn legale Trefferfaelle.
+Alle drei Aufloesungen ohne fehlende Kontaktpunkte:
+9x7 maximal 3.524 mm Oberflaechenabweichung; 17x17 1.181 mm; 33x25 0.607 mm.
+Nachweis: validation/side-cage-multicase.json. Das aeltere side-cage-audit.json
+ist nur ein Standardschlag mit engerem y-Bereich (-0.080..0.140 m), kein
+vergleichbarer Gesamtwert. 17x17 bleibt vorlaeufige Laboraufloesung.
+SideTissue nutzt denselben Referenzsolver mit dieser Tetraedertopologie.
+Knotenmassen entstehen aus einem Viertel jedes angrenzenden Tetraedervolumens
+mal Labordichte 1000 kg/m3; keine anatomische Kalibrierung. Tiefe Schicht und
+Rasterrand fest. Geometrie-, Massen-, Ruhelage-, Anker- und Abklingtest bestanden.
+Noch NICHT im Match aktiv. Offene Voraussetzungen: mehrere Kontaktpunkte,
+Rueckwirkung auf Gelenke, passende sichtbare seitliche Deformationsabbildung,
+Konvergenz und Laufzeit mit neuer Topologie. Kein Physik-/Grafik-Abnahmebeleg.

@@ -1,0 +1,23 @@
+{
+  "9x7": {
+    "nodes": 126,
+    "tetrahedra": 220,
+    "missing_contacts": 0,
+    "max_error_m": 0.005460450305140002,
+    "mean_error_m": 0.0014977620948956993
+  },
+  "17x17": {
+    "nodes": 578,
+    "tetrahedra": 1225,
+    "missing_contacts": 0,
+    "max_error_m": 0.000963202623082679,
+    "mean_error_m": 0.00026016690947420394
+  },
+  "33x25": {
+    "nodes": 1650,
+    "tetrahedra": 3710,
+    "missing_contacts": 0,
+    "max_error_m": 0.0002240807071453299,
+    "mean_error_m": 9.232933680155819e-05
+  }
+}
