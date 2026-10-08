@@ -344,3 +344,14 @@ erklaert. Beleg validation/face-hair-style.json und face-hair-front/side.png.
 Host8877 weiterhin Session50074. Releasepaketv0.4 bleibt aelterer gepruefter Stand.
 Naechster Durchlauf sollte groessere offene Produktluecke bearbeiten: Kleidung/
 Arena und klare aktive Bedienfuehrung im echten Erstkontakt mit dem Spiel.
+
+G3 WEITERE SCHADENSFREIE PROBE DIREKT WAEHLBAR
+Bedienpanel nennt linke Maustaste, Zug nach links und Maushoehe ausdruecklich.
+Nach erster Probe kann NOCH EINMAL OHNE SCHADEN UEBEN den naechsten Schwung als
+Probe festlegen; Titel/Button markieren dies, danach wieder normaler Schlag.
+Server erlaubte wiederholte practice bereits mit Zug-/Phasenpruefung; keine
+Clientschadenslogik oder geaenderte Matchregeln. Zugzeit laeuft weiter, Anleitung
+nennt dies. Phasewechsel loescht lokale Probewahl. Echter Browsercheck erweitert:
+erste Probe, Button, zweite Probe mit Eventpractice/hits0/phaseaim, danach Schlag
+und vollstaendige Replaykontrollen PASS, errors[]. Beleg repeat-practice.json.
+Keine neue menschliche Verstaendlichkeitsabnahme; G3 bleibt offen.

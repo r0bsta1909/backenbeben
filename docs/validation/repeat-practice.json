@@ -1,0 +1,24 @@
+{
+  "idle_material_uploads_skipped": true,
+  "mirror_visibility_updates": true,
+  "pose_camera_and_wheel": true,
+  "crowd_reaction_and_rewind": true,
+  "jump_to_contact": true,
+  "side_camera": true,
+  "marker_toggle": true,
+  "no_stale_markers": true,
+  "errors": [],
+  "coupled": {
+    "backend": "coupled",
+    "solve_ms": 1392.0,
+    "peak": 0.0049429999999999995,
+    "contact_diagnostics": {
+      "maximum_wrist_separation_m": 6.617770076128054e-06,
+      "maximum_penetration_m": 2.2677535224023007e-06,
+      "unconverged_steps": 14,
+      "maximum_material_residual_m": 0.0001340902181462784
+    }
+  },
+  "repeat_practice_without_damage": true,
+  "scope": "Real browser: first practice, button-selected second practice with hits=0 and practice event, then actual strike/replay. No new human acceptance."
+}

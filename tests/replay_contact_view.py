@@ -34,7 +34,14 @@ async def main():
    for i in range(12):
     await page.mouse.move(1920*(.8-.34/1.5*(i+1)/12),648);await page.wait_for_timeout(8)
    await page.mouse.up()
-  await stroke();await page.wait_for_function('state.practice_done');await stroke()
+  await stroke();await page.wait_for_function('state.practice_done')
+  first_event=await page.evaluate('state.event_id')
+  await page.locator('#repeatPractice').click()
+  await page.wait_for_function("document.getElementById('repeatPractice').textContent.includes('NUR PROBE')")
+  await stroke()
+  await page.wait_for_function('(old)=>state.event_id>old',arg=first_event)
+  assert await page.evaluate("state.phase==='aim' && state.hits===0 && state.event.kind==='practice'")
+  await stroke()
   try:await page.wait_for_function("state.phase==='replay'",timeout=20000)
   except Exception:
    print(await page.evaluate('JSON.stringify({state,actions:sentActions})'));print(errors)
@@ -85,7 +92,7 @@ async def main():
   await page.wait_for_function('JSON.parse(physicsFrame).arm.pose.finger_relax===0')
   await page.wait_for_function('godotStats?.crowd_active===false')
   assert not errors,errors
-  report={'idle_material_uploads_skipped':True,'mirror_visibility_updates':True,'pose_camera_and_wheel':True,'crowd_reaction_and_rewind':True,'jump_to_contact':True,'side_camera':True,'marker_toggle':True,'no_stale_markers':True,'errors':errors}
+  report={'repeat_practice_without_damage':True,'idle_material_uploads_skipped':True,'mirror_visibility_updates':True,'pose_camera_and_wheel':True,'crowd_reaction_and_rewind':True,'jump_to_contact':True,'side_camera':True,'marker_toggle':True,'no_stale_markers':True,'errors':errors}
   if coupled_evidence:report['coupled']=coupled_evidence
   Path('logs/contact-view.json').write_text(json.dumps(report,indent=2));print(json.dumps(report))
   await browser.close()

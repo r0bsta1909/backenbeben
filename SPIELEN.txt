@@ -26,6 +26,8 @@ HAND VON DER SEITE ANSEHEN wechselt die Kamera zum Prüfen der Haltung; auch
 in dieser Ansicht bleibt die Eingabe ein Zug nach links.
 EINS / Probe: erster Schwung ohne Schaden. Anschließend die Kontaktdiagnose
 lesen: Handfläche, Fingerspitzen, Streifer oder Foul. Haltung bei Bedarf ändern.
+NOCH EINMAL OHNE SCHADEN ÜBEN macht den nächsten Schwung erneut zur Probe.
+Die Zugzeit läuft dabei weiter; anschließend zählt der nächste Schwung als Schlag.
 ZWEI / Schlag: erneut nach links ziehen. Der erste räumliche Kontakt zählt,
 nicht die Stelle, an der du die Taste loslässt. Tempo und Handhaltung wirken mit.
 
