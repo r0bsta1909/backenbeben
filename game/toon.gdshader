@@ -28,8 +28,10 @@ void fragment() {
     if(hair_surface) {
         color+=vec3(.045,.026,.012)*smoothstep(.15,.75,d);
         vec3 h=skin_position/geometry_scale;
-        float strand=sin(atan(h.x,h.z)*160.0+sin(h.y*130.0)*.8+h.y*70.0);
-        color*=1.0-.07*smoothstep(.80,.98,strand);
+        float strand_phase=atan(h.x,h.z)*160.0+sin(h.y*130.0)*.8+h.y*70.0;
+        float strand=sin(strand_phase);
+        float strand_visibility=1.0-smoothstep(.7,2.2,fwidth(strand_phase));
+        color*=1.0-.07*smoothstep(.80,.98,strand)*strand_visibility;
     }
     if(face_skin) {
         vec3 local=skin_position/geometry_scale;
@@ -67,7 +69,11 @@ void fragment() {
 
 void light() {
     float facing=dot(normalize(NORMAL),normalize(LIGHT));
-    float band=facing>.65 ? 1.0 : (facing>.12 ? .62 : .10);
+    // Keep three flat ink bands, but cover their boundaries across a pixel.
+    // A hard comparison creates crawling stair-steps during head/hand motion.
+    float pixel_width=clamp(fwidth(facing)*.75,.001,.06);
+    float band=.10+.52*smoothstep(.12-pixel_width,.12+pixel_width,facing)
+        +.38*smoothstep(.65-pixel_width,.65+pixel_width,facing);
     // Real shadow attenuation keeps the hand, nose and face in one space.
     DIFFUSE_LIGHT += band * ATTENUATION * LIGHT_COLOR / PI;
 }

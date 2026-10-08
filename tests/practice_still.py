@@ -37,6 +37,6 @@ async def main():
   await page.locator('#inspectPractice').click();await page.locator('#repeatPractice').click()
   assert await page.locator('#practiceStillHint').is_hidden()
   assert not errors,errors
-  Path(f'logs/practice-still{suffix}.json').write_text(json.dumps({'viewport':[1366,768],'host_recorded_pose':recorded,'actual_rig_matches':True,'side_and_front':True,'wheel_exits_to_live_pose':True,'saved_probe_unchanged':True,'repeat_exits':True,'no_damage':True,'errors':errors},indent=2))
+  Path(f'logs/practice-still{suffix}.json').write_text(json.dumps({'viewport':[1366,768],'msaa_3d':await page.evaluate('godotStats.msaa_3d'),'host_recorded_pose':recorded,'actual_rig_matches':True,'side_and_front':True,'wheel_exits_to_live_pose':True,'saved_probe_unchanged':True,'repeat_exits':True,'no_damage':True,'errors':errors},indent=2))
   await browser.close()
 asyncio.run(main())

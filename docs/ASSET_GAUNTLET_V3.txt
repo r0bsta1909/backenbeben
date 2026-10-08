@@ -930,3 +930,19 @@ inkl.Resume/Verletzungsruecklauf/KO-Ruecklauf/RevanchePASS,errors[].
 Beleg validation/helper-step.json/png. WeiteranimierteSchrittbahn,kein
 physikalischesGleichgewichts-/Gangmodell. Gesamtzielweiteroffen.
 Host8877CheckoutSession81546;V08PaketbleibtvorHelferhand-/Schrittkorrekturen.
+
+G2 COMIC-HANDDETAILS UND KANTEN
+16 kurze gekruemmteRueckenfalten auffinalesHandmesh projiziert,mitgleicher
+DistanzgewichtungwieArm anRig gebunden. ErstezuGeradeRingstricheverworfen.
+Blenderquelle/GLB/Vorschau regeneriert; geschlosseneSchlaghand/116Kontaktpunkte
+undCharaktervalidierungPASS; Kollisions-/Landmarkendateienunveraendert.
+Toonbandgrenzenpixelbreit geglaettet, HaarlinienunterPixelaufloesungausgeblendet;
+2xMSAA fuerGeometriekonturen. GodotDoku: https://docs.godotengine.org/en/stable/tutorials/3d/3d_antialiasing.html
+15Browserkontaktansichten/Probe/Replay/SpiegelPASS. KontaktundRueckholung
+gesichtet;nativergleichePoseVergleichMSAA0/1. EinzelneAermelstricheimweiten
+BildnichtalsvollstaendiggeklaerteUrsachebehaupten. BrowserViewportmsaa_3d=1
+separatimProbetestbestätigt. VollerLAN-KO inkl.Resume/Verletzungsruecklauf/
+KO-Reverse/RevanchePASS,errors[],Replayp95=20.9ms bei1920x1080. Keine60FPS-
+oderMehrhardwarezusage. Beleg validation/comic-hand-detail.json/png.
+Gesamtstil-/menschlicheAbnahmeweiteroffen. Host8877CheckoutSession18596;
+V08PaketweiterhistorischvorletztenHelfer-/Probe-/Handdetailkorrekturen.

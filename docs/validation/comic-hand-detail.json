@@ -1,0 +1,251 @@
+{
+  "contact_views": {
+    "repeat_practice_without_damage": true,
+    "idle_material_uploads_skipped": true,
+    "mirror_visibility_updates": true,
+    "pose_camera_and_wheel": true,
+    "crowd_reaction_and_rewind": true,
+    "jump_to_contact": true,
+    "side_camera": true,
+    "marker_toggle": true,
+    "no_stale_markers": true,
+    "errors": [],
+    "inspection_survives_original_deadline": false,
+    "coupled": {
+      "backend": "coupled-moving",
+      "solve_ms": 2989.2,
+      "peak": 0.032355,
+      "contact_diagnostics": {
+        "maximum_wrist_separation_m": 1.0863300155951312e-05,
+        "maximum_penetration_m": 2.776342556478243e-06,
+        "unconverged_steps": 14,
+        "maximum_material_residual_m": 0.00027646084736819966
+      },
+      "head_response": {
+        "model": "coupled-yaw-through-contact-and-tail",
+        "braced": false,
+        "tail_pin_error_m": 1.1454450268324268e-07,
+        "spatial_rotation": true,
+        "translation": true,
+        "parameters": "prototype tuning, three translations and three Euler rotations; diagonal generalized inertia"
+      },
+      "maximum_head_yaw_rad": 0.07978
+    }
+  },
+  "practice": {
+    "viewport": [
+      1366,
+      768
+    ],
+    "msaa_3d": 1,
+    "host_recorded_pose": {
+      "time": 0.5,
+      "pose": {
+        "root": [
+          0,
+          0,
+          0.525
+        ],
+        "shoulder": [
+          0.23450635798342198,
+          -0.16,
+          0.5097760693199445
+        ],
+        "torso_yaw": 0.06482808282197895,
+        "elbow": [
+          0.24486386397258234,
+          -0.1363671958659024,
+          0.21866746270480603
+        ],
+        "wrist": [
+          0.08876978280944733,
+          -0.08011249844775306,
+          0.03198312934749109
+        ],
+        "angles": [
+          -0.2312281599349924,
+          -0.1795839924115737,
+          0.7368416975645155
+        ],
+        "blocked": true,
+        "wrist_limited": false,
+        "finger_direction": [
+          0.07898992833716563,
+          0.9961946980917455,
+          0.03683360850073487
+        ],
+        "palm_normal": [
+          -0.9028590122851735,
+          0.08715574274765817,
+          -0.4210100716628344
+        ]
+      },
+      "tilt": -15,
+      "attacker": 0
+    },
+    "actual_rig_matches": true,
+    "side_and_front": true,
+    "wheel_exits_to_live_pose": true,
+    "saved_probe_unchanged": true,
+    "repeat_exits": true,
+    "no_damage": true,
+    "errors": []
+  },
+  "duel": {
+    "url": "http://192.168.178.67:8877",
+    "errors": [],
+    "hits": [
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 15.47,
+        "quality": 0.529,
+        "braced": true,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "09459ac619dab6f84241"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 25.35,
+        "quality": 0.5633,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "3bc9443a3e5b8029eb21"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 25.76,
+        "quality": 0.5724,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "3feb03dfba9c29e8c63d"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 25.09,
+        "quality": 0.5576,
+        "braced": false,
+        "side": "R",
+        "ko": true,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "20c8b37849705adf70c2"
+      }
+    ],
+    "configuration": {
+      "base_damage": 45,
+      "ko_threshold": 60,
+      "turn_seconds": 60
+    },
+    "single_tilt_control": true,
+    "physics_backend": "coupled-moving",
+    "moving_head_brace_consistent": true,
+    "solved_normal_impulse_ns": 1.0580970496418551,
+    "solved_quality_matches_hit": true,
+    "recorded_arm_frames": 553,
+    "clip_hash": "90de0dc923128721370c446c75be67b90866f88103d527dda08c3a001bb19f78",
+    "replay": {
+      "clipId": "09459ac619dab6f84241",
+      "frameCount": 337,
+      "peak": 0.025722,
+      "time": 0.58331,
+      "frame": 69,
+      "deformation": 0.025721411999999996
+    },
+    "replay_frame_ms_p95": 20.900000000001455,
+    "viewport": [
+      1920,
+      1080
+    ],
+    "resume": true,
+    "injury_material_rewind": true,
+    "ko_body_recorded": true,
+    "ko_reverse_seek": true,
+    "winner": 1,
+    "audio": {
+      "mode": "buffer-fallback",
+      "played": 6,
+      "unlocked": true
+    },
+    "rematch_material_reset": true,
+    "rematch": true,
+    "leave": true,
+    "stats": {
+      "arm_data": true,
+      "camera_position": [
+        0.300000011920929,
+        0.550000011920929,
+        2.65000009536743
+      ],
+      "crowd_active": false,
+      "dragging": false,
+      "face_head_offset": [
+        0,
+        0,
+        0
+      ],
+      "face_head_rotation": [
+        0,
+        0,
+        0
+      ],
+      "face_injury": [
+        0,
+        0,
+        0
+      ],
+      "fps": 61,
+      "hand_wrist": "(-0.12, -0.49, -0.17)",
+      "mirror_draw_requests": 772,
+      "mirror_injury": [
+        0,
+        0,
+        0
+      ],
+      "msaa_3d": 1,
+      "muted": false,
+      "physics_active": false,
+      "physics_material_updates": 430,
+      "physics_time": -1,
+      "rendered_arm": {
+        "elbow": [
+          0.346037536859512,
+          -0.411999642848969,
+          0.622861385345459
+        ],
+        "shoulder": [
+          0.234999999403954,
+          -0.159999996423721,
+          0.524999976158142
+        ],
+        "wrist": [
+          0.120000019669533,
+          -0.490000009536743,
+          0.694999933242798
+        ]
+      },
+      "samples": 0
+    }
+  },
+  "asset_validation": {
+    "closed_strike_hand": true,
+    "contact_points": 116,
+    "collision_files_unchanged": true
+  },
+  "rendering": "Pixel-width toon band boundaries, subpixel hair-line fade, 2x MSAA; native same-pose comparison and browser contact/recovery inspected.",
+  "hand_details": "16 projected, rigged dorsal joint creases. Initial straight strokes shortened and curved after review.",
+  "limits": "Overall reference style and human readability acceptance remain open. Frame timing is machine-specific.",
+  "reference": "https://docs.godotengine.org/en/stable/tutorials/3d/3d_antialiasing.html"
+}

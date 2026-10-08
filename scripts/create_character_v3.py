@@ -362,6 +362,22 @@ for sign,side in [(-1,'R'),(1,'L')]:
         bmesh.ops.delete(bm,geom=[v for c in components if c is not largest for v in c],context='VERTS')
     bm.to_mesh(arm.data);bm.free()
     arm_objects[arm.name]=(arm,None)
+    # Sparse dorsal joint creases, projected onto the final skin rather than
+    # floating at guessed finger heights. Same distance-based skinning as arm.
+    hand_bvh=BVHTree.FromPolygons([G(v.co) for v in arm.data.vertices],[list(f.vertices) for f in arm.data.polygons])
+    for digit in range(4):
+        for joint_index in [1,2]:
+            center=Vector(bones[f'finger{digit}_{joint_index}.{side}'][0])
+            stroke=[]
+            for sample in range(7):
+                u=(sample-3)/3
+                guide=center+target_width*(u*.0042)+direction*(.0025*(1-u*u))
+                hit=hand_bvh.ray_cast(guide-target_normal*.045,target_normal,.09)
+                if hit[0] is not None:stroke.append(hit[0]+hit[1]*.00025)
+            if len(stroke)==7:
+                detail=curve(f'HandCrease{digit}_{joint_index}.{side}',stroke,.00024,ink)
+                arm_objects[detail.name]=(detail,None)
+
     # Sleeve sections stay perpendicular to the humerus. The inset root bends
     # toward the chest; using that bend as its frame creates a raised horn.
     sleeve=loft('Sleeve.'+side,[(Vector((sign*.175,-.158,0)),.042,.058),(sh-upper*.005,.057,.057),(sh+upper*.035,.061,.058),(sh+upper*.080,.058,.054),(sh+upper*.135,.054,.049)],shirt,section_axis=upper)

@@ -94,6 +94,7 @@ async def main():
                     frames=await a.evaluate("() => new Promise(resolve=>{let values=[],last=performance.now();function tick(t){values.push(t-last);last=t;if(values.length<120)requestAnimationFrame(tick);else resolve(values.slice(5));}requestAnimationFrame(tick)})")
                     frames.sort();report['replay_frame_ms_p95']=frames[int(len(frames)*.95)]
                     report['viewport']=[1920,1080]
+                    report['msaa_3d']=await a.evaluate('godotStats?.msaa_3d ?? null')
                     # Browser reload resumes the same seat, room and recorded clip.
                     await b.reload();await b.wait_for_function('window.gameReady',timeout=60000)
                     await b.wait_for_function("JSON.parse(renderState).state?.phase==='replay'",timeout=5000)
