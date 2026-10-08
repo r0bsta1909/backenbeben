@@ -10,11 +10,11 @@ func capture() -> void:
 	await process_frame
 	scene.set_process(false)
 	scene.caption.hide()
-	if scene.stage.sponsor_surfaces.size()!=8:
-		push_error("Expected all eight supplied sponsors")
+	if scene.stage.sponsor_surfaces.size()!=6 or scene.stage.crowd_poses.size()!=0:
+		push_error("Expected 6 platform/table logos and a painted auditorium")
 		quit(1)
 		return
-	var directory=ProjectSettings.globalize_path("res://../logs/arena-preview")
+	var directory=ProjectSettings.globalize_path("res://../logs/arena-hybrid-preview")
 	DirAccess.make_dir_recursive_absolute(directory)
 	for number in range(1,5):
 		scene.set_view(number)
@@ -32,5 +32,5 @@ func capture() -> void:
 	await process_frame
 	RenderingServer.force_draw(false)
 	root.get_texture().get_image().save_png(directory+"/podium.png")
-	print("ARENA_CAPTURE_OK: 8 sponsor surfaces, 4 camera views")
+	print("ARENA_HYBRID_CAPTURE_OK: 2D hall, 6 platform/table logos, 4 camera views")
 	quit(0)

@@ -1,0 +1,20 @@
+HYBRID-ARENA / 08.10.2026 – aktueller Nutzerumfang
+
+ARENA_PLATFORM_BAKE_OK: editorfaehiges Podest/Pult ohne Hallen- oder Crowd-Meshes.
+ARENA_HYBRID_PASS: gemalter Hintergrund vorhanden, sechs 3D-Werbeflaechen,
+keine volumetrischen Tribuenen/Zuschauer, vier Kameras ohne Geometrieverdopplung,
+unveraenderte Pultoberkante. Echte native Renderbilder in logs/arena-hybrid-preview.
+Die Gesamtansicht und die Nahansichten wurden visuell geprueft.
+
+Isolierter Web-Build erfolgreich. Chromium: alle vier Kamerawechsel bestanden;
+audience_3d=0, sponsors_3d=6, backdrop_2d=true in jeder Ansicht.
+Keine JavaScript-/Konsolenfehler. Browser-Viewport 1600x900.
+Frameintervalle p95 (Gesamt/Spiel/Kontakt/TV): 16.67 / 16.67 / 16.67 / 17.45 ms.
+Lokale VSync-Frameintervalle, keine Leistungszusage fuer andere Rechner.
+
+Die Wandwerbung ist Bestandteil der Imagegen-Kulisse. Nur die sechs Motive
+auf Podest/Boden/Pult verwenden unveraenderte hochgeladene Originaldateien
+mit Rendering-Freistellung und angepassten Druckfarben.
+Die Kulisse ist eine feste 2D-Illustration, kein frei begehbarer Hallenraum.
+Der Match-Start und die Serverphysik wurden in diesem Designpass nicht geaendert.
+Technische Pruefung ersetzt keine optische Abnahme durch den Nutzer.

@@ -6,6 +6,7 @@ uniform bool circular = false;
 uniform bool ivory_ink = false;
 uniform bool koenig_mask = false;
 uniform bool lighten_blue = false;
+uniform bool blue_mask = false;
 uniform bool vertical_church = false;
 uniform float pale_low = .30;
 uniform float pale_high = .50;
@@ -27,6 +28,7 @@ void fragment() {
         // source_color samples are linear; remove both tones of baked pale backgrounds.
         alpha *= 1.0 - smoothstep(pale_low, pale_high, pale);
     }
+    if(blue_mask)alpha*=smoothstep(.008,.035,ink.b-ink.r);
     // Keep the white letters inside the purple band and the red triangular plate.
     if(koenig_mask) {
         bool band=source_uv.y>.287 && source_uv.y<.495;

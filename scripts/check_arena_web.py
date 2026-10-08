@@ -35,6 +35,6 @@ async def main():
         print(json.dumps(report, indent=2))
         await browser.close()
         assert not errors, errors
-        assert all(item['audience'] == 362 and item['sponsors'] == 8 for item in stats)
+        assert all(item['audience_3d'] == 0 and item['sponsors_3d'] == 6 and item['backdrop_2d'] for item in stats)
 
 asyncio.run(main())

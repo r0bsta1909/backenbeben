@@ -75,6 +75,7 @@ func stage_deck() -> void:
 	artwork("FasciaHoenhorst","hoenhorst.png",Vector3(4.0,-5.7,7.064),Vector2(2.0,.81),Vector3.ZERO,true,false,true)
 	sponsor_surfaces["FasciaHoenhorst"].material_override.set_shader_parameter("pale_low",.18)
 	sponsor_surfaces["FasciaHoenhorst"].material_override.set_shader_parameter("pale_high",.30)
+	sponsor_surfaces["FasciaHoenhorst"].material_override.set_shader_parameter("blue_mask",true)
 	for x in [-7.0,7.0]:
 		part("DeckEdge",Vector3(x,-5.24,1.05),Vector3(.04,.06,12),"a29579")
 	for x in [-6.9,-4.0,-1.0,2.0,5.0,6.9]:

@@ -1,58 +1,56 @@
-BACKENBEBEN – 3D-ARENA / 08.10.2026
+BACKENBEBEN – AKTUELLE ARENA / 08.10.2026
 
-ZIEL UND UMFANG
-Die letzte vom Nutzer freigegebene Konzepttafel 05-arena-gesamtlook.png
-im lokalen Arena-Design-Ordner ist die optische Vorlage. Das vorherige
-Blockout ist zur ausgearbeiteten Arena erweitert: warme Industriehalle,
-Beton und Stahl, ovales gepolstertes Pult, ruhige matte Wettkampfflaeche,
-rote Einfassung, sechs Tribuenenreihen, Treppen, Gelaender, Wandlampen,
-Dachtrager und Lichttraverse, TV-Kameras, Produktionskisten und Kabel.
-362 sitzende Zuschauer mit Varianten, freien Sitzen, Haaren und Nasen.
-Comic-Materialien mit Konturen, Lichtstufen, sparsamen Gebrauchsspuren;
-warme Spielflaeche, kuehlere seitliche Zuschauer, dezenter Hallendunst.
+VERBINDLICHER NUTZERWUNSCH
+Die Arena soll im Look der letzten freigegebenen Illustration aussehen.
+Der Nutzer hat den Umfang korrigiert: Halle und Publikum duerfen 2D sein;
+nur das Podest mit dem Tisch, an dem die Spieler stehen, braucht 3D.
+Die vollstaendige 3D-Halle ist ein historischer Zwischenstand.
 
-BENUTZUNG UND BEARBEITUNG
-Workspace START_ARENA.bat startet game/arena_preview.tscn.
-1 Spielkamera, 2 seitlicher Kontakt, 3 TV-Ansicht, 4 Gesamtansicht.
-WASD und Q/E bewegen die Kamera, rechte Maustaste dreht, H blendet Hinweise.
-game/arena_finished.tscn ist die komplette bearbeitbare Arena im Godot-Editor.
-Die neutralen Personen der Vorschau nutzen das vorhandene Spielrig als
-Massstabsfiguren. Charakter-Redesign ist nicht Teil dieser Arena-Arbeit.
-Der native Standard-Spielstart main.tscn und die Serverphysik sind unveraendert.
+AKTUELLE UMSETZUNG
+Halle, Tribuenen, Publikum, Architektur und Wandbanner sind ein gemalter
+2D-Hintergrund mit warmem Licht und Comic-Konturen. Eigene Imagegen-
+Bearbeitung des Nutzerentwurfs 05-arena-gesamtlook.png. Plattform und
+Spieler wurden aus dem Bild entfernt, damit keine doppelte Buehne entsteht.
+Hintergrund: game/assets/arena_backdrops/hall-front.png.
+Erzeugung: eingebautes Imagegen; Prompt in ARENA_BACKDROP_PROMPT.txt.
+Externe Power-Slap-Fotos bleiben ausserhalb des Repositories.
 
-BAUQUELLEN
-game/arena_final.gd baut die ausgearbeitete Geometrie und Lichtanlage.
-arena_blockout.gd liefert gemeinsame Werbe- und Geometrie-Helfer.
-Die gespeicherte Szene wird bei jedem Start geladen und erzeugt ihre
-Geometrie nicht erneut. Manuelle Editor-Aenderungen bleiben somit erhalten.
-Regenerieren nur bewusst: Godot mit echtem OpenGL-Renderer, --path game
---script ../scripts/bake_arena.gd. Das ueberschreibt arena_finished.tscn.
-Nicht headless backen: der Dummy-Renderer speichert keine MultiMesh-Puffer.
+Echte 3D-Geometrie: Plattform, matte Flaeche, rote Einfassung, Stufen,
+ovales gepolstertes Pult, Fuss und sechs Druckmotive.
+game/arena_platform.tscn ist die bearbeitbare Plattform mit Pult.
+game/arena_hybrid.gd erzeugt nur diese Elemente; keine Hallen- oder
+Zuschauergeometrie wird in der aktuellen Vorschau geladen.
+Ein weicher projizierter 2D-Schatten verankert das Podest im Hallenbild.
+Neutrale Figuren aus dem Spielrig zeigen den Massstab. Sie bleiben 3D;
+Charakter-Redesign ist nicht Teil des Kulissenauftrags.
+
+BENUTZUNG
+Workspace START_ARENA.bat -> game/arena_preview.tscn.
+1 Spiel, 2 Kontakt, 3 TV, 4 Gesamt. H blendet Hinweise ein/aus.
+WASD, Q/E und rechte Maustaste sind Kamerawerkzeuge der Designvorschau.
+Eine fixe 2D-Kulisse bildet keinen frei begehbaren Raum ab. Fuer Nahansichten
+wird das Bild passend vergroessert; freie Kameradrehungen sind Designwerkzeuge.
 
 WERBUNG
-Acht Originaldateien aus dem vom Nutzer bereitgestellten WerbeLogos.zip
-liegen in game/assets/arena_sponsors. Werbung war in alten Projektplaenen
-zurueckgestellt; der aktuelle ausdrueckliche Nutzerauftrag autorisiert sie.
-Boden: AdiHash, Zahnersatz. Pult: INEOS. Podest: KFZ Koenig, Versino,
-Hoenhorst. Wand: Veltins und Katholische Kirche. Zentral BACKENBEBEN.
-Die Logos sind Texturen aus den gelieferten Dateien, keine KI-Neuzeichnung.
-Shader entfernen helle Foto-Hintergruende, bewahren KFZ-Innenbuchstaben
-und legen Kreuz/Text der Kirche im vertikalen Banner an. Auf dunklen
-Flaechen werden einzelne dunkle Druckfarben fuer Lesbarkeit aufgehellt.
-Die sehr kleine Hoenhorst-Datei und Versino-Unterzeile begrenzen weiterhin
-die Lesbarkeit. Kein Renderer kann fehlende Quelldetails rekonstruieren.
-Konzeptbilder und Power-Slap-Referenzfotos bleiben ausserhalb des Repos.
+Sechs Original-Drucktexturen: AdiHash/Zahnersatz am Boden, INEOS am Pult,
+KFZ Koenig/Versino/Hoenhorst am Podest. Druckshader entfernen Hintergruende
+und bewahren KFZ-Innenbuchstaben. Hoenhorst wird aus den blauen Schriftpixeln
+freigestellt, um beige Fotoflecken zu entfernen.
+Veltins, Kirche und BACKENBEBEN gehoeren zum gemalten Hallenbild. Sie folgen
+der Illustration; kleine Details sind keine pixelgenaue Originalreproduktion.
 
-TECHNISCHE PRUEFUNG UND GRENZEN
-tests/arena_finished.gd: acht Werbeflaechen, 362 Zuschauer, Pultoberkante,
-Treffer/KO/Rewind/Wiederholung/Miss und Laden ohne doppelte Geometrie.
-scripts/capture_arena_blockout.gd: vier echte OpenGL-Renderansichten.
-scripts/build_arena.ps1 erzeugt isolierte Web-Vorschau unter build/arena,
-ohne die Hauptprojekt-Konfiguration zu veraendern.
-scripts/check_arena_web.py prueft vier Kameras in echtem Chromium und
-schreibt Fehler, Framezeiten und Screenshots unter logs/arena-web-preview.
-Die Szene besitzt keine neue Gameplay-Kollision fuer Architektur: Zuschauer
-und Halle sind Kulisse. Integration in den Match-Start ist ein separater Schritt.
-Illustrationspanels sind keine metrischen Ansichten; ein gemeinsamer 3D-Raum
-vereinheitlicht Abweichungen. Automatische Tests ersetzen nicht die optische
-Abnahme des Nutzers. Dies ist kein neues Spielrelease.
+QUELLEN UND PRUEFUNG
+scripts/bake_arena_hybrid.gd regeneriert arena_platform.tscn. Das ersetzt
+manuelle Editor-Aenderungen nur bei bewusstem Aufruf.
+tests/arena_hybrid.gd: sechs 3D-Werbeflaechen, keine Hallen-/Crowd-Geometrie,
+Hintergrundauflosung, vier Kameras und unveraenderte Pultoberkante.
+scripts/capture_arena_blockout.gd schreibt nach logs/arena-hybrid-preview.
+scripts/build_arena.ps1 erzeugt build/arena; check_arena_web.py prueft die
+vier Ansichten in Chromium und protokolliert Browserfehler/Frameintervalle.
+Der normale Match-Start main.tscn und die Serverphysik sind unveraendert.
+Die Kulisse ist eine separate Vorschau mit wiederverwendbarer Plattform.
+Menschliche optische Abnahme ist von Techniktests getrennt.
+
+HISTORISCH
+arena_finished.tscn, bake_arena.gd und tests/arena_finished.gd gehoeren zur
+Voll-3D-Fassung. Die aktuelle Vorschau instanziert diese Szene nicht.
