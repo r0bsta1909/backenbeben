@@ -2046,3 +2046,17 @@ BewussterAnsichtsmoduswechsel, keinephysikalischeRueckholanimation behauptet.
 MenschlicheAbnahmeweiteroffen. V11weiterhistorischesPaket. Goalaktiv.
 NaechsterG8Schritt: fehlendenvollstaendigenLeistungsnachweis fuerIdle/Schwung/
 Impact/Replay imaktuellenSpiel erheben; bisherigeMessungbetrafvorallemReplay.
+
+G8 FRAMEZEITEN UEBER VOLLSTAENDIGES DUELL
+Reproduzierbar im v3_browser_gauntlet.py: rAFIntervalleproPhase,Median/p95/Max,
+>33/>50/>100msZaehler undPhasendauern. UebergangsintervalleausFramegruppen
+ausgeschlossen; Segmentdauernbleiben. Hauptclient,2HeadlessBrowser+Host auf1PC.
+Ryzen53600/RTX2080/15.9GiB,Chrome154.0.8037.98,1920x1080.
+AimIdle p95=41.7ms,Schwung34.9ms,Impact62.6ms,Replaylaufend34.9ms,pausiert27.9ms.
+Resolving2.07-3.25s. Kein60FPS-PASS. Lobbymax23.36s imLaufmitzweitemBrowserstart;
+Ursachenichtisoliert,nichtalsnormalerIdlewertverschweigen. Screenshots/Automation
+beeinflussendenLauf. KeineGPUProfiler-/ZweiPC-Aussage.
+Standardduell5TrefferbisKO/Anspannen/Replayruecklauf/Resume/RevanchePASS,errors[].
+Beleg validation/phase-performance.json. MessungschliesstNachweisluecke, nicht
+Leistungsabnahme. Goalaktiv. NaechsterkonkreterEngpass: RenderpfadbeimImpact
+inkl.Gesichts-/Spiegelaktualisierungprofilieren; keinisolierterSolveroptimierungsloop.

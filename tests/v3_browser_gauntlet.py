@@ -19,6 +19,26 @@ async def main():
         pages=[]
         for _ in range(2):
             c=await browser.new_context(viewport={'width':1920,'height':1080})
+            await c.add_init_script("""(() => {
+                const samples={},segments=[];let last=0,previous='',start=0;
+                function tick(t){
+                    let phase='loading';
+                    try { if(window.gameReady){const s=JSON.parse(renderState).state;
+                        phase=s?.phase||'lobby';
+                        if(phase==='aim')phase=document.getElementById('posePanel')?.dataset.dragging==='true'?'stroke':'aim_idle';
+                        if(phase==='replay')phase=document.getElementById('replayPlay')?.textContent==='PAUSE'?'replay_playing':'replay_paused';
+                    }} catch (_) {}
+                    if(document.hidden)phase='hidden';
+                    if(phase!==previous){if(previous)segments.push({phase:previous,ms:t-start});start=t;}
+                    else if(last&&phase!=='loading'&&phase!=='hidden'){
+                        const list=samples[phase]||(samples[phase]=[]);if(list.length<20000)list.push(t-last);
+                    }
+                    previous=phase;last=t;requestAnimationFrame(tick);
+                }
+                window.phasePerformance=()=>({samples,segments:[...segments,{phase:previous,ms:performance.now()-start}],
+                    viewport:[innerWidth,innerHeight],devicePixelRatio,hardwareConcurrency:navigator.hardwareConcurrency});
+                requestAnimationFrame(tick);
+            })();""")
             page=await c.new_page();pages.append(page)
             def record_input(payload):
                 try:
@@ -191,6 +211,14 @@ async def main():
             await a.wait_for_function("JSON.parse(renderState).state.phase==='disconnected'")
             report['leave']=True
             report['stats']=await a.evaluate('godotStats')
+            performance=await a.evaluate('phasePerformance()')
+            phase_summary={}
+            for phase,values in performance.pop('samples').items():
+                values.sort()
+                phase_summary[phase]={'frames':len(values),'median_ms':round(values[len(values)//2],2),'p95_ms':round(values[min(len(values)-1,int(len(values)*.95))],2),'max_ms':round(values[-1],2),'over_33ms':sum(v>33.34 for v in values),'over_50ms':sum(v>50 for v in values),'over_100ms':sum(v>100 for v in values)}
+            report['phase_performance']=dict(performance,phases=phase_summary,limits='Browser requestAnimationFrame intervals, not GPU timings. Two headless clients and host share one PC. Transition-crossing frames excluded; phase segment durations retained. Primary client only, including replay inspection pauses.')
+            for required in ('aim_idle','stroke','impact','replay_playing','replay_paused'):
+                assert phase_summary.get(required,{}).get('frames',0)>0,required
             assert not report['errors'],report['errors']
             output='logs/v3-standard-duel.json' if standard else 'logs/v3-browser-gauntlet.json'
             Path(output).write_text(json.dumps(report,indent=2),encoding='utf-8')
