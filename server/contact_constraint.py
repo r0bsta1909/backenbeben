@@ -126,3 +126,45 @@ def resolve_inelastic_contact_velocity(hand_velocity, node_velocities,
     # dt=1 and zero compliance make its multiplier a velocity impulse.
     return project_contact(hand_velocity, node_velocities, inverse_hand_mass,
                            inverse_node_masses, weights, normal, 1., 0., 0.)
+
+
+def resolve_rigid_inelastic_velocity(velocity, angular_velocity, orientation,
+                                     local_point, inverse_mass, inverse_inertia_body,
+                                     node_velocities, inverse_node_masses, weights, normal):
+    """Single established rigid-hand contact, zero restitution, no friction.
+
+    Velocities and normal are world-space; local_point is relative to center
+    of mass. Caller establishes touching geometry. No positional correction,
+    time-of-impact detection, or multi-contact convergence is performed here.
+    """
+    v=np.array(velocity,dtype=float,copy=True)
+    omega=np.array(angular_velocity,dtype=float,copy=True)
+    rotation=np.asarray(orientation,dtype=float)
+    local=np.asarray(local_point,dtype=float)
+    inertia=np.asarray(inverse_inertia_body,dtype=float)
+    nv=np.array(node_velocities,dtype=float,copy=True)
+    w=np.asarray(inverse_node_masses,dtype=float)
+    a=np.asarray(weights,dtype=float);n=np.asarray(normal,dtype=float)
+    if (v.shape!=(3,) or omega.shape!=(3,) or rotation.shape!=(3,3)
+        or local.shape!=(3,) or inertia.shape!=(3,3) or a.ndim!=1
+        or nv.shape!=(len(a),3) or w.shape!=a.shape or n.shape!=(3,)):
+        raise ValueError('Rigid velocity contact shape mismatch')
+    if not all(np.isfinite(x).all() for x in (v,omega,rotation,local,inertia,nv,w,a,n,[inverse_mass])):
+        raise ValueError('Nonfinite rigid velocity contact')
+    if inverse_mass<0 or np.any(w<0) or np.any(a<0):
+        raise ValueError('Invalid inverse mass or weights')
+    if not np.allclose(rotation.T@rotation,np.eye(3),atol=1e-9,rtol=0) or np.linalg.det(rotation)<0:
+        raise ValueError('Orientation must be a proper rotation')
+    if not np.allclose(inertia,inertia.T,atol=1e-12,rtol=0) or np.min(np.linalg.eigvalsh(inertia))<-1e-12:
+        raise ValueError('Inverse inertia must be positive semidefinite')
+    if not np.isclose(a.sum(),1.,atol=1e-10,rtol=0) or abs(np.linalg.norm(n)-1)>1e-8:
+        raise ValueError('Weights and normal must be normalized')
+    r=rotation@local;world_inverse=rotation@inertia@rotation.T
+    lever=np.cross(r,n)
+    effective=inverse_mass+float(lever@world_inverse@lever)+float(w@(a*a))
+    closing=float((v+np.cross(omega,r)-a@nv)@n)
+    impulse=max(0.,-closing/effective) if effective>0 else 0.
+    v+=inverse_mass*impulse*n
+    omega+=world_inverse@lever*impulse
+    nv-=(w*a*impulse)[:,None]*n
+    return v,omega,nv,impulse

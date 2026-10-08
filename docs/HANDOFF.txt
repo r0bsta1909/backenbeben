@@ -766,3 +766,16 @@ Weitere Tests: trennende Bewegung ohne Impuls, feste Oberflaeche ohne Rueckprall
 Dies beweist nur den einzelnen linearen Aufprall, nicht einen vollstaendigen
 Feder-Kontakt-Zeitverlauf. Kontaktzeitbestimmung, wiederholte Kontakte, Rotation,
 Materialkopplung und Echtzeitintegration weiterhin offen. Spielsolver unveraendert.
+
+ROTIERENDE HAND IM INELASTISCHEN EINZELKONTAKT
+resolve_rigid_inelastic_velocity beruecksichtigt v+omega x r am Kontaktpunkt,
+Welttraegheit und Hebelarm in effektiver Masse und Drehimpulsantwort. Reibungsfrei,
+Restitution null, nur bereits festgestellter Einzelkontakt. Keine Geometriekorrektur.
+Test mit schraegem Normalenvektor, gedrehter anisotroper Traegheit, außermittigem
+Kontakt und drei ungleich schweren Knoten: linearer und Drehimpuls erhalten,
+Energieverlust gleich .5*v_rel^2/effektive_inverse_Masse, normale Relativbewegung
+nach Impuls null. Reine Rotation kann Kontakt schliessen trotz ruhendem Schwerpunkt.
+Trennende und voll fixierte Faelle erzeugen keinen Impuls. 81 Python-Tests bestanden.
+Keine Reibung bedeutet hier keinen Tangentialimpuls; durch Rotationskopplung kann
+sich tangentiale Kontaktpunktgeschwindigkeit trotzdem aendern. Noch Laborbaustein:
+TOI, simultane Mehrpunktkontakte und Einbau in den gekoppelten Clip bleiben offen.
