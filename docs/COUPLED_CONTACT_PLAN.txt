@@ -57,3 +57,20 @@ Keine Freigabe aufgrund des stabil aussehenden Einzelversuchs. Naechste Aufgabe:
 Jacobi-Gradnormalisierung und Volumenkorrekturen des vorhandenen Kaefigsolvers
 gegen eine konsistente XPBD-Referenz pruefen. Diese sind ein Verdacht, keine
 bewiesene Ursache. Danach erst Handfeder und flaechenbasierte Kopplung.
+
+REFERENZVERGLEICH: RESTFEHLER VON MATERIALWEICHHEIT TRENNEN
+server/tissue_reference.py implementiert konfliktfreie Gauss-Seidel-Gruppen
+fuer Kanten und Tetraedervolumen ohne nachtraegliche Gradmittelung. Noch rein
+experimentell. Zweimal getestet: Gruppierung vollstaendig/disjunkt; Ruhe exakt.
+Messfenster 0.15 s, Handpunkt 1 m/s, unveraenderte Testmassen:
+- 12 Iterationen / 240 Hz / Volumencompliance 1e-15: 6.68 mm Spitzenverformung.
+- 12 / 480 Hz / 1e-15: 3.32 mm. Schrittweitenproblem bleibt.
+- 96 / 240 Hz / 1e-15: 0.77 mm. Laufzeit rund 10 s fuer 0.15 s Simulation.
+- 12 / 240 Hz / 1e-9: 12.01 mm; 12 / 480 Hz / 1e-9: 7.44 mm.
+Messdaten in validation/coupled-reference*.json. Damit ist die Gradmittelung
+nicht als alleinige Ursache belegt. Die starke Iterationsabhaengigkeit zeigt,
+dass numerischer Restfehler noch erheblich zur sichtbaren Verformung beitraegt.
+Weichere Volumenparameter allein beheben das nicht. Keine Matchintegration.
+Naechster Schritt: Residuen C+alpha*lambda pro Constraintfamilie und Kontakt
+messen; adaptive Konvergenzstudie von tatsaechlicher Materialnachgiebigkeit
+trennen. Erst danach Laufzeitoptimierung, Handfeder und Flaechenkopplung.

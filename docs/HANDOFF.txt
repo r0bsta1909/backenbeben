@@ -173,3 +173,8 @@ SI-Kopplungslabor implementiert, NICHT im Spiel aktiv. Kontakt bewegt Hand und
 Gewebe, Ruhe bleibt exakt. Schrittweitenvergleich durchgefallen (10.32 vs
 5.42 mm Verformung bei 240/480 Hz). Naechster Schritt: Kaefigsolver gegen
 konsistente XPBD-Referenz pruefen, nicht trotz Befund integrieren.
+
+Kontaktlabor: Gauss-Seidel-Referenz bestaetigt starken numerischen Restfehler.
+12->96 Iterationen senken Peak 6.68->0.77 mm. Zwei neue Referenztests bestanden.
+Naechste Aufgabe sind explizite Constraint-Residuen/Konvergenzmessung; noch
+keine Integration oder Behauptung physikalisch korrekter Gewebeweichheit.

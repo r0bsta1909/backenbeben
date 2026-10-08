@@ -1,0 +1,34 @@
+{
+  "240": {
+    "reference": true,
+    "iterations": 12,
+    "units": "metres, kilograms, seconds",
+    "fps": 240,
+    "speed": 1.0,
+    "peak_deformation_m": 0.006680560623414101,
+    "minimum_gap_m": -1.3877787807814457e-17,
+    "contact_steps": 8,
+    "final_hand_velocity": [
+      0.49439663144922985,
+      0.0,
+      0.0
+    ],
+    "solve_ms": 1674.5035999992979
+  },
+  "480": {
+    "reference": true,
+    "iterations": 12,
+    "units": "metres, kilograms, seconds",
+    "fps": 480,
+    "speed": 1.0,
+    "peak_deformation_m": 0.0033184269812090955,
+    "minimum_gap_m": 0.0,
+    "contact_steps": 7,
+    "final_hand_velocity": [
+      0.5062384998251401,
+      0.0,
+      0.0
+    ],
+    "solve_ms": 2384.8668999999063
+  }
+}
