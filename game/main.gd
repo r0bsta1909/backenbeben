@@ -544,6 +544,10 @@ func build_officials() -> void:
 func update_officials(body: Array) -> void:
 	if body==officials_frame:return
 	officials_frame=body.duplicate()
+	var body_hip := Vector3(0,-.6,0)
+	var body_drop := Vector3(0,-float(body[0]),-float(body[1]))
+	var body_bend := Basis(Vector3.FORWARD,float(body[3]))*Basis(Vector3.RIGHT,-float(body[2]))
+	var gaze_target := (body_hip+body_drop+body_bend*(Vector3(0,.06,0)-body_hip))*4.0
 	for i in range(officials.size()):
 		var actor: Node3D=officials[i]
 		actor.position=actor.get_meta("home")
@@ -560,3 +564,4 @@ func update_officials(body: Array) -> void:
 			var support := (hip+drop+bend*(armpit-hip))*4.0
 			actor.reach_toward(Vector3.ZERO,"R" if i==0 else "L",0.0)
 			actor.reach_toward(support,"L" if i==0 else "R",catch_amount,bend*Vector3(.88 if i==0 else -.88,-.46,0).normalized(),bend*Vector3(.46 if i==0 else -.46,.88,0).normalized())
+		actor.look_toward(gaze_target)

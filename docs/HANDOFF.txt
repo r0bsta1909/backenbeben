@@ -1681,3 +1681,20 @@ KO-Reverse/RevanchePASS,errors[],Replayp95=20.9ms bei1920x1080. Keine60FPS-
 oderMehrhardwarezusage. Beleg validation/comic-hand-detail.json/png.
 Gesamtstil-/menschlicheAbnahmeweiteroffen. Host8877CheckoutSession18596;
 V08PaketweiterhistorischvorletztenHelfer-/Probe-/Handdetailkorrekturen.
+
+G2/G6 BLICKRICHTUNG, HALS UND FESTE GESICHTSZEICHNUNG
+Helfer richten Augenlinie ueber Hals/Kopf auf den aufgefangenen Kaempfer.
+337 echte KO-Frames: maximaler Zielfehler 0.001899 rad; maximaler Framewinkel
+0.03033 rad; Halsanschluss und deterministischer Ruecklauf bestanden.
+Blender-Hautgewichte verbinden unteren Kopf mit Hals/Brust. Gesichtsbemalung
+nutzt unverformte UV-Koordinaten statt bereits gedrehter Vertexpositionen;
+damit verschwinden doppelte/verrutschte Gesichtsmerkmale bei Helferrotation.
+Exportierte UVs an 17113 Vertices geprueft, maximaler Restpositionsfehler
+6.22e-8 m. Blenderquelle, GLB und Vorschau erneuert. Assetvalidierung und
+Webbuild bestanden. 15 Browserkontaktansichten und kompletter LAN-KO-Kampf
+inklusive Anspannen, Ruecklauf, Resume und Revanche bestanden, errors[].
+32 native Verletzungszustaende mit vier Hautvarianten bestanden. Kontakt-/KO-
+Bilder gesichtet. Beleg validation/helper-gaze-face-uv.json/png.
+Weiter gefuehrte Bewegung, keine physikalische Griffsimulation; Gesamtstil,
+menschliche Verstaendlichkeit und Zwei-PC-Nachweis bleiben offen.
+Host8877 Checkout Session18596. V08-Download enthaelt diese Korrekturen nicht.

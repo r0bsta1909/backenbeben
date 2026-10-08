@@ -455,7 +455,7 @@ for obj in [o for o in bpy.context.scene.objects if o.type=='MESH']:
     candidates=None;fixed='chest'
     if obj.name in leg_bindings:fixed=leg_bindings[obj.name]
     if obj in head_parts:fixed='head'
-    if obj==neck:fixed='neck'
+    if obj in [face,neck]:candidates=['chest','neck','head']
     if obj.name in arm_objects:
         _,fixed=arm_objects[obj.name]
         if fixed is None:
@@ -465,6 +465,12 @@ for obj in [o for o in bpy.context.scene.objects if o.type=='MESH']:
         groups={name:obj.vertex_groups.new(name=name) for name in candidates}
         for v in obj.data.vertices:
             p=G(v.co)
+            if obj in [face,neck]:
+                head_weight=smoothstep(-.135,-.075,p.y)
+                neck_weight=(1-head_weight)*smoothstep(-.185,-.140,p.y)
+                for name,weight in [('head',head_weight),('neck',neck_weight),('chest',1-head_weight-neck_weight)]:
+                    if weight>1e-8:groups[name].add([v.index],weight,'REPLACE')
+                continue
             if obj==body:
                 # Smooth armhole ownership: no horizontal cut through the sleeve.
                 side='L' if p.x>0 else 'R'
@@ -537,6 +543,17 @@ for obj in [o for o in bpy.context.scene.objects if o.type=='MESH']:
         for li in poly.loop_indices:
             p=G(obj.data.vertices[obj.data.loops[li].vertex_index].co);obj.data.uv_layers.active.data[li].uv=((p.x+.19)/.38,(p.y+.135)/.38) if obj==face else (p.x+.5,p.y+.8)
     bpy.ops.object.mode_set(mode='EDIT');bpy.ops.mesh.select_all(action='SELECT');bpy.ops.mesh.normals_make_consistent(inside=False);bpy.ops.object.mode_set(mode='OBJECT')
+
+# Preserve rest-space paint coordinates/mask through skeletal head rotation.
+# glTF flips V on import: encode 1-z so Godot UV2.y retains rest depth.
+rest_uv=face.data.uv_layers.new(name='RestPaint')
+for poly in face.data.polygons:
+    for li in poly.loop_indices:
+        vertex=face.data.vertices[face.data.loops[li].vertex_index]
+        p=G(vertex.co);normal=G(vertex.normal).normalized()
+        mask=smoothstep(.35,.80,normal.z)*smoothstep(.012,.065,p.z)
+        rest_uv.data[li].uv=(mask,1-p.z)
+face.data.uv_layers.active_index=0
 
 # The paint guide uses a fixed front projection; keep it editable and packed in
 # the Blender source. Runtime adds its own light and injury layers to this ink.

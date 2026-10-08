@@ -179,6 +179,33 @@ func collapsed_point(rest_point: Vector3) -> Vector3:
 	var bend := Basis(Vector3.FORWARD,float(last_body[3]))*Basis(Vector3.RIGHT,-float(last_body[2]))
 	return hip+offset+bend*(rest_point-hip)
 
+func look_toward(world_target: Vector3) -> void:
+	var ni := skeleton.find_bone("neck")
+	var hi := skeleton.find_bone("head")
+	var neck_rest := skeleton.get_bone_global_rest(ni)
+	var head_rest := skeleton.get_bone_global_rest(hi)
+	var body_basis := Basis.IDENTITY
+	if last_body.size()>=5:
+		body_basis=Basis(Vector3.FORWARD,float(last_body[3]))*Basis(Vector3.RIGHT,-float(last_body[2]))
+	var neck_origin := collapsed_point(neck_rest.origin)
+	var yaw := 0.0
+	var pitch := 0.0
+	var neck_turn := Basis.IDENTITY
+	var head_turn := Basis.IDENTITY
+	var head_origin := collapsed_point(head_rest.origin)
+	# Turning shifts the eyes around the neck pivot. Refine against that moving
+	# origin, especially when the caught fighter is close to the helper's face.
+	for iteration in range(12):
+		var eye := head_origin+body_basis*head_turn*(Vector3(0,.09,.09)-head_rest.origin)
+		var direction := body_basis.inverse()*(to_local(world_target)-eye)
+		yaw=lerpf(yaw,clampf(atan2(direction.x,direction.z),-1.20,1.20),.6)
+		pitch=lerpf(pitch,clampf(-atan2(direction.y,Vector2(direction.x,direction.z).length()),-.35,.90),.6)
+		neck_turn=Basis(Vector3.UP,yaw*.35)*Basis(Vector3.RIGHT,pitch*.35)
+		head_turn=Basis(Vector3.UP,yaw)*Basis(Vector3.RIGHT,pitch)
+		head_origin=neck_origin+body_basis*neck_turn*(head_rest.origin-neck_rest.origin)
+	skeleton.set_bone_global_pose_override(ni,Transform3D(body_basis*neck_turn*neck_rest.basis,neck_origin),1.0,true)
+	skeleton.set_bone_global_pose_override(hi,Transform3D(body_basis*head_turn*head_rest.basis,head_origin),1.0,true)
+
 func reach_toward(world_target: Vector3, side: String, amount: float, world_normal := Vector3.BACK, world_fingers := Vector3.UP) -> void:
 	var upper: Dictionary=metadata.bones["upper_arm."+side]
 	var fore: Dictionary=metadata.bones["forearm_twist."+side]

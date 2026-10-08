@@ -11,10 +11,10 @@ varying float front_paint_weight;
 #include "res://face_deform.gdshaderinc"
 void vertex() {
     vec3 p = (VERTEX + part_origin)*geometry_scale;
-    skin_position=p;
+    skin_position=face_skin?vec3(UV.x*.38-.19,.245-UV.y*.38,UV2.y)*geometry_scale:p;
     // Frontal concept paint must not stretch across temple/ear side planes.
     // Use the rest surface orientation, not camera facing, so marks stay put.
-    front_paint_weight=smoothstep(0.35,0.80,normalize(NORMAL).z);
+    front_paint_weight=UV2.x;
     NORMAL=deform_face_normal(p,NORMAL);
     p=deform_face(p);
     VERTEX=p/geometry_scale-part_origin;
@@ -35,9 +35,9 @@ void fragment() {
     }
     if(face_skin) {
         vec3 local=skin_position/geometry_scale;
-        vec2 paint_uv=vec2((local.x+.19)/.38,(.245-local.y)/.38);
+        vec2 paint_uv=UV;
         vec3 paint=texture(face_ink,paint_uv).rgb;
-        float paint_mask=smoothstep(.012,.065,local.z)*front_paint_weight;
+        float paint_mask=front_paint_weight;
         float ink=clamp(paint.r/.55,.055,1.2);
         color*=mix(1.0,ink,paint_mask*.65);
         float injury=skin_position.x<0.0?injury_left:injury_right;
