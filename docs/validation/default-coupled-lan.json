@@ -1,0 +1,138 @@
+{
+  "errors": [],
+  "configuration": {
+    "base_damage": 25,
+    "ko_threshold": 100,
+    "turn_seconds": 25
+  },
+  "physics_backend": "coupled",
+  "hits": [
+    {
+      "kind": "hit",
+      "target": 1,
+      "damage": 11.96,
+      "quality": 0.7362,
+      "braced": true,
+      "side": "R",
+      "ko": false,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen."
+    },
+    {
+      "kind": "hit",
+      "target": 0,
+      "damage": 19.47,
+      "quality": 0.7789,
+      "braced": false,
+      "side": "R",
+      "ko": false,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen."
+    },
+    {
+      "kind": "hit",
+      "target": 1,
+      "damage": 17.54,
+      "quality": 0.7014,
+      "braced": false,
+      "side": "R",
+      "ko": false,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen."
+    },
+    {
+      "kind": "hit",
+      "target": 0,
+      "damage": 17.55,
+      "quality": 0.7021,
+      "braced": false,
+      "side": "R",
+      "ko": false,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen."
+    },
+    {
+      "kind": "hit",
+      "target": 1,
+      "damage": 15.34,
+      "quality": 0.6137,
+      "braced": false,
+      "side": "R",
+      "ko": false,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen."
+    },
+    {
+      "kind": "hit",
+      "target": 0,
+      "damage": 17.4,
+      "quality": 0.696,
+      "braced": false,
+      "side": "R",
+      "ko": false,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen."
+    },
+    {
+      "kind": "hit",
+      "target": 1,
+      "damage": 16.44,
+      "quality": 0.6575,
+      "braced": false,
+      "side": "R",
+      "ko": false,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen."
+    },
+    {
+      "kind": "hit",
+      "target": 0,
+      "damage": 15.46,
+      "quality": 0.6183,
+      "braced": false,
+      "side": "R",
+      "ko": false,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen."
+    },
+    {
+      "kind": "hit",
+      "target": 1,
+      "damage": 10.48,
+      "quality": 0.4193,
+      "braced": false,
+      "side": "R",
+      "ko": false,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen."
+    },
+    {
+      "kind": "hit",
+      "target": 0,
+      "damage": 2.46,
+      "quality": 0.0984,
+      "braced": false,
+      "side": "R",
+      "ko": false,
+      "foul": false,
+      "diagnosis": "Gestreift. Handfl\u00e4che flacher zur Wange stellen."
+    }
+  ],
+  "recorded_arm_frames": 524,
+  "replay_frame_ms_p95": 14,
+  "viewport": [
+    1920,
+    1080
+  ],
+  "resume": true,
+  "winner": 1,
+  "audio": {
+    "mode": "buffer-fallback",
+    "played": 11,
+    "unlocked": true
+  },
+  "rematch": true,
+  "leave": true,
+  "launch": "START_HOST.bat --port 8877 --no-browser --no-console (no physics override)",
+  "scope": "Standard balance, two browser contexts on LAN HTTP from one computer; development checkout, not isolated release package."
+}

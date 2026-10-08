@@ -55,13 +55,15 @@ Netzwerk freigeben; `ALLOW_LAN.bat` richtet eine begrenzte Regel für Port 8765 
 - Aktuelle Integrationstests: `tests/v3_browser_gauntlet.py` und `tests/v3_network_gauntlet.py`
   gegen einen separaten Host auf Port 8877. Playwright und Chrome werden dafür benötigt.
 
-Der gekoppelte Kontaktpfad kann gezielt mit
+Der normale Hoststart verwendet den gekoppelten Kontaktpfad. Für einen separaten
+Testhost:
 `python server/host.py --port 8877 --no-browser --no-console --physics coupled`
-geprüft werden. Dafür zusätzlich `server/requirements-lab.txt` installieren.
+Nach einem Update einmal `SETUP_HOST.bat` ausführen; die benötigte Kompilierung
+ist jetzt in `server/requirements.txt` enthalten.
 Er liefert vollständige Browser-Replays mit seitlichem Gewebe und durchgehender
 Arm-Rückholung. Die Rechenworker werden beim Hoststart vorbereitet; der geprüfte Browser-Treffer
-benötigte danach rund 1,36 Sekunden. Kopf/Kiefer bleiben eine stilisierte Reaktion. Der normale Start verwendet bis
-zur vollständigen Abnahme weiterhin den bisherigen Pfad. Der gezielte Browsercheck
+benötigte danach rund 1,36 Sekunden. Kopf/Kiefer bleiben eine stilisierte Reaktion. `--physics legacy` hält den bisherigen Pfad für technische Vergleiche verfügbar.
+Der gezielte Browsercheck
 lautet `python tests/replay_contact_view.py --expect-coupled --visual-contact`.
 
 ## Wissenssicherung

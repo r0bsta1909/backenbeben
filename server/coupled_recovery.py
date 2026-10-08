@@ -9,7 +9,7 @@ import numpy as np
 from arm import Arm,DT
 from arm_hand_attachment import rotation_log
 from contact_constraint import rotation_increment
-from contact_v3 import hand_frame,table_collision,side_surfaces
+from contact_v3 import hand_frame,table_collision,side_surfaces,WRIST_LIMIT
 from hand_surface import world_positions
 
 
@@ -49,6 +49,15 @@ def recover(scored,contact):
             rest=np.column_stack((np.cross(rest_f,rest_n),rest_f,rest_n))
             desired=rotation_increment(rotation_log(rest@desired.T)*lower)@desired
             orientation=rotation_increment(rotation_log(desired@carried.T)*smooth((elapsed-.16)/.30))@carried
+            # Bound the carried angular motion against the CURRENT forearm.
+            # Apply one rigid rotation to finger and palm axes; collision uses
+            # this same constrained orientation before the pose is accepted.
+            f=orientation[:,1]
+            angle=math.acos(float(np.clip(f@rest_f,-1.,1.)))
+            if angle>WRIST_LIMIT:
+                axis=np.cross(f,rest_f);length=float(np.linalg.norm(axis))
+                if length<1e-12:axis=orientation[:,2];length=1.
+                orientation=rotation_increment(axis/length*(angle-WRIST_LIMIT))@orientation
             return orientation[:,1],orientation[:,2]
         def blocked(elbow,wrist):
             if table_collision(elbow,wrist):return True

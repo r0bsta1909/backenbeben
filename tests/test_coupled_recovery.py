@@ -39,3 +39,20 @@ class CoupledRecoveryTests(unittest.TestCase):
   self.assertGreater(final['wrist'][0],.30);self.assertLess(final['wrist'][1],-.55)
   self.assertLess(final['finger_direction'][1],-.8)
   self.assertEqual(final['finger_relax'],1.)
+
+ def test_foul_recovery_does_not_overextend_wrist(self):
+  from contact_v3 import score,WRIST_LIMIT,side_surfaces
+  from coupled_replay import simulate
+  from hand_surface import world_positions
+  for y,tilt in [(.1,0),(.35,35)]:
+   scored=score({'version':3,'points':[[.19+.34*i/40,y,800*i/40,0,tilt,0] for i in range(41)]})
+   path=simulate(scored)['arm_path']
+   for record in path[-324:]:
+    p=record['pose'];f=np.array(p['finger_direction']);n=np.array(p['palm_normal'])
+    fore=np.array(p['wrist'])-p['elbow'];fore/=np.linalg.norm(fore)
+    self.assertGreaterEqual(float(f@fore),math.cos(WRIST_LIMIT)-1e-8)
+    self.assertAlmostEqual(float(f@n),0.,places=10)
+    points=world_positions(p,f,n)*4;depth=side_surfaces(points[:,1:]);valid=np.isfinite(depth)
+    if valid.any():self.assertGreaterEqual(float(np.min(points[valid,0]-depth[valid])),-1e-7)
+   index=len(path)-325
+   self.assertLess(math.acos(np.clip(np.dot(path[index]['pose']['palm_normal'],path[index+1]['pose']['palm_normal']),-1,1)),math.radians(2))

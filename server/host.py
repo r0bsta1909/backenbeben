@@ -394,9 +394,12 @@ async def lifecycle(app):
 
 def main():
     global simulate
-    parser=argparse.ArgumentParser();parser.add_argument('--port',type=int,default=8765);parser.add_argument('--no-browser',action='store_true');parser.add_argument('--no-console',action='store_true');parser.add_argument('--physics',choices=['legacy','coupled'],default='legacy');args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--port',type=int,default=8765);parser.add_argument('--no-browser',action='store_true');parser.add_argument('--no-console',action='store_true');parser.add_argument('--physics',choices=['legacy','coupled'],default='coupled');args=parser.parse_args()
     if args.physics=='coupled':
-        from coupled_replay import simulate as coupled_simulate
+        try:
+            from coupled_replay import simulate as coupled_simulate
+        except ModuleNotFoundError as exc:
+            raise SystemExit('Host-Abhaengigkeit fehlt: '+str(exc.name)+'. Bitte SETUP_HOST.bat ausfuehren.') from exc
         simulate=coupled_simulate
     if not (ROOT/'build/web/index.pck').exists():raise SystemExit('Web-Build fehlt. Zuerst BUILD_GAME.bat ausführen.')
     app=web.Application(client_max_size=32768);app['physics_backend']=args.physics;app.cleanup_ctx.append(lifecycle)

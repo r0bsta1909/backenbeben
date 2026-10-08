@@ -41,9 +41,9 @@ G4 GEMEINSAME BEWEGUNG / KONTAKT — OFFEN
 Ein durchgehender aktiver Pfad fuer Arm, Hand, Trefferwertung, Gewebereaktion,
 Nachbewegung und Replay. Kontaktgeometrie aus sichtbarem Export. Keine Teleports,
 Durchdringung oder kuenstliches Rueckfedern. Sichtbarer Kontakt entspricht Wertung.
-Aktuell: normaler Matchstart nutzt alten Gewebepfad. --physics coupled liefert
-vollstaendige gekoppelte Kontakt-/Gewebe-/Arm-Replays im echten Browserkampf,
-ist wegen Laufzeit und verbleibender Modellgrenzen noch nicht Standard.
+Aktuell: normaler Matchstart nutzt gekoppelte Kontakt-/Gewebe-/Arm-Replays.
+Batchstart und vollstaendiger LAN-Standardkampf sind geprueft. Legacy bleibt nur
+Vergleichsoption. Head-/Kieferreaktion und Kontaktwertung haben noch Modellgrenzen.
 Freie anisotrope Rotation nicht mit Kontaktsuche integriert. Das ist NICHT fertig.
 Geeignete Laborbausteine zu einem spielbaren Clip verbinden; konkurrierende alte
 Wege erst nach nachgewiesener Gleichwertigkeit/Verbesserung abloesen.
@@ -262,3 +262,23 @@ Start-/Paketabhaengigkeiten vor Standardaktivierung noch zu pruefen. G4 bleibt
 insgesamt offen; Kopf/Kiefer und Bewertung noch teilweise bisheriges Modell.
 Naechster Schritt: gekoppelten Pfad mit verschiedenen Trefferlagen/Verletzungs-
 zustaenden absichern, dann Standardstart und Paket mit passenden Dependencies.
+
+G4 GEKOPPELTER PFAD ALS NORMALER START AKTIVIERT
+Sieben komplette Varianten (flat/glance/tips/high-foul/heel-foul/swollen/jaw-injured)
+auf endliche Frames, Handgelenkgrenze und Face-/Pultfreiheit der Rueckholung
+geprueft. Audit reproduzierbar in scripts/audit_coupled_variants.py; Beleg
+validation/coupled-variants.json. Dabei reale Ueberdrehung bei Fouls entdeckt:
+Rueckholung erreichte89.8/96.1Grad. Orientierung wird nun gegen den aktuellen
+Unterarm auf85Grad begrenzt, Finger und Palmnormal gemeinsam rotiert. Kollisions-
+pruefung verwendet exakt diese Haltung. Keine Startspruenge, Foultests bestanden.
+121 Python-Tests bestanden. Neue Standardoption coupled in host.py; NumBa0.61.2
+in regulaeren Hostrequirements. Fehlende Abhaengigkeiten verweisen auf SETUP_HOST.
+Historische requirements-lab.txt verweist auf dieselben Requirements, README aktuell.
+Normaler START_HOST.bat-Aufruf ohne --physics auf Testport8877 gestartet, Session23242.
+Vollstaendiger LAN-Standardkampf:10 Treffer bisPunkteentscheidung, zunehmende
+Verletzungen, identische Replays, Resume, Rematch und Leave bestanden, errors[].
+Backendcoupled im Bericht bestaetigt: validation/default-coupled-lan.json. Keine
+neue menschliche Verstaendlichkeits-/Stilabnahme und kein fertiges G4-Gesamtgate.
+Naechster Schritt: separat entpacktes Hostpaket mit frischer Laufzeitinstallation
+pruefen; danach groesste sichtbare Asset-/Stilluecke bearbeiten statt Physiklabor
+weiter auszubauen. Oeffentliches Releasearchiv ist weiterhin alter Stand.

@@ -1,7 +1,7 @@
 """Coupled contact interval initialized from an actual scored strike.
 
-Used by the optional coupled match backend. The normal host default remains
-the legacy backend until the full integration gauntlet has passed.
+Used by the normal coupled match backend. The legacy backend remains available
+for comparison; overall art and gameplay acceptance are separate requirements.
 """
 import time
 import numpy as np
