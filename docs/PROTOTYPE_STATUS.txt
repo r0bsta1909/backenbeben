@@ -148,3 +148,29 @@ bestanden; Kontakt/Rueckholung und geneigterKoerper gesichtet. NativeVorschau
 nutztDefaultfarben. Beleg validation/cloth-ink.json pluszweiBilder.
 Linien bewusst sparsam; keineStoffsimulation oderGesamtstilabnahme.
 Goalaktiv; V09-Paketweiterhistorisch vorLicht/Lid/Trikotdetails.
+
+G4 REIBUNG — ERSTER BAUSTEIN, NOCH NICHT IM SPIEL
+AktiverPfad untersucht: spatial_head_replay -> moving_head_replay ->
+coupled_contact -> CompiledRigidHandContact.project/project_sheet.
+Derzeit werden ausschliesslich normale Multiplikatoren projiziert.
+Neue contact_friction.tangent_correction loest einen 2D-Tangentialblock mit
+Coulomb-Scheibengrenze mu*lambda_n in Positionssolver-Einheiten. Anisotrope
+Massenmatrix wird als beschraenktes quadratisches Problem geloest; einfaches
+radiales Abschneiden der freien Loesung waere im Allgemeinen falsch.
+Fuenf Tests bestanden: analytisches Haften/Gleiten, keinNormalkontakt/mu0,
+100anisotropeFaelle mit Grenze/Energie/Stationaritaet, Rotationsinvarianz,
+ungueltigeEingaben. Dies belegt NUR den lokalen Block, keine Gesamtenergie-
+oder Reibungsvalidierung des gekoppelten Schlags. Ein Koeffizient, keine
+kalibrierten Hautwerte. Noch kein Default-/Gameplayunterschied.
+Primaerquelle: https://matthias-research.github.io/pages/publications/flex.pdf
+Abschnitt6.1 beschreibt relative tangentiale Positionskorrektur, statische/
+kinetische Grenzen und Iterationsabhaengigkeit; unser anisotroper Block ist
+eine eigene Erweiterung, keine wortgetreue Umsetzung dieser Partikelformel.
+VERBINDLICH NAECHSTES: In hand-sheet-Projektion Vorpositionsanker und angesammelte
+Tangentialmultiplikatoren integrieren, bei Kontaktwechsel sauber zuruecksetzen;
+Handtranslation/-rotation und dreiGewebeknoten mit gleicherGegenkorrektur.
+Normalmultiplikator begrenzt Tangentialbetrag, kein separater Kick amClipende.
+Mit mu0 bisherigenPfad exakt vergleichen; reale seitlicheSchlaege, Kontakt-
+wechsel, Energie, Rueckholung und Browserclip pruefen. Maximal ein weiterer
+reiner Labor-Meilenstein, danach Integrationsentscheidung gemaessGauntlet.
+Goalaktiv. V09 und aktivesSpiel weiterhin ohneReibung, nichtandersbehaupten.
