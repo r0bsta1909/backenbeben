@@ -36,5 +36,41 @@
   },
   "injury_render": "Both sides, four skin colors, 0/35/75/0 and exact healthy reset passed",
   "visual_review": "No beard stipple; facial contour placement retained in rendered model",
-  "remaining": "Packed Blender source texture and re-export still need synchronization; overall reference look not accepted"
+  "remaining": "Overall reference look and human acceptance remain open",
+  "blender_source_synchronized": true,
+  "packed_image_exact_match": true,
+  "geometry_metadata_unchanged": true,
+  "asset_validation": "PASS: connected components, rig, 116 contact samples, closed strike hand",
+  "reexport_browser": {
+    "repeat_practice_without_damage": true,
+    "idle_material_uploads_skipped": true,
+    "mirror_visibility_updates": true,
+    "pose_camera_and_wheel": true,
+    "crowd_reaction_and_rewind": true,
+    "jump_to_contact": true,
+    "side_camera": true,
+    "marker_toggle": true,
+    "no_stale_markers": true,
+    "errors": [],
+    "inspection_survives_original_deadline": false,
+    "coupled": {
+      "backend": "coupled-moving",
+      "solve_ms": 2587.5,
+      "peak": 0.045684999999999996,
+      "contact_diagnostics": {
+        "maximum_wrist_separation_m": 1.1974199029344164e-05,
+        "maximum_penetration_m": 3.324480353530845e-06,
+        "unconverged_steps": 13,
+        "maximum_material_residual_m": 0.00029390618097207167
+      },
+      "head_response": {
+        "model": "coupled-yaw-through-contact-and-tail",
+        "braced": false,
+        "tail_pin_error_m": 7.171457547643221e-08,
+        "translation": true,
+        "parameters": "prototype tuning, three translations and yaw; pitch/roll fixed"
+      },
+      "maximum_head_yaw_rad": 0.08473
+    }
+  }
 }

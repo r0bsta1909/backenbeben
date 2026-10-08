@@ -1510,3 +1510,11 @@ WICHTIG NAECHSTER SCHRITT: bestehendecharacter-v3.blend undGLB enthalten
 nochaltegepackteTextur;Generatoraktualisiert,NeuerzeugungnochOFFEN.
 RuntimeShadernutztv2 bereitsdirekt. Beleg validation/face-ink-v2.json/png.
 KeinGesamt-Artabschluss,Goalaktiv. Host52990weiterCheckout.
+
+G2 V2-TEXTURQUELLE SYNCHRONISIERT
+Generatorerneutgelaufen:character-v3.blend/GLB/Vorschaumitv2. GepacktePNG
+bytegenaugegenface_ink_v2geprueft.88040Polygone,Rig-/Kontaktmetadaten
+unveraendert. Assetvalidatorinkl.116Kontaktpunkten/geschlossenerHandPASS.
+GodotNeuimport/Webbuild/15BrowserkontaktansichtenPASS,errors[]. Blenderpreview
+gesichtet. GodotextrahierteGLBTexturressourceebenfallsmitgesichert.
+VorigeroffenerQuellabgleichdamiterledigt,Gesamt-Artabnahmeweiteroffen.
