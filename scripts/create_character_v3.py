@@ -382,15 +382,35 @@ bpy.context.view_layer.objects.active=body;bpy.ops.object.join()
 rem=body.modifiers.new('Continuous shirt and sleeve seams','REMESH');rem.mode='VOXEL';rem.voxel_size=.0035;rem.use_smooth_shade=True
 bpy.ops.object.modifier_apply(modifier=rem.name)
 sm=body.modifiers.new('Tailored shoulder transition','SMOOTH');sm.factor=.6;sm.iterations=5;bpy.ops.object.modifier_apply(modifier=sm.name)
-# Small broad folds follow armpit and hem tension instead of separate painted bars.
+# Authored tension folds: tapered ridges from the armholes, a few broad chest
+# diagonals and short compressed hem folds. Avoid uniform sine-wave ribbing.
+cloth_folds=[
+    ((-.19,-.26),(-.07,-.34),.0055,.010),
+    ((-.18,-.34),(-.03,-.38),.0040,.009),
+    ((.18,-.25),(.065,-.30),.0060,.011),
+    ((.17,-.35),(.035,-.41),.0045,.009),
+    ((-.15,-.48),(.09,-.445),.0045,.013),
+    ((-.12,-.535),(.16,-.56),.0050,.010),
+    ((-.16,-.575),(-.035,-.555),.0035,.008),
+    ((.02,-.585),(.13,-.578),.0030,.007),
+]
+def cloth_fold(x,y,a,b,height,width):
+    dx,dy=b[0]-a[0],b[1]-a[1]
+    length_squared=dx*dx+dy*dy
+    t=((x-a[0])*dx+(y-a[1])*dy)/length_squared
+    if t<=0 or t>=1:return 0.
+    distance=((x-a[0])*dy-(y-a[1])*dx)/math.sqrt(length_squared)
+    taper=math.sin(math.pi*t)**.7
+    w=width*(.3+.7*taper)
+    ridge=math.exp(-(distance/w)**2)-.38*math.exp(-((distance-w*1.3)/(w*1.5))**2)
+    return height*taper*ridge
 for v in body.data.vertices:
     p=G(v.co)
-    if p.z>0:
-        weight=math.exp(-((abs(p.x)-.16)/.07)**2-((p.y+.27)/.15)**2)
-        p.z+=weight*.0035*math.sin((p.y+abs(p.x)*.7)*90)
-        p.z+=.002*math.sin(p.x*55)*math.exp(-((p.y+.56)/.04)**2)
+    front=smoothstep(.015,.065,p.z)*(1-smoothstep(.19,.24,abs(p.x)))
+    if front>0:
+        p.z+=front*sum(cloth_fold(p.x,p.y,*fold) for fold in cloth_folds)
         v.co=B(p)
-dec=body.modifiers.new('Cloth budget' ,'DECIMATE');dec.ratio=.10;bpy.ops.object.modifier_apply(modifier=dec.name)
+dec=body.modifiers.new('Cloth budget' ,'DECIMATE');dec.ratio=.16;bpy.ops.object.modifier_apply(modifier=dec.name)
 
 bpy.ops.object.select_all(action='DESELECT');bpy.ops.object.armature_add()
 rig=bpy.context.object;rig.name='CharacterRig';bpy.ops.object.mode_set(mode='EDIT');rig.data.edit_bones.remove(rig.data.edit_bones[0])

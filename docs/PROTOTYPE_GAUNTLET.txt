@@ -412,3 +412,16 @@ Solverrestfehler offen. Neues Modul wird durch Paketallowlist automatisch erfass
 Host8877 WIEDER AUS CHECKOUT,Session47462; v0.5-Pakettesthost beendet. V0.5-Release
 enthaelt noch vorige Wertung, README kennzeichnet dies. Neue menschliche Antwort
 weiterhin ausstehend; alle bisherigen negativen Abnahmebefunde bleiben erhalten.
+
+G2 GEZIELTE STOFFFALTEN IM SPIELASSET
+Regelmaessige Sinuswellen auf Shirt durch acht auslaufende modellierte Falten
+(Achselspannung, Brustdiagonalen, Saumkompression) ersetzt. Lokales Profil erzeugt
+Grat und benachbarte Mulde, mit auslaufender Breite/Staerke. Clothdecimation.10
+auf.16 erhoeht fuer Erhalt der Form; Gesamt88040Polygone,Shirt12287Vertices.
+Blenderquelle/GLB/Vorschau regeneriert. Charakter-/Hand-/Kontaktpruefung PASS;
+Gesichts-/Handkollisionsdateien unveraendert. Fuenf native Rueckholposen/Skelett-
+abgleich und neun Browserkontaktansichten samt Replay/Probe/Spiegel PASS,errors[].
+Blenderpreview und echte Kontaktpose gesichtet: Stoffform lesbarer, kein fertiger
+Referenzlook behauptet. Statische modellierte Falten mit Skinning, keine Clothsim.
+Belege validation/cloth-folds.json und cloth-contact.png. Naechste groessere
+sichtbare Luecke: Publikum als Figuren statt offensichtlich einfache Koerper.
