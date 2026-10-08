@@ -294,13 +294,18 @@ for sign,side in [(-1,'R'),(1,'L')]:
     hidden=[f for f in bm.faces if all((G(v.co)-sh).dot(upper)<.101 for v in f.verts)]
     bmesh.ops.delete(bm,geom=hidden,context='FACES');bm.to_mesh(arm.data);bm.free()
     arm_objects[arm.name]=(arm,None)
-    sleeve=loft('Sleeve.'+side,[(sh+direction*.010,.065,.060),(sh+direction*.070,.073,.063),(sh+direction*.115,.064,.056)],shirt)
+    sleeve=loft('Sleeve.'+side,[(sh+upper*.025,.052,.052),(sh+upper*.060,.070,.063),(sh+upper*.100,.066,.058),(sh+upper*.135,.061,.054)],shirt)
     arm_objects[sleeve.name]=(sleeve,'upper_arm.'+side)
     landmarks[side]={'shoulder':list(sh),'elbow':list(el),'wrist':list(wr),'palm_center':list(palm),'palm_normal':[0,0,1],'finger_direction':list(direction),'upper_length':(el-sh).length,'forearm_length':(wr-el).length,'palm_offset':.054}
 
 # Weld shirt and sleeves before rig binding: no exposed shoulder caps or seams.
-shoulder_caps=[ell('ShoulderCloth'+side,(bones['upper_arm.'+side][0][0],-.166,0),(.053,.023,.054),shirt) for side in ['R','L']]
+shoulder_caps=[ell('ShoulderCloth'+side,(bones['upper_arm.'+side][0][0],-.171,0),(.058,.033,.067),shirt) for side in ['R','L']]
 cloth=[body]+shoulder_caps+[o for o in bpy.context.scene.objects if o.name.startswith('Sleeve.')]
+# Resolve loft winding before volume reconstruction, not only after export.
+for piece in cloth:
+    bm=bmesh.new();bm.from_mesh(piece.data)
+    bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces))
+    bm.to_mesh(piece.data);bm.free()
 bpy.ops.object.select_all(action='DESELECT')
 for o in cloth:o.select_set(True)
 bpy.context.view_layer.objects.active=body;bpy.ops.object.join()

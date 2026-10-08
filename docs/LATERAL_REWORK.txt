@@ -221,3 +221,17 @@ Ansteuerung und Reset. Vollstaendiger Zweibrowser-LAN-Gauntlet mit KO,
 Rueckwaertssuche und Revanche bestanden; keine Browserfehler. Totale visuell
 geprueft: docs/validation/ko-expression-wide.png. Das ist stilisierte
 Ausdrucksanimation, keine medizinische Aussage oder Gesichts-Muskelphysik.
+
+AERMELACHSE UND SCHULTERANSATZ
+Die generierten Aermel folgten bisher der Unterarmrichtung. Sie folgen nun der
+Oberarmachse. Ein schmalerer, tiefer liegender Ansatz verhindert den hochstehenden
+Rand des ersten Versuchs; die Schulterfuellung ist daran angepasst. Flachennormalen
+werden vor dem Verschweissen konsistent ausgerichtet. Diese allein waren nicht
+Ursache der sichtbaren Einbuchtung. Aktuelle Form in Blender-Ruhepose und echtem
+Browserkontakt geprueft: docs/validation/sleeve-contact.png.
+Assetvalidierung bestanden: Armhaeute verbunden, Gewichte und 114 Kontaktpunkte
+korrekt. Hand-/Gesichtskollisionsdaten unveraendert. Browserbuild und Kontakt-
+Replay mit Rueckzug/Rueckwaertssuche bestanden, keine Browserfehler.
+Die Schulterfuellung und Stofffalten bleiben stilistisch weiter zu verfeinern;
+keine Referenzlook-Abnahme. Menschliche Verstaendlichkeitsfrage erneut gestellt,
+noch keine neue Antwort erhalten.

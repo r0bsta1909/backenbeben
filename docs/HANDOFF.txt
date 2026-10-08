@@ -153,3 +153,7 @@ bestanden. Vollstaendige Koerperkollision bleibt offen; LATERAL_REWORK.txt.
 KO-Ausdruck aktiviert: vorhandener Lid-Morph schliesst zeitabhaengig und
 oeffnet beim Rueckspulen/Reset wieder. Godot- und LAN-Pruefung bestanden.
 Details und Bild unter LATERAL_REWORK.txt / validation/ko-expression-*.
+
+Aermel folgen jetzt der Oberarmachse, Ansatz zur Schulter korrigiert. Blender-
+und Browserpruefung bestanden; verbleibende Stoffqualitaet offen. Eine neue
+menschliche Verstaendlichkeitsfrage ist gestellt, noch unbeantwortet.
