@@ -76,7 +76,7 @@ function frame(now){
    if(state.replay_id&&clip?.id!==state.replay_id&&loading!==state.replay_id)fetchClip(state.replay_id);
    if(ownTurn()){
       document.getElementById('poseTitle').textContent=state.practice_done?'ZWEI · JETZT SCHLAGEN':'EINS · PROBESCHWUNG';
-      document.getElementById('poseReadout').textContent=pitch>8?'HANDBALLEN VORAUS':pitch< -22?'FINGER VORAUS':'HAND FLACH';
+      document.getElementById('poseReadout').textContent=window.netArm?.pose?.wrist_limited?'HANDGELENK AM ANSCHLAG':pitch>8?'HANDBALLEN VORAUS':pitch< -22?'FINGER VORAUS':'HAND FLACH';
       document.getElementById('contactVerdict').textContent=state.diagnosis||'Links halten und nach links schwingen. Das Mausrad kippt die Finger zur Wange oder davon weg.';
       document.getElementById('phaseTitle').textContent=state.practice_done?'ZWEI. SCHLAG.':'EINS. PROBE.';
       document.getElementById('phaseHint').textContent=state.practice_done?'Gleicher Bogen. Handfläche und Finger gemeinsam.':'Probe ohne Schaden. Schau auf Handfläche, Finger und Wange.';

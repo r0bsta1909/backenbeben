@@ -1,7 +1,7 @@
 import unittest,sys,math
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'server'))
-from contact_v3 import score,surface,side_surface,probes
+from contact_v3 import score,surface,side_surface,probes,hand_frame,WRIST_LIMIT
 from arm import L1,L2
 from tissue import simulate
 
@@ -25,6 +25,24 @@ class MeshContactTests(unittest.TestCase):
         self.assertLess(abs(record['pose']['palm_normal'][2]),.5)
         self.assertGreaterEqual(min(gaps),-.0001)
         self.assertLess(min(gaps),.005)
+    def test_wrist_limit_over_full_stroke_and_extreme_input(self):
+        for tilt in [-45,-10,0,35,45]:
+            result=score(stroke(tilt=tilt))
+            for record in result['arm_path']:
+                p=record['pose'];finger=p['finger_direction'];normal=p['palm_normal']
+                forearm=[p['wrist'][i]-p['elbow'][i] for i in range(3)]
+                cosine=sum(a*b for a,b in zip(finger,forearm))/math.sqrt(sum(x*x for x in forearm))
+                self.assertGreaterEqual(cosine,math.cos(WRIST_LIMIT)-1e-9)
+                self.assertAlmostEqual(sum(x*x for x in finger),1,places=9)
+                self.assertAlmostEqual(sum(x*x for x in normal),1,places=9)
+                self.assertAlmostEqual(sum(a*b for a,b in zip(finger,normal)),0,places=9)
+                self.assertEqual(tuple(finger),hand_frame(tilt,p)[0])
+        finger,_=hand_frame(-10)
+        pose={'wrist':[0,0,0],'elbow':list(finger)}
+        f,n=hand_frame(-10,pose)
+        self.assertAlmostEqual(sum(x*x for x in f),1,places=9)
+        self.assertAlmostEqual(sum(a*b for a,b in zip(f,n)),0,places=9)
+
     def test_mesh_rotates_and_swelling_changes_collision(self):
         difference=sum(abs(surface(x,y)-surface(x,y,.2)) for x,y in [(.1,.1),(.2,.2),(.3,.1)])
         self.assertGreater(difference,.003)

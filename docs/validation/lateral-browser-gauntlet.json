@@ -4,62 +4,62 @@
     {
       "kind": "hit",
       "target": 1,
-      "damage": 15.34,
-      "quality": 0.5246,
+      "damage": 16.11,
+      "quality": 0.5509,
       "braced": true,
       "side": "R",
       "ko": false,
       "foul": false,
       "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
-      "replay_id": "7963b7504fa5048dbff4"
+      "replay_id": "94043fe829aaa9ffc7e8"
     },
     {
       "kind": "hit",
       "target": 0,
-      "damage": 24.98,
-      "quality": 0.5552,
+      "damage": 23.9,
+      "quality": 0.5312,
       "braced": false,
       "side": "R",
       "ko": false,
       "foul": false,
       "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
-      "replay_id": "544711ddffdc43ab6e15"
+      "replay_id": "65ba3d2662f6f28c24bb"
     },
     {
       "kind": "hit",
       "target": 1,
-      "damage": 24.65,
-      "quality": 0.5477,
+      "damage": 25.49,
+      "quality": 0.5665,
       "braced": false,
       "side": "R",
       "ko": false,
       "foul": false,
       "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
-      "replay_id": "13588429547bd1638b1e"
+      "replay_id": "314538ea7816c33fbaaf"
     },
     {
       "kind": "hit",
       "target": 0,
-      "damage": 23.55,
-      "quality": 0.5233,
+      "damage": 23.94,
+      "quality": 0.5319,
       "braced": false,
       "side": "R",
       "ko": true,
       "foul": false,
       "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
-      "replay_id": "a2c0a07d37cb7de24c3f"
+      "replay_id": "f8562b6585b81df7a0aa"
     }
   ],
   "single_tilt_control": true,
-  "recorded_arm_frames": 347,
-  "clip_hash": "d23c1af15fb6427eed18c80fbf9554ce266fedbdd82b0d374f8b07b8ddc9a551",
+  "recorded_arm_frames": 352,
+  "clip_hash": "fb29376ba408fea421d6f898b9fae0276ab25ae37d9d151e97f5cc15980785a0",
   "replay": {
-    "clipId": "7963b7504fa5048dbff4",
+    "clipId": "94043fe829aaa9ffc7e8",
     "frameCount": 337,
-    "peak": 0.0087,
+    "peak": 0.009,
     "time": 0.508313,
     "frame": 60,
-    "deformation": 0.008688532
+    "deformation": 0.008988044
   },
   "replay_frame_ms_p95": 13.900000000001455,
   "viewport": [
@@ -80,7 +80,7 @@
   "stats": {
     "arm_data": true,
     "dragging": false,
-    "fps": 100,
+    "fps": 103,
     "hand_wrist": "(-0.473, -0.643, 0.02)",
     "muted": false,
     "physics_active": false,

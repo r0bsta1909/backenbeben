@@ -1,4 +1,5 @@
 {
+  "shared_live_wrist_limit": true,
   "practice_required": true,
   "duplicate_rejected": true,
   "foul_disqualification": true,

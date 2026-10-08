@@ -1,5 +1,5 @@
 """Authoritative foul / duplicate / validation regression against port 8877."""
-import asyncio,json,sys
+import asyncio,json,sys,math
 from pathlib import Path
 import aiohttp
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'server'))
@@ -22,6 +22,15 @@ async def main():
         await b.send_json({'action':'join','mode':'duel','name':'VALID TEST'})
         for i in range(3):
             s=await phase(a,'aim');attacker=a if s['turn']==0 else b
+            if i==0:
+                await attacker.send_json({'action':'pose','x':.19,'y':.6,'progress':0,'tilt':45})
+                pa=await receive(a,lambda d:d.get('type')=='arm_pose')
+                pb=await receive(b,lambda d:d.get('type')=='arm_pose')
+                assert pa==pb and pa['pose']['wrist_limited']
+                pose=pa['pose'];forearm=[pose['wrist'][j]-pose['elbow'][j] for j in range(3)]
+                cosine=sum(x*y for x,y in zip(forearm,pose['finger_direction']))/math.sqrt(sum(x*x for x in forearm))
+                assert cosine>=math.cos(math.radians(85))-1e-9
+                report['shared_live_wrist_limit']=True
             points=bot_stroke()['points']
             if s['turn']==0:
                 for p in points:p[1]=.35;p[4]=35

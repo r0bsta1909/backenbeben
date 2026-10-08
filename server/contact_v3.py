@@ -5,7 +5,7 @@ import json,math
 from functools import lru_cache
 from pathlib import Path
 import numpy as np
-from arm import Arm,DT,META,add,mul,lab_collision
+from arm import Arm,DT,META,add,mul,lab_collision,sub,dot,unit
 DATA=json.loads((Path(__file__).resolve().parents[1]/'game/assets/face_v3_collision.json').read_text())
 VERTICES=np.array(DATA['vertices']);INDICES=np.array(DATA['triangles'])
 REGIONS=META['contact_regions']
@@ -56,27 +56,43 @@ def input_target(x,y,progress):
     return (.05+.25*math.cos(theta),((.5-y)*1.2-.10)/4-.024,
             .28-.25*math.sin(theta))
 
-def hand_frame(tilt):
+WRIST_LIMIT=math.radians(85) # Conservative gameplay cone, not a biomechanical wrist model.
+
+def cross(a,b):return (a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0])
+
+def hand_frame(tilt,pose=None):
     a=math.radians(tilt+20)
-    # Fingers up. Palm faces left toward cheek; its narrow edge faces camera.
     c,s=math.cos(math.radians(25)),math.sin(math.radians(25))
-    return (c*math.sin(a),math.cos(a),s*math.sin(a)),(-c*math.cos(a),math.sin(a),-s*math.cos(a))
+    finger=(c*math.sin(a),math.cos(a),s*math.sin(a))
+    normal=(-c*math.cos(a),math.sin(a),-s*math.cos(a))
+    if pose and 'elbow' in pose:
+        forearm=unit(sub(pose['wrist'],pose['elbow']))
+        angle=math.acos(max(-1,min(1,dot(finger,forearm))))
+        if angle>WRIST_LIMIT:
+            axis=cross(finger,forearm)
+            if dot(axis,axis)<1e-12:axis=cross(finger,(1,0,0) if abs(finger[0])<.9 else (0,1,0))
+            axis=unit(axis);turn=angle-WRIST_LIMIT
+            def rotate(v):return add(add(mul(v,math.cos(turn)),mul(cross(axis,v),math.sin(turn))),mul(axis,dot(axis,v)*(1-math.cos(turn))))
+            finger,normal=rotate(finger),rotate(normal)
+    return finger,normal
 
 def decorate(pose,tilt):
-    finger,normal=hand_frame(tilt)
+    finger,normal=hand_frame(tilt,pose)
+    requested,_=hand_frame(tilt)
+    pose['wrist_limited']=dot(finger,requested)<.99999
     pose['finger_direction']=list(finger);pose['palm_normal']=list(normal)
     return pose
 
 def probes(pose,tilt):
-    finger,normal=hand_frame(tilt)
+    finger,normal=hand_frame(tilt,pose)
     center=add(pose['wrist'],mul(finger,.054))
-    width=(-math.sin(math.radians(25)),0.,math.cos(math.radians(25)))
+    width=cross(finger,normal)
     return [(region,*mul(add(add(center,mul(width,u)),add(mul(finger,v),mul(normal,.021))),4)) for region,u,v in REGIONS]
 
 def collision(tilt,skin_state=(0.,0.,0.)):
     def blocked(elbow,wrist):
         if wrist[1]<-.235 and abs(wrist[0])<.30 and .06<wrist[2]<.30:return True
-        for _,x,y,z in probes({'wrist':wrist},tilt):
+        for _,x,y,z in probes({'wrist':wrist,'elbow':elbow},tilt):
             face_x=side_surface(y,z,skin_state)
             if face_x is not None and x<face_x:return True
         return False
@@ -117,8 +133,8 @@ def score(data):
             for region,x,y,z in probes(pose,tilt):
                 face_x=mesh_surface(y,z)
                 if face_x is not None and x-face_x<.035:near.append((region,x,y,z,face_x,x-face_x))
-            speed_into_skin=max(0.,sum(travel_velocity[i]*hand_frame(tilt)[1][i] for i in range(3)))
-            hit=(near,t,touching[0][0],speed_into_skin)
+            speed_into_skin=max(0.,sum(travel_velocity[i]*hand_frame(tilt,pose)[1][i] for i in range(3)))
+            hit=(near,t,touching[0][0],speed_into_skin,hand_frame(tilt,pose)[1])
         records.append({'time':round((t-start)/1000,6),'pose':decorate(pose,tilt),'tilt':tilt})
         if hit:break
     final_t=records[-1]['time'];return_tilt=records[-1]['tilt']
@@ -128,7 +144,7 @@ def score(data):
         records.append({'time':round(final_t+tick*DT,6),'pose':decorate(pose,return_tilt),'tilt':return_tilt})
     base={'version':3,'skin_state':skin_state,'quality':0.,'precision':0.,'side':'L','duration':duration,'hit':False,'foul':False,'diagnosis':'Daneben – den Bogen weiter über die Wange führen.','contact_class':'miss','position':[0,.16,.3],'path':[],'arm_path':records,'footprint':[],'contact_time':duration/1000,'normal_speed':0.,'coverage':0.}
     if not hit:return base
-    near,t,first,speed_into_skin=hit
+    near,t,first,speed_into_skin,contact_normal=hit
     if not near:return base
     x=sum(c[1] for c in near)/len(near);y=sum(c[2] for c in near)/len(near)
     coverage=sum(c[0]=='palm' for c in near)/3;regions={c[0] for c in near}
@@ -143,5 +159,5 @@ def score(data):
     speed=min(1,speed_into_skin/1.8);quality=(.3+.7*coverage)*(.4+.6*speed)
     if kind in ('tips','glance'):quality*=.3 if kind=='tips' else .55
     if foul:quality=0
-    base.update(quality=round(quality,4),precision=coverage,side='L' if x<0 else 'R',hit=not foul,foul=foul,diagnosis=label,contact_class=kind,position=[x,y,sum(c[3] for c in near)/len(near)],normal=list(hand_frame(tilt)[1]),footprint=[[c[4],c[2],c[3],c[0]] for c in near],contact_time=(t-start)/1000,normal_speed=speed,coverage=coverage)
+    base.update(quality=round(quality,4),precision=coverage,side='L' if x<0 else 'R',hit=not foul,foul=foul,diagnosis=label,contact_class=kind,position=[x,y,sum(c[3] for c in near)/len(near)],normal=list(contact_normal),footprint=[[c[4],c[2],c[3],c[0]] for c in near],contact_time=(t-start)/1000,normal_speed=speed,coverage=coverage)
     return base

@@ -95,3 +95,9 @@ Haaransatz, weiche Schulter-/Ärmelgewichte und seitliche Tribünen ergänzt.
 TV-Kamera nach innen korrigiert, nachdem die neue Wand die Totale verdeckte.
 LAN-Gauntlet erneut bestanden; anschließend realen KO-Clip gezielt visuell geprüft.
 Aktuelle Bilder und genauer Prüfaufbau: docs/LATERAL_REWORK.txt.
+
+Handgelenk-Überstreckung (bis 130.7 Grad) im gesamten Schwung entdeckt und
+mit gemeinsamer 85-Grad-Spielgrenze korrigiert. Alle 26 Unit-Tests und beide
+LAN-Gauntlets bestanden; Livepose-Gleichheit der Grenze explizit geprüft.
+Server-Testhost muss für diese Änderung neu gestartet werden; eigener Testhost
+auf 8877 wurde neu gestartet. Produktionshost startet den neuen Code erst neu.

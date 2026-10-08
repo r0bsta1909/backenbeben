@@ -90,3 +90,20 @@ Assetprüfung auch nach der Ärmelkorrektur bestanden.
 Nächster Schwerpunkt: Kontakt-/Wristwinkel über den gesamten Schwung prüfen,
 Gewebe-/Handkontakt genauer darstellen und natürliche Auffangpose verbessern.
 Stil und menschliche Verständlichkeit bleiben ausdrücklich nicht freigegeben.
+
+GELENKGRENZE — PHYSIKKORREKTUR
+Winkelprüfung über komplette Schwünge fand bis zu 130.7 Grad Abknickung
+zwischen Unterarm und Fingerrichtung bei extremer Mausradstellung.
+server/contact_v3.py begrenzt nun Fingerbasis UND Palmennormale gemeinsam
+auf einen 85-Grad-Kegel relativ zum tatsächlichen Unterarm. Das ist eine
+bewusst vereinfachte Spielgrenze, keine anatomische Zwei-Achsen-Simulation.
+Kontaktproben, Normalgeschwindigkeit, Livepose und Replay verwenden dieselbe
+begrenzte Basis. Die Anzeige meldet bei Eingabeüberschreitung Gelenkanschlag.
+26 Unit-Tests bestanden, inklusive kompletter Schwünge/extremer Winkel,
+orthonormaler Basis und numerisch antiparalleler Ausgangsrichtung.
+Erweiterter LAN-Test bestätigt identische begrenzte Livepose auf beiden Clients.
+Vollständiger Zweibrowser-Kampf erneut bestanden; keine Browserfehler,
+p95 Replay 13.9 ms auf RTX 2080. Neue KO-Totale stammt jetzt wieder direkt
+aus diesem realen LAN-Match (kein nachträglich geladener Replay-Prüfaufbau).
+Nächste offene Punkte: räumliche Kontaktdiagnose am Modell, feinere Hand-/Haut-
+Kontaktfläche und natürlichere Auffangreaktion. Menschliche Abnahme weiter offen.
