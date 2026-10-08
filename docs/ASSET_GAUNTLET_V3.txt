@@ -381,3 +381,20 @@ RAFp95 bis 23.5 ms (vorher 15.8), bewegtes Replay 16.1 ms; Median rund 15 ms,
 Godot-Stichprobe 76 fps. Beleuchtung/Schatten verursachen deutliche Mehrkosten.
 60-Hz-Budget deshalb nicht durchgaengig bestanden; weitere Optimierung offen.
 Keine reine GPU-Zeitmessung. Werte: validation/face-light.json.
+
+SPIEGELRENDERING BEI ZUSTANDSAKTUALISIERUNG
+SubViewport nicht mehr UPDATE_ALWAYS. apply_fighter(reflection) und geaenderte
+Physikframes markieren das Spiegelbild als dirty; nach Anwendung aller Aenderungen
+wird bei sichtbarem Spiegel UPDATE_ONCE angefordert. Verdeckter Spiegel bleibt
+deaktiviert und behaelt dirty fuer das Wiedereinblenden. Aussehens-/Blinkzustand
+wird weiterhin mit dem bestehenden .08-s-Takt aktualisiert, Physik nach Hostframe.
+Keine Reduktion der Schattenqualitaet und kein Entfernen von Schattenwerfern.
+Browser prueft ausbleibende Renderanforderungen bei Seitenansicht und erneute
+Anforderungen bei Ego-Rueckkehr, ausserdem Mausrad/Reset/Kontaktreplay. Bestanden,
+keine Fehler. Ego-Screenshot mit sichtbarem Spiegel selbst gesichtet.
+Zwei-Ansichten-Test RTX 2080: hoechstes RAF-p95 16.6 ms statt 23.5 ms im vorherigen
+Lauf; bewegtes Replay 16.0 ms; Mediane etwa 15 ms, Godot-Stichprobe 78 fps.
+Ein lokaler Vergleich, keine reine GPU-Zeit oder plattformuebergreifende Zusage.
+Nachweis validation/mirror-render.json. Sichtbare naechste Geometrie-/Rigaufgabe:
+stark geknicktes Handgelenk in der Ego-Bereitpose, unter neuem Licht deutlicher.
+Gesamtstil und menschliche Bedienverstaendlichkeit weiterhin nicht abgenommen.

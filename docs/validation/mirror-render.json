@@ -1,0 +1,67 @@
+{
+  "stages": {
+    "idle": {
+      "samples": 167,
+      "p95": 16.599999999998545,
+      "median": 15.399999999997817
+    },
+    "moving": {
+      "samples": 88,
+      "p95": 16.100000000002183,
+      "median": 15.5
+    },
+    "windup": {
+      "samples": 94,
+      "p95": 16.100000000002183,
+      "median": 15.099999999998545
+    },
+    "resolving": {
+      "samples": 123,
+      "p95": 16.400000000001455,
+      "median": 15.299999999999272
+    },
+    "impact": {
+      "samples": 212,
+      "p95": 16.100000000002183,
+      "median": 15
+    },
+    "replay_moving": {
+      "samples": 146,
+      "p95": 16,
+      "median": 15.099999999998545
+    },
+    "replay_paused": {
+      "samples": 112,
+      "p95": 16.200000000000728,
+      "median": 14.200000000000728
+    }
+  },
+  "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 2080 (0x00001E87) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "godot": {
+    "arm_data": true,
+    "camera_position": [
+      3,
+      0.550000011920929,
+      1.10000002384186
+    ],
+    "crowd_active": true,
+    "dragging": false,
+    "fps": 78,
+    "hand_wrist": "(-0.408958, -0.181476, 0.229088)",
+    "mirror_draw_requests": 227,
+    "muted": false,
+    "physics_active": true,
+    "physics_time": 0.993187,
+    "samples": 0
+  },
+  "browser_checks": {
+    "mirror_visibility_updates": true,
+    "pose_camera_and_wheel": true,
+    "crowd_reaction_and_rewind": true,
+    "jump_to_contact": true,
+    "side_camera": true,
+    "marker_toggle": true,
+    "no_stale_markers": true,
+    "errors": []
+  }
+}

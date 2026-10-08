@@ -14,6 +14,10 @@ async def main():
   await page.locator('#poseCamera').click()
   await page.wait_for_function('godotStats?.camera_position?.[0]===3')
   assert await page.locator('#poseCamera').get_attribute('aria-pressed')=='true'
+  await page.wait_for_timeout(150)
+  hidden_draws=await page.evaluate('godotStats.mirror_draw_requests')
+  await page.wait_for_timeout(300)
+  assert await page.evaluate('godotStats.mirror_draw_requests')==hidden_draws
   await page.mouse.move(1536,648);await page.mouse.wheel(0,120)
   await page.wait_for_function('window.netArm?.tilt===-12')
   await page.screenshot(path='logs/pose-inspection.png')
@@ -21,6 +25,7 @@ async def main():
   await page.wait_for_function('window.netArm?.tilt===-15')
   await page.locator('#poseCamera').click()
   await page.wait_for_function('godotStats?.camera_position?.[0]<1')
+  await page.wait_for_function('(n)=>godotStats.mirror_draw_requests>n',arg=hidden_draws)
   assert 'HAND FLACH' not in await page.locator('#poseReadout').inner_text()
   async def stroke():
    await page.mouse.move(1536,648);await page.mouse.down()
@@ -56,7 +61,7 @@ async def main():
   await page.wait_for_function('JSON.parse(physicsFrame).arm.pose.finger_relax===0')
   await page.wait_for_function('godotStats?.crowd_active===false')
   assert not errors,errors
-  report={'pose_camera_and_wheel':True,'crowd_reaction_and_rewind':True,'jump_to_contact':True,'side_camera':True,'marker_toggle':True,'no_stale_markers':True,'errors':errors}
+  report={'mirror_visibility_updates':True,'pose_camera_and_wheel':True,'crowd_reaction_and_rewind':True,'jump_to_contact':True,'side_camera':True,'marker_toggle':True,'no_stale_markers':True,'errors':errors}
   Path('logs/contact-view.json').write_text(json.dumps(report,indent=2));print(json.dumps(report))
   await browser.close()
 asyncio.run(main())

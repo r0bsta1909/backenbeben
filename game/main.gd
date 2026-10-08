@@ -35,6 +35,8 @@ var js_timer := 0.0
 var appearance_timer := 0.0
 var particles: Array = []
 var mirror_mount: Node3D
+var mirror_dirty := true
+var mirror_draw_requests := 0
 var mirror_viewport: SubViewport
 var last_physics_hash := 0
 var emote_player := -1
@@ -203,7 +205,7 @@ func build_mirror() -> void:
 	mirror_viewport=vp
 	vp.size = Vector2i(320, 320)
 	vp.own_world_3d = true
-	vp.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	vp.render_target_update_mode = SubViewport.UPDATE_ONCE
 	add_child(vp)
 	var root := Node3D.new()
 	vp.add_child(root)
@@ -248,6 +250,7 @@ func build_mirror() -> void:
 	caption.reparent(mirror_mount,false)
 
 func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
+	if root==reflection:mirror_dirty=true
 	var damage := float(data.get("damage",0))
 	var ratio := clampf(damage/100.,0,1)
 	var fractured := clampf((damage-50)/40,0,1)
@@ -334,7 +337,7 @@ func _process(delta: float) -> void:
 			JavaScriptBridge.eval("window.contactSound=false")
 		mirror_focus=bool(JavaScriptBridge.eval("window.mirrorFocus || false",true))
 		AudioServer.set_bus_mute(0,bool(JavaScriptBridge.eval("window.muted || false",true)))
-		JavaScriptBridge.eval("window.godotStats="+JSON.stringify({"fps":Engine.get_frames_per_second(),"arm_data":hand_pose.has("arm"),"hand_wrist":str(hand.skeleton.get_bone_global_pose(hand.skeleton.find_bone("hand.R")).origin),"dragging":dragging,"samples":gesture.size(),"physics_time":physics_frame.get("time",-1),"physics_active":physics_frame.has("id"),"crowd_active":arena_stage.crowd_was_active,"camera_position":[camera.position.x,camera.position.y,camera.position.z],"muted":AudioServer.is_bus_mute(0)}))
+		JavaScriptBridge.eval("window.godotStats="+JSON.stringify({"fps":Engine.get_frames_per_second(),"arm_data":hand_pose.has("arm"),"hand_wrist":str(hand.skeleton.get_bone_global_pose(hand.skeleton.find_bone("hand.R")).origin),"dragging":dragging,"samples":gesture.size(),"physics_time":physics_frame.get("time",-1),"physics_active":physics_frame.has("id"),"crowd_active":arena_stage.crowd_was_active,"camera_position":[camera.position.x,camera.position.y,camera.position.z],"mirror_draw_requests":mirror_draw_requests,"muted":AudioServer.is_bus_mute(0)}))
 	if appearance_timer>=.08:
 		appearance_timer=0
 		if state.has("players") and state.players.size()>1:
@@ -352,6 +355,10 @@ func _process(delta: float) -> void:
 			apply_fighter(fighter,preview,true)
 			apply_fighter(reflection,preview,false)
 	drive_recorded_physics()
+	if mirror_mount.visible and mirror_dirty:
+		mirror_viewport.render_target_update_mode=SubViewport.UPDATE_ONCE
+		mirror_draw_requests+=1
+		mirror_dirty=false
 	flash.color.a=maxf(0,flash.color.a-delta*1.4)
 	burst.visible=impact>.35
 	mirror_mount.position=mirror_mount.position.lerp(Vector3(-.52,-.05,1.0) if mirror_focus else Vector3(-.76,-.28,.70),minf(1,delta*8))
@@ -406,6 +413,7 @@ func color_hand(root: Node3D, data: Dictionary) -> void:
 
 func drive_recorded_physics() -> void:
 	if physics_frame.has("id") and physics_frame.hash()==last_physics_hash:return
+	if last_physics_hash!=physics_frame.hash():mirror_dirty=true
 	last_physics_hash=physics_frame.hash()
 	var offsets := PackedVector3Array()
 	offsets.resize(63)
@@ -441,7 +449,7 @@ func drive_recorded_physics() -> void:
 	var inspecting: bool = not active and bool(hand_pose.get("active",false)) and hand_pose.get("camera","")=="side"
 	var side_view: bool = inspecting or (replaying and physics_frame.get("camera","") in ["side","wide"])
 	mirror_mount.visible=not (replaying or inspecting)
-	mirror_viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED if replaying or inspecting else SubViewport.UPDATE_ALWAYS
+	if replaying or inspecting:mirror_viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED
 	camera.position=Vector3(6.0,2.8,6.5) if wide_view else Vector3(3,.55,1.1) if side_view else Vector3(.30,.55,2.65)
 	camera.look_at(Vector3(0,-3.0,.4) if wide_view else Vector3(0,-.12,1.0) if side_view else Vector3(.22,-.18,0))
 	hand.visible=true
