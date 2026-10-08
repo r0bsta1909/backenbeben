@@ -32,6 +32,8 @@ var bell_audio: AudioStreamPlayer
 var opponent_base := Vector3.ZERO
 var mat_cache: Dictionary = {}
 var js_timer := 0.0
+var profile_cpu := false
+var cpu_samples := {}
 var appearance_timer := 0.0
 var particles: Array = []
 var mirror_mount: Node3D
@@ -52,6 +54,7 @@ var shirts := [Color("6e242b"), Color("26354b"), Color("deb64c"), Color("534979"
 var hairs := [Color("241b16"), Color("6b3624"), Color("b8afa0")]
 
 func _ready() -> void:
+	profile_cpu=OS.has_feature("web") and bool(JavaScriptBridge.eval("window.profileCPU === true",true))
 	RenderingServer.set_default_clear_color(Color("111623"))
 	build_arena()
 	fighter = new_character()
@@ -335,6 +338,20 @@ func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 	root.rotation=Vector3.ZERO
 
 
+func record_cpu(section: String, started: int) -> void:
+ var phase: String=str(state.get("phase","lobby"))
+ if phase=="impact":phase+="_receiver" if int(physics_frame.get("target",-1))==you else "_striker"
+ var key:=phase+"/"+section
+ if not cpu_samples.has(key):cpu_samples[key]=[]
+ if cpu_samples[key].size()<4096:cpu_samples[key].append((Time.get_ticks_usec()-started)/1000.0)
+
+func cpu_summary() -> Dictionary:
+ var result: Dictionary={}
+ for key in cpu_samples:
+  var values: Array=cpu_samples[key].duplicate();values.sort()
+  result[key]={"samples":values.size(),"median_ms":values[values.size()/2],"p95_ms":values[mini(values.size()-1,int(values.size()*.95))],"max_ms":values[-1]}
+ return result
+
 func _process(delta: float) -> void:
 	clock_time+=delta
 	appearance_timer+=delta
@@ -343,6 +360,7 @@ func _process(delta: float) -> void:
 	swing=maxf(0,swing-delta*2.6)
 	js_timer+=delta
 	if OS.has_feature("web") and js_timer>.033:
+		var bridge_started: int=Time.get_ticks_usec() if profile_cpu else 0
 		js_timer=0
 		var raw=JavaScriptBridge.eval("window.renderState || '{}'",true)
 		var parsed=JSON.parse_string(str(raw))
@@ -367,7 +385,12 @@ func _process(delta: float) -> void:
 		mirror_focus=bool(JavaScriptBridge.eval("window.mirrorFocus || false",true))
 		AudioServer.set_bus_mute(0,bool(JavaScriptBridge.eval("window.muted || false",true)))
 		JavaScriptBridge.eval("window.godotStats="+JSON.stringify({"face_eye_closure":fighter.face_mesh.get_blend_shape_value(fighter.blink_index),"msaa_3d":get_viewport().msaa_3d,"fps":Engine.get_frames_per_second(),"face_head_offset":head_offset_state(fighter),"face_head_rotation":head_offset_state(fighter,"head_rotation"),"face_injury":injury_material_state(fighter),"mirror_injury":injury_material_state(reflection),"arm_data":hand_pose.has("arm"),"rendered_arm":hand.arm_world_joints(),"hand_wrist":str(hand.skeleton.get_bone_global_pose(hand.skeleton.find_bone("hand.R")).origin),"dragging":dragging,"samples":gesture.size(),"physics_time":physics_frame.get("time",-1),"physics_active":physics_frame.has("id"),"crowd_active":arena_stage.crowd_was_active,"camera_position":[camera.position.x,camera.position.y,camera.position.z],"mirror_draw_requests":mirror_draw_requests,"physics_material_updates":physics_material_updates,"muted":AudioServer.is_bus_mute(0)}))
+		if profile_cpu:
+			record_cpu("bridge",bridge_started)
+			if bool(JavaScriptBridge.eval("window.profileCPURead === true",true)):
+				JavaScriptBridge.eval("window.cpuProfile="+JSON.stringify(cpu_summary())+";window.profileCPURead=false")
 	if appearance_timer>=.08:
+		var appearance_started: int=Time.get_ticks_usec() if profile_cpu else 0
 		appearance_timer=0
 		if state.has("players") and state.players.size()>1:
 			var shown_players: Array = physics_frame.get("players",state.players)
@@ -383,7 +406,10 @@ func _process(delta: float) -> void:
 				if data is Dictionary:preview=data
 			apply_fighter(fighter,preview,true)
 			apply_fighter(reflection,preview,false)
+		if profile_cpu:record_cpu("appearance",appearance_started)
+	var drive_started: int=Time.get_ticks_usec() if profile_cpu else 0
 	drive_recorded_physics()
+	if profile_cpu:record_cpu("recorded_motion",drive_started)
 	if mirror_mount.visible and mirror_dirty:
 		mirror_viewport.render_target_update_mode=SubViewport.UPDATE_ONCE
 		mirror_draw_requests+=1

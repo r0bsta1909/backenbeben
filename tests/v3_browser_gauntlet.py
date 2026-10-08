@@ -19,6 +19,7 @@ async def main():
         pages=[]
         for _ in range(2):
             c=await browser.new_context(viewport={'width':1920,'height':1080})
+            if "--profile-cpu" in sys.argv:await c.add_init_script("window.profileCPU=true")
             await c.add_init_script("""(() => {
                 const samples={},segments=[];let last=0,previous='',start=0,mirrorStart=0;
                 function tick(t){
@@ -212,6 +213,10 @@ async def main():
             await a.wait_for_function("JSON.parse(renderState).state.phase==='disconnected'")
             report['leave']=True
             report['stats']=await a.evaluate('godotStats')
+            if '--profile-cpu' in sys.argv:
+                await a.evaluate('window.profileCPURead=true')
+                await a.wait_for_function('window.cpuProfile')
+                report['cpu_profile']=await a.evaluate('cpuProfile')
             performance=await a.evaluate('phasePerformance()')
             phase_summary={}
             for phase,values in performance.pop('samples').items():

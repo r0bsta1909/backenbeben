@@ -474,3 +474,17 @@ Beleg validation/mirror-dirty-performance.json; tests/mirror_dirty.gd.
 Goal aktiv. Naechster Schritt: CPU-Zeit der Browserbruecke, Erscheinungsupdates
 und drive_recorded_physics getrennt messen, bevor weitere Optimierung.
 V11-Download bleibt vor diesen Quellaenderungen; Gesamtabnahme weiter offen.
+
+G8 CPU-PROFIL IM ECHTEN DUELL
+Opt-in --profile-cpu im v3_browser_gauntlet.py aktiviert nur im Prueflauf
+Time.get_ticks_usec-Messung von Browserbruecke, Erscheinungsupdate und
+aufgezeichneter Bewegung. Pro Phase maximal4096Werte; Auswertung erst auf
+Anforderung am Ende, keine fortlaufende Uebertragung grosser Messarrays.
+Beim Angreifer-Impact p95: Bruecke1.6ms, Erscheinung1.9ms, Bewegung1.7ms.
+Diese Abschnitte erklaeren die langen Browserbildintervalle nicht. GPU/Engine-
+Renderarbeit und Browserplanung nicht enthalten; Perzentile nicht addieren.
+Webexport und kompletter Standard-KO-Kampf samt Replay/Resume/Revanche PASS,
+Browserfehler leer. Beleg validation/cpu-phase-profile.json.
+Goal aktiv. Naechster Schritt: Renderkosten und Konkurrenz zweier Browser auf
+demselben Rechner trennen; keine weitere Optimierung dieser CPU-Abschnitte auf
+Verdacht. V11-Download bleibt historisch, Gesamtziel weiterhin offen.
