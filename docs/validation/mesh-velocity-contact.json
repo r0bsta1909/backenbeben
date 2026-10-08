@@ -6,14 +6,23 @@
     111
   ],
   "maximum_penetration_m": 0.0,
-  "sweep_ms": 17.630399997869972,
+  "rotational_proximity": {
+    "time_s": 0.00031764571482775485,
+    "distance_m": 4.765282214633634e-09,
+    "sample_index": 111,
+    "triangle_index": 355,
+    "iterations": 10,
+    "status": "proximity",
+    "solve_ms": 203.8821000023745
+  },
+  "sweep_ms": 15.835899997910019,
   "contact_fraction": 0.06010395294037726,
   "contact_time_s": 0.0003005197647018863,
   "hand_samples": 116,
   "active_impulses": 1,
   "energy_before_j": 0.09,
   "energy_after_j": 0.08864368312178596,
-  "solve_ms": 7.583700004033744,
+  "solve_ms": 6.66800000180956,
   "final_velocity": [
     -0.9849298124642881,
     -0.0009422669916699914,
@@ -25,7 +34,7 @@
     -0.353004386278057
   ],
   "limits": [
-    "linear translation against stationary cage only; no curved rotation",
+    "impulse snapshot uses linear sweep; rotational proximity measured separately",
     "single first-impact snapshot; no full timeline",
     "free rigid hand; no arm reaction",
     "not active match physics"

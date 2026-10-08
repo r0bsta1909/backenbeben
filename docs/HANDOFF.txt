@@ -832,3 +832,21 @@ trennende Bewegung, fruehestes Sample, koplanare Ablehnung; danach zusaetzlicher
 bekannter baryzentrischer Event auf deformierendem Dreieck. Vollsuite94 bestanden,
 anschliessend alle6 Sweep-Modultests bestanden. Rotationsbahn, fortlaufende
 Kontaktintegration mit Gewebe/Arm und Mehrfachereignisse weiterhin offen.
+
+KONSERVATIVE NAEHERUNGSPRUEFUNG FUER ROTIERENDE HAND
+contact_rotational_sweep prueft Punktabstaende zu Dreiecksinnenflaeche und Kanten.
+Konstante Weltwinkelgeschwindigkeit wird ueber SO(3)-Exponential ausgewertet.
+Schrittschranke aus |v|+|omega|*maxRadius+maxKnotengeschwindigkeit verhindert im
+idealen Modell das Ueberspringen einer Beruehrung. Dreiecksknoten bewegen sich
+linear. Status proximity (Abstand <= Toleranz), clear (Restintervall frei) oder
+unresolved (Limit/Stagnation) wird explizit zurueckgegeben. Proximity ist noch kein
+gerichteter Aufprall: Normale und schliessende Geschwindigkeit muessen folgen.
+Tests: Kreisbogen trifft bei 1/6 s, obwohl Endpunktsehne vorbeigeht; freie Bahn,
+Iterationslimit, bewegtes Dreieck und Abstand ausserhalb Dreiecksinnenflaeche.
+99 Tests bestanden. Realer Export mit -1 m/s und 2 rad/s um Y erreicht
+4.77e-9 m Abstand bei .000317646 s, 10 Iterationen. Referenzlauf ca.204 ms:
+noch deutlich zu langsam fuer Echtzeit. Bericht mesh-velocity-contact.json enthaelt
+separate Rotationsdiagnose; Impulsantwort dort weiterhin aus linearem Sweep.
+Keine Handflaechen-/Kantenkollision zwischen Samples, keine beschleunigte Bahn,
+kein vollstaendiger Kontaktzeitverlauf. Naechstes Gate: Rotationsereignis an
+Kontaktfilter/Impulssolver uebergeben und wiederholte Ereignisse behandeln.
