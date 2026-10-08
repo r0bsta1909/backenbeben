@@ -16,7 +16,7 @@ def rotation_vector(matrix):
     sine=np.linalg.norm(axis);angle=np.arctan2(sine,(np.trace(matrix)-1)*.5)
     return axis if sine<1e-12 else axis*(angle/sine)
 
-def run(fps=960,duration=.06,attached=False,compiled_embedding=True,iterations=64):
+def run(fps=960,duration=.06,attached=False,compiled_embedding=True,iterations=64,residual_tolerance=1e-6):
     scored=score({'version':3,'points':[[.19+.34*i/40,.6,800*i/40,0,-15,0] for i in range(41)]})
     pose=min(scored['arm_path'],key=lambda r:abs(r['time']-scored['contact_time']))['pose']
     points=world_positions(pose,pose['finger_direction'],pose['palm_normal'])
@@ -34,7 +34,7 @@ def run(fps=960,duration=.06,attached=False,compiled_embedding=True,iterations=6
         joint_velocity=np.clip(np.linalg.lstsq(jacobian,[-1.,0.,0.],rcond=None)[0],-11,11)
         initial_joint_velocity=joint_velocity.copy()
     else:hand.center[0]+=.003
-    cage=CompiledSideTissue();cage.prepare();cage.iterations=iterations;cage.residual_tolerance=1e-6
+    cage=CompiledSideTissue();cage.prepare();cage.iterations=iterations;cage.residual_tolerance=residual_tolerance
     velocity=np.array([-1.,0.,0.]);angular_velocity=np.zeros(3);dt=1/fps
     if attached:
         # Initial physical state must not change when the solver dt changes.
@@ -76,7 +76,7 @@ def run(fps=960,duration=.06,attached=False,compiled_embedding=True,iterations=6
         peak=max(peak,float(np.max(np.linalg.norm(cage.p-cage.rest,axis=1))))
         penetration=max(penetration,hand.penetration(cage));contacts=max(contacts,hand.last_contacts)
         frames.append({'time':(step+1)*dt,'offsets':cage.replay_offsets(),'center':hand.center.tolist(),'rotation':hand.rotation.tolist(),'arm':arm.pose() if attached else None})
-    return {'initial_velocity':initial_velocity.tolist(),'initial_angular_velocity':initial_angular_velocity.tolist(),'iterations_cap':iterations,'iteration_counts':iteration_counts,'unconverged_steps':unconverged,'maximum_material_residual_m':material_residual,'compiled_embedding':compiled_embedding,'attached':attached,'initial_penetration_m':initial_penetration,'maximum_wrist_separation_m':wrist_error,'maximum_bond_residual_m':bond_residual,'initial_joint_velocity':initial_joint_velocity.tolist() if attached else None,'final_joint_velocity':joint_velocity.tolist() if attached else None,'fps':fps,'duration':duration,'hand_samples':len(points),'peak_active_contacts':contacts,
+    return {'residual_tolerance_m':residual_tolerance,'initial_velocity':initial_velocity.tolist(),'initial_angular_velocity':initial_angular_velocity.tolist(),'iterations_cap':iterations,'iteration_counts':iteration_counts,'unconverged_steps':unconverged,'maximum_material_residual_m':material_residual,'compiled_embedding':compiled_embedding,'attached':attached,'initial_penetration_m':initial_penetration,'maximum_wrist_separation_m':wrist_error,'maximum_bond_residual_m':bond_residual,'initial_joint_velocity':initial_joint_velocity.tolist() if attached else None,'final_joint_velocity':joint_velocity.tolist() if attached else None,'fps':fps,'duration':duration,'hand_samples':len(points),'peak_active_contacts':contacts,
             'peak_deformation_m':peak,'maximum_penetration_m':penetration,'final_velocity':velocity.tolist(),
             'final_angular_velocity':angular_velocity.tolist(),'solve_ms':(time.perf_counter()-started)*1000,
             'side_cage':cage.replay_geometry(),'frames':frames,'hand_local':hand.local.tolist(),

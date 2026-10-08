@@ -1,0 +1,20 @@
+[
+  {
+    "fps": 960,
+    "tight_unconverged_steps": 0,
+    "end_center_difference_m": 3.70758576374315e-07,
+    "end_velocity_difference_m_s": 4.7922829480624743e-05
+  },
+  {
+    "fps": 1920,
+    "tight_unconverged_steps": 0,
+    "end_center_difference_m": 4.678922830517939e-07,
+    "end_velocity_difference_m_s": 5.44180721883659e-05
+  },
+  {
+    "fps": 3840,
+    "tight_unconverged_steps": 0,
+    "end_center_difference_m": 3.834241472763825e-07,
+    "end_velocity_difference_m_s": 5.070882112030072e-05
+  }
+]

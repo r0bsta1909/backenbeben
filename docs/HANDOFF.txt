@@ -660,3 +660,32 @@ Einfluss fester Positionsresidualtoleranz auf Geschwindigkeiten bei dt-Verfeiner
 gegebenenfalls Toleranz verfeinern und Iterationskonvergenz separat nachweisen.
 Weiterhin kurze einzelne Aufprallsituation, keine Reibung/Muskelantriebe,
 diagonale Gelenkinertia, keine anatomische Kalibrierung. Matchsolver unveraendert.
+
+ZEITSCHRITTABWEICHUNG IST KAUM DURCH ITERATIONSABBRUCH ERKLAERT
+Labor-run akzeptiert residual_tolerance explizit und schreibt sie in den Nachweis.
+Audit hat --tolerance, --iterations, --rates und --label; separate Reports erhalten
+fruehere Messungen. Labels begrenzt auf alphanumerisch/Bindestrich, Toleranz endlich
+und positiv, Raten positiv/streng steigend. Keine Aenderung des Matchsolvers.
+960/1920/3840 Hz erneut mit 1e-8 m statt 1e-6 und Limit 1024: alle Schritte
+konvergiert. Gegen die vorherige Toleranz Handposition am Ende nur .371/.468/.383
+Mikrometer verschieden, Endgeschwindigkeit etwa 5e-5 m/s. Die deutlich groesseren
+Zeitschrittunterschiede bleiben fast identisch. Toleranzhypothese fuer diesen
+kurzen Einzelkontakt damit als Hauptursache nicht gestuetzt.
+Weitere Folge 3840/7680/15360 Hz, gleiche 12.5 ms, gleiche Anfangsdaten, 1e-8 m:
+alle Schritte konvergiert, aber Peak-Verformung 1.220/1.331/1.469 mm und weiterhin
+nicht monotone Geschwindigkeits-/Gewebedifferenzen. Handpositionsdifferenzen
+.259/.227 mm; Endgeschwindigkeitsdifferenzen .100/.065 m/s. Kein bestandenes
+Zeitschrittgate. Laufzeiten 5.34/4.89/6.61 s, weiterhin weit von Echtzeit entfernt.
+Nachweise contact-timestep-tight.json, contact-tolerance-comparison.json,
+contact-timestep-fine.json in validation. Reproduzieren:
+python scripts/audit_contact_timestep.py --tolerance 1e-8 --iterations 1024
+--rates 3840 7680 15360 --label contact-timestep-fine
+Primaerquelle zur Trennung Substeps/Iterationen erneut gelesen:
+https://matthias-research.github.io/pages/publications/smallsteps.pdf
+Keine Uebertragung der dortigen Genauigkeits-/Leistungsaussagen auf dieses Modell.
+Naechste gezielte Diagnose: Energieverlauf und Kontaktimpulse/Wechsel ueber gleiche
+physische Zeitpunkte vergleichen, statt nur weitere Raten blind zu erhoehen.
+Aktuelle Befunde unterscheiden Materialkalibrierung, Kontaktmodell und numerische
+Daempfung noch nicht. Vollstaendige Physik und Integration bleiben offen.
+68 Python-Tests bestanden; belasteter Kopplungstest prueft jetzt explizit
+die angeforderte 1e-8-m-Toleranz fuer Material, Bindung und Durchdringung.
