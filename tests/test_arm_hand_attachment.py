@@ -30,3 +30,22 @@ class AttachmentTests(unittest.TestCase):
   for v in [[.2,-.1,.3],[0,0,0],[np.pi,0,0]]:
    rotation=rotation_increment(v)
    np.testing.assert_allclose(rotation_increment(rotation_log(rotation)),rotation,atol=1e-10)
+
+ def test_hybrid_jacobian_matches_finite_differences(self):
+  rng=np.random.default_rng(1909)
+  for _ in range(24):
+   arm,hand,bond=self.setup_pair()
+   arm.q=[rng.uniform(-1,1),rng.uniform(-.8,.7),rng.uniform(.3,2.1)]
+   arm.torso_yaw=rng.uniform(-.12,.2)
+   hand.rotation=rotation_increment(rng.normal(0,.3,3))@hand.rotation
+   np.testing.assert_allclose(bond.jacobian(),bond.jacobian_numeric(),atol=2e-8,rtol=0)
+
+ def test_forearm_frame_is_continuous_through_former_axis_switch(self):
+  from arm_hand_attachment import forearm_frame
+  arm=Arm();previous=None
+  for yaw in np.linspace(-1.65,1.65,1001):
+   frame=forearm_frame(arm,[yaw,-.4,1.3])
+   np.testing.assert_allclose(frame.T@frame,np.eye(3),atol=1e-12)
+   self.assertGreater(np.linalg.det(frame),.999999)
+   if previous is not None:self.assertLess(np.linalg.norm(rotation_log(frame@previous.T)),.00331)
+   previous=frame

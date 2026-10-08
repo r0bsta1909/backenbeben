@@ -352,3 +352,29 @@ Damit ist langsame Konvergenz dieses einzelnen Kontakts belegt, keine globale
 Physikabnahme. Weitere Treffervarianten, Zeitschrittverfeinerung, Muskelantrieb,
 Echtzeitlaufzeit und sichtbare Integration bleiben offen. Naechster Engpass:
 numerischer Arm-Hand-Jacobian; danach solverweite Reduktion des Python-Overheads.
+
+ARM-HAND-ABLEITUNG BESCHLEUNIGT UND ORIENTIERUNGSSPRUNG ENTFERNT
+ArmHandAttachment.jacobian verwendet direkte Ableitungen fuer Handtranslation,
+Rotationslogarithmus und die Handgelenkposition aus Forward Kinematics. Nur die
+Unterarmbasis wird weiterhin zentral differenziert. Nahe dem 180-Grad-Zweig
+bleibt die komplette numerische Referenz als Rueckfall aktiv. 24 unterschiedliche
+Armstellungen inklusive Torsodrehung gegen jacobian_numeric geprueft (2e-8).
+Dabei weiterer Fehler gefunden: forearm_frame wechselte bei abs(axis.x)=0.9
+die Welthilfsachse. Schulter-Yaw in 0.0033-rad-Schritten erzeugte einen Sprung
+von 0.54258 rad (~31 Grad). Jetzt definiert die Ebene aus Schulter, Ellbogen
+und Handgelenk die Basis; bei erlaubten Ellbogenwinkeln nicht degeneriert.
+1001 Stellungen geprueft, maximale Basisaenderung nun 0.003300000000001 rad.
+Dies korrigiert die NEUE LABORKOPPLUNG, nicht den bisherigen Matchsolver.
+Vollstaendig konvergierter Warmvergleich nach Basiskorrektur: 0.012 s bei
+960 Hz, Limit 384; numerisch 9.817 s, hybrid 7.780 s. Gleiche Iterationszahlen,
+kein nicht konvergierter Schritt. Maximalabweichungen: Gewebe 8.14e-13
+Render-Einheiten, Handzentrum 6.48e-13 m, Rotationsmatrix 3.80e-12,
+Armwinkel 5.10e-12 rad. Keine Behauptung bitgleicher Ergebnisse bei diesem
+Formelwechsel; Abweichungen liegen weit unter der 1e-6-m-Loesertoleranz.
+Nachweis: validation/attachment-hybrid-jacobian.json. Alle 66 Python-Tests
+bestanden, inklusive belastetem gekoppeltem Kontakt. Kein Matchsolverwechsel.
+Laufzeit bleibt unzureichend. Naechste Arbeit: verbleibende Kopplung/Residual-
+Auswertung profilieren und den numerischen Referenzpfad fuer jeden weiteren
+kompilierten Schritt erhalten. Grafik/Anatomie/Spielverstaendlichkeit weiter
+offen; bisherige Laborfortschritte ersetzen keine visuelle oder menschliche
+Abnahme des gewuenschten Spiels.

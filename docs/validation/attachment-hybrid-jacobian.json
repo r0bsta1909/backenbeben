@@ -1,0 +1,22 @@
+{
+  "frame_basis": "continuous bent-arm plane",
+  "duration_s": 0.012,
+  "fps": 960,
+  "iterations_cap": 384,
+  "numeric_ms": 9817.143000000215,
+  "hybrid_ms": 7780.437899997196,
+  "maximum_absolute_differences": {
+    "offsets": 8.13626943596546e-13,
+    "center": 6.473224734016014e-13,
+    "rotation": 3.790545568399528e-12,
+    "arm_angles": 5.094813460004843e-12
+  },
+  "numeric_unconverged_steps": 0,
+  "hybrid_unconverged_steps": 0,
+  "identical_iteration_counts": true,
+  "numeric_penetration_m": 4.4408345618318354e-11,
+  "hybrid_penetration_m": 4.4408369950288785e-11,
+  "maximum_frame_step_rad": 0.0033000000000009697,
+  "joint_step_rad": 0.0033,
+  "previous_auxiliary_basis_maximum_step_rad": 0.5425827336022594
+}
