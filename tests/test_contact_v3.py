@@ -9,6 +9,29 @@ def stroke(y=.6,tilt=-15,count=41):
     return {'version':3,'points':[[.19+.34*i/(count-1),y,800*i/(count-1),0,tilt,0] for i in range(count)]}
 
 class MeshContactTests(unittest.TestCase):
+    def test_forearm_table_edge_between_clear_endpoints(self):
+        from contact_v3 import forearm_hits_table,table_collision
+        # Both joints are outside the padded top, but the shaft crosses it.
+        elbow=(.42,-.29,.16);wrist=(-.42,-.29,.16)
+        self.assertTrue(forearm_hits_table(elbow,wrist))
+        self.assertTrue(table_collision(elbow,wrist))
+        self.assertFalse(forearm_hits_table((.42,-.20,.16),(-.42,-.20,.16)))
+        self.assertFalse(forearm_hits_table((.42,-.29,.40),(-.42,-.29,.40)))
+        # A tiny corner crossing must not fall between sparse sample points.
+        self.assertFalse(forearm_hits_table((.301,-.228,.16),(.299,-.226,.16)))
+        self.assertTrue(forearm_hits_table((.301,-.229,.16),(.299,-.226,.16)))
+
+    def test_driven_arm_stops_at_padded_table(self):
+        from arm import Arm
+        from contact_v3 import table_collision
+        arm=Arm();blocked=0
+        for _ in range(480):
+            pose=arm.step((0,-.4,.17),table_collision)
+            self.assertFalse(table_collision(pose['elbow'],pose['wrist']))
+            blocked+=pose['blocked']
+        self.assertGreater(blocked,0)
+        self.assertEqual(arm.velocity,[0.,0.,0.])
+
     def test_regions_from_actual_arm(self):
         for y,tilt,expected in [(.6,-15,'flat'),(.6,-10,'glance'),(.6,-20,'tips'),(.1,0,'zone'),(.35,35,'heel')]:
             with self.subTest(expected=expected):self.assertEqual(score(stroke(y,tilt))['contact_class'],expected)

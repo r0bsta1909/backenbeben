@@ -195,3 +195,17 @@ Korrektur: relative Beugung auf der gespeicherten Grundrotation. Godot-Test
 Rueckwaertssuche zum Kontakt setzt sie auf null; keine Browserfehler.
 Echtes Spielbild in der Totale: docs/validation/finger-recovery.png.
 Dies ist eine aufgezeichnete Riganimation, keine Fingergelenk-Physiksimulation.
+
+UNTERARM GEGEN PULTKANTE
+Livepose, Schlagwertung und Rueckzug pruefen nun die gesamte Verbindung vom
+Ellbogen zur Handwurzel gegen die um einen konservativen Radius erweiterte
+Pultoberseite. Die analytische Segment-Box-Pruefung ersetzt hier keine Form
+am Mesh, schliesst aber die Luecke zwischen einzelnen Pruefpunkten. Bisher
+konnte der Unterarm die Kante schneiden, obwohl die Handwurzel frei blieb.
+Die bisherige Handwurzelbegrenzung bleibt zusaetzlich aktiv. Keine Polster-
+kompression, keine vollstaendige Oberarm-/Rumpfkollision oder zeitlich stetige
+Swept-Mesh-Kollision. Physik bleibt 240-Hz-Simulation mit Gelenk-Bisection.
+34 Unit-Tests bestanden; anschliessend Motorregression ergaenzt und die gesamte
+Kontakt-V3-Testsuite erneut bestanden. Motorversuch: 480 Schritte ins Pult,
+0 durchdringende Frames, 464 blockierte Frames, Endgeschwindigkeit null.
+Netzwerk-Gauntlet mit Livepose, Foul, Revanche und Protokollpruefung bestanden.

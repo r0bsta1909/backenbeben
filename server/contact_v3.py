@@ -144,9 +144,31 @@ def contact_candidates(pose,tilt,skin_state,margin=.035):
     depths=side_surfaces(coordinates[rows,1:],skin_state)
     return [(HAND_SURFACE['samples'][i]['region'],*map(float,coordinates[i]),float(depth),float(coordinates[i,0]-depth),HAND_SURFACE['samples'][i]['area_m2']) for i,depth in zip(rows,depths) if np.isfinite(depth)]
 
+def forearm_hits_table(elbow,wrist):
+    """Continuous segment against a conservatively radius-expanded padded top.
+
+    Coordinates are metres. This is a rigid box/capsule proxy; rounded corner
+    detail and skin compression are intentionally not represented here.
+    """
+    lower=(-.30,-.335,.045);upper=(.30,-.227,.28)
+    enter,leave=0.,1.
+    for start,end,low,high in zip(elbow,wrist,lower,upper):
+        delta=end-start
+        if abs(delta)<1e-12:
+            if start<=low or start>=high:return False
+        else:
+            a,b=(low-start)/delta,(high-start)/delta
+            enter=max(enter,min(a,b));leave=min(leave,max(a,b))
+            if enter>=leave:return False
+    return True
+
+
+def table_collision(elbow,wrist):
+    return (wrist[1]<-.235 and abs(wrist[0])<.30 and .06<wrist[2]<.30) or forearm_hits_table(elbow,wrist)
+
 def collision(tilt,skin_state=(0.,0.,0.)):
     def blocked(elbow,wrist):
-        if wrist[1]<-.235 and abs(wrist[0])<.30 and .06<wrist[2]<.30:return True
+        if table_collision(elbow,wrist):return True
         return any(c[5]<0 for c in contact_candidates({'wrist':wrist,'elbow':elbow},tilt,skin_state,0.))
     return blocked
 
@@ -162,9 +184,8 @@ def score(data):
         p=[a[i]+(b[i]-a[i])*f for i in range(6)]
         arc+=math.hypot(p[0]-last[0],p[1]-last[1]);last=p
         # Table constraints remain active; skin contact is resolved separately.
-        def table(el,wr):return wr[1]<-.235 and abs(wr[0])<.30 and .06<wr[2]<.30
         arm.drive_torso(.20-.30*max(0,min(1,(p[0]-.19)/.34)))
-        old_pose=arm.pose();old=arm.q[:];pose=arm.step(input_target(p[0],p[1],arc/.23),table)
+        old_pose=arm.pose();old=arm.q[:];pose=arm.step(input_target(p[0],p[1],arc/.23),table_collision)
         travel_velocity=[(pose['wrist'][i]-old_pose['wrist'][i])/DT for i in range(3)]
         tilt=max(-45,min(45,p[4]));candidates=contact_candidates(pose,tilt,skin_state)
         touching=[c for c in candidates if c[5]<=.002]

@@ -145,3 +145,7 @@ eine Vereinfachung; Details und Spielbild in LATERAL_REWORK.txt.
 Finger entspannen nach seitlichem Rueckzug; vor/am Treffer unveraendert offen.
 Importgrundrotationen erhalten, Godot-Rigtest und Browser-Reversesuche bestanden.
 Details in LATERAL_REWORK.txt. Physikalische Handnachgiebigkeit weiter offen.
+
+Pultkollision umfasst jetzt den Unterarm als durchgaengiges Segment in einer
+radius-erweiterten Box. Motor- und Grenzfalltests plus Netzwerk-Gauntlet
+bestanden. Vollstaendige Koerperkollision bleibt offen; LATERAL_REWORK.txt.
