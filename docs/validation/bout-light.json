@@ -1,0 +1,187 @@
+{
+  "change": "Warm key light .85 on bout/arena layer1; cool support directional light .32 on officials layer2. Existing rim retained.",
+  "contact": {
+    "repeat_practice_without_damage": true,
+    "idle_material_uploads_skipped": true,
+    "mirror_visibility_updates": true,
+    "pose_camera_and_wheel": true,
+    "crowd_reaction_and_rewind": true,
+    "jump_to_contact": true,
+    "side_camera": true,
+    "marker_toggle": true,
+    "no_stale_markers": true,
+    "errors": [],
+    "inspection_survives_original_deadline": false,
+    "coupled": {
+      "backend": "coupled-moving",
+      "solve_ms": 3213.8,
+      "peak": 0.031467999999999996,
+      "contact_diagnostics": {
+        "maximum_wrist_separation_m": 1.0378780447147131e-05,
+        "maximum_penetration_m": 2.7130990795785596e-06,
+        "unconverged_steps": 14,
+        "maximum_material_residual_m": 0.000272251290429775
+      },
+      "head_response": {
+        "model": "coupled-yaw-through-contact-and-tail",
+        "braced": false,
+        "tail_pin_error_m": 1.1276569729202528e-07,
+        "spatial_rotation": true,
+        "translation": true,
+        "parameters": "prototype tuning, three translations and three Euler rotations; diagonal generalized inertia"
+      },
+      "maximum_head_yaw_rad": 0.07787
+    }
+  },
+  "duel": {
+    "url": "http://192.168.178.67:8877",
+    "errors": [],
+    "hits": [
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 13.63,
+        "quality": 0.466,
+        "braced": true,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber – mit der flachen Hand getroffen.",
+        "replay_id": "d9f872e3d4204be9e83a"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 25.1,
+        "quality": 0.5578,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber – mit der flachen Hand getroffen.",
+        "replay_id": "d2b92a2a41d761aa6ac4"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 21.73,
+        "quality": 0.4829,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber – mit der flachen Hand getroffen.",
+        "replay_id": "028999bd4ba1da48c8dd"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 22.42,
+        "quality": 0.4983,
+        "braced": false,
+        "side": "R",
+        "ko": true,
+        "foul": false,
+        "diagnosis": "Sauber – mit der flachen Hand getroffen.",
+        "replay_id": "0643ad0436fbb17edbe3"
+      }
+    ],
+    "configuration": {
+      "base_damage": 45,
+      "ko_threshold": 60,
+      "turn_seconds": 60
+    },
+    "single_tilt_control": true,
+    "physics_backend": "coupled-moving",
+    "moving_head_brace_consistent": true,
+    "solved_normal_impulse_ns": 0.9587832905880569,
+    "solved_quality_matches_hit": true,
+    "recorded_arm_frames": 554,
+    "clip_hash": "00d4681418b39d34ea7d27c68c254bf24259c0d7c6ad1ac76087092dabb651be",
+    "replay": {
+      "clipId": "d9f872e3d4204be9e83a",
+      "frameCount": 337,
+      "peak": 0.023001999999999998,
+      "time": 0.58331,
+      "frame": 69,
+      "deformation": 0.023001445599999996
+    },
+    "replay_frame_ms_p95": 20.900000000001455,
+    "viewport": [
+      1920,
+      1080
+    ],
+    "msaa_3d": 1,
+    "resume": true,
+    "injury_material_rewind": true,
+    "ko_body_recorded": true,
+    "ko_reverse_seek": true,
+    "winner": 1,
+    "audio": {
+      "mode": "buffer-fallback",
+      "played": 6,
+      "unlocked": true
+    },
+    "rematch_material_reset": true,
+    "rematch": true,
+    "leave": true,
+    "stats": {
+      "arm_data": true,
+      "camera_position": [
+        0.300000011920929,
+        0.550000011920929,
+        2.65000009536743
+      ],
+      "crowd_active": false,
+      "dragging": false,
+      "face_head_offset": [
+        0,
+        0,
+        0
+      ],
+      "face_head_rotation": [
+        0,
+        0,
+        0
+      ],
+      "face_injury": [
+        0,
+        0,
+        0
+      ],
+      "fps": 58,
+      "hand_wrist": "(-0.12, -0.49, -0.17)",
+      "mirror_draw_requests": 765,
+      "mirror_injury": [
+        0,
+        0,
+        0
+      ],
+      "msaa_3d": 1,
+      "muted": false,
+      "physics_active": false,
+      "physics_material_updates": 402,
+      "physics_time": -1,
+      "rendered_arm": {
+        "elbow": [
+          0.346037536859512,
+          -0.411999642848969,
+          0.622861385345459
+        ],
+        "shoulder": [
+          0.234999999403954,
+          -0.159999996423721,
+          0.524999976158142
+        ],
+        "wrist": [
+          0.120000019669533,
+          -0.490000009536743,
+          0.694999933242798
+        ]
+      },
+      "samples": 0
+    }
+  },
+  "visual_review": "Front and three-quarter contact plus wide KO inspected: officials remain visible with reduced brightness, cheek and striking hand retain the warm key. Catching hands visible at upper arms.",
+  "limits": "Art-direction improvement, not overall style or human gameplay acceptance. No physics changes."
+}

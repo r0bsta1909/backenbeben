@@ -143,11 +143,19 @@ func build_arena() -> void:
 	key.rotation_degrees = Vector3(-30, -35, 0)
 	key.light_color = Color("ffe1b2")
 	key.light_energy = .85
+	key.light_cull_mask = 1
 	key.shadow_enabled = true
 	key.directional_shadow_max_distance = 18.0
 	key.shadow_bias = .1
 	key.shadow_normal_bias = 2.0
 	add_child(key)
+	# Keep officials readable in the background without competing with the bout.
+	var support_light := DirectionalLight3D.new()
+	support_light.rotation = key.rotation
+	support_light.light_color = Color("b8c5d8")
+	support_light.light_energy = .32
+	support_light.light_cull_mask = 2
+	add_child(support_light)
 	var rim := OmniLight3D.new()
 	rim.position = Vector3(-2, 1, -0.5)
 	rim.light_color = Color("43a8c1")
@@ -528,6 +536,8 @@ func build_officials() -> void:
 		actor.position=Vector3((-1.55 if i==0 else 1.55) if i<2 else -2.7,0,-2.5 if i<2 else -3.5)
 		actor.rotation.y=.22 if i==0 else -.22
 		prepare_materials(actor)
+		for mesh in actor.find_children("*", "MeshInstance3D", true, false):
+			mesh.layers = 2
 		for node in actor.find_children("*","MeshInstance3D",true,false):
 			for j in range(node.mesh.get_surface_count()):
 				var m=node.get_surface_override_material(j)

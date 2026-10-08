@@ -112,3 +112,14 @@ Spielinhalte entsprechen exakt genanntem Quellcommit, kein neuer Export danach.
 Gesamtziel weiterhin offen: Referenzstil, menschliche Verstaendlichkeit,
 Physikmodellgrenzen und Zwei-PC-Nachweis. Keine Endabnahme aus Pakettest ableiten.
 CheckoutHost8877 Session18596, PaketHost8880 Session18599.
+
+G2/G6 LICHTFOKUS AUF HAND UND WANGE
+Helfer standen ebenso hell wie Kaempfer direkt hinter der Kontaktstelle.
+Separates kuehleres Helferlicht (.32) und Lichtlayer2 setzen sie zurueck;
+warmes Hauptlicht .85 bleibt fuer Kampf/Arena aufLayer1, vorhandenes Randlicht
+bleibt. Ego-/Dreiviertelkontakt und KO-Totale gesichtet: Gesichter und stützende
+Haende erkennbar, Gegner/Schlaghand deutlich heller. 15Kontaktansichten und
+kompletter KO-Browserkampf mit Replay/Resume/Revanche bestanden, errors[].
+Beleg validation/bout-light.json sowie Kontakt-/KO-Bilder. Keine Gesamtstil-
+oder menschliche Bedienabnahme. V09-Paket bleibt Stand vor dieser Lichtkorrektur.
+Goal weiter aktiv. CheckoutHost8877 Session18596; PaketHost8880 Session18599.
