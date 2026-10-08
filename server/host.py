@@ -69,7 +69,7 @@ def new_room(client, training):
 
 def public(room):
     now=time.monotonic()
-    return {k: room[k] for k in ('id','players','phase','turn','turn_id','hits','event','event_id','match_id','winner','training','revision')} | {'remaining':max(0.,room['deadline']-now),'max_pairs':room['settings']['max_pairs'], 'windup_seconds':WINDUP_SECONDS, 'brace_window_ms':room['settings']['brace_window_ms'], 'brace_used':room['brace'] is not None, 'brace_result':room.get('brace_result',''), 'practice_done':room.get('practice_done',False), 'replay_id':room.get('replay_id'), 'replay_skip':room.get('replay_skip',[]), 'diagnosis':room.get('diagnosis','')}
+    return {k: room[k] for k in ('id','players','phase','turn','turn_id','hits','event','event_id','match_id','winner','training','revision')} | {'remaining':max(0.,room['deadline']-now),'max_pairs':room['settings']['max_pairs'], 'windup_seconds':WINDUP_SECONDS, 'brace_window_ms':room['settings']['brace_window_ms'], 'brace_used':room['brace'] is not None, 'brace_result':room.get('brace_result',''), 'practice_done':room.get('practice_done',False), 'replay_id':room.get('replay_id'), 'replay_skip':room.get('replay_skip',[]), 'diagnosis':room.get('diagnosis',''), 'practice_pose':room.get('practice_pose') if room.get('practice_done') else None}
 
 
 async def broadcast(room):
@@ -156,6 +156,9 @@ async def command(c, d):
         preview=score_contact(d,room["players"][1-me])
         from practice_guidance import wheel_hint
         hint=wheel_hint(d,preview,lambda candidate:score_contact(candidate,room['players'][1-me]))
+        records=preview.get('arm_path',[])
+        moment=min(records,key=lambda r:abs(r['time']-preview['contact_time'])) if records else None
+        room['practice_pose']=dict(moment,attacker=me) if moment else None
         room['practice_done']=True;room['diagnosis']='Probe: '+preview['diagnosis']+' '+hint
         event(room,'practice',diagnosis=room['diagnosis']);await broadcast(room);return
     if action=='inspect_replay':

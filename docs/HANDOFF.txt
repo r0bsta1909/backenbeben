@@ -1649,3 +1649,19 @@ inkl.Resume/Verletzungsruecklauf/KO-Ruecklauf/RevanchePASS,errors[].
 Beleg validation/helper-step.json/png. WeiteranimierteSchrittbahn,kein
 physikalischesGleichgewichts-/Gangmodell. Gesamtzielweiteroffen.
 Host8877CheckoutSession81546;V08PaketbleibtvorHelferhand-/Schrittkorrekturen.
+
+G3 TATSAECHLICHE PROBE ALS KONTAKTSTANDBILD
+Host speichert denArmrecord am bewertetenKontaktzeitpunkt; publicstate zeigt ihn
+nurbei practice_done. NeuerButton ProbeAmKontaktAnsehen zeigt dieseunveraenderte
+Pose inSeiten-/Egoansicht. EindeutigeStandbildueberschrift, gespeicherteNeigung
+undaktuelleEinstellung. Mausrad/neuerZug/Reset/erneuteProbe verlassenStandbild;
+keine versteckteHaltungskorrektur. ErsterEntwurf hatteHinweis unterScrollrand,
+daherKennzeichnung nachobenverschoben. Browser1366x768 mit echtenZuegen:
+Flat undTips, gerenderteSchulter/Ellbogen/Wrist entsprechenHostpose<1e-5,
+Kamerwechsel, Radexit, unveraenderteAufzeichnung, keinSchaden PASS.
+Mauskorrekturablauf und3kompakteFensterPASS;153Tests undvollerLAN-KO-Kampf
+inkl.Resume/Verletzungsruecklauf/KO-Reverse/RevanchePASS,errors[].
+Beleg validation/practice-still.json plusFlat/Tips-Seitenbildergesichtet.
+MenschlicheVerstaendlichkeitsabnahme weiterOFFEN, nichtausTestsableiten.
+Host8877CheckoutSession18596;V08Download enthaeltnochkeineStandbildhilfe
+undkeineletztenHelferkorrekturen. Goalweiteraktiv.

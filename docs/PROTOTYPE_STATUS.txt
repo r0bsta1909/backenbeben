@@ -21,6 +21,7 @@ Technischer Export oder bestandener Rendercheck ersetzt keine Artabnahme.
 G3 / SEITLICHER KONTAKT UND BEDIENUNG — OFFEN
 Vorhanden: koerpergebundener Schwung, echte Handkontaktpunkte, Probe/Schlag,
 weitere freiwillige Probe, Seitenkamera, Mausrad, gruenes Anspannfenster.
+Bewertete Probepose als Standbild mit Kamerawechsel: validation/practice-still.json.
 Belege: validation/repeat-practice.json, anatomical-arm-front/side.png.
 Letzte menschliche Rueckmeldung: weiterhin unverstaendlich; keine neue Abnahme.
 
