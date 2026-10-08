@@ -20,3 +20,6 @@ server/balance.json
 /P16-221025-302.jpg
 /screenshot-2024-11-10-at-5-46-17-pm.png
 /slap-fighting.webp
+
+# Godot extracts this embedded GLB image during import. Source lives in face_ink_v1.png.
+game/assets/character_v3_face_ink_v1.png*

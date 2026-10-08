@@ -86,3 +86,7 @@ Nach den letzten Assetkorrekturen Bilder und Totale nochmals prüfen.
 Stil ist noch nicht auf Referenzniveau. Handgelenkübergang, Stoff/Haare,
 Licht/Tiefenstaffelung, Auffangkontakt und Kontaktdiagnose weiter verfeinern.
 Kein fertiges v0.3.0-Release veröffentlichen; Goal bleibt aktiv.
+
+Neuster Bildstand: Face-Ink-Textur + Konturshader, runder Kragen, korrigierte
+Wrist-Gewichtung, zurückgesetzte Auffänger. Details in LATERAL_REWORK.txt.
+Nächster konkreter Art-Pass: helmartige Haarform und Schulter/Stoffsilhouette.

@@ -12,6 +12,8 @@ uniform float injury_left = 0.0;
 uniform float injury_right = 0.0;
 uniform float injury_jaw = 0.0;
 uniform bool face_skin = false;
+uniform bool hair_surface = false;
+uniform sampler2D face_ink : source_color,filter_linear_mipmap,repeat_disable;
 varying vec3 skin_position;
 vec3 displacement(vec3 p) {
     vec2 grid = clamp((p.xy - vec2(-0.48,-0.34))/vec2(0.12,0.16),vec2(0.0),vec2(7.999,5.999));
@@ -45,7 +47,15 @@ void fragment() {
     float shade = d > 0.65 ? 1.08 : (d > 0.12 ? 0.84 : 0.52);
     float edge = smoothstep(0.06, 0.20, dot(n, normalize(VIEW)));
     vec3 color=base_color.rgb;
+    if(hair_surface) color+=vec3(.045,.026,.012)*smoothstep(.15,.75,d);
     if(face_skin) {
+        vec3 local=skin_position/geometry_scale;
+        vec2 paint_uv=vec2((local.x+.19)/.38,(.245-local.y)/.38);
+        vec3 paint=texture(face_ink,paint_uv).rgb;
+        float paint_mask=smoothstep(.012,.065,local.z);
+        float ink=clamp(paint.r/.55,.055,1.2);
+        color*=mix(1.0,ink,paint_mask*.88);
+        shade=mix(shade,.96,paint_mask*.60);
         float injury=skin_position.x<0.0?injury_left:injury_right;
         vec2 q=vec2(abs(skin_position.x),skin_position.y);
         float beard=(1.0-smoothstep(-.12,.0,q.y))*smoothstep(.05,.22,skin_position.z);

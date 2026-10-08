@@ -1,0 +1,8 @@
+Built-in image_gen tool, style-transfer edit, 2026-10-08.
+Input: assets-source/face-texture-guide.png, orthographic render of actual head.
+Output: game/assets/face_ink_v1.png. Original output retained in Codex generated_images.
+Projection: X [-.19,.19] m; Y [-.135,.245] m. Front-facing skin only.
+Image is a surface texture, never used as a substitute for the 3D game screenshot.
+
+Prompt:
+Use case: style-transfer. Asset type: precise front-projected diffuse texture for an existing 3D game head, NOT a new character concept. Edit the attached 1024x1024 orthographic head guide in place. Preserve EXACTLY the pixel positions, scale, silhouette, bald scalp, ears, eye openings, nose, mouth, jaw and neck; no camera or expression changes. Paint ONLY surface details in the style of a mature European action graphic novel / original XIII cel-shaded game: warm muted ochre skin, restrained sharp dark ink accents around eyelids, nostril creases and lips, subtle short hatching at cheek hollows and jaw, fine irregular brush/paper grain, a few natural forehead creases, faint five-o-clock stubble. Keep skin mostly an even medium value, with restrained 2-tone warm shadows; no dramatic baked directional light, no photoreal pores. The head must remain the same exact geometry and alignment so the image can be projected back onto this actual mesh. Keep the plain dark gray background unchanged. No hair, no clothing, no additions, no text, no border, no watermark. Prioritize exact spatial registration over beauty; avoid changing facial proportions.

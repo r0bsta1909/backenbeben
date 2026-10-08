@@ -158,8 +158,10 @@ head_parts.append(ell('Teeth',(0,-.026,.081),(.023,.004,.003),white))
 
 body=loft('Shirt',[((0,-.60,-.014),.175,.096),((0,-.51,-.012),.188,.106),((0,-.36,0),.22,.120),((0,-.23,0),.245,.124),((0,-.17,0),.24,.103),((0,-.125,0),.145,.070),((0,-.105,0),.054,.048)],shirt,64)
 neck=loft('Neck',[((0,-.18,0),.070,.060),((0,-.12,0),.057,.05),((0,-.06,-.008),.049,.043)],skin)
-curve('Collar',[(-.070,-.136,.064),(-.055,-.160,.091),(0,-.173,.108),(.055,-.160,.091),(.070,-.136,.064)],.006,ink)
-curve('CollarTrim',[(-.070,-.141,.066),(-.055,-.165,.093),(0,-.179,.109),(.055,-.165,.093),(.070,-.141,.066)],.0017,trim)
+# A true crew-neck rim follows the neck opening instead of floating on the chest.
+collar_points=[(.056*math.cos(i*math.tau/48),-.107-.005*max(0,math.sin(i*math.tau/48)),.050*math.sin(i*math.tau/48)) for i in range(49)]
+curve('Collar',collar_points,.004,ink)
+
 
 # Rest skeleton, including clavicle, upper arm, two forearm twist sections and
 # fully articulated digits. Constant-length bones are exported into GLB.
@@ -241,7 +243,14 @@ for sign,side in [(-1,'R'),(1,'L')]:
     rem=arm.modifiers.new('Weld finger webs and thenar','REMESH');rem.mode='VOXEL';rem.voxel_size=.0018;rem.use_smooth_shade=True
     bpy.ops.object.modifier_apply(modifier=rem.name)
     sm=arm.modifiers.new('Relax joint transitions','SMOOTH');sm.factor=.45;sm.iterations=3;bpy.ops.object.modifier_apply(modifier=sm.name)
-    dec=arm.modifiers.new('Web silhouette budget','DECIMATE');dec.ratio=.13;bpy.ops.object.modifier_apply(modifier=dec.name)
+    wrist_relax=arm.vertex_groups.new(name='WristRelax')
+    for v in arm.data.vertices:
+        along=(G(v.co)-wr).dot(direction)
+        weight=math.exp(-(along/.042)**2)
+        if weight>.005:wrist_relax.add([v.index],weight,'REPLACE')
+    relax=arm.modifiers.new('Anatomical wrist transition','SMOOTH');relax.factor=.65;relax.iterations=14;relax.vertex_group=wrist_relax.name
+    bpy.ops.object.modifier_apply(modifier=relax.name);arm.vertex_groups.remove(arm.vertex_groups.get('WristRelax'))
+    dec=arm.modifiers.new('Web silhouette budget','DECIMATE');dec.ratio=.18;bpy.ops.object.modifier_apply(modifier=dec.name)
     # Skin beneath the opaque sleeve is not rendered. This prevents differently
     # blended cloth/skin layers from fighting during shoulder rotation.
     bm=bmesh.new();bm.from_mesh(arm.data);upper=(el-sh).normalized()
@@ -296,6 +305,18 @@ for obj in [o for o in bpy.context.scene.objects if o.type=='MESH']:
             p=G(v.co)
             if obj==body and (p.y<-.29 or abs(p.x)<.15):
                 groups['chest'].add([v.index],1,'REPLACE');continue
+            if obj.name.startswith('ArmSkin.'):
+                side=obj.name[-1]
+                wrist=Vector(bones['hand.'+side][0])
+                axis=(Vector(bones['hand.'+side][1])-wrist).normalized()
+                along=(p-wrist).dot(axis)
+                # Explicit longitudinal wrist blend prevents nearest-bone weights
+                # from collapsing a sharp ring when the palm turns upright.
+                if -.045 < along < .035:
+                    hand_weight=smoothstep(-.045,.035,along)
+                    groups['hand.'+side].add([v.index],hand_weight,'REPLACE')
+                    groups['forearm_twist.'+side].add([v.index],1-hand_weight,'REPLACE')
+                    continue
             rank=sorted((distance(p,Vector(bones[k][0]),Vector(bones[k][1])),k) for k in candidates)
             # Smooth joints but no bleeding from neighbouring fingers.
             chosen=rank[:2] if obj==body or rank[0][1].startswith(('upper','forearm','hand')) else rank[:1]
@@ -312,8 +333,17 @@ for obj in [o for o in bpy.context.scene.objects if o.type=='MESH']:
     if not obj.data.uv_layers:obj.data.uv_layers.new(name='UVMap')
     for poly in obj.data.polygons:
         for li in poly.loop_indices:
-            p=G(obj.data.vertices[obj.data.loops[li].vertex_index].co);obj.data.uv_layers.active.data[li].uv=(p.x+.5,p.y+.8)
+            p=G(obj.data.vertices[obj.data.loops[li].vertex_index].co);obj.data.uv_layers.active.data[li].uv=((p.x+.19)/.38,(p.y+.135)/.38) if obj==face else (p.x+.5,p.y+.8)
     bpy.ops.object.mode_set(mode='EDIT');bpy.ops.mesh.select_all(action='SELECT');bpy.ops.mesh.normals_make_consistent(inside=False);bpy.ops.object.mode_set(mode='OBJECT')
+
+# The paint guide uses a fixed front projection; keep it editable and packed in
+# the Blender source. Runtime adds its own light and injury layers to this ink.
+if (OUT/'face_ink_v1.png').exists():
+    face_material=skin.copy();face_material.name='FaceSkin'
+    image=bpy.data.images.load(str(OUT/'face_ink_v1.png'));image.pack()
+    tex=face_material.node_tree.nodes.new('ShaderNodeTexImage');tex.image=image
+    face_material.node_tree.links.new(tex.outputs['Color'],face_material.node_tree.nodes.get('Principled BSDF').inputs['Base Color'])
+    face.data.materials[0]=face_material
 
 meta={'version':3,'units':'metres','axes':'Godot: +X right, +Y up, +Z face forward; Blender: X, -Z, Y','render_scale_legacy':4,'torso_anchor':[0,-.36,0],'camera_anchor':[0,.115,.78],'arms':landmarks,'bones':{k:{'head':list(a),'tail':list(b),'parent':p} for k,(a,b,p) in bones.items()},'cheek_surface':[-.065,.04,.078],'contact_regions':[['heel',0,-.039],['palm',-.018,-.012],['palm',.018,-.012],['palm',0,.013],['finger',-.015,.083],['finger',.015,.080],['tip',-.015,.136],['tip',.015,.125]]}
 (OUT/'character_v3.json').write_text(json.dumps(meta,indent=2),encoding='utf-8')

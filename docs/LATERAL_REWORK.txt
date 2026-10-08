@@ -47,3 +47,26 @@ Jacobi-Korrekturen, 12 Iterationen, unveränderte Volumengrenzen im Regressionst
 Auffanghände folgen den transformierten Achselpositionen; Füße bleiben beim
 Einknicken am Boden. Das ist noch kein physikalisch gelöster Zweipersonenkontakt.
 ArmSkin.R und ArmSkin.L sind jeweils ein zusammenhängendes Mesh; in Blender geprüft.
+
+DARSTELLUNG — ZWEITER DURCHLAUF
+Zusätzlicher invertierter Konturpass mit identischer Kopf-/Gewebeverformung;
+Bühnenlicht dunkler, damit der Kampf vor dem Zuschauerraum lesbar bleibt.
+Separater Browser-Performancecheck mit Konturen: p95 rund 14 ms bei 1080p
+auf RTX 2080. Kleine horizontale Kameraverschiebung hält die Ausgangshand
+besser im Bild. Menschliche Verständlichkeitsabnahme weiterhin offen.
+
+TEXTUR / HANDGELENK / BILDAUFBAU
+Auf das echte Kopfmesh projizierte Imagegen-Oberflächentextur integriert;
+Prompt und Herkunft: docs/art-direction-v3/FACE_TEXTURE_PROMPT.txt.
+Blender-Datei und GLB enthalten die Textur; Runtime verwendet denselben PNG.
+Kamera zeigt den Kopf höher, Hinweise liegen seitlich. Echter runder Kragen.
+Längsgewichtung und lokal geglättete Geometrie am Handgelenk. Zusätzliche
+Konturhülle dort entfernt: sie erzeugte schwarze Dreiecke bei starker Beugung.
+Auffänger stehen weiter zurück und treten beim KO heran.
+Gespeichertes Asset validiert: je ein verbundenes Armmesh, normalisierte
+Knochengewichte, endliche Geometrie, eingebettete Textur. Prüfer:
+scripts/validate_character_v3.py (Blender mit gespeicherter .blend öffnen).
+Kontaktbilder bei exakt 0.50 s und neue Messung unter docs/validation/.
+1080p / RTX 2080 / zwei Browserkontexte: p95 13.9–14 ms, Median 7 ms.
+Noch offen: natürliche Haarform, Stoff/Schulterform, Handgelenksilhouette,
+physikalisch gelöster Auffangkontakt und menschliche Verständlichkeitsabnahme.

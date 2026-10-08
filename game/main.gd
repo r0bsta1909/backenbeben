@@ -132,22 +132,22 @@ func build_arena() -> void:
 	env.background_color = Color("131a29")
 	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	env.ambient_light_color = Color("a4b6cb")
-	env.ambient_light_energy = 0.32
+	env.ambient_light_energy = 0.18
 	world.environment = env
 	add_child(world)
 	var key := DirectionalLight3D.new()
 	key.rotation_degrees = Vector3(-30, -35, 0)
 	key.light_color = Color("ffe1b2")
-	key.light_energy = 1.4
+	key.light_energy = .65
 	add_child(key)
 	var rim := OmniLight3D.new()
 	rim.position = Vector3(-2, 1, -0.5)
 	rim.light_color = Color("43a8c1")
-	rim.light_energy = 2.0
+	rim.light_energy = .8
 	rim.omni_range = 6.0
 	add_child(rim)
 	camera = Camera3D.new()
-	camera.position = Vector3(0,.55,2.65)
+	camera.position = Vector3(.30,.55,2.65)
 	camera.fov = 55
 	add_child(camera)
 	camera.look_at(Vector3.ZERO)
@@ -178,9 +178,18 @@ func prepare_materials(root: Node) -> void:
 				copy.set_shader_parameter("part_origin",node.position)
 				copy.set_shader_parameter("geometry_scale",4.0)
 				copy.set_shader_parameter("face_skin",str(node.name)=="Face")
+				copy.set_shader_parameter("hair_surface",m.resource_name=="Hair")
+				if str(node.name)=="Face":copy.set_shader_parameter("face_ink",load("res://assets/face_ink_v1.png"))
 				copy.set_shader_parameter("tissue",str(node.name) in ["Face","FaceInk","MouthLine","LidsL","LidsR"])
 				copy.set_shader_parameter("head_part",str(node.name) in ["Face","FaceInk","MouthLine","MouthInterior","Teeth","LidsL","LidsR","EyeL","EyeR","IrisL","IrisR","PupilL","PupilR","BrowL","BrowR","HairCap","EarL","EarR","EarFoldL","EarFoldR","NostrilL","NostrilR"])
 				physics_materials[root.get_instance_id()].append(copy)
+				if m.resource_name in ["Skin","FaceSkin","Shirt","Hair","Trousers","Shoe"] and not str(node.name).begins_with("ArmSkin"):
+					var outline := ShaderMaterial.new()
+					outline.shader=load("res://toon_outline.gdshader")
+					for parameter in ["part_origin","geometry_scale","face_skin","tissue","head_part"]:
+						outline.set_shader_parameter(parameter,copy.get_shader_parameter(parameter))
+					copy.next_pass=outline
+					physics_materials[root.get_instance_id()].append(outline)
 				node.set_surface_override_material(i, copy)
 				mat_cache[str(node.get_instance_id())+":"+str(i)] = m.resource_name
 
@@ -252,7 +261,10 @@ func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 				m.set_shader_parameter("injury_jaw",fractured)
 				m.set_shader_parameter("injury_left",clampf(float(data.get("zones",{}).get("L",0))/75.,0,1))
 				m.set_shader_parameter("injury_right",clampf(float(data.get("zones",{}).get("R",0))/75.,0,1))
-				if base_name=="Skin": m.set_shader_parameter("base_color",skins[int(data.get("skin",0))%4])
+				if m.next_pass is ShaderMaterial:
+					for parameter in ["injury_left","injury_right","injury_jaw"]:
+						m.next_pass.set_shader_parameter(parameter,m.get_shader_parameter(parameter))
+				if base_name in ["Skin","FaceSkin"]: m.set_shader_parameter("base_color",skins[int(data.get("skin",0))%4])
 				if base_name=="SkinShadow": m.set_shader_parameter("base_color",skins[int(data.get("skin",0))%4].darkened(.18))
 				if base_name=="Shirt": m.set_shader_parameter("base_color",shirts[int(data.get("shirt",0))%4])
 				if base_name=="Hair": m.set_shader_parameter("base_color",hairs[int(data.get("hair",0))%3])
@@ -384,7 +396,7 @@ func color_hand(root: Node3D, data: Dictionary) -> void:
 			var m = node.get_surface_override_material(i)
 			var base_name: String = mat_cache.get(str(node.get_instance_id())+":"+str(i),"")
 			if m is ShaderMaterial:
-				if base_name=="Skin":m.set_shader_parameter("base_color",skins[int(data.get("skin",0))%4])
+				if base_name in ["Skin","FaceSkin"]:m.set_shader_parameter("base_color",skins[int(data.get("skin",0))%4])
 				if base_name=="Shirt":m.set_shader_parameter("base_color",shirts[int(data.get("shirt",0))%4])
 
 func drive_recorded_physics() -> void:
@@ -412,8 +424,8 @@ func drive_recorded_physics() -> void:
 	mirror_viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED if replaying else SubViewport.UPDATE_ALWAYS
 	var wide_view: bool = replaying and physics_frame.get("camera","")=="wide"
 	var side_view: bool = replaying and physics_frame.get("camera","") in ["side","wide"]
-	camera.position=Vector3(8.5,1.8,5.5) if wide_view else Vector3(3,.55,1.1) if side_view else Vector3(0,.55,2.65)
-	camera.look_at(Vector3(0,-3.0,.4) if wide_view else Vector3(0,-.12,1.0) if side_view else Vector3(0,.15,0))
+	camera.position=Vector3(8.5,1.8,5.5) if wide_view else Vector3(3,.55,1.1) if side_view else Vector3(.30,.55,2.65)
+	camera.look_at(Vector3(0,-3.0,.4) if wide_view else Vector3(0,-.12,1.0) if side_view else Vector3(.22,-.18,0))
 	hand.visible=true
 	hand.first_person(not side_view)
 	var arm_data: Variant = physics_frame.get("arm") if active else hand_pose.get("arm")
@@ -457,7 +469,7 @@ func zero_cage() -> Array:
 func build_officials() -> void:
 	for i in range(3):
 		var actor := new_character()
-		actor.position=Vector3((-1.55 if i==0 else 1.55) if i<2 else -2.7,0,-1.55 if i<2 else -.1)
+		actor.position=Vector3((-1.55 if i==0 else 1.55) if i<2 else -2.7,0,-2.5 if i<2 else -.1)
 		actor.rotation.y=.22 if i==0 else -.22
 		prepare_materials(actor)
 		for node in actor.find_children("*","MeshInstance3D",true,false):
@@ -465,7 +477,7 @@ func build_officials() -> void:
 				var m=node.get_surface_override_material(j)
 				var base: String=mat_cache.get(str(node.get_instance_id())+":"+str(j),"")
 				if base=="Shirt":m.set_shader_parameter("base_color",Color("191d24"))
-				if base=="Skin":m.set_shader_parameter("base_color",skins[1].darkened(.20))
+				if base in ["Skin","FaceSkin"]:m.set_shader_parameter("base_color",skins[1].darkened(.20))
 				if base=="Hair":m.set_shader_parameter("base_color",Color("28262b") if i==0 else Color("58504b"))
 			if i==0 and str(node.name)=="HairCap":node.visible=false
 		actor.set_meta("home",actor.position)
@@ -480,6 +492,7 @@ func update_officials(body: Array) -> void:
 		var catch_amount: float=float(body[4]) if body.size()>4 else 0.0
 		if i<2:
 			actor.position.x*=1.0-catch_amount*.25
+			actor.position.z+=catch_amount*.85
 			actor.apply_collapse([catch_amount*.05,0,catch_amount*.12,0,0])
 			var hip := Vector3(0,-.6,0)
 			var drop := Vector3(0,-float(body[0]),-float(body[1]))

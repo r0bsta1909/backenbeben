@@ -1,38 +1,38 @@
 {
   "stages": {
     "idle": {
-      "samples": 362,
+      "samples": 290,
       "p95": 13.900000000001455,
       "median": 7
     },
     "moving": {
-      "samples": 117,
-      "p95": 13.899999999999636,
+      "samples": 112,
+      "p95": 14,
       "median": 7
     },
     "windup": {
-      "samples": 164,
-      "p95": 7.099999999998545,
+      "samples": 162,
+      "p95": 13.900000000001455,
       "median": 7
     },
     "resolving": {
-      "samples": 173,
-      "p95": 7.100000000002183,
+      "samples": 244,
+      "p95": 13.900000000001455,
       "median": 7
     },
     "impact": {
-      "samples": 363,
-      "p95": 13.899999999997817,
+      "samples": 307,
+      "p95": 14,
       "median": 7
     },
     "replay_moving": {
-      "samples": 252,
-      "p95": 13.899999999997817,
+      "samples": 230,
+      "p95": 13.900000000001455,
       "median": 7
     },
     "replay_paused": {
-      "samples": 279,
-      "p95": 7.099999999998545,
+      "samples": 267,
+      "p95": 13.900000000001455,
       "median": 7
     }
   },
@@ -40,11 +40,11 @@
   "godot": {
     "arm_data": true,
     "dragging": false,
-    "fps": 135,
-    "hand_wrist": "(-0.42458, -0.079058, 0.405363)",
+    "fps": 123,
+    "hand_wrist": "(-0.300804, -0.079047, 0.244842)",
     "muted": false,
     "physics_active": true,
-    "physics_time": 0.985261999999998,
+    "physics_time": 0.958904999999999,
     "samples": 0
   }
 }
