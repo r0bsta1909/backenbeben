@@ -1,0 +1,31 @@
+{
+  "fps": 960,
+  "duration": 0.06,
+  "hand_samples": 114,
+  "peak_active_contacts": 2,
+  "peak_deformation_m": 0.0006923647512895083,
+  "maximum_penetration_m": 5.549217034897818e-07,
+  "final_velocity": [
+    0.02719075085178435,
+    -0.24166296352550243,
+    0.3814634112201154
+  ],
+  "final_angular_velocity": [
+    1.7954169429350002,
+    2.3271598914192206,
+    -1.219802149127072
+  ],
+  "solve_ms": 32294.802000000345,
+  "limits": [
+    "free rigid hand, no shoulder/elbow reaction yet",
+    "laboratory box inertia",
+    "no friction",
+    "not active in matches"
+  ],
+  "python_tests_passed": 57,
+  "native_replay_preview": {
+    "changed_channels": 421,
+    "renderer_errors": [],
+    "style_accepted": false
+  }
+}

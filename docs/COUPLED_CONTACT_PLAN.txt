@@ -234,3 +234,31 @@ Drei SideTissue-Tests bestanden; Webexport und Browser-Kontaktreplay bestanden,
 keine Browserfehler. Das ist kein Beleg fuer gute Gesichtsanimation: aktuelle
 Matches erzeugen weiterhin alte Frames. Mehrpunktkontakt, Gelenkrueckwirkung,
 Normals/Beleuchtung der verformten Flaeche und sichtbare Gesamtpruefung offen.
+
+MEHRPUNKTKONTAKT MIT DREHREAKTION IM LABOR
+project_rigid_contact loest Translation und Rotation eines gemeinsamen starren
+Handkoerpers gegen massengewichtete Gewebeknoten. Drehkorrektur auf SO(3),
+Welttraegheit aus Koerpertraegheit; Kontaktmultiplikatoren bleiben nichtnegativ.
+Fuenf Tests pruefen zentralen Kontakt, aussermittige Drehung, erhaltene
+Handabstaende, linearen Massenausgleich, Trennung, numerischen Winkelgradienten
+und zwei gemeinsame Kontakte. Batch-Einbettung gegen skalare Referenz auf
+verformtem Mesh geprueft. Gesamte Python-Suite: 57 Tests bestanden.
+RigidHandContact verwendet echte Handmesh-Punkte; keine auf die Gesichtsseite
+projizierte Ersatzhand. Oberflaechenzuordnung und Normale werden je Iteration
+neu berechnet; bei Dreieckswechsel wird der Kontaktmultiplikator geloescht.
+Reproduzierbar: scripts/run_side_contact_lab.py (optionales Numba erforderlich).
+114 Punkte, 960 Hz, 0.06 s, 1 m/s: maximal zwei aktive Kontakte, Verformung
+0.692 mm, Durchdringung maximal 5.55e-7 m. Rechenzeit 32.3 s inkl. Laborkosten.
+WICHTIG: frei bewegliche Hand gleitet/dreht weg. Das ist kein flaechengefuehrter
+Schlag und keine Echtzeitloesung. Boxtraegheit ist ein Laborparameter. Keine
+Schulter-/Ellbogenrueckwirkung, keine Reibung; nicht in Matches aktiviert.
+Nachweis: validation/side-contact-lab.json. Naechster Physikschritt ist die
+nachgiebige Rueckbindung von Handgelenk und Orientierung an den Gelenkarm.
+Aufgezeichnete SideTissue-Frames im echten Spielrenderer abgespielt mit
+Tests/side_contact_preview.gd; 421 geaenderte Bildkanaele zwischen Ruhe und
+maximaler Verformung, keine Shader-/Scriptfehler. Native Vorschau gespeichert:
+validation/side-contact-peak.png. Die kleine Aenderung ist kein Gesamtbeleg fuer
+Gesichtsphysik oder Stil. Sichtpruefung: Haare noch schematisch/regelmaessig,
+Schulterformen rund/aufgesetzt, Publikum geometrische Platzhalter. Grafikgate
+offen. Erste Vorschau hatte uninitialisierte weisse Haut; Testinitialisierung
+auf regulaeres apply_fighter korrigiert, gespeicherte Vorschau danach erzeugt.
