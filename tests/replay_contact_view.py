@@ -48,11 +48,11 @@ async def main():
    await page.screenshot(path='logs/contact-view-failure.png')
    await browser.close();raise
   coupled_evidence=None
-  if '--expect-coupled' in sys.argv:
+  if '--expect-coupled' in sys.argv or '--expect-moving' in sys.argv:
    await page.wait_for_function('JSON.parse(physicsFrame).side_cage.nx===17')
    replay_id=await page.evaluate('state.replay_id')
    recorded=await (await page.request.get('http://localhost:8877/api/replay/'+replay_id)).json()
-   assert recorded['physics_backend']=='coupled'
+   assert recorded['physics_backend']==('coupled-moving' if '--expect-moving' in sys.argv else 'coupled')
    coupled_evidence={'backend':recorded['physics_backend'],'solve_ms':recorded['solve_ms'],'peak':recorded['peak'],'contact_diagnostics':recorded['contact_diagnostics'],'head_response':recorded.get('head_response'),'maximum_head_yaw_rad':max(abs(f[0]) for f in recorded['frames'])}
   await page.locator('#replayImpact').click()
   await page.wait_for_function("JSON.parse(physicsFrame).camera==='side' && JSON.parse(physicsFrame).time===.5")

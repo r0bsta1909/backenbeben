@@ -258,6 +258,9 @@ async def tick(app):
                     record(dict(kind='physics_error',error=str(exc)));r['phase']='disconnected';event(r,'disconnect',text='Physik konnte nicht berechnet werden. Bitte neues Duell starten.');await broadcast(r);continue
                 target=1-r['turn'];p=r['players'][target]
                 braced=r['brace'] is not None and 0 <= r['deadline']-r['brace'] <= r['settings']['brace_window_ms']/1000
+                if braced and clip.get('head_response',{}).get('model')=='coupled-yaw-through-contact-and-tail' and not clip['head_response'].get('braced'):
+                    r['solve']=asyncio.get_running_loop().run_in_executor(POOL,simulate,r['pending'],True)
+                    r['phase']='resolving';await broadcast(r);continue
                 r['pending'].update(clip.get('score_update',{}))
                 before=copy.deepcopy(r['players'])
                 damage,ko=apply_hit(p,r['pending'],r['settings'],braced)
@@ -275,7 +278,7 @@ async def tick(app):
                         for i,frame in enumerate(clip['frames']):
                             frame[0]=round(yaw_state(response['contact_moment_nms'][1],i/clip['fps']-response['start_time'],True)[0],5)
                         response['braced']=True
-                    else:
+                    elif clip.get('head_response',{}).get('model')!='coupled-yaw-through-contact-and-tail':
                         for frame in clip['frames']:frame[0]=round(frame[0]*.65,5)
                 rid=secrets.token_hex(10);r['replay_id']=rid;r['replay_skip']=[]
                 clip.update(id=rid,target=target,attacker=r['turn'],before=before,after=copy.deepcopy(r['players']),
@@ -371,8 +374,11 @@ async def replay(request):
 
 
 def prepare_physics_worker(backend):
-    if backend=='coupled':
-        from coupled_replay import simulate as prepare
+    if backend in ('coupled','coupled-moving'):
+        if backend=='coupled-moving':
+            from moving_head_replay import simulate as prepare
+        else:
+            from coupled_replay import simulate as prepare
         prepare(v3_score(bot_stroke()))
 
 
@@ -383,7 +389,7 @@ async def lifecycle(app):
     global POOL
     backend=app.get('physics_backend','legacy')
     POOL=ProcessPoolExecutor(max_workers=2,initializer=prepare_physics_worker,initargs=(backend,))
-    if backend=='coupled':
+    if backend in ('coupled','coupled-moving'):
         print('Gekoppelte Physik wird vorbereitet ...',flush=True)
         await asyncio.gather(*(asyncio.get_running_loop().run_in_executor(POOL,physics_worker_ready) for _ in range(2)))
     def connection_error(loop,context):
@@ -402,10 +408,13 @@ async def lifecycle(app):
 
 def main():
     global simulate
-    parser=argparse.ArgumentParser();parser.add_argument('--port',type=int,default=8765);parser.add_argument('--no-browser',action='store_true');parser.add_argument('--no-console',action='store_true');parser.add_argument('--physics',choices=['legacy','coupled'],default='coupled');args=parser.parse_args()
-    if args.physics=='coupled':
+    parser=argparse.ArgumentParser();parser.add_argument('--port',type=int,default=8765);parser.add_argument('--no-browser',action='store_true');parser.add_argument('--no-console',action='store_true');parser.add_argument('--physics',choices=['legacy','coupled','coupled-moving'],default='coupled');args=parser.parse_args()
+    if args.physics in ('coupled','coupled-moving'):
         try:
-            from coupled_replay import simulate as coupled_simulate
+            if args.physics=='coupled-moving':
+                from moving_head_replay import simulate as coupled_simulate
+            else:
+                from coupled_replay import simulate as coupled_simulate
         except ModuleNotFoundError as exc:
             raise SystemExit('Host-Abhaengigkeit fehlt: '+str(exc.name)+'. Bitte SETUP_HOST.bat ausfuehren.') from exc
         simulate=coupled_simulate

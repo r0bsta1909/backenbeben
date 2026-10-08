@@ -1,7 +1,7 @@
 """Join a solved contact interval to motor-driven, collision-checked recovery.
 
 The contact path is preserved. Recovery begins with its final joint velocities
-and hand orientation; this is not yet selected by the match host.
+and hand orientation. An optional recorded surface follows a moving head.
 """
 import copy
 import math
@@ -18,7 +18,7 @@ def smooth(value):
     return t*t*t*(10-15*t+6*t*t)
 
 
-def recover(scored,contact):
+def recover(scored,contact,collision_surface=None):
     if not contact.get('attached') or not contact.get('frames'):
         raise ValueError('An attached contact interval is required')
     impact=float(scored['contact_time'])
@@ -59,10 +59,18 @@ def recover(scored,contact):
                 if length<1e-12:axis=orientation[:,2];length=1.
                 orientation=rotation_increment(axis/length*(angle-WRIST_LIMIT))@orientation
             return orientation[:,1],orientation[:,2]
+        surface=collision_surface(elapsed) if collision_surface is not None else None
         def blocked(elbow,wrist):
             if table_collision(elbow,wrist):return True
             f,n=orientation_for(elbow,wrist)
-            points=world_positions({'elbow':elbow,'wrist':wrist},f,n)*4
+            points=world_positions({'elbow':elbow,'wrist':wrist},f,n)
+            if surface is not None:
+                from contact_embedding_compiled import intersections
+                nodes,triangles=surface
+                ids,_,positions,normals=intersections(points,nodes,triangles)
+                valid=ids>=0
+                return bool(np.any(np.sum((points[valid]-positions[valid])*normals[valid],axis=1)<-1e-8))
+            points=points*4
             depths=side_surfaces(points[:,1:],skin_state)
             return bool(np.any(np.isfinite(depths)&(points[:,0]<depths)))
         pose=arm.step(tuple(target),blocked)

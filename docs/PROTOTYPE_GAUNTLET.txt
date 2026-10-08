@@ -515,3 +515,25 @@ NAECHSTER VERBINDLICHER INTEGRATIONSSCHRITT (kein weiterer isolierterBaustein):
   nach integriertem Nachweis Entscheidung zum Defaultpfad. Dieses ist der erste
   Labor-Meilenstein seit letzter Spielintegration, keine unbegrenzteLaborkette.
 Host8877 weiterhin ausV06Paket(Session59351), keinQuellhostNeustart erforderlich.
+
+G4 BEWEGLICHER KOPF IN VOLLSTAENDIGEM SPIELCLIP INTEGRIERT
+moving_head_replay.simulate erhaelt volleEndpositionen/-geschwindigkeiten aller
+Gewebeknoten und HeadAttachment-Zustand. Kontakt UND Auslauf mit demselbenModell.
+LokaleOffsets invertieren exakt den YawBlend des Shaders, keineDoppelrotation.
+Handrueckholung prueft zeitinterpolierte geloesteWeltoberflaeche.337Frames/120Hz.
+Hostoption --physics coupled-moving inkl.Warmup; DEFAULT weitercoupled. Spaetes
+korrektesAnspannen berechnet gesamtenClip mit steiferemHals erneut statt einer
+nachtraeglichenBildskalierung (zusaetzlicheWartezeit, nochzuoptimieren).
+138Tests PASS.15Browseransichten/Proben/Spiegel/Ruecklauf PASS. Siebenvollstaendige
+Treffervarianten: rekonstruierteQuantisierungsoberflaeche gegen324Rueckholposen,
+keineDurchdringung/keinTischkontakt,Wrist<=85Grad. Solve1.76-2.32s imVariantenlauf.
+ErsterLAN-Kampf scheiterte am3sMaterial-Ruecklaufcheck. Diagnosewiederholung mit
+unveraendertenAssertions bestandKO/Anspannen/identischeClips/Resume/Revanche.
+ErsteUrsache bleibtUNGEKLAERT; keineDefaultfreigabe daraus ableiten. Diagnose-
+Aufzeichnung imTest ergaenzt fuer erneutesAuftreten. Belege moving-head-integration,
+moving-head-replay-variants.json und zwei Spielbilder. Dies ist die geforderte
+Spielintegration nach erstemKontaktlabor, keinweiterer isolierterBaustein.
+Offen: Standardduell/Timingursache/Defaultentscheidung; festeTranslation,nurYaw,
+Kieferstilisiert,kalibrierteAnatomie undnumerischeRestfehler. KeineGesamtabnahme.
+Host8877 JETZT Checkout mit --physics coupled-moving,Session37411. V06PaketHost
+beendet; oeffentlichesV06 enthaelt weiterhin vorherigengeprueftenDefaultpfad.

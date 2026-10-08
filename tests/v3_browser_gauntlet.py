@@ -69,7 +69,11 @@ async def main():
                     clip_b=await (await b.request.get(url+'/api/replay/'+sb['replay_id'])).json()
                     assert clip==clip_b
                     report['physics_backend']=clip.get('physics_backend','legacy')
-                    if clip.get('physics_backend')=='coupled':
+                    if '--expect-moving' in sys.argv:
+                        assert clip['physics_backend']=='coupled-moving'
+                        assert clip['head_response']['braced']==clip['braced']
+                        report['moving_head_brace_consistent']=True
+                    if clip.get('physics_backend') in ('coupled','coupled-moving'):
                         assert clip['contact_active'] and clip['normal_impulse_ns']>0
                         assert clip['score_update']['quality']==hit['quality']
                         report['solved_normal_impulse_ns']=clip['normal_impulse_ns']
@@ -98,7 +102,12 @@ async def main():
                     player=health_clip[key][health_clip['target']]
                     expected=[min(1,player['zones'].get(side,0)/75) for side in ['L','R']]+[max(0,min(1,(player['damage']-50)/40))]
                     await a.locator('#replaySeek').evaluate('(e,t)=>{e.value=t;e.dispatchEvent(new Event("input"))}',moment)
-                    await a.wait_for_function('(wanted)=>godotStats.face_injury?.every((v,i)=>Math.abs(v-wanted[i])<1e-5)',arg=expected,timeout=3000)
+                    try:
+                        await a.wait_for_function('(wanted)=>godotStats.face_injury?.every((v,i)=>Math.abs(v-wanted[i])<1e-5)',arg=expected,timeout=3000)
+                    except Exception:
+                        print('INJURY_REWIND_FAILURE',json.dumps({'expected':expected,'moment':moment,'actual':await a.evaluate('({state:JSON.parse(renderState).state,frame:JSON.parse(physicsFrame),stats:godotStats})')}),flush=True)
+                        await a.screenshot(path='logs/injury-rewind-failure.png')
+                        raise
                 report['injury_material_rewind']=True
                 if hit.get('ko'):
                     ko_clip=await (await a.request.get(url+'/api/replay/'+sa['replay_id'])).json()
