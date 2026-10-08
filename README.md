@@ -6,7 +6,7 @@ Der Look orientiert sich an kantiger Comicgrafik und dem ursprünglichen XIII.
 
 ## Aktueller Stand
 
-Der aktuelle [Prototyp 09](https://github.com/r0bsta1909/backenbeben/releases/tag/v0.9.0-dev.20261008)
+Der aktuelle [Prototyp 10](https://github.com/r0bsta1909/backenbeben/releases/tag/v0.10.0-dev.20261008)
 enthält anatomische Arm-/Handmodelle, körpergebundene seitliche Schläge und vom Host
 aufgezeichnete Kontakt-/Gesichtsreplays. Weitere schadensfreie Probeschwünge sind
 wählbar; Verletzungen und geschwollene Augen erscheinen auch im eigenen Spiegel.
@@ -15,7 +15,10 @@ sind mit dem Gewebe gekoppelt. Eine konkretere Mausradhilfe begleitet die Proben
 Schulterform sind überarbeitet. Die tatsächliche Probe lässt sich als Kontaktstandbild
 betrachten; die Dreiviertelansicht zeigt den gesamten Schlagarm. Helfer setzen ihre
 Füße, stützen den Kämpfer und folgen ihm mit dem Blick. Gesichtszeichnung und Hals
-bleiben bei Kopfdrehungen verbunden. Modellierte Stofffalten und Zuschauer ergänzen die Comicfiguren.
+bleiben bei Kopfdrehungen verbunden. Modellierte Stofffalten und Zuschauer ergänzen die Comicfiguren. Der aktuelle Stand
+ergänzt Stofflinien, ruhigere Helferbeleuchtung und sichtbares Anspannen der Augenlider.
+Tangentiale Reibung ist in den Hand-/Gewebekontakt integriert; die Berechnung wurde
+beschleunigt, ohne Replayframes oder Solverprüfungen zu reduzieren.
 
 Standardkampf, KO, Replay-Rücklauf, Wiedereinstieg und Revanche sind mit zwei
 Browserclients geprüft. Das Hostpaket wurde außerhalb des Projekts mit frischer
@@ -74,7 +77,7 @@ Hoststart vorbereitet. Laufzeit und numerische Restfehler sind in den
 
 Für technische Vergleiche bleiben `--physics coupled-spatial` (ohne Reibung),
 `--physics coupled-moving` (nur Yaw), `--physics coupled` (verankerter Kopf)
-und `--physics legacy` verfügbar. Der öffentliche Download Prototyp 09 enthält
+und `--physics legacy` verfügbar. Der öffentliche Download Prototyp 10 enthält
 noch den Stand ohne Reibung.
 Der gezielte Browsercheck
 lautet `python tests/replay_contact_view.py --expect-moving --expect-spatial --inspect-timeout --visual-contact`.
