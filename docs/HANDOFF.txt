@@ -1992,3 +1992,17 @@ Beleg validation/v11-package.json undKontaktbild. ZweiBrowserauf1PC,keine
 physischeZwei-PC-Abnahme. Gesamtstil/menschlicheBedienabnahme weiterOFFEN.
 NaechsterFokusG2/G3: sichtbarenReferenzabstand derFiguren undBedienbarkeit
 imGesamtspiel verbessern. KeineweitereSolver-Laborkette. Goalaktiv.
+
+G2 BRAUENAUSDRUCK UND BARTZEICHNUNG
+Referenz01-character-face mit aktuellemFrontbild verglichen. Brauen innen tiefer
+und wenigergewölbt, weiterhinhautnahgeschlossenesMesh; kurzegefilterteBartstriche
+imRuhekoordinatensystem stattgroberDiagonalschraffur. Lippenzoneausgespart.
+Blenderquelle/GLB/Previewregeneriert. Gesichts-Kollisionsmesh/Handdatenunveraendert.
+ErstrenderzeigteNaN-Schwarzflaechen durchpow(negative,4); absBasis korrigiert,
+neue32Renderueber4Hautfarben/beideSeiten/Verletzung/Reset PASS undgesichtet.
+Assetvalidator/116HandpunktePASS; RestUVmax6.757e-8. WebexportPASS. Voller
+Standard-KO-Browserkampf inklusiveAnspannlid/Replayruecklauf/Resume/Revanche
+PASS,errors[]. Gesunde/verletzte/Anspannansichtgesichtet; Beleg
+validation/brow-stubble-style.json plusdreiBilder. Gesamtstil/MenschabnahmeOFFEN.
+V11Download bleibtunveraendert vor diesemStilschritt. Goalaktiv. NaechsterFokus:
+Gesamteindruck vonBeleuchtung/Hauttoenen gegenReferenz, nichtnurGesichtsdetails.

@@ -47,16 +47,21 @@ void fragment() {
         color*=mix(1.0,ink,paint_mask*.65);
         float injury=skin_position.x<0.0?injury_left:injury_right;
         vec2 q=vec2(abs(skin_position.x),skin_position.y);
-        float beard=(1.0-smoothstep(-.12,.0,q.y))*smoothstep(.05,.22,skin_position.z);
-        // Broad beard tone instead of subpixel random stippling. Ink lines stay
-        // attached to the rest surface and fade below pixel resolution.
-        float hatch_phase=(skin_position.x+skin_position.y*.65)*105.0;
-        float footprint=fwidth(hatch_phase);
-        float hatch=smoothstep(.72,.94,sin(hatch_phase));
-        hatch*=1.0-smoothstep(.7,2.2,footprint);
-        float shadow_ink=1.0-smoothstep(.05,.45,d);
-        color=mix(color,color*vec3(.55,.57,.61),beard*.20);
-        color*=1.0-beard*shadow_ink*hatch*.14;
+        // Rest-space beard silhouette and short ink stubble, following the head.
+        float beard_top=.025-.52*abs(local.x);
+        float beard=(1.0-smoothstep(beard_top-.008,beard_top+.006,local.y))
+            *smoothstep(.018,.055,local.z)*smoothstep(-.10,-.078,local.y);
+        float lip_clear=1.0-exp(-pow(abs(local.x)/.036,4.0)-pow(abs(local.y+.025)/.013,4.0));
+        beard*=lip_clear;
+        vec2 cell=floor(local.xy/.0024);
+        vec2 seed=fract(sin(vec2(dot(cell,vec2(127.1,311.7)),dot(cell,vec2(269.5,183.3))))*43758.5453);
+        vec2 mark=fract(local.xy/.0024)-(.22+.56*seed);
+        mark.x+=mark.y*.25;
+        float mark_distance=length(mark/vec2(.10,.22));
+        float mark_pixel=max(fwidth(mark_distance),.05);
+        float stubble=1.0-smoothstep(1.0-mark_pixel,1.0+mark_pixel,mark_distance);
+        stubble*=1.0-smoothstep(.65,1.4,max(fwidth(local.x),fwidth(local.y))/.0024);
+        color*=1.0-beard*(.075+.28*stubble);
         vec2 bruise_distance=(q-vec2(.27,.15))/.13;
         float patch=exp(-dot(bruise_distance,bruise_distance))*smoothstep(.12,.27,skin_position.z);
         color=mix(color,vec3(.22,.085,.19),patch*smoothstep(.12,.85,injury)*.8);

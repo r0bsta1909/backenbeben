@@ -133,7 +133,7 @@ for sign,suffix in [(-1,'L'),(1,'R')]:
             socket_uv.data[loop.index].uv=(max(0,min(1,.5+(height-ey)/.024)),.5)
         eye_part.data.uv_layers.active_index=0
     # A tapered skin-hugging brow ribbon, not a constant-radius tube.
-    stations=[(.017,.106,.0015),(.022,.108,.0030),(.031,.111,.0031),(.041,.113,.0028),(.051,.110,.0021),(.060,.106,.0010),(.064,.104,.00015)]
+    stations=[(.016,.101,.0020),(.023,.103,.0034),(.032,.106,.0035),(.043,.108,.0030),(.052,.107,.0022),(.060,.104,.0010),(.064,.102,.00015)]
     brow_vertices=[];brow_faces=[]
     rows=[]
     for a,b in zip(stations,stations[1:]):
