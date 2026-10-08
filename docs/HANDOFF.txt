@@ -106,3 +106,9 @@ Replaykontakt ist jetzt direkt erreichbar und nach Handregion eingefärbt.
 Gezielter Browsertest und echtes Spielbild: docs/validation/contact-view.*.
 Die acht Kontaktpunkte bleiben eine explizite Vereinfachung, keine fertige
 flächenbasierte Hand-/Hautkollision. Nächster sinnvoller Physikschwerpunkt.
+
+Kontaktmesh-Audit: drei alte Probes liegen nicht auf der echten Hand.
+114 geometrisch validierte Ersatzpunkte samt Skinninggewicht exportiert.
+Noch nicht in Matchwertung aktiv. Konkreter Integrationsplan und Nachweise:
+docs/HAND_CONTACT_SURFACE.txt. Nächste Aktion: gebündelte seitliche Abfragen
+und Flächengewichtung vorbereiten, anschließend gemeinsam aktivieren.

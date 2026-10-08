@@ -1,0 +1,66 @@
+[
+  {
+    "region": "heel",
+    "u": 0,
+    "v": -0.039,
+    "on_mesh": true,
+    "surface_depth_m": 0.01591,
+    "legacy_depth_m": 0.021
+  },
+  {
+    "region": "palm",
+    "u": -0.018,
+    "v": -0.012,
+    "on_mesh": true,
+    "surface_depth_m": 0.014793,
+    "legacy_depth_m": 0.021
+  },
+  {
+    "region": "palm",
+    "u": 0.018,
+    "v": -0.012,
+    "on_mesh": true,
+    "surface_depth_m": 0.024045,
+    "legacy_depth_m": 0.021
+  },
+  {
+    "region": "palm",
+    "u": 0,
+    "v": 0.013,
+    "on_mesh": true,
+    "surface_depth_m": 0.00352,
+    "legacy_depth_m": 0.021
+  },
+  {
+    "region": "finger",
+    "u": -0.015,
+    "v": 0.083,
+    "on_mesh": true,
+    "surface_depth_m": -0.006968,
+    "legacy_depth_m": 0.021
+  },
+  {
+    "region": "finger",
+    "u": 0.015,
+    "v": 0.08,
+    "on_mesh": false,
+    "surface_depth_m": null,
+    "legacy_depth_m": 0.021
+  },
+  {
+    "region": "tip",
+    "u": -0.015,
+    "v": 0.136,
+    "on_mesh": false,
+    "surface_depth_m": null,
+    "legacy_depth_m": 0.021
+  },
+  {
+    "region": "tip",
+    "u": 0.015,
+    "v": 0.125,
+    "on_mesh": false,
+    "surface_depth_m": null,
+    "legacy_depth_m": 0.021
+  }
+]

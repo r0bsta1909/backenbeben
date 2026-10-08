@@ -1,0 +1,39 @@
+HAND CONTACT SURFACE — Kandidat, noch nicht in der Matchwertung
+
+Die acht bisherigen Platzhalter wurden gegen ArmSkin.R in der aktuellen
+character-v3.blend vermessen. Drei Finger-/Spitzenpunkte treffen kein Dreieck.
+Andere verwenden pauschal 21 mm Tiefe, obwohl die reale Oberfläche dort
+zwischen etwa -7 und +24 mm liegt. Diese Abweichung widerspricht dem Ziel,
+dass die sichtbare Hand den bewerteten Kontakt erklärt.
+Nachweis: docs/validation/legacy-hand-contact-audit.json.
+
+scripts/export_hand_contact_surface.py exportiert 114 Punkte mit 9-mm-Raster
+auf der tatsächlichen palmarseitigen Oberfläche. Jeder Punkt trägt Tiefe,
+Region, projizierte Rasterfläche und interpoliertes Hand-Knochengewicht.
+Daumendominierte Punkte werden ausgeschlossen. Die Regionen umfassen
+11 Handballen-, 42 Handflächen-, 53 Finger- und 8 Spitzenpunkte.
+Das Raster ist weiterhin eine diskrete Annäherung, keine kontinuierliche
+Dreieck-gegen-Dreieck-Kollision oder vollständig verformbare Hand.
+
+Der Assetgenerator ruft den Export künftig mit auf. Die bestehende Blender-
+Quelle wurde mit dem Export separat geprüft: alle Punkte liegen innerhalb
+1 Mikrometer auf der expliziten Blender-Triangulierung. Die Triangulierung
+muss explizit bleiben; eine abweichende Quad-Diagonale ist keine gleiche Fläche.
+server/hand_surface.py rekonstruiert die Punkte mit gemischter Hand-/Unterarm-
+Transformation wie das Skinning. Finger bleiben relativ zur Hand in Ruhepose.
+Zwei neue Tests prüfen Restrekonstruktion und endliche körpergebundene Punkte
+bei extremen Winkeln. Vollständiger Vergleich mit gerenderten gebeugten
+Dreiecken bleibt für die Integration erforderlich.
+
+Nächste Schritte in Reihenfolge:
+1. Seitliche Oberflächenabfragen für 114 Punkte effizient bündeln.
+2. Kontaktgewichtung über projizierte Fläche statt bisher palm_count / 3.
+3. Sauber/Finger/Handballen anhand realer geometrischer Fälle neu prüfen;
+   alte Platzhalter-Treffer nicht als unveränderliches Soll erzwingen.
+4. Livepose, Wertung und Replay gemeinsam auf dieselbe Oberfläche umstellen.
+5. Replaymarkierungen auf die tatsächliche Kontaktmenge erweitern und am
+   sichtbaren Handmesh prüfen, inklusive Handgelenkblend.
+6. LAN- und Leistungsprüfung; erst danach neuen Kontaktstand freigeben.
+
+Aktuell bleibt contact_v3.py unverändert bei acht Punkten. Der neue Datensatz
+und Transformationshelfer sind absichtlich noch kein aktiver Gameplaywechsel.

@@ -376,6 +376,9 @@ fv=[[v*4 for v in G(p.co)] for p in face.data.vertices]
 face.data.calc_loop_triangles()
 (OUT/'face_v3_collision.json').write_text(json.dumps({'vertices':fv,'triangles':[list(t.vertices) for t in face.data.loop_triangles]},separators=(',',':')),encoding='utf-8')
 
+import runpy
+runpy.run_path(str(ROOT/'scripts/export_hand_contact_surface.py'),run_name='__main__')
+
 # Source preview with actual geometry; no image-generated render substitution.
 scene=bpy.context.scene;scene.render.engine='CYCLES';scene.cycles.samples=32
 scene.world.color=(.18,.18,.18)

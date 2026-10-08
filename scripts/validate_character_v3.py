@@ -28,4 +28,23 @@ face=bpy.data.objects['Face']
 assert face.data.materials[0].name=='FaceSkin'
 images=[n.image for n in face.data.materials[0].node_tree.nodes if n.type=='TEX_IMAGE']
 assert images and images[0].packed_file, 'Source must embed the generated face texture'
+# Contact samples must lie on the actual source skin, not in finger gaps.
+import json
+from pathlib import Path
+from mathutils import Vector
+from mathutils.bvhtree import BVHTree
+root=Path(__file__).resolve().parents[1]
+contact=json.loads((root/'game/assets/hand_contact_surface_v3.json').read_text())
+arm=bpy.data.objects['ArmSkin.R']
+vertices=[Vector((v.co.x,v.co.z,-v.co.y)) for v in arm.data.vertices]
+arm.data.calc_loop_triangles()
+bvh=BVHTree.FromPolygons(vertices,[tuple(t.vertices) for t in arm.data.loop_triangles],all_triangles=True)
+basis={k:Vector(v) for k,v in contact['basis'].items()}
+assert len(contact['samples'])>40
+for sample in contact['samples']:
+ u,a,d=sample['local'];point=basis['wrist']+basis['width']*u+basis['finger']*a+basis['normal']*d
+ hit,normal,index,distance=bvh.find_nearest(point)
+ assert distance<.000001, ('off-surface contact',sample,distance)
+ assert 0<=sample['hand_weight']<=1
+print('CONTACT_SURFACE_VALIDATION_PASS',len(contact['samples']))
 print('CHARACTER_ASSET_VALIDATION_PASS')
