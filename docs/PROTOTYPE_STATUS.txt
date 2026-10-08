@@ -504,3 +504,19 @@ CPU-Optimierung auf Verdacht wird zugunsten des Gesamtprodukts zurueckgestellt.
 Goal aktiv. Naechster Schritt: aktuelles zusammenhaengendes Paket mit Stil-,
 Probe-, Bereitmachen- und Renderkorrekturen bauen/frisch pruefen. V11 liegt
 vor diesen Aenderungen. Menschliche Bedien-/Stilabnahme bleibt eigenstaendig offen.
+
+G7/G8 PROTOTYP12 VERÖFFENTLICHT UND FRISCH GEPRUEFT
+Release v0.12.0-dev.20261008, Quelle b9c4399c2a7cd9417926fede654053046f020f38.
+68Dateien/23884159Bytes, SHA256
+6db77eee8210a8aeeda65dc18e72ef79b5e4ba3c2815d1c98135eff43c96ea86.
+Frische .venv ausserhalb Checkout, mitgeliefertes Setup und START_HOST.bat8880.
+Echte Probe: automatische Seitenansicht, Mausradkorrektur, Originalhaltung,
+Vorbereitung mit Rigabgleich, weitere schadensfreie Probe PASS.
+Vollstaendiger Standardkampf5Treffer bisKO/Anspannen/Replayruecklauf/Resume/
+Revanche PASS, Browserfehler leer. GitHub-Downloadhash und alle68Dateien exakt
+gegen getestete Installation abgeglichen. Beleg validation/v12-package.json/png.
+Paket umfasst aktuelle Brauen/Bart/Farben/Licht, automatische Probe, Vorbereitung,
+Texturwiederverwendung und gezielte Spiegelaktualisierung. Profiling standardmaessig aus.
+Gesamtstil/menschliche Verstaendlichkeit/physischer Zwei-PC-Test bleiben offen.
+Goal aktiv. Naechster Schwerpunkt: aktuellen Gesamtstand erneut markerfrei gegen
+Referenzen pruefen und groesste sichtbare Figuren-/Bewegungsluecke bearbeiten.
