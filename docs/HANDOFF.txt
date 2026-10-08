@@ -1583,3 +1583,12 @@ empfiehltBeibehalten;ohneVerbesserungSeitenansichtstattgeratenerRichtung.
 BrowsergegenHostmitaufgezeichnetenProbedaten:beideHinweisesichtbar,keinSchaden,
 errors[].1366x768Bildgesichtet. Beleg validation/practice-advice.json/png.
 MenschlicheAbnahmebleibtoffen. Host8877aktuellerDefault,Session82509.
+
+G3 ECHTER MAUS-KORREKTURABLAUF
+NeueBrowserpruefungpractice_wheel_correction.py verwendetechteMauszuegeund
+Mausradevents stattgesendeterfertigerPunkte. -21Grad:Tips,Hintnachunten;
+-18Grad:Glance,erneuterHintnachunten;-15Grad:Flat. JeweilsNochEinmalUeben,
+keinSchaden,errors[]. ErsteTestannahme(eineRastunggleichFlat)wardurchrealen
+Ablaufwiderlegt;HinweisversprichtnurVerbesserung,Testprueftnunmehrstufigen
+Lernablauf. Beleg validation/practice-wheel-correction.json/png.
+DiesbelegttechnischeKorrigierbarkeit,nichtmenschlicheVerstaendlichkeitsabnahme.
