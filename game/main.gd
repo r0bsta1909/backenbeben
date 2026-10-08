@@ -300,7 +300,8 @@ func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 				var shape := str(node.mesh.get_blend_shape_name(i))
 				var amount := 0.0
 				if shape=="grin" and emote_active:amount=.8
-				if shape=="blink":amount=1.0 if physics_frame.get("ko",false) and float(physics_frame.get("time",0))>.65 else clampf((sin(clock_time*1.1)-.99)*100,0,1)
+				# The contact driver owns lids, including paused replay frames.
+				if shape=="blink":continue
 				if shape=="swelling": amount=ratio
 				if shape=="jaw_broken": amount=clampf((damage-50)/40,0,1)
 				if shape=="cheek_hit_L" and data.get("side","L")=="L": amount=impact if is_enemy else 0
@@ -356,7 +357,7 @@ func _process(delta: float) -> void:
 			JavaScriptBridge.eval("window.contactSound=false")
 		mirror_focus=bool(JavaScriptBridge.eval("window.mirrorFocus || false",true))
 		AudioServer.set_bus_mute(0,bool(JavaScriptBridge.eval("window.muted || false",true)))
-		JavaScriptBridge.eval("window.godotStats="+JSON.stringify({"msaa_3d":get_viewport().msaa_3d,"fps":Engine.get_frames_per_second(),"face_head_offset":head_offset_state(fighter),"face_head_rotation":head_offset_state(fighter,"head_rotation"),"face_injury":injury_material_state(fighter),"mirror_injury":injury_material_state(reflection),"arm_data":hand_pose.has("arm"),"rendered_arm":hand.arm_world_joints(),"hand_wrist":str(hand.skeleton.get_bone_global_pose(hand.skeleton.find_bone("hand.R")).origin),"dragging":dragging,"samples":gesture.size(),"physics_time":physics_frame.get("time",-1),"physics_active":physics_frame.has("id"),"crowd_active":arena_stage.crowd_was_active,"camera_position":[camera.position.x,camera.position.y,camera.position.z],"mirror_draw_requests":mirror_draw_requests,"physics_material_updates":physics_material_updates,"muted":AudioServer.is_bus_mute(0)}))
+		JavaScriptBridge.eval("window.godotStats="+JSON.stringify({"face_eye_closure":fighter.face_mesh.get_blend_shape_value(fighter.blink_index),"msaa_3d":get_viewport().msaa_3d,"fps":Engine.get_frames_per_second(),"face_head_offset":head_offset_state(fighter),"face_head_rotation":head_offset_state(fighter,"head_rotation"),"face_injury":injury_material_state(fighter),"mirror_injury":injury_material_state(reflection),"arm_data":hand_pose.has("arm"),"rendered_arm":hand.arm_world_joints(),"hand_wrist":str(hand.skeleton.get_bone_global_pose(hand.skeleton.find_bone("hand.R")).origin),"dragging":dragging,"samples":gesture.size(),"physics_time":physics_frame.get("time",-1),"physics_active":physics_frame.has("id"),"crowd_active":arena_stage.crowd_was_active,"camera_position":[camera.position.x,camera.position.y,camera.position.z],"mirror_draw_requests":mirror_draw_requests,"physics_material_updates":physics_material_updates,"muted":AudioServer.is_bus_mute(0)}))
 	if appearance_timer>=.08:
 		appearance_timer=0
 		if state.has("players") and state.players.size()>1:
@@ -454,9 +455,14 @@ func drive_recorded_physics() -> void:
 	for root in [fighter,reflection]:
 		var affected: bool = active and (replaying if root==fighter else false)
 		if not replaying:affected=active and ((root==fighter and int(physics_frame.target)!=you) or (root==reflection and int(physics_frame.target)==you))
-		var eye_closure := 0.0
+		var eye_closure := 0.0 if active else clampf((sin(clock_time*1.1)-.99)*100,0,1)
+		var defending: bool = (root==fighter and int(state.get("turn",you))==you) or (root==reflection and int(state.get("turn",you))!=you)
+		if not active and defending and state.get("phase","") in ["windup","resolving"] and state.get("brace_result","")=="ready":
+			eye_closure=.35
+		if affected and bool(physics_frame.get("braced",false)):
+			eye_closure=.35*(1.0-smoothstep(.5,.85,float(physics_frame.get("time",0.0))))
 		if affected and bool(physics_frame.get("ko",false)):
-			eye_closure=smoothstep(.62,.82,float(physics_frame.get("time",0.0)))
+			eye_closure=maxf(eye_closure,smoothstep(.62,.82,float(physics_frame.get("time",0.0))))
 		root.set_eye_closure(eye_closure)
 		if active:root.rotation=Vector3.ZERO;root.position.y=0
 		for m in (physics_materials.get(root.get_instance_id(),[]) if physics_changed else []):

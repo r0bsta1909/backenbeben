@@ -123,3 +123,16 @@ kompletter KO-Browserkampf mit Replay/Resume/Revanche bestanden, errors[].
 Beleg validation/bout-light.json sowie Kontakt-/KO-Bilder. Keine Gesamtstil-
 oder menschliche Bedienabnahme. V09-Paket bleibt Stand vor dieser Lichtkorrektur.
 Goal weiter aktiv. CheckoutHost8877 Session18596; PaketHost8880 Session18599.
+
+G3 BESTAETIGTES ANSPANNEN AM GESICHT
+Vorhandene Empfaengerpose bereits hinterRuecken; keine doppelte Pose eingebaut.
+Bestaetigtes brace_result=ready verengt Lider leicht(.35), falscher/frueherVersuch
+nicht. Rollen fuer Gegner und eigenenSpiegel getrennt; Replay uebernimmt clip.braced,
+entspannt .5-.85s, KO hatVorrang. Gesichtsappearance konnte zuvor pausierteLider
+ueberschreiben: Blinksteuerung jetzt allein im Kontakt-/Idle-Treiber.
+NativerSzenentest: beideRollen,early/ready,Phasenreset,Ruecklauf,KO und Appearance-
+Refresh bestanden. EchterLAN-KO-Kampf finalBuild bestanden; Browser misst .35
+auch nach350msPause,Clipflag korrekt,Resume/Verletzungsruecklauf/Revanche,errors[].
+Spielbild bei.4s gesichtet: leichtverengte,weiteroffeneAugen. Beleg validation/
+brace-expression.json/png. KeineMuskelphysik odermenschlicheAbnahme behauptet.
+V09-Paket bleibt vor Licht-/Lidkorrektur. Goalaktiv; Checkout8877Session18596.

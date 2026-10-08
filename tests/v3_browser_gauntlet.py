@@ -87,6 +87,13 @@ async def main():
                     assert clip['version']==3 and len(clip['arm_path'])>100
                     report['recorded_arm_frames']=len(clip['arm_path'])
                     report['clip_hash']=hashlib.sha256(json.dumps(clip,sort_keys=True).encode()).hexdigest()
+                    if '--expect-brace-expression' in sys.argv:
+                        await a.locator('#replaySeek').evaluate('(e)=>{e.value=.4;e.dispatchEvent(new Event("input",{bubbles:true}))}')
+                        await a.wait_for_function('JSON.parse(physicsFrame).braced && Math.abs(godotStats.face_eye_closure-.35)<.00001')
+                        await a.wait_for_timeout(350)
+                        assert abs(await a.evaluate('godotStats.face_eye_closure')-.35)<.00001
+                        await a.screenshot(path='logs/brace-expression-contact.png')
+                        report['brace_expression_stable_in_paused_replay']=True
                     peak_i=max(range(len(clip['frames'])),key=lambda i:max(abs(v) for v in clip['frames'][i][2:]))
                     peak_t=peak_i/120
                     await a.locator('#replaySeek').evaluate('(e,t)=>{e.value=t;e.dispatchEvent(new Event("input",{bubbles:true}))}',peak_t)
