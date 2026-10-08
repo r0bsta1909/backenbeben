@@ -879,3 +879,12 @@ Revanche PASS,errors[]. Replayp95=20.8ms bei1920x1080, hardwareabhaengig und kei
 Nachweis fuer zwei physische PCs. Belege validation/crowd-assets.json und
 crowd-contact.png. Gesamt-Artabnahme/Bedienabnahme/volle Physik weiterhin offen.
 Host8877 weiter aus Checkout. Oeffentliches v0.5-Paket ist aelterer Stand.
+
+G2/G6 HELFER-RUHEPOSE KORRIGIERT
+Seitlich abgespreizte Ellbogen und nachvorn gerichtete Handflaechen durch
+koerpernahe leichtgebeugte Arme mit Handflaechen zumKoerper ersetzt. Ellbogenpole
+folgt gebeugtemBrustkorb und interpoliert zurAuffangpose. NativePruefung:
+Schulteranbindung,seitlicherEllbogenabstand,stetigerUebergang,Ruecklauf PASS.
+Webexport und15Kontaktansichten PASS,errors[]. Frontbild gesichtet: seitliche
+EllbogenSilhouette korrigiert. Beleg validation/helper-rest-pose.json/png.
+Keine vollstaendige Helferanimation oderArtabnahme; Goalweiteraktiv.

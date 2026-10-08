@@ -172,19 +172,24 @@ func reach_toward(world_target: Vector3, side: String, amount: float, world_norm
 	# skeleton-global, so their origins must follow that same body transform.
 	var shoulder := collapsed_point(vector(upper.head))
 	var side_sign := 1.0 if side=="L" else -1.0
-	var resting_wrist := Vector3(side_sign*.27,-.62,.035)
+	var resting_wrist := Vector3(side_sign*.29,-.685,.06)
 	var wrist := collapsed_point(resting_wrist).lerp(to_local(world_target),amount)
 	var delta := wrist-shoulder
 	var a: float=metadata.arms[side].upper_length
 	var b: float=metadata.arms[side].forearm_length
 	var reach := clampf(delta.length(),absf(a-b)+.001,a+b-.001)
 	var axis := delta.normalized();wrist=shoulder+axis*reach
-	var pole := Vector3(1 if side=="L" else -1,-.4,.2)
+	var rest_pole := Vector3(side_sign*.12,-.1,1.0)
+	var catch_pole := Vector3(side_sign,-.4,.2)
+	var pole := rest_pole.lerp(catch_pole,amount)
+	pole=(collapsed_point(vector(upper.head)+pole)-shoulder).normalized()
 	pole=(pole-axis*pole.dot(axis)).normalized()
 	var along := (a*a-b*b+reach*reach)/(2*reach)
 	var elbow := shoulder+axis*along+pole*sqrt(maxf(0,a*a-along*along))
 	orient_bone("upper_arm."+side,shoulder,elbow)
-	var normal := (global_basis.inverse()*world_normal).normalized()
+	var resting_normal := Vector3(-side_sign,0,.15).normalized()
+	resting_normal=(collapsed_point(resting_wrist+resting_normal)-collapsed_point(resting_wrist)).normalized()
+	var normal := resting_normal.slerp((global_basis.inverse()*world_normal).normalized(),amount)
 	orient_surface("forearm."+side,elbow,elbow.lerp(wrist,.5),normal)
 	orient_surface("forearm_twist."+side,elbow.lerp(wrist,.5),wrist,normal)
 	var finger_direction := Vector3.DOWN.rotated(Vector3.RIGHT,PI*amount)

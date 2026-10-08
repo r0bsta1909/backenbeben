@@ -1448,3 +1448,12 @@ Oberflaechen weiterhin hinterReferenz. KeineArt-/Bedienabnahme behauptet.
 Host8877 aktuellerCheckoutDefault,Session11116. V06PaketweiterhistorischerStand.
 Naechste Arbeit: sichtbare Figuren-/Helferbewegung und verstaendliche Bedienfuehrung
 im Gesamtspiel verbessern; Gesamtabnahme und Zwei-PC-Nachweis bleiben offen.
+
+G2/G6 HELFER-RUHEPOSE KORRIGIERT
+Seitlich abgespreizte Ellbogen und nachvorn gerichtete Handflaechen durch
+koerpernahe leichtgebeugte Arme mit Handflaechen zumKoerper ersetzt. Ellbogenpole
+folgt gebeugtemBrustkorb und interpoliert zurAuffangpose. NativePruefung:
+Schulteranbindung,seitlicherEllbogenabstand,stetigerUebergang,Ruecklauf PASS.
+Webexport und15Kontaktansichten PASS,errors[]. Frontbild gesichtet: seitliche
+EllbogenSilhouette korrigiert. Beleg validation/helper-rest-pose.json/png.
+Keine vollstaendige Helferanimation oderArtabnahme; Goalweiteraktiv.

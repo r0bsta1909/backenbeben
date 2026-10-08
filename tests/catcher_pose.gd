@@ -28,6 +28,9 @@ func verify() -> void:
 		var wrist_index=actor.skeleton.find_bone("hand."+side)
 		var idle=actor.skeleton.get_bone_global_pose_override(wrist_index).origin
 		var shoulder=actor.skeleton.get_bone_global_pose_override(actor.skeleton.find_bone("upper_arm."+side)).origin
+		var elbow=actor.skeleton.get_bone_global_pose_override(actor.skeleton.find_bone("forearm."+side)).origin
+		if abs(elbow.x-shoulder.x)>.08:
+			push_error("Resting helper elbow flares away from torso");quit(1);return
 		if idle.y>shoulder.y-.30:
 			push_error("Official idle arm is not lowered");quit(1);return
 		actor.reach_toward(Vector3(.72,-1.8,-.25),side,.0001)

@@ -1,0 +1,38 @@
+{
+  "change": "Body-close helper resting arms, inward palms, continuous transition to catch",
+  "native_catcher_pose": "PASS: chest attachment, lateral elbow bound, transition continuity, rewind",
+  "browser": {
+    "repeat_practice_without_damage": true,
+    "idle_material_uploads_skipped": true,
+    "mirror_visibility_updates": true,
+    "pose_camera_and_wheel": true,
+    "crowd_reaction_and_rewind": true,
+    "jump_to_contact": true,
+    "side_camera": true,
+    "marker_toggle": true,
+    "no_stale_markers": true,
+    "errors": [],
+    "inspection_survives_original_deadline": false,
+    "coupled": {
+      "backend": "coupled-moving",
+      "solve_ms": 2504.7,
+      "peak": 0.051935999999999996,
+      "contact_diagnostics": {
+        "maximum_wrist_separation_m": 1.4457265987154598e-05,
+        "maximum_penetration_m": 9.559824964931755e-06,
+        "unconverged_steps": 13,
+        "maximum_material_residual_m": 0.0003380623651935391
+      },
+      "head_response": {
+        "model": "coupled-yaw-through-contact-and-tail",
+        "braced": false,
+        "tail_pin_error_m": 7.25295068612175e-08,
+        "translation": true,
+        "parameters": "prototype tuning, three translations and yaw; pitch/roll fixed"
+      },
+      "maximum_head_yaw_rad": 0.09647
+    }
+  },
+  "views": 15,
+  "visual_review": "Elbows no longer flare laterally; reference art and full helper reaction animation still open"
+}
