@@ -6,10 +6,12 @@ Der Look orientiert sich an kantiger Comicgrafik und dem ursprünglichen XIII.
 
 ## Aktueller Stand
 
-Der aktuelle [Prototyp 05](https://github.com/r0bsta1909/backenbeben/releases/tag/v0.5.0-dev.20261008)
+Der aktuelle [Prototyp 06](https://github.com/r0bsta1909/backenbeben/releases/tag/v0.6.0-dev.20261008)
 enthält anatomische Arm-/Handmodelle, körpergebundene seitliche Schläge und vom Host
 aufgezeichnete Kontakt-/Gesichtsreplays. Weitere schadensfreie Probeschwünge sind
 wählbar; Verletzungen und geschwollene Augen erscheinen auch im eigenen Spiegel.
+Der Kontaktimpuls steuert die Wirkung, der gemessene Drehimpuls die vereinfachte
+Kopfantwort. Modellierte Stofffalten und Zuschauer ergänzen die Comicfiguren.
 
 Standardkampf, KO, Replay-Rücklauf, Wiedereinstieg und Revanche sind mit zwei
 Browserclients geprüft. Das Hostpaket wurde außerhalb des Projekts mit frischer
@@ -23,7 +25,7 @@ Kopf/Kiefer, Wertung und KO verwenden teilweise vereinfachte Modelle. Der
 [verbindliche Gauntlet](docs/PROTOTYPE_GAUNTLET.txt) nennen die offenen Anforderungen.
 Die [Konzeptbilder](docs/art-direction-v3/03-first-person.png) bleiben das Stilziel.
 
-![Seitlicher Kontakt im aktuellen Browserprototyp](docs/validation/face-hair-side.png)
+![Seitlicher Kontakt im aktuellen Browserprototyp](docs/validation/official-composition-wide.png)
 
 ## Spielen unter Windows
 
@@ -84,5 +86,5 @@ Oberflächenpunkte. [Geometrieprüfung, Integration und Grenzen](docs/HAND_CONTA
 Die aktuelle Quellversion koppelt die Wirkungsstaerke an den vom Kontaktsolver
 berechneten Normalimpuls. Flaechenabdeckung und Foulregeln bleiben Teil der
 Spielwertung. Die Umrechnung (2 N·s fuer volle Impulsstaerke) ist Spielbalance,
-keine medizinische Verletzungsschwelle. Das v0.5-Paket verwendet noch die vorige
-Wertungsformel; die neue Integration wird vor einem weiteren Paket geprueft.
+keine medizinische Verletzungsschwelle. Das v0.6-Paket enthält diese Integration einschließlich der vereinfachten
+Kopfantwort aus dem Kontaktdrehimpuls.
