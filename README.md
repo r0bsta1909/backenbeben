@@ -6,25 +6,24 @@ Der Look orientiert sich an kantiger Comicgrafik und dem ursprünglichen XIII.
 
 ## Aktueller Stand
 
-Prototyp 03 integriert eine neue vollständige 3D-Figur und einen körpergebundenen,
-serverseitig angetriebenen Arm. Mausziehen bewegt einen erreichbaren Schwungbogen;
-das Mausrad kippt die Handfläche. Meshkontakt, Gesichtsverformung und Replay teilen
-aufgezeichnete Zustände. Training, LAN-Duell, Anspannen, Emotes und Balancing bleiben erhalten.
+Der aktuelle [Prototyp 05](https://github.com/r0bsta1909/backenbeben/releases/tag/v0.5.0-dev.20261008)
+enthält anatomische Arm-/Handmodelle, körpergebundene seitliche Schläge und vom Host
+aufgezeichnete Kontakt-/Gesichtsreplays. Weitere schadensfreie Probeschwünge sind
+wählbar; Verletzungen und geschwollene Augen erscheinen auch im eigenen Spiegel.
 
-**V3 ist im Nutzertest durchgefallen: Handkontakt zu frontal, Steuerung unverständlich, Grafik weit vom Stilziel entfernt. Dieser Stand ist ein verworfener Zwischenstand, kein fertiges Release. Die Überarbeitung läuft.**
-Der frühere Prototyp 02 bleibt als Release v0.2.0 erhalten. Der
-[Asset-Gauntlet V3](docs/ASSET_GAUNTLET_V3.txt) und der
-[Implementierungsstand mit Grenzen](docs/V3_IMPLEMENTATION.txt) unterscheiden technische
-Tests von Spielgefühlsfreigabe. Die [Konzeptbilder](docs/art-direction-v3/03-first-person.png)
-zeigen weiterhin das gestalterische Ziel.
+Standardkampf, KO, Replay-Rücklauf, Wiedereinstieg und Revanche sind mit zwei
+Browserclients geprüft. Das Hostpaket wurde außerhalb des Projekts mit frischer
+Python-Umgebung getestet und der GitHub-Download per SHA256 abgeglichen.
+Zwei Browserclients auf einem PC ersetzen keinen Test auf zwei physischen PCs.
 
-Der laufende seitliche Umbau ergänzt anatomische Kopf-/Arm-/Handtopologie,
-eine explizite Handflächenorientierung, gleichsinnige Maussteuerung,
-gedämpfte Brustkorbdrehung, TV-Bühne und einen gespeicherten K.-o.-Körpertrack.
-[Recherche, Gauntlet und offene Grenzen](docs/LATERAL_REWORK.txt).
-Dieser Zwischenstand ist weiterhin keine Stil- oder Spielgefühlsfreigabe.
+**Experimenteller Stand, keine fertige Stil- oder Spielgefühlsabnahme.** Die letzte
+menschliche Rückmeldung war „weiterhin unverständlich“; eine neue Abnahme steht aus.
+Kopf/Kiefer, Wertung und KO verwenden teilweise vereinfachte Modelle. Der
+[aktuelle Abnahmestand](docs/PROTOTYPE_STATUS.txt) und der
+[verbindliche Gauntlet](docs/PROTOTYPE_GAUNTLET.txt) nennen die offenen Anforderungen.
+Die [Konzeptbilder](docs/art-direction-v3/03-first-person.png) bleiben das Stilziel.
 
-![Seitlicher Umbau im Browser, Zwischenstand](docs/validation/lateral-contact-ego.png)
+![Seitlicher Kontakt im aktuellen Browserprototyp](docs/validation/face-hair-side.png)
 
 ## Spielen unter Windows
 

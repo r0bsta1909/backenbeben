@@ -15,5 +15,29 @@
     "rematch": true,
     "leave": true
   },
-  "scope": "Two browser contexts on one physical PC over LAN HTTP. Full standard duel previously checked from same gameplay source; this independent package run used accelerated KO balance."
+  "scope": "Two browser contexts on one physical PC over LAN HTTP. Full standard duel previously checked from same gameplay source; this independent package run used accelerated KO balance.",
+  "download_hash_verified": true,
+  "downloaded_package_replay": {
+    "repeat_practice_without_damage": true,
+    "idle_material_uploads_skipped": true,
+    "mirror_visibility_updates": true,
+    "pose_camera_and_wheel": true,
+    "crowd_reaction_and_rewind": true,
+    "jump_to_contact": true,
+    "side_camera": true,
+    "marker_toggle": true,
+    "no_stale_markers": true,
+    "errors": [],
+    "coupled": {
+      "backend": "coupled",
+      "solve_ms": 1317.8,
+      "peak": 0.005252,
+      "contact_diagnostics": {
+        "maximum_wrist_separation_m": 6.941249122316682e-06,
+        "maximum_penetration_m": 2.4024716765574138e-06,
+        "unconverged_steps": 14,
+        "maximum_material_residual_m": 0.00014389438260217595
+      }
+    }
+  }
 }

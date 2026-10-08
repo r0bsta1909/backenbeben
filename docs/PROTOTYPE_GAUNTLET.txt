@@ -382,3 +382,15 @@ validation/injury-full-duels.json. Zwei Browserkontexte auf einem PC, keine
 Zwei-PC-Abnahme. Neue Uebersicht PROTOTYPE_STATUS.txt trennt Liefergegenstaende,
 Belege und offene Arbeit. Neue menschliche Verstaendlichkeitsfrage gestellt;
 Antwort noch ausstehend, frueheren negativen Befund nicht als bestanden ersetzen.
+
+G8 AKTUELLES V0.5-PAKET VEROEFFENTLICHT UND HERUNTERGELADEN
+Aktuelle Assets/Probe/Verletzungen/Materialdiagnostik als v0.5.0-dev.20261008
+veroeffentlicht. Frisches Temp-Verzeichnis/eigenevenv, Requirementsinstall und
+START_HOST ohne Physics-Override. Zwei LAN-Browser: KO3Treffer, identischeClips,
+Verletzungsruecklauf, Resume, KO-Ruecklauf und unverletzte Revanche bestanden.
+DownloadSHA256=5115dbd4ff5ee1c2d4a877f98a8e2602e9a67d392b58ff06f62254af159b0f66,
+21023842Bytes. Download entpackt, alle Dateien bytegleich, weiterer Browsercheck
+inkl.zusaetzlicherProbe/Spiegel/Replay PASS,errors[]. Beleg validation/v05-package.json.
+Host8877 laeuft JETZT AUS PAKET in Temp/backenbeben-v05-8yoq704w, Session91026;
+Entwicklungshost beendet. Vor Quellcode-Spieltests wieder Checkoutserver starten.
+Oeffentliche README und PROTOTYPE_STATUS aktuell; keine Gesamtabnahme behauptet.
