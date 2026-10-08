@@ -29,3 +29,14 @@ def project_contact(hand, nodes, inverse_hand_mass, inverse_node_masses,
     h+=inverse_hand_mass*delta*n
     p-=((w*a)*delta)[:,None]*n
     return h,p,updated
+
+def project_attachment(hand,arm,inverse_hand_mass,inverse_arm_mass,rest_offset,dt,compliance,multiplier):
+    """Compliant vector attachment; equal/opposite mass-weighted corrections."""
+    h=np.array(hand,dtype=float,copy=True);a=np.array(arm,dtype=float,copy=True)
+    offset=np.asarray(rest_offset,dtype=float);lam=np.asarray(multiplier,dtype=float)
+    if any(x.shape!=(3,) or not np.isfinite(x).all() for x in [h,a,offset,lam]):raise ValueError('Invalid attachment vector')
+    if not np.isfinite([inverse_hand_mass,inverse_arm_mass,dt,compliance]).all() or dt<=0 or min(inverse_hand_mass,inverse_arm_mass,compliance)<0:raise ValueError('Invalid attachment parameters')
+    alpha=compliance/(dt*dt);weight=inverse_hand_mass+inverse_arm_mass
+    if weight==0:return h,a,np.zeros(3)
+    delta=(-(h-a-offset)-alpha*lam)/(weight+alpha)
+    return h+inverse_hand_mass*delta,a-inverse_arm_mass*delta,lam+delta

@@ -202,3 +202,8 @@ Optionaler Numba-Materialkern implementiert (requirements-lab.txt). Vergleich
 inklusive aller Knoten/Multiplikatoren bestanden. Warm 422 ms statt 1993 ms
 im 0.03-s-Lauf; Kaltkompilierung rund 6.9 s. Fuenf Gewebetests bestanden.
 Noch nicht im Spiel aktiv; Details in COUPLED_CONTACT_PLAN.txt.
+
+Laborkopplung um nachgiebige Verbindung Hand/Armproxy erweitert. Reaktion
+wirkt auf beide Massen, Ruhezustand exakt. Elf gezielte Tests bestanden.
+Noch kein Anschluss an Gelenkarm; Flaechenkontakt und Gelenkrueckwirkung
+sind die naechsten Schritte. Siehe COUPLED_CONTACT_PLAN.txt.

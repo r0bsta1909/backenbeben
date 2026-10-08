@@ -166,3 +166,20 @@ Ohne optionales Numba wird nur dieser Kompiliertest explizit uebersprungen.
 Nachweis: validation/compiled-contact.json. Noch keine Matchintegration.
 Naechste Aufgabe: Profil des warmen Gesamtloops, danach Arm-Hand-Feder und
 mehrpunktiger Kontakt; Kaltstart und Paketabhaengigkeiten vor Freigabe loesen.
+
+NACHGIEBIGE ARM-HAND-VERBINDUNG IM LABOR
+project_attachment verbindet zwei bewegliche Punkte mit einer vektoriellen
+XPBD-Feder; beide erhalten entgegengesetzte massengewichtete Korrekturen.
+Adaptive Konvergenz prueft nun zusaetzlich das Federresiduum nach dem Kontakt.
+Laboroption attachment=True: 180-g-Handpunkt, 1.8-kg-Armproxy, Nachgiebigkeit
+3e-4 m/N. Ausschliesslich Testparameter; keine anatomische Kalibrierung und
+noch keine Kopplung an Schulter/Ellbogen oder Handgelenkrotation.
+1920 Hz, 0.15 s, 1 m/s: maximaler Hand-Arm-Abstand 20.9 mm; Arm kehrt von
+-1 m/s auf +0.968 m/s um, Hand auf +0.605 m/s. Federresiduum <1e-8 m;
+Kontaktluecke nicht negativ ausser Rundung. Gemeinsame Frames enthalten beide
+Punkte. Ruhe exakt unveraendert. Keine Behauptung Gesamtenergie-Erhaltung:
+festgehaltenes Gewebe, Daempfung und numerische Integration bleiben vorhanden.
+Sechs Kontakt-/Federtests und fuenf Gewebetests bestanden. Nachweis:
+validation/arm-attachment.json. Noch nicht im Spiel aktiv.
+Naechster Schritt: flaechenbasierte Einbettung mehrerer Handpunkte und danach
+Anbindung der Gegenreaktion an die echten Armkoordinaten statt freien Proxy.

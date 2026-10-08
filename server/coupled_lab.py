@@ -3,9 +3,9 @@ import json,time
 import numpy as np
 from tissue import Tissue,NX,NY
 from contact_v3 import surface
-from contact_constraint import project_contact
+from contact_constraint import project_contact,project_attachment
 
-def run(speed=1.,fps=240,duration=.5,reference=False,iterations=12,volume_compliance=1e-15,tolerance=None,compiled=False):
+def run(speed=1.,fps=240,duration=.5,reference=False,iterations=12,volume_compliance=1e-15,tolerance=None,compiled=False,attachment=False):
     started=time.perf_counter()
     from tissue_reference import ReferenceTissue
     cls=ReferenceTissue if reference else Tissue
@@ -20,22 +20,29 @@ def run(speed=1.,fps=240,duration=.5,reference=False,iterations=12,volume_compli
     # Single surface node is a deliberately exact embedding for this first lab.
     index=3*NX+7;weights=np.zeros(len(tissue.p));weights[index]=1.
     hand=tissue.rest[index]+np.array([.015,0.,0.]);velocity=np.array([-speed,0.,0.])
+    arm=hand.copy();arm_velocity=velocity.copy();attachment_compliance=3e-4;peak_separation=0.;attachment_residual_peak=0.
     dt=1/fps;frames=[];peak=0.;min_gap=1.;contacts=0;residual_peaks={};iteration_counts=[]
     for step in range(round(duration*fps)):
         previous=hand.copy();hand+=velocity*dt;multiplier=0.
+        previous_arm=arm.copy();arm+=arm_velocity*dt;attachment_lambda=np.zeros(3)
         def contact(cage):
-            nonlocal hand,multiplier
+            nonlocal hand,arm,multiplier,attachment_lambda
+            if attachment:hand,arm,attachment_lambda=project_attachment(hand,arm,1/.18,1/1.8,[0,0,0],dt,attachment_compliance,attachment_lambda)
             hand,corrected,multiplier=project_contact(hand,cage.p,1/.18,cage.w,weights,[1,0,0],dt,0.,multiplier)
             cage.p[:]=corrected
+        contact.residual=lambda:float(np.max(np.abs(hand-arm+attachment_compliance/(dt*dt)*attachment_lambda))) if attachment else 0.
         tissue.step(dt,project_contact=contact)
+        attachment_residual_peak=max(attachment_residual_peak,contact.residual())
+        if attachment:peak_separation=max(peak_separation,float(np.linalg.norm(hand-arm)))
+        arm_velocity=(arm-previous_arm)/dt
         for key,value in getattr(tissue,"residuals",{}).items():residual_peaks[key]=max(residual_peaks.get(key,0.),value)
         iteration_counts.append(getattr(tissue,"iterations_used",12))
         velocity=(hand-previous)/dt
         gap=float(hand[0]-tissue.p[index,0]);min_gap=min(min_gap,gap)
         peak=max(peak,float(np.max(np.linalg.norm(tissue.p-tissue.rest,axis=1))))
         contacts+=multiplier>0
-        frames.append({'time':(step+1)*dt,'hand':hand.tolist(),'contact_node':tissue.p[index].tolist(),'gap':gap,'lambda':multiplier})
-    return {'compiled':compiled,'reference':reference,'iterations':iterations,'units':'metres, kilograms, seconds','fps':fps,'speed':speed,'peak_deformation_m':peak,
+        frames.append({'time':(step+1)*dt,'arm_proxy':arm.tolist(),'hand':hand.tolist(),'contact_node':tissue.p[index].tolist(),'gap':gap,'lambda':multiplier})
+    return {'attachment':attachment,'peak_hand_arm_separation_m':peak_separation,'attachment_residual_peak_m':attachment_residual_peak,'final_arm_velocity':arm_velocity.tolist(),'compiled':compiled,'reference':reference,'iterations':iterations,'units':'metres, kilograms, seconds','fps':fps,'speed':speed,'peak_deformation_m':peak,
             'iteration_counts':iteration_counts,'residual_tolerance_m':tolerance,'residual_peaks':residual_peaks,'minimum_gap_m':min_gap,'contact_steps':contacts,'final_hand_velocity':velocity.tolist(),
             'solve_ms':(time.perf_counter()-started)*1000,'frames':frames}
 

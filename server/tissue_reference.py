@@ -41,7 +41,8 @@ class ReferenceTissue(Tissue):
             tolerance=getattr(self,'residual_tolerance',None)
             if tolerance is not None and (iteration+1)%4==0:
                 residuals=self.measure_residuals(le,lv,alpha,av)
-                if max(residuals['edge_m'],residuals['volume_equivalent_m'])<=tolerance:break
+                external=project_contact.residual() if hasattr(project_contact,'residual') else 0.
+                if max(residuals['edge_m'],residuals['volume_equivalent_m'],external)<=tolerance:break
         self.residuals=self.measure_residuals(le,lv,alpha,av)
         self.v=(p-old)/dt
 

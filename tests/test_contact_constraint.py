@@ -2,7 +2,7 @@ import unittest,sys
 from pathlib import Path
 import numpy as np
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'server'))
-from contact_constraint import project_contact
+from contact_constraint import project_contact,project_attachment
 class CoupledContactTests(unittest.TestCase):
  def test_unequal_masses_correct_both_sides_and_preserve_centroid(self):
   h=np.array([-.01,0,0]);p=np.array([[0.,0,0],[0,1,0]])
@@ -22,3 +22,15 @@ class CoupledContactTests(unittest.TestCase):
  def test_two_fixed_objects_stay_finite(self):
   h,p,lam=project_contact([-.01,0,0],[[0,0,0]],0,[0],[1],[1,0,0],1/240)
   self.assertEqual(h[0],-.01);self.assertEqual(lam,0)
+
+ def test_attachment_reacts_on_both_masses_without_centroid_shift(self):
+  h=np.array([.01,0,0]);a=np.zeros(3)
+  hh,aa,lam=project_attachment(h,a,1/.2,1/2.,[0,0,0],1/240,.0003,np.zeros(3))
+  self.assertLess(hh[0],h[0]);self.assertGreater(aa[0],a[0])
+  np.testing.assert_allclose(.2*hh+2*aa,.2*h+2*a,atol=1e-14)
+  np.testing.assert_allclose(hh-aa+.0003*240**2*lam,0,atol=1e-14)
+ def test_attachment_rest_has_no_artificial_motion(self):
+  h=np.array([.1,.2,.3])
+  hh,aa,lam=project_attachment(h,h,1/.2,1/2.,[0,0,0],1/240,.0003,np.zeros(3))
+  np.testing.assert_array_equal(hh,h);np.testing.assert_array_equal(aa,h)
+  np.testing.assert_array_equal(lam,np.zeros(3))
