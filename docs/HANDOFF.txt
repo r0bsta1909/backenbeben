@@ -1144,3 +1144,15 @@ neue menschliche Verstaendlichkeits-/Stilabnahme und kein fertiges G4-Gesamtgate
 Naechster Schritt: separat entpacktes Hostpaket mit frischer Laufzeitinstallation
 pruefen; danach groesste sichtbare Asset-/Stilluecke bearbeiten statt Physiklabor
 weiter auszubauen. Oeffentliches Releasearchiv ist weiterhin alter Stand.
+
+G7/G8 FRISCHES HOSTPAKET GEPRUEFT
+ZIP ausserhalb Checkout entpackt, eigene Python3.12-venv erstellt und ausschliesslich
+server/requirements.txt installiert. START_HOST ohne Physics-Override gestartet.
+Zwei Browserkontexte ueber LAN-HTTP: Standardkampf10Treffer/Punkte und beschleunigter
+KO3Treffer bestanden, identische Replays, Resume, KO-Ruecklauf, Rematch/Leave, errors[].
+Keine zwei physischen PCs behauptet. Veraltete widerspruechliche SPIELEN-Anleitung
+komplett auf aktuelle Steuerung konsolidiert; Ingame-Hilfe nennt richtigen Resetbutton.
+Finales Paket unterscheidet sich nur in SPIELEN.txt und Web-HTML; erneut entpackt,
+alle Dateien bytegenau verglichen, Browser-Replaycheck mit coupled erfolgreich.
+Beleg validation/fresh-package-duels.json mit Archivhash. G2/G3 bleiben offen,
+letzte menschliche Abnahme unverstaendlich. Naechster Schwerpunkt Figuren/Stil.

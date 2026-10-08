@@ -1,12 +1,14 @@
-BACKENBEBEN — SPIELBARER PROTOTYP 02
+BACKENBEBEN — EXPERIMENTELLER PROTOTYP 04
 
 START
-1. START_HOST.bat doppelklicken.
-2. Der Browser öffnet http://localhost:8765. Beim ersten Laden kurz warten.
-3. TRAINING GEGEN BRUNO startet sofort ein vollständiges Duell gegen den Bot.
-4. Für zwei Menschen wählen beide LAN-DUELL BEITRETEN. Der Host zeigt die
+1. Beim ersten Einrichten Python 3.12 installieren und SETUP_HOST.bat ausführen.
+   Die Einrichtung benötigt Internet; danach läuft das Spiel im lokalen Netz.
+2. START_HOST.bat doppelklicken. Der erste Start bereitet die Physik vor.
+3. Der Browser öffnet http://localhost:8765. Beim ersten Laden kurz warten.
+4. TRAINING GEGEN BRUNO startet sofort ein vollständiges Duell gegen den Bot.
+5. Für zwei Menschen wählen beide LAN-DUELL BEITRETEN. Der Host zeigt die
    LAN-Adresse in der Lobby, z.B. http://192.168.1.100:8765.
-5. Gäste öffnen diese Adresse auf einem PC im selben Netzwerk. Es ist keine
+6. Gäste öffnen diese Adresse auf einem PC im selben Netzwerk. Es ist keine
    Installation beim Gast nötig. Chrome/Edge/Firefox mit WebGL2 verwenden.
 
 Falls Windows den Zugriff abfragt, das private Netzwerk erlauben.
@@ -16,27 +18,31 @@ Firewallregel ab: TCP 8765, privates Netz, lokales Subnetz, Spiel-Pythonprogramm
 Spielserver und Browser laufen anschließend normal ohne Windows-Elevation.
 Nicht für öffentliche Internet-Server gedacht. Keine Portweiterleitung erforderlich.
 
-STEUERUNG — PROTOTYP 02
-Ausrichten: rechte Maustaste halten + Maus bewegen dreht/kippt das Handgelenk.
-Mausrad verändert die Reichweite. HAND NEUTRAL setzt die Haltung zurück.
-EINS / Probe: links außen neben dem Gesicht die linke Taste halten und über
-seine linke Wange ziehen. Die Probe erfolgt mit Abstand; die Diagnose zeigt
-sauberen Kontakt, Fingerspitzen, Streifer oder einen möglichen Regelverstoß.
-ZWEI / Schlag: denselben Bogen erneut ziehen. Der räumliche Kontakt während des
-Schwungs zählt, nicht der Ort des Loslassens. Tempo sättigt, flache Ausrichtung
-und Reichweite entscheiden mit. Kein Modus "Halten & zielen" mehr.
-Abwehr: Grau = gesperrt, Gelb = warten, Grün = JETZT ANSPANNEN.
-Beim Empfang einmal rechts klicken, Leertaste oder den grünen Button drücken.
-Die Ankündigung dauert 1,4 Sekunden; das grüne Fenster standardmäßig 450 ms.
-Nur der erste Versuch zählt; frühes Drücken verbraucht ihn. Angreifer nutzen
-rechts zum Ausrichten, Empfänger zum Anspannen.
-Replay: nach jedem Treffer Zeitlupe (0,1x/0,25x/1x), Pause, Einzelbild,
-Zeitleiste, Front-/Dreiviertelansicht und Kontaktspur. Die Anzeige nennt die
-verbleibende Replayzeit. Nach 12 Sekunden geht es weiter; beide Spieler können
-vorher WEITER wählen. Im Training reicht die eigene Zustimmung.
+STEUERUNG
+Angriff: linke Maustaste halten und die Maus NACH LINKS ziehen. Die sichtbare
+rechte Hand schwingt seitlich zur Wange. Die Maushöhe bestimmt die Treffhöhe.
+Mausrad: Handfläche kippen. HALTUNG ZURÜCKSETZEN stellt die Ausgangshaltung her.
+HAND VON DER SEITE ANSEHEN wechselt die Kamera zum Prüfen der Haltung; auch
+in dieser Ansicht bleibt die Eingabe ein Zug nach links.
+EINS / Probe: erster Schwung ohne Schaden. Anschließend die Kontaktdiagnose
+lesen: Handfläche, Fingerspitzen, Streifer oder Foul. Haltung bei Bedarf ändern.
+ZWEI / Schlag: erneut nach links ziehen. Der erste räumliche Kontakt zählt,
+nicht die Stelle, an der du die Taste loslässt. Tempo und Handhaltung wirken mit.
+
+Abwehr: Du kannst nur als Empfänger während der Schlagankündigung anspannen.
+Gelb bedeutet WARTEN. Erst bei Grün einmal rechts klicken, Leertaste oder den
+grünen Button drücken. Frühes Drücken verbraucht den einzigen Versuch.
+Die Ankündigung dauert 1,4 Sekunden, das grüne Fenster standardmäßig 450 ms.
+Außerhalb dieses Fensters beziehungsweise als Angreifer ist Anspannen gesperrt.
+
+Replay: Zeitlupe, Pause, Einzelbild und Zeitleiste untersuchen den Treffer.
+ZUM TREFFER pausiert am Kontakt und öffnet die Seitenkamera. TV-TOTALE zeigt
+Körperstand und KO. Zuschaltbare Kontaktpunkte: Türkis = Handfläche,
+Gelb = Finger, Rosa = Handballen. WEITER beendet das Replay, wenn beide
+zustimmen; im Training reicht deine Zustimmung. Sonst läuft es nach 12 s weiter.
 Emotes: in der Erholung nach dem Replay 1, 2 oder 3 beziehungsweise Buttons.
-M: eigenen Pultspiegel vergrößern/verkleinern. TON AN/AUS schaltet den Ton.
-? STEUERUNG erklärt die Eingaben auch im Spiel.
+M: eigenen Pultspiegel außerhalb des Replays vergrößern/verkleinern.
+TON AN/AUS schaltet den Ton. ? STEUERUNG öffnet die Hilfe im Spiel.
 
 REGELN
 Abwechselnde Schläge, fünf Schlagpaare oder vorheriger KO.
@@ -85,33 +91,19 @@ Im Host-Terminal Strg+C drücken, danach Browser schließen.
 Bei belegtem Port den bereits laufenden Host beenden. Alternativer Port:
 START_HOST.bat --port 8766 (LAN-Firewallregel dann entsprechend anpassen).
 
-WEITERENTWICKLUNG
-START_GODOT.bat öffnet das editierbare Godot-Projekt.
-BUILD_GAME.bat aktualisiert den Browser-Build. Browser danach neu laden.
-START_BLENDER.bat öffnet Blender mit projektlokaler MCP-Brücke.
-assets-source/fighter.blend und hand.blend sind die editierbaren Modelle.
-scripts/create_assets.py erzeugt Modelle und eigene Sounds reproduzierbar.
-Der Godot-Editor zeigt die 3D-Szene; Match-UI und Netzwerk werden im Web getestet.
-Das fertige Spiel benötigt weder Blender noch Godot-Editor noch Internetzugriff.
-Der Host nutzt die lokale Python-Laufzeit inklusive NumPy 2.2.6 für Physik.
-Nach einem Update: bisherigen Host mit Strg+C beenden, START_HOST.bat starten
-und beide Browser mit Strg+F5 neu laden.
+ENTWICKLUNGSSTAND
+Dieses Paket ist ein experimenteller LAN-Spieltest. Figuren, Comicstil und
+Verständlichkeit sind weiterhin in Überarbeitung. Arm und Hand sind gekoppelt;
+Gesichtsgewebe verformt sich während des Kontakts und schwingt danach aus.
+Kopf, Kiefer, Trefferwertung und KO bleiben teilweise vereinfachte Spielmodelle.
+Ein sauberer Schlag ist deshalb nicht automatisch ein KO.
 
-PRÜFNACHWEISE
-docs/GAUNTLET.txt erklärt die geprüften Gates und die verbleibende menschliche
-Abnahme. Automatisierte Tests unter tests/, Ergebnisse und Bilder unter logs/.
-
-PROTOTYP 03 — AKTUELLE EINGABE (ersetzt ältere V2-Winkelhinweise)
-Linke Maustaste halten und von links nach rechts ziehen: Körpergebundener Schwung.
-Maus höher/tiefer bewegt die Treffhöhe. Mausrad kippt die flache Hand.
-Erst Probe ohne Schaden, dann denselben Schwung als Schlag. Keine freie Tiefenachse.
-Rechts/Leertaste nur als Empfänger beim grünen Signal zum Anspannen.
-Der Arm und die Hände stammen jetzt aus einem gemeinsamen vollständigen 3D-Rig.
-
-SEITLICHER UMBAU: Linke Taste halten und MAUS NACH LINKS bewegen.
-Die sichtbare rechte Hand schwingt ebenfalls nach links. Mausrad kippt die Finger.
-Replay besitzt zusätzlich TV-TOTALE für Körperstand und KO.
-
-Replay: "Zum Treffer" pausiert am Kontakt und öffnet die Seitenkamera.
-Türkis zeigt Handflächenkontakt, Gelb Finger, Rosa den Handballen. Die Punkte
-sind eine zuschaltbare Prüfhilfe. "Punkte an/aus" blendet sie ein oder aus.
+QUELLPROJEKT
+https://github.com/r0bsta1909/backenbeben
+Im vollständigen Quellprojekt öffnet START_GODOT.bat den Editor;
+BUILD_GAME.bat aktualisiert den Browser-Build. Blender-Quelle der aktuellen
+Figur: assets-source/character-v3.blend. Entwicklungswerkzeuge sind nicht im
+Hostpaket enthalten. Zum Spielen braucht man weder Blender noch Godot-Editor.
+Nach einem Update den bisherigen Host mit Strg+C beenden, START_HOST.bat
+starten und beide Browser mit Strg+F5 neu laden.
+Prüfstand und offene Anforderungen: docs/PROTOTYPE_GAUNTLET.txt im Repository.
