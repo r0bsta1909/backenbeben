@@ -440,3 +440,13 @@ Revanche PASS,errors[]. Replayp95=20.8ms bei1920x1080, hardwareabhaengig und kei
 Nachweis fuer zwei physische PCs. Belege validation/crowd-assets.json und
 crowd-contact.png. Gesamt-Artabnahme/Bedienabnahme/volle Physik weiterhin offen.
 Host8877 weiter aus Checkout. Oeffentliches v0.5-Paket ist aelterer Stand.
+
+G5 BILATERALE VERLETZUNGSDARSTELLUNG / SHADERDEFINITION
+Drei Gaussprofile fuer Wangenverformung/Haematom/Augenhaematom verwendeten
+pow mit potentiell negativer Basis (laut GLSL undefiniert). Durch dot(d,d)
+ersetzt, Profilparameter unveraendert. Renderpruefung auf beide Seiten erweitert:
+4Hautvarianten x2Seiten x4Zustaende=32Bilder; Verletzungen aendern Pixel,
+Gesundreset bytegleich einschliesslich Spiegel. NativeOpenGL und Webbuild PASS.
+Vollstaendiger Browserkampf: keine Fehler, Materialruecklauf und Revanche PASS.
+Beleg validation/bilateral-injury.json und zwei Bilder. Kein Cross-GPU-/Zwei-PC-
+Nachweis; Kopf-/Halsmodell unveraendert stilisiert, Gesamtziel weiterhin offen.

@@ -1,0 +1,84 @@
+{
+  "problem": "Negative bases passed to GLSL pow(x,2), undefined by specification. Replaced with dot(d,d) for Gaussian cheek swelling and bruise masks.",
+  "reference": "https://registry.khronos.org/OpenGL/specs/gl/GLSLangSpec.3.30.pdf",
+  "native": "32 rendered states: 4 skin variants x 2 sides x healthy/moderate/severe/reset; each injury visibly changes pixels, each reset is byte-identical including mirror.",
+  "browser": {
+    "errors": [],
+    "hits": [
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 19.59,
+        "quality": 0.6696,
+        "braced": true,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "5ca833179600c9e448da"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 32.42,
+        "quality": 0.7205,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "5dd043df5dfbedd0907e"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 31.66,
+        "quality": 0.7035,
+        "braced": false,
+        "side": "R",
+        "ko": true,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "a95d20444b6eb5afe2ef"
+      }
+    ],
+    "configuration": {
+      "base_damage": 45,
+      "ko_threshold": 60,
+      "turn_seconds": 60
+    },
+    "single_tilt_control": true,
+    "physics_backend": "coupled",
+    "solved_normal_impulse_ns": 1.3777600848432525,
+    "solved_quality_matches_hit": true,
+    "recorded_arm_frames": 527,
+    "clip_hash": "0aefbc643bb935fd12feb4ce5c86c63df0148d4f00751923de02a8a38e7eadd1",
+    "replay": {
+      "clipId": "5ca833179600c9e448da",
+      "frameCount": 337,
+      "peak": 0.003712,
+      "time": 0.508313,
+      "frame": 60,
+      "deformation": 0.00370294272
+    },
+    "replay_frame_ms_p95": 14,
+    "viewport": [
+      1920,
+      1080
+    ],
+    "resume": true,
+    "injury_material_rewind": true,
+    "ko_body_recorded": true,
+    "ko_reverse_seek": true,
+    "winner": 0,
+    "audio": {
+      "mode": "buffer-fallback",
+      "played": 5,
+      "unlocked": true
+    },
+    "rematch_material_reset": true,
+    "rematch": true,
+    "leave": true
+  },
+  "limits": "Native OpenGL and Chromium WebGL on this PC; not evidence of cross-GPU or two-physical-PC coverage. Head/neck mechanics unchanged."
+}

@@ -17,7 +17,8 @@ vec3 deform_face(vec3 p) {
     if (tissue) {
         float front = smoothstep(0.02,0.22,p.z);
         p += side_cage_enabled ? side_displacement(p) : displacement(p)*front;
-        float swelling = (p.x<0.0?injury_left:injury_right)*exp(-pow((abs(p.x)-0.28)/0.17,2.0)-pow((p.y-0.17)/0.2,2.0))*front;
+        vec2 cheek_distance=vec2((abs(p.x)-.28)/.17,(p.y-.17)/.2);
+        float swelling = (p.x<0.0?injury_left:injury_right)*exp(-dot(cheek_distance,cheek_distance))*front;
         p.z += swelling*0.035;
         // Local lid swelling narrows the struck eye; the eyeball stays rigid.
         float eye_injury=smoothstep(.25,1.0,p.x<0.0?injury_left:injury_right);

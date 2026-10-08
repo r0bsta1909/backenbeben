@@ -43,9 +43,11 @@ void fragment() {
         float beard=(1.0-smoothstep(-.12,.0,q.y))*smoothstep(.05,.22,skin_position.z);
         float grain=fract(sin(dot(floor(skin_position.xy*650.0),vec2(12.9898,78.233)))*43758.5453);
         color=mix(color,color*vec3(.55,.57,.61),beard*(.20+.07*step(.76,grain)));
-        float patch=exp(-pow((q.x-.27)/.13,2.0)-pow((q.y-.15)/.13,2.0))*smoothstep(.12,.27,skin_position.z);
+        vec2 bruise_distance=(q-vec2(.27,.15))/.13;
+        float patch=exp(-dot(bruise_distance,bruise_distance))*smoothstep(.12,.27,skin_position.z);
         color=mix(color,vec3(.22,.085,.19),patch*smoothstep(.12,.85,injury)*.8);
-        float eye_bruise=exp(-pow((q.x-.1524)/.105,2.0)-pow((q.y-.335)/.075,2.0))*smoothstep(.18,.28,skin_position.z);
+        vec2 eye_distance=(q-vec2(.1524,.335))/vec2(.105,.075);
+        float eye_bruise=exp(-dot(eye_distance,eye_distance))*smoothstep(.18,.28,skin_position.z);
         color=mix(color,vec3(.16,.075,.15),eye_bruise*smoothstep(.25,.9,injury)*.72);
         float cut=(1.0-smoothstep(.004,.012,abs(q.y-(.20-.4*(q.x-.25)))))*smoothstep(.15,.19,q.x)*(1.0-smoothstep(.34,.37,q.x));
         color=mix(color,vec3(.40,.015,.022),cut*smoothstep(.35,.5,injury));
