@@ -6,6 +6,7 @@ var caption: Label
 var backdrop: TextureRect
 var ground_shadow: ColorRect
 var view := 4
+var show_scale_figures := true
 var actors: Array[Node3D] = []
 var frame_times: Array[float] = []
 var sample_clock := 0.0
@@ -29,14 +30,15 @@ func human(p: Vector3, yaw: float, color: Color) -> Node3D:
 
 func set_view(number: int) -> void:
 	view=number
-	actors[1].visible=number!=1
+	actors[0].visible=show_scale_figures
+	actors[1].visible=show_scale_figures and number!=1
 	camera.position=POSITIONS[number-1]
 	camera.fov=62 if number==1 else (58 if number>=3 else 55)
 	camera.look_at(TARGETS[number-1])
 	update_ground_shadow()
 	backdrop.material.set_shader_parameter("zoom",1.5 if number<=2 else 1.0)
 	backdrop.material.set_shader_parameter("focus",Vector2(.5,.56) if number==1 else (Vector2(.5,.56) if number==2 else Vector2(.5,.5)))
-	caption.text="BACKENBEBEN · "+VIEW_NAMES[number-1]+"\n1 Spiel · 2 Kontakt · 3 TV · 4 Gesamt\nWASD + Q/E: bewegen · rechte Maustaste: Blick drehen · H: Hinweise"
+	caption.text="BACKENBEBEN · "+VIEW_NAMES[number-1]+"\n1 Spiel · 2 Kontakt · 3 TV · 4 Gesamt\nP: Figuren ein/aus · H: Hinweise\nWASD + Q/E: bewegen · rechte Maustaste: Blick drehen"
 
 func _ready() -> void:
 	var world:=WorldEnvironment.new();var env:=Environment.new()
@@ -78,6 +80,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode>=KEY_1 and event.keycode<=KEY_4:set_view(event.keycode-KEY_1+1)
 		if event.keycode==KEY_H:caption.visible=not caption.visible
+		if event.keycode==KEY_P:
+			show_scale_figures=not show_scale_figures
+			set_view(view)
 	if event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 		camera.rotation.y-=event.relative.x*.004
 		camera.rotation.x=clampf(camera.rotation.x-event.relative.y*.004,-1.45,1.45)

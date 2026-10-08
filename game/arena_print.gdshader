@@ -12,6 +12,8 @@ uniform float pale_low = .30;
 uniform float pale_high = .50;
 uniform vec2 uv_scale = vec2(1.0);
 uniform vec2 uv_offset = vec2(0.0);
+uniform vec4 substrate_color : source_color = vec4(.13,.15,.14,1.0);
+uniform float substrate_mix = 0.0;
 void fragment() {
     vec2 source_uv=UV*uv_scale+uv_offset;
     if(vertical_church) {
@@ -43,6 +45,7 @@ void fragment() {
     vec3 print_color = ivory_ink ? vec3(0.82, 0.78, 0.66) : ink.rgb;
     if(lighten_blue && ink.b>ink.r*1.3 && ink.b>ink.g*1.2)print_color=mix(ink.rgb,vec3(.72,.77,.82),.75);
     ALBEDO = mix(print_color, vec3(dot(print_color,vec3(.3,.59,.11))), .12)*vec3(.92,.88,.78)*.98;
+    ALBEDO=mix(ALBEDO,substrate_color.rgb,substrate_mix);
     EMISSION=ALBEDO*.13;
     ROUGHNESS = 0.95;
 }

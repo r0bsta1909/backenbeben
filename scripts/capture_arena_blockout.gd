@@ -26,6 +26,11 @@ func capture() -> void:
 			quit(1)
 			return
 	for actor in scene.actors:actor.hide()
+	scene.show_scale_figures=false
+	scene.set_view(3)
+	await process_frame
+	RenderingServer.force_draw(false)
+	root.get_texture().get_image().save_png(directory+"/arena-only.png")
 	scene.camera.position=Vector3(2.2,-1.2,3.6)
 	scene.camera.fov=55
 	scene.camera.look_at(Vector3(0,-2.2,.65))

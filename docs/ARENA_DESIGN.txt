@@ -27,6 +27,7 @@ Charakter-Redesign ist nicht Teil des Kulissenauftrags.
 BENUTZUNG
 Workspace START_ARENA.bat -> game/arena_preview.tscn.
 1 Spiel, 2 Kontakt, 3 TV, 4 Gesamt. H blendet Hinweise ein/aus.
+P blendet die neutralen Massstabsfiguren ein/aus, auch nach Kamerawechseln.
 WASD, Q/E und rechte Maustaste sind Kamerawerkzeuge der Designvorschau.
 Eine fixe 2D-Kulisse bildet keinen frei begehbaren Raum ab. Fuer Nahansichten
 wird das Bild passend vergroessert; freie Kameradrehungen sind Designwerkzeuge.
@@ -63,6 +64,17 @@ Pult sowie dezente Fugen und Befestigungen am Podest verfeinern die Geometrie.
 Der gemalte Hallenhintergrund und die Verteilung der Originallogos bleiben
 erhalten. Aktuelle Bilder im Workspace: Arena-Design/10-arena-verfeinert.png,
 10-arena-spielansicht.png und 10-arena-pultdetail.png.
+
+AKTUELLER FOKUS: ARENA FINALISIEREN
+Der Nutzer priorisiert die Arena vor Figurenarbeit und Match-Integration.
+Letzte Bereinigung: geglaettete Polsternormalen, zurueckgenommene Konturen
+an Naehten/Befestigungen, matte anthrazitfarbene Tischoberseite und dezentere
+Bodendrucke durch leichte Beimischung des Untergrundtons. Originalmotive,
+Seitenverhaeltnisse und Sponsorpositionen bleiben erhalten.
+Arena allein: Arena-Design/11-arena-ohne-figuren.png im Workspace.
+Spielansicht: Arena-Design/11-arena-spielansicht.png im Workspace.
+Vier Kameras nativ und im Browser geprueft. Der Stand ist zur optischen
+Sichtpruefung bereit; keine neue menschliche Freigabe vorweggenommen.
 
 HISTORISCH
 arena_finished.tscn, bake_arena.gd und tests/arena_finished.gd gehoeren zur

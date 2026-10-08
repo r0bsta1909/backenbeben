@@ -1,0 +1,20 @@
+Arena-Bereinigung und separate Sichtpruefung, 2026-10-08
+
+Umfang ausschliesslich Arena: geglaettete Polstergeometrie, feine Naehte ohne
+ueberdimensionierte Kontur, dezente Befestigungen, matte Tischoberseite und
+leicht an den Gummiboden angeglichene Druckfarben. Keine Originalgrafik neu
+gezeichnet. Hintergrund, Geometrieabmessungen und Pultoberkante unveraendert.
+Vorschau: P schaltet Massstabsfiguren um; Sichtbarkeit bleibt beim Kamerawechsel
+erhalten. Zusaetzliche native Aufnahme arena-only.png ohne Figuren.
+
+Erneut gebacken und ARENA_HYBRID_PASS. Native vier Kameras, Pult-/Fasciadetails
+und Arena ohne Figuren erfasst; Spielkamera und figurlose Totale gesichtet.
+Isolierter Webbuild erfolgreich. Reales Chromium: Kameras 4,1,2,3; errors[].
+Jeweils sechs 3D-Druckmotive und 2D-Hintergrund, keine 3D-Zuschauergeometrie.
+Lokale p95-Frameintervalle 16.67 bis 17.86 ms, keine Hardware-Leistungszusage.
+Sandbox verhindert user://-Log und Shadercache; Rendern und Export erfolgreich.
+
+Keine Match-Integration oder Figurenarbeit. Kulisse ist aus fixer Perspektive
+gemalt; freie Designkamera macht daraus keine begehbare Halle. Hoenhorst bleibt
+eine kleine Originalfotovorlage mit begrenzter Aufloesung. Menschliche optische
+Freigabe offen; Technikchecks sind keine automatische Art-Abnahme.

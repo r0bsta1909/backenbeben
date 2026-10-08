@@ -12,6 +12,7 @@ func ring_mesh(rings: Array, ellipse: Vector2) -> ArrayMesh:
 			var p2:=Vector3(cos(b)*ellipse.x*rings[row+1].x,rings[row+1].y,sin(b)*ellipse.y*rings[row+1].x)
 			var p3:=Vector3(cos(a)*ellipse.x*rings[row+1].x,rings[row+1].y,sin(a)*ellipse.y*rings[row+1].x)
 			for p in [p0,p1,p2,p0,p2,p3]:surface.add_vertex(p)
+	surface.index()
 	surface.generate_normals()
 	return surface.commit()
 
@@ -31,11 +32,16 @@ func podium() -> void:
 	for x in [-.28,.28]:beam(Vector3(x,-4.99,.92),Vector3(x,-1.49,.92),.009,Color("6c3733"))
 	for x in [-.45,.45]:
 		for z in [.42,.88]:round_part("FootFixing",Vector3(x,-5.029,z),Vector3(.055,.018,.055),"7d8079")
+	find_child("PodiumTop",true,false).material_override=finished_material(Color("434643"),5,false,false)
 
 func stage_deck() -> void:
 	super.stage_deck()
 	var mat_node: MeshInstance3D=find_child("RubberMat",true,false)
 	mat_node.material_override=finished_material(Color("656c68"),4,false,false)
+	for id in ["FloorAdiHash","FloorTooth"]:
+		var print_material: ShaderMaterial=find_child(id,true,false).material_override
+		print_material.set_shader_parameter("substrate_color",Color("656c68"))
+		print_material.set_shader_parameter("substrate_mix",.20 if id=="FloorAdiHash" else .16)
 	# Small corner marks locate the feet without turning the mat into a signboard.
 	for z in [0.0,2.1]:
 		for side in [-1.0,1.0]:
@@ -48,6 +54,18 @@ func stage_deck() -> void:
 	for z in [-4.6,-.2,2.2,6.5]:
 		var fixing:=round_part("SideFasciaFixing",Vector3(7.023,-5.43,z),Vector3(.035,.018,.035),"7b807a")
 		fixing.rotation.z=PI/2
+
+func finish_surfaces() -> void:
+	super.finish_surfaces()
+	# Ink dilation on tiny seams creates spikes. Keep bold ink for the main forms.
+	for node in find_children("*","MeshInstance3D",true,false):
+		var fine_cylinder: bool=node.mesh is CylinderMesh and node.mesh.top_radius<=.012
+		var hardware: bool="Fixing" in node.name or "Bolt" in node.name or "FootCorner" in node.name or "PanelJoin" in node.name
+		if (fine_cylinder or hardware) and node.material_override is ShaderMaterial:
+			var color: Color=node.material_override.get_shader_parameter("base_color")
+			node.material_override=finished_material(color,0,false,false)
+			node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+
 func _ready() -> void:
 	if has_meta("baked_hybrid"):
 		for id in ["FloorAdiHash","FloorTooth","FasciaKoenig","FasciaVersino","FasciaHoenhorst","PodiumINEOS"]:

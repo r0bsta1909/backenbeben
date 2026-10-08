@@ -41,6 +41,9 @@ void fragment() {
         float detail=1.0-smoothstep(.025,.12,max(fwidth(p.x),fwidth(p.z)));
         color*=1.0+relief*.012*detail;
     }
+    if(surface_kind==5) {
+        color*=.97+soft_noise(p.xz*18.0)*.04;
+    }
     float edge=smoothstep(.03,.20,dot(normalize(NORMAL),normalize(VIEW)));
     ALBEDO=mix(vec3(.013,.015,.020),color,edge);
     EMISSION=color*vec3(.10,.11,.13);
