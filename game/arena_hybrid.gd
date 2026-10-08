@@ -30,9 +30,9 @@ func worn_material(node: MeshInstance3D, color: Color, kind: int, amount: float)
 	material.set_shader_parameter("wear_amount",amount)
 	node.material_override=material
 
-func ring_mesh(rings: Array, ellipse: Vector2) -> ArrayMesh:
+func ring_mesh(rings: Array, ellipse: Vector2, cap_ends: bool=false) -> ArrayMesh:
 	var surface:=SurfaceTool.new();surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-	var segments:=64
+	var segments:=96
 	for row in range(rings.size()-1):
 		for n in range(segments):
 			var a: float=TAU*n/segments;var b: float=TAU*(n+1)/segments
@@ -41,8 +41,16 @@ func ring_mesh(rings: Array, ellipse: Vector2) -> ArrayMesh:
 			var p2:=Vector3(cos(b)*ellipse.x*rings[row+1].x,rings[row+1].y,sin(b)*ellipse.y*rings[row+1].x)
 			var p3:=Vector3(cos(a)*ellipse.x*rings[row+1].x,rings[row+1].y,sin(a)*ellipse.y*rings[row+1].x)
 			for p in [p0,p1,p2,p0,p2,p3]:surface.add_vertex(p)
-	surface.index()
-	surface.generate_normals()
+	if cap_ends:
+		surface.set_smooth_group(-1)
+		for n in range(segments):
+			var a: float=TAU*n/segments;var b: float=TAU*(n+1)/segments
+			for end in [0,rings.size()-1]:
+				var profile: Vector2=rings[end]
+				var p0:=Vector3(cos(a)*ellipse.x*profile.x,profile.y,sin(a)*ellipse.y*profile.x)
+				var p1:=Vector3(cos(b)*ellipse.x*profile.x,profile.y,sin(b)*ellipse.y*profile.x)
+				for p in [Vector3(0,profile.y,0),p1 if end==0 else p0,p0 if end==0 else p1]:surface.add_vertex(p)
+	surface.generate_normals();surface.index()
 	return surface.commit()
 
 func podium() -> void:
@@ -62,9 +70,13 @@ func podium() -> void:
 	for x in [-.45,.45]:
 		for z in [.42,.88]:round_part("FootFixing",Vector3(x,-5.029,z),Vector3(.055,.018,.055),"7d8079")
 	worn_material(find_child("PodiumTop",true,false),Color("50544e"),5,.08)
+	find_child("PodiumTop",true,false).mesh.radial_segments=96
 	worn_material(find_child("PodiumBody",true,false),Color("303839"),6,.08)
 	worn_material(find_child("PodiumFoot",true,false),Color("272e30"),6,.12)
-	find_child("PodiumRedBand",true,false).material_override=finished_material(Color("883c38"),0,false,false)
+	var red_band: MeshInstance3D=find_child("PodiumRedBand",true,false)
+	red_band.position.y=-1.29;red_band.scale=Vector3.ONE
+	red_band.mesh=ring_mesh([Vector2(.47,-.0425),Vector2(.493,-.027),Vector2(.5,0),Vector2(.493,.027),Vector2(.47,.0425)],Vector2(2.12,.73),true)
+	red_band.material_override=finished_material(Color("883c38"),0,false,false)
 
 func stage_deck() -> void:
 	super.stage_deck()
@@ -96,10 +108,20 @@ func stage_deck() -> void:
 		print_material.set_shader_parameter("substrate_color",Color("4d514b"))
 		print_material.set_shader_parameter("substrate_mix",.20 if id=="FasciaHoenhorst" else .08)
 		print_material.set_shader_parameter("ink_aging",.06)
+	# Keep the small original photograph intact, with a separate readable identifier.
+	var plaque: MeshInstance3D=find_child("HoenhorstPlaque",true,false)
+	plaque.position=Vector3(3.3,-5.7,7.064);plaque.mesh.size=Vector3(2.21,.90,.014)
+	var photo: MeshInstance3D=find_child("FasciaHoenhorst",true,false)
+	photo.position=Vector3(3.3,-5.61,7.082);photo.rotation=Vector3.ZERO
+	photo.mesh.size=Vector2(1.70,1.70*96/237.0)
+	part("HoenhorstCaptionStrip",Vector3(3.3,-6.05,7.082),Vector3(2.15,.16,.016),"323a3c")
+	var caption:=Label3D.new();caption.name="HoenhorstIdentifier";caption.text="HOENHORST"
+	caption.position=Vector3(3.3,-6.05,7.097);caption.font_size=48;caption.pixel_size=.0032
+	caption.modulate=Color("c5bea9");caption.outline_size=2;add_child(caption)
 	for y in [-6.07,-5.33]:
-		for z in [2.30,4.30]:
-			var fixing:=round_part("PlaqueFixing",Vector3(7.05,y,z),Vector3(.028,.014,.028),"80796b")
-			fixing.rotation.z=PI/2
+		for x in [2.30,4.30]:
+			var fixing:=round_part("PlaqueFixing",Vector3(x,y,7.097),Vector3(.028,.014,.028),"80796b")
+			fixing.rotation.x=PI/2
 	# Small corner marks locate the feet without turning the mat into a signboard.
 	for z in [0.0,2.1]:
 		for side in [-1.0,1.0]:

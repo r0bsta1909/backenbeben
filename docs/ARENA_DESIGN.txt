@@ -35,8 +35,8 @@ wird das Bild passend vergroessert; freie Kameradrehungen sind Designwerkzeuge.
 WERBUNG
 Sechs Original-Drucktexturen: AdiHash/Zahnersatz am Boden, INEOS am Pult,
 KFZ Koenig/Versino/Hoenhorst am Podest. Druckshader entfernen Hintergruende
-und bewahren KFZ-Innenbuchstaben. KFZ steht auf einer Podestseite, Versino
-und Hoenhorst auf der angrenzenden Seite. Die kleine Hoenhorst-Fotovorlage
+und bewahren KFZ-Innenbuchstaben. KFZ und Hoenhorst stehen vorne, Versino
+auf der angrenzenden Seite. Die kleine Hoenhorst-Fotovorlage
 bleibt als kompaktes Werbeschild vollstaendig erhalten, weil eine Farbmaske
 den Praegeschriftzug beschaedigt. Weiche Alphakanten erhalten feine Druckdetails.
 Veltins, Kirche und BACKENBEBEN gehoeren zum gemalten Hallenbild. Sie folgen
@@ -89,6 +89,20 @@ FUENF-PUNKTE-FEINSCHLIFF
 Aktuelle Bilder: Arena-Design/12-arena-feinschliff.png und
 12-arena-spielansicht.png im Workspace. 12-arena-tischdetail.png zeigt das Pult.
 Tischhoehe, Matchstart und Serverphysik bleiben unveraendert.
+
+ABSCHLIESSENDE SICHTBEREINIGUNG
+Keine groessere Hoenhorst-Datei im Workspace gefunden (Original 237x96).
+Die Originalfotografie wird mit unveraendertem Seitenverhaeltnis in einem
+kompakten frontseitigen Schild gezeigt. Eine getrennte Namenszeile HOENHORST
+verbessert die Lesbarkeit; sie ist eine Beschriftung, keine rekonstruierte Marke.
+TV- und Gesamtkamera liegen weniger seitlich zur frontal gemalten Halle.
+Spiel- und Kontaktkamera behalten ihre Positionen; fixe 2D-Perspektive bleibt
+eine Illustration und keine frei drehbare Hallengeometrie.
+Polsterrundung und Tischoberseite nutzen 96 Segmente. Der rote Zierring ist
+gerundet, geschlossen und an die Polsterunterkante angeschlossen; keine
+offene Ringschattenkontur auf dem Boden. Pultoberkante bleibt -1.015.
+Stand zur optischen Abnahme: Arena-Design/13-arena-sichtpruefung.png,
+13-arena-spielansicht.png und 13-arena-werbeschild.png im Workspace.
 
 HISTORISCH
 arena_finished.tscn, bake_arena.gd und tests/arena_finished.gd gehoeren zur

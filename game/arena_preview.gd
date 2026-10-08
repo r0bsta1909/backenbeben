@@ -10,7 +10,7 @@ var show_scale_figures := true
 var actors: Array[Node3D] = []
 var frame_times: Array[float] = []
 var sample_clock := 0.0
-const POSITIONS := [Vector3(.30,.70,3.3),Vector3(3,.55,1.1),Vector3(14,.0,15),Vector3(24,4,15)]
+const POSITIONS := [Vector3(.30,.70,3.3),Vector3(3,.55,1.1),Vector3(7,.8,22),Vector3(11,4,28)]
 const TARGETS := [Vector3(.22,-.55,0),Vector3(0,-.12,1),Vector3(0,-1.4,1.05),Vector3(0,-.4,.65)]
 const VIEW_NAMES := ["Spielkamera", "Kontaktkamera", "TV-Kamera", "Gesamtansicht"]
 

@@ -1,0 +1,23 @@
+Arena: Werbeschilder, Kameraabstimmung und Tischdetails, 2026-10-08
+
+Lokale Suche findet nur die bekannte 237x96-Hoenhorst-Vorlage. Originalmotiv
+erhalten; keine erfundene Bitmap-Rekonstruktion. Kompaktes Schild nach vorne
+versetzt, korrekter Fotoaspekt und getrennte lesbare Namenszeile HOENHORST.
+KFZ vorne links, Hoenhorst vorne rechts, Versino auf der angrenzenden Seite.
+TV/Gesamt weniger schraeg, passend zur frontal gemalten Kulisse. Nahkameras,
+Tischoberkante, Podestabmessungen und normale Match-Szene unveraendert.
+96 Segmente fuer Polster/Tischoberseite. Roter Ring mit gerundetem Profil,
+geschlossenen Endflaechen und sauberem Anschluss an die Polsterunterkante.
+Erster offener Ring erzeugte eine hohle Schattenkontur; durch Deckflaechen
+korrigiert und native Spielansicht erneut gesichtet.
+
+Plattform neu gebacken; ARENA_HYBRID_PASS. Native vier Kameras sowie Arena
+allein, Pult, Fassade, Werbeschild und Stufen erfolgreich erfasst. Native
+Spielkamera, TV ohne Figuren, Gesamt und Werbeschild visuell kontrolliert.
+Isolierter Web-Export erfolgreich, abschliessender Chromium-Kameracheck
+prueft vier Ansichten und Browserfehler. Bericht lokal logs/arena-web-preview.
+Abschliessend bestanden: Kameras 4/1/2/3, errors[], sechs Druckmotive,
+2D-Hintergrund, keine 3D-Zuschauer; lokale p95-Frameintervalle 16.67 ms.
+Keine Figuren-, Match- oder Physikarbeit. Nutzerfreigabe des Looks offen.
+Die geringe Aufloesung der Originalfotografie bleibt eine Qualitaetsgrenze.
+Fixe Malperspektive wird durch die freie Designkamera nicht rekonstruiert.

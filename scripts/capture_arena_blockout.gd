@@ -42,6 +42,11 @@ func capture() -> void:
 	await process_frame
 	RenderingServer.force_draw(false)
 	root.get_texture().get_image().save_png(directory+"/fascia.png")
+	scene.camera.position=Vector3(5.6,-5.35,10.2)
+	scene.camera.look_at(Vector3(3.3,-5.7,7.09))
+	await process_frame
+	RenderingServer.force_draw(false)
+	root.get_texture().get_image().save_png(directory+"/sponsor-plaque.png")
 	scene.camera.position=Vector3(-11,-3.3,7.2)
 	scene.camera.look_at(Vector3(-7.2,-5.8,4.2))
 	await process_frame
