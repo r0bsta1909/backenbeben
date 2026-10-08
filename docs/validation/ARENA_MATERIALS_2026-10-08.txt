@@ -1,0 +1,23 @@
+Arena-Vorschau: Material- und Detailpass, 2026-10-08
+
+Aenderungen
+- Matte graugruene Gummiflaeche mit entfernungsabhaengiger Mikrostruktur.
+- Gerundeter Polsterrand mit feiner Paspel und Naht am Pult.
+- Kleine Positionsmarkierungen, Podestfugen und Befestigungen.
+- Dezente rote Linien am Pult und Befestigungen am Fuss.
+- Hintergrundbild, Sponsorverteilung und normale Match-Szene unveraendert.
+
+Pruefung
+Plattform neu aus arena_hybrid.gd gebacken. Native Capture aller vier Kameras
+und der Detailansichten erfolgreich. Falsche Dreiecksorientierung des neuen
+Polsterrandes korrigiert und anschliessend erneut nativ gerendert.
+tests/arena_hybrid.gd: ARENA_HYBRID_PASS, sechs Sponsor-Meshes, keine
+3D-Zuschauer/Halle, vier Kameras und unveraenderte Pultoberkante.
+Isolierter Web-Export erfolgreich. Chromium pruefte Kameras 4, 1, 2, 3;
+keine Browserfehler, jeweils 2D-Hintergrund und sechs 3D-Sponsor-Meshes.
+Gemessene lokale p95-Frameintervalle: 16.67 bis 18.06 ms. Diese Messung ist
+keine Leistungszusage fuer andere Rechner.
+
+Native Nahansicht und Web-TV-Ansicht visuell kontrolliert. Spielermodelle
+bleiben neutrale Massstabsfiguren. Die Arena ist eine separate Designvorschau;
+die optische Freigabe durch den Nutzer wird durch Techniktests nicht ersetzt.

@@ -5,6 +5,11 @@ uniform bool instance_color = false;
 uniform int surface_kind = 0;
 varying vec3 position_world;
 float hash(vec3 p) { return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453); }
+float soft_noise(vec2 p) {
+    vec2 c=floor(p), f=fract(p);f=f*f*(3.0-2.0*f);
+    return mix(mix(hash(vec3(c,0.0)),hash(vec3(c+vec2(1.0,0.0),0.0)),f.x),
+               mix(hash(vec3(c+vec2(0.0,1.0),0.0)),hash(vec3(c+vec2(1.0),0.0)),f.x),f.y);
+}
 void vertex() { position_world=(MODEL_MATRIX*vec4(VERTEX,1.0)).xyz; }
 void fragment() {
     vec3 p=position_world;
@@ -29,6 +34,12 @@ void fragment() {
     if(surface_kind==3) {
         float weave=sin(UV.x*420.0)*sin(UV.y*300.0);
         color*=.96+weave*.04;
+    }
+    if(surface_kind==4) {
+        color*=.96+soft_noise(p.xz*3.7)*.055;
+        float relief=sin(p.x*45.0)*sin(p.z*45.0);
+        float detail=1.0-smoothstep(.025,.12,max(fwidth(p.x),fwidth(p.z)));
+        color*=1.0+relief*.012*detail;
     }
     float edge=smoothstep(.03,.20,dot(normalize(NORMAL),normalize(VIEW)));
     ALBEDO=mix(vec3(.013,.015,.020),color,edge);

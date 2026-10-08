@@ -53,6 +53,17 @@ Der normale Match-Start main.tscn und die Serverphysik sind unveraendert.
 Die Kulisse ist eine separate Vorschau mit wiederverwendbarer Plattform.
 Menschliche optische Abnahme ist von Techniktests getrennt.
 
+MATERIAL- UND DETAILPASS 2026-10-08
+Die Wettkampfflaeche ist jetzt kuehl graugruen, matt und mit einer dezenten
+Gummistruktur versehen. Die feine Struktur wird in der Entfernung reduziert,
+damit sie nicht flimmert. Kleine L-Markierungen ordnen die Spielerpositionen.
+Das Pult besitzt eine gerundete Polsterkante, dunkle Paspel und kurze Naehte;
+die vorhandene Pultoberkante bleibt unveraendert. Schmale rote Linien am
+Pult sowie dezente Fugen und Befestigungen am Podest verfeinern die Geometrie.
+Der gemalte Hallenhintergrund und die Verteilung der Originallogos bleiben
+erhalten. Aktuelle Bilder im Workspace: Arena-Design/10-arena-verfeinert.png,
+10-arena-spielansicht.png und 10-arena-pultdetail.png.
+
 HISTORISCH
 arena_finished.tscn, bake_arena.gd und tests/arena_finished.gd gehoeren zur
 Voll-3D-Fassung. Die aktuelle Vorschau instanziert diese Szene nicht.
