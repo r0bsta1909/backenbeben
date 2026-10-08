@@ -572,3 +572,20 @@ bleiben Laborpfad, Matchsolver unveraendert. Keine unerwartete Energieerzeugung
 in diesem kurzen Fall; Vollclip, andere Treffer und Echtzeit bleiben offen.
 Naechste gezielte Trennung: kontaktfreie/vereinfachte Kopplungsfaelle gegen
 analytische Federantwort und gleiche Aufprallsituation mit Kontaktvergleich.
+
+ISOLIERTER FEDERTEST: INTEGRATIONSDAEMPFUNG
+scripts/audit_attachment_oscillator.py prueft dieselbe project_attachment-Funktion
+an zwei freien Massen (.18/2 kg), Compliance 2e-5, ohne Kontakt oder Daempfung.
+Unabhaengige geschlossene komplexe Loesung zeigt Backward-Euler-Verhalten:
+E_n/E_0=(1+omega^2*dt^2)^(-n), omega=550.252 rad/s. Diskreter Zustandsfehler
+unter 4e-15 m, Energiefehler unter 1.7e-13 J; Impuls/Schwerpunkt erhalten.
+Nach 12.5 ms bleiben bei 960/1920/3840/7680/15360 Hz nur
+3.31/15.04/37.70/61.17/78.17 Prozent der Anfangsenergie erhalten.
+Die kontinuierliche ungedaempfte Feder behaelt 100 Prozent. Verfeinerung reduziert
+hier den kombinierten Phasen-/Amplitudenfehler monoton. Das isoliert erwartete
+Integrationsdaempfung, quantifiziert aber NICHT ihren Anteil im nichtlinearen
+Gesichtskontakt. Keine Uebertragung dieser Prozentwerte auf das gesamte Modell.
+Nachweis docs/validation/attachment-oscillator.json; zwei Regressionstests.
+Matchsolver unveraendert. Naechster Vergleich: alternative daempfungsarme Integration
+am analytischen Fall, dann kontrollierter Kontaktfall; keine globale nachtraegliche
+Energiereskalierung, die inelastische Kontakte unphysikalisch zurueckfedern liesse.

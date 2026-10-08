@@ -1,0 +1,66 @@
+{
+  "scope": "Two free masses, linear compliant attachment, no contacts or explicit damping. Not anatomical calibration.",
+  "expected": "Backward Euler: E_n/E_0=(1+omega^2*dt^2)^(-n). Continuous oscillator conserves energy.",
+  "runs": [
+    {
+      "rate_hz": 960,
+      "duration_s": 0.0125,
+      "angular_frequency_rad_s": 550.252467307306,
+      "max_discrete_state_error_m": 9.351243737687476e-17,
+      "max_momentum_error_ns": 7.717784744620815e-15,
+      "max_com_error_m": 6.938893903907228e-18,
+      "max_discrete_energy_error_j": 1.8457457784393227e-15,
+      "energy_retained_fraction": 0.033076864131484134,
+      "continuous_position_error_m": 0.00044021898603408894,
+      "continuous_phase_state_error_m": 0.0009151179064057313
+    },
+    {
+      "rate_hz": 1920,
+      "duration_s": 0.0125,
+      "angular_frequency_rad_s": 550.252467307306,
+      "max_discrete_state_error_m": 1.9618638311125203e-16,
+      "max_momentum_error_ns": 3.351485755587191e-14,
+      "max_com_error_m": 1.0061396160665481e-16,
+      "max_discrete_energy_error_j": 6.042041866827219e-15,
+      "energy_retained_fraction": 0.15040337846672847,
+      "continuous_position_error_m": 0.0003265030228460454,
+      "continuous_phase_state_error_m": 0.0006621111779835293
+    },
+    {
+      "rate_hz": 3840,
+      "duration_s": 0.0125,
+      "angular_frequency_rad_s": 550.252467307306,
+      "max_discrete_state_error_m": 7.003946034256359e-16,
+      "max_momentum_error_ns": 1.0661610483353456e-13,
+      "max_com_error_m": 3.191891195797325e-16,
+      "max_discrete_energy_error_j": 2.762720607840663e-14,
+      "energy_retained_fraction": 0.376957722386758,
+      "continuous_position_error_m": 0.00021688062069175962,
+      "continuous_phase_state_error_m": 0.00041256533862954947
+    },
+    {
+      "rate_hz": 7680,
+      "duration_s": 0.0125,
+      "angular_frequency_rad_s": 550.252467307306,
+      "max_discrete_state_error_m": 1.6338926739356552e-15,
+      "max_momentum_error_ns": 1.9363677328243512e-13,
+      "max_com_error_m": 6.002143226879753e-16,
+      "max_discrete_energy_error_j": 7.202224927560508e-14,
+      "energy_retained_fraction": 0.6116825628139456,
+      "continuous_position_error_m": 0.00012819413841331573,
+      "continuous_phase_state_error_m": 0.00023210830690252541
+    },
+    {
+      "rate_hz": 15360,
+      "duration_s": 0.0125,
+      "angular_frequency_rad_s": 550.252467307306,
+      "max_discrete_state_error_m": 3.974305693571489e-15,
+      "max_momentum_error_ns": 4.415634524690404e-13,
+      "max_com_error_m": 9.298117831235686e-16,
+      "max_discrete_energy_error_j": 1.6776510736171701e-13,
+      "energy_retained_fraction": 0.7817320741671244,
+      "continuous_position_error_m": 7.01011832069477e-05,
+      "continuous_phase_state_error_m": 0.00012329373092088728
+    }
+  ]
+}
