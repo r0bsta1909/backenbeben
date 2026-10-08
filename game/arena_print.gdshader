@@ -15,6 +15,7 @@ uniform vec2 uv_offset = vec2(0.0);
 uniform vec4 substrate_color : source_color = vec4(.13,.15,.14,1.0);
 uniform float substrate_mix = 0.0;
 uniform float ink_aging = 0.0;
+uniform float ink_gain = 1.0;
 void fragment() {
     vec2 source_uv=UV*uv_scale+uv_offset;
     if(vertical_church) {
@@ -48,7 +49,7 @@ void fragment() {
     ALBEDO = mix(print_color, vec3(dot(print_color,vec3(.3,.59,.11))), .12)*vec3(.92,.88,.78)*.98;
     ALBEDO=mix(ALBEDO,substrate_color.rgb,substrate_mix);
     float uneven=sin(UV.x*43.0+UV.y*19.0)*sin(UV.y*29.0)*.5+.5;
-    ALBEDO*=1.0-uneven*ink_aging;
+    ALBEDO*=(1.0-uneven*ink_aging)*ink_gain;
     EMISSION=ALBEDO*.07;
     ROUGHNESS = 0.95;
 }

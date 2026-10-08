@@ -36,7 +36,7 @@ WERBUNG
 Sechs Original-Drucktexturen: AdiHash/Zahnersatz am Boden, INEOS am Pult,
 KFZ Koenig/Versino/Hoenhorst am Podest. Druckshader entfernen Hintergruende
 und bewahren KFZ-Innenbuchstaben. KFZ und Hoenhorst stehen vorne, Versino
-auf der angrenzenden Seite. Die kleine Hoenhorst-Fotovorlage
+auf der linken angrenzenden Seite. Die kleine Hoenhorst-Fotovorlage
 bleibt als kompaktes Werbeschild vollstaendig erhalten, weil eine Farbmaske
 den Praegeschriftzug beschaedigt. Weiche Alphakanten erhalten feine Druckdetails.
 Veltins, Kirche und BACKENBEBEN gehoeren zum gemalten Hallenbild. Sie folgen
@@ -103,6 +103,16 @@ gerundet, geschlossen und an die Polsterunterkante angeschlossen; keine
 offene Ringschattenkontur auf dem Boden. Pultoberkante bleibt -1.015.
 Stand zur optischen Abnahme: Arena-Design/13-arena-sichtpruefung.png,
 13-arena-spielansicht.png und 13-arena-werbeschild.png im Workspace.
+
+FERNANSICHT UND ZUGANG
+Ein begrenzter warmer Spot auf die Pultsaeule ist nur in TV/Gesamt aktiv.
+Spiel-/Kontaktkamera behalten ihre Beleuchtung. Die Gesamtkamera blickt jetzt
+von links vorne und zeigt die Treppe. Versino sitzt auf der linken Fascia,
+vom Aufgang getrennt, mit etwas angehobenem Druckkontrast und Originalaspekt.
+Neue Bilder: Arena-Design/14-arena-mit-aufgang.png und 14-versino-detail.png.
+Hoenhorst ist weiterhin das kleine Original. Keine groessere Vorlage lokal
+gefunden, keine eindeutig zuordenbare Quelle in der Websuche. Rueckfrage nach
+vollstaendigem Betrieb/Website gestellt; der Austausch ist noch offen.
 
 HISTORISCH
 arena_finished.tscn, bake_arena.gd und tests/arena_finished.gd gehoeren zur

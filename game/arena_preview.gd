@@ -1,6 +1,7 @@
 extends Node3D
 ## Painted 2D auditorium behind the actual 3D competition platform.
 var camera: Camera3D
+var table_accent: SpotLight3D
 var stage: Node3D
 var caption: Label
 var backdrop: TextureRect
@@ -10,7 +11,7 @@ var show_scale_figures := true
 var actors: Array[Node3D] = []
 var frame_times: Array[float] = []
 var sample_clock := 0.0
-const POSITIONS := [Vector3(.30,.70,3.3),Vector3(3,.55,1.1),Vector3(7,.8,22),Vector3(11,4,28)]
+const POSITIONS := [Vector3(.30,.70,3.3),Vector3(3,.55,1.1),Vector3(7,.8,22),Vector3(-15,4,24)]
 const TARGETS := [Vector3(.22,-.55,0),Vector3(0,-.12,1),Vector3(0,-1.4,1.05),Vector3(0,-.4,.65)]
 const VIEW_NAMES := ["Spielkamera", "Kontaktkamera", "TV-Kamera", "Gesamtansicht"]
 
@@ -30,6 +31,7 @@ func human(p: Vector3, yaw: float, color: Color) -> Node3D:
 
 func set_view(number: int) -> void:
 	view=number
+	table_accent.visible=number>=3
 	actors[0].visible=show_scale_figures
 	actors[1].visible=show_scale_figures and number!=1
 	camera.position=POSITIONS[number-1]
@@ -67,6 +69,11 @@ func _ready() -> void:
 	var table_wash:=OmniLight3D.new();table_wash.position=Vector3(-1,-2,2.2)
 	table_wash.light_color=Color("ffe0b3");table_wash.light_energy=.22;table_wash.omni_range=6
 	add_child(table_wash)
+	table_accent=SpotLight3D.new();table_accent.name="TableDistanceAccent"
+	table_accent.position=Vector3(-2,-2.3,3.2);add_child(table_accent)
+	table_accent.look_at(Vector3(0,-3.8,.65));table_accent.spot_angle=20
+	table_accent.spot_range=5.2;table_accent.light_energy=1.4
+	table_accent.light_color=Color("fff0d4")
 	stage=load("res://arena_platform.tscn").instantiate();add_child(stage)
 	person(0);person(2.1)
 	camera=Camera3D.new();camera.near=.08;camera.far=100;add_child(camera);camera.current=true

@@ -108,6 +108,9 @@ func stage_deck() -> void:
 		print_material.set_shader_parameter("substrate_color",Color("4d514b"))
 		print_material.set_shader_parameter("substrate_mix",.20 if id=="FasciaHoenhorst" else .08)
 		print_material.set_shader_parameter("ink_aging",.06)
+	var versino: MeshInstance3D=find_child("FasciaVersino",true,false)
+	versino.position=Vector3(-7.024,-5.7,-1.2);versino.rotation.y=-PI/2
+	versino.material_override.set_shader_parameter("ink_gain",1.12)
 	# Keep the small original photograph intact, with a separate readable identifier.
 	var plaque: MeshInstance3D=find_child("HoenhorstPlaque",true,false)
 	plaque.position=Vector3(3.3,-5.7,7.064);plaque.mesh.size=Vector3(2.21,.90,.014)

@@ -31,14 +31,18 @@ func capture() -> void:
 	await process_frame
 	RenderingServer.force_draw(false)
 	root.get_texture().get_image().save_png(directory+"/arena-only.png")
+	scene.set_view(4)
+	await process_frame
+	RenderingServer.force_draw(false)
+	root.get_texture().get_image().save_png(directory+"/arena-access.png")
 	scene.camera.position=Vector3(2.2,-1.2,3.6)
 	scene.camera.fov=55
 	scene.camera.look_at(Vector3(0,-2.2,.65))
 	await process_frame
 	RenderingServer.force_draw(false)
 	root.get_texture().get_image().save_png(directory+"/podium.png")
-	scene.camera.position=Vector3(10,-5.2,4)
-	scene.camera.look_at(Vector3(7.024,-5.7,2.1))
+	scene.camera.position=Vector3(-10,-5.2,0)
+	scene.camera.look_at(Vector3(-7.024,-5.7,-1.2))
 	await process_frame
 	RenderingServer.force_draw(false)
 	root.get_texture().get_image().save_png(directory+"/fascia.png")

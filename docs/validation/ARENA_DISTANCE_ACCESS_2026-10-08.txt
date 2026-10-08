@@ -1,0 +1,22 @@
+Arena-Fernansicht, Zugang und seitliche Werbung, 2026-10-08
+
+Gezielter warmer Spot auf die Pultsaeule, nur in Kameras 3/4 aktiv.
+Gesamtkamera von links vorne zeigt den Stufenaufgang. Versino links, abseits
+der Treppe; leichte Kontrastanhebung im Druckshader, Originalgrafik und Aspekt
+erhalten. Erste Position nahe dem Zugang war teilweise verdeckt; nach der
+nativen Sichtpruefung von der Treppe getrennt. Neue reproduzierbare Aufnahmen
+arena-access.png und fascia.png zeigen Gesamtansicht/Versino in Nahaufnahme.
+
+Plattform gebacken, ARENA_HYBRID_PASS, native vier Kameras und Detailansichten
+erfasst. Gesamtansicht ohne Figuren, TV ohne Figuren und Versino-Nahaufnahme
+gesichtet. Isolierter Web-Export erfolgreich; Chromium prueft Kameras 4/1/2/3.
+Abschliessende Fassung bestanden: errors[], sechs Druckmotive, 2D-Kulisse,
+keine 3D-Zuschauer; lokale p95-Frameintervalle 16.67 ms, keine Hardwarezusage.
+Keine Aenderung von Tischhoehe, Match oder Serverphysik.
+
+Hoenhorst-Austausch offen: nur bekanntes 237x96-Original im Workspace. Websuche
+lieferte keine eindeutig passende offizielle Quelle. Nutzer nach Betrieb/Website
+gefragt, Antwort noch ausstehend. Keine fremde Marke eingesetzt, kein künstlich
+hochskaliertes Bild als scharfe Originaldatei ausgegeben. Vorhandenes Schild mit
+separater lesbarer Namenszeile bleibt aktiv. Grosse Entfernung begrenzt weiterhin
+die Lesbarkeit kleiner Sponsorunterzeilen. Keine menschliche Art-Freigabe.
