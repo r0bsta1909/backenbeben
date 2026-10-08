@@ -41,7 +41,7 @@ var emote_kind := 0
 var emote_remaining := 0.0
 var skins := [Color("cf946f"), Color("986345"), Color("683f30"), Color("e5b69a")]
 var shirts := [Color("6e242b"), Color("26354b"), Color("deb64c"), Color("534979")]
-var hairs := [Color("221b22"), Color("6b3624"), Color("b8afa0")]
+var hairs := [Color("241b16"), Color("6b3624"), Color("b8afa0")]
 
 func _ready() -> void:
 	RenderingServer.set_default_clear_color(Color("111623"))
@@ -183,7 +183,7 @@ func prepare_materials(root: Node) -> void:
 				copy.set_shader_parameter("tissue",str(node.name) in ["Face","FaceInk","MouthLine","LidsL","LidsR"])
 				copy.set_shader_parameter("head_part",str(node.name) in ["Face","FaceInk","MouthLine","MouthInterior","Teeth","LidsL","LidsR","EyeL","EyeR","IrisL","IrisR","PupilL","PupilR","BrowL","BrowR","HairCap","EarL","EarR","EarFoldL","EarFoldR","NostrilL","NostrilR"])
 				physics_materials[root.get_instance_id()].append(copy)
-				if m.resource_name in ["Skin","FaceSkin","Shirt","Hair","Trousers","Shoe"] and not str(node.name).begins_with("ArmSkin"):
+				if m.resource_name in ["Skin","FaceSkin","Hair","Trousers","Shoe"] and not str(node.name).begins_with("ArmSkin"):
 					var outline := ShaderMaterial.new()
 					outline.shader=load("res://toon_outline.gdshader")
 					for parameter in ["part_origin","geometry_scale","face_skin","tissue","head_part"]:
@@ -424,7 +424,7 @@ func drive_recorded_physics() -> void:
 	mirror_viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED if replaying else SubViewport.UPDATE_ALWAYS
 	var wide_view: bool = replaying and physics_frame.get("camera","")=="wide"
 	var side_view: bool = replaying and physics_frame.get("camera","") in ["side","wide"]
-	camera.position=Vector3(8.5,1.8,5.5) if wide_view else Vector3(3,.55,1.1) if side_view else Vector3(.30,.55,2.65)
+	camera.position=Vector3(6.0,2.8,6.5) if wide_view else Vector3(3,.55,1.1) if side_view else Vector3(.30,.55,2.65)
 	camera.look_at(Vector3(0,-3.0,.4) if wide_view else Vector3(0,-.12,1.0) if side_view else Vector3(.22,-.18,0))
 	hand.visible=true
 	hand.first_person(not side_view)

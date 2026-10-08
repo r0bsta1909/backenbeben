@@ -90,3 +90,8 @@ Kein fertiges v0.3.0-Release veröffentlichen; Goal bleibt aktiv.
 Neuster Bildstand: Face-Ink-Textur + Konturshader, runder Kragen, korrigierte
 Wrist-Gewichtung, zurückgesetzte Auffänger. Details in LATERAL_REWORK.txt.
 Nächster konkreter Art-Pass: helmartige Haarform und Schulter/Stoffsilhouette.
+
+Haaransatz, weiche Schulter-/Ärmelgewichte und seitliche Tribünen ergänzt.
+TV-Kamera nach innen korrigiert, nachdem die neue Wand die Totale verdeckte.
+LAN-Gauntlet erneut bestanden; anschließend realen KO-Clip gezielt visuell geprüft.
+Aktuelle Bilder und genauer Prüfaufbau: docs/LATERAL_REWORK.txt.

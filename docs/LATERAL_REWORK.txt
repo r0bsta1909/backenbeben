@@ -70,3 +70,23 @@ Kontaktbilder bei exakt 0.50 s und neue Messung unter docs/validation/.
 1080p / RTX 2080 / zwei Browserkontexte: p95 13.9–14 ms, Median 7 ms.
 Noch offen: natürliche Haarform, Stoff/Schulterform, Handgelenksilhouette,
 physikalisch gelöster Auffangkontakt und menschliche Verständlichkeitsabnahme.
+
+HAAR / SCHULTER / SEITLICHE ARENA
+Haaransatz kontinuierlich mit Aussparung oberhalb der Ohren; versetzte kurze
+Strähnen statt einer einzelnen Spitzenreihe. Dezente Strähnenschattierung.
+Ärmelgewichtung besitzt jetzt einen räumlich weichen Übergang zum Brustkorb;
+die alte horizontale Abschneidegrenze verzog den Ärmel beim angehobenen Arm.
+Zusätzliche Konturhülle auch auf stark gebogenem Stoff entfernt.
+Seitliche Tribünen/Wände ergänzen die zuvor leere TV-Seitenkulisse.
+Die erste TV-Totale lag dadurch hinter einer Wand: bei Bildprüfung erkannt,
+Kamera nach innen versetzt und mit realer gespeicherter KO-Aufzeichnung geprüft.
+LAN-Duell erneut bestanden: Anspannen, Audiofallback, identische Aufzeichnung,
+Wiederverbindung, KO-Körpertrack, Rückwärtsscrubbing, Revanche, Verlassen;
+keine Browserfehler. Nach Kamera-/Ärmelkorrektur denselben echten KO-Clip gezielt
+in Front/Seite/Totale wiedergegeben. Die aktuellen Bilder stammen aus diesem
+Replay-Prüfaufbau; sein Lobby-/Namensoverlay ist nicht das originale Matchoverlay.
+Die letzte physikalische Aufzeichnung wurde dabei nicht verändert.
+Assetprüfung auch nach der Ärmelkorrektur bestanden.
+Nächster Schwerpunkt: Kontakt-/Wristwinkel über den gesamten Schwung prüfen,
+Gewebe-/Handkontakt genauer darstellen und natürliche Auffangpose verbessern.
+Stil und menschliche Verständlichkeit bleiben ausdrücklich nicht freigegeben.

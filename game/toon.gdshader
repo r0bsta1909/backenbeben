@@ -47,7 +47,12 @@ void fragment() {
     float shade = d > 0.65 ? 1.08 : (d > 0.12 ? 0.84 : 0.52);
     float edge = smoothstep(0.06, 0.20, dot(n, normalize(VIEW)));
     vec3 color=base_color.rgb;
-    if(hair_surface) color+=vec3(.045,.026,.012)*smoothstep(.15,.75,d);
+    if(hair_surface) {
+        color+=vec3(.045,.026,.012)*smoothstep(.15,.75,d);
+        vec3 h=skin_position/geometry_scale;
+        float strand=sin(atan(h.x,h.z)*160.0+sin(h.y*130.0)*.8+h.y*70.0);
+        color*=1.0-.07*smoothstep(.80,.98,strand);
+    }
     if(face_skin) {
         vec3 local=skin_position/geometry_scale;
         vec2 paint_uv=vec2((local.x+.19)/.38,(.245-local.y)/.38);

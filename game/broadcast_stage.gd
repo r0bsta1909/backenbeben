@@ -19,6 +19,20 @@ func label(text: String,p: Vector3,size: int,c: Color) -> void:
 func _ready() -> void:
 	cube(Vector3(0,-5.5,0),Vector3(16,.25,15),Color("17191f"))
 	cube(Vector3(0,-.7,-7),Vector3(16,10,.15),Color("0b0d14"))
+	# Enclose the arena for the broadcast side cameras as well as the ego view.
+	for side in [-1.0,1.0]:
+		cube(Vector3(side*8,-.7,2),Vector3(.15,10,30),Color("0b0d14"))
+		for tier in range(2):
+			var level: float=-1.8+tier*2.5
+			cube(Vector3(side*7,level-.55,0),Vector3(1.8,.20,12),Color("202127"))
+			beam(Vector3(side*6.25,level-.05,-6),Vector3(side*6.25,level-.05,6),.035,Color("4c4d56"))
+			for seat in range(20):
+				var z: float=-5.5+seat*.56
+				var head := MeshInstance3D.new();var shape := SphereMesh.new()
+				shape.radius=.115;shape.height=.29;shape.radial_segments=8;shape.rings=4
+				head.mesh=shape;head.material_override=mat(Color("2b2830"))
+				head.position=Vector3(side*6.7,level+.45+(seat%3)*.06,z);add_child(head)
+				cube(Vector3(side*6.7,level+.07,z),Vector3(.24,.51,.33),Color("20242c"))
 	for x in [-3.5,3.5]:
 		for z in [-3.3,-3.0]:
 			for dx in [-.16,.16]:beam(Vector3(x+dx,-5.2,z),Vector3(x+dx,3.8,z),.035,Color("56606a"))

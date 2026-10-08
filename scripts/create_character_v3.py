@@ -126,10 +126,13 @@ for sign,suffix in [(-1,'L'),(1,'R')]:
     pts=[skinpoint(sign*x,y) for x,y in [(.017,.106),(.028,.111),(.044,.116),(.060,.108)]]
     head_parts.append(curve('Brow'+suffix,pts,.0028,hair))
 # Scalp follows the real head. Short swept clumps vary in length and direction.
+def hairline(p):
+    ear_notch=.025*math.exp(-((p.z-.020)/.035)**2)*smoothstep(.075,.10,abs(p.x))
+    return .100+.063*smoothstep(-.005,.08,p.z)-.005*smoothstep(.055,.10,abs(p.x))+ear_notch+.0015*math.sin(p.x*110)
 hv=[];hf=[]
 for f in faces:
     center=sum((Vector(verts[i]) for i in f),Vector())/len(f)
-    threshold=.117+.046*max(0,min(1,(center.z+.015)/.10))+.004*math.sin(center.x*110)
+    threshold=hairline(center)
     if min(verts[i][1] for i in f)>threshold:
         ids=[]
         for i in f:
@@ -137,15 +140,23 @@ for f in faces:
             ids.append(len(hv));hv.append(tuple(v))
         hf.append(tuple(ids))
 cap=mesh('HairCap',hv,hf,hair)
-bm=bmesh.new();bm.from_mesh(cap.data);bmesh.ops.remove_doubles(bm,verts=list(bm.verts),dist=.00001);bm.to_mesh(cap.data);bm.free()
+bm=bmesh.new();bm.from_mesh(cap.data);bmesh.ops.remove_doubles(bm,verts=list(bm.verts),dist=.00001)
+# Trim the boundary continuously instead of retaining staircase-shaped mesh rows.
+for v in bm.verts:
+    if any(e.is_boundary for e in v.link_edges):
+        q=G(v.co)
+        q.y=hairline(q)
+        v.co=B(q)
+bm.to_mesh(cap.data);bm.free()
 locks=[]
-for i in range(17):
-    x=-.086+i*.0102;y=.164+.009*math.sin(i*.9)
-    root=Vector(skinpoint(x,y,.003));tip=root+Vector((.017,.029+(i%4)*.002,-.025))
+for i in range(26):
+    row=i//13;column=i%13
+    x=(-.076+column*.0126)*(1-row*.19);y=.164+row*.019+.003*math.sin(i*1.7)
+    root=Vector(skinpoint(x,y,.003));tip=root+Vector((.018,.019+(i%5)*.002,-.022))
     vv=[]
     for k in range(5):
         t=k/4;c=root.lerp(tip,t);c.z+=math.sin(t*math.pi)*.008
-        w=.008*(1-t)+.0002
+        w=.009*(1-t)+.0002
         vv.extend([tuple(c+Vector((-w,0,0))),tuple(c+Vector((0,.003,.003))),tuple(c+Vector((w,0,0)))])
     ff=[(k*3+j,k*3+j+1,(k+1)*3+j+1,(k+1)*3+j) for k in range(4) for j in range(2)]
     locks.append(mesh('HairLock',vv,ff,hair))
@@ -278,7 +289,7 @@ for v in body.data.vertices:
         p.z+=weight*.0035*math.sin((p.y+abs(p.x)*.7)*90)
         p.z+=.002*math.sin(p.x*55)*math.exp(-((p.y+.56)/.04)**2)
         v.co=B(p)
-dec=body.modifiers.new('Cloth budget' ,'DECIMATE');dec.ratio=.055;bpy.ops.object.modifier_apply(modifier=dec.name)
+dec=body.modifiers.new('Cloth budget' ,'DECIMATE');dec.ratio=.10;bpy.ops.object.modifier_apply(modifier=dec.name)
 
 bpy.ops.object.select_all(action='DESELECT');bpy.ops.object.armature_add()
 rig=bpy.context.object;rig.name='CharacterRig';bpy.ops.object.mode_set(mode='EDIT');rig.data.edit_bones.remove(rig.data.edit_bones[0])
@@ -303,8 +314,13 @@ for obj in [o for o in bpy.context.scene.objects if o.type=='MESH']:
         groups={name:obj.vertex_groups.new(name=name) for name in candidates}
         for v in obj.data.vertices:
             p=G(v.co)
-            if obj==body and (p.y<-.29 or abs(p.x)<.15):
-                groups['chest'].add([v.index],1,'REPLACE');continue
+            if obj==body:
+                # Smooth armhole ownership: no horizontal cut through the sleeve.
+                arm_weight=smoothstep(.145,.265,abs(p.x))*(1-smoothstep(.285,.365,-p.y))
+                side='L' if p.x>0 else 'R'
+                groups['chest'].add([v.index],1-arm_weight,'REPLACE')
+                groups['upper_arm.'+side].add([v.index],arm_weight,'REPLACE')
+                continue
             if obj.name.startswith('ArmSkin.'):
                 side=obj.name[-1]
                 wrist=Vector(bones['hand.'+side][0])
