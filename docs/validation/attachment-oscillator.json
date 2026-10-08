@@ -1,8 +1,9 @@
 {
   "scope": "Two free masses, linear compliant attachment, no contacts or explicit damping. Not anatomical calibration.",
-  "expected": "Backward Euler: E_n/E_0=(1+omega^2*dt^2)^(-n). Continuous oscillator conserves energy.",
+  "expected": "Backward Euler: E_n/E_0=(1+omega^2*dt^2)^(-n). Midpoint and continuous oscillator conserve quadratic energy; midpoint retains phase error.",
   "runs": [
     {
+      "method": "backward_euler",
       "rate_hz": 960,
       "duration_s": 0.0125,
       "angular_frequency_rad_s": 550.252467307306,
@@ -15,52 +16,121 @@
       "continuous_phase_state_error_m": 0.0009151179064057313
     },
     {
+      "method": "backward_euler",
       "rate_hz": 1920,
       "duration_s": 0.0125,
       "angular_frequency_rad_s": 550.252467307306,
       "max_discrete_state_error_m": 1.9618638311125203e-16,
       "max_momentum_error_ns": 3.351485755587191e-14,
       "max_com_error_m": 1.0061396160665481e-16,
-      "max_discrete_energy_error_j": 6.042041866827219e-15,
+      "max_discrete_energy_error_j": 6.012551567735613e-15,
       "energy_retained_fraction": 0.15040337846672847,
       "continuous_position_error_m": 0.0003265030228460454,
       "continuous_phase_state_error_m": 0.0006621111779835293
     },
     {
+      "method": "backward_euler",
       "rate_hz": 3840,
       "duration_s": 0.0125,
       "angular_frequency_rad_s": 550.252467307306,
       "max_discrete_state_error_m": 7.003946034256359e-16,
       "max_momentum_error_ns": 1.0661610483353456e-13,
       "max_com_error_m": 3.191891195797325e-16,
-      "max_discrete_energy_error_j": 2.762720607840663e-14,
+      "max_discrete_energy_error_j": 2.7727820040013285e-14,
       "energy_retained_fraction": 0.376957722386758,
       "continuous_position_error_m": 0.00021688062069175962,
       "continuous_phase_state_error_m": 0.00041256533862954947
     },
     {
+      "method": "backward_euler",
       "rate_hz": 7680,
       "duration_s": 0.0125,
       "angular_frequency_rad_s": 550.252467307306,
       "max_discrete_state_error_m": 1.6338926739356552e-15,
       "max_momentum_error_ns": 1.9363677328243512e-13,
       "max_com_error_m": 6.002143226879753e-16,
-      "max_discrete_energy_error_j": 7.202224927560508e-14,
+      "max_discrete_energy_error_j": 7.213674102501955e-14,
       "energy_retained_fraction": 0.6116825628139456,
       "continuous_position_error_m": 0.00012819413841331573,
       "continuous_phase_state_error_m": 0.00023210830690252541
     },
     {
+      "method": "backward_euler",
       "rate_hz": 15360,
       "duration_s": 0.0125,
       "angular_frequency_rad_s": 550.252467307306,
       "max_discrete_state_error_m": 3.974305693571489e-15,
       "max_momentum_error_ns": 4.415634524690404e-13,
       "max_com_error_m": 9.298117831235686e-16,
-      "max_discrete_energy_error_j": 1.6776510736171701e-13,
+      "max_discrete_energy_error_j": 1.6784143519466e-13,
       "energy_retained_fraction": 0.7817320741671244,
       "continuous_position_error_m": 7.01011832069477e-05,
       "continuous_phase_state_error_m": 0.00012329373092088728
+    },
+    {
+      "method": "midpoint",
+      "rate_hz": 960,
+      "duration_s": 0.0125,
+      "angular_frequency_rad_s": 550.252467307306,
+      "max_discrete_state_error_m": 3.699297812520541e-16,
+      "max_momentum_error_ns": 6.925363060794609e-14,
+      "max_com_error_m": 2.5326962749261384e-16,
+      "max_discrete_energy_error_j": 2.01123839804751e-14,
+      "energy_retained_fraction": 0.999999999999748,
+      "continuous_position_error_m": 0.0001438072202877748,
+      "continuous_phase_state_error_m": 0.0001907767836551185
+    },
+    {
+      "method": "midpoint",
+      "rate_hz": 1920,
+      "duration_s": 0.0125,
+      "angular_frequency_rad_s": 550.252467307306,
+      "max_discrete_state_error_m": 4.977572173880951e-16,
+      "max_momentum_error_ns": 4.5755066402364264e-14,
+      "max_com_error_m": 5.898059818321144e-17,
+      "max_discrete_energy_error_j": 2.1344037648418634e-14,
+      "energy_retained_fraction": 1.000000000000549,
+      "continuous_position_error_m": 3.937498618443935e-05,
+      "continuous_phase_state_error_m": 4.947797660043815e-05
+    },
+    {
+      "method": "midpoint",
+      "rate_hz": 3840,
+      "duration_s": 0.0125,
+      "angular_frequency_rad_s": 550.252467307306,
+      "max_discrete_state_error_m": 1.97010376762341e-15,
+      "max_momentum_error_ns": 3.5050434776806583e-13,
+      "max_com_error_m": 6.591949208711867e-16,
+      "max_discrete_energy_error_j": 9.96876192704832e-14,
+      "energy_retained_fraction": 0.9999999999986844,
+      "continuous_position_error_m": 1.0064927202559797e-05,
+      "continuous_phase_state_error_m": 1.2484160867125911e-05
+    },
+    {
+      "method": "midpoint",
+      "rate_hz": 7680,
+      "duration_s": 0.0125,
+      "angular_frequency_rad_s": 550.252467307306,
+      "max_discrete_state_error_m": 1.0217629693720642e-14,
+      "max_momentum_error_ns": 1.305561561637525e-12,
+      "max_com_error_m": 2.237793284010081e-15,
+      "max_discrete_energy_error_j": 5.623349008665457e-13,
+      "energy_retained_fraction": 0.9999999999833574,
+      "continuous_position_error_m": 2.5301616989236103e-06,
+      "continuous_phase_state_error_m": 3.1282558609766173e-06
+    },
+    {
+      "method": "midpoint",
+      "rate_hz": 15360,
+      "duration_s": 0.0125,
+      "angular_frequency_rad_s": 550.252467307306,
+      "max_discrete_state_error_m": 2.7053012607858307e-14,
+      "max_momentum_error_ns": 3.684896138222982e-12,
+      "max_com_error_m": 5.412337245047638e-15,
+      "max_discrete_energy_error_j": 1.5423044785745077e-12,
+      "energy_retained_fraction": 1.0000000000414222,
+      "continuous_position_error_m": 6.334126784656108e-07,
+      "continuous_phase_state_error_m": 7.825156987815557e-07
     }
   ]
 }

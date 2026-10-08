@@ -461,3 +461,20 @@ Nachweis docs/validation/attachment-oscillator.json; zwei Regressionstests.
 Matchsolver unveraendert. Naechster Vergleich: alternative daempfungsarme Integration
 am analytischen Fall, dann kontrollierter Kontaktfall; keine globale nachtraegliche
 Energiereskalierung, die inelastische Kontakte unphysikalisch zurueckfedern liesse.
+
+MITTELPUNKTINTEGRATION FUER ISOLIERTE LINEARE BINDUNG
+advance_attachment_midpoint in contact_constraint.py berechnet einen impliziten
+Halbschritt und spiegelt Position/Geschwindigkeit fuer den vollen Federschritt.
+Nur lineare bilaterale Feder, positive Compliance, keine Kontakte oder Rotation.
+Der analytische Vergleich umfasst jetzt beide Verfahren. Mittelpunkt erhaelt
+quadratische Energie im 12.5-ms-Fall bis auf Rundung (max 5e-11 relativ).
+Kombinierter Phasen-/Amplitudenfehler bei 960/1920/3840 Hz:
+.191/.0495/.0125 mm statt .915/.662/.413 mm mit Backward Euler.
+Es bleibt Phasenfehler; Energieerhaltung allein beweist keine korrekte Bewegung.
+Tests pruefen geschlossene diskrete Loesung, Energie, Impuls, Schwerpunkt,
+quadratische Fehlerkonvergenz, 3D-Zeitumkehr, festen Anker und Parameterfehler.
+Nicht auf unilaterale Kontaktkorrekturen anwenden: Reflexion wuerde Restitution
+und moegliche Durchdringung erzeugen. Match und gekoppelter Laborclip bleiben
+unveraendert. Naechstes Gate ist ein kontrollierter Feder-Aufprall mit getrennter
+inelastischer Kontaktbehandlung gegen Impuls-/Energiebilanz, vor jeder Uebertragung
+auf nichtlineare Gewebefedern und Gelenkrotationen.

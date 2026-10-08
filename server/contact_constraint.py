@@ -80,3 +80,33 @@ def project_rigid_contact(center,orientation,local_point,inverse_mass,inverse_in
     rotation=rotation_increment(world_inertia@angular*delta)@rotation
     p-=((w*a)*delta)[:,None]*n
     return center,rotation,p,updated
+
+
+def advance_attachment_midpoint(hand, arm, hand_velocity, arm_velocity,
+                                inverse_hand_mass, inverse_arm_mass, rest_offset,
+                                dt, compliance):
+    """Experimental implicit midpoint for a linear bilateral spring only.
+
+    A backward-Euler half-step computes midpoint positions and velocities.
+    Reflection about the initial state gives the full step. This preserves
+    quadratic spring energy; it must NOT be applied to unilateral impact
+    corrections, which would introduce restitution and possible penetration.
+    No damping, contact, rotation or nonlinear joint constraints are included.
+    """
+    h = np.asarray(hand, dtype=float)
+    a = np.asarray(arm, dtype=float)
+    vh = np.asarray(hand_velocity, dtype=float)
+    va = np.asarray(arm_velocity, dtype=float)
+    if any(value.shape != (3,) or not np.isfinite(value).all()
+           for value in (h, a, vh, va)):
+        raise ValueError('Invalid midpoint state')
+    if not np.isfinite(compliance) or compliance <= 0:
+        raise ValueError('Midpoint spring requires positive compliance')
+    half = dt * .5
+    midpoint_h, midpoint_a, _ = project_attachment(
+        h + half * vh, a + half * va, inverse_hand_mass, inverse_arm_mass,
+        rest_offset, half, compliance, np.zeros(3))
+    midpoint_vh = (midpoint_h - h) / half
+    midpoint_va = (midpoint_a - a) / half
+    return (2 * midpoint_h - h, 2 * midpoint_a - a,
+            2 * midpoint_vh - vh, 2 * midpoint_va - va)
