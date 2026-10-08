@@ -23,7 +23,8 @@ Kopf/Hand, brauchbare vorhandene Varianten, Toonmaterialien, Licht und Arena.
 Ziel: docs/art-direction-v3/01-character-face.png, 02-hand-connected-arm.png,
 03-first-person.png und Nutzerscreenshots. Ego/Seite/Replay pruefen: keine Loecher,
 Deformationsspitzen, abgetrennten Glieder; natuerliche Schulter-/Aermeluebergaenge.
-Aktuell: technische Exporte bestehen; Aermel, Proportionen und Stil bleiben offen.
+Aktuell: verbundene Aermel mit abfallender Schulterform und erhobener Schlagpose
+geprueft (validation/shoulder-tailoring.json). Proportionen/Gesamtstil bleiben offen.
 
 G3 VERSTAENDLICHER SEITLICHER SCHLAG — HOECHSTE SICHTBARE PRIORITAET / OFFEN
 Ausholen, Ausrichten, Probe und Schlag mit gemeinsamer koerpergebundener Bewegung.
@@ -44,7 +45,10 @@ Durchdringung oder kuenstliches Rueckfedern. Sichtbarer Kontakt entspricht Wertu
 Aktuell: normaler Matchstart nutzt gekoppelte Kontakt-/Gewebe-/Arm-Replays.
 Batchstart und vollstaendiger LAN-Standardkampf sind geprueft. Legacy bleibt nur
 Vergleichsoption. Head-/Kieferreaktion und Kontaktwertung haben noch Modellgrenzen.
-Freie anisotrope Rotation nicht mit Kontaktsuche integriert. Das ist NICHT fertig.
+Drei Kopftranslationen und drei Eulerrotationen sind im Quellstandard integriert;
+Kontakt, Auslauf, Shader und Rueckholung nutzen dieselbe Aufzeichnung. Offene
+Grenzen: diagonale generalisierte Traegheit, Prototyp-Halsparameter, Reibung,
+stilisierter Kiefer und gefuehrter KO. Das ist keine fertige anatomische Simulation.
 Geeignete Laborbausteine zu einem spielbaren Clip verbinden; konkurrierende alte
 Wege erst nach nachgewiesener Gleichwertigkeit/Verbesserung abloesen.
 
@@ -72,7 +76,8 @@ Gemessene Zielhardware-Leistung fuer Idle, Schlag, Impact und Replay; keine nur
 isolierte Solverzeit als FPS-Beweis. Fehlerliste abarbeiten. Aktuelles herunter-
 geladenes Paket ausserhalb Entwicklungsordner starten und G5/G7 erneut pruefen.
 Quellen, eigene Assets, Lizenzen, Anleitung, Wissenssicherung und Release konsistent.
-Altes v0.3-dev-Archiv ist nicht automatisch aktueller Quellstand. Release aktualisieren.
+Oeffentliches v0.7-dev-Archiv enthaelt noch Yaw-Kopfbewegung und fruehere Assets.
+Der neuere Quellstand muss als eigenes frisches Paket geprueft werden.
 Goal erst abschliessen, wenn alle Gates mit passenden Belegen bestanden sind.
 
 ZURUECKGESTELLT

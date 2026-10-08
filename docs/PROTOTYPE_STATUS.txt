@@ -5,14 +5,16 @@ Diese Uebersicht trennt Liefergegenstaende, vorhandene Nachweise und offene Arbe
 G1 / INVENTAR
 Quelle: game/, server/, scripts/, tests/; Blender: assets-source/character-v3.blend.
 Gauntlet und historische Entscheidungen: PROTOTYPE_GAUNTLET.txt, HANDOFF.txt.
-Aktueller Spielstand ist als experimentelles v0.7-Hostpaket veroeffentlicht.
+Oeffentliches v0.7-Hostpaket ist aelter als der aktuelle Quellstand: drei Kopfachsen,
+Gesichtstextur V2, konkrete Mausradhilfe und Schulterkorrektur fehlen im Archiv.
 
 G2 / FIGUREN UND COMICSTIL — OFFEN
 Vorhanden: anatomischer Kopf, Arme/Haende, vollstaendiges Rig, Haargeometrie,
 Kleidung, Toonmaterialien, vier Haut-/vier Trikot-/drei Haarfarben.
 Belege: validation/anatomical-arms.json, face-hair-style.json; Blenderquelle.
 Modellierte Stofffalten und vereinfachte Zuschauerfiguren vorhanden; Belege
-validation/cloth-folds.json und crowd-assets.json.
+validation/cloth-folds.json und crowd-assets.json. Schulter-/Aermelkorrektur mit
+15 echten Browseransichten geprueft: validation/shoulder-tailoring.json.
 Offen: Referenzlook als Gesamtbild und weitere Figuren-/Bewegungsqualitaet.
 Technischer Export oder bestandener Rendercheck ersetzt keine Artabnahme.
 
