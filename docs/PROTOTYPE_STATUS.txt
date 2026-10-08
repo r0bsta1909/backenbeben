@@ -520,3 +520,21 @@ Texturwiederverwendung und gezielte Spiegelaktualisierung. Profiling standardmae
 Gesamtstil/menschliche Verstaendlichkeit/physischer Zwei-PC-Test bleiben offen.
 Goal aktiv. Naechster Schwerpunkt: aktuellen Gesamtstand erneut markerfrei gegen
 Referenzen pruefen und groesste sichtbare Figuren-/Bewegungsluecke bearbeiten.
+
+G2 SICHTBARER HALS UND KORREKTER BUILD-FEHLERABBRUCH
+Vorderen Crewneck um45mm vertieft, Kragen und vordere Tiefe mitgefuehrt;
+Kopf/Schultergelenke/Kontaktmesh unveraendert. Blender/GLB/Preview gemeinsam
+regeneriert,89901Polygone. Front/Spiegel und erhobene seitliche Schlagpose
+visuell geprueft: Hals sichtbar, geschlossener Anschluss. Assetvalidator und
+116Handkontaktpunkte PASS,32Verletzungsrender mit gesundem Reset PASS.
+Dabei nativen Parserfehler aus vorheriger CPU-Profiling-Ergaenzung entdeckt:
+gemischte Leerzeichen/Tab-Einrueckung. Korrigiert. build.ps1 prueft jetzt neben
+Exitcode auch SCRIPT ERROR/ERROR-Zeilen; vorher konnte Godot trotz Parserfehler
+Exitcode0 liefern. Absichtlich erzeugter Scriptfehler mit Exit0 wird abgewiesen.
+Danach frischer Import/Export ohne Fehler; kompletter Standard-KO-Kampf mit
+Replay/Resume/Revanche bestanden, Browserfehler leer.
+Beleg validation/crew-neck-style.json und zwei Bilder. V12 bleibt getestetes
+historisches Browserpaket vor Ausschnitt und nativem Parser-/Buildfix.
+Goal aktiv; Gesamtstil/Menschabnahme weiter offen. Naechster G2/G4-Schritt:
+Kopf-/Halsverbindung bei deutlicher Nachbewegung und KO markerfrei pruefen,
+nicht allein neutrale Frontansicht als Beleg fuer alle Posen verwenden.

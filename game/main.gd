@@ -339,18 +339,18 @@ func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 
 
 func record_cpu(section: String, started: int) -> void:
- var phase: String=str(state.get("phase","lobby"))
- if phase=="impact":phase+="_receiver" if int(physics_frame.get("target",-1))==you else "_striker"
- var key:=phase+"/"+section
- if not cpu_samples.has(key):cpu_samples[key]=[]
- if cpu_samples[key].size()<4096:cpu_samples[key].append((Time.get_ticks_usec()-started)/1000.0)
+	var phase: String=str(state.get("phase","lobby"))
+	if phase=="impact":phase+="_receiver" if int(physics_frame.get("target",-1))==you else "_striker"
+	var key:=phase+"/"+section
+	if not cpu_samples.has(key):cpu_samples[key]=[]
+	if cpu_samples[key].size()<4096:cpu_samples[key].append((Time.get_ticks_usec()-started)/1000.0)
 
 func cpu_summary() -> Dictionary:
- var result: Dictionary={}
- for key in cpu_samples:
-  var values: Array=cpu_samples[key].duplicate();values.sort()
-  result[key]={"samples":values.size(),"median_ms":values[values.size()/2],"p95_ms":values[mini(values.size()-1,int(values.size()*.95))],"max_ms":values[-1]}
- return result
+	var result: Dictionary={}
+	for key in cpu_samples:
+		var values: Array=cpu_samples[key].duplicate();values.sort()
+		result[key]={"samples":values.size(),"median_ms":values[values.size()/2],"p95_ms":values[mini(values.size()-1,int(values.size()*.95))],"max_ms":values[-1]}
+	return result
 
 func _process(delta: float) -> void:
 	clock_time+=delta

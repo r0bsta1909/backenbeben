@@ -224,9 +224,17 @@ head_parts.append(ell('MouthInterior',(0,-.025,.075),(.026,.009,.010),ink))
 head_parts.append(ell('Teeth',(0,-.026,.081),(.023,.004,.003),white))
 
 body=loft('Shirt',[((0,-.60,-.014),.175,.096),((0,-.51,-.012),.188,.106),((0,-.36,0),.22,.120),((0,-.23,0),.218,.117),((0,-.150,0),.205,.085),((0,-.125,0),.135,.070),((0,-.105,0),.054,.048)],shirt,64)
+# A crew neck is lower in front, exposing the throat without moving the rig.
+for vertex in body.data.vertices:
+    point=G(vertex.co)
+    front=max(0,min(1,point.z/.048))
+    opening=smoothstep(-.19,-.11,point.y)
+    point.y-=.045*opening*front
+    point.z+=.012*opening*front
+    vertex.co=B(point)
 neck=loft('Neck',[((0,-.18,0),.070,.060),((0,-.12,0),.057,.05),((0,-.06,-.008),.049,.043)],skin)
 # A true crew-neck rim follows the neck opening instead of floating on the chest.
-collar_points=[(.056*math.cos(i*math.tau/48),-.107-.005*max(0,math.sin(i*math.tau/48)),.050*math.sin(i*math.tau/48)) for i in range(49)]
+collar_points=[(.056*math.cos(i*math.tau/48),-.107-.045*max(0,math.sin(i*math.tau/48)),.050*math.sin(i*math.tau/48)+.014*max(0,math.sin(i*math.tau/48))) for i in range(49)]
 curve('Collar',collar_points,.004,ink)
 
 
