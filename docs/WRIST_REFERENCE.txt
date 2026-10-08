@@ -1,0 +1,45 @@
+HANDGELENK / UNTERARMREFERENZ — INTEGRATIONSENTSCHEIDUNG
+
+Fachgrundlage
+Crisco et al., 2011, DOI 10.2106/JBJS.I.01222:
+https://pubmed.ncbi.nlm.nih.gov/21248214/
+Sechs Kadaverhandgelenke, 24 Belastungsrichtungen, Momente bis +/-2Nm.
+Gemessene Bewegungshuelle elliptisch und im Mittel26.6Grad gegen reine
+Flexion/Extension geneigt. Diese passiven Versuche sind keine Slap-Messung
+und liefern keinen unmittelbar uebernehmbaren Spielgrenzwert.
+
+Aktueller Pfad
+contact_v3.hand_frame begrenzt den Gesamtwinkel Finger/Unterarm auf85Grad.
+Das ist ein isotroper Spielkegel, kein anatomischer Bewegungsbereich.
+ArmHandAttachment verwendet die aus Schulter/Ellbogen/Wrist bestimmte
+Armbeugeebene als Referenz. Das sichtbare Rig orient_surface projiziert dagegen
+in jedem Frame die Handflaechennormale auf die Unterarmquerebene. Eine getrennte
+aufgezeichnete Pronation/Supination fehlt. Damit kann eine Handdrehung den
+sichtbaren Unterarm anders drehen als die im Attachment getragene Referenz.
+
+Beleg und Aussagegrenzen
+scripts/audit_forearm_reference.py liest echte Browserposen und kalibriert beide
+Referenzen am Kontakt. validation/forearm-reference-audit.json zeigt fuenf
+Stichproben: nachKontakt .05Grad, Nachbewegung39.48Grad, Rueckholung54.37Grad.
+Das ist Referenzdrift, kein Beweis einer anatomischen Winkelueberschreitung.
+Rueckholung darf aktiv pronieren; die derzeitige implizite Drehung muss daher
+nicht einfach ueberall durch eine feste Referenz ersetzt werden.
+
+Verbindlicher naechster integrierter Schritt
+1. Gemeinsamen Unterarmrahmen/Pronation explizit im Hostposeformat aufzeichnen.
+   Am Kontaktstart zum bisherigen sichtbaren Unterarm kalibrieren; waehrend
+   gekoppeltem Kontakt an derselben Solverreferenz tragen.
+2. Rueckholung uebernimmt den letzten Rahmen kontinuierlich und fuehrt die
+   aktive Pronation nachvollziehbar zur Ruhepose zurueck. Aim/Probe ebenfalls
+   denselben Rahmen liefern; keine Umschaltung mit sichtbarem Sprung.
+3. Godot nutzt aufgezeichnete Unterarmnormalen; Finger/Palmkontakt bleiben
+   dieselben Hostdaten. Beide Unterarmsegmente kontinuierlich verbinden.
+4. Ganze Clips vor/bei/nachKontakt, Grenzneigungen und Ruecklauf pruefen:
+   Rigachsen gegen Aufzeichnung, Handkontakt unveraendert, keine Hautspitzen,
+   keine Unterarmrollspruenge. Echten Browserkontakt und Standardduell pruefen.
+5. Erst mit diesem gemeinsamen Rahmen anatomische Achsen und gekoppelte
+   Winkelgrenzen implementieren. Keine Ellipsengrenze auf unkalibrierte
+   Weltachsen setzen; das wuerde unbemerkt Eingabe und Kontaktwertung veraendern.
+
+Dies ist erster gezielter Referenzaudit, kein neuer konkurrierender Physikpfad.
+Naechste Arbeit ist die Integration aus1-4, keine weitere isolierte Laborkette.

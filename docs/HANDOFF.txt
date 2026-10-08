@@ -2217,3 +2217,15 @@ Keine Anatomie-/Gesamtstil-/Menschabnahme ableiten. V13 liegt vor Haaransatz
 und diesem Cachefix. Goal aktiv. Naechste Arbeit: anisotrope menschliche
 Handgelenkachsen anhand belastbarer Referenzen statt globalem85Grad-Kegel
 untersuchen; anschliessend nur als zusammenhaengende Arm-/Handaenderung testen.
+
+G4 UNTERARMREFERENZ VOR ANATOMISCHEN GRENZEN
+Primaerstudie Crisco2011 gelesen; winkelabhaengige schraege Bewegungshuelle,
+keine direkte Kalibrierung fuer Slap. Aktuelle Referenzen unterscheidbar:
+Solver nutzt Armbeugeebene, Rig projiziert Handnormalen. Echter Browserclip
+gegen amKontakt kalibrierten Solverrahmen: Nachbewegung39.48Grad/Rueckholung
+54.37Grad Drift; nachKontakt.05Grad. Keine anatomische Ueberschreitung daraus
+behaupten, Rueckholung darf aktiv pronieren. Reproduzierbarer Audit committed.
+Naechste Integration konkret in WRIST_REFERENCE.txt: explizite aufgezeichnete
+Unterarmnormalen, kontinuierlicher Kontakt/Rueckholuebergang, Godotabgleich,
+Browserkontakt und Standardduell. Erst dann anatomische Winkelhuelle.
+Goal aktiv. Keine Produktionswinkel oder Trefferwertung in diesem Audit geaendert.
