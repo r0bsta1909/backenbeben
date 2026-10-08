@@ -813,3 +813,22 @@ validation/mesh-velocity-contact.json. Regression prueft echte Meshkontakte,
 Nichtmutation und kontaktfreie Bewegung. Naechstes Gate: kontinuierliche
 Kontaktzeitbestimmung statt kontrollierter Ueberlappung; danach gemeinsame
 Zeitintegration mit Gewebe/Arm. Matchsolver und visuelle Abnahme unveraendert.
+
+KONTINUIERLICHER LINEARER PUNKT-DREIECK-KONTAKT
+contact_sweep.first_linear_contact bildet kubisches Koplanaritaetspolynom fuer
+linear bewegte Punkte und Dreiecksecken, prueft reelle Wurzeln in [0,1],
+Baryzentrik und schliessende Relativbewegung. Swept-AABB reduziert Kandidaten.
+Seitennormale folgt positiver X-Konvention des Wangencages. Koplanare/degenerierte
+Kandidaten werden explizit abgelehnt, nicht als sicherer Fehlschlag verschwiegen.
+Kein allgemeiner Rotationssweep: gekruemmte Bahnen duerfen nicht ohne Fehlerschranke
+als eine Sehne ersetzt werden. Anfangsueberlappung ist kein geloester TOI-Fall.
+Audit_mesh_velocity_contact ersetzt die alte kuenstliche 5-mm-Ueberlappung durch
+einen 5-mm-Translationssweep gegen stationaeres reales Wangennetz. Erstkontakt
+nach .000300520 s bei 1 m/s, Sample 111 von 116, gemessene Durchdringung null.
+Einzelimpuls konvergiert, Energie .09 -> .0886437 J. Sweep ca.17.6 ms plus
+Impulssolve7.6 ms: kein Echtzeitnachweis. Weiterhin freie Hand, nur erster Event.
+Tests: schneller Durchgang, bewegtes Dreieck, ausserhalb liegender Schnitt,
+trennende Bewegung, fruehestes Sample, koplanare Ablehnung; danach zusaetzlicher
+bekannter baryzentrischer Event auf deformierendem Dreieck. Vollsuite94 bestanden,
+anschliessend alle6 Sweep-Modultests bestanden. Rotationsbahn, fortlaufende
+Kontaktintegration mit Gewebe/Arm und Mehrfachereignisse weiterhin offen.

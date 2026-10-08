@@ -10,7 +10,10 @@ from rigid_hand_contact import RigidHandContact
 class MeshVelocityContactTests(unittest.TestCase):
  def test_exported_hand_and_cheek_exercise_nonzero_impulses(self):
   result=run()
-  self.assertGreater(result['active_impulses'],1)
+  self.assertGreater(result['active_impulses'],0)
+  self.assertLess(result['maximum_penetration_m'],1e-9)
+  self.assertGreater(result['contact_fraction'],0.)
+  self.assertLess(result['contact_fraction'],1.)
   self.assertLess(result['energy_after_j'],result['energy_before_j'])
   self.assertLessEqual(result['residual_m_s'],1e-8)
 

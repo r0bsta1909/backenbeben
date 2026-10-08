@@ -8,6 +8,7 @@ from contact_v3 import score
 from hand_surface import world_positions,DATA
 from rigid_hand_contact import RigidHandContact
 from contact_energy import mechanical_energy
+from contact_sweep import first_linear_contact
 
 
 def run():
@@ -16,8 +17,13 @@ def run():
     points=world_positions(pose,pose['finger_direction'],pose['palm_normal'])
     hand=RigidHandContact(points,[s['area_m2'] for s in DATA['samples']])
     cage=SideTissue();cage.prepare()
-    # Controlled overlap snapshot, not a time-of-impact claim.
-    hand.center[0]-=.005
+    # Constant translational sweep; triangle nodes remain stationary here.
+    displacement=np.array([-.005,0.,0.])
+    sweep_started=time.perf_counter()
+    hit=first_linear_contact(hand.points(),hand.points()+displacement,cage.p,cage.p,cage.geometry['triangles'])
+    sweep_ms=(time.perf_counter()-sweep_started)*1000
+    if hit is None:raise AssertionError('Expected first mesh contact')
+    hand.center+=displacement*hit['fraction']
     velocity=np.array([-1.,0.,0.]);omega=np.zeros(3)
     before=mechanical_energy(cage,hand,velocity,omega)['total']
     oldp=cage.p.copy();oldv=cage.v.copy();oldcenter=hand.center.copy()
@@ -28,10 +34,10 @@ def run():
     cage.v=result['node_velocities']
     after=mechanical_energy(cage,hand,result['velocity'],result['angular_velocity'])['total']
     report={k:v for k,v in result.items() if k not in ('node_velocities','velocity','angular_velocity','impulses')}
-    report.update(hand_samples=len(points),active_impulses=int(np.count_nonzero(result['impulses']>0)),
+    report.update(sweep_ms=sweep_ms,contact_fraction=hit['fraction'],contact_time_s=hit['fraction']*.005,hand_samples=len(points),active_impulses=int(np.count_nonzero(result['impulses']>0)),
         energy_before_j=before,energy_after_j=after,solve_ms=elapsed*1000,
         final_velocity=result['velocity'].tolist(),final_angular_velocity=result['angular_velocity'].tolist(),
-        limits=['snapshot only; no TOI','initial penetration reported, not corrected','free rigid hand; no arm reaction','not active match physics'])
+        limits=['linear translation against stationary cage only; no curved rotation','single first-impact snapshot; no full timeline','free rigid hand; no arm reaction','not active match physics'])
     if not result['sample_indices']:raise AssertionError('No mesh contacts exercised')
     if not result['converged']:raise AssertionError(report)
     if after>before+1e-8:raise AssertionError('Energy increase')

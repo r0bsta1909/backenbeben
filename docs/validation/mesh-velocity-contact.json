@@ -1,39 +1,32 @@
 {
-  "residual_m_s": 9.630903630153398e-09,
+  "residual_m_s": 0.0,
   "converged": true,
-  "iterations": 143,
+  "iterations": 1,
   "sample_indices": [
-    16,
-    17,
-    18,
-    23,
-    28,
-    33,
-    39,
-    96,
-    102,
-    107,
     111
   ],
-  "maximum_penetration_m": 0.004621613414702614,
+  "maximum_penetration_m": 0.0,
+  "sweep_ms": 17.630399997869972,
+  "contact_fraction": 0.06010395294037726,
+  "contact_time_s": 0.0003005197647018863,
   "hand_samples": 116,
-  "active_impulses": 11,
+  "active_impulses": 1,
   "energy_before_j": 0.09,
-  "energy_after_j": 0.08408751516456545,
-  "solve_ms": 16.603300005954225,
+  "energy_after_j": 0.08864368312178596,
+  "solve_ms": 7.583700004033744,
   "final_velocity": [
-    -0.9343057240374987,
-    -0.025601704818925205,
-    0.01660470171595677
+    -0.9849298124642881,
+    -0.0009422669916699914,
+    0.002613332018691791
   ],
   "final_angular_velocity": [
-    0.06506753820081385,
-    1.6963471838703867,
-    0.2410297757130191
+    0.05911035382431826,
+    0.5026948712152361,
+    -0.353004386278057
   ],
   "limits": [
-    "snapshot only; no TOI",
-    "initial penetration reported, not corrected",
+    "linear translation against stationary cage only; no curved rotation",
+    "single first-impact snapshot; no full timeline",
     "free rigid hand; no arm reaction",
     "not active match physics"
   ]
