@@ -1,0 +1,115 @@
+{
+  "sha256": "07760957e6e9f3f5874beac8af4c43b929f4498b349b2c49a0f8afd5bab19daa",
+  "bytes": 23883206,
+  "files": 68,
+  "source_commit": "db866b44d4a7793d221f5b14ec457f4fe2eeb0c1",
+  "all_packaged_files_match_running_install": true,
+  "fresh_environment": true,
+  "outside_checkout": true,
+  "practice_test_exit": 0,
+  "download_hash_verified": true,
+  "standard_duel": {
+    "configuration": {
+      "base_damage": 35.0,
+      "brace_window_ms": 450.0,
+      "brace_reduction": 0.35,
+      "recovery": 6.0,
+      "ko_threshold": 100.0,
+      "turn_seconds": 25.0,
+      "max_pairs": 5.0
+    },
+    "skilled_standard": true,
+    "errors": [],
+    "resume": true,
+    "injury_material_rewind": true,
+    "ko_body_recorded": true,
+    "ko_reverse_seek": true,
+    "rematch_material_reset": true,
+    "rematch": true,
+    "leave": true,
+    "audio": {
+      "mode": "buffer-fallback",
+      "played": 7,
+      "unlocked": true
+    },
+    "ko_views": [
+      {
+        "camera": "front",
+        "time": 0.75,
+        "actual_time": 0.74997,
+        "markers": false
+      },
+      {
+        "camera": "front",
+        "time": 1.3,
+        "actual_time": 1.299948,
+        "markers": false
+      },
+      {
+        "camera": "front",
+        "time": 2.4,
+        "actual_time": 2.399904,
+        "markers": false
+      },
+      {
+        "camera": "side",
+        "time": 0.75,
+        "actual_time": 0.74997,
+        "markers": false
+      },
+      {
+        "camera": "side",
+        "time": 1.3,
+        "actual_time": 1.299948,
+        "markers": false
+      },
+      {
+        "camera": "side",
+        "time": 2.4,
+        "actual_time": 2.399904,
+        "markers": false
+      },
+      {
+        "camera": "wide",
+        "time": 0.75,
+        "actual_time": 0.74997,
+        "markers": false
+      },
+      {
+        "camera": "wide",
+        "time": 1.3,
+        "actual_time": 1.299948,
+        "markers": false
+      },
+      {
+        "camera": "wide",
+        "time": 2.4,
+        "actual_time": 2.399904,
+        "markers": false
+      }
+    ],
+    "replay_frame_ms_p95": 27.80000000000291,
+    "viewport": [
+      1920,
+      1080
+    ],
+    "hit_count": 5,
+    "last_hit_ko": true,
+    "first_hit_braced": true
+  },
+  "helper_tests": {
+    "support_samples": 380,
+    "max_support_error_m": 1.33280039449346e-07,
+    "gaze_frames": 337,
+    "max_gaze_error_rad": 0.00189898011740297,
+    "max_frame_turn_rad": 0.0303298011422157,
+    "step_poses": 101,
+    "planted_feet_and_rewind": true,
+    "shoulder_pose_pass": true
+  },
+  "limits": [
+    "Two browser clients on one PC over LAN HTTP, not two physical PCs",
+    "Guided KO and support, not full physical ragdoll",
+    "Human control and overall style acceptance remains open"
+  ]
+}

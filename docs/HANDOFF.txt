@@ -2166,3 +2166,22 @@ Gefuehrter Kollaps bleibt vereinfachte Animation, keine vollstaendige Ragdoll.
 Goal aktiv. Naechster Gesamtprodukt-Schritt: Helferabstand und Kopfueberdeckung
 im KO pruefen, dann aktuellen Asset-/Build-/Kamerastand ins Release integrieren.
 V12 liegt weiterhin vor Crewneck/Buildguard/Kamera. Menschabnahme offen.
+
+G7/G8 V13 VERÖFFENTLICHT UND DOWNLOAD GEPRUEFT
+Quelle db866b44d4a7793d221f5b14ec457f4fe2eeb0c1; Release v0.13.0-dev.20261008.
+68Dateien/23883206Bytes; SHA256
+07760957e6e9f3f5874beac8af4c43b929f4498b349b2c49a0f8afd5bab19daa.
+Eigene frische venv ausserhalb Checkout, Paketsetup und START_HOST.bat8880.
+Probe/Mausrad/Original/Bereitmachen PASS; echter Standardkampf mit5Treffern bisKO,
+Anspannen,9markerfreieKOAnsichten,Ruecklauf,Resume,Revanche PASS;errors[].
+GitHubdownload und alle68Dateien bytegleich zur laufenden Installation.
+Paket umfasst Crewneck/Buildguard/KO-Kamera. Helfertests aktuell wiederholt:
+380Stuetzpunkte max1.33e-7m;337Blickframes max.001899rad;101Schrittposen;
+Schulteranschluss und Ruecklauf PASS. Front.75/Totale2.4 und Paketseite1.3
+visuell geprueft; kein neuer Positionseingriff allein wegen Perspektivueberdeckung.
+Beleg validation/v13-package.json/png. Statusuebersicht verweist nun aufV13;
+alte Durchlaufnotizen als historisch markiert statt weiterhin aktuelle Hinweise.
+Goal aktiv. Gesamtstil, menschliche Verstaendlichkeit, anatomische Modellgrenzen
+und physischer Zwei-PC-Nachweis offen. Naechster Schwerpunkt G2/G3: aktuellen
+seitlichen Kontakt nochmals direkt neben Konzeptreferenz bewerten und groesste
+sichtbare Form-/Bewegungsluecke bearbeiten, keine weiteren Release-Mikrozyklen.

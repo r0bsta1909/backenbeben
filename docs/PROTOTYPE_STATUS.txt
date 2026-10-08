@@ -5,8 +5,10 @@ Diese Uebersicht trennt Liefergegenstaende, vorhandene Nachweise und offene Arbe
 G1 / INVENTAR
 Quelle: game/, server/, scripts/, tests/; Blender: assets-source/character-v3.blend.
 Gauntlet und historische Entscheidungen: PROTOTYPE_GAUNTLET.txt, HANDOFF.txt.
-Oeffentliches v0.8-Hostpaket enthaelt drei Kopfachsen, Gesichtstextur V2, konkrete
-Mausradhilfe und Schulterkorrektur. Frische Paketpruefung: validation/v08-package.json.
+Zuletzt veroeffentlicht und frisch geprueft: v0.13.0-dev.20261008;
+Beleg validation/v13-package.json.
+Quellstand umfasst zusaetzlich vertieften Kragen, Buildfehler-Abbruch und
+mitgehende KO-Nahkameras (validation/crew-neck-style.json, ko-camera-follow.json).
 
 G2 / FIGUREN UND COMICSTIL — OFFEN
 Vorhanden: anatomischer Kopf, Arme/Haende, vollstaendiges Rig, Haargeometrie,
@@ -62,11 +64,17 @@ Audio auf LAN-HTTP, zwei Browserkontexte, Resume und Admin geprueft.
 Zwei Browserkontexte auf einem PC sind kein Test auf zwei physischen PCs.
 
 G8 / AUSLIEFERUNG — OFFEN FUER ENDSTAND
-v0.7-Prerelease mit Kopftranslation/Yaw, Helferpose und neuer Bedienfuehrung
-in frischer Umgebung
-geprueft, heruntergeladen und SHA256 verglichen. Beleg: validation/v07-package.json.
+V13-Prerelease in frischer Umgebung geprueft, heruntergeladen und SHA256
+verglichen. Beleg validation/v13-package.json.
+Leistung: validation/single-browser-performance.json; Ryzen53600/RTX2080,
+1920x1080, ein Headless-Browser plus Host: Median13.9ms, Impact-p95 34.8ms.
+Zweicliententest erzeugt hoehere Last; keine allgemeine60FPS-Garantie.
 Ein als abgeschlossen abgenommener Endstand fehlt weiterhin.
 Turniere, ElevenLabs und Werbung bleiben wie vereinbart zurueckgestellt.
+
+HISTORISCHE DURCHLAUFNOTIZEN
+Die folgenden Paket-/Session-/Naechster-Schritt-Angaben gelten nur fuer ihren
+jeweiligen damaligen Durchlauf. Aktueller Einstieg: HANDOFF.txt am Dateiende.
 
 G2/G6 BLICKRICHTUNG, HALS UND FESTE GESICHTSZEICHNUNG
 Helfer richten Augenlinie ueber Hals/Kopf auf den aufgefangenen Kaempfer.
