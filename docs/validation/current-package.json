@@ -1,0 +1,10 @@
+{
+  "source_commit": "09676ccb9cb0931aa0d0294c08411dd9fea956cc",
+  "sha256": "93318a0c3bbd0de97d8aba2609c1c49fa90baad22a6b65743259dce46f751657",
+  "bytes": 21259702,
+  "isolated_extracted_browser_replay": true,
+  "finger_relax_and_reverse_seek": true,
+  "browser_errors": [],
+  "python_tests": 35,
+  "runtime": "existing Python environment; fresh Windows setup untested"
+}

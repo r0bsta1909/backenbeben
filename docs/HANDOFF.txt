@@ -157,3 +157,9 @@ Details und Bild unter LATERAL_REWORK.txt / validation/ko-expression-*.
 Aermel folgen jetzt der Oberarmachse, Ansatz zur Schulter korrigiert. Blender-
 und Browserpruefung bestanden; verbleibende Stoffqualitaet offen. Eine neue
 menschliche Verstaendlichkeitsfrage ist gestellt, noch unbeantwortet.
+
+Spielbares Entwicklungspaket veroeffentlicht als GitHub-Prerelease
+v0.3.0-dev.20261008 (Quellstand 09676cc). 35 Python-Tests bestanden;
+entpacktes Paket im echten Browser geprueft, inklusive Kontakt und
+Finger-Reversesuche. SHA256/Pruefgrenzen: validation/current-package.json.
+Kein Abschluss des Goals: Stil, gekoppelte Physik und G7 bleiben offen.
