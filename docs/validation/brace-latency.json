@@ -1,0 +1,149 @@
+{
+  "before": {
+    "trials": [
+      {
+        "seconds_to_impact": 4.202683499999694,
+        "solve_ms": 2062.3,
+        "normal_impulse_ns": 1.3144955912089211,
+        "quality": 0.6572
+      },
+      {
+        "seconds_to_impact": 4.247230999993917,
+        "solve_ms": 2084.7,
+        "normal_impulse_ns": 1.3144955912089211,
+        "quality": 0.6572
+      },
+      {
+        "seconds_to_impact": 4.299210000004678,
+        "solve_ms": 2049.9,
+        "normal_impulse_ns": 1.3144955912089211,
+        "quality": 0.6572
+      }
+    ],
+    "median_seconds": 4.247230999993917
+  },
+  "after": {
+    "trials": [
+      {
+        "seconds_to_impact": 3.3578274000028614,
+        "solve_ms": 2093.7,
+        "normal_impulse_ns": 1.3144955912089211,
+        "quality": 0.6572
+      },
+      {
+        "seconds_to_impact": 3.29936959999759,
+        "solve_ms": 2088.0,
+        "normal_impulse_ns": 1.3144955912089211,
+        "quality": 0.6572
+      },
+      {
+        "seconds_to_impact": 3.3737115999974776,
+        "solve_ms": 2127.7,
+        "normal_impulse_ns": 1.3144955912089211,
+        "quality": 0.6572
+      }
+    ],
+    "median_seconds": 3.3578274000028614
+  },
+  "improvement_percent": 20.940787067911526,
+  "contact_impulse_and_quality_identical": true,
+  "scope": "Three sequential identical two-client WebSocket strikes on this PC. Median from request to impact includes windup. Hardware-specific; no claim about other machines.",
+  "mechanism": "Start accepted braced solve immediately, discard obsolete unbraced future; running worker may finish old calculation. Early brace and legacy backends unchanged.",
+  "regression_tests": 143,
+  "browser": {
+    "errors": [],
+    "hits": [
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 23.25,
+        "quality": 0.795,
+        "braced": true,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "d6b7bcb87204f3a011e5"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 24,
+        "quality": 0.5334,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "fdd073fb819d81323f6a"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 29.46,
+        "quality": 0.6546,
+        "braced": false,
+        "side": "R",
+        "ko": true,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "418f642fb657ef88d34a"
+      }
+    ],
+    "configuration": {
+      "base_damage": 45,
+      "ko_threshold": 60,
+      "turn_seconds": 60
+    },
+    "single_tilt_control": true,
+    "physics_backend": "coupled-moving",
+    "moving_head_brace_consistent": true,
+    "solved_normal_impulse_ns": 1.5900065566123758,
+    "solved_quality_matches_hit": true,
+    "recorded_arm_frames": 523,
+    "clip_hash": "66946acfe09a4ccb1e3c2dd3f8ef0aa92d3ccd18d48c2c6bdc863bf175c51f46",
+    "replay": {
+      "clipId": "d6b7bcb87204f3a011e5",
+      "frameCount": 337,
+      "peak": 0.027811,
+      "time": 0.616642,
+      "frame": 73,
+      "deformation": 0.02781066848
+    },
+    "replay_frame_ms_p95": 14,
+    "viewport": [
+      1920,
+      1080
+    ],
+    "resume": true,
+    "injury_material_rewind": true,
+    "ko_body_recorded": true,
+    "ko_reverse_seek": true,
+    "winner": 0,
+    "audio": {
+      "mode": "buffer-fallback",
+      "played": 5,
+      "unlocked": true
+    },
+    "rematch_material_reset": true,
+    "rematch": true,
+    "leave": true
+  },
+  "replay_timeout_diagnosis": {
+    "failed_phase": "aim",
+    "failed_physics_time": -1,
+    "requested_replay_time": 0.2,
+    "expected_before_injury": [
+      0,
+      0,
+      0
+    ],
+    "actual_current_injury": [
+      0,
+      0.27624,
+      0
+    ],
+    "cause": "Replay already expired. Synthetic input events did not bubble to delegated inspection listener. Tests now dispatch bubbling input events like actual browser input; all original injury assertions retained.",
+    "historical_limit": "This reproduced failure is diagnosed; older failures without snapshots are not independently proven identical."
+  }
+}

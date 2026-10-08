@@ -21,6 +21,7 @@ from concurrent.futures import ProcessPoolExecutor
 ROOT = Path(__file__).resolve().parents[1]
 ROOMS, CLIENTS, REPLAYS = {}, {}, {}
 POOL = None
+PHYSICS_BACKEND = 'legacy'
 SETTINGS = dict(DEFAULTS)
 REVISION = 1
 SEQ = 0
@@ -98,6 +99,17 @@ async def leave(c):
     else: ROOMS.pop(room['id'],None)
 
 
+def start_braced_solve(room):
+    if PHYSICS_BACKEND!='coupled-moving' or room.get('brace_result')!='ready':
+        return False
+    previous=room['solve']
+    room['solve']=asyncio.get_running_loop().run_in_executor(POOL,simulate,room['pending'],True)
+    # Cancellation drops an obsolete queued result. A running process may finish
+    # its old calculation, while the other worker handles the accepted brace.
+    previous.cancel()
+    return True
+
+
 async def command(c, d):
     action=d.get('action')
     if action=='join':
@@ -167,6 +179,7 @@ async def command(c, d):
             room['brace']=now
             remaining=room['deadline']-now
             room['brace_result']='ready' if 0 <= remaining <= room['settings']['brace_window_ms']/1000 else 'early'
+            start_braced_solve(room)
             await c['ws'].send_json({'type':'notice','text':'Richtig getimt – du fängst den Schlag ab.' if room['brace_result']=='ready' else 'Zu früh! Dein Versuch ist verbraucht. Beim nächsten Schlag auf GRÜN warten.'})
             await broadcast(room)
         elif room['phase']=='windup' and me!=room['turn']:
@@ -413,8 +426,9 @@ async def lifecycle(app):
 
 
 def main():
-    global simulate
+    global simulate,PHYSICS_BACKEND
     parser=argparse.ArgumentParser();parser.add_argument('--port',type=int,default=8765);parser.add_argument('--no-browser',action='store_true');parser.add_argument('--no-console',action='store_true');parser.add_argument('--physics',choices=['legacy','coupled','coupled-moving'],default='coupled-moving');args=parser.parse_args()
+    PHYSICS_BACKEND=args.physics
     if args.physics in ('coupled','coupled-moving'):
         try:
             if args.physics=='coupled-moving':

@@ -74,7 +74,7 @@ async def main():
    for view in ('front','side','wide'):
     await page.locator('#replayCamera').select_option(view)
     for moment,label in ((.46,'before'),(.5,'contact'),(.54,'after'),(.65,'head-response'),(.8,'recovery')):
-     await page.locator('#replaySeek').evaluate('(e,t)=>{e.value=t;e.dispatchEvent(new Event("input"))}',moment)
+     await page.locator('#replaySeek').evaluate('(e,t)=>{e.value=t;e.dispatchEvent(new Event("input",{bubbles:true}))}',moment)
      await page.wait_for_function('(s)=>{const f=JSON.parse(physicsFrame);return f.camera===s.view && Math.abs(f.time-s.time)<.002 && f.footprint.length===0}',arg={'view':view,'time':moment})
      await page.wait_for_timeout(200)
      await page.screenshot(path=f'logs/contact-audit-{view}-{label}.png')
@@ -84,12 +84,12 @@ async def main():
       assert max(abs(a-b) for a,b in zip(record['frame']['arm']['pose'][joint],record['rendered'][joint]))<1e-5,(view,label,joint,record)
    Path('logs/contact-arm-render-audit.json').write_text(json.dumps(audit,indent=2))
   await page.locator('#replayImpact').click()
-  await page.locator('#replaySeek').evaluate('e=>{e.value=.7;e.dispatchEvent(new Event("input"))}')
+  await page.locator('#replaySeek').evaluate('e=>{e.value=.7;e.dispatchEvent(new Event("input",{bubbles:true}))}')
   await page.wait_for_function('JSON.parse(physicsFrame).time>.6')
   await page.wait_for_function('godotStats?.crowd_active===true')
   assert not await page.locator('#contactLegend').is_visible()
   assert not (await page.evaluate('JSON.parse(physicsFrame)'))['footprint']
-  await page.locator('#replaySeek').evaluate('e=>{e.value=1.8;e.dispatchEvent(new Event("input"))}')
+  await page.locator('#replaySeek').evaluate('e=>{e.value=1.8;e.dispatchEvent(new Event("input",{bubbles:true}))}')
   await page.wait_for_function('JSON.parse(physicsFrame).arm.pose.finger_relax>.99')
   await page.wait_for_function('godotStats?.crowd_active===false')
   await page.locator('#replayCamera').select_option('wide')

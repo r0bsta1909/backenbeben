@@ -32,8 +32,10 @@ Quellstandard coupled-moving koppelt Kopf-Yaw bereits waehrend Kontakt,
 Auslauf und Rueckholung. Nachweise: validation/moving-head-integration.json,
 moving-head-replay-variants.json und moving-head-default.json.
 Aktive Replaybedienung verlaengert die Betrachtungszeit begrenzt auf45Sekunden.
-Ein frueherer LAN-Ruecklauf-Timeout wurde nicht eindeutig zugeordnet; folgende
-KO-/Standardlaeufe bestanden. Kein Nachweis fuer dessen genaue Ursache.
+Reproduzierter LAN-Testtimeout: Replay bereits beendet; synthetische Eingaben
+umgingen die Fristverlaengerung. Test korrigiert, voller Kampf bestanden.
+Aeltere Fehler ohne Snapshot bleiben historisch nicht eindeutig zugeordnet.
+Anspannlatenz auf Testhardware um21% reduziert; Beleg brace-latency.json.
 Offen im normalen Pfad: Kopftranslation fest,nurYaw,Halsparameter kalibriert,
 Kiefer stilisiert.
 Gefuehrter KO, numerische Kontaktrestfehler;

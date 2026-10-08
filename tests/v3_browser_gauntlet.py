@@ -83,7 +83,7 @@ async def main():
                     report['clip_hash']=hashlib.sha256(json.dumps(clip,sort_keys=True).encode()).hexdigest()
                     peak_i=max(range(len(clip['frames'])),key=lambda i:max(abs(v) for v in clip['frames'][i][2:]))
                     peak_t=peak_i/120
-                    await a.locator('#replaySeek').evaluate('(e,t)=>{e.value=t;e.dispatchEvent(new Event("input"))}',peak_t)
+                    await a.locator('#replaySeek').evaluate('(e,t)=>{e.value=t;e.dispatchEvent(new Event("input",{bubbles:true}))}',peak_t)
                     await a.locator('#replayCamera').select_option('side')
                     await a.wait_for_timeout(300);await a.screenshot(path='logs/v3-physics-peak.png')
                     d=await a.evaluate('combatDiagnostics');assert d['deformation']>.003,d
@@ -101,7 +101,7 @@ async def main():
                 for moment,key in [(0.9,'after'),(0.2,'before')]:
                     player=health_clip[key][health_clip['target']]
                     expected=[min(1,player['zones'].get(side,0)/75) for side in ['L','R']]+[max(0,min(1,(player['damage']-50)/40))]
-                    await a.locator('#replaySeek').evaluate('(e,t)=>{e.value=t;e.dispatchEvent(new Event("input"))}',moment)
+                    await a.locator('#replaySeek').evaluate('(e,t)=>{e.value=t;e.dispatchEvent(new Event("input",{bubbles:true}))}',moment)
                     try:
                         await a.wait_for_function('(wanted)=>godotStats.face_injury?.every((v,i)=>Math.abs(v-wanted[i])<1e-5)',arg=expected,timeout=3000)
                     except Exception:
@@ -114,11 +114,11 @@ async def main():
                     assert ko_clip['ko'] and len(ko_clip['body_frames'])==337
                     assert ko_clip['body_frames'][-1][0]>.20
                     report['ko_body_recorded']=True
-                    await attacker.locator('#replaySeek').evaluate('e=>{e.value=2;e.dispatchEvent(new Event("input"))}')
+                    await attacker.locator('#replaySeek').evaluate('e=>{e.value=2;e.dispatchEvent(new Event("input",{bubbles:true}))}')
                     await attacker.locator('#replayCamera').select_option('wide')
                     await attacker.wait_for_timeout(250)
                     await attacker.screenshot(path='logs/lateral-ko-side.png')
-                    await attacker.locator('#replaySeek').evaluate('e=>{e.value=.2;e.dispatchEvent(new Event("input"))}')
+                    await attacker.locator('#replaySeek').evaluate('e=>{e.value=.2;e.dispatchEvent(new Event("input",{bubbles:true}))}')
                     await attacker.wait_for_timeout(100)
                     frame=await attacker.evaluate('JSON.parse(physicsFrame)')
                     assert frame['body'][0]==0

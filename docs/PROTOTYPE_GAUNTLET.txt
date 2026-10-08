@@ -553,3 +553,19 @@ bewiesenerShaderfehler oderbewiesenerFristfehler ausgeben. Folgelaeufe bestanden
 README/SPIELEN/Status aktualisiert. OeffentlichesV06 bleibtvorigerDefault.
 Host8877 CheckoutOHNEOverride,Session42933. Goalweiteroffen: PhysiknurYaw/
 Translationfest,kalibrierteAnatomie,Kiefer/KOstilisiert,Art-/Bedienabnahmeoffen.
+
+G4 ANSPANN-LATENZ REDUZIERT / REPLAY-TESTFEHLER EINGEGRENZT
+GueltigesAnspannen startet coupled-moving-Neuberechnung sofort im zweitenWorker,
+veraltetesFuture wirdverworfen (laufendeBerechnung kannnochfertigwerden). Fruehe
+Versuche und Vergleichsbackends unveraendert.3identischeNetzwerkschlaegevor/nach:
+Median4.247s->3.358s vomSchlagauftragbisImpact,20.94%weniger aufdiesemRechner.
+Normalimpuls/Trefferqualitaet jeweilsidentisch. Messskript measure_brace_latency.py.
+143TestsPASS. ErsterBrowserlauf scheiterte erneut amRuecklauf; jetzigerDiagnose-
+Snapshot beweist phase=aim,physics_time=-1: Replaybereitsabgelaufen,aktuelles
+Verletzungsmaterial stattVor-Trefferzustand. SynthetischeTests erzeugten input ohne
+bubbles undumgingen neuenReplaypanel-Listener. Events jetztbubbles:true wieechte
+Browserbedienung; Assertionsnichtgelockert. ErneuterkompletterBrowserkampfPASS
+inkl.Anspannen/Materialruecklauf/KO/Resume/Revanche,errors[]. Beleg brace-latency.json.
+AeltereFehlerohneSnapshot nichtnachtraeglichalszweifelsgleichbehaupten. Neuer
+reproduzierterFehleristzugeordnet. Host8877 normalerCheckoutDefault,Session1639.
+OeffentlichesV06weiteraeltererStand,Goalweiteroffen.
