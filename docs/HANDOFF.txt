@@ -1573,3 +1573,13 @@ Beleg validation/spatial-head-default.json. READMEundStatusaktualisiert,
 DownloadlinkkorrigiertaufV07;PaketV07weiteralterYawPfad. Host8877Default
 Session2909. NaechsteProduktprioritaetwiederG3Lesbarkeit/G2Bewegung;kein
 weitererPhysiklaborausbauohneProduktnutzen. Anatomie/Reibungweiteroffen.
+
+G3 KONKRETE MAUSRADHILFE NACH PROBE
+practice_guidance prueftzweiNachbarhaltungen +/-3Grad mitderselbenKontaktgeometrie
+undVerletzungslage;nenntnurRichtungwennKlasse/Handflaechenabdeckungbesser.
+KeinEingriffinHandhaltung/Eingabedaten,keineWirkungsprognose. SaubereProbe
+empfiehltBeibehalten;ohneVerbesserungSeitenansichtstattgeratenerRichtung.
+3TestsPASS:Tips/GlanceunterschiedlicheRichtung,keineMutation,keinRatohneNutzen.
+BrowsergegenHostmitaufgezeichnetenProbedaten:beideHinweisesichtbar,keinSchaden,
+errors[].1366x768Bildgesichtet. Beleg validation/practice-advice.json/png.
+MenschlicheAbnahmebleibtoffen. Host8877aktuellerDefault,Session82509.

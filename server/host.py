@@ -154,7 +154,9 @@ async def command(c, d):
     if action=='practice':
         if room['phase']!='aim' or room['turn']!=me or d.get('turn_id')!=room['turn_id']: raise ValueError('Du bist nicht am Zug.')
         preview=score_contact(d,room["players"][1-me])
-        room['practice_done']=True;room['diagnosis']='Probe: '+preview['diagnosis']
+        from practice_guidance import wheel_hint
+        hint=wheel_hint(d,preview,lambda candidate:score_contact(candidate,room['players'][1-me]))
+        room['practice_done']=True;room['diagnosis']='Probe: '+preview['diagnosis']+' '+hint
         event(room,'practice',diagnosis=room['diagnosis']);await broadcast(room);return
     if action=='inspect_replay':
         from replay_timing import extend_inspection
