@@ -1,0 +1,104 @@
+{
+  "calibration_full_power_impulse_ns": 2.0,
+  "meaning": "Solved normal impulse controls effect; contact coverage and first-touch foul rules remain gameplay classification. Stylized head/jaw response, not full anatomical physics.",
+  "unit_tests": 126,
+  "runs": {
+    "ko": {
+      "configuration": {
+        "base_damage": 45,
+        "ko_threshold": 60,
+        "turn_seconds": 60
+      },
+      "solved_normal_impulse_ns": 1.280849269217421,
+      "solved_quality_matches_hit": true,
+      "injury_material_rewind": true,
+      "rematch_material_reset": true,
+      "resume": true,
+      "rematch": true,
+      "errors": [],
+      "hits": 3
+    },
+    "standard": {
+      "configuration": {
+        "base_damage": 25,
+        "ko_threshold": 100,
+        "turn_seconds": 25
+      },
+      "solved_normal_impulse_ns": 1.4748541692001547,
+      "solved_quality_matches_hit": true,
+      "injury_material_rewind": true,
+      "rematch_material_reset": true,
+      "resume": true,
+      "rematch": true,
+      "errors": [],
+      "hits": 10
+    }
+  },
+  "measured_cases": [
+    {
+      "case": "flat",
+      "quality": 0.6749,
+      "class": "flat",
+      "impulse_ns": [
+        1.2787868233893367,
+        -0.4366032524192042,
+        0.3791764295195589
+      ],
+      "norm": 1.403457482220398,
+      "active_samples": 4,
+      "peak_m": 0.001357610050242616
+    },
+    {
+      "case": "tips",
+      "quality": 0.0652,
+      "class": "tips",
+      "impulse_ns": [
+        1.0945438410246953,
+        0.005551575275100915,
+        0.1642200402514283
+      ],
+      "norm": 1.106808592997592,
+      "active_samples": 1,
+      "peak_m": 0.0012854069973883009
+    },
+    {
+      "case": "glance",
+      "quality": 0.1391,
+      "class": "glance",
+      "impulse_ns": [
+        1.0622973828981792,
+        -0.6565183524358038,
+        0.29175323458882996
+      ],
+      "norm": 1.2824242771760006,
+      "active_samples": 3,
+      "peak_m": 0.0014869905116179443
+    },
+    {
+      "case": "heel",
+      "quality": 0,
+      "class": "heel",
+      "impulse_ns": [
+        0.8405766661923115,
+        -0.12311322539561075,
+        0.0838788408458382
+      ],
+      "norm": 0.8536753820720923,
+      "active_samples": 3,
+      "peak_m": 0.0012975364227512066
+    },
+    {
+      "case": "high",
+      "quality": 0,
+      "class": "zone",
+      "impulse_ns": [
+        0.6471874553803978,
+        0.13742848095637272,
+        0.28652376890260156
+      ],
+      "norm": 0.7209951871724817,
+      "active_samples": 1,
+      "peak_m": 0.0018311822565006562
+    }
+  ]
+}

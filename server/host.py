@@ -258,6 +258,7 @@ async def tick(app):
                     record(dict(kind='physics_error',error=str(exc)));r['phase']='disconnected';event(r,'disconnect',text='Physik konnte nicht berechnet werden. Bitte neues Duell starten.');await broadcast(r);continue
                 target=1-r['turn'];p=r['players'][target]
                 braced=r['brace'] is not None and 0 <= r['deadline']-r['brace'] <= r['settings']['brace_window_ms']/1000
+                r['pending'].update(clip.get('score_update',{}))
                 before=copy.deepcopy(r['players'])
                 damage,ko=apply_hit(p,r['pending'],r['settings'],braced)
                 attacker=r['players'][r['turn']]

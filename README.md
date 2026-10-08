@@ -80,3 +80,9 @@ MakeHuman; Quelldaten und Herkunft liegen unter `assets-source/makehuman/`. Für
 
 Die Kontaktwertung verwendet inzwischen 116 aus der sichtbaren Hand exportierte
 Oberflächenpunkte. [Geometrieprüfung, Integration und Grenzen](docs/HAND_CONTACT_SURFACE.txt).
+
+Die aktuelle Quellversion koppelt die Wirkungsstaerke an den vom Kontaktsolver
+berechneten Normalimpuls. Flaechenabdeckung und Foulregeln bleiben Teil der
+Spielwertung. Die Umrechnung (2 N·s fuer volle Impulsstaerke) ist Spielbalance,
+keine medizinische Verletzungsschwelle. Das v0.5-Paket verwendet noch die vorige
+Wertungsformel; die neue Integration wird vor einem weiteren Paket geprueft.

@@ -98,4 +98,4 @@ def simulate_contact(scored, fps=960,duration=.06,attached=False,compiled_embedd
             'peak_deformation_m':peak,'maximum_penetration_m':penetration,'final_velocity':velocity.tolist(),
             'final_angular_velocity':angular_velocity.tolist(),'solve_ms':(time.perf_counter()-started)*1000,
             'side_cage':cage.replay_geometry(),'frames':frames,'hand_local':hand.local.tolist(),
-            'limits':(['diagonal joint inertia, stationary torso, no active muscle drive'] if attached else ['free rigid hand, no shoulder/elbow reaction yet'])+['laboratory box inertia','no friction','not active in matches']}
+            'limits':(['diagonal joint inertia, stationary torso, no active muscle drive'] if attached else ['free rigid hand, no shoulder/elbow reaction yet'])+['laboratory box inertia','no friction','head response remains stylized']}

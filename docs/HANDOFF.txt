@@ -1256,3 +1256,21 @@ inkl.zusaetzlicherProbe/Spiegel/Replay PASS,errors[]. Beleg validation/v05-packa
 Host8877 laeuft JETZT AUS PAKET in Temp/backenbeben-v05-8yoq704w, Session91026;
 Entwicklungshost beendet. Vor Quellcode-Spieltests wieder Checkoutserver starten.
 Oeffentliche README und PROTOTYPE_STATUS aktuell; keine Gesamtabnahme behauptet.
+
+G4 WIRKUNGSSTAERKE AN GELOESTEN KONTAKT ANGEBUNDEN
+Bisher verwendeten Matchschaden und Kopffeder nur initiale Kontaktgeometrie/Tempo.
+contact_outcome.resolve verwendet jetzt auf Kontaktnormale projizierten kumulierten
+Solverimpuls.2Ns fuer volle Impulsstaerke ist explizite Spielkalibrierung. Abdeckung
+und erste Kontaktklasse/Foulregel bleiben Geometrie-/Regelanteil. Ohne aktive
+Kontaktsamples und positiven Normalimpuls kein Schaden. Host uebernimmt score_update
+aus berechnetem Clip VOR apply_hit; keine Clientwertung. Kopffeder nutzt gleiche
+physische Wirkungsstaerke, auch bei Fouls, deren Wertungsschaden null bleibt.
+Replay enthaelt Impuls und aufgeloeste Qualitaet. Stale Laborlimittext korrigiert.
+126Tests bestanden; letzte Foulreaktionskorrektur separat5Tests bestanden. Reale
+LAN-KO- und Standardkaempfe PASS inkl.Materialruecklauf/Revanche. Replayqualitaet
+entspricht nachweislich Match-Hitqualitaet,errors[]. Beleg solved-contact-outcome.json.
+Kein vollstaendiger G4-Pass: Kopf/Kiefer bleiben stilisiert, Reibung/Anatomie und
+Solverrestfehler offen. Neues Modul wird durch Paketallowlist automatisch erfasst.
+Host8877 WIEDER AUS CHECKOUT,Session47462; v0.5-Pakettesthost beendet. V0.5-Release
+enthaelt noch vorige Wertung, README kennzeichnet dies. Neue menschliche Antwort
+weiterhin ausstehend; alle bisherigen negativen Abnahmebefunde bleiben erhalten.

@@ -24,7 +24,9 @@ G4 / PHYSIK — OFFEN
 Vorhanden: standardmaessig gekoppelter Arm-/Hand-/Gewebeclip mit Rueckholung,
 120Hz-Replay, identische Hostaufzeichnung fuer beide Clients.
 Belege: validation/coupled-variants.json, compiled-game-replay.json.
-Offen: Kontaktwertung noch teilweise initiale Geometrie statt geloester Wirkung;
+Die Wirkungsstaerke nutzt den geloesten Normalimpuls; Flaechenabdeckung und
+Foulklassifikation stammen weiterhin aus der ersten Kontaktgeometrie.
+Offen:
 Kopf/Kiefer stilisierte Federn, gefuehrter KO, numerische Kontaktrestfehler;
 keine vollstaendige anatomische Traegheits-/Reibungs-/Verletzungssimulation.
 Lidschwellung ist visuelle Zustandsanzeige, nicht Teil des Kontaktkaefigs.

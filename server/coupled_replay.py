@@ -8,6 +8,7 @@ import time
 import numpy as np
 from coupled_contact import simulate_contact,CompiledSideTissue
 from coupled_recovery import recover
+from contact_outcome import resolve
 
 
 def simulate(scored,braced=False):
@@ -37,9 +38,8 @@ def encode(scored,contact,braced=False):
     times=np.array([0.]+[f['time'] for f in samples])
     offsets=np.array([[0.]*(count*3)]+[f['offsets'] for f in samples])
     area=scored.get('contact_area_m2',0.)
-    strength=max(0.,min(1.,scored.get('normal_speed',0.)))*min(1.,area/.0015)
-    if scored.get('contact_class')=='tips':strength*=.35
-    elif scored.get('contact_class')=='glance':strength*=.60
+    outcome=resolve(scored,contact)
+    strength=outcome['response_strength']
     side=-1 if scored['position'][0]<0 else 1
     frames=[];head=0.;hv=0.;jaw=0.;jv=0.;head_started=False;peak=0.
     scale=1e-6;dt=1/240
@@ -69,8 +69,8 @@ def encode(scored,contact,braced=False):
         frames.append([round(head,5),round(jaw,5),*encoded.tolist()])
     return dict(fps=120,duration=2.8,contact=.5,nx=cage.geometry['nx'],ny=cage.geometry['ny'],scale=scale,
                 frames=frames,peak=peak,solve_ms=round(contact['solve_ms']+(time.perf_counter()-started)*1000,1),
-                version=3,physics_backend='coupled',side_cage=cage.replay_geometry(),
+                **outcome,version=3,physics_backend='coupled',side_cage=cage.replay_geometry(),
                 arm_path=recover(scored,contact),footprint=scored.get('footprint',[]),path=scored.get('path',[]),
-                contact_time=scored['contact_time'],position=scored['position'],diagnosis=scored.get('diagnosis',''),
+                contact_time=scored['contact_time'],position=scored['position'],diagnosis=outcome['score_update'].get('diagnosis',scored.get('diagnosis','')),
                 impact_speed_m_s=scored.get('impact_speed_m_s',0),contact_area_m2=area,
                 contact_diagnostics={k:contact[k] for k in ['maximum_wrist_separation_m','maximum_penetration_m','unconverged_steps','maximum_material_residual_m']})
