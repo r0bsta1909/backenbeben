@@ -1,5 +1,5 @@
 """Exercise contact-view controls against a real training replay on port 8877."""
-import asyncio,json
+import asyncio,json,sys
 from pathlib import Path
 from playwright.async_api import async_playwright
 async def main():
@@ -49,6 +49,14 @@ async def main():
   await page.locator('#replayContact').click()
   await page.wait_for_function('JSON.parse(physicsFrame).footprint.length===0')
   assert not await page.locator('#contactLegend').is_visible()
+  if '--visual-contact' in sys.argv:
+   for view in ('front','side','wide'):
+    await page.locator('#replayCamera').select_option(view)
+    for moment,label in ((.46,'before'),(.5,'contact'),(.54,'after')):
+     await page.locator('#replaySeek').evaluate('(e,t)=>{e.value=t;e.dispatchEvent(new Event("input"))}',moment)
+     await page.wait_for_function('(s)=>{const f=JSON.parse(physicsFrame);return f.camera===s.view && Math.abs(f.time-s.time)<.002 && f.footprint.length===0}',arg={'view':view,'time':moment})
+     await page.wait_for_timeout(200)
+     await page.screenshot(path=f'logs/contact-audit-{view}-{label}.png')
   await page.locator('#replayImpact').click()
   await page.locator('#replaySeek').evaluate('e=>{e.value=.7;e.dispatchEvent(new Event("input"))}')
   await page.wait_for_function('JSON.parse(physicsFrame).time>.6')

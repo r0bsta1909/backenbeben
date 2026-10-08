@@ -1,0 +1,94 @@
+BACKENBEBEN — VERBINDLICHER GAUNTLET FUER DEN GESCHLOSSENEN PROTOTYP
+Stand 08.10.2026. Gesamtstatus OFFEN. Dieser Plan steuert die Arbeit; historische
+Gauntlets und Laborberichte sind Nachweise einzelner Teile, keine Gesamtabnahme.
+
+LOOP
+Istzustand und letzte Belege lesen -> groesste Luecke im spielbaren Gesamtprodukt
+waehlen -> integrierten Schritt umsetzen -> reales Spiel/renderte Assets pruefen ->
+Fehler beheben -> geprueften Stand und Wissenssicherung zu GitHub pushen.
+Ein bestandener Unit-Test ist kein bestandenes Grafik-/Bedienbarkeitsgate.
+Laborarbeit nur mit benanntem Integrationsziel. Nach spaetestens zwei reinen
+Labor-Meilensteinen Integrationsentscheidung dokumentieren: einbauen, konkreten
+Blocker beheben oder zugunsten eines groesseren Produktmangels zurueckstellen.
+Keine weitere unbeschraenkte Kette isolierter Physikbausteine ohne Spielintegration.
+
+G1 UMFANG / ISTSTAND — OFFEN
+Eine verbindliche Liste der untenstehenden Liefergegenstaende; je Gate Artefakt,
+Pruefbefehl, sichtbarer Nachweis, bekannte Luecke. Bestehende Start-/LAN-/Replaytests
+erneut am finalen Paket verwenden. Keine historischen PASS-Texte als Gesamtbeweis.
+
+G2 FIGUREN / STIL — OFFEN
+Blenderquelle, exportierter Koerper bis Huefte mit beiden Armen, anatomisch lesbarer
+Kopf/Hand, brauchbare vorhandene Varianten, Toonmaterialien, Licht und Arena.
+Ziel: docs/art-direction-v3/01-character-face.png, 02-hand-connected-arm.png,
+03-first-person.png und Nutzerscreenshots. Ego/Seite/Replay pruefen: keine Loecher,
+Deformationsspitzen, abgetrennten Glieder; natuerliche Schulter-/Aermeluebergaenge.
+Aktuell: technische Exporte bestehen; Aermel, Proportionen und Stil bleiben offen.
+
+G3 VERSTAENDLICHER SEITLICHER SCHLAG — HOECHSTE SICHTBARE PRIORITAET / OFFEN
+Ausholen, Ausrichten, Probe und Schlag mit gemeinsamer koerpergebundener Bewegung.
+Kontaktpose zwingend: Handflaeche zur seitlichen Wange; offene Finger, Handflaeche
+und Kontaktstelle optisch zusammenpassend; kein frontaler Stoss auf Nase/Stirn,
+kein Handrueckentreffer. Handruecken darf perspektivbedingt zur Seitenkamera zeigen.
+Nicht durch versteckte automatische Ausrichtung eine falsche Eingabe gutwerten.
+Ego-, frontale Aussen- und Dreiviertelansicht sowie drei Zeitpunkte (vor/bei/nach
+Kontakt) pruefen, zunaechst OHNE Kontaktmarker; Marker nur zur Geometriekontrolle.
+Mausradwirkung, Handhaltung und Anspannfenster klar. Neue Spieler sollen treffen,
+Fehler erkennen und Haltung gezielt korrigieren koennen. Menschliche Abnahme bleibt
+eigenstaendiges Gate; zuletzt 'Weiterhin unverstaendlich', nicht bestanden.
+
+G4 GEMEINSAME BEWEGUNG / KONTAKT — OFFEN
+Ein durchgehender aktiver Pfad fuer Arm, Hand, Trefferwertung, Gewebereaktion,
+Nachbewegung und Replay. Kontaktgeometrie aus sichtbarem Export. Keine Teleports,
+Durchdringung oder kuenstliches Rueckfedern. Sichtbarer Kontakt entspricht Wertung.
+Aktuell: Match nutzt alten Gewebepfad; neue Kopplung/CCD/Impulse nur Labor.
+Freie anisotrope Rotation nicht mit Kontaktsuche integriert. Das ist NICHT fertig.
+Geeignete Laborbausteine zu einem spielbaren Clip verbinden; konkurrierende alte
+Wege erst nach nachgewiesener Gleichwertigkeit/Verbesserung abloesen.
+
+G5 VOLLSTAENDIGES DUELL — OFFEN BIS END-TO-END-ABNAHME
+Lobby -> Individualisierung -> Training oder LAN-Duell -> Probe/Angriff/Anspannen
+-> Rundenwechsel -> Gesichtsverletzungen als Zustandsanzeige/Spiegel -> Emotes
+-> Sieg/Niederlage -> Rematch. Kompletter Kampf ohne Entwicklereingriff.
+Vorhandene Systeme pruefen statt neu erfinden. Verletzungsdarstellung und KO
+muessen im tatsaechlichen Match erreichbar und im Replay reproduzierbar sein.
+
+G6 KO / UEBERTRAGUNG — OFFEN
+Trefferreaktion, KO-Uebergang, Auffangen, Ergebnis und steuerbares Replay.
+Kamerafuehrung, Pult, Licht, Publikum und Helfer unterstuetzen den Kampf.
+Kein perfekter Treffer garantiert automatisch KO; Balance und Zustand entscheiden.
+Aktuell gelenkte KO-Animation, kein vollphysikalischer Koerper. Nicht anders bewerben.
+
+G7 LAN / START / ADMIN — OFFEN BIS PAKETTEST
+.bat startet Server und Browser; Adminzugang, echte Hostadressen, Balancingterminal,
+LAN-HTTP-Audiofallback, klare Fehler, Wiederverbindung. Zwei getrennte Browserclients
+spielen ganzen Kampf ueber LAN-Adresse plus Reload/Resume und Rematch.
+Keine unnoetige Windows-Administrator-Elevation fuer normales Hosting erzwingen.
+
+G8 ABSCHLUSS / RELEASE — OFFEN
+Gemessene Zielhardware-Leistung fuer Idle, Schlag, Impact und Replay; keine nur
+isolierte Solverzeit als FPS-Beweis. Fehlerliste abarbeiten. Aktuelles herunter-
+geladenes Paket ausserhalb Entwicklungsordner starten und G5/G7 erneut pruefen.
+Quellen, eigene Assets, Lizenzen, Anleitung, Wissenssicherung und Release konsistent.
+Altes v0.3-dev-Archiv ist nicht automatisch aktueller Quellstand. Release aktualisieren.
+Goal erst abschliessen, wenn alle Gates mit passenden Belegen bestanden sind.
+
+ZURUECKGESTELLT
+Turniere, unbegrenzte Turnierteilnehmer/Formate/Wildcards, ElevenLabs-Kommentar und
+Crowdaudio sowie absurde Werbung bleiben gemaess Nutzerauftrag ausserhalb dieses
+Prototypabschlusses. Vorhandene lokale Soundeffekte bleiben Bestandteil des Duells.
+
+NAECHSTER DURCHLAUF
+Kontaktpose im aktuellen Spiel ohne Marker aus mehreren Kameras erfassen; an
+Nutzerreferenzen und untenstehender Referenznotiz messen. Groessten sichtbaren
+Fehler korrigieren. Keine weiteren rein isolierten Physikfeatures vorher.
+
+G3 KONTAKTAUDIT OHNE MARKER — AUSGANGSBEFUND
+python tests/replay_contact_view.py --visual-contact erstellt neun echte Browser-
+Screenshots front/side/wide bei .46/.50/.54s; bestehende Replayassertions bestehen,
+errors[]. Frontkontakt und Totale visuell gesichtet. Seitliche Handflaechenlage
+an Wange erkennbar, aber steiler Unterarm/stark abgewinkelter Ellbogen laesst
+Kontakt wie Andruecken wirken. Kein visuelles PASS. Naechster konkreter Eingriff:
+Schulter/Ellbogen/Hand-Kette und Reichweite gemeinsam korrigieren, nicht nur
+Palmnormalen drehen. Kontaktflaeche muss an derselben Wange bleiben; vor/bei/nach
+Kontakt erneut ohne Marker pruefen. Screenshots lokal logs/contact-audit-*.png.

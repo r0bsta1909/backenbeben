@@ -797,3 +797,7 @@ ansicht pose-inspection.png gesichtet: Schulterverlauf schmaler; Aermelform und
 Armlochschatten weiterhin steif/kantig. Kein fertiger Referenzlook behauptet.
 Naechster visueller Schritt: Aermeluebergang bei angehobenem und abgesenktem Arm
 gezielt formen/pruefen; nicht nur weitere Polygonzahl oder UI-Hinweise erhoehen.
+
+VERBINDLICHER GESAMTPLAN: docs/PROTOTYPE_GAUNTLET.txt. Historische PASS-Abschnitte
+sind keine Gesamtabnahme. Naechster Durchlauf G3: sichtbare seitliche Kontaktpose
+ohne Marker in mehreren Ansichten; Referenznotiz SLAP_VISUAL_REFERENCES.txt.

@@ -942,3 +942,17 @@ ansicht pose-inspection.png gesichtet: Schulterverlauf schmaler; Aermelform und
 Armlochschatten weiterhin steif/kantig. Kein fertiger Referenzlook behauptet.
 Naechster visueller Schritt: Aermeluebergang bei angehobenem und abgesenktem Arm
 gezielt formen/pruefen; nicht nur weitere Polygonzahl oder UI-Hinweise erhoehen.
+
+VERBINDLICHER GESAMTPLAN: docs/PROTOTYPE_GAUNTLET.txt. Historische PASS-Abschnitte
+sind keine Gesamtabnahme. Naechster Durchlauf G3: sichtbare seitliche Kontaktpose
+ohne Marker in mehreren Ansichten; Referenznotiz SLAP_VISUAL_REFERENCES.txt.
+
+G3 KONTAKTAUDIT OHNE MARKER — AUSGANGSBEFUND
+python tests/replay_contact_view.py --visual-contact erstellt neun echte Browser-
+Screenshots front/side/wide bei .46/.50/.54s; bestehende Replayassertions bestehen,
+errors[]. Frontkontakt und Totale visuell gesichtet. Seitliche Handflaechenlage
+an Wange erkennbar, aber steiler Unterarm/stark abgewinkelter Ellbogen laesst
+Kontakt wie Andruecken wirken. Kein visuelles PASS. Naechster konkreter Eingriff:
+Schulter/Ellbogen/Hand-Kette und Reichweite gemeinsam korrigieren, nicht nur
+Palmnormalen drehen. Kontaktflaeche muss an derselben Wange bleiben; vor/bei/nach
+Kontakt erneut ohne Marker pruefen. Screenshots lokal logs/contact-audit-*.png.

@@ -1,0 +1,27 @@
+SEITLICHER HANDKONTAKT — REFERENZNOTIZ 08.10.2026
+Primaere Nutzerreferenz: docs/art-direction-v3/03-first-person.png plus im Chat
+uebergebene reale Wettkampfstandbilder. Fotos sind perspektivische Momentaufnahmen,
+keine Messdaten fuer Gelenkwinkel oder Kontaktkraft.
+
+Offizielle Regelquelle erneut recherchiert:
+https://www.powerslap.com/rules/
+Handflaeche und Finger sollen gleichzeitig auftreffen; Ziel ist seitliches Gesicht.
+Regeln bestimmen Kontaktanforderungen, nicht automatisch die sichtbare Animation.
+
+Weitere Bildfundstellen (Fremdbilder nicht ins oeffentliche Repo kopiert):
+https://www.powerslap.com/news/power-slap-8-full-fight-card-coin-toss-winners/
+https://www.powerslap.com/news/wolverine-is-blazing-his-own-power-slap-path/
+https://www.powerslap.com/news/power-slap-road-to-the-title-episode-6-recap/
+Bildsuche liefert Trefferbilder; direkter Abruf des PS8-JPG scheiterte im Webtool.
+Nicht als erfolgreich pixelgepruefte neue Referenz ausgeben. Bereits vom Nutzer
+sichtbar bereitgestellte Standbilder bleiben der visuelle Massstab.
+
+ABNAHME AM SPIEL
+Handflaechenseite zur Wange; seitliche Bewegung statt frontalem Schieben.
+Finger und Handflaeche bilden eine lesbare offene Schlagflaeche; Finger nicht wie
+Krallen/gespreizte Einzelstaebe. Handgelenk/Unterarm/Schulter plausibel verbunden.
+Kameraabhaengigkeit beachten: Seitenkamera sieht oft Handruecken/Nagelseite, obwohl
+die Handflaeche korrekt anliegt. Darum nie nur anhand sichtbarer Naegel drehen.
+Kontakt ohne bunte Debugpunkte muss verstaendlich sein. Marker danach verwenden,
+um sichtbare Flaeche mit Meshkontakt/Wertung zu vergleichen. Ego/Front/Seite und
+vor/bei/nach Kontakt gemeinsam pruefen. Trefferklassifikation allein genuegt nicht.
