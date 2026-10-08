@@ -1518,3 +1518,14 @@ unveraendert. Assetvalidatorinkl.116Kontaktpunkten/geschlossenerHandPASS.
 GodotNeuimport/Webbuild/15BrowserkontaktansichtenPASS,errors[]. Blenderpreview
 gesichtet. GodotextrahierteGLBTexturressourceebenfallsmitgesichert.
 VorigeroffenerQuellabgleichdamiterledigt,Gesamt-Artabnahmeweiteroffen.
+
+G4 DREIACHSIGE ROTATION: MATHEMATISCHE GRUNDLAGE
+server/head_rotation.py: Rz(roll)*Ry(-yaw)*Rx(pitch),exakteAbleitungen,
+gekoppelteTranslations-/Rotationsprojektion. KeineSciPyAbhaengigkeit:kleine
+Matrizenexplizitmultipliziert.3TestsPASS:Orthogonalitaet/Determinante/Jacobian
+gegenfiniteDifferenzen,jedeDrehmomentrichtung+Massenzentrum,Yaw-onlybis1e-14
+gleichbestehendemProjektor. NochNICHTimSpielaktiv;keinPhysikabschluss.
+NAECHSTER VERBINDLICHER SCHRITT: SpatialHeadAttachment-Zustand inKontakt+Tail
+integrieren,Anglesaufzeichnen,Shader-/InverseTransformation angleBlendgleich,
+Rueckholoberflaeche+Browseransichtenpruefen. KeineweitereisolierteLaborkette.
+AktuellesSpielweiter3Translationen+Yaw,Pitch/Rollfest.
