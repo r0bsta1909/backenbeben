@@ -16,11 +16,13 @@ def rotation_vector(matrix):
     sine=np.linalg.norm(axis);angle=np.arctan2(sine,(np.trace(matrix)-1)*.5)
     return axis if sine<1e-12 else axis*(angle/sine)
 
-def run(fps=960,duration=.06,attached=False):
+def run(fps=960,duration=.06,attached=False,compiled_embedding=True):
     scored=score({'version':3,'points':[[.19+.34*i/40,.6,800*i/40,0,-15,0] for i in range(41)]})
     pose=min(scored['arm_path'],key=lambda r:abs(r['time']-scored['contact_time']))['pose']
     points=world_positions(pose,pose['finger_direction'],pose['palm_normal'])
-    hand=RigidHandContact(points,[s['area_m2'] for s in DATA['samples']])
+    from contact_embedding import embed_side_many
+    if compiled_embedding:from contact_embedding_compiled import embed_side_many
+    hand=RigidHandContact(points,[s['area_m2'] for s in DATA['samples']],embedding=embed_side_many)
     bond=None;arm=None;initial_joint_velocity=None
     if attached:
         from arm import Arm,LIMITS
@@ -63,15 +65,15 @@ def run(fps=960,duration=.06,attached=False):
         peak=max(peak,float(np.max(np.linalg.norm(cage.p-cage.rest,axis=1))))
         penetration=max(penetration,hand.penetration(cage));contacts=max(contacts,hand.last_contacts)
         frames.append({'time':(step+1)*dt,'offsets':cage.replay_offsets(),'center':hand.center.tolist(),'rotation':hand.rotation.tolist(),'arm':arm.pose() if attached else None})
-    return {'attached':attached,'initial_penetration_m':initial_penetration,'maximum_wrist_separation_m':wrist_error,'maximum_bond_residual_m':bond_residual,'initial_joint_velocity':initial_joint_velocity.tolist() if attached else None,'final_joint_velocity':joint_velocity.tolist() if attached else None,'fps':fps,'duration':duration,'hand_samples':len(points),'peak_active_contacts':contacts,
+    return {'compiled_embedding':compiled_embedding,'attached':attached,'initial_penetration_m':initial_penetration,'maximum_wrist_separation_m':wrist_error,'maximum_bond_residual_m':bond_residual,'initial_joint_velocity':initial_joint_velocity.tolist() if attached else None,'final_joint_velocity':joint_velocity.tolist() if attached else None,'fps':fps,'duration':duration,'hand_samples':len(points),'peak_active_contacts':contacts,
             'peak_deformation_m':peak,'maximum_penetration_m':penetration,'final_velocity':velocity.tolist(),
             'final_angular_velocity':angular_velocity.tolist(),'solve_ms':(time.perf_counter()-started)*1000,
             'side_cage':cage.replay_geometry(),'frames':frames,'hand_local':hand.local.tolist(),
             'limits':(['diagonal joint inertia, stationary torso, no active muscle drive'] if attached else ['free rigid hand, no shoulder/elbow reaction yet'])+['laboratory box inertia','no friction','not active in matches']}
 if __name__=='__main__':
     import argparse
-    parser=argparse.ArgumentParser();parser.add_argument('--attached',action='store_true')
-    args=parser.parse_args();result=run(attached=args.attached)
+    parser=argparse.ArgumentParser();parser.add_argument('--attached',action='store_true');parser.add_argument('--reference-embedding',action='store_true')
+    args=parser.parse_args();result=run(attached=args.attached,compiled_embedding=not args.reference_embedding)
     name='attached-side-contact' if args.attached else 'side-contact-lab'
     (ROOT/'logs'/f'{name}.json').write_text(json.dumps(result))
     summary={k:v for k,v in result.items() if k not in ['frames','side_cage','hand_local']}

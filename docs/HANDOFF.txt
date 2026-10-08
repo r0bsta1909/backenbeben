@@ -300,3 +300,28 @@ der Hand, keine Reibung. Die geringe Kontaktflaeche ist nicht als fertiger
 flacher Schlag akzeptiert. Naechste Schritte: Konvergenz/Laufzeit profilieren,
 Motoren und Handgelenknachgiebigkeit gemeinsam abstimmen, erst dann die
 sichtbare Arm-Hand-Aufzeichnung integrieren. Grafikgate weiterhin offen.
+
+KONTAKTLOOP PROFILIERT UND OHNE ERGEBNISAENDERUNG BESCHLEUNIGT
+Warmprofil des gekoppelten 0.012-s-Versuchs: 39.57 s unter cProfile;
+87,552 Aufrufe project_rigid_contact, kumulativ 28.14 s. Der Grossteil
+validiert/projiziert getrennte Punkte mit exakt null Korrektur.
+RigidHandContact ueberspringt jetzt nur positive/nichtnegative Luecken mit
+Multiplikator null. Luecke nach vorangehenden Korrekturen neu ausgewertet;
+bereits belastete Kontakte werden weiterhin entlastet. Vergleich ueber alle
+Frames: Referenz 27.216 s, optimiert 9.805 s; Offsets, Handposition/-rotation
+und Armwinkel exakt identisch. Test deckt explizit Entlastung trotz Abstand ab.
+Optionaler JIT-Kernel contact_embedding_compiled.py berechnet dieselben
+Dreiecksformeln ohne Fast-Math. Gegen deformiertes Mesh (160 Abfragen) sowie
+vollstaendigen gekoppelten Loop geprueft. Zweiter Warmvergleich: 9.877 s auf
+5.241 s, alle aufgezeichneten Werte wieder exakt identisch, gleiche maximale
+Durchdringung 2.584e-7 m und drei aktive Kontakte im kurzen Zeitfenster.
+Nachweise: validation/separated-contact-optimization.json und
+validation/compiled-side-embedding.json. Werte sind lokale Laufzeiten, kein
+plattformuebergreifendes Leistungsversprechen. Vollsuite: 62 Tests bestanden.
+Labor nutzt kompiliertes Embedding standardmaessig; Vergleich:
+scripts/run_side_contact_lab.py --attached --reference-embedding.
+Numba bleibt optionale Laborabhaengigkeit; Matchpfad unveraendert.
+Weiterhin mehrere hundertmal langsamer als Echtzeit. Naechste Profilbereiche:
+Materialkernel mit vielen kleinen Arrayoperationen und numerischer
+Arm-Hand-Jacobian. Keine Genauigkeitsreduktion/Iterationskuerzung zur Kaschierung
+der Laufzeit. Physik-Konvergenz, flaechengefuehrter Schlag und Grafikgate offen.

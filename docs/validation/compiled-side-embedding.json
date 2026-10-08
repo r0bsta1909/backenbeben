@@ -1,0 +1,16 @@
+{
+  "duration_s": 0.012,
+  "fps": 960,
+  "reference_ms": 9877.084399999148,
+  "compiled_embedding_ms": 5241.280700000061,
+  "maximum_absolute_differences": {
+    "offsets": 0.0,
+    "center": 0.0,
+    "rotation": 0.0,
+    "arm_angles": 0.0
+  },
+  "reference_penetration_m": 2.5843202537636295e-07,
+  "compiled_penetration_m": 2.5843202537636295e-07,
+  "reference_contacts": 3,
+  "compiled_contacts": 3
+}

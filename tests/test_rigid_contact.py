@@ -39,3 +39,20 @@ class RigidContactTests(unittest.TestCase):
   self.assertLess(hand.penetration(cage),1e-9)
   self.assertAlmostEqual(np.linalg.norm(hand.points()[0]-hand.points()[1]),.1,places=12)
   self.assertTrue(np.all(hand.multipliers>=0))
+
+ def test_separated_skip_matches_reference_including_loaded_contact(self):
+  from types import SimpleNamespace
+  from rigid_hand_contact import RigidHandContact
+  def pair():
+   cage=SimpleNamespace(p=np.array([[0.,-1.,-1.],[0.,-1.,1.],[0.,1.,-1.],[0.,1.,1.]]),w=np.ones(4)*2,geometry={'triangles':np.array([[0,1,2],[1,3,2]])})
+   hand=RigidHandContact([[-.005,-.05,0.],[-.005,.05,0.],[.05,0.,.02]],[1.,1.,1.])
+   return cage,hand
+  ref,a=pair();opt,b=pair()
+  for iteration in range(24):
+   if iteration==12:
+    a.center[0]+=.01;b.center[0]+=.01 # loaded multipliers must unload despite positive gap
+   a.project(ref,1/960,skip_separated=False);b.project(opt,1/960,skip_separated=True)
+   np.testing.assert_allclose(a.center,b.center,atol=1e-14,rtol=0)
+   np.testing.assert_allclose(a.rotation,b.rotation,atol=1e-14,rtol=0)
+   np.testing.assert_allclose(ref.p,opt.p,atol=1e-14,rtol=0)
+   np.testing.assert_allclose(a.multipliers,b.multipliers,atol=1e-14,rtol=0)
