@@ -458,3 +458,19 @@ Impactp9562.5ms vs62.6msvorher: KEINnachgewiesenerFramezeitgewinn. Replayp95
 Beleg validation/side-texture-reuse.json; testside_cage_reuse.gd.
 Goalaktiv. NaechsterSchritt: ImpactmessungnachAngreifer/Empfaengertrennen und
 Spiegel-Neuzeichnungenzaehlen,bevorweitereOptimierung. V11Downloadunveraendert.
+
+G8 UNVERAENDERTEN SPIEGEL NICHT NEU ZEICHNEN
+Rollenmessung zeigt langsamere Frames beim Angreifer: Impact p95 62.6 ms,
+Empfaenger 34.8 ms. Vorher 50-61 Spiegelzeichnungen je gegnerischem Treffer.
+Spiegel jetzt nur bei geaendertem Aussehen/Emote, eigener Physik oder deren
+Reset sowie Lidbewegung und Matchwechsel als veraendert markieren.
+Native Pruefung fuer statischen Zustand, beide Trefferrollen, Reset, Verletzung,
+Blinzeln und Emote bestanden. Webexport und kompletter Standard-KO-Kampf samt
+Replay/Resume/Revanche bestanden, Browserfehler leer.
+Danach beim Angreifer 3-7 Spiegelzeichnungen je Treffer; eigene Treffer bleiben
+mit 56-58 Zeichnungen sichtbar. Impact p95 weiterhin 62.6 ms: KEIN belegter
+Framezeitgewinn. Andere echte Mausduelle, kein identisches Replay-A/B.
+Beleg validation/mirror-dirty-performance.json; tests/mirror_dirty.gd.
+Goal aktiv. Naechster Schritt: CPU-Zeit der Browserbruecke, Erscheinungsupdates
+und drive_recorded_physics getrennt messen, bevor weitere Optimierung.
+V11-Download bleibt vor diesen Quellaenderungen; Gesamtabnahme weiter offen.

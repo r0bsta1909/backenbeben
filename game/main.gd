@@ -36,6 +36,9 @@ var appearance_timer := 0.0
 var particles: Array = []
 var mirror_mount: Node3D
 var recorded_side_texture: ImageTexture
+var mirror_appearance_hash := 0
+var mirror_physics_active := false
+var mirror_eye_closure := -1.0
 var mirror_dirty := true
 var mirror_draw_requests := 0
 var mirror_viewport: SubViewport
@@ -272,11 +275,14 @@ func head_offset_state(actor: Node3D, parameter := "head_offset") -> Array:
 	return [value.x,value.y,value.z]
 
 func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
-	if root==reflection:mirror_dirty=true
 	var damage := float(data.get("damage",0))
 	var ratio := clampf(damage/100.,0,1)
 	var fractured := clampf((damage-50)/40,0,1)
 	var emote_active := emote_remaining>0 and ((is_enemy and emote_player!=you) or (not is_enemy and emote_player==you))
+	if root==reflection:
+		var appearance_hash: int=[data,emote_active,emote_kind if emote_active else -1].hash()
+		if appearance_hash!=mirror_appearance_hash:mirror_dirty=true
+		mirror_appearance_hash=appearance_hash
 	for node in root.find_children("*", "MeshInstance3D", true, false):
 		var n := str(node.name)
 		var side: String = "L" if n.ends_with("L") else "R"
@@ -343,7 +349,7 @@ func _process(delta: float) -> void:
 		if parsed is Dictionary and parsed.has("state"):
 			state=parsed.state;you=int(parsed.you)
 			if int(state.match_id)!=last_match:
-				last_match=int(state.match_id);last_event=-1
+				last_match=int(state.match_id);last_event=-1;mirror_dirty=true
 				for view in [fighter,hand,reflection]:view.reset_all()
 				play_sound(bell_audio,"bell")
 			if int(state.event_id)!=last_event:
@@ -439,7 +445,6 @@ func drive_recorded_physics() -> void:
 	var physics_changed: bool=frame_hash!=last_physics_hash
 	if physics_frame.has("id") and not physics_changed:return
 	if physics_changed:
-		mirror_dirty=true
 		physics_material_updates+=1
 	last_physics_hash=frame_hash
 	var offsets := PackedVector3Array()
@@ -456,6 +461,9 @@ func drive_recorded_physics() -> void:
 	var side_texture: ImageTexture = preload("res://side_cage_view.gd").texture_for(side_data,physics_frame.get("offsets",[]),recorded_side_texture)
 	if side_texture!=null:recorded_side_texture=side_texture
 	var replaying: bool = physics_frame.get("replay",false)
+	var own_physics: bool=active and not replaying and int(physics_frame.get("target",-1))==you
+	if physics_changed and (own_physics or mirror_physics_active):mirror_dirty=true
+	mirror_physics_active=own_physics
 	for root in [fighter,reflection]:
 		var affected: bool = active and (replaying if root==fighter else false)
 		if not replaying:affected=active and ((root==fighter and int(physics_frame.target)!=you) or (root==reflection and int(physics_frame.target)==you))
@@ -467,6 +475,8 @@ func drive_recorded_physics() -> void:
 			eye_closure=.35*(1.0-smoothstep(.5,.85,float(physics_frame.get("time",0.0))))
 		if affected and bool(physics_frame.get("ko",false)):
 			eye_closure=maxf(eye_closure,smoothstep(.62,.82,float(physics_frame.get("time",0.0))))
+		if root==reflection and eye_closure!=mirror_eye_closure:
+			mirror_dirty=true;mirror_eye_closure=eye_closure
 		root.set_eye_closure(eye_closure)
 		if active:root.rotation=Vector3.ZERO;root.position.y=0
 		for m in (physics_materials.get(root.get_instance_id(),[]) if physics_changed else []):
