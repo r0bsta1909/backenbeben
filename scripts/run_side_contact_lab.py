@@ -9,6 +9,7 @@ from contact_v3 import score
 from hand_surface import world_positions,DATA
 from rigid_hand_contact import RigidHandContact
 from contact_constraint import rotation_increment
+from contact_energy import mechanical_energy
 class CompiledSideTissue(SideTissue,CompiledTissue):pass
 
 def rotation_vector(matrix):
@@ -50,6 +51,8 @@ def run(fps=960,duration=.06,attached=False,compiled_embedding=True,iterations=6
         angular_velocity=rotation_vector(after_rotation@before_rotation.T)/(2*probe)
     initial_velocity=velocity.copy();initial_angular_velocity=angular_velocity.copy()
     initial_penetration=hand.penetration(cage)
+    initial_energy=mechanical_energy(cage,hand,velocity,angular_velocity,bond,initial_joint_velocity)
+    damping_loss=0.;cumulative_impulse=np.zeros(3)
     frames=[];peak=0.;penetration=0.;contacts=0;wrist_error=0.;bond_residual=0.;iteration_counts=[];unconverged=0;material_residual=0.;started=time.perf_counter()
     for step in range(round(duration*fps)):
         old_center=hand.center.copy();old_rotation=hand.rotation.copy()
@@ -62,6 +65,7 @@ def run(fps=960,duration=.06,attached=False,compiled_embedding=True,iterations=6
             if attached:bond.project(dt)
             hand.project(tissue,dt)
         project.residual=lambda:max(hand.penetration(cage),bond.residual(dt) if attached else 0.)
+        damping_loss+=float(.5*np.sum(cage.node_masses[:,None]*cage.v*cage.v))*(1-np.exp(-12*dt))
         cage.step(dt,project_contact=project)
         iteration_counts.append(cage.iterations_used)
         current_material=max(cage.residuals['edge_m'],cage.residuals['volume_equivalent_m'])
@@ -75,8 +79,10 @@ def run(fps=960,duration=.06,attached=False,compiled_embedding=True,iterations=6
         angular_velocity=rotation_vector(hand.rotation@old_rotation.T)/dt
         peak=max(peak,float(np.max(np.linalg.norm(cage.p-cage.rest,axis=1))))
         penetration=max(penetration,hand.penetration(cage));contacts=max(contacts,hand.last_contacts)
-        frames.append({'time':(step+1)*dt,'offsets':cage.replay_offsets(),'center':hand.center.tolist(),'rotation':hand.rotation.tolist(),'arm':arm.pose() if attached else None})
-    return {'residual_tolerance_m':residual_tolerance,'initial_velocity':initial_velocity.tolist(),'initial_angular_velocity':initial_angular_velocity.tolist(),'iterations_cap':iterations,'iteration_counts':iteration_counts,'unconverged_steps':unconverged,'maximum_material_residual_m':material_residual,'compiled_embedding':compiled_embedding,'attached':attached,'initial_penetration_m':initial_penetration,'maximum_wrist_separation_m':wrist_error,'maximum_bond_residual_m':bond_residual,'initial_joint_velocity':initial_joint_velocity.tolist() if attached else None,'final_joint_velocity':joint_velocity.tolist() if attached else None,'fps':fps,'duration':duration,'hand_samples':len(points),'peak_active_contacts':contacts,
+        cumulative_impulse+=hand.step_contact_impulse
+        energy=mechanical_energy(cage,hand,velocity,angular_velocity,bond,joint_velocity if attached else None)
+        frames.append({'energy_j':energy,'explicit_damping_loss_j':damping_loss,'contact_impulse_ns':hand.step_contact_impulse.tolist(),'cumulative_contact_impulse_ns':cumulative_impulse.tolist(),'contact_switches':hand.step_contact_switches,'active_contact_samples':np.flatnonzero(hand.multipliers>0).tolist(),'time':(step+1)*dt,'offsets':cage.replay_offsets(),'center':hand.center.tolist(),'rotation':hand.rotation.tolist(),'arm':arm.pose() if attached else None})
+    return {'initial_energy_j':initial_energy,'final_energy_j':frames[-1]['energy_j'] if frames else initial_energy,'explicit_damping_loss_j':damping_loss,'residual_tolerance_m':residual_tolerance,'initial_velocity':initial_velocity.tolist(),'initial_angular_velocity':initial_angular_velocity.tolist(),'iterations_cap':iterations,'iteration_counts':iteration_counts,'unconverged_steps':unconverged,'maximum_material_residual_m':material_residual,'compiled_embedding':compiled_embedding,'attached':attached,'initial_penetration_m':initial_penetration,'maximum_wrist_separation_m':wrist_error,'maximum_bond_residual_m':bond_residual,'initial_joint_velocity':initial_joint_velocity.tolist() if attached else None,'final_joint_velocity':joint_velocity.tolist() if attached else None,'fps':fps,'duration':duration,'hand_samples':len(points),'peak_active_contacts':contacts,
             'peak_deformation_m':peak,'maximum_penetration_m':penetration,'final_velocity':velocity.tolist(),
             'final_angular_velocity':angular_velocity.tolist(),'solve_ms':(time.perf_counter()-started)*1000,
             'side_cage':cage.replay_geometry(),'frames':frames,'hand_local':hand.local.tolist(),

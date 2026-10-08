@@ -1,0 +1,916 @@
+{
+  "runs": [
+    {
+      "fps": 960,
+      "state_matches_before_instrumentation": true,
+      "initial_total_j": 0.717820923678563,
+      "final_total_j": 0.536049101578334,
+      "total_loss_j": 0.18177182210022902,
+      "explicit_damping_loss_j": 7.406029019301269e-06,
+      "loss_outside_explicit_damping_j": 0.18176441607120972,
+      "largest_step_energy_increase_j": 0.0,
+      "cumulative_contact_impulse_ns": [
+        1.2230504352851175,
+        -0.4061890456574439,
+        0.37820702866220324
+      ],
+      "all_embedding_triangle_switches": 69,
+      "common_time_samples": [
+        {
+          "time": 0.0010416666666666667,
+          "energy_j": {
+            "hand_translation": 0.0536506071008634,
+            "hand_rotation": 0.00215231708534162,
+            "tissue_kinetic": 0.0001273184673153411,
+            "tissue_edges": 0.004807340099239534,
+            "tissue_volumes": 4.63555841694538e-07,
+            "arm_kinetic": 0.6287862489739782,
+            "attachment": 0.0024674407927455407,
+            "total": 0.6919917360753253
+          },
+          "cumulative_contact_impulse_ns": [
+            0.039610970595529725,
+            -0.002469222119954964,
+            0.006890293052144268
+          ],
+          "active_contact_samples": [
+            111
+          ]
+        },
+        {
+          "time": 0.0020833333333333333,
+          "energy_j": {
+            "hand_translation": 0.016622531860589873,
+            "hand_rotation": 0.0036335502775682693,
+            "tissue_kinetic": 0.00011157379001893516,
+            "tissue_edges": 0.010873517235600844,
+            "tissue_volumes": 1.3788250473887154e-06,
+            "arm_kinetic": 0.6172680208821786,
+            "attachment": 0.014488364652679133,
+            "total": 0.662998937523683
+          },
+          "cumulative_contact_impulse_ns": [
+            0.11434942256419756,
+            -0.01807366118736164,
+            0.023404462240533944
+          ],
+          "active_contact_samples": [
+            17,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.003125,
+          "energy_j": {
+            "hand_translation": 0.006070098740949316,
+            "hand_rotation": 0.0019496446272140341,
+            "tissue_kinetic": 0.00013094761496231473,
+            "tissue_edges": 0.012628037360152194,
+            "tissue_volumes": 2.4220917703603897e-06,
+            "arm_kinetic": 0.5786783297354551,
+            "attachment": 0.042107946269653,
+            "total": 0.6415674264401563
+          },
+          "cumulative_contact_impulse_ns": [
+            0.20028789593047858,
+            -0.04597079625927481,
+            0.045881999700294496
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.004166666666666667,
+          "energy_j": {
+            "hand_translation": 0.0067982103828051555,
+            "hand_rotation": 0.0013128218441692235,
+            "tissue_kinetic": 4.9361202057238444e-05,
+            "tissue_edges": 0.012697973780996947,
+            "tissue_volumes": 2.9355731539860343e-06,
+            "arm_kinetic": 0.5165852408297086,
+            "attachment": 0.08827668107086258,
+            "total": 0.6257232246837537
+          },
+          "cumulative_contact_impulse_ns": [
+            0.28142019616835484,
+            -0.07706427944403564,
+            0.06926994331054154
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.005208333333333333,
+          "energy_j": {
+            "hand_translation": 0.007768005752675141,
+            "hand_rotation": 0.0010563521114044525,
+            "tissue_kinetic": 3.3280601770432164e-05,
+            "tissue_edges": 0.015991127359301235,
+            "tissue_volumes": 3.946324058036899e-06,
+            "arm_kinetic": 0.4439964427802779,
+            "attachment": 0.14318111009100945,
+            "total": 0.6120302650204966
+          },
+          "cumulative_contact_impulse_ns": [
+            0.3674564319203411,
+            -0.11229496146808673,
+            0.09604499482217406
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.00625,
+          "energy_j": {
+            "hand_translation": 0.007504783566437703,
+            "hand_rotation": 0.0008130671782063972,
+            "tissue_kinetic": 4.343573885556229e-05,
+            "tissue_edges": 0.022576507438038143,
+            "tissue_volumes": 5.6610730069810755e-06,
+            "arm_kinetic": 0.3729718986301862,
+            "attachment": 0.19554245562889677,
+            "total": 0.5994578092536278
+          },
+          "cumulative_contact_impulse_ns": [
+            0.4671002671296923,
+            -0.15220278726381012,
+            0.12821782769379847
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.007291666666666667,
+          "energy_j": {
+            "hand_translation": 0.005469652867775076,
+            "hand_rotation": 0.0005910934029148411,
+            "tissue_kinetic": 4.4289587631984965e-05,
+            "tissue_edges": 0.030397503593126773,
+            "tissue_volumes": 7.648703058898876e-06,
+            "arm_kinetic": 0.3109115009504492,
+            "attachment": 0.24014981783518916,
+            "total": 0.5875715069401459
+          },
+          "cumulative_contact_impulse_ns": [
+            0.5822125463747956,
+            -0.1958238909542661,
+            0.16588195141011625
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.008333333333333333,
+          "energy_j": {
+            "hand_translation": 0.0025683605817220434,
+            "hand_rotation": 0.00039203149658686054,
+            "tissue_kinetic": 2.6888656373293253e-05,
+            "tissue_edges": 0.03692875272920512,
+            "tissue_volumes": 9.28360738291006e-06,
+            "arm_kinetic": 0.2615109234764639,
+            "attachment": 0.2748432416638931,
+            "total": 0.5762794822116273
+          },
+          "cumulative_contact_impulse_ns": [
+            0.7090487431956035,
+            -0.2412617095619338,
+            0.2076274430010638
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.009375,
+          "energy_j": {
+            "hand_translation": 0.000950275930940211,
+            "hand_rotation": 0.00024473664650559034,
+            "tissue_kinetic": 1.0727610685601091e-05,
+            "tissue_edges": 0.040568706792303164,
+            "tissue_volumes": 1.0160056346813863e-05,
+            "arm_kinetic": 0.22645648865186213,
+            "attachment": 0.2974234385372011,
+            "total": 0.5656645342258446
+          },
+          "cumulative_contact_impulse_ns": [
+            0.8417045595682605,
+            -0.2864898189332571,
+            0.2514858991956308
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.010416666666666666,
+          "energy_j": {
+            "hand_translation": 0.002636828620927202,
+            "hand_rotation": 0.00020291514320075146,
+            "tissue_kinetic": 6.4775049196043825e-06,
+            "tissue_edges": 0.04114330546663065,
+            "tissue_volumes": 1.0234129473557364e-05,
+            "arm_kinetic": 0.20633906176246825,
+            "attachment": 0.30534934840149025,
+            "total": 0.5556881710291103
+          },
+          "cumulative_contact_impulse_ns": [
+            0.9745089180198182,
+            -0.32980003678895387,
+            0.29556629889504993
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.011458333333333333,
+          "energy_j": {
+            "hand_translation": 0.008743147726672305,
+            "hand_rotation": 0.00033421080210573913,
+            "tissue_kinetic": 1.1892276056916944e-05,
+            "tissue_edges": 0.039367453670730905,
+            "tissue_volumes": 9.686996088031278e-06,
+            "arm_kinetic": 0.20086605217771789,
+            "attachment": 0.2966708974904407,
+            "total": 0.5460033411398124
+          },
+          "cumulative_contact_impulse_ns": [
+            1.1028396432204763,
+            -0.3699545262829794,
+            0.3382611486121942
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.0125,
+          "energy_j": {
+            "hand_translation": 0.01925370847544243,
+            "hand_rotation": 0.0006880000865218837,
+            "tissue_kinetic": 2.2175825296922785e-05,
+            "tissue_edges": 0.036101003424348216,
+            "tissue_volumes": 8.73565438821198e-06,
+            "arm_kinetic": 0.20876500491844086,
+            "attachment": 0.27121047319389546,
+            "total": 0.536049101578334
+          },
+          "cumulative_contact_impulse_ns": [
+            1.2230504352851175,
+            -0.4061890456574439,
+            0.37820702866220324
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        }
+      ]
+    },
+    {
+      "fps": 1920,
+      "state_matches_before_instrumentation": true,
+      "initial_total_j": 0.717820923678563,
+      "final_total_j": 0.5958422090852274,
+      "total_loss_j": 0.12197871459333554,
+      "explicit_damping_loss_j": 1.50239427112714e-05,
+      "loss_outside_explicit_damping_j": 0.12196369065062426,
+      "largest_step_energy_increase_j": 0.0,
+      "cumulative_contact_impulse_ns": [
+        1.2478845123198057,
+        -0.4194731969603247,
+        0.3929330324426776
+      ],
+      "all_embedding_triangle_switches": 60,
+      "common_time_samples": [
+        {
+          "time": 0.0010416666666666667,
+          "energy_j": {
+            "hand_translation": 0.053587898713622295,
+            "hand_rotation": 0.003774515986833273,
+            "tissue_kinetic": 0.0004185726695949381,
+            "tissue_edges": 0.009371904963346696,
+            "tissue_volumes": 9.230119959160073e-07,
+            "arm_kinetic": 0.6301018746437264,
+            "attachment": 0.002386760707445893,
+            "total": 0.6996424506965654
+          },
+          "cumulative_contact_impulse_ns": [
+            0.03838870131775444,
+            -0.002260790255431218,
+            0.006841891909245603
+          ],
+          "active_contact_samples": [
+            111
+          ]
+        },
+        {
+          "time": 0.0020833333333333333,
+          "energy_j": {
+            "hand_translation": 0.010027658803566937,
+            "hand_rotation": 0.004359016893117652,
+            "tissue_kinetic": 0.000483188291121821,
+            "tissue_edges": 0.016437494167757423,
+            "tissue_volumes": 2.536321556408541e-06,
+            "arm_kinetic": 0.6289283578584264,
+            "attachment": 0.016771039880244726,
+            "total": 0.6770092922157913
+          },
+          "cumulative_contact_impulse_ns": [
+            0.12230606095242154,
+            -0.01888635570752767,
+            0.0260065140011832
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.003125,
+          "energy_j": {
+            "hand_translation": 0.005581128282930219,
+            "hand_rotation": 0.0015076559225297018,
+            "tissue_kinetic": 0.00010798411546617147,
+            "tissue_edges": 0.011946927589786376,
+            "tissue_volumes": 2.4446676266981e-06,
+            "arm_kinetic": 0.597140279057857,
+            "attachment": 0.04549206742393939,
+            "total": 0.6617784870601356
+          },
+          "cumulative_contact_impulse_ns": [
+            0.20776308069621635,
+            -0.04576128112416862,
+            0.048133247480100484
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.004166666666666667,
+          "energy_j": {
+            "hand_translation": 0.007691114163691842,
+            "hand_rotation": 0.0016249102275577793,
+            "tissue_kinetic": 4.880379820445484e-05,
+            "tissue_edges": 0.008393005538811131,
+            "tissue_volumes": 2.0455693752419854e-06,
+            "arm_kinetic": 0.5324576000929491,
+            "attachment": 0.10052516281292145,
+            "total": 0.650742642203511
+          },
+          "cumulative_contact_impulse_ns": [
+            0.27366200785509043,
+            -0.07275496886544094,
+            0.06710056381107192
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.005208333333333333,
+          "energy_j": {
+            "hand_translation": 0.010236706617981426,
+            "hand_rotation": 0.0012192502216664518,
+            "tissue_kinetic": 7.365016925998369e-05,
+            "tissue_edges": 0.013470415107044735,
+            "tissue_volumes": 3.44918466154634e-06,
+            "arm_kinetic": 0.45470985835874034,
+            "attachment": 0.16199026419886042,
+            "total": 0.6417035938582148
+          },
+          "cumulative_contact_impulse_ns": [
+            0.3424470573192894,
+            -0.10506084159335219,
+            0.08923997695580209
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.00625,
+          "energy_j": {
+            "hand_translation": 0.012458092182500035,
+            "hand_rotation": 0.000955818555753806,
+            "tissue_kinetic": 0.00015747748090121465,
+            "tissue_edges": 0.025326020050813296,
+            "tissue_volumes": 6.505170805425718e-06,
+            "arm_kinetic": 0.3804526010186676,
+            "attachment": 0.21433742493235275,
+            "total": 0.6336939393917942
+          },
+          "cumulative_contact_impulse_ns": [
+            0.4373790497126375,
+            -0.14582851329082372,
+            0.12048157648157631
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.007291666666666667,
+          "energy_j": {
+            "hand_translation": 0.00931924203480369,
+            "hand_rotation": 0.0007852391529879477,
+            "tissue_kinetic": 9.723175756300823e-05,
+            "tissue_edges": 0.03885181587162082,
+            "tissue_volumes": 9.922522543326267e-06,
+            "arm_kinetic": 0.31660997369853516,
+            "attachment": 0.26044583811873,
+            "total": 0.626119263156784
+          },
+          "cumulative_contact_impulse_ns": [
+            0.5616635671437862,
+            -0.19304379699594376,
+            0.16129871582844277
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.008333333333333333,
+          "energy_j": {
+            "hand_translation": 0.0041801114600103165,
+            "hand_rotation": 0.000705509992163103,
+            "tissue_kinetic": 2.1048100320354362e-05,
+            "tissue_edges": 0.04687570080756733,
+            "tissue_volumes": 1.1969059654258999e-05,
+            "arm_kinetic": 0.26562738891746357,
+            "attachment": 0.30155442192095994,
+            "total": 0.6189761502581389
+          },
+          "cumulative_contact_impulse_ns": [
+            0.7025647728998243,
+            -0.24266736362166244,
+            0.20792567678573962
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.009375,
+          "energy_j": {
+            "hand_translation": 0.0010627327719827996,
+            "hand_rotation": 0.0005877520340300088,
+            "tissue_kinetic": 5.080743938843484e-06,
+            "tissue_edges": 0.04779364996630592,
+            "tissue_volumes": 1.2231943972186263e-05,
+            "arm_kinetic": 0.22897369979584753,
+            "attachment": 0.3341236009016194,
+            "total": 0.6125587481576967
+          },
+          "cumulative_contact_impulse_ns": [
+            0.8459681184435821,
+            -0.29132582003713153,
+            0.2560662033291676
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.010416666666666666,
+          "energy_j": {
+            "hand_translation": 0.0017075814722514804,
+            "hand_rotation": 0.0003789960620890859,
+            "tissue_kinetic": 8.975330131945232e-06,
+            "tissue_edges": 0.045362923681426075,
+            "tissue_volumes": 1.1582003557187018e-05,
+            "arm_kinetic": 0.20762707553461934,
+            "attachment": 0.35171625930789036,
+            "total": 0.6068133933919655
+          },
+          "cumulative_contact_impulse_ns": [
+            0.9848937125196828,
+            -0.33729692277048284,
+            0.30331796180458703
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.011458333333333333,
+          "energy_j": {
+            "hand_translation": 0.00803417435364916,
+            "hand_rotation": 0.00034910905494437566,
+            "tissue_kinetic": 1.3868941546353812e-05,
+            "tissue_edges": 0.042657396704990254,
+            "tissue_volumes": 1.0780930455929625e-05,
+            "arm_kinetic": 0.2017223523332753,
+            "attachment": 0.34861735093182866,
+            "total": 0.6014050332506901
+          },
+          "cumulative_contact_impulse_ns": [
+            1.1187456807016893,
+            -0.38009207267803735,
+            0.34906269418281727
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.0125,
+          "energy_j": {
+            "hand_translation": 0.021284617279192227,
+            "hand_rotation": 0.0007093644375798292,
+            "tissue_kinetic": 2.4039589589031905e-05,
+            "tissue_edges": 0.039886688384439956,
+            "tissue_volumes": 9.907399326979148e-06,
+            "arm_kinetic": 0.21042098130172066,
+            "attachment": 0.32350661069337877,
+            "total": 0.5958422090852274
+          },
+          "cumulative_contact_impulse_ns": [
+            1.2478845123198057,
+            -0.4194731969603247,
+            0.3929330324426776
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        }
+      ]
+    },
+    {
+      "fps": 3840,
+      "state_matches_before_instrumentation": true,
+      "initial_total_j": 0.717820923678563,
+      "final_total_j": 0.6314794373314424,
+      "total_loss_j": 0.08634148634712058,
+      "explicit_damping_loss_j": 3.439640591684911e-05,
+      "loss_outside_explicit_damping_j": 0.08630708994120373,
+      "largest_step_energy_increase_j": 0.0,
+      "cumulative_contact_impulse_ns": [
+        1.248001589425869,
+        -0.42471332615616464,
+        0.3998769800316457
+      ],
+      "all_embedding_triangle_switches": 26,
+      "common_time_samples": [
+        {
+          "time": 0.0010416666666666667,
+          "energy_j": {
+            "hand_translation": 0.055274064741788566,
+            "hand_rotation": 0.00523980059356876,
+            "tissue_kinetic": 0.00057141102945818,
+            "tissue_edges": 0.013511473772809424,
+            "tissue_volumes": 1.4568609867411127e-06,
+            "arm_kinetic": 0.6295708665387056,
+            "attachment": 0.0021299915911847152,
+            "total": 0.706299065128502
+          },
+          "cumulative_contact_impulse_ns": [
+            0.03672916858556333,
+            -0.0020138461499775388,
+            0.00675640853557752
+          ],
+          "active_contact_samples": [
+            111
+          ]
+        },
+        {
+          "time": 0.0020833333333333333,
+          "energy_j": {
+            "hand_translation": 0.007336317348567195,
+            "hand_rotation": 0.005007020542294061,
+            "tissue_kinetic": 0.0007101665658939206,
+            "tissue_edges": 0.021431315078095845,
+            "tissue_volumes": 3.81934765202986e-06,
+            "arm_kinetic": 0.6343989807260136,
+            "attachment": 0.02048523160618215,
+            "total": 0.6893728512146988
+          },
+          "cumulative_contact_impulse_ns": [
+            0.12809378609511032,
+            -0.01984150221912155,
+            0.028428371093319194
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.003125,
+          "energy_j": {
+            "hand_translation": 0.008545184542356414,
+            "hand_rotation": 0.0014307373755964778,
+            "tissue_kinetic": 0.00028664696106511886,
+            "tissue_edges": 0.011272221972859112,
+            "tissue_volumes": 2.280910110073872e-06,
+            "arm_kinetic": 0.6089591369720156,
+            "attachment": 0.04737049968123741,
+            "total": 0.6778667084152402
+          },
+          "cumulative_contact_impulse_ns": [
+            0.21813458812792227,
+            -0.047438064317614576,
+            0.051860150759279654
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.004166666666666667,
+          "energy_j": {
+            "hand_translation": 0.008499671108250595,
+            "hand_rotation": 0.0027715748486911475,
+            "tissue_kinetic": 0.0001265370441384097,
+            "tissue_edges": 0.0047888107847188,
+            "tissue_volumes": 1.1911078160483e-06,
+            "arm_kinetic": 0.5412889604323949,
+            "attachment": 0.11159895860288764,
+            "total": 0.6690757039288976
+          },
+          "cumulative_contact_impulse_ns": [
+            0.27220452897126673,
+            -0.06996625715639097,
+            0.0672029219948332
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.005208333333333333,
+          "energy_j": {
+            "hand_translation": 0.012555253694994729,
+            "hand_rotation": 0.0022109343095473243,
+            "tissue_kinetic": 0.00024291908466312796,
+            "tissue_edges": 0.01149425214144535,
+            "tissue_volumes": 3.0273383719883754e-06,
+            "arm_kinetic": 0.4594855316483897,
+            "attachment": 0.17623115266614567,
+            "total": 0.6622230708835579
+          },
+          "cumulative_contact_impulse_ns": [
+            0.3235612738189583,
+            -0.09888666682750807,
+            0.08430798609835355
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39
+          ]
+        },
+        {
+          "time": 0.00625,
+          "energy_j": {
+            "hand_translation": 0.019850953408331793,
+            "hand_rotation": 0.0009994773800129709,
+            "tissue_kinetic": 0.0004185689413648643,
+            "tissue_edges": 0.028153870618192946,
+            "tissue_volumes": 7.432311177242909e-06,
+            "arm_kinetic": 0.38416346968682646,
+            "attachment": 0.22252105229440058,
+            "total": 0.6561148246403069
+          },
+          "cumulative_contact_impulse_ns": [
+            0.4083952621683975,
+            -0.14017679811231462,
+            0.11312670914706696
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.007291666666666667,
+          "energy_j": {
+            "hand_translation": 0.013020201361411972,
+            "hand_rotation": 0.0009559324484684145,
+            "tissue_kinetic": 0.00019388970629900218,
+            "tissue_edges": 0.050890887394120746,
+            "tissue_volumes": 1.299585578848998e-05,
+            "arm_kinetic": 0.3198968759556147,
+            "attachment": 0.2652704480952254,
+            "total": 0.6502412308169288
+          },
+          "cumulative_contact_impulse_ns": [
+            0.5452332725895335,
+            -0.19067964046646751,
+            0.15790813584999613
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.008333333333333333,
+          "energy_j": {
+            "hand_translation": 0.005743298218001295,
+            "hand_rotation": 0.0013147067774316454,
+            "tissue_kinetic": 1.3124050908375241e-05,
+            "tissue_edges": 0.05897156914544455,
+            "tissue_volumes": 1.528318199037256e-05,
+            "arm_kinetic": 0.2683505669494843,
+            "attachment": 0.3106278909410216,
+            "total": 0.6450364392642821
+          },
+          "cumulative_contact_impulse_ns": [
+            0.7046640741995142,
+            -0.24416048333564064,
+            0.21085374911484325
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.009375,
+          "energy_j": {
+            "hand_translation": 0.0029756490127478235,
+            "hand_rotation": 0.0012693038288404891,
+            "tissue_kinetic": 5.532794364237444e-05,
+            "tissue_edges": 0.05117567185112616,
+            "tissue_volumes": 1.3505443909521438e-05,
+            "arm_kinetic": 0.23079270552416953,
+            "attachment": 0.35479301437296284,
+            "total": 0.6410751779773988
+          },
+          "cumulative_contact_impulse_ns": [
+            0.8554953022988874,
+            -0.2950556164121229,
+            0.26243447178311535
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.010416666666666666,
+          "energy_j": {
+            "hand_translation": 0.001403970506477108,
+            "hand_rotation": 0.0005666187478419336,
+            "tissue_kinetic": 2.4067021604155295e-05,
+            "tissue_edges": 0.04265015527029392,
+            "tissue_volumes": 1.1250396517379692e-05,
+            "arm_kinetic": 0.20872411645482425,
+            "attachment": 0.3843399372307221,
+            "total": 0.6377201156282808
+          },
+          "cumulative_contact_impulse_ns": [
+            0.9884894355716259,
+            -0.34082315142167496,
+            0.3092103669280571
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.011458333333333333,
+          "energy_j": {
+            "hand_translation": 0.00649651544722244,
+            "hand_rotation": 0.0002751598660820683,
+            "tissue_kinetic": 1.1511248889912785e-05,
+            "tissue_edges": 0.04142902330369846,
+            "tissue_volumes": 1.0770017219040032e-05,
+            "arm_kinetic": 0.2025873471288891,
+            "attachment": 0.383712370521215,
+            "total": 0.634522697533216
+          },
+          "cumulative_contact_impulse_ns": [
+            1.114913504670922,
+            -0.3832380267467982,
+            0.35393958872480047
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        },
+        {
+          "time": 0.0125,
+          "energy_j": {
+            "hand_translation": 0.021017468116869237,
+            "hand_rotation": 0.0005551749747063381,
+            "tissue_kinetic": 2.511621416181886e-05,
+            "tissue_edges": 0.044401148743476955,
+            "tissue_volumes": 1.1278007156099343e-05,
+            "arm_kinetic": 0.21079505121891368,
+            "attachment": 0.35467420005615824,
+            "total": 0.6314794373314424
+          },
+          "cumulative_contact_impulse_ns": [
+            1.248001589425869,
+            -0.42471332615616464,
+            0.3998769800316457
+          ],
+          "active_contact_samples": [
+            17,
+            18,
+            39,
+            111
+          ]
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Energy of diagonal joint/box hand/edge-volume spring model only",
+    "Triangle switch count includes unloaded projected samples",
+    "Loss outside explicit damping may include integration and inelastic contact effects"
+  ]
+}

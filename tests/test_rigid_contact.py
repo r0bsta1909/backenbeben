@@ -34,11 +34,13 @@ class RigidContactTests(unittest.TestCase):
   from rigid_hand_contact import RigidHandContact
   cage=SimpleNamespace(p=np.array([[0.,-1.,-1.],[0.,-1.,1.],[0.,1.,-1.],[0.,1.,1.]]),w=np.zeros(4),geometry={'triangles':np.array([[0,1,2],[1,3,2]])})
   hand=RigidHandContact([[-.005,-.05,0.],[-.005,.05,0.]],[1.,1.])
-  hand.begin_step()
+  hand.begin_step();initial_center=hand.center.copy()
   for _ in range(40):hand.project(cage,1/960)
   self.assertLess(hand.penetration(cage),1e-9)
   self.assertAlmostEqual(np.linalg.norm(hand.points()[0]-hand.points()[1]),.1,places=12)
   self.assertTrue(np.all(hand.multipliers>=0))
+  np.testing.assert_allclose(hand.step_contact_impulse,(hand.center-initial_center)/hand.inverse_mass*960,atol=1e-12,rtol=0)
+  hand.begin_step();np.testing.assert_array_equal(hand.step_contact_impulse,np.zeros(3))
 
  def test_separated_skip_matches_reference_including_loaded_contact(self):
   from types import SimpleNamespace

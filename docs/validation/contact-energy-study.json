@@ -1,0 +1,351 @@
+{
+  "duration_s": 0.0125,
+  "initial_state_identical": true,
+  "samples": 116,
+  "runs": [
+    {
+      "initial_energy_j": {
+        "hand_translation": 0.0899830918300287,
+        "hand_rotation": 0.00020721389699670994,
+        "tissue_kinetic": 0.0,
+        "tissue_edges": 0.0,
+        "tissue_volumes": 0.0,
+        "arm_kinetic": 0.6276306179515376,
+        "attachment": 0.0,
+        "total": 0.717820923678563
+      },
+      "final_energy_j": {
+        "hand_translation": 0.01925370847544243,
+        "hand_rotation": 0.0006880000865218837,
+        "tissue_kinetic": 2.2175825296922785e-05,
+        "tissue_edges": 0.036101003424348216,
+        "tissue_volumes": 8.73565438821198e-06,
+        "arm_kinetic": 0.20876500491844086,
+        "attachment": 0.27121047319389546,
+        "total": 0.536049101578334
+      },
+      "explicit_damping_loss_j": 7.406029019301269e-06,
+      "residual_tolerance_m": 1e-08,
+      "initial_velocity": [
+        -0.9969741261856013,
+        0.0012709158517254515,
+        -0.07650560720703914
+      ],
+      "initial_angular_velocity": [
+        -0.7767385765217294,
+        0.3108063523652915,
+        -0.025557658793260673
+      ],
+      "iterations_cap": 1024,
+      "iteration_counts": [
+        260,
+        260,
+        292,
+        300,
+        308,
+        308,
+        312,
+        312,
+        312,
+        316,
+        316,
+        320
+      ],
+      "unconverged_steps": 0,
+      "maximum_material_residual_m": 9.947252746421941e-09,
+      "compiled_embedding": true,
+      "attached": true,
+      "initial_penetration_m": 0.0,
+      "maximum_wrist_separation_m": 0.002762448744815348,
+      "maximum_bond_residual_m": 1.334939448913164e-10,
+      "initial_joint_velocity": [
+        -1.8957809986654512,
+        1.3621946055041967,
+        -3.1805359076544915
+      ],
+      "final_joint_velocity": [
+        0.9089093098495304,
+        0.8163299267410373,
+        -2.083003297888446
+      ],
+      "fps": 960,
+      "duration": 0.0125,
+      "hand_samples": 116,
+      "peak_active_contacts": 4,
+      "peak_deformation_m": 0.0010574523854986132,
+      "maximum_penetration_m": 1.0390598282139646e-10,
+      "final_velocity": [
+        0.20927168272455443,
+        0.04266020556858985,
+        -0.4102627985109808
+      ],
+      "final_angular_velocity": [
+        -0.8159127917471183,
+        -2.2956220898075728,
+        0.5868054519357115
+      ],
+      "solve_ms": 14733.860300002561,
+      "limits": [
+        "diagonal joint inertia, stationary torso, no active muscle drive",
+        "laboratory box inertia",
+        "no friction",
+        "not active in matches"
+      ]
+    },
+    {
+      "initial_energy_j": {
+        "hand_translation": 0.0899830918300287,
+        "hand_rotation": 0.00020721389699670994,
+        "tissue_kinetic": 0.0,
+        "tissue_edges": 0.0,
+        "tissue_volumes": 0.0,
+        "arm_kinetic": 0.6276306179515376,
+        "attachment": 0.0,
+        "total": 0.717820923678563
+      },
+      "final_energy_j": {
+        "hand_translation": 0.021284617279192227,
+        "hand_rotation": 0.0007093644375798292,
+        "tissue_kinetic": 2.4039589589031905e-05,
+        "tissue_edges": 0.039886688384439956,
+        "tissue_volumes": 9.907399326979148e-06,
+        "arm_kinetic": 0.21042098130172066,
+        "attachment": 0.32350661069337877,
+        "total": 0.5958422090852274
+      },
+      "explicit_damping_loss_j": 1.50239427112714e-05,
+      "residual_tolerance_m": 1e-08,
+      "initial_velocity": [
+        -0.9969741261856013,
+        0.0012709158517254515,
+        -0.07650560720703914
+      ],
+      "initial_angular_velocity": [
+        -0.7767385765217294,
+        0.3108063523652915,
+        -0.025557658793260673
+      ],
+      "iterations_cap": 1024,
+      "iteration_counts": [
+        64,
+        72,
+        72,
+        76,
+        80,
+        80,
+        80,
+        84,
+        84,
+        84,
+        84,
+        84,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88
+      ],
+      "unconverged_steps": 0,
+      "maximum_material_residual_m": 9.979085045188523e-09,
+      "compiled_embedding": true,
+      "attached": true,
+      "initial_penetration_m": 0.0,
+      "maximum_wrist_separation_m": 0.0029604903948881735,
+      "maximum_bond_residual_m": 2.184097873045299e-10,
+      "initial_joint_velocity": [
+        -1.8957809986654512,
+        1.3621946055041967,
+        -3.1805359076544915
+      ],
+      "final_joint_velocity": [
+        0.9645782341569031,
+        0.7913554162611014,
+        -2.0568879170826193
+      ],
+      "fps": 1920,
+      "duration": 0.0125,
+      "hand_samples": 116,
+      "peak_active_contacts": 4,
+      "peak_deformation_m": 0.0011252647274549083,
+      "maximum_penetration_m": 1.1786114311005978e-10,
+      "final_velocity": [
+        0.21702456515365398,
+        0.056735798153080275,
+        -0.43148248501460706
+      ],
+      "final_angular_velocity": [
+        -0.8704330800796704,
+        -2.1485440262021145,
+        0.6915386919236026
+      ],
+      "solve_ms": 8349.682900006883,
+      "limits": [
+        "diagonal joint inertia, stationary torso, no active muscle drive",
+        "laboratory box inertia",
+        "no friction",
+        "not active in matches"
+      ]
+    },
+    {
+      "initial_energy_j": {
+        "hand_translation": 0.0899830918300287,
+        "hand_rotation": 0.00020721389699670994,
+        "tissue_kinetic": 0.0,
+        "tissue_edges": 0.0,
+        "tissue_volumes": 0.0,
+        "arm_kinetic": 0.6276306179515376,
+        "attachment": 0.0,
+        "total": 0.717820923678563
+      },
+      "final_energy_j": {
+        "hand_translation": 0.021017468116869237,
+        "hand_rotation": 0.0005551749747063381,
+        "tissue_kinetic": 2.511621416181886e-05,
+        "tissue_edges": 0.044401148743476955,
+        "tissue_volumes": 1.1278007156099343e-05,
+        "arm_kinetic": 0.21079505121891368,
+        "attachment": 0.35467420005615824,
+        "total": 0.6314794373314424
+      },
+      "explicit_damping_loss_j": 3.439640591684911e-05,
+      "residual_tolerance_m": 1e-08,
+      "initial_velocity": [
+        -0.9969741261856013,
+        0.0012709158517254515,
+        -0.07650560720703914
+      ],
+      "initial_angular_velocity": [
+        -0.7767385765217294,
+        0.3108063523652915,
+        -0.025557658793260673
+      ],
+      "iterations_cap": 1024,
+      "iteration_counts": [
+        4,
+        20,
+        20,
+        24,
+        24,
+        24,
+        24,
+        28,
+        28,
+        28,
+        28,
+        28,
+        24,
+        24,
+        24,
+        24,
+        28,
+        28,
+        28,
+        28,
+        28,
+        28,
+        28,
+        28,
+        28,
+        28,
+        28,
+        28,
+        28,
+        28,
+        28,
+        28,
+        28,
+        28,
+        28,
+        28,
+        28,
+        28,
+        28,
+        28,
+        28,
+        28,
+        28,
+        28,
+        28,
+        28,
+        28,
+        28
+      ],
+      "unconverged_steps": 0,
+      "maximum_material_residual_m": 9.928467805619529e-09,
+      "compiled_embedding": true,
+      "attached": true,
+      "initial_penetration_m": 0.0,
+      "maximum_wrist_separation_m": 0.0031117836921115524,
+      "maximum_bond_residual_m": 4.289049150346322e-10,
+      "initial_joint_velocity": [
+        -1.8957809986654512,
+        1.3621946055041967,
+        -3.1805359076544915
+      ],
+      "final_joint_velocity": [
+        0.9851056807363534,
+        0.7757039597131765,
+        -2.0518544069467737
+      ],
+      "fps": 3840,
+      "duration": 0.0125,
+      "hand_samples": 116,
+      "peak_active_contacts": 4,
+      "peak_deformation_m": 0.0012199514388950663,
+      "maximum_penetration_m": 1.8282105027371393e-10,
+      "final_velocity": [
+        0.1662249930792825,
+        0.07751139520850492,
+        -0.4470890949345474
+      ],
+      "final_angular_velocity": [
+        -0.7396297098090272,
+        -1.2890393339731436,
+        0.9552767527685156
+      ],
+      "solve_ms": 5428.191799997876,
+      "limits": [
+        "diagonal joint inertia, stationary torso, no active muscle drive",
+        "laboratory box inertia",
+        "no friction",
+        "not active in matches"
+      ]
+    }
+  ],
+  "comparisons": [
+    {
+      "rates": [
+        960,
+        1920
+      ],
+      "end_tissue_max_difference_m": 0.00017702488743426064,
+      "end_tissue_rms_difference_m": 1.4098319008141168e-05,
+      "end_hand_center_difference_m": 0.000523436200490693,
+      "end_hand_rotation_difference_rad": 0.002206240024498272,
+      "end_hand_velocity_difference_m_s": 0.026617749489319737
+    },
+    {
+      "rates": [
+        1920,
+        3840
+      ],
+      "end_tissue_max_difference_m": 0.0001568852116664929,
+      "end_tissue_rms_difference_m": 1.375729459319192e-05,
+      "end_hand_center_difference_m": 0.00034477213401660947,
+      "end_hand_rotation_difference_rad": 0.0015793404173054903,
+      "end_hand_velocity_difference_m_s": 0.05705951479939003
+    }
+  ],
+  "limits": [
+    "Short single impact, not full clip convergence",
+    "No muscle drive, diagonal joint inertia, no friction",
+    "Laboratory only, not active in matches"
+  ]
+}

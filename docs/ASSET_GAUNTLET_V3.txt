@@ -546,3 +546,29 @@ Aktuelle Befunde unterscheiden Materialkalibrierung, Kontaktmodell und numerisch
 Daempfung noch nicht. Vollstaendige Physik und Integration bleiben offen.
 68 Python-Tests bestanden; belasteter Kopplungstest prueft jetzt explizit
 die angeforderte 1e-8-m-Toleranz fuer Material, Bindung und Durchdringung.
+
+ENERGIE- UND KONTAKTIMPULSBILANZ IM GEKOPPELTEN LABOR
+contact_energy.py erfasst Handtranslation/-rotation, diagonale Gelenkkinetik,
+Knotenkinetik, Kanten-/Volumenfederenergie und nachgiebige Handgelenkbindung.
+Es sind Energien des aktuellen Proxy-Modells, keine anatomische Kalibrierung.
+Laborframes enthalten Komponenten in Joule, kumulierten Verlust der expliziten
+exp(-6 dt)-Knotendaempfung und Kontaktimpulse in Ns. Impulse summieren delta-lambda
+pro Projektion, statt nur letzte Multiplikatoren auszulesen. Dreieckswechselzaehler
+enthaelt auch unbelastete projizierte Samples und darf nicht als Zahl kollidierender
+Punkte ausgegeben werden. Aktive Kontakt-Sampleindices separat gespeichert.
+Analytische Energiepruefung und Rotationsinvarianz hinzugefuegt. Kontaktimpuls
+gegen m*delta-position/dt an Mehrpunktkontakt und Step-Reset geprueft. 70 Tests OK.
+Drei Wiederholungen 960/1920/3840 Hz mit 1e-8 m/1024 Iterationen: alle Positionen,
+Orientierungen, Armposes und Gewebeoffsets bitgleich zum Lauf vor Instrumentierung.
+E0=.717821 J; nach .0125 s .536049/.595842/.631479 J. Kein einzelner Schritt mit
+Energieanstieg. Verlust .181772/.121979/.086341 J, explizite Knotendaempfung nur
+.0000074/.0000150/.0000344 J. Grosser restlicher Verlust ist stark dt-abhaengig;
+Integration und inelastische Kontaktprojektion noch nicht getrennt. Kein pauschaler
+Nachweis, dass alles davon unphysikalisch ist. Lateraler Gesamtimpuls 1.22305/
+1.24788/1.24800 Ns; andere Komponenten und Gewebeenergie noch nicht voll konvergiert.
+Nachweise contact-energy-study.json und contact-energy-balance.json, letzterer
+mit Komponenten und Impulsen zu gleichen physischen Zeitpunkten. Alle Modelldaten
+bleiben Laborpfad, Matchsolver unveraendert. Keine unerwartete Energieerzeugung
+in diesem kurzen Fall; Vollclip, andere Treffer und Echtzeit bleiben offen.
+Naechste gezielte Trennung: kontaktfreie/vereinfachte Kopplungsfaelle gegen
+analytische Federantwort und gleiche Aufprallsituation mit Kontaktvergleich.
