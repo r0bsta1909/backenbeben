@@ -96,3 +96,19 @@ arm-framing-replay.png und arm-framing-practice.png. Erste Pruefung erwartete
 noch exakt alte Kamera-x=3 und lief in Timeout; Erwartung auf3.5 aktualisiert,
 sonstige Assertions erhalten. Keine neue menschliche Abnahme ableiten.
 Goal aktiv; Host8877 aktueller Checkout. V08-Paket weiterhin historisch.
+
+G8 PROTOTYP 09 ALS GEPRUEFTES TESTPAKET VERÖFFENTLICHT
+Release v0.9.0-dev.20261008, Spielquelle d67fdcf00470369ee06609ef0a42871706407eef.
+Frische Installation ausserhalb Checkout mit eigener Python3.12-venv, 64Dateien
+bytegleich zum ZIP. Paketbatch aufPort8880; LAN-HTTP mit zwei Browserclients:
+KO4Treffer und Standard10Treffer bestanden inklusive Anspannen, identischeClips,
+Verletzungs-/KO-Ruecklauf, Resume und Revanche; errors[]. Replayp95=21.0/20.9ms
+auf diesem Rechner bei1920x1080. GitHubdownload SHA256 abgeglichen.
+Beleg validation/v09-package.json. Paket enthaelt Probe-Standbild, Armkamera,
+Helferhaende/Schritte/Blick, Handdetails, Halsgewichte und feste Gesichts-UVs.
+Browsergauntlet nimmt nun --port fuer getrennte Pakettests; bisheriger8877Default
+bleibt. Paket README beschreibt zum Erstellzeitpunkt nochV08, OnlineREADME istV09;
+Spielinhalte entsprechen exakt genanntem Quellcommit, kein neuer Export danach.
+Gesamtziel weiterhin offen: Referenzstil, menschliche Verstaendlichkeit,
+Physikmodellgrenzen und Zwei-PC-Nachweis. Keine Endabnahme aus Pakettest ableiten.
+CheckoutHost8877 Session18596, PaketHost8880 Session18599.

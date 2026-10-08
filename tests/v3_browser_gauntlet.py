@@ -1,13 +1,16 @@
 """Two real browser clients, LAN HTTP, pointer input, recorded replay and resume."""
-import asyncio,json,socket,hashlib,sys
+import asyncio,json,socket,hashlib,sys,argparse
 from pathlib import Path
 from playwright.async_api import async_playwright
 
 async def main():
+    parser=argparse.ArgumentParser();parser.add_argument("--port",type=int,default=8877)
+    options,_=parser.parse_known_args()
+    assert 1 <= options.port <= 65535
     ip=next(i[4][0] for i in socket.getaddrinfo(socket.gethostname(),None,socket.AF_INET) if not i[4][0].startswith(('127.','169.254.')))
     standard='--standard-balance' in sys.argv
     balance={'base_damage':25 if standard else 45,'ko_threshold':100 if standard else 60,'turn_seconds':25 if standard else 60}
-    url=f'http://{ip}:8877';report={'url':url,'errors':[],'hits':[],'configuration':balance}
+    url=f'http://{ip}:{options.port}';report={'url':url,'errors':[],'hits':[],'configuration':balance}
     async with async_playwright() as p:
         browser=await p.chromium.launch(executable_path=r'C:\Program Files\Google\Chrome\Application\chrome.exe',headless=True,args=['--enable-webgl'])
         pages=[]
@@ -20,7 +23,7 @@ async def main():
             assert await page.evaluate('audioFallback && !isSecureContext')
         a,b=pages
         async def admin(command):
-            response=await a.request.post('http://localhost:8877/api/admin',headers={'Origin':'http://localhost:8877'},data={'command':command})
+            response=await a.request.post(f'http://localhost:{options.port}/api/admin',headers={'Origin':f'http://localhost:{options.port}'},data={'command':command})
             assert response.ok
         try:
             for key,value in balance.items():await admin(f'set {key} {value}')

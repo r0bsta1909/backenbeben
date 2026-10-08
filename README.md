@@ -6,13 +6,16 @@ Der Look orientiert sich an kantiger Comicgrafik und dem ursprünglichen XIII.
 
 ## Aktueller Stand
 
-Der aktuelle [Prototyp 08](https://github.com/r0bsta1909/backenbeben/releases/tag/v0.8.0-dev.20261008)
+Der aktuelle [Prototyp 09](https://github.com/r0bsta1909/backenbeben/releases/tag/v0.9.0-dev.20261008)
 enthält anatomische Arm-/Handmodelle, körpergebundene seitliche Schläge und vom Host
 aufgezeichnete Kontakt-/Gesichtsreplays. Weitere schadensfreie Probeschwünge sind
 wählbar; Verletzungen und geschwollene Augen erscheinen auch im eigenen Spiegel.
 Der Kontaktimpuls steuert die Wirkung; Kopfverschiebung und Drehung um drei Achsen
 sind mit dem Gewebe gekoppelt. Eine konkretere Mausradhilfe begleitet die Proben; Gesichtstextur und
-Schulterform sind überarbeitet. Modellierte Stofffalten und Zuschauer ergänzen die Comicfiguren.
+Schulterform sind überarbeitet. Die tatsächliche Probe lässt sich als Kontaktstandbild
+betrachten; die Dreiviertelansicht zeigt den gesamten Schlagarm. Helfer setzen ihre
+Füße, stützen den Kämpfer und folgen ihm mit dem Blick. Gesichtszeichnung und Hals
+bleiben bei Kopfdrehungen verbunden. Modellierte Stofffalten und Zuschauer ergänzen die Comicfiguren.
 
 Standardkampf, KO, Replay-Rücklauf, Wiedereinstieg und Revanche sind mit zwei
 Browserclients geprüft. Das Hostpaket wurde außerhalb des Projekts mit frischer

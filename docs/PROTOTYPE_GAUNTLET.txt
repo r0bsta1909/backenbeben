@@ -76,8 +76,8 @@ Gemessene Zielhardware-Leistung fuer Idle, Schlag, Impact und Replay; keine nur
 isolierte Solverzeit als FPS-Beweis. Fehlerliste abarbeiten. Aktuelles herunter-
 geladenes Paket ausserhalb Entwicklungsordner starten und G5/G7 erneut pruefen.
 Quellen, eigene Assets, Lizenzen, Anleitung, Wissenssicherung und Release konsistent.
-Oeffentliches v0.8-dev-Archiv enthaelt den integrierten Quellstand c24b7bc.
-Frischer KO-/Standardpakettest und Downloadhash: validation/v08-package.json.
+Oeffentliches v0.9-dev-Archiv enthaelt den integrierten Quellstand d67fdcf.
+Frischer KO-/Standardpakettest und Downloadhash: validation/v09-package.json.
 Goal erst abschliessen, wenn alle Gates mit passenden Belegen bestanden sind.
 
 ZURUECKGESTELLT
