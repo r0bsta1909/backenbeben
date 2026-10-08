@@ -26,6 +26,15 @@ class FrictionBlockTests(unittest.TestCase):
   angle=.73;R=np.array([[np.cos(angle),-np.sin(angle)],[np.sin(angle),np.cos(angle)]])
   d=np.array([2.,-1.]);K=np.array([[3.,.7],[.7,1.]])
   np.testing.assert_allclose(tangent_correction(R@d,R@K@R.T,1,.4),R@tangent_correction(d,K,1,.4),atol=1e-12)
+ def test_compiled_block_matches_reference(self):
+  import sys
+  from pathlib import Path
+  sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'server'))
+  from contact_friction_compiled import tangent_block
+  rng=np.random.default_rng(54)
+  for _ in range(100):
+   a=rng.normal(size=(2,2));K=a.T@a+np.eye(2)*.01;d=rng.normal(size=2)
+   np.testing.assert_allclose(tangent_block(d,K,1.,.2),tangent_correction(d,K,1,.2),atol=1e-12,rtol=0)
  def test_invalid_inputs(self):
   for K in [np.zeros((2,2)),[[1,2],[0,1]],[[1,0],[0,-1]]]:
    with self.assertRaises(ValueError):tangent_correction([1,1],K,1,.5)

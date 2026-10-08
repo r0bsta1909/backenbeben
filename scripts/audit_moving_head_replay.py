@@ -9,11 +9,12 @@ from side_cage import build_side_cage
 from moving_head_replay import simulate
 from hand_surface import world_positions
 from contact_embedding_compiled import intersections
-spatial="--spatial" in sys.argv
+friction="--friction" in sys.argv
+spatial="--spatial" in sys.argv or friction
 rows=[]
 for name,y,tilt,skin in CASES:
  s=score({'version':3,'points':[[.19+.34*i/40,y,800*i/40,0,tilt,0] for i in range(41)],'_skin_state':skin})
- clip=simulate(s,spatial=spatial);g=build_side_cage(skin_state=skin);n=g['nx']*g['ny'];world=[]
+ clip=simulate(s,spatial=spatial,friction_coefficient=.2 if friction else 0.);g=build_side_cage(skin_state=skin);n=g['nx']*g['ny'];world=[]
  for index,frame in enumerate(clip['frames']):
   p=g['nodes'][:n]+np.asarray(frame[2:]).reshape(n,3)*clip['scale']/4
   blend=np.clip((p[:,1]*4+.55)/.43,0,1);blend=blend*blend*(3-2*blend)
@@ -36,6 +37,6 @@ for name,y,tilt,skin in CASES:
   if valid.any():gap=min(gap,float(np.min(np.sum((points[valid]-positions[valid])*normals[valid],axis=1))))
  assert gap>=-2e-6,(name,gap) # Quantized shader/replay reconstruction, 2 micrometers.
  assert wrist_angle<=WRIST_LIMIT+1e-6,(name,wrist_angle)
- rows.append({'case':name,'spatial':spatial,'max_rotation_rad':np.max(np.abs(clip['head_rotations']),axis=0).tolist(),'solve_ms':clip['solve_ms'],'minimum_recorded_recovery_gap_m':gap if math.isfinite(gap) else None,'maximum_wrist_deg':math.degrees(wrist_angle),'tail_pin_error_m':clip['head_response']['tail_pin_error_m'],'max_yaw_rad':max(abs(f[0]) for f in clip['frames'])})
+ rows.append({'case':name,'spatial':spatial,'friction_coefficient':.2 if friction else 0.,'max_rotation_rad':np.max(np.abs(clip['head_rotations']),axis=0).tolist(),'solve_ms':clip['solve_ms'],'minimum_recorded_recovery_gap_m':gap if math.isfinite(gap) else None,'maximum_wrist_deg':math.degrees(wrist_angle),'tail_pin_error_m':clip['head_response']['tail_pin_error_m'],'max_yaw_rad':max(abs(f[0]) for f in clip['frames'])})
  print(json.dumps(rows[-1]),flush=True)
-(ROOT/('docs/validation/spatial-head-replay-variants.json' if spatial else 'docs/validation/moving-head-replay-variants.json')).write_text(json.dumps(rows,indent=2)+'\n')
+(ROOT/('docs/validation/friction-replay-variants.json' if friction else 'docs/validation/spatial-head-replay-variants.json' if spatial else 'docs/validation/moving-head-replay-variants.json')).write_text(json.dumps(rows,indent=2)+'\n')

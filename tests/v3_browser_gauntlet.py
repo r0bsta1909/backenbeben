@@ -84,6 +84,10 @@ async def main():
                         assert clip['score_update']['quality']==hit['quality']
                         report['solved_normal_impulse_ns']=clip['normal_impulse_ns']
                         report['solved_quality_matches_hit']=True
+                    if '--expect-friction' in sys.argv:
+                        assert clip['friction']['coefficient']==.2
+                        assert clip['friction']['maximum_cone_error']<=1e-12
+                        report['friction']=clip['friction']
                     assert clip['version']==3 and len(clip['arm_path'])>100
                     report['recorded_arm_frames']=len(clip['arm_path'])
                     report['clip_hash']=hashlib.sha256(json.dumps(clip,sort_keys=True).encode()).hexdigest()

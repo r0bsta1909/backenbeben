@@ -18,7 +18,7 @@ def rotation_vector(matrix):
     sine=np.linalg.norm(axis);angle=np.arctan2(sine,(np.trace(matrix)-1)*.5)
     return axis if sine<1e-12 else axis*(angle/sine)
 
-def simulate_contact(scored, fps=960,duration=.06,attached=False,compiled_embedding=True,iterations=64,residual_tolerance=1e-6,compiled_projection=True,moving_head=False,braced=False,translate_head=False,spatial_head=False,friction_coefficient=0.):
+def simulate_contact(scored, fps=960,duration=.06,attached=False,compiled_embedding=True,iterations=64,residual_tolerance=1e-6,compiled_projection=True,moving_head=False,braced=False,translate_head=False,spatial_head=False,friction_coefficient=0.,friction_compiled=True):
     pose=min(scored['arm_path'],key=lambda r:abs(r['time']-scored['contact_time']))['pose']
     points=world_positions(pose,pose['finger_direction'],pose['palm_normal'])
     from contact_embedding import embed_side_many
@@ -32,7 +32,7 @@ def simulate_contact(scored, fps=960,duration=.06,attached=False,compiled_embedd
     if friction_coefficient:
         if not compiled_projection:raise ValueError("Friction requires compiled normal contacts")
         from contact_friction import HandSheetFriction
-        friction=HandSheetFriction(hand,friction_coefficient)
+        friction=HandSheetFriction(hand,friction_coefficient,compiled=friction_compiled)
     bond=None;arm=None;initial_joint_velocity=None
     if attached:
         from arm import Arm,LIMITS

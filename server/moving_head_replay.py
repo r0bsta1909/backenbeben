@@ -35,12 +35,12 @@ def local_offsets_spatial(points,rest,angles,position):
         local=np.column_stack((xx,c[:,0]*y+t[:,0]*zz,-t[:,0]*y+c[:,0]*zz))
     return ((local-rest)*4).ravel()
 
-def simulate(scored,braced=False,spatial=False):
+def simulate(scored,braced=False,spatial=False,friction_coefficient=0.):
     started=time.perf_counter()
     if scored.get('contact_class')=='miss' or scored.get('impact_speed_m_s',0)<=0:
         from coupled_replay import simulate as no_impact
         return no_impact(scored,braced)
-    contact=simulate_contact(scored,attached=True,moving_head=True,braced=braced,translate_head=True,spatial_head=spatial)
+    contact=simulate_contact(scored,attached=True,moving_head=True,braced=braced,translate_head=True,spatial_head=spatial,friction_coefficient=friction_coefficient)
     result=encode(scored,contact,braced)
     result['solve_ms']=round((time.perf_counter()-started)*1000,1)
     return result
@@ -108,6 +108,7 @@ def encode(scored,contact,braced=False):
         world=world_frames[i]*(1-alpha)+world_frames[min(i+1,336)]*alpha
         return world,cage.geometry['triangles']
     return dict(fps=120,duration=2.8,contact=.5,nx=cage.geometry['nx'],ny=cage.geometry['ny'],scale=1e-6,
+        friction={"coefficient":contact.get("friction_coefficient",0.),"maximum_residual_m":max(f.get("friction_residual_m",0.) for f in samples),"maximum_cone_error":max(f.get("friction_cone_error",0.) for f in samples)},
         frames=frames,head_rotations=head_rotations,head_positions=head_positions,peak=peak,**outcome,version=3,physics_backend='coupled-moving',side_cage=cage.replay_geometry(),
         head_response={'model':'coupled-yaw-through-contact-and-tail','braced':braced,'tail_pin_error_m':pin_error,'spatial_rotation':spatial,'translation':bool(head.inverse_mass),'parameters':('prototype tuning, three translations and three Euler rotations; diagonal generalized inertia' if spatial else 'prototype tuning, three translations and yaw; pitch/roll fixed')},
         arm_path=recover(scored,contact,collision_surface),footprint=scored.get('footprint',[]),path=scored.get('path',[]),

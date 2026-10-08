@@ -36,9 +36,9 @@ class HandSheetFriction:
     Only the compiled normal solver exposes stable triangle identifiers.
     Normal and tangential impulses remain separate for contact scoring.
     """
-    def __init__(self,hand,coefficient):
+    def __init__(self,hand,coefficient,compiled=True):
         if not np.isfinite(coefficient) or coefficient<0:raise ValueError('Invalid friction coefficient')
-        self.hand=hand;self.coefficient=coefficient
+        self.hand=hand;self.coefficient=coefficient;self.compiled=compiled
 
     def begin_step(self,cage):
         self.old_points=self.hand.points().copy();self.old_nodes=cage.p.copy()
@@ -52,6 +52,14 @@ class HandSheetFriction:
         from contact_constraint import rotation_increment
         hand=self.hand;triangles=cage.geometry['triangles']
         best,weights,_,normals=intersections(hand.points(),cage.p,triangles)
+        if self.compiled:
+            from contact_friction_compiled import project_friction
+            hand.center,hand.rotation,impulse,moment,self.residual,cone_error=project_friction(
+                hand.center,hand.rotation,hand.local,hand.inverse_mass,hand.inverse_inertia,
+                cage.p,cage.w,triangles,best,weights,normals,hand.multipliers,hand.triangle_keys,
+                self.old_points,self.old_nodes,self.keys,self.weights,self.multipliers,self.coefficient,dt)
+            self.impulse+=impulse;self.moment+=moment;self.max_cone_error=max(self.max_cone_error,cone_error)
+            return
         self.residual=0.
         for i,triangle in enumerate(best):
             if triangle<0 or triangle!=hand.triangle_keys[i]:

@@ -1,0 +1,107 @@
+[
+  {
+    "case": "flat",
+    "spatial": true,
+    "friction_coefficient": 0.2,
+    "max_rotation_rad": [
+      0.025304,
+      0.053911,
+      0.026595
+    ],
+    "solve_ms": 3569.4,
+    "minimum_recorded_recovery_gap_m": 0.005481712358673703,
+    "maximum_wrist_deg": 81.67347062529646,
+    "tail_pin_error_m": 1.0955417792557623e-07,
+    "max_yaw_rad": 0.05391
+  },
+  {
+    "case": "glance",
+    "spatial": true,
+    "friction_coefficient": 0.2,
+    "max_rotation_rad": [
+      0.02899,
+      0.051719,
+      0.011208
+    ],
+    "solve_ms": 3820.2,
+    "minimum_recorded_recovery_gap_m": 0.004572079268771672,
+    "maximum_wrist_deg": 84.83134808218117,
+    "tail_pin_error_m": 7.537172806052747e-08,
+    "max_yaw_rad": 0.05172
+  },
+  {
+    "case": "tips",
+    "spatial": true,
+    "friction_coefficient": 0.2,
+    "max_rotation_rad": [
+      0.058576,
+      0.047795,
+      0.162046
+    ],
+    "solve_ms": 3902.3,
+    "minimum_recorded_recovery_gap_m": 0.0006786888688896646,
+    "maximum_wrist_deg": 76.6977180225938,
+    "tail_pin_error_m": 9.934139177262033e-08,
+    "max_yaw_rad": 0.0478
+  },
+  {
+    "case": "high-foul",
+    "spatial": true,
+    "friction_coefficient": 0.2,
+    "max_rotation_rad": [
+      0.019183,
+      0.057551,
+      0.099515
+    ],
+    "solve_ms": 2772.8,
+    "minimum_recorded_recovery_gap_m": 0.0066874891532779125,
+    "maximum_wrist_deg": 85.00000000000001,
+    "tail_pin_error_m": 1.039580184072382e-07,
+    "max_yaw_rad": 0.05755
+  },
+  {
+    "case": "heel-foul",
+    "spatial": true,
+    "friction_coefficient": 0.2,
+    "max_rotation_rad": [
+      0.013659,
+      0.032124,
+      0.05397
+    ],
+    "solve_ms": 2916.0,
+    "minimum_recorded_recovery_gap_m": 0.007027692793887951,
+    "maximum_wrist_deg": 85.00000000000006,
+    "tail_pin_error_m": 1.0723116918657912e-07,
+    "max_yaw_rad": 0.03212
+  },
+  {
+    "case": "swollen",
+    "spatial": true,
+    "friction_coefficient": 0.2,
+    "max_rotation_rad": [
+      0.021131,
+      0.054163,
+      0.022477
+    ],
+    "solve_ms": 3311.5,
+    "minimum_recorded_recovery_gap_m": 0.005762161564061349,
+    "maximum_wrist_deg": 81.66446042169137,
+    "tail_pin_error_m": 1.1627938529767228e-07,
+    "max_yaw_rad": 0.05416
+  },
+  {
+    "case": "jaw-injured",
+    "spatial": true,
+    "friction_coefficient": 0.2,
+    "max_rotation_rad": [
+      0.011773,
+      0.069803,
+      0.037232
+    ],
+    "solve_ms": 3357.4,
+    "minimum_recorded_recovery_gap_m": 0.01129013506036553,
+    "maximum_wrist_deg": 81.16293190795076,
+    "tail_pin_error_m": 7.009799149903439e-08,
+    "max_yaw_rad": 0.0698
+  }
+]

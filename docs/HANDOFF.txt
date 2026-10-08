@@ -1807,3 +1807,25 @@ Laufzeit/Restfehler. NAECHSTES dieseBlocker beheben (kompilierterTangentialblock
 Restfehler/Kontaktwechsel pruefen), dannvollstaendigenmoving_head_replay.encode
 mitKandidat/Rueckholung pruefen undimBrowser integrieren. Keineweiteren isolierten
 Physikfeatures. AktiverHost/V09 weiterhinreibungsfrei. Goalaktiv.
+
+G4 REIBUNG BESCHLEUNIGT UND IM VOLLEN SPIEL INTEGRIERT
+Kompilierte identische Tangentialprojektion ohneFastMath/SciPy/neueAbhaengigkeit.
+100Blockvergleiche max1.11e-16; realer12.5msKontakt: Positions-/Rotationsdifferenzen
+<7e-14,Impulsdifferenz2.28e-13. Rechenzeit14.16s->.520s aufdiesemRechner.
+Vollkontakt60ms/58Steps/64Iterationen1.51s,mu0 weiterhinFramesexaktidentisch.
+Restfehleroffen: Reibung42.2um,Penetration1.59um,Wrist12.3um,14Steps erreichen
+1umZielnicht. Vollstaendiger337FrameReplay samt551Armframes3.59s.
+Hostoption --physics coupled-friction,mu=.2 alsPrototypabstimmung;Warmup/zweiter
+Anspannworker verwendenKandidat. Normaldefault coupled-spatial bleibtunveraendert.
+EchterLAN-Browserkampf auf8881 mit6Treffern: Reibungsflag/Grenze,Anspannen,
+Abwehrlider,identischeClips,Ruecklauf,KO,Resume,Revanche bestanden,errors[].
+Replayp95=20.9ms1920x1080. Peakbildgesichtet. SiebenVariantenmitje324Rueckholposen
+gegenrekonstruiertebewegteOberflaeche bestanden,keinTischkontakt,Wrist<=85Grad.
+160PythonTests PASS. Belege validation/friction-integration.json/png und
+friction-replay-variants.json. Reproduktion audit_friction_contact.py nunmit
+--compare-reference; audit_moving_head_replay.py --friction; Browsergauntlet
+--port8881 --expect-moving --expect-spatial --expect-friction.
+Integrationsschritt erledigt,keineweitereisolierteLaborkette. NAECHSTES Standard-
+Duell/Restfehlervergleich und Defaultentscheidung; keineanatomischeKalibrierung
+behaupten. AktiveHosts: normal8877Session18596,experimentell8881Session64436,
+V09Paket8880Session18599. OeffentlichesV09enthaeltReibungnochNICHT. Goalaktiv.

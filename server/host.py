@@ -100,7 +100,7 @@ async def leave(c):
 
 
 def start_braced_solve(room):
-    if PHYSICS_BACKEND not in ('coupled-moving','coupled-spatial') or room.get('brace_result')!='ready':
+    if PHYSICS_BACKEND not in ('coupled-moving','coupled-spatial','coupled-friction') or room.get('brace_result')!='ready':
         return False
     previous=room['solve']
     room['solve']=asyncio.get_running_loop().run_in_executor(POOL,simulate,room['pending'],True)
@@ -398,8 +398,10 @@ async def replay(request):
 
 
 def prepare_physics_worker(backend):
-    if backend in ('coupled','coupled-moving','coupled-spatial'):
-        if backend=='coupled-spatial':
+    if backend in ('coupled','coupled-moving','coupled-spatial','coupled-friction'):
+        if backend=='coupled-friction':
+            from friction_head_replay import simulate as prepare
+        elif backend=='coupled-spatial':
             from spatial_head_replay import simulate as prepare
         elif backend=='coupled-moving':
             from moving_head_replay import simulate as prepare
@@ -415,7 +417,7 @@ async def lifecycle(app):
     global POOL
     backend=app.get('physics_backend','legacy')
     POOL=ProcessPoolExecutor(max_workers=2,initializer=prepare_physics_worker,initargs=(backend,))
-    if backend in ('coupled','coupled-moving','coupled-spatial'):
+    if backend in ('coupled','coupled-moving','coupled-spatial','coupled-friction'):
         print('Gekoppelte Physik wird vorbereitet ...',flush=True)
         await asyncio.gather(*(asyncio.get_running_loop().run_in_executor(POOL,physics_worker_ready) for _ in range(2)))
     def connection_error(loop,context):
@@ -434,11 +436,13 @@ async def lifecycle(app):
 
 def main():
     global simulate,PHYSICS_BACKEND
-    parser=argparse.ArgumentParser();parser.add_argument('--port',type=int,default=8765);parser.add_argument('--no-browser',action='store_true');parser.add_argument('--no-console',action='store_true');parser.add_argument('--physics',choices=['legacy','coupled','coupled-moving','coupled-spatial'],default='coupled-spatial');args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--port',type=int,default=8765);parser.add_argument('--no-browser',action='store_true');parser.add_argument('--no-console',action='store_true');parser.add_argument('--physics',choices=['legacy','coupled','coupled-moving','coupled-spatial','coupled-friction'],default='coupled-spatial');args=parser.parse_args()
     PHYSICS_BACKEND=args.physics
-    if args.physics in ('coupled','coupled-moving','coupled-spatial'):
+    if args.physics in ('coupled','coupled-moving','coupled-spatial','coupled-friction'):
         try:
-            if args.physics=='coupled-spatial':
+            if args.physics=='coupled-friction':
+                from friction_head_replay import simulate as coupled_simulate
+            elif args.physics=='coupled-spatial':
                 from spatial_head_replay import simulate as coupled_simulate
             elif args.physics=='coupled-moving':
                 from moving_head_replay import simulate as coupled_simulate
