@@ -3,6 +3,14 @@ import math
 import numpy as np
 from tissue import Tissue
 
+def cross3(a,b):
+    """Specialized N x 3 cross product, avoiding generic axis dispatch."""
+    result=np.empty_like(a)
+    result[:,0]=a[:,1]*b[:,2]-a[:,2]*b[:,1]
+    result[:,1]=a[:,2]*b[:,0]-a[:,0]*b[:,2]
+    result[:,2]=a[:,0]*b[:,1]-a[:,1]*b[:,0]
+    return result
+
 def independent_batches(indices):
     batches=[];occupied=[]
     for index,nodes in enumerate(indices):
@@ -36,9 +44,9 @@ class ReferenceTissue(Tissue):
                 p[i]+=correction*w[i,None];p[j]-=correction*w[j,None]
             for ids in self.volume_batches:
                 indices=self.ti[ids];q=p[indices];a,b,c,d=[q[:,i] for i in range(4)]
-                gb=np.cross(c-a,d-a)/6;gc=np.cross(d-a,b-a)/6;gd=np.cross(b-a,c-a)/6
+                gb=cross3(c-a,d-a)/6;gc=cross3(d-a,b-a)/6;gd=cross3(b-a,c-a)/6
                 gradients=np.stack((-gb-gc-gd,gb,gc,gd),axis=1)
-                volumes=np.sum((b-a)*np.cross(c-a,d-a),axis=1)/6
+                volumes=np.sum((b-a)*gb,axis=1)
                 error=volumes-self.tv[ids];error=np.where(np.abs(error)<1e-18,0.,error)
                 denom=av+np.sum(w[indices]*np.sum(gradients*gradients,axis=2),axis=1)
                 dl=(-error-av*lv[ids])/denom;lv[ids]+=dl
@@ -57,9 +65,9 @@ class ReferenceTissue(Tissue):
         # Measure the actual compliant equation, not deformation alone.
         edge_residual=np.linalg.norm(p[self.ei]-p[self.ej],axis=1)-self.el+alpha*le
         q=p[self.ti];a,b,c,d=[q[:,i] for i in range(4)]
-        gb=np.cross(c-a,d-a)/6;gc=np.cross(d-a,b-a)/6;gd=np.cross(b-a,c-a)/6
+        gb=cross3(c-a,d-a)/6;gc=cross3(d-a,b-a)/6;gd=cross3(b-a,c-a)/6
         gradients=np.stack((-gb-gc-gd,gb,gc,gd),axis=1)
-        volume_residual=np.sum((b-a)*np.cross(c-a,d-a),axis=1)/6-self.tv+av*lv
+        volume_residual=np.sum((b-a)*gb,axis=1)-self.tv+av*lv
         gradient_norm=np.sqrt(np.sum(gradients*gradients,axis=(1,2)))
         return {'edge_m':float(np.max(np.abs(edge_residual))),
                         'volume_m3':float(np.max(np.abs(volume_residual))),

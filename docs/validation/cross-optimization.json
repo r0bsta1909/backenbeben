@@ -1,0 +1,8 @@
+{
+  "baseline_ms": 2546.6035999997985,
+  "optimized_ms": 1973.798800001532,
+  "max_position_difference_m": 2.0816681711721685e-17,
+  "same_iteration_counts": true,
+  "peak_before_m": 0.004992013683818577,
+  "peak_after_m": 0.004992013683818572
+}

@@ -2,7 +2,7 @@ import unittest,sys
 from pathlib import Path
 import numpy as np
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'server'))
-from tissue_reference import independent_batches
+from tissue_reference import independent_batches,cross3
 from coupled_lab import run
 class ReferenceTests(unittest.TestCase):
  def test_batches_have_no_shared_vertices_and_cover_every_constraint(self):
@@ -26,3 +26,9 @@ class ReferenceTests(unittest.TestCase):
   self.assertGreater(max(r['iteration_counts']),4)
   self.assertLess(max(r['iteration_counts']),192)
   self.assertGreaterEqual(r['minimum_gap_m'],-1e-12)
+
+ def test_specialized_cross_matches_numpy(self):
+  random=np.random.default_rng(1909)
+  for count in [0,1,17,240]:
+   a=random.normal(size=(count,3));b=random.normal(size=(count,3))
+   np.testing.assert_array_equal(cross3(a,b),np.cross(a,b))

@@ -188,3 +188,8 @@ Adaptiver Residuenabbruch im Referenzlabor senkt 480-Hz-Rechenzeit 20.4->3.3 s
 bei fast gleichem Peak. Verfeinerung bis 3840 Hz zeigt Annaeherung, aber noch
 keine Freigabe. Drei Referenztests bestanden. Naechster Schritt: feinere
 Referenz/Profilierung, dann beschleunigen ohne Konvergenzpruefung aufzugeben.
+
+Kontaktreferenz weiter verfeinert bis 7680 Hz; Aenderung gegenueber 3840 Hz
+noch 2.8% Peak/4.4% Rueckprall. Spezialisierte Vektorrechnung lokal 22%
+schneller bei gleichen Iterationen/Positionen bis Rundung. Vier Referenztests
+bestanden; Solver noch nicht im Spiel. Details: COUPLED_CONTACT_PLAN.txt.

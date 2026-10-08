@@ -1,0 +1,24 @@
+{
+  "reference": true,
+  "iterations": 192,
+  "units": "metres, kilograms, seconds",
+  "fps": 7680,
+  "speed": 1.0,
+  "peak_deformation_m": 0.0058677385614863495,
+  "residual_tolerance_m": 3.90625e-08,
+  "residual_peaks": {
+    "edge_m": 3.903025457163863e-08,
+    "volume_m3": 3.140127336694747e-11,
+    "volume_equivalent_m": 3.6091790175262164e-08
+  },
+  "minimum_gap_m": 0.0,
+  "contact_steps": 115,
+  "final_hand_velocity": [
+    0.8962179881537224,
+    0.0,
+    0.0
+  ],
+  "solve_ms": 8475.373000001127,
+  "iterations_mean": 4.501628664495114,
+  "iterations_max": 8
+}

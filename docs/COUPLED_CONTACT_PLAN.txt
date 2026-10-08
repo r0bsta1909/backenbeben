@@ -117,3 +117,20 @@ Nachweise: validation/coupled-adaptive*.json. Noch nicht im Match aktiv.
 Naechster Schritt: Referenzlauf mit weiter halbiertem dt sowie Profilierung der
 vielen kleinen NumPy-Aufrufe. Erst danach schnellerer Solver mit gleicher
 Residual-/Kontaktpruefung; Handfeder und Flaechenkontakt weiterhin erforderlich.
+
+FEINREFERENZ UND GEMESSENE OPTIMIERUNG
+7680 Hz, dt-abhaengige Toleranz 3.90625e-8 m: Peak 5.868 mm, Rueckprall
+0.896 m/s. Gegenueber 3840 Hz noch 2.8% bzw. 4.4% Aenderung. Das ist weitere
+Annaeherung im Einzelpunktversuch, keine globale Genauigkeitsfreigabe.
+Profiler des 960-Hz-Versuchs: generische NumPy-Kreuzprodukte und ihre
+Achsenverwaltung dominieren die Laufzeit. cross3 berechnet ausschliesslich Nx3;
+Volumen verwendet den bereits berechneten Gradienten statt erneutem Kreuzprodukt.
+Unprofilierter Vorher/Nachher-Lauf mit identischen Parametern: 2546.6/1973.8 ms.
+Aufgezeichnete Hand-/Kontaktknotenpositionen weichen maximal 2.1e-17 m ab;
+Iterationszahlen identisch. Lokaler Einzelvergleich, keine allgemeine Speedzusage.
+Vier Referenztests bestanden, inklusive bitgleichem cross3/NumPy-Vergleich fuer
+leere, einzelne und groessere Vektorfelder. Spielpfad weiter unveraendert.
+Nachweise: validation/coupled-fine.json und cross-optimization.json.
+Naechste Aufgabe: schnellere Ausfuehrung des verbleibenden Solverloops bei
+unveraenderten Residuenpruefungen; danach endliche Arm-Hand-Anbindung und
+mehrpunktiger Flaechenkontakt. Numerische Referenz fuer Vergleiche beibehalten.
