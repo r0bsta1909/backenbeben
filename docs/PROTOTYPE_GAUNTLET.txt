@@ -131,3 +131,26 @@ Hand bleibt nahe der Wange, kein sofortiges starkes Zurueckreissen. Keine neue
 physikalische Kopplung behauptet: Kontakt stoppt Gelenkgeschwindigkeit weiterhin
 kinematisch; Gewebe-/Handimpulsintegration und Referenzstil bleiben offen.
 Testhost8877 neu gestartet, Execsession91882. Goal bleibt aktiv.
+
+G5 AKTUELLER LAN-DURCHLAUF UND G2 VERWORFENER VERSUCH
+Vollstaendiger Browserduelltest auf LAN-HTTP am Standad7788b erfolgreich:
+Anspannen, drei Treffer bisKO, identische aufgezeichnete Clips auf beiden Clients,
+Reload/Resume, KO-Ruecklauf, Emote, Ergebnis, Rematch und Verlassen. Keine Browser-
+fehler. Beleg validation/current-duel.json. Erhoehte Testbalance45/60/60 explizit
+vermerkt; zwei Browserkontexte auf einem Rechner, kein Test zweier physischer PCs.
+Replay-p95 Framezeit20.9ms bei1920x1080 in diesem Durchlauf; kein pauschaler60FPS-
+Nachweis. Releasepaket damit weiterhin nicht geprueft.
+G2: Aermelwurzel vony-.205 auf-.150 versetzt, Blenderquelle/GLB neu gebaut,
+Assetvalidator und Browser bestanden. Pixelkontrolle zeigte aber deutlichere
+Schulterkappe. Versuch vollstaendig verworfen, vorherige Assets wiederhergestellt
+und Webbuild erneut erstellt. Keine Stilverbesserung behauptet. Groessere
+anatomische Ueberarbeitung erforderlich statt weiterer blinder Ringverschiebung.
+
+G5 STANDARDKAMPF BESTANDEN
+Neuer Schalter --standard-balance im Browsergauntlet prueft25 Schadenbasis,
+100 KO-Schwelle und25s Zugzeit statt beschleunigter Testbalance. Vollstaendiger
+Durchlauf mit10 Treffern, KO=False, Ergebnis, Resume und Rematch bestanden,
+errors[]. Beleg validation/standard-duel.json. Individuelle Teststeuerung und
+Markerpruefung ersetzen weiterhin keine menschliche Bedienbarkeitsabnahme.
+Naechster wesentlicher Integrationsschritt bleibt G4: aktive seitliche Gewebereaktion
+an dieselbe Kontaktgeometrie anschliessen; nicht weitere isolierte Laborbausteine.

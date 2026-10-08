@@ -1,11 +1,13 @@
 """Two real browser clients, LAN HTTP, pointer input, recorded replay and resume."""
-import asyncio,json,socket,hashlib
+import asyncio,json,socket,hashlib,sys
 from pathlib import Path
 from playwright.async_api import async_playwright
 
 async def main():
     ip=next(i[4][0] for i in socket.getaddrinfo(socket.gethostname(),None,socket.AF_INET) if not i[4][0].startswith(('127.','169.254.')))
-    url=f'http://{ip}:8877';report={'url':url,'errors':[],'hits':[]}
+    standard='--standard-balance' in sys.argv
+    balance={'base_damage':25 if standard else 45,'ko_threshold':100 if standard else 60,'turn_seconds':25 if standard else 60}
+    url=f'http://{ip}:8877';report={'url':url,'errors':[],'hits':[],'configuration':balance}
     async with async_playwright() as p:
         browser=await p.chromium.launch(executable_path=r'C:\Program Files\Google\Chrome\Application\chrome.exe',headless=True,args=['--enable-webgl'])
         pages=[]
@@ -21,7 +23,7 @@ async def main():
             response=await a.request.post('http://localhost:8877/api/admin',headers={'Origin':'http://localhost:8877'},data={'command':command})
             assert response.ok
         try:
-            await admin('set base_damage 45');await admin('set ko_threshold 60');await admin('set turn_seconds 60')
+            for key,value in balance.items():await admin(f'set {key} {value}')
             await a.locator('#nickname').fill('PALM PILOT');await b.locator('#nickname').fill('LAN CHALLENGER')
             await a.locator('#duel').click();await b.locator('#duel').click()
             async def state(page):return await page.evaluate('JSON.parse(renderState).state')
@@ -119,7 +121,8 @@ async def main():
             report['leave']=True
             report['stats']=await a.evaluate('godotStats')
             assert not report['errors'],report['errors']
-            Path('logs/v3-browser-gauntlet.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
+            output='logs/v3-standard-duel.json' if standard else 'logs/v3-browser-gauntlet.json'
+            Path(output).write_text(json.dumps(report,indent=2),encoding='utf-8')
             print(json.dumps(report,indent=2))
         finally:
             await admin('set base_damage 25');await admin('set ko_threshold 100');await admin('set turn_seconds 25')

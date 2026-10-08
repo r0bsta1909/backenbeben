@@ -1,0 +1,63 @@
+{
+  "errors": [],
+  "hits": [
+    {
+      "kind": "hit",
+      "target": 1,
+      "damage": 20.81,
+      "quality": 0.7116,
+      "braced": true,
+      "side": "R",
+      "ko": false,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen."
+    },
+    {
+      "kind": "hit",
+      "target": 0,
+      "damage": 28.95,
+      "quality": 0.6434,
+      "braced": false,
+      "side": "R",
+      "ko": false,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen."
+    },
+    {
+      "kind": "hit",
+      "target": 1,
+      "damage": 30.78,
+      "quality": 0.6841,
+      "braced": false,
+      "side": "R",
+      "ko": true,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen."
+    }
+  ],
+  "single_tilt_control": true,
+  "recorded_arm_frames": 486,
+  "replay_frame_ms_p95": 20.89999999999418,
+  "viewport": [
+    1920,
+    1080
+  ],
+  "resume": true,
+  "ko_body_recorded": true,
+  "ko_reverse_seek": true,
+  "winner": 0,
+  "audio": {
+    "mode": "buffer-fallback",
+    "played": 5,
+    "unlocked": true
+  },
+  "rematch": true,
+  "leave": true,
+  "source_commit": "ad7788b",
+  "configuration": {
+    "base_damage": 45,
+    "ko_threshold": 60,
+    "turn_seconds": 60
+  },
+  "scope": "Two browser contexts on actual LAN HTTP; accelerated KO balance. Development host, not release package or separate physical computers."
+}
