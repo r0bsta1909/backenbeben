@@ -1,0 +1,86 @@
+{
+  "errors": [],
+  "hits": [
+    {
+      "kind": "hit",
+      "target": 1,
+      "damage": 20.2,
+      "quality": 0.6905,
+      "braced": true,
+      "side": "R",
+      "ko": false,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+      "replay_id": "50bb38206608c927b2ad"
+    },
+    {
+      "kind": "hit",
+      "target": 0,
+      "damage": 37.61,
+      "quality": 0.8357,
+      "braced": false,
+      "side": "R",
+      "ko": false,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+      "replay_id": "2f12e62915d12eb1a07e"
+    },
+    {
+      "kind": "hit",
+      "target": 1,
+      "damage": 30.42,
+      "quality": 0.6759,
+      "braced": false,
+      "side": "R",
+      "ko": true,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+      "replay_id": "4aaee99b5ed96f151695"
+    }
+  ],
+  "single_tilt_control": true,
+  "recorded_arm_frames": 473,
+  "clip_hash": "678bbbbed3a78ac62650992cb54ef13150dd7cd5b576f4c815daf23c98b261ea",
+  "replay": {
+    "clipId": "50bb38206608c927b2ad",
+    "frameCount": 337,
+    "peak": 0.0103,
+    "time": 0.508313,
+    "frame": 60,
+    "deformation": 0.010290971999999999
+  },
+  "replay_frame_ms_p95": 16.099999999998545,
+  "viewport": [
+    1920,
+    1080
+  ],
+  "resume": true,
+  "ko_body_recorded": true,
+  "ko_reverse_seek": true,
+  "winner": 0,
+  "audio": {
+    "mode": "buffer-fallback",
+    "played": 5,
+    "unlocked": true
+  },
+  "rematch": true,
+  "leave": true,
+  "stats": {
+    "arm_data": true,
+    "camera_position": [
+      0.300000011920929,
+      0.550000011920929,
+      2.65000009536743
+    ],
+    "crowd_active": false,
+    "dragging": false,
+    "fps": 78,
+    "hand_wrist": "(-0.473, -0.643, 0.02)",
+    "mirror_draw_requests": 557,
+    "muted": false,
+    "physics_active": false,
+    "physics_material_updates": 325,
+    "physics_time": -1,
+    "samples": 0
+  }
+}

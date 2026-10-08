@@ -16,8 +16,10 @@ async def main():
   assert await page.locator('#poseCamera').get_attribute('aria-pressed')=='true'
   await page.wait_for_timeout(150)
   hidden_draws=await page.evaluate('godotStats.mirror_draw_requests')
+  idle_updates=await page.evaluate('godotStats.physics_material_updates')
   await page.wait_for_timeout(300)
   assert await page.evaluate('godotStats.mirror_draw_requests')==hidden_draws
+  assert await page.evaluate('godotStats.physics_material_updates')==idle_updates
   await page.mouse.move(1536,648);await page.mouse.wheel(0,120)
   await page.wait_for_function('window.netArm?.tilt===-12')
   await page.screenshot(path='logs/pose-inspection.png')
@@ -41,6 +43,7 @@ async def main():
   await page.locator('#replayImpact').click()
   await page.wait_for_function("JSON.parse(physicsFrame).camera==='side' && JSON.parse(physicsFrame).time===.5")
   assert await page.locator('#contactLegend').is_visible()
+  assert await page.evaluate('godotStats.physics_material_updates')>idle_updates
   frame=await page.evaluate('JSON.parse(physicsFrame)');assert frame['footprint']
   await page.wait_for_timeout(300);await page.screenshot(path='logs/contact-view.png')
   await page.locator('#replayContact').click()
@@ -61,7 +64,7 @@ async def main():
   await page.wait_for_function('JSON.parse(physicsFrame).arm.pose.finger_relax===0')
   await page.wait_for_function('godotStats?.crowd_active===false')
   assert not errors,errors
-  report={'mirror_visibility_updates':True,'pose_camera_and_wheel':True,'crowd_reaction_and_rewind':True,'jump_to_contact':True,'side_camera':True,'marker_toggle':True,'no_stale_markers':True,'errors':errors}
+  report={'idle_material_uploads_skipped':True,'mirror_visibility_updates':True,'pose_camera_and_wheel':True,'crowd_reaction_and_rewind':True,'jump_to_contact':True,'side_camera':True,'marker_toggle':True,'no_stale_markers':True,'errors':errors}
   Path('logs/contact-view.json').write_text(json.dumps(report,indent=2));print(json.dumps(report))
   await browser.close()
 asyncio.run(main())

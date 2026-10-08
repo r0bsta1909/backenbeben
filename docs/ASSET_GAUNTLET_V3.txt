@@ -456,3 +456,22 @@ Replaybild selbst gesichtet. Zwei Ansichten RTX 2080: RAF-p95 16.5 ms Treffer,
 diese Ausreisser nicht nachweisbar; 60-Hz-Budget nicht durchgehend erfuellt.
 Mediane etwa 15 ms. Nachweis validation/face-normals.json. Keine reine GPU-Zeit,
 kein perfektes Stilgate und keine Abnahme des gesamten Physikmodells.
+
+UNVERAENDERTE GEWEBEPARAMETER NICHT ERNEUT HOCHLADEN
+main.gd berechnet den Physikframe-Hash einmal und sendet Cage/Kopf/Kiefer-Uniforms
+nur bei geaendertem Frame. Im Leerlauf weiterhin Arm-/Kameraupdates; keine
+Gleichsetzung von Handpose und Gewebeclip. Wechsel von Clip zu leerem Zustand
+setzt Gewebe einmal zurueck. Zaehler physics_material_updates fuer Pruefung.
+Browser bestaetigt konstante Uploadzahl im Leerlauf sowie Anstieg beim Replay;
+Mausrad, Kamera, Spiegel und Kontaktpunkte weiter geprueft, keine Fehler.
+Zwei Ansichten RTX 2080: RAF-p95 Ziehen 16.7 ms (vorher 22.6), Treffer 16.1,
+bewegtes Replay 16.3. Host-Berechnung weiterhin p95 22.8 ms. Kein durchgaengig
+bestandenes 60-Hz-Gate; lokale Einzelmessung, keine reine GPU-Zeit. Werte unter
+validation/material-updates.json. Von Godot erzeugte face_deform-UID mitgesichert.
+Aktueller Gesamtstand zusaetzlich durch Zwei-Client-LAN-Browsergauntlet geprueft:
+identische Replayclips (473 Armframes, 337 Gewebeframes), Session-Resume nach
+Reload, Anspannen, Audio-buffer-fallback auf HTTP, K.o.-Koerperclip und Rueckspulen,
+Rueckkampf mit zurueckgesetztem Schaden/Fouls, Verlassen. Keine Browserfehler.
+Test erhoeht zeitweise Schaden/senkt K.o.-Schwelle; danach Standardwerte 25/100/25
+wiederhergestellt. Kein Nachweis fuer zwei physische PCs oder menschliche Bedienung.
+Nachweis validation/current-assets-lan.json. Peak-Replaybild selbst gesichtet.

@@ -39,6 +39,7 @@ var mirror_dirty := true
 var mirror_draw_requests := 0
 var mirror_viewport: SubViewport
 var last_physics_hash := 0
+var physics_material_updates := 0
 var emote_player := -1
 var emote_kind := 0
 var emote_remaining := 0.0
@@ -337,7 +338,7 @@ func _process(delta: float) -> void:
 			JavaScriptBridge.eval("window.contactSound=false")
 		mirror_focus=bool(JavaScriptBridge.eval("window.mirrorFocus || false",true))
 		AudioServer.set_bus_mute(0,bool(JavaScriptBridge.eval("window.muted || false",true)))
-		JavaScriptBridge.eval("window.godotStats="+JSON.stringify({"fps":Engine.get_frames_per_second(),"arm_data":hand_pose.has("arm"),"hand_wrist":str(hand.skeleton.get_bone_global_pose(hand.skeleton.find_bone("hand.R")).origin),"dragging":dragging,"samples":gesture.size(),"physics_time":physics_frame.get("time",-1),"physics_active":physics_frame.has("id"),"crowd_active":arena_stage.crowd_was_active,"camera_position":[camera.position.x,camera.position.y,camera.position.z],"mirror_draw_requests":mirror_draw_requests,"muted":AudioServer.is_bus_mute(0)}))
+		JavaScriptBridge.eval("window.godotStats="+JSON.stringify({"fps":Engine.get_frames_per_second(),"arm_data":hand_pose.has("arm"),"hand_wrist":str(hand.skeleton.get_bone_global_pose(hand.skeleton.find_bone("hand.R")).origin),"dragging":dragging,"samples":gesture.size(),"physics_time":physics_frame.get("time",-1),"physics_active":physics_frame.has("id"),"crowd_active":arena_stage.crowd_was_active,"camera_position":[camera.position.x,camera.position.y,camera.position.z],"mirror_draw_requests":mirror_draw_requests,"physics_material_updates":physics_material_updates,"muted":AudioServer.is_bus_mute(0)}))
 	if appearance_timer>=.08:
 		appearance_timer=0
 		if state.has("players") and state.players.size()>1:
@@ -412,9 +413,13 @@ func color_hand(root: Node3D, data: Dictionary) -> void:
 				if base_name=="Shirt":m.set_shader_parameter("base_color",shirts[int(data.get("shirt",0))%4])
 
 func drive_recorded_physics() -> void:
-	if physics_frame.has("id") and physics_frame.hash()==last_physics_hash:return
-	if last_physics_hash!=physics_frame.hash():mirror_dirty=true
-	last_physics_hash=physics_frame.hash()
+	var frame_hash: int=physics_frame.hash()
+	var physics_changed: bool=frame_hash!=last_physics_hash
+	if physics_frame.has("id") and not physics_changed:return
+	if physics_changed:
+		mirror_dirty=true
+		physics_material_updates+=1
+	last_physics_hash=frame_hash
 	var offsets := PackedVector3Array()
 	offsets.resize(63)
 	var empty_cage := PackedVector3Array()
@@ -436,7 +441,7 @@ func drive_recorded_physics() -> void:
 			eye_closure=smoothstep(.62,.82,float(physics_frame.get("time",0.0)))
 		root.set_eye_closure(eye_closure)
 		if active:root.rotation=Vector3.ZERO;root.position.y=0
-		for m in physics_materials.get(root.get_instance_id(),[]):
+		for m in (physics_materials.get(root.get_instance_id(),[]) if physics_changed else []):
 			m.set_shader_parameter("side_cage_enabled",affected and side_texture!=null)
 			if affected and side_texture!=null:
 				m.set_shader_parameter("side_cage_texture",side_texture)
