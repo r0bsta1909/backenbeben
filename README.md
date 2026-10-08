@@ -56,7 +56,7 @@ Netzwerk freigeben; `ALLOW_LAN.bat` richtet eine begrenzte Regel für Port 8765 
 - Aktuelle Integrationstests: `tests/v3_browser_gauntlet.py` und `tests/v3_network_gauntlet.py`
   gegen einen separaten Host auf Port 8877. Playwright und Chrome werden dafür benötigt.
 
-Der normale Hoststart im aktuellen Quellstand verwendet `coupled-moving`: Kopf-Yaw,
+Der normale Hoststart im aktuellen Quellstand verwendet `coupled-moving`: Kopfverschiebung, Kopf-Yaw,
 Gewebe und Hand bleiben während Kontakt, Auslauf und Rückholung verbunden.
 Das veröffentlichte Paket 06 enthält noch den vorherigen `coupled`-Pfad. Für einen separaten
 Testhost:
@@ -65,8 +65,8 @@ Nach einem Update einmal `SETUP_HOST.bat` ausführen; die benötigte Kompilierun
 ist jetzt in `server/requirements.txt` enthalten.
 Er liefert vollständige Browser-Replays mit seitlichem Gewebe und durchgehender
 Arm-Rückholung. Die Rechenworker werden beim Hoststart vorbereitet; der geprüfte Browser-Treffer
-benötigte im beweglichen Pfad rund 2,3 Sekunden. Die Translation des Kopfes bleibt
-fest, seine Yaw-Drehung ist gekoppelt; Halsparameter sind kalibriert und die
+benötigte im beweglichen Pfad rund 2,4 Sekunden. Drei Verschiebungsachsen und die Yaw-Drehung sind gekoppelt;
+Pitch und Roll bleiben fest. Halsparameter sind Prototyp-Abstimmungen und die
 Kieferreaktion ist stilisiert. `--physics coupled` erhält den vorherigen
 verankerten Kontaktpfad zum Vergleich. `--physics legacy` hält den bisherigen Pfad für technische Vergleiche verfügbar.
 Der gezielte Browsercheck

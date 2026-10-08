@@ -34,3 +34,12 @@ class HeadAttachmentTests(unittest.TestCase):
   from coupled_replay import encode
   with self.assertRaisesRegex(ValueError,'matching replay tail'):
    encode({}, {'moving_head':True})
+
+ def test_mobile_pin_preserves_linear_mass_center(self):
+  from head_attachment import project_mobile_pins
+  p=np.array([[.001,0.,0.]]);rest=np.zeros((1,3));position=np.zeros(3)
+  initial=p[0]/10+position/.2
+  angle=project_mobile_pins(p,np.array([10.]),rest,np.array([0]),0.,50.,position,.2)
+  np.testing.assert_allclose(p[0]/10+position/.2,initial,atol=1e-14)
+  np.testing.assert_allclose(p[0],position,atol=1e-14)
+  self.assertEqual(angle,0.)

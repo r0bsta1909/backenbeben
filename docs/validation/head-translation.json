@@ -1,0 +1,86 @@
+{
+  "scope": "Three translations plus yaw coupled through contact, tail, shader and recovery",
+  "unit_tests": 144,
+  "browser_views": 15,
+  "contact": {
+    "repeat_practice_without_damage": true,
+    "idle_material_uploads_skipped": true,
+    "mirror_visibility_updates": true,
+    "pose_camera_and_wheel": true,
+    "crowd_reaction_and_rewind": true,
+    "jump_to_contact": true,
+    "side_camera": true,
+    "marker_toggle": true,
+    "no_stale_markers": true,
+    "errors": [],
+    "inspection_survives_original_deadline": true,
+    "coupled": {
+      "backend": "coupled-moving",
+      "solve_ms": 2441.0,
+      "peak": 0.047823,
+      "contact_diagnostics": {
+        "maximum_wrist_separation_m": 1.3021766580078122e-05,
+        "maximum_penetration_m": 4.020186028196963e-06,
+        "unconverged_steps": 13,
+        "maximum_material_residual_m": 0.0003421633981677872
+      },
+      "head_response": {
+        "model": "coupled-yaw-through-contact-and-tail",
+        "braced": false,
+        "tail_pin_error_m": 7.058907631675855e-08,
+        "translation": true,
+        "parameters": "prototype tuning, three translations and yaw; pitch/roll fixed"
+      },
+      "maximum_head_yaw_rad": 0.08729
+    }
+  },
+  "duel": {
+    "url": "http://192.168.178.67:8877",
+    "errors": [],
+    "configuration": {
+      "base_damage": 45,
+      "ko_threshold": 60,
+      "turn_seconds": 60
+    },
+    "single_tilt_control": true,
+    "physics_backend": "coupled-moving",
+    "moving_head_brace_consistent": true,
+    "solved_normal_impulse_ns": 1.0704200641935664,
+    "solved_quality_matches_hit": true,
+    "recorded_arm_frames": 524,
+    "clip_hash": "485d1b55c5d1fff74ab5e6b97ff50630bee4e358cd92ec88a379cd83877cc849",
+    "replay": {
+      "clipId": "be038c1da14f3b536474",
+      "frameCount": 337,
+      "peak": 0.036341,
+      "time": 0.599976,
+      "frame": 71,
+      "deformation": 0.03634086752
+    },
+    "replay_frame_ms_p95": 14,
+    "viewport": [
+      1920,
+      1080
+    ],
+    "resume": true,
+    "injury_material_rewind": true,
+    "ko_body_recorded": true,
+    "ko_reverse_seek": true,
+    "winner": 1,
+    "audio": {
+      "mode": "buffer-fallback",
+      "played": 6,
+      "unlocked": true
+    },
+    "rematch_material_reset": true,
+    "rematch": true,
+    "leave": true
+  },
+  "limits": [
+    "Prototype mass and neck parameters, not anatomical calibration",
+    "Pitch and roll fixed",
+    "Guided KO and stylized jaw",
+    "Two browser clients on one PC, not two physical PCs",
+    "Art and human control acceptance remain open"
+  ]
+}

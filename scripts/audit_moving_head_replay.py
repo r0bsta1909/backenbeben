@@ -13,10 +13,10 @@ rows=[]
 for name,y,tilt,skin in CASES:
  s=score({'version':3,'points':[[.19+.34*i/40,y,800*i/40,0,tilt,0] for i in range(41)],'_skin_state':skin})
  clip=simulate(s);g=build_side_cage(skin_state=skin);n=g['nx']*g['ny'];world=[]
- for frame in clip['frames']:
+ for index,frame in enumerate(clip['frames']):
   p=g['nodes'][:n]+np.asarray(frame[2:]).reshape(n,3)*clip['scale']/4
   blend=np.clip((p[:,1]*4+.55)/.43,0,1);a=frame[0]*blend*blend*(3-2*blend)
-  q=p.copy();q[:,0]=np.cos(a)*p[:,0]-np.sin(a)*p[:,2];q[:,2]=np.sin(a)*p[:,0]+np.cos(a)*p[:,2];world.append(q)
+  q=p.copy();q[:,0]=np.cos(a)*p[:,0]-np.sin(a)*p[:,2];q[:,2]=np.sin(a)*p[:,0]+np.cos(a)*p[:,2];q+=np.asarray(clip.get('head_positions',[[0,0,0]]*337)[index])/4*(blend*blend*(3-2*blend))[:,None];world.append(q)
  world=np.array(world);gap=math.inf;wrist_angle=0.
  for record in clip['arm_path'][-324:]:
   pose=record['pose'];f=np.asarray(pose['finger_direction']);fore=np.asarray(pose['wrist'])-pose['elbow'];fore/=np.linalg.norm(fore)

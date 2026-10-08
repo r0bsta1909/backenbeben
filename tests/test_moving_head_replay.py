@@ -8,9 +8,11 @@ class MovingHeadReplayTests(unittest.TestCase):
   from moving_head_replay import local_offsets
   rest=np.array([[.08,-.10,.06],[.08,.03,.06],[.08,.10,.06]])
   world=rest+np.array([[-.001,.002,.003],[-.003,.001,.002],[.001,0.,.001]])
-  local=rest+local_offsets(world,rest,.12).reshape(-1,3)/4
+  position=np.array([-.006,.004,.003])
+  local=rest+local_offsets(world,rest,.12,position).reshape(-1,3)/4
   blend=np.clip((local[:,1]*4+.55)/.43,0,1);a=.12*blend*blend*(3-2*blend)
   rendered=local.copy();rendered[:,0]=np.cos(a)*local[:,0]-np.sin(a)*local[:,2];rendered[:,2]=np.sin(a)*local[:,0]+np.cos(a)*local[:,2]
+  rendered+=position*(blend*blend*(3-2*blend))[:,None]
   np.testing.assert_allclose(rendered,world,atol=1e-14)
  def test_complete_clip_moves_during_contact_then_settles(self):
   from contact_v3 import score
@@ -18,6 +20,10 @@ class MovingHeadReplayTests(unittest.TestCase):
   s=score({'version':3,'points':[[.19+.34*i/40,.6,800*i/40,0,-15,0] for i in range(41)]})
   c=simulate(s)
   self.assertEqual(len(c['frames']),337)
+  self.assertEqual(len(c['head_positions']),337)
+  self.assertGreater(max(np.linalg.norm(p) for p in c['head_positions']),.001)
+  self.assertLess(np.linalg.norm(c['head_positions'][-1]),1e-5)
+  self.assertTrue(np.all(np.asarray(c['head_positions'][:61])==0))
   self.assertGreater(abs(c['frames'][63][0]),.001)
   self.assertLess(abs(c['frames'][-1][0]),1e-4)
   self.assertLess(max(abs(v)*c['scale'] for v in c['frames'][-1][2:]),1e-5)

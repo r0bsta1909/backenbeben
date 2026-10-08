@@ -78,8 +78,9 @@ async def main():
      await page.wait_for_function('(s)=>{const f=JSON.parse(physicsFrame);return f.camera===s.view && Math.abs(f.time-s.time)<.002 && f.footprint.length===0}',arg={'view':view,'time':moment})
      await page.wait_for_timeout(200)
      await page.screenshot(path=f'logs/contact-audit-{view}-{label}.png')
-     record=await page.evaluate('({frame:JSON.parse(physicsFrame),rendered:godotStats.rendered_arm})')
+     record=await page.evaluate('({frame:JSON.parse(physicsFrame),rendered:godotStats.rendered_arm,head_offset:godotStats.face_head_offset})')
      record.update(camera=view,moment=label);audit.append(record)
+     assert max(abs(a-b) for a,b in zip(record['head_offset'],record['frame'].get('head_offset',[0,0,0])))<1e-5
      for joint in ('shoulder','elbow','wrist'):
       assert max(abs(a-b) for a,b in zip(record['frame']['arm']['pose'][joint],record['rendered'][joint]))<1e-5,(view,label,joint,record)
    Path('logs/contact-arm-render-audit.json').write_text(json.dumps(audit,indent=2))

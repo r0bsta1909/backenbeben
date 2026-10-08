@@ -1431,3 +1431,20 @@ inkl.Anspannen/Materialruecklauf/KO/Resume/Revanche,errors[]. Beleg brace-latenc
 AeltereFehlerohneSnapshot nichtnachtraeglichalszweifelsgleichbehaupten. Neuer
 reproduzierterFehleristzugeordnet. Host8877 normalerCheckoutDefault,Session1639.
 OeffentlichesV06weiteraeltererStand,Goalweiteroffen.
+
+G4 KOPFTRANSLATION IM SPIEL INTEGRIERT
+Drei Verschiebungsachsen zusaetzlich zu Yaw: Gewebeanker wirken auf Kopfmasse,
+Kontaktzustand wird ohne Reset in Auslauf uebernommen. Shader blendet Translation
+am Hals; lokale Gewebeoffsets invertieren dieselbe Transformation. Rueckholung
+prueft die bewegte Weltoberflaeche. Parameter:4.5kg,800/1200/800N/m,120Ns/m;
+ausdruecklich Prototypabstimmung, keine anatomische Kalibrierung. Pitch/Roll fest.
+144Tests PASS inkl.Massenzentrum und Shader-Roundtrip. Sieben komplette Varianten
+bestehen Rueckholkollision/Wristlimit.15Browseransichten vergleichen echte
+Face-Materialtranslation mit Replaydaten,errors[]. VollerLAN-KO-Kampf bestanden
+inkl.Anspannen/identischerClips/Resume/Materialruecklauf/Revanche; Kopftranslation
+nachRevanche exaktNull. Beleg validation/head-translation.json pluszweiBilder.
+Sichtpruefung: Halsanschluss erhalten, seitlicher Handkontakt; Figuren/Helfer und
+Oberflaechen weiterhin hinterReferenz. KeineArt-/Bedienabnahme behauptet.
+Host8877 aktuellerCheckoutDefault,Session11116. V06PaketweiterhistorischerStand.
+Naechste Arbeit: sichtbare Figuren-/Helferbewegung und verstaendliche Bedienfuehrung
+im Gesamtspiel verbessern; Gesamtabnahme und Zwei-PC-Nachweis bleiben offen.
