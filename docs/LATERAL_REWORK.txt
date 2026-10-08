@@ -169,3 +169,15 @@ bestanden; keine Browserfehler. KO-Totale visuell geprueft und gesichert unter
 docs/validation/catcher-ko-wide.png. Helferarme bleiben eine animierte IK-Loesung,
 keine wechselseitige physikalische Abstuetzung. Handkontakt und Koerpergewicht
 muessen fuer eine natuerliche Auffangbewegung weiter gekoppelt werden.
+
+SCHLAGARM: RUECKZUG NACH KONTAKT
+Der gespeicherte Armverlauf kehrte zuvor in die hohe Messpose zurueck und
+blieb beim KO mit offener Hand auf Gesichtshoehe. Er zieht nun zuerst seitlich
+von der Wange weg und senkt sich ueber ein geglaettetes Motorziel ab. Der Host
+zeichnet 1.35 Sekunden Rueckzug auf; Replay und beide Clients verwenden ihn.
+Gelenkgrenzen und Kollision bleiben aktiv. Der Regressionstest prueft abgesenkte
+Endlage, Beruhigung, Abstand zur Wange; bestehende Tests pruefen Knochenlaengen.
+33 Unit-Tests und vollstaendiger Zweibrowser-LAN-Gauntlet bestanden. KO-Totale
+visuell geprueft: docs/validation/recovery-ko-wide.png. Die Hand bleibt noch
+in offener Schlagorientierung; Fingerentspannung, vollstaendige Koerperkollision
+und gekoppelte Handnachgiebigkeit sind damit nicht erledigt.

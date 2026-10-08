@@ -137,3 +137,7 @@ und echte Bilder in LATERAL_REWORK.txt / docs/validation/arena-light-*.
 Auffaengerfehler korrigiert: Armansatz folgt jetzt der gebeugten Schulter statt
 der Ruheposition. Godot-Regression und LAN-KO bestanden; dokumentierte
 physikalische Kopplung der Helfer bleibt offen. Siehe LATERAL_REWORK.txt.
+
+Rueckzug des Schlagarms aufgezeichnet: seitlich loesen, dann absenken statt
+hohe Messpose im KO halten. 33 Tests und LAN-KO bestanden. Offene Hand bleibt
+eine Vereinfachung; Details und Spielbild in LATERAL_REWORK.txt.

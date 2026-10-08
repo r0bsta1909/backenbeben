@@ -43,6 +43,19 @@ class MeshContactTests(unittest.TestCase):
         self.assertAlmostEqual(sum(x*x for x in f),1,places=9)
         self.assertAlmostEqual(sum(a*b for a,b in zip(f,n)),0,places=9)
 
+    def test_recovery_clears_cheek_and_lowers_beside_body(self):
+        result=score(stroke())
+        final=result['arm_path'][-1]['pose']
+        self.assertGreater(final['wrist'][0],.38)
+        self.assertLess(final['wrist'][1],-.29)
+        self.assertFalse(final['blocked'])
+        previous=result['arm_path'][-25]['pose']
+        self.assertLess(math.dist(final['wrist'],previous['wrist']),.01)
+        for record in result['arm_path']:
+            if record['time']<result['contact_time']:continue
+            gaps=[x-side_surface(y,z) for _,x,y,z in probes(record['pose'],record['tilt']) if side_surface(y,z) is not None]
+            if gaps:self.assertGreaterEqual(min(gaps),-.0001)
+
     def test_mesh_rotates_and_swelling_changes_collision(self):
         difference=sum(abs(surface(x,y)-surface(x,y,.2)) for x,y in [(.1,.1),(.2,.2),(.3,.1)])
         self.assertGreater(difference,.003)
