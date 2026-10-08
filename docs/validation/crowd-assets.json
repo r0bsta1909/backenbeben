@@ -1,0 +1,114 @@
+{
+  "source": "assets-source/crowd.blend",
+  "generator": "scripts/create_crowd_assets.py",
+  "mesh_polygons": {
+    "head": 499,
+    "hair": 208,
+    "torso": 62
+  },
+  "spectators": 142,
+  "draw_batches": 5,
+  "native_geometry_rewind": "PASS with OpenGL renderer; normal and KO reactions, hair attachment, all-part rewind",
+  "browser": {
+    "repeat_practice_without_damage": true,
+    "idle_material_uploads_skipped": true,
+    "mirror_visibility_updates": true,
+    "pose_camera_and_wheel": true,
+    "crowd_reaction_and_rewind": true,
+    "jump_to_contact": true,
+    "side_camera": true,
+    "marker_toggle": true,
+    "no_stale_markers": true,
+    "errors": [],
+    "coupled": {
+      "backend": "coupled",
+      "solve_ms": 1320.6,
+      "peak": 0.006362,
+      "contact_diagnostics": {
+        "maximum_wrist_separation_m": 8.46169705690824e-06,
+        "maximum_penetration_m": 2.9571925582856734e-06,
+        "unconverged_steps": 14,
+        "maximum_material_residual_m": 0.0001813022486720493
+      }
+    }
+  },
+  "full_duel": {
+    "errors": [],
+    "hits": [
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 23.45,
+        "quality": 0.8016,
+        "braced": true,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "5022839965ca0fda4fbe"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 32.16,
+        "quality": 0.7146,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "5b834908ef61165df9b1"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 36.54,
+        "quality": 0.8121,
+        "braced": false,
+        "side": "R",
+        "ko": true,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "a6a227c75f0dc5980354"
+      }
+    ],
+    "configuration": {
+      "base_damage": 45,
+      "ko_threshold": 60,
+      "turn_seconds": 60
+    },
+    "single_tilt_control": true,
+    "physics_backend": "coupled",
+    "solved_normal_impulse_ns": 1.6031906360669135,
+    "solved_quality_matches_hit": true,
+    "recorded_arm_frames": 530,
+    "clip_hash": "0ba114922fb8a72b4119a6c45d5a5d7ef5d8b9ceab9e4477e61b1d348505402a",
+    "replay": {
+      "clipId": "5022839965ca0fda4fbe",
+      "frameCount": 337,
+      "peak": 0.006392999999999999,
+      "time": 0.508313,
+      "frame": 60,
+      "deformation": 0.006377401079999999
+    },
+    "replay_frame_ms_p95": 20.80000000000291,
+    "viewport": [
+      1920,
+      1080
+    ],
+    "resume": true,
+    "injury_material_rewind": true,
+    "ko_body_recorded": true,
+    "ko_reverse_seek": true,
+    "winner": 0,
+    "audio": {
+      "mode": "buffer-fallback",
+      "played": 5,
+      "unlocked": true
+    },
+    "rematch_material_reset": true,
+    "rematch": true,
+    "leave": true
+  },
+  "limits": "Two browser contexts on one PC. Measured replay frame time is hardware-specific. Simplified distant figures, no crowd skeletal animation. Overall art and human gameplay acceptance remain open."
+}

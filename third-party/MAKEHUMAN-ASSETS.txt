@@ -1,5 +1,6 @@
 MakeHuman Community: CC0 base mesh and shape data.
 Adapted head, arm and hand topology in character_v3.glb.
+The reduced crowd head in crowd.glb is derived from the same head topology.
 Source: https://github.com/makehumancommunity/makehuman
 See assets-source/makehuman/PROVENANCE.txt for inputs.
 

@@ -11,7 +11,9 @@ G2 / FIGUREN UND COMICSTIL — OFFEN
 Vorhanden: anatomischer Kopf, Arme/Haende, vollstaendiges Rig, Haargeometrie,
 Kleidung, Toonmaterialien, vier Haut-/vier Trikot-/drei Haarfarben.
 Belege: validation/anatomical-arms.json, face-hair-style.json; Blenderquelle.
-Offen: Referenzlook als Gesamtbild, Kleidung und Publikum weiter ausarbeiten.
+Modellierte Stofffalten und vereinfachte Zuschauerfiguren vorhanden; Belege
+validation/cloth-folds.json und crowd-assets.json.
+Offen: Referenzlook als Gesamtbild und weitere Figuren-/Bewegungsqualitaet.
 Technischer Export oder bestandener Rendercheck ersetzt keine Artabnahme.
 
 G3 / SEITLICHER KONTAKT UND BEDIENUNG — OFFEN

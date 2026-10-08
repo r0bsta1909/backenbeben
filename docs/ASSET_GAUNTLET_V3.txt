@@ -864,3 +864,18 @@ Blenderpreview und echte Kontaktpose gesichtet: Stoffform lesbarer, kein fertige
 Referenzlook behauptet. Statische modellierte Falten mit Skinning, keine Clothsim.
 Belege validation/cloth-folds.json und cloth-contact.png. Naechste groessere
 sichtbare Luecke: Publikum als Figuren statt offensichtlich einfache Koerper.
+
+G2/G6 PUBLIKUM MIT ABGELEITETEN FIGURENASSETS
+Neue reproduzierbare Blenderquelle crowd.blend und crowd.glb: Kopf499Polygone,
+Haar208, Oberkoerper62. Kopf aus CC0-Charakter abgeleitet, Herkunft erweitert.
+142Zuschauer in5MultiMesh-Batches statt Kugelkopf/Zylindertorso; Schultern/Taille,
+Gesichter und Haarvarianten. Haende bleiben vereinfachte separate Geometrie.
+Native Renderpruefung: Geometrie vorhanden, Normal-/KO-Reaktion bewegt echte
+Instanztransformationen, Haare bleiben am Kopf, Ruecklauf aller Teile PASS.
+Headless-Dummy kann MultiMesh-Transformationen nicht nachweisen; Test verlangt
+aktiven Compatibility-Renderer. Webbuild/native5Posen/neunBrowseransichten PASS.
+Vollstaendiger LAN-KO-Kampf3Treffer, Verletzungsruecklauf/Resume/KO-Ruecklauf/
+Revanche PASS,errors[]. Replayp95=20.8ms bei1920x1080, hardwareabhaengig und kein
+Nachweis fuer zwei physische PCs. Belege validation/crowd-assets.json und
+crowd-contact.png. Gesamt-Artabnahme/Bedienabnahme/volle Physik weiterhin offen.
+Host8877 weiter aus Checkout. Oeffentliches v0.5-Paket ist aelterer Stand.
