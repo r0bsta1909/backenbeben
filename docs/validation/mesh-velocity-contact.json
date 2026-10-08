@@ -6,6 +6,8 @@
     111
   ],
   "maximum_penetration_m": 0.0,
+  "full_sweep_reference_ms": 196.23419999697944,
+  "identical_to_full_sweep": true,
   "rotational_proximity": {
     "time_s": 0.00031764571482775485,
     "distance_m": 4.765282214633634e-09,
@@ -20,7 +22,7 @@
   "active_impulses": 1,
   "energy_before_j": 0.090291,
   "energy_after_j": 0.08907822429647239,
-  "solve_ms": 208.97949999925913,
+  "solve_ms": 67.73909999901662,
   "final_velocity": [
     -0.9857565055524572,
     -0.000890577813457871,

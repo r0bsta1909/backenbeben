@@ -27,9 +27,30 @@ def nearest_triangle_distance(points,nodes,triangles):
     return float(np.sqrt(distances[sample,triangle])),int(sample),int(triangle)
 
 
+def nearest_triangle_distance_bounded(points,nodes,triangles):
+    """Exact pruning: AABB lower bound versus a real vertex upper bound.
+
+    Any selected vertex lies on a candidate triangle, so its distance is an
+    upper bound for the global minimum. A triangle box farther away cannot win.
+    No temporal approximation or contact margin is introduced.
+    """
+    q=nodes[triangles]
+    vertex_delta=points[:,None,:]-q[None,:,0,:]
+    upper_squared=float(np.min(np.sum(vertex_delta*vertex_delta,axis=2)))
+    lower=q.min(axis=1);upper=q.max(axis=1)
+    outside=np.maximum(np.maximum(lower[None,:,:]-points[:,None,:],
+                                  points[:,None,:]-upper[None,:,:]),0.)
+    lower_squared=np.sum(outside*outside,axis=2)
+    # Small outward rounding cushion retains boundary/tie candidates.
+    cushion=1e-24+1e-12*upper_squared
+    candidates=np.flatnonzero(np.any(lower_squared<=upper_squared+cushion,axis=0))
+    distance,sample,triangle=nearest_triangle_distance(points,nodes,triangles[candidates])
+    return distance,sample,int(candidates[triangle])
+
+
 def first_rigid_proximity(center,orientation,local_points,velocity,angular_velocity,
                           nodes,node_velocities,triangles,duration,
-                          distance_tolerance=1e-8,max_iterations=4096):
+                          distance_tolerance=1e-8,max_iterations=4096,use_bounds=True):
     center=np.asarray(center,dtype=float);R=np.asarray(orientation,dtype=float)
     local=np.asarray(local_points,dtype=float);v=np.asarray(velocity,dtype=float)
     omega=np.asarray(angular_velocity,dtype=float);nodes=np.asarray(nodes,dtype=float)
@@ -47,7 +68,8 @@ def first_rigid_proximity(center,orientation,local_points,velocity,angular_veloc
     for iteration in range(max_iterations):
         rotation=rotation_increment(omega*time)@R
         points=local@rotation.T+center+v*time
-        distance,sample,triangle=nearest_triangle_distance(points,nodes+nv*time,tri)
+        distance_query=nearest_triangle_distance_bounded if use_bounds else nearest_triangle_distance
+        distance,sample,triangle=distance_query(points,nodes+nv*time,tri)
         result=dict(time_s=time,distance_m=distance,sample_index=sample,triangle_index=triangle,iterations=iteration+1)
         if distance<=distance_tolerance:return dict(result,status='proximity')
         remaining=duration-time

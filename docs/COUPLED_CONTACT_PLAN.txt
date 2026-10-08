@@ -593,3 +593,17 @@ Suchbahn hat konstante Weltgeschwindigkeiten; das ist KEINE freie anisotrope
 Starrkoerperintegration. Material-/Armbewegung und verbleibendes Zeitintervall
 werden noch nicht integriert. Ereigniskette mit anhaltendem Kontakt und geeignete
 Dynamikintegration bleiben offen; im aktiven Match weiterhin nicht verwendet.
+
+EXAKTE RAUMGRENZEN BESCHLEUNIGEN ROTATIONSSUCHE
+nearest_triangle_distance_bounded verwendet Abstand zu realem Dreiecksvertex als
+obere Schranke des globalen Minimums und Punkt-AABB-Abstand als untere Schranke.
+Dreiecke ohne moeglichen besseren Abstand entfallen; Grenzfaelle erhalten einen
+kleinen nach aussen gerichteten Rundungspuffer. Keine zeitliche Approximation.
+Vollstaendige Suche bleibt ueber use_bounds=False als Referenz verfuegbar.
+30 deterministische Zufallsgeometrien: gleicher Abstand und gleiche Indices;
+Kreisbogen-Ereignis vollstaendig gleich. Reales Hand-/Wangenmesh: gesamtes
+Ereignisdict (Zeit, Abstand, Sample, Dreieck, Iterationen, Status) identisch.
+Gemessener Referenzsweep196.2 ms, optimierter Sweep inklusive Impulsantwort67.7 ms.
+Ein Lauf, kein allgemeiner Benchmark und noch kein Echtzeitnachweis. Energie und
+Impulsresultat unveraendert. Audit erfasst Referenzzeit und Identitaetspruefung.
+Fortlaufende Kontaktdynamik, Gewebe-/Armzeitintegration und visuelle Abnahme offen.

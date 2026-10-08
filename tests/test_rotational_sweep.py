@@ -2,7 +2,7 @@ import sys,unittest
 from pathlib import Path
 import numpy as np
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'server'))
-from contact_rotational_sweep import first_rigid_proximity,nearest_triangle_distance
+from contact_rotational_sweep import first_rigid_proximity,nearest_triangle_distance,nearest_triangle_distance_bounded
 from contact_sweep import first_linear_contact
 
 class RotationalSweepTests(unittest.TestCase):
@@ -27,3 +27,16 @@ class RotationalSweepTests(unittest.TestCase):
  def test_triangle_edge_distance_is_not_plane_distance(self):
   distance,_,_=nearest_triangle_distance(np.array([[0.,5.,-3.]]),self.nodes,self.tri)
   self.assertAlmostEqual(distance,2.)
+
+ def test_bounds_match_full_distance_on_random_geometry(self):
+  rng=np.random.default_rng(1847)
+  for _ in range(30):
+   nodes=rng.normal(size=(60,3));tri=np.arange(60).reshape(-1,3)
+   points=rng.normal(size=(15,3))
+   full=nearest_triangle_distance(points,nodes,tri)
+   bounded=nearest_triangle_distance_bounded(points,nodes,tri)
+   self.assertEqual(full[1:],bounded[1:])
+   self.assertAlmostEqual(full[0],bounded[0],places=14)
+ def test_bounds_preserve_rotational_event(self):
+  full=self.run_arc(use_bounds=False);bounded=self.run_arc(use_bounds=True)
+  self.assertEqual(full,bounded)
