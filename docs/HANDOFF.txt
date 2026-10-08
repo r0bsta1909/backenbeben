@@ -483,3 +483,19 @@ obwohl der lokale Test innerhalb 60-Hz-Budget bleibt. Keine reine GPU-Zeit.
 Nachweis: validation/crowd-reaction.json. Noch kein animierter Applaus und
 keine Audioerweiterung. Gesamtstil, Arm-/Gesichtsphysik und menschliche
 Verstaendlichkeitsabnahme bleiben offen.
+
+TRAININGSANSICHT: HAND RAEUMLICH PRUEFEN
+Eigener Ausrichtungszug hat jetzt einen Umschalter Ego/Dreiviertel. Dieselbe
+vom Host berechnete Arm- und Handpose wird aus einer anderen Kamera gezeigt;
+keine Vorschau mit abweichender Treffergeometrie. Geste und Mausrad bleiben
+gleich, Kameraschalter waehrend Ziehen gesperrt, neuer Zug startet in Ego.
+Spiegel in Inspektionsansicht ausgeblendet. Replaykamera bleibt unabhaengig.
+Die bisherige Anzeige HAND FLACH / FINGER VORAUS / HANDBALLEN VORAUS wurde
+entfernt: Sie beruhte nur auf Pitch-Grenzen und war keine Kontaktmessung.
+Wrist-Limit bleibt angezeigt, sonst Verweis auf den schadensfreien Probeschwung.
+Browser prueft Kamera in echtem Godot, Mausrad-Hostantwort, Reset, Rueckkehr
+und anschliessend Kontaktreplay samt Punkten/Publikumsreaktion/Rueckspulen.
+Screenshot selbst gesichtet: Seitenansicht macht die Positionen kontrollierbar,
+zeigt aber weiterhin grobe Gesichtsschattierung und unzureichende Stilqualitaet.
+Kein bestandenes menschliches Verstaendlichkeitsgate. Koerperphysik bleibt
+approximiert; gekoppelte Laborphysik noch nicht im Match und nicht echtzeitfaehig.

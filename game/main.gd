@@ -330,7 +330,7 @@ func _process(delta: float) -> void:
 			JavaScriptBridge.eval("window.contactSound=false")
 		mirror_focus=bool(JavaScriptBridge.eval("window.mirrorFocus || false",true))
 		AudioServer.set_bus_mute(0,bool(JavaScriptBridge.eval("window.muted || false",true)))
-		JavaScriptBridge.eval("window.godotStats="+JSON.stringify({"fps":Engine.get_frames_per_second(),"arm_data":hand_pose.has("arm"),"hand_wrist":str(hand.skeleton.get_bone_global_pose(hand.skeleton.find_bone("hand.R")).origin),"dragging":dragging,"samples":gesture.size(),"physics_time":physics_frame.get("time",-1),"physics_active":physics_frame.has("id"),"crowd_active":arena_stage.crowd_was_active,"muted":AudioServer.is_bus_mute(0)}))
+		JavaScriptBridge.eval("window.godotStats="+JSON.stringify({"fps":Engine.get_frames_per_second(),"arm_data":hand_pose.has("arm"),"hand_wrist":str(hand.skeleton.get_bone_global_pose(hand.skeleton.find_bone("hand.R")).origin),"dragging":dragging,"samples":gesture.size(),"physics_time":physics_frame.get("time",-1),"physics_active":physics_frame.has("id"),"crowd_active":arena_stage.crowd_was_active,"camera_position":[camera.position.x,camera.position.y,camera.position.z],"muted":AudioServer.is_bus_mute(0)}))
 	if appearance_timer>=.08:
 		appearance_timer=0
 		if state.has("players") and state.players.size()>1:
@@ -433,10 +433,11 @@ func drive_recorded_physics() -> void:
 			m.set_shader_parameter("cage",offsets if affected else empty_cage)
 			m.set_shader_parameter("head_angle",float(physics_frame.get("head",0)) if affected else 0.0)
 			m.set_shader_parameter("jaw_angle",float(physics_frame.get("jaw",0)) if affected else 0.0)
-	mirror_mount.visible=not replaying
-	mirror_viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED if replaying else SubViewport.UPDATE_ALWAYS
 	var wide_view: bool = replaying and physics_frame.get("camera","")=="wide"
-	var side_view: bool = replaying and physics_frame.get("camera","") in ["side","wide"]
+	var inspecting: bool = not active and bool(hand_pose.get("active",false)) and hand_pose.get("camera","")=="side"
+	var side_view: bool = inspecting or (replaying and physics_frame.get("camera","") in ["side","wide"])
+	mirror_mount.visible=not (replaying or inspecting)
+	mirror_viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED if replaying or inspecting else SubViewport.UPDATE_ALWAYS
 	camera.position=Vector3(6.0,2.8,6.5) if wide_view else Vector3(3,.55,1.1) if side_view else Vector3(.30,.55,2.65)
 	camera.look_at(Vector3(0,-3.0,.4) if wide_view else Vector3(0,-.12,1.0) if side_view else Vector3(.22,-.18,0))
 	hand.visible=true

@@ -1,0 +1,9 @@
+{
+  "pose_camera_and_wheel": true,
+  "crowd_reaction_and_rewind": true,
+  "jump_to_contact": true,
+  "side_camera": true,
+  "marker_toggle": true,
+  "no_stale_markers": true,
+  "errors": []
+}
