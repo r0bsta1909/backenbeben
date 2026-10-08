@@ -150,7 +150,12 @@ for sign,suffix in [(-1,'L'),(1,'R')]:
 # Scalp follows the real head. Short swept clumps vary in length and direction.
 def hairline(p):
     ear_notch=.025*math.exp(-((p.z-.020)/.035)**2)*smoothstep(.075,.10,abs(p.x))
-    return .100+.063*smoothstep(-.005,.08,p.z)-.005*smoothstep(.055,.10,abs(p.x))+ear_notch+.0015*math.sin(p.x*110)
+    # Close-cropped sides descend behind the ear; a tapered temple point breaks
+    # the former horizontal helmet edge without covering the forehead or ear.
+    side=smoothstep(.060,.095,abs(p.x))
+    temple=.037*math.exp(-((p.z-.056)/.016)**2)*side
+    rear=.019*(1-smoothstep(-.005,.025,p.z))
+    return .100+.063*smoothstep(-.005,.08,p.z)-.005*smoothstep(.055,.10,abs(p.x))+ear_notch-temple-rear+.0015*math.sin(p.x*110)
 hv=[];hf=[]
 for f in faces:
     center=sum((Vector(verts[i]) for i in f),Vector())/len(f)

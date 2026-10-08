@@ -2185,3 +2185,17 @@ Goal aktiv. Gesamtstil, menschliche Verstaendlichkeit, anatomische Modellgrenzen
 und physischer Zwei-PC-Nachweis offen. Naechster Schwerpunkt G2/G3: aktuellen
 seitlichen Kontakt nochmals direkt neben Konzeptreferenz bewerten und groesste
 sichtbare Form-/Bewegungsluecke bearbeiten, keine weiteren Release-Mikrozyklen.
+
+G2 HAARANSATZ AN SCHLAEFEN UND HINTER OHREN
+Vergleich mit03-first-person: bisher hohe durchgehende Kappenkante an Seiten.
+Hinteren Ansatz19mm gesenkt, schmalen Schlaefenkeil bis37mm ergaenzt;
+Stirn/Ohrfreistellung erhalten. Blenderquelle/GLB/Vorschau neu,90210Polygone.
+Riglandmarken, Gesichtskollision und116Handkontaktpunkte unveraendert.
+Assetvalidator/Webbuild PASS. EchterBrowserkontaktcheck mit15Ansichten,
+Probe/Kamera/Mausrad/Replay/Crowdruecklauf PASS,errors[]. Front/Seitenkontakt,
+seitlicheKopfnachbewegung und Blender-Vorschau gesichtet. Belege validation/
+hairline-temples.json und hairline-front/side.png. Kein Gesamtstil-PASS.
+V13 ist letzter gepruefter Download und liegt vor dieser Haaransatzkorrektur.
+Goal aktiv. Naechstes G2/G3-Thema: Kontaktansicht zeigt weiterhin steil gebeugtes
+Handgelenk; dieses anhand realer seitlicher Referenzen und Rigwinkel pruefen,
+nicht mit kosmetischer Handdrehung an der Hostkontaktgeometrie vorbeiarbeiten.
