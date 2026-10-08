@@ -11,12 +11,16 @@ var last_tilt := Vector2.INF
 var is_first_person := false
 var last_body: Array = []
 var finger_rest_rotations: Dictionary = {}
+var face_mesh: MeshInstance3D
+var blink_index := -1
 
 func _ready() -> void:
 	metadata = JSON.parse_string(FileAccess.get_file_as_string("res://assets/character_v3.json"))
 	model = load("res://assets/character_v3.glb").instantiate()
 	add_child(model)
 	skeleton = model.find_children("*", "Skeleton3D", true, false)[0]
+	face_mesh=model.find_child("Face",true,false)
+	if is_instance_valid(face_mesh):blink_index=face_mesh.find_blend_shape_by_name("blink")
 	for index in range(skeleton.get_bone_count()):
 		if skeleton.get_bone_name(index).begins_with("finger"):
 			finger_rest_rotations[index]=skeleton.get_bone_pose_rotation(index)
@@ -105,6 +109,9 @@ func apply_finger_relax(amount: float, side: String) -> void:
 			var angle: float=[.25,.38,.20][segment]*(.85+digit*.10)*clampf(amount,0,1)
 			skeleton.set_bone_pose_rotation(index,finger_rest_rotations[index]*Quaternion(axis,angle))
 
+func set_eye_closure(amount: float) -> void:
+	if blink_index>=0:face_mesh.set_blend_shape_value(blink_index,clampf(amount,0.0,1.0))
+
 func first_person(enabled: bool) -> void:
 	if enabled==is_first_person:return
 	is_first_person=enabled
@@ -175,6 +182,7 @@ func reach_toward(world_target: Vector3, side: String, amount: float, world_norm
 	orient_surface("hand."+side,wrist,wrist+Vector3.UP*.1,normal)
 
 func reset_all() -> void:
+	set_eye_closure(0.0)
 	skeleton.clear_bones_global_pose_override()
 	skeleton.reset_bone_poses()
 	has_pose=false

@@ -149,3 +149,7 @@ Details in LATERAL_REWORK.txt. Physikalische Handnachgiebigkeit weiter offen.
 Pultkollision umfasst jetzt den Unterarm als durchgaengiges Segment in einer
 radius-erweiterten Box. Motor- und Grenzfalltests plus Netzwerk-Gauntlet
 bestanden. Vollstaendige Koerperkollision bleibt offen; LATERAL_REWORK.txt.
+
+KO-Ausdruck aktiviert: vorhandener Lid-Morph schliesst zeitabhaengig und
+oeffnet beim Rueckspulen/Reset wieder. Godot- und LAN-Pruefung bestanden.
+Details und Bild unter LATERAL_REWORK.txt / validation/ko-expression-*.

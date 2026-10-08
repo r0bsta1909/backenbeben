@@ -415,6 +415,10 @@ func drive_recorded_physics() -> void:
 	for root in [fighter,reflection]:
 		var affected: bool = active and (replaying if root==fighter else false)
 		if not replaying:affected=active and ((root==fighter and int(physics_frame.target)!=you) or (root==reflection and int(physics_frame.target)==you))
+		var eye_closure := 0.0
+		if affected and bool(physics_frame.get("ko",false)):
+			eye_closure=smoothstep(.62,.82,float(physics_frame.get("time",0.0)))
+		root.set_eye_closure(eye_closure)
 		if active:root.rotation=Vector3.ZERO;root.position.y=0
 		for m in physics_materials.get(root.get_instance_id(),[]):
 			m.set_shader_parameter("cage",offsets if affected else empty_cage)

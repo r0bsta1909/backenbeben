@@ -209,3 +209,15 @@ Swept-Mesh-Kollision. Physik bleibt 240-Hz-Simulation mit Gelenk-Bisection.
 Kontakt-V3-Testsuite erneut bestanden. Motorversuch: 480 Schritte ins Pult,
 0 durchdringende Frames, 464 blockierte Frames, Endgeschwindigkeit null.
 Netzwerk-Gauntlet mit Livepose, Foul, Revanche und Protokollpruefung bestanden.
+
+KO-GESICHTSAUSDRUCK
+Der vorhandene Lid-Morph wird beim betroffenen Charakter zwischen 0.62 und
+0.82 Sekunden Replayzeit geschlossen. Er wird direkt aus Clipzeit und KO-Flag
+berechnet, daher oeffnen sich die Augen beim Rueckwaertssuchen wieder. Spiegel
+und Gegner erhalten den Ausdruck entsprechend der betroffenen Rolle. Normale
+Treffer bleiben unveraendert. reset_all setzt den Morph ebenfalls zurueck.
+Godot-Pruefung tests/ko_expression.gd bestaetigt vorhandenen Exportmorph,
+Ansteuerung und Reset. Vollstaendiger Zweibrowser-LAN-Gauntlet mit KO,
+Rueckwaertssuche und Revanche bestanden; keine Browserfehler. Totale visuell
+geprueft: docs/validation/ko-expression-wide.png. Das ist stilisierte
+Ausdrucksanimation, keine medizinische Aussage oder Gesichts-Muskelphysik.
