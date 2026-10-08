@@ -7,6 +7,11 @@ uniform vec2 p3;
 uniform float orientation=1.0;
 uniform vec2 cast_offset=vec2(6.0,10.0);
 uniform float softness=16.0;
+uniform bool steps_enabled=false;
+uniform vec2 step_p0;
+uniform vec2 step_p1;
+uniform vec2 step_p2;
+uniform vec2 step_p3;
 float edge(vec2 a,vec2 b,vec2 p) {
     vec2 d=b-a;
     return orientation*(d.x*(p.y-a.y)-d.y*(p.x-a.x))/max(length(d),.001);
@@ -18,5 +23,9 @@ void fragment() {
     vec2 p=UV*viewport_size;
     float contact=.40*smoothstep(-3.0,2.0,polygon_distance(p));
     float cast=.20*smoothstep(-softness,softness*.35,polygon_distance(p-cast_offset));
+    if(steps_enabled) {
+        float near_step=min(min(edge(step_p0,step_p1,p),edge(step_p1,step_p2,p)),min(edge(step_p2,step_p3,p),edge(step_p3,step_p0,p)));
+        contact=1.0-(1.0-contact)*(1.0-.32*smoothstep(-3.0,2.0,near_step));
+    }
     COLOR=vec4(.025,.020,.014,1.0-(1.0-contact)*(1.0-cast));
 }

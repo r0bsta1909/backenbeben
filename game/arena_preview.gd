@@ -43,6 +43,9 @@ func set_view(number: int) -> void:
 	caption.text="BACKENBEBEN · "+VIEW_NAMES[number-1]+"\n1 Spiel · 2 Kontakt · 3 TV · 4 Gesamt\nP: Figuren ein/aus · H: Hinweise\nWASD + Q/E: bewegen · rechte Maustaste: Blick drehen"
 
 func _ready() -> void:
+	# The painted perspective and camera compositions share one reference frame.
+	get_window().content_scale_size=Vector2i(1600,900)
+	get_window().content_scale_aspect=Window.CONTENT_SCALE_ASPECT_KEEP
 	var world:=WorldEnvironment.new();var env:=Environment.new()
 	env.background_mode=Environment.BG_CANVAS;env.background_canvas_max_layer=-1
 	env.ambient_light_source=Environment.AMBIENT_SOURCE_COLOR
@@ -111,6 +114,13 @@ func update_ground_shadow() -> void:
 	ground_shadow.material.set_shader_parameter("cast_offset",offset)
 	ground_shadow.material.set_shader_parameter("softness",clampf(points[0].distance_to(points[1])*.018,5,22))
 	for i in range(4):ground_shadow.material.set_shader_parameter("p%d"%i,points[i])
+	var step_points: PackedVector2Array=[]
+	for p in [Vector3(-8.97,-6.20,3.1),Vector3(-7.03,-6.20,3.1),Vector3(-7.03,-6.20,5.3),Vector3(-8.97,-6.20,5.3)]:
+		if camera.is_position_behind(p):break
+		step_points.append(camera.unproject_position(p))
+	ground_shadow.material.set_shader_parameter("steps_enabled",step_points.size()==4)
+	if step_points.size()==4:
+		for i in range(4):ground_shadow.material.set_shader_parameter("step_p%d"%i,step_points[i])
 
 func _process(delta: float) -> void:
 	if OS.has_feature("web"):
@@ -119,7 +129,7 @@ func _process(delta: float) -> void:
 		if sample_clock>1 and frame_times.size()>=60:
 			sample_clock=0
 			var sorted:=frame_times.duplicate();sorted.sort()
-			JavaScriptBridge.eval("window.arenaStats="+JSON.stringify({"frame_p95_ms":sorted[int(sorted.size()*.95)],"audience_3d":stage.crowd_poses.size(),"sponsors_3d":stage.sponsor_surfaces.size(),"backdrop_2d":true,"view":view})+";")
+			JavaScriptBridge.eval("window.arenaStats="+JSON.stringify({"frame_p95_ms":sorted[int(sorted.size()*.95)],"audience_3d":stage.crowd_poses.size(),"sponsors_3d":stage.sponsor_surfaces.size(),"backdrop_2d":true,"view":view,"figures_visible":actors[0].visible or actors[1].visible,"table_accent":table_accent.visible,"viewport_width":get_viewport().get_visible_rect().size.x,"viewport_height":get_viewport().get_visible_rect().size.y})+";")
 	var movement:=Vector3.ZERO
 	if Input.is_physical_key_pressed(KEY_W):movement.z-=1
 	if Input.is_physical_key_pressed(KEY_S):movement.z+=1

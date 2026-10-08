@@ -71,6 +71,7 @@ func podium() -> void:
 		for z in [.42,.88]:round_part("FootFixing",Vector3(x,-5.029,z),Vector3(.055,.018,.055),"7d8079")
 	worn_material(find_child("PodiumTop",true,false),Color("50544e"),5,.08)
 	find_child("PodiumTop",true,false).mesh.radial_segments=96
+	find_child("PodiumTop",true,false).scale=Vector3(2.021,.018,.7144)
 	worn_material(find_child("PodiumBody",true,false),Color("303839"),6,.08)
 	worn_material(find_child("PodiumFoot",true,false),Color("272e30"),6,.12)
 	var red_band: MeshInstance3D=find_child("PodiumRedBand",true,false)
@@ -99,10 +100,12 @@ func stage_deck() -> void:
 		worn_material(step,Color("494b48"),6,.22)
 	for lip in find_children("StepLip*","MeshInstance3D",true,false):worn_material(lip,Color("b6a184"),6,.20)
 	for id in ["FloorAdiHash","FloorTooth"]:
+		find_child(id,true,false).position.y=DECK_Y+.033
 		var print_material: ShaderMaterial=find_child(id,true,false).material_override
 		print_material.set_shader_parameter("substrate_color",Color("656c68"))
 		print_material.set_shader_parameter("substrate_mix",.25 if id=="FloorAdiHash" else .30)
 		print_material.set_shader_parameter("ink_aging",.12)
+	find_child("FloorAdiHash",true,false).material_override.set_shader_parameter("border_trim",Vector2(.006,.003))
 	for id in ["FasciaKoenig","FasciaVersino","FasciaHoenhorst"]:
 		var print_material: ShaderMaterial=find_child(id,true,false).material_override
 		print_material.set_shader_parameter("substrate_color",Color("4d514b"))

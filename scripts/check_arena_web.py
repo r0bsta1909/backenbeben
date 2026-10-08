@@ -30,7 +30,24 @@ async def main():
             await page.wait_for_timeout(1500)
             await page.screenshot(path=str(output / f'view-{number}.png'))
             stats.append(await page.evaluate('window.arenaStats'))
-        report = {'views': stats, 'errors': errors}
+        await page.keyboard.press('p')
+        await page.wait_for_function('window.arenaStats.figures_visible === false')
+        resized = []
+        for width, height in [(1280, 720), (1280, 1024), (900, 1200)]:
+            await page.set_viewport_size({'width': width, 'height': height})
+            for number in [4, 1, 2, 3]:
+                await page.keyboard.press(str(number))
+                await page.wait_for_function(f'window.arenaStats.view === {number}')
+                await page.wait_for_timeout(700)
+                state = await page.evaluate('window.arenaStats')
+                assert not state['figures_visible'], state
+                assert state['table_accent'] == (number >= 3), state
+                assert abs(state['viewport_width'] / state['viewport_height'] - 16 / 9) < .001, state
+                await page.screenshot(path=str(output / f'resize-{width}x{height}-view-{number}.png'))
+                resized.append({'browser_size': [width, height], **state})
+        await page.keyboard.press('p')
+        await page.wait_for_function('window.arenaStats.figures_visible === true')
+        report = {'views': stats, 'resize_views': resized, 'errors': errors}
         (output / 'result.json').write_text(json.dumps(report, indent=2), encoding='utf-8')
         print(json.dumps(report, indent=2))
         await browser.close()

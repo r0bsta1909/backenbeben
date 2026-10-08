@@ -114,6 +114,20 @@ Hoenhorst ist weiterhin das kleine Original. Keine groessere Vorlage lokal
 gefunden, keine eindeutig zuordenbare Quelle in der Websuche. Rueckfrage nach
 vollstaendigem Betrieb/Website gestellt; der Austausch ist noch offen.
 
+ANOMALIENPRUEFUNG 2026-10-09
+AdiHash hatte einen dunklen Quelldateirand, der als Linie neben dem Bodendruck
+erschien. Der Druckshader blendet nur diesen Rand aus. Bodendrucke liegen jetzt
+knapp ueber der Matte statt sichtbar abgesetzt. Die Tischoberseite reicht in
+beiden Achsen bis zum oberen Polsterring; der bisherige schmale Spalt ist zu.
+Die Treppe besitzt einen eigenen projizierten Kontaktschatten auf dem Hallenboden.
+Alle Kameras verwenden ein festes 1600x900-Referenzbild. Andere Fensterformate
+zeigen Raender, damit Kulisse und Podest ihren Bildausschnitt gemeinsam behalten.
+Native Nah-/Gesamtbilder geprueft, Browser: vier Kameras in vier Fensterformaten,
+Figurenumschaltung und Fernlichtgrenze bestanden. Regressionspruefungen fuer
+Polsterabdeckung, Druckschatten, Stufenboden und Figuren-/Lichtwechsel ergaenzt.
+Neue Bilder: Arena-Design/15-arena-geprueft.png und 15-arena-tischdetail.png.
+Gesamtbericht: docs/validation/ARENA_ANOMALY_AUDIT_2026-10-09.txt.
+
 HISTORISCH
 arena_finished.tscn, bake_arena.gd und tests/arena_finished.gd gehoeren zur
 Voll-3D-Fassung. Die aktuelle Vorschau instanziert diese Szene nicht.

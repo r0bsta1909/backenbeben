@@ -20,5 +20,24 @@ func verify() -> void:
 	var podium: MeshInstance3D=stage.find_child("PodiumTop",true,false)
 	if absf(podium.position.y+1.015)>.001:
 		push_error("Table height changed");quit(1);return
+	# The flat insert must cover the open upper ring of the upholstery.
+	var padding: MeshInstance3D=stage.find_child("PodiumPadding",true,false)
+	var vertices: PackedVector3Array=padding.mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX]
+	var covered:=podium.mesh.get_aabb().size*podium.scale*.5
+	for vertex in vertices:
+		if vertex.y>.119 and (absf(vertex.x)>covered.x+.001 or absf(vertex.z)>covered.z+.001):
+			push_error("Open gap between tabletop insert and upholstery");quit(1);return
+	for print_mesh in stage.sponsor_surfaces.values():
+		if print_mesh.cast_shadow!=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:
+			push_error("Printed artwork casts a floating sign shadow");quit(1);return
+	for step in stage.find_children("AccessStep*","MeshInstance3D",true,false):
+		if absf(step.position.y+step.mesh.get_aabb().position.y+6.20)>.001:
+			push_error("Access step does not reach the stage ground plane");quit(1);return
+	for i in range(1,5):
+		scene.show_scale_figures=false;scene.set_view(i)
+		if scene.actors[0].visible or scene.actors[1].visible:
+			push_error("Hidden figures reappear after camera switch");quit(1);return
+		if scene.table_accent.visible!=(i>=3):
+			push_error("Distance light leaks into the close cameras");quit(1);return
 	print("ARENA_HYBRID_PASS: painted 2D hall; no audience/architecture geometry; 6 3D sponsor meshes; 4 cameras; table height")
 	quit(0)

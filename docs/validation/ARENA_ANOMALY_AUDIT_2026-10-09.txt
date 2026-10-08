@@ -1,0 +1,46 @@
+BACKENBEBEN - genaue Arena-Pruefung, 09.10.2026
+
+Umfang: aktuelle hybride Arena-Vorschau. Keine erneute Gesamtspiel-/Netzwerk-
+abnahme behauptet. Unveraenderter Matchstart und Serverphysik.
+
+BEFUNDE UND KORREKTUREN
+1. Schwarze Linien neben AdiHash: Rand der Originalgrafik blieb nach Weissmaske
+   sichtbar. Nur 0.6% rechts und 0.3% unten am Quellrand im Shader ausgeblendet.
+   Kein Neuzeichnen des Originalmotivs. In nativer Pultnahaufnahme Linie entfernt.
+2. Bodendrucke schwebten 0.03 Einheiten ueber der Mattenoberseite. Abstand auf
+   0.003 reduziert, noch positiv gegen Z-Fighting. Alle sechs Druckmeshes werfen
+   weiterhin keinen eigenen Schatten.
+3. Tischinsert zu schmal entlang der kurzen Achse: oberer Polsterring Z-Radius
+   0.3572, bisheriges Insert 0.335. Insert auf passenden Radius erweitert; gleiche
+   Pultoberkante, kein offener Spalt. Geometrischer Regressionstest prueft, dass
+   jeder obere Ringpunkt von der Tischoberseite abgedeckt ist.
+4. Stufen hatten keinen engen Schatten im gemalten Boden. Zusaetzliche projizierte
+   Kontaktflaeche fuer den echten Treppenfussabdruck. Native Gesamtansicht gesichtet.
+5. Referenzformat der Vorschau explizit 1600x900 statt Projektstandard 1280x800.
+   Fensteraenderungen erhalten nun gemeinsam die Kulissen-/Kamerakomposition.
+   Breitbild fuellt passend; 5:4 und Hochformat zeigen erwartete schwarze Raender.
+
+VALIDIERUNG
+Neu gebackene Plattform und erweiterter ARENA_HYBRID_PASS erfolgreich.
+Zusaetzliche geometrische Checks: geschlossener Anschluss des Tischinserts,
+Drucke ohne Schatten, alle Stufen bis zur Bodenhoehe -6.20.
+Vier Kamerawechsel mit ausgeblendeten Figuren: bleiben verborgen; Tischakzent
+nur in 3/4. Keine duplizierte Geometrie, sechs Sponsor-Meshes, keine 3D-Halle.
+Native Captures: vier Kameras und Detailaufnahmen. Pult/AdiHash und Gesamt mit
+Treppenschatten visuell kontrolliert. Isolierter Web-Export erfolgreich.
+Chromium: 1600x900, 1280x720, 1280x1024, 900x1200, jeweils alle vier Kameras:
+16 Ansichten, errors[]. Zusaetzlich Figuren aus/an, 16:9-Referenzbild und korrekte
+Tischakzent-Grenze geprueft. 5:4-Gesamt, Hochformat-Spiel und Kontaktbild gesichtet.
+Lokaler Bericht/Screenshots: logs/arena-web-preview/result.json und resize-*.png.
+Godot kann im Sandboxlauf user://-Logs/Shadercache nicht schreiben; Capture,
+Shaderkompilierung, Regression und Web-Export erfolgreich.
+
+VERBLEIBENDES VERBESSERUNGSPOTENZIAL
+Hoenhorst weiterhin nur 237x96-Fotovorlage; Firmen-/Websitefrage unbeantwortet.
+Kleine Sponsorunterzeilen sind aus grosser Entfernung nicht vollstaendig lesbar.
+Fixe gemalte Hallenperspektive ist fuer feste Ansichten gedacht; freie Kamerafahrt
+ist ein Designwerkzeug und kann die 2D-Kulisse nicht geometrisch rekonstruieren.
+Figuren sind Platzhalter aus dem Spielrig. Charakterdetails und Auffaenger gehoeren
+nicht zu dieser Arena-Abnahme. Nutzerfreigabe des Looks steht weiterhin aus.
+Keine weiteren klar belegten Fehler in den geprueften Bildern gefunden; die
+Pruefung belegt nicht Fehlerfreiheit fuer beliebige freie Kamerapositionen.

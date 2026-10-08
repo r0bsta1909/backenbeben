@@ -16,8 +16,10 @@ uniform vec4 substrate_color : source_color = vec4(.13,.15,.14,1.0);
 uniform float substrate_mix = 0.0;
 uniform float ink_aging = 0.0;
 uniform float ink_gain = 1.0;
+uniform vec2 border_trim = vec2(0.0);
 void fragment() {
     vec2 source_uv=UV*uv_scale+uv_offset;
+    if(source_uv.x>1.0-border_trim.x || source_uv.y>1.0-border_trim.y)discard;
     if(vertical_church) {
         bool cross=UV.x>.35 && UV.x<.65 && UV.y>.05 && UV.y<.58;
         bool text=UV.x>.09 && UV.x<.91 && UV.y>.70 && UV.y<.905;
