@@ -44,4 +44,14 @@ class ReferenceTissue(Tissue):
                 dl=(-error-av*lv[ids])/denom;lv[ids]+=dl
                 p[indices]+=gradients*(dl[:,None]*w[indices])[:,:,None]
             if project_contact is not None:project_contact(self)
+        # Measure the actual compliant equation, not deformation alone.
+        edge_residual=np.linalg.norm(p[self.ei]-p[self.ej],axis=1)-self.el+alpha*le
+        q=p[self.ti];a,b,c,d=[q[:,i] for i in range(4)]
+        gb=np.cross(c-a,d-a)/6;gc=np.cross(d-a,b-a)/6;gd=np.cross(b-a,c-a)/6
+        gradients=np.stack((-gb-gc-gd,gb,gc,gd),axis=1)
+        volume_residual=np.sum((b-a)*np.cross(c-a,d-a),axis=1)/6-self.tv+av*lv
+        gradient_norm=np.sqrt(np.sum(gradients*gradients,axis=(1,2)))
+        self.residuals={'edge_m':float(np.max(np.abs(edge_residual))),
+                        'volume_m3':float(np.max(np.abs(volume_residual))),
+                        'volume_equivalent_m':float(np.max(np.abs(volume_residual)/np.maximum(gradient_norm,1e-15)))}
         self.v=(p-old)/dt

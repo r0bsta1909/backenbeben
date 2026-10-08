@@ -178,3 +178,8 @@ Kontaktlabor: Gauss-Seidel-Referenz bestaetigt starken numerischen Restfehler.
 12->96 Iterationen senken Peak 6.68->0.77 mm. Zwei neue Referenztests bestanden.
 Naechste Aufgabe sind explizite Constraint-Residuen/Konvergenzmessung; noch
 keine Integration oder Behauptung physikalisch korrekter Gewebeweichheit.
+
+Physikreferenz misst nun explizite Kanten-/Volumenresiduen. Hohe Iterationszahl
+reduziert diese, behebt aber die dynamische Schrittweitenabhaengigkeit noch
+nicht. Messdaten/naechste Schritte in COUPLED_CONTACT_PLAN.txt. Spielpfad
+unveraendert; keine Freigabe der experimentellen Kontaktkopplung.

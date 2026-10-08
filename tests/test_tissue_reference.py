@@ -15,4 +15,5 @@ class ReferenceTests(unittest.TestCase):
   result=run(speed=0,duration=.025,reference=True)
   self.assertEqual(result['peak_deformation_m'],0)
   self.assertEqual(result['contact_steps'],0)
+  for residual in result['residual_peaks'].values():self.assertLess(residual,1e-12)
   self.assertEqual(result['final_hand_velocity'],[0.,0.,0.])

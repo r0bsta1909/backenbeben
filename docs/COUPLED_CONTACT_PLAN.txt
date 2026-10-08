@@ -74,3 +74,25 @@ Weichere Volumenparameter allein beheben das nicht. Keine Matchintegration.
 Naechster Schritt: Residuen C+alpha*lambda pro Constraintfamilie und Kontakt
 messen; adaptive Konvergenzstudie von tatsaechlicher Materialnachgiebigkeit
 trennen. Erst danach Laufzeitoptimierung, Handfeder und Flaechenkopplung.
+
+RESIDUENMESSUNG
+Referenzsolver misst nach jedem Substep C+alpha*lambda fuer Kanten und Volumen.
+Volumenresiduum wird zusaetzlich durch die Gradientennorm geteilt und als
+linearisierte aequivalente Laenge angegeben, nicht als gemessene Eindringtiefe.
+Kontaktabstand wird weiterhin separat gemessen. Ruhezustandstest umfasst nun
+auch Residuen <1e-12; beide Referenztests bestanden.
+240 Hz, Volumencompliance 1e-15, 0.08 s Messfenster:
+12/48/192 Iterationen: maximale Kantenresiduen 5.602/1.392/0.177 mm;
+aequivalente Volumenresiduen 4.522/1.307/0.082 mm. Dieser quantitative Befund
+bestaetigt erhebliche unaufgeloeste Constraints bei niedriger Iterationszahl.
+
+Weichere Einstellung (Volumencompliance 1e-9), 192 Iterationen:
+240 Hz: Peak 3.058 mm, Kantenrest 0.0933 mm, Rueckprall 0.253 m/s.
+480 Hz: Peak 4.283 mm, Kantenrest 0.00175 mm, Rueckprall 0.484 m/s.
+Schrittweitenabhaengigkeit bleibt also selbst bei kleinen Residuen relevant;
+Iterationsfehler ist nicht die einzige Ursache. Laufzeit 10.7/20.4 s fuer
+0.08 s Simulation ist ungeeignet fuer das Spiel. Kein Gate bestanden.
+Naechste Versuche: feinere zeitliche Referenz fuer den kurzen Kontakt und
+adaptive Iterationsabbruchkriterien; anschliessend bedingte Substeps waehrend
+Kontakt. Materialwerte nicht zum Kaschieren numerischer Fehler nachstimmen.
+Nachweise: validation/coupled-residuals.json und coupled-soft-residuals.json.

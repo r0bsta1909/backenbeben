@@ -16,7 +16,7 @@ def run(speed=1.,fps=240,duration=.5,reference=False,iterations=12,volume_compli
     # Single surface node is a deliberately exact embedding for this first lab.
     index=3*NX+7;weights=np.zeros(len(tissue.p));weights[index]=1.
     hand=tissue.rest[index]+np.array([.015,0.,0.]);velocity=np.array([-speed,0.,0.])
-    dt=1/fps;frames=[];peak=0.;min_gap=1.;contacts=0
+    dt=1/fps;frames=[];peak=0.;min_gap=1.;contacts=0;residual_peaks={}
     for step in range(round(duration*fps)):
         previous=hand.copy();hand+=velocity*dt;multiplier=0.
         def contact(cage):
@@ -24,13 +24,14 @@ def run(speed=1.,fps=240,duration=.5,reference=False,iterations=12,volume_compli
             hand,corrected,multiplier=project_contact(hand,cage.p,1/.18,cage.w,weights,[1,0,0],dt,0.,multiplier)
             cage.p[:]=corrected
         tissue.step(dt,project_contact=contact)
+        for key,value in getattr(tissue,"residuals",{}).items():residual_peaks[key]=max(residual_peaks.get(key,0.),value)
         velocity=(hand-previous)/dt
         gap=float(hand[0]-tissue.p[index,0]);min_gap=min(min_gap,gap)
         peak=max(peak,float(np.max(np.linalg.norm(tissue.p-tissue.rest,axis=1))))
         contacts+=multiplier>0
         frames.append({'time':(step+1)*dt,'hand':hand.tolist(),'contact_node':tissue.p[index].tolist(),'gap':gap,'lambda':multiplier})
     return {'reference':reference,'iterations':iterations,'units':'metres, kilograms, seconds','fps':fps,'speed':speed,'peak_deformation_m':peak,
-            'minimum_gap_m':min_gap,'contact_steps':contacts,'final_hand_velocity':velocity.tolist(),
+            'residual_peaks':residual_peaks,'minimum_gap_m':min_gap,'contact_steps':contacts,'final_hand_velocity':velocity.tolist(),
             'solve_ms':(time.perf_counter()-started)*1000,'frames':frames}
 
 if __name__=='__main__':

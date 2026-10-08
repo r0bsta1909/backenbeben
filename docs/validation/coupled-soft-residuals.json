@@ -1,0 +1,46 @@
+{
+  "240": {
+    "reference": true,
+    "iterations": 192,
+    "units": "metres, kilograms, seconds",
+    "fps": 240,
+    "speed": 1.0,
+    "peak_deformation_m": 0.00305764239365576,
+    "residual_peaks": {
+      "edge_m": 9.325811961372765e-05,
+      "volume_m3": 1.5424379822657792e-08,
+      "volume_equivalent_m": 1.7335081495158057e-05
+    },
+    "minimum_gap_m": 0.0,
+    "contact_steps": 5,
+    "final_hand_velocity": [
+      0.2534104472695742,
+      0.0,
+      0.0
+    ],
+    "solve_ms": 10673.196499999904,
+    "volume_compliance": 1e-09
+  },
+  "480": {
+    "reference": true,
+    "iterations": 192,
+    "units": "metres, kilograms, seconds",
+    "fps": 480,
+    "speed": 1.0,
+    "peak_deformation_m": 0.004282701205714264,
+    "residual_peaks": {
+      "edge_m": 1.7494296306650283e-06,
+      "volume_m3": 4.7847485705237915e-11,
+      "volume_equivalent_m": 5.327415665281124e-08
+    },
+    "minimum_gap_m": 0.0,
+    "contact_steps": 7,
+    "final_hand_velocity": [
+      0.484116233645675,
+      0.0,
+      0.0
+    ],
+    "solve_ms": 20366.92210000183,
+    "volume_compliance": 1e-09
+  }
+}

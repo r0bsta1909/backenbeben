@@ -1,0 +1,65 @@
+{
+  "12": {
+    "reference": true,
+    "iterations": 12,
+    "units": "metres, kilograms, seconds",
+    "fps": 240,
+    "speed": 1.0,
+    "peak_deformation_m": 0.006680560623414101,
+    "residual_peaks": {
+      "edge_m": 0.0056018871836223776,
+      "volume_m3": 4.062985864168378e-06,
+      "volume_equivalent_m": 0.004522430771746656
+    },
+    "minimum_gap_m": -1.3877787807814457e-17,
+    "contact_steps": 8,
+    "final_hand_velocity": [
+      0.49439663144922985,
+      0.0,
+      0.0
+    ],
+    "solve_ms": 1103.9936999986821
+  },
+  "48": {
+    "reference": true,
+    "iterations": 48,
+    "units": "metres, kilograms, seconds",
+    "fps": 240,
+    "speed": 1.0,
+    "peak_deformation_m": 0.001994036141532811,
+    "residual_peaks": {
+      "edge_m": 0.001392445745474521,
+      "volume_m3": 1.178795614049199e-06,
+      "volume_equivalent_m": 0.0013065541220465405
+    },
+    "minimum_gap_m": 0.0,
+    "contact_steps": 4,
+    "final_hand_velocity": [
+      0.2395185528876964,
+      0.0,
+      0.0
+    ],
+    "solve_ms": 2625.2758000009635
+  },
+  "192": {
+    "reference": true,
+    "iterations": 192,
+    "units": "metres, kilograms, seconds",
+    "fps": 240,
+    "speed": 1.0,
+    "peak_deformation_m": 0.0001543273430280848,
+    "residual_peaks": {
+      "edge_m": 0.0001769632088228553,
+      "volume_m3": 6.920796755290541e-08,
+      "volume_equivalent_m": 8.175007919171724e-05
+    },
+    "minimum_gap_m": 0.0,
+    "contact_steps": 3,
+    "final_hand_velocity": [
+      0.030434729498626245,
+      0.0,
+      0.0
+    ],
+    "solve_ms": 10279.735700001766
+  }
+}
