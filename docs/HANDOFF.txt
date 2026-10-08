@@ -1960,3 +1960,20 @@ Goalaktiv. NaechsterG5-Schritt: erreichbarenKOmitNORMALERSpielbalance pruefen;
 bisherigerStandardpaketkampf10Treffer endeteohneKO,KO-Testsmitbeschleunigter
 Testbalance. Das ersetztkeinenNachweisderErreichbarkeitimnormalenSpiel.
 Gesamtstil/menschlicheVerstaendlichkeit/physikalischeModellgrenzenweiteroffen.
+
+G5 KO MIT STANDARD-BALANCE ERREICHBAR
+Grundschaden35 statt25; KO100, Anspannen450ms/35%, Erholung6, Zug25s und
+maximal5Schlagpaare unveraendert. Produktionssolver-Reihe mit verletzterGeometrie:
+35 erreicht bei3starken ungeschuetztenTreffern KO; bei5durchgehendangespannten
+Treffern keinKO. BegrenzteTestreihe, keineglobaleBalancegarantie.
+EchterLAN-Browserkampf mit --skilled-standard PASS: Standardwerte vollstaendig
+vomHost verifiziert, schnellerMauszug mit explizit-15Grad/Hohe.64. KO-Aufzeichnung,
+Ruecklauf, ersterTrefferangespannt, identischeClips, Resume, Revanche/Reset PASS.
+Browsererrors[]. 165PythonTests PASS, Webexport PASS.
+Testfehler behoben:24sequenziellePointerbefehle dauerten~2s statt350ms; nun4echte
+Pointerbewegungen, gemesseneDauer~.4s. KeineZeitstempelmanipulation/Schlag-RPC.
+TestbewahrtvorherigeAdminwerte undsichertDiagnoseinkl.tatsaechlicherWS-Eingaben.
+Beleg validation/standard-balance-ko.json/png. Gesamtstil/menschlicheBedienabnahme
+undZwei-PC-Nachweis weiteroffen. V10Download enthaelt dieseAenderung NICHT.
+CheckoutHost8877Session8664. Goalaktiv; naechsterSchritt aktuelleszusammenhaengendes
+Paket bauen undfrischpruefen, danachoffeneReferenz-/Bedienqualitaetweiterbearbeiten.

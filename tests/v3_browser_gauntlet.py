@@ -1,15 +1,18 @@
 """Two real browser clients, LAN HTTP, pointer input, recorded replay and resume."""
-import asyncio,json,socket,hashlib,sys,argparse
+import asyncio,json,socket,hashlib,sys,argparse,time
 from pathlib import Path
 from playwright.async_api import async_playwright
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"server"))
+from rules import DEFAULTS
 
 async def main():
     parser=argparse.ArgumentParser();parser.add_argument("--port",type=int,default=8877)
     options,_=parser.parse_known_args()
     assert 1 <= options.port <= 65535
     ip=next(i[4][0] for i in socket.getaddrinfo(socket.gethostname(),None,socket.AF_INET) if not i[4][0].startswith(('127.','169.254.')))
-    standard='--standard-balance' in sys.argv
-    balance={'base_damage':25 if standard else 45,'ko_threshold':100 if standard else 60,'turn_seconds':25 if standard else 60}
+    skilled='--skilled-standard' in sys.argv
+    standard=skilled or '--standard-balance' in sys.argv
+    balance=dict(DEFAULTS) if standard else dict(DEFAULTS,base_damage=45,ko_threshold=60,turn_seconds=60)
     url=f'http://{ip}:{options.port}';report={'url':url,'errors':[],'hits':[],'configuration':balance}
     async with async_playwright() as p:
         browser=await p.chromium.launch(executable_path=r'C:\Program Files\Google\Chrome\Application\chrome.exe',headless=True,args=['--enable-webgl'])
@@ -17,6 +20,12 @@ async def main():
         for _ in range(2):
             c=await browser.new_context(viewport={'width':1920,'height':1080})
             page=await c.new_page();pages.append(page)
+            def record_input(payload):
+                try:
+                    message=json.loads(payload)
+                    if message.get('action') in ('practice','slap'):report.setdefault('sent_inputs',[]).append(message)
+                except (ValueError,TypeError):pass
+            page.on('websocket',lambda ws:ws.on('framesent',record_input))
             page.on('pageerror',lambda e:report['errors'].append(str(e)))
             page.on('console',lambda m:report['errors'].append(m.text) if m.type=='error' else None)
             await page.goto(url);await page.wait_for_function('window.gameReady',timeout=60000)
@@ -25,20 +34,36 @@ async def main():
         async def admin(command):
             response=await a.request.post(f'http://localhost:{options.port}/api/admin',headers={'Origin':f'http://localhost:{options.port}'},data={'command':command})
             assert response.ok
+            return (await response.json())['reply']
+        original_balance=json.loads(await admin('get'))
         try:
             for key,value in balance.items():await admin(f'set {key} {value}')
+            assert json.loads(await admin('get'))==balance
+            report['skilled_standard']=skilled
             await a.locator('#nickname').fill('PALM PILOT');await b.locator('#nickname').fill('LAN CHALLENGER')
             await a.locator('#duel').click();await b.locator('#duel').click()
             async def state(page):return await page.evaluate('JSON.parse(renderState).state')
             async def stroke(page):
                 await page.bring_to_front();await page.wait_for_timeout(150)
-                await page.mouse.move(1920*.8,1080*.6);await page.mouse.down()
-                for i in range(12):
-                    await page.mouse.move(1920*(.8-.34/1.5*(i+1)/12),1080*.6)
-                    await page.wait_for_timeout(8)
+                height=.64 if skilled else .6
+                await page.mouse.move(1920*.8,1080*height)
+                if skilled:
+                    await page.wait_for_function('window.netArm?.pose',timeout=5000)
+                    tilt=await page.evaluate('netArm.tilt')
+                    steps=round((-15-tilt)/3)
+                    for _ in range(abs(steps)):await page.mouse.wheel(0,120 if steps>0 else -120)
+                    await page.wait_for_function('Math.abs(netArm.tilt+15)<.01')
+                await page.mouse.down()
+                started=time.perf_counter()
+                count=4 if skilled else 12
+                for i in range(count):
+                    if skilled:await asyncio.sleep(max(0,started+.35*(i+1)/count-time.perf_counter()))
+                    await page.mouse.move(1920*(.8-.34/1.5*(i+1)/count),1080*height)
+                    if not skilled:await page.wait_for_timeout(8)
+                report.setdefault('input_duration_ms',[]).append(round((time.perf_counter()-started)*1000,1))
                 await page.mouse.up()
                 await page.wait_for_timeout(100)
-                print('stroke',await page.locator('#toast').text_content(),flush=True)
+                print('stroke',report['input_duration_ms'][-1],await page.locator('#toast').text_content(),flush=True)
             for turn in range(12):
                 await a.wait_for_function("['aim','over'].includes(JSON.parse(renderState).state.phase)",timeout=15000)
                 s=await state(a)
@@ -64,6 +89,8 @@ async def main():
                 await attacker.wait_for_function("JSON.parse(renderState).state.phase==='impact'",timeout=10000)
                 hit=(await state(attacker))['event'];assert hit['damage']>0,hit
                 report['hits'].append(hit)
+                Path('logs/v3-duel-last-attempt.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
+                print('HIT',json.dumps({k:hit.get(k) for k in ('damage','quality','ko','braced','contact_class')}),flush=True)
                 await attacker.wait_for_function("JSON.parse(renderState).state.phase==='replay'",timeout=6000)
                 await defender.wait_for_function("JSON.parse(renderState).state.phase==='replay'",timeout=6000)
                 sa,sb=await state(a),await state(b);assert sa['replay_id']==sb['replay_id']
@@ -150,6 +177,7 @@ async def main():
             sa,sb=await state(a),await state(b)
             assert sa['phase']==sb['phase']=='over';assert sa['players']==sb['players'] and sa['winner']==sb['winner']
             assert report['hits'][0]['braced'];report['winner']=sa['winner']
+            if skilled:assert report.get('ko_body_recorded'), 'Standard skilled duel must reach KO'
             report['audio']=await a.evaluate('audioDiagnostics');assert report['audio']['played']>=2
             await a.screenshot(path='logs/v3-result.png')
             await a.locator('#rematch').click();await b.locator('#rematch').click()
@@ -168,7 +196,8 @@ async def main():
             Path(output).write_text(json.dumps(report,indent=2),encoding='utf-8')
             print(json.dumps(report,indent=2))
         finally:
-            await admin('set base_damage 25');await admin('set ko_threshold 100');await admin('set turn_seconds 25')
+            Path('logs/v3-duel-last-attempt.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
+            for key,value in original_balance.items():await admin(f'set {key} {value}')
             await browser.close()
 
 asyncio.run(main())

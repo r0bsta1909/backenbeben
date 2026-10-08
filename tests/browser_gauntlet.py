@@ -90,7 +90,7 @@ async def main():
         r=(await snapshot(a))['state']
         assert r['turn']==1 and r['revision']>old_rev and all(x['damage']==0 for x in r['players'])
         report['rematch_and_balance_revision']=True
-        await a.request.post('http://localhost:8765/api/admin',headers={'Origin':'http://localhost:8765'},data={'command':'set base_damage 25'})
+        await a.request.post('http://localhost:8765/api/admin',headers={'Origin':'http://localhost:8765'},data={'command':'set base_damage 35'})
         await b.close()
         await a.wait_for_function("JSON.parse(renderState).state.phase==='disconnected'",timeout=5000)
         report['disconnect']=True

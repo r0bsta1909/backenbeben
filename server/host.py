@@ -471,7 +471,7 @@ def main():
         url=f'http://localhost:{args.port}'
         addresses=lan_addresses()
         links='\n'.join(f'LAN: http://{address}:{args.port}' for address in addresses) or 'LAN: Keine aktive IPv4-Adresse gefunden. Netzwerkverbindung prüfen.'
-        print('\nBACKENBEBEN / HOST\n'+url+'\n'+links+'\nDiese LAN-Adresse auf dem Client öffnen.\nAdmin: help, get, set base_damage 25, save, load, reset, status\n',flush=True)
+        print('\nBACKENBEBEN / HOST\n'+url+'\n'+links+'\nDiese LAN-Adresse auf dem Client öffnen.\nAdmin: help, get, set base_damage 35, save, load, reset, status\n',flush=True)
         if not args.no_browser:asyncio.get_running_loop().call_later(1,webbrowser.open,url)
         if not args.no_console:
             import threading

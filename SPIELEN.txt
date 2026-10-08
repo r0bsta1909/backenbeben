@@ -81,7 +81,7 @@ BALANCING
 Im Host-Terminal eingeben oder im lokalen Browser BALANCING öffnen:
   help
   get
-  set base_damage 25
+  set base_damage 35
   set brace_window_ms 450
   set brace_reduction 0.35
   set recovery 6

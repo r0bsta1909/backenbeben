@@ -1,0 +1,1178 @@
+{
+  "browser": {
+    "url": "LAN HTTP / two browser contexts on one PC",
+    "errors": [],
+    "hits": [
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 18.43,
+        "quality": 0.81,
+        "braced": true,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "5c3441046999fe8445c1"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 32.13,
+        "quality": 0.918,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "3477f9674637460084e1"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 26.44,
+        "quality": 0.7553,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "3bcf7d44be608f5f7f93"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 32.13,
+        "quality": 0.918,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "c20aa3bc147b7865ee04"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 33.84,
+        "quality": 0.9668,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "26bee0a8cb0397467328"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 29.94,
+        "quality": 0.8555,
+        "braced": false,
+        "side": "R",
+        "ko": true,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "d20a0a4ff0817f48899c"
+      }
+    ],
+    "configuration": {
+      "base_damage": 35.0,
+      "brace_window_ms": 450.0,
+      "brace_reduction": 0.35,
+      "recovery": 6.0,
+      "ko_threshold": 100.0,
+      "turn_seconds": 25.0,
+      "max_pairs": 5.0
+    },
+    "skilled_standard": true,
+    "single_tilt_control": true,
+    "input_duration_ms": [
+      404.8,
+      409.9,
+      442.7,
+      419.8,
+      482.3,
+      434.6,
+      433.3,
+      420.3,
+      481.6,
+      426.1,
+      439.0,
+      407.2
+    ],
+    "physics_backend": "coupled-moving",
+    "moving_head_brace_consistent": true,
+    "solved_normal_impulse_ns": 2.003901451930617,
+    "solved_quality_matches_hit": true,
+    "friction": {
+      "coefficient": 0.2,
+      "maximum_residual_m": 0.00024998066751855694,
+      "maximum_cone_error": 0.0
+    },
+    "recorded_arm_frames": 473,
+    "clip_hash": "43ccd35b46c018f4ccdd8ef457876de5fe7ba34cbd2c908a3ed5a9d861e3f67c",
+    "brace_expression_stable_in_paused_replay": true,
+    "replay": {
+      "clipId": "5c3441046999fe8445c1",
+      "frameCount": 337,
+      "peak": 0.056458999999999995,
+      "time": 0.591643,
+      "frame": 70,
+      "deformation": 0.05645890344
+    },
+    "replay_frame_ms_p95": 27.80000000000291,
+    "viewport": [
+      1920,
+      1080
+    ],
+    "msaa_3d": 1,
+    "resume": true,
+    "injury_material_rewind": true,
+    "ko_body_recorded": true,
+    "ko_reverse_seek": true,
+    "winner": 1,
+    "audio": {
+      "mode": "buffer-fallback",
+      "played": 8,
+      "unlocked": true
+    },
+    "rematch_material_reset": true,
+    "rematch": true,
+    "leave": true,
+    "limits": "Technical standard-balance KO reachability, not human usability acceptance or two physical PCs. KO remains a guided collapse, not full ragdoll."
+  },
+  "received_strike_series": {
+    "selected_input": {
+      "height": 0.64,
+      "tilt": -15,
+      "duration_ms": 350,
+      "class": "flat",
+      "geometric_quality": 0.918,
+      "normal_impulse_ns": 1.8934976134077222,
+      "quality": 0.8691
+    },
+    "series": [
+      {
+        "base_damage": 25,
+        "braced_every_strike": false,
+        "ko": false,
+        "fouls": 0,
+        "strikes": [
+          {
+            "strike": 1,
+            "before": {
+              "damage": 0.0,
+              "stun": 0.0,
+              "zones": {
+                "L": 0.0,
+                "R": 0.0
+              }
+            },
+            "after": {
+              "damage": 21.727,
+              "stun": 11.95,
+              "zones": {
+                "L": 0.0,
+                "R": 21.727
+              },
+              "side": "R"
+            },
+            "damage": 21.73,
+            "quality": 0.8691,
+            "class": "flat",
+            "normal_impulse_ns": 1.8934976134077222,
+            "ko": false
+          },
+          {
+            "strike": 2,
+            "before": {
+              "damage": 21.727,
+              "stun": 0,
+              "zones": {
+                "L": 0.0,
+                "R": 21.727
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 43.374,
+              "stun": 11.906,
+              "zones": {
+                "L": 0.0,
+                "R": 43.374
+              },
+              "side": "R"
+            },
+            "damage": 21.65,
+            "quality": 0.8659,
+            "class": "flat",
+            "normal_impulse_ns": 1.8865355807711008,
+            "ko": false
+          },
+          {
+            "strike": 3,
+            "before": {
+              "damage": 43.374,
+              "stun": 0,
+              "zones": {
+                "L": 0.0,
+                "R": 43.374
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 66.806,
+              "stun": 12.888,
+              "zones": {
+                "L": 0.0,
+                "R": 66.806
+              },
+              "side": "R"
+            },
+            "damage": 23.43,
+            "quality": 0.9373,
+            "class": "flat",
+            "normal_impulse_ns": 1.87462099406323,
+            "ko": false
+          },
+          {
+            "strike": 4,
+            "before": {
+              "damage": 66.806,
+              "stun": 0.8879999999999999,
+              "zones": {
+                "L": 0.0,
+                "R": 66.806
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 80.831,
+              "stun": 8.602,
+              "zones": {
+                "L": 0.0,
+                "R": 80.831
+              },
+              "side": "R"
+            },
+            "damage": 14.03,
+            "quality": 0.561,
+            "class": "flat",
+            "normal_impulse_ns": 1.5982936674597368,
+            "ko": false
+          },
+          {
+            "strike": 5,
+            "before": {
+              "damage": 80.831,
+              "stun": 0,
+              "zones": {
+                "L": 0.0,
+                "R": 80.831
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 83.466,
+              "stun": 1.449,
+              "zones": {
+                "L": 0.0,
+                "R": 83.466
+              },
+              "side": "R"
+            },
+            "damage": 2.63,
+            "quality": 0.1054,
+            "class": "glance",
+            "normal_impulse_ns": 1.419636844239647,
+            "ko": false
+          }
+        ]
+      },
+      {
+        "base_damage": 25,
+        "braced_every_strike": true,
+        "ko": false,
+        "fouls": 0,
+        "strikes": [
+          {
+            "strike": 1,
+            "before": {
+              "damage": 0.0,
+              "stun": 0.0,
+              "zones": {
+                "L": 0.0,
+                "R": 0.0
+              }
+            },
+            "after": {
+              "damage": 14.129,
+              "stun": 7.771,
+              "zones": {
+                "L": 0.0,
+                "R": 14.129
+              },
+              "side": "R"
+            },
+            "damage": 14.13,
+            "quality": 0.8695,
+            "class": "flat",
+            "normal_impulse_ns": 1.8942834485334654,
+            "ko": false
+          },
+          {
+            "strike": 2,
+            "before": {
+              "damage": 14.129,
+              "stun": 0,
+              "zones": {
+                "L": 0.0,
+                "R": 14.129
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 28.227,
+              "stun": 7.754,
+              "zones": {
+                "L": 0.0,
+                "R": 28.227
+              },
+              "side": "R"
+            },
+            "damage": 14.1,
+            "quality": 0.8676,
+            "class": "flat",
+            "normal_impulse_ns": 1.8903004798746075,
+            "ko": false
+          },
+          {
+            "strike": 3,
+            "before": {
+              "damage": 28.227,
+              "stun": 0,
+              "zones": {
+                "L": 0.0,
+                "R": 28.227
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 43.102,
+              "stun": 8.181,
+              "zones": {
+                "L": 0.0,
+                "R": 43.102
+              },
+              "side": "R"
+            },
+            "damage": 14.88,
+            "quality": 0.9154,
+            "class": "flat",
+            "normal_impulse_ns": 1.8834595772305278,
+            "ko": false
+          },
+          {
+            "strike": 4,
+            "before": {
+              "damage": 43.102,
+              "stun": 0,
+              "zones": {
+                "L": 0.0,
+                "R": 43.102
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 58.346,
+              "stun": 8.384,
+              "zones": {
+                "L": 0.0,
+                "R": 58.346
+              },
+              "side": "R"
+            },
+            "damage": 15.24,
+            "quality": 0.9381,
+            "class": "flat",
+            "normal_impulse_ns": 1.8762637095230894,
+            "ko": false
+          },
+          {
+            "strike": 5,
+            "before": {
+              "damage": 58.346,
+              "stun": 0,
+              "zones": {
+                "L": 0.0,
+                "R": 58.346
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 72.139,
+              "stun": 7.586,
+              "zones": {
+                "L": 0.0,
+                "R": 72.139
+              },
+              "side": "R"
+            },
+            "damage": 13.79,
+            "quality": 0.8488,
+            "class": "flat",
+            "normal_impulse_ns": 1.8491640737932757,
+            "ko": false
+          }
+        ]
+      },
+      {
+        "base_damage": 35,
+        "braced_every_strike": false,
+        "ko": true,
+        "fouls": 0,
+        "strikes": [
+          {
+            "strike": 1,
+            "before": {
+              "damage": 0.0,
+              "stun": 0.0,
+              "zones": {
+                "L": 0.0,
+                "R": 0.0
+              }
+            },
+            "after": {
+              "damage": 30.418,
+              "stun": 16.73,
+              "zones": {
+                "L": 0.0,
+                "R": 30.418
+              },
+              "side": "R"
+            },
+            "damage": 30.42,
+            "quality": 0.8691,
+            "class": "flat",
+            "normal_impulse_ns": 1.8934976134077222,
+            "ko": false
+          },
+          {
+            "strike": 2,
+            "before": {
+              "damage": 30.418,
+              "stun": 4.73,
+              "zones": {
+                "L": 0.0,
+                "R": 30.418
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 62.425,
+              "stun": 22.334,
+              "zones": {
+                "L": 0.0,
+                "R": 62.425
+              },
+              "side": "R"
+            },
+            "damage": 32.01,
+            "quality": 0.9145,
+            "class": "flat",
+            "normal_impulse_ns": 1.8816553572403227,
+            "ko": false
+          },
+          {
+            "strike": 3,
+            "before": {
+              "damage": 62.425,
+              "stun": 10.334,
+              "zones": {
+                "L": 0.0,
+                "R": 62.425
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 90.891,
+              "stun": 25.99,
+              "zones": {
+                "L": 0.0,
+                "R": 90.891
+              },
+              "side": "R"
+            },
+            "damage": 28.47,
+            "quality": 0.8133,
+            "class": "flat",
+            "normal_impulse_ns": 1.771970660998979,
+            "ko": true
+          }
+        ]
+      },
+      {
+        "base_damage": 35,
+        "braced_every_strike": true,
+        "ko": false,
+        "fouls": 0,
+        "strikes": [
+          {
+            "strike": 1,
+            "before": {
+              "damage": 0.0,
+              "stun": 0.0,
+              "zones": {
+                "L": 0.0,
+                "R": 0.0
+              }
+            },
+            "after": {
+              "damage": 19.781,
+              "stun": 10.88,
+              "zones": {
+                "L": 0.0,
+                "R": 19.781
+              },
+              "side": "R"
+            },
+            "damage": 19.78,
+            "quality": 0.8695,
+            "class": "flat",
+            "normal_impulse_ns": 1.8942834485334654,
+            "ko": false
+          },
+          {
+            "strike": 2,
+            "before": {
+              "damage": 19.781,
+              "stun": 0,
+              "zones": {
+                "L": 0.0,
+                "R": 19.781
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 39.501,
+              "stun": 10.846,
+              "zones": {
+                "L": 0.0,
+                "R": 39.501
+              },
+              "side": "R"
+            },
+            "damage": 19.72,
+            "quality": 0.8668,
+            "class": "flat",
+            "normal_impulse_ns": 1.8883777287536385,
+            "ko": false
+          },
+          {
+            "strike": 3,
+            "before": {
+              "damage": 39.501,
+              "stun": 0,
+              "zones": {
+                "L": 0.0,
+                "R": 39.501
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 60.868,
+              "stun": 11.752,
+              "zones": {
+                "L": 0.0,
+                "R": 60.868
+              },
+              "side": "R"
+            },
+            "damage": 21.37,
+            "quality": 0.9392,
+            "class": "flat",
+            "normal_impulse_ns": 1.878366442299153,
+            "ko": false
+          },
+          {
+            "strike": 4,
+            "before": {
+              "damage": 60.868,
+              "stun": 0,
+              "zones": {
+                "L": 0.0,
+                "R": 60.868
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 79.687,
+              "stun": 10.35,
+              "zones": {
+                "L": 0.0,
+                "R": 79.687
+              },
+              "side": "R"
+            },
+            "damage": 18.82,
+            "quality": 0.8272,
+            "class": "flat",
+            "normal_impulse_ns": 1.80211717239862,
+            "ko": false
+          },
+          {
+            "strike": 5,
+            "before": {
+              "damage": 79.687,
+              "stun": 0,
+              "zones": {
+                "L": 0.0,
+                "R": 79.687
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 82.033,
+              "stun": 1.29,
+              "zones": {
+                "L": 0.0,
+                "R": 82.033
+              },
+              "side": "R"
+            },
+            "damage": 2.35,
+            "quality": 0.1031,
+            "class": "glance",
+            "normal_impulse_ns": 1.3884958460804686,
+            "ko": false
+          }
+        ]
+      },
+      {
+        "base_damage": 40,
+        "braced_every_strike": false,
+        "ko": true,
+        "fouls": 0,
+        "strikes": [
+          {
+            "strike": 1,
+            "before": {
+              "damage": 0.0,
+              "stun": 0.0,
+              "zones": {
+                "L": 0.0,
+                "R": 0.0
+              }
+            },
+            "after": {
+              "damage": 34.764,
+              "stun": 19.12,
+              "zones": {
+                "L": 0.0,
+                "R": 34.764
+              },
+              "side": "R"
+            },
+            "damage": 34.76,
+            "quality": 0.8691,
+            "class": "flat",
+            "normal_impulse_ns": 1.8934976134077222,
+            "ko": false
+          },
+          {
+            "strike": 2,
+            "before": {
+              "damage": 34.764,
+              "stun": 7.120000000000001,
+              "zones": {
+                "L": 0.0,
+                "R": 34.764
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 71.312,
+              "stun": 27.221,
+              "zones": {
+                "L": 0.0,
+                "R": 71.312
+              },
+              "side": "R"
+            },
+            "damage": 36.55,
+            "quality": 0.9137,
+            "class": "flat",
+            "normal_impulse_ns": 1.8800087404588721,
+            "ko": false
+          },
+          {
+            "strike": 3,
+            "before": {
+              "damage": 71.312,
+              "stun": 15.221,
+              "zones": {
+                "L": 0.0,
+                "R": 71.312
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 84.768,
+              "stun": 22.622,
+              "zones": {
+                "L": 0.0,
+                "R": 84.768
+              },
+              "side": "R"
+            },
+            "damage": 13.46,
+            "quality": 0.3364,
+            "class": "flat",
+            "normal_impulse_ns": 1.3841652878502448,
+            "ko": true
+          }
+        ]
+      },
+      {
+        "base_damage": 40,
+        "braced_every_strike": true,
+        "ko": false,
+        "fouls": 0,
+        "strikes": [
+          {
+            "strike": 1,
+            "before": {
+              "damage": 0.0,
+              "stun": 0.0,
+              "zones": {
+                "L": 0.0,
+                "R": 0.0
+              }
+            },
+            "after": {
+              "damage": 22.607,
+              "stun": 12.434,
+              "zones": {
+                "L": 0.0,
+                "R": 22.607
+              },
+              "side": "R"
+            },
+            "damage": 22.61,
+            "quality": 0.8695,
+            "class": "flat",
+            "normal_impulse_ns": 1.8942834485334654,
+            "ko": false
+          },
+          {
+            "strike": 2,
+            "before": {
+              "damage": 22.607,
+              "stun": 0.4339999999999993,
+              "zones": {
+                "L": 0.0,
+                "R": 22.607
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 45.12,
+              "stun": 12.816,
+              "zones": {
+                "L": 0.0,
+                "R": 45.12
+              },
+              "side": "R"
+            },
+            "damage": 22.51,
+            "quality": 0.8659,
+            "class": "flat",
+            "normal_impulse_ns": 1.886593409614836,
+            "ko": false
+          },
+          {
+            "strike": 3,
+            "before": {
+              "damage": 45.12,
+              "stun": 0.8160000000000007,
+              "zones": {
+                "L": 0.0,
+                "R": 45.12
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 69.505,
+              "stun": 14.228,
+              "zones": {
+                "L": 0.0,
+                "R": 69.505
+              },
+              "side": "R"
+            },
+            "damage": 24.39,
+            "quality": 0.9379,
+            "class": "flat",
+            "normal_impulse_ns": 1.8758580833352874,
+            "ko": false
+          },
+          {
+            "strike": 4,
+            "before": {
+              "damage": 69.505,
+              "stun": 2.2279999999999998,
+              "zones": {
+                "L": 0.0,
+                "R": 69.505
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 78.842,
+              "stun": 7.363,
+              "zones": {
+                "L": 0.0,
+                "R": 78.842
+              },
+              "side": "R"
+            },
+            "damage": 9.34,
+            "quality": 0.3591,
+            "class": "flat",
+            "normal_impulse_ns": 1.477878196419088,
+            "ko": false
+          },
+          {
+            "strike": 5,
+            "before": {
+              "damage": 78.842,
+              "stun": 0,
+              "zones": {
+                "L": 0.0,
+                "R": 78.842
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 81.447,
+              "stun": 1.433,
+              "zones": {
+                "L": 0.0,
+                "R": 81.447
+              },
+              "side": "R"
+            },
+            "damage": 2.61,
+            "quality": 0.1002,
+            "class": "glance",
+            "normal_impulse_ns": 1.3489995788143783,
+            "ko": false
+          }
+        ]
+      }
+    ],
+    "limits": "Received-strike series, not a complete network duel. Opponent turns modeled only for defender recovery. Same gesture repeated; no automatic aiming correction."
+  },
+  "adaptive_base25_series": {
+    "selected_input": {
+      "height": 0.64,
+      "tilt": -15,
+      "duration_ms": 350,
+      "class": "flat",
+      "geometric_quality": 0.918,
+      "normal_impulse_ns": 1.8934976134077222,
+      "quality": 0.8691
+    },
+    "series": [
+      {
+        "base_damage": 25,
+        "braced_every_strike": false,
+        "ko": false,
+        "fouls": 0,
+        "strikes": [
+          {
+            "strike": 1,
+            "tilt": -15,
+            "before": {
+              "damage": 0.0,
+              "stun": 0.0,
+              "zones": {
+                "L": 0.0,
+                "R": 0.0
+              }
+            },
+            "after": {
+              "damage": 21.727,
+              "stun": 11.95,
+              "zones": {
+                "L": 0.0,
+                "R": 21.727
+              },
+              "side": "R"
+            },
+            "damage": 21.73,
+            "quality": 0.8691,
+            "class": "flat",
+            "normal_impulse_ns": 1.8934976134077222,
+            "ko": false
+          },
+          {
+            "strike": 2,
+            "tilt": -15,
+            "before": {
+              "damage": 21.727,
+              "stun": 0,
+              "zones": {
+                "L": 0.0,
+                "R": 21.727
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 43.374,
+              "stun": 11.906,
+              "zones": {
+                "L": 0.0,
+                "R": 43.374
+              },
+              "side": "R"
+            },
+            "damage": 21.65,
+            "quality": 0.8659,
+            "class": "flat",
+            "normal_impulse_ns": 1.8865355807711008,
+            "ko": false
+          },
+          {
+            "strike": 3,
+            "tilt": -15,
+            "before": {
+              "damage": 43.374,
+              "stun": 0,
+              "zones": {
+                "L": 0.0,
+                "R": 43.374
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 66.806,
+              "stun": 12.888,
+              "zones": {
+                "L": 0.0,
+                "R": 66.806
+              },
+              "side": "R"
+            },
+            "damage": 23.43,
+            "quality": 0.9373,
+            "class": "flat",
+            "normal_impulse_ns": 1.87462099406323,
+            "ko": false
+          },
+          {
+            "strike": 4,
+            "tilt": -15,
+            "before": {
+              "damage": 66.806,
+              "stun": 0.8879999999999999,
+              "zones": {
+                "L": 0.0,
+                "R": 66.806
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 80.831,
+              "stun": 8.602,
+              "zones": {
+                "L": 0.0,
+                "R": 80.831
+              },
+              "side": "R"
+            },
+            "damage": 14.03,
+            "quality": 0.561,
+            "class": "flat",
+            "normal_impulse_ns": 1.5982936674597368,
+            "ko": false
+          },
+          {
+            "strike": 5,
+            "tilt": -18,
+            "before": {
+              "damage": 80.831,
+              "stun": 0,
+              "zones": {
+                "L": 0.0,
+                "R": 80.831
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 87.986,
+              "stun": 3.935,
+              "zones": {
+                "L": 0.0,
+                "R": 87.986
+              },
+              "side": "R"
+            },
+            "damage": 7.16,
+            "quality": 0.2862,
+            "class": "flat",
+            "normal_impulse_ns": 1.324900552648627,
+            "ko": false
+          }
+        ]
+      },
+      {
+        "base_damage": 25,
+        "braced_every_strike": true,
+        "ko": false,
+        "fouls": 0,
+        "strikes": [
+          {
+            "strike": 1,
+            "tilt": -15,
+            "before": {
+              "damage": 0.0,
+              "stun": 0.0,
+              "zones": {
+                "L": 0.0,
+                "R": 0.0
+              }
+            },
+            "after": {
+              "damage": 14.129,
+              "stun": 7.771,
+              "zones": {
+                "L": 0.0,
+                "R": 14.129
+              },
+              "side": "R"
+            },
+            "damage": 14.13,
+            "quality": 0.8695,
+            "class": "flat",
+            "normal_impulse_ns": 1.8942834485334654,
+            "ko": false
+          },
+          {
+            "strike": 2,
+            "tilt": -15,
+            "before": {
+              "damage": 14.129,
+              "stun": 0,
+              "zones": {
+                "L": 0.0,
+                "R": 14.129
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 28.227,
+              "stun": 7.754,
+              "zones": {
+                "L": 0.0,
+                "R": 28.227
+              },
+              "side": "R"
+            },
+            "damage": 14.1,
+            "quality": 0.8676,
+            "class": "flat",
+            "normal_impulse_ns": 1.8903004798746075,
+            "ko": false
+          },
+          {
+            "strike": 3,
+            "tilt": -15,
+            "before": {
+              "damage": 28.227,
+              "stun": 0,
+              "zones": {
+                "L": 0.0,
+                "R": 28.227
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 43.102,
+              "stun": 8.181,
+              "zones": {
+                "L": 0.0,
+                "R": 43.102
+              },
+              "side": "R"
+            },
+            "damage": 14.88,
+            "quality": 0.9154,
+            "class": "flat",
+            "normal_impulse_ns": 1.8834595772305278,
+            "ko": false
+          },
+          {
+            "strike": 4,
+            "tilt": -15,
+            "before": {
+              "damage": 43.102,
+              "stun": 0,
+              "zones": {
+                "L": 0.0,
+                "R": 43.102
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 58.346,
+              "stun": 8.384,
+              "zones": {
+                "L": 0.0,
+                "R": 58.346
+              },
+              "side": "R"
+            },
+            "damage": 15.24,
+            "quality": 0.9381,
+            "class": "flat",
+            "normal_impulse_ns": 1.8762637095230894,
+            "ko": false
+          },
+          {
+            "strike": 5,
+            "tilt": -15,
+            "before": {
+              "damage": 58.346,
+              "stun": 0,
+              "zones": {
+                "L": 0.0,
+                "R": 58.346
+              },
+              "side": "R"
+            },
+            "after": {
+              "damage": 72.139,
+              "stun": 7.586,
+              "zones": {
+                "L": 0.0,
+                "R": 72.139
+              },
+              "side": "R"
+            },
+            "damage": 13.79,
+            "quality": 0.8488,
+            "class": "flat",
+            "normal_impulse_ns": 1.8491640737932757,
+            "ko": false
+          }
+        ]
+      }
+    ],
+    "adaptive_geometric_comparison": true,
+    "limits": "Received-strike series, not a complete network duel. Opponent turns modeled only for defender recovery. Adaptive option simulates up to two explicit three-degree wheel comparisons using geometric coverage, not future solved damage. No automatic aiming correction added to the game."
+  },
+  "python_tests": 165,
+  "input_test_correction": "24 sequential browser pointer commands took about 1.9-2.1 seconds instead of requested 350ms. Four real pointer moves give measured roughly 0.4-second strokes; no RPC strike injection or fabricated input timestamps."
+}
