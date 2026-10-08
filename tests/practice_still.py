@@ -1,14 +1,16 @@
-import asyncio,json,sys
+import asyncio,json,sys,argparse
 from pathlib import Path
 from playwright.async_api import async_playwright
 async def main():
+ parser=argparse.ArgumentParser();parser.add_argument("--port",type=int,default=8877)
+ options,_=parser.parse_known_args();assert 1<=options.port<=65535
  tips="--tips" in sys.argv
  suffix="-tips" if tips else ""
  tilt=-24 if tips else -18
  async with async_playwright() as p:
   browser=await p.chromium.launch(executable_path=r'C:\Program Files\Google\Chrome\Application\chrome.exe',headless=True)
   page=await browser.new_page(viewport={'width':1366,'height':768});errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
-  await page.goto('http://localhost:8877');await page.wait_for_function('window.gameReady',timeout=60000)
+  await page.goto(f'http://localhost:{options.port}');await page.wait_for_function('window.gameReady',timeout=60000)
   await page.locator('#training').click();await page.wait_for_function("state?.phase==='aim'")
   assert not await page.locator('#inspectPractice').is_visible()
   if tips:
