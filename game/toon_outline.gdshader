@@ -11,6 +11,6 @@ void vertex() {
     skin_position=p;
     NORMAL=deform_face_normal(p,NORMAL);
     p=deform_face(p);
-    VERTEX=p/geometry_scale-part_origin+normalize(NORMAL)*.00065;
+    VERTEX=p/geometry_scale-part_origin+normalize(NORMAL)*.0010;
 }
 void fragment() { ALBEDO=vec3(.012,.010,.017); }

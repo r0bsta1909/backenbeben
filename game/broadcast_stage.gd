@@ -89,10 +89,10 @@ func react_to_hit(time_since_contact: float, knockout: bool, hit: bool) -> void:
 func _ready() -> void:
 	crowd_rng.seed=1909
 	cube(Vector3(0,-5.5,0),Vector3(16,.25,15),Color("292d35"))
-	cube(Vector3(0,-.7,-7),Vector3(16,10,.15),Color("292e3a"))
+	cube(Vector3(0,-.7,-7),Vector3(16,10,.15),Color("141b27"))
 	# Enclose the arena for the broadcast side cameras as well as the ego view.
 	for side in [-1.0,1.0]:
-		cube(Vector3(side*8,-.7,2),Vector3(.15,10,30),Color("292e3a"))
+		cube(Vector3(side*8,-.7,2),Vector3(.15,10,30),Color("141b27"))
 		for tier in range(2):
 			var level: float=-1.8+tier*2.5
 			cube(Vector3(side*7,level-.55,0),Vector3(1.8,.20,12),Color("202127"))
@@ -106,7 +106,7 @@ func _ready() -> void:
 		var wash := OmniLight3D.new()
 		wash.position=Vector3(side*4.5,1.8,-4.5)
 		wash.light_color=Color("c3cbdc") if side<0 else Color("e4bd87")
-		wash.light_energy=2.2
+		wash.light_energy=.65
 		wash.omni_range=8.0
 		wash.omni_attenuation=.75
 		add_child(wash)

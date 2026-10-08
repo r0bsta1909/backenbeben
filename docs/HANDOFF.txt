@@ -1191,3 +1191,18 @@ numerische Restfehler, nicht als vollstaendig korrekte Anatomie ausgeben.
 Host8877 mit neuen Kontaktdaten neu gestartet, Execsession50074. GitHub-Release
 v0.4 bleibt gepruefter vorheriger Paketstand; Quellprojekt ist neuer. Naechster
 groesserer sichtbarer Schritt: Kopf/Haar/Kleidung und Arena an Referenz angleichen.
+
+G2 HAARFORM / GESICHTSZEICHNUNG / ARENALICHT
+Haarbueschel mit getrenntem Stirn-/Scheitel-/Seitenvolumen;104 statt76 Strahnen.
+Erste hohe Variante war sichtbar blockig und verworfen. Reduzierter Hub und
+gemeinsamer Kaemmverlauf ergeben zusammenhaengendere Silhouette. Gesichtstusche
+im Spielshader von.45 auf.65, Konturversatz.65mm auf1mm erhoeht. Hallenwaende
+dunkler und Architektur-Wash2.2 auf.65 reduziert. Blenderquelle/GLB/Vorschau
+regeneriert:81539Polygone. Charakter-/Hand-/Kontaktsamplepruefung PASS; Physik-
+kollisionsdateien unveraendert. Webbuild und abschliessender Browserkontaktcheck
+mit neun Ansichten, Mausrad/Posekamera, Replay-Ruecklauf/Crowd/Spiegel PASS,errors[].
+Front/Seite gesichtet; Referenzlook weiterhin offen, nicht zur fertigen Abnahme
+erklaert. Beleg validation/face-hair-style.json und face-hair-front/side.png.
+Host8877 weiterhin Session50074. Releasepaketv0.4 bleibt aelterer gepruefter Stand.
+Naechster Durchlauf sollte groessere offene Produktluecke bearbeiten: Kleidung/
+Arena und klare aktive Bedienfuehrung im echten Erstkontakt mit dem Spiel.

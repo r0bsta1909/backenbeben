@@ -1,0 +1,31 @@
+{
+  "changes": [
+    "Swept hair crest with shorter side locks; rejected overly raised first iteration",
+    "Face ink strength .45 to .65; contour offset .65mm to 1mm",
+    "Darker arena walls and lower architectural wash energy"
+  ],
+  "mesh_validation": "passed; head/hand collision data unchanged",
+  "browser": {
+    "idle_material_uploads_skipped": true,
+    "mirror_visibility_updates": true,
+    "pose_camera_and_wheel": true,
+    "crowd_reaction_and_rewind": true,
+    "jump_to_contact": true,
+    "side_camera": true,
+    "marker_toggle": true,
+    "no_stale_markers": true,
+    "errors": [],
+    "coupled": {
+      "backend": "coupled",
+      "solve_ms": 1377.0,
+      "peak": 0.004679,
+      "contact_diagnostics": {
+        "maximum_wrist_separation_m": 6.254715377246972e-06,
+        "maximum_penetration_m": 2.077401136922314e-06,
+        "unconverged_steps": 15,
+        "maximum_material_residual_m": 0.00012754184187849433
+      }
+    }
+  },
+  "visual_review": "Front and side viewed. More coherent swept hair, stronger face definition; still not a completed XIII reference match. Crowd, clothing and facial styling remain open."
+}

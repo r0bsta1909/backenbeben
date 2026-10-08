@@ -159,32 +159,34 @@ def scalp_direction(direction):
     direction=direction.normalized()
     return bvh.ray_cast(scalp_center+direction*.4,-direction)[0],direction
 
-for index in range(76):
+for index in range(104):
     theta=index*2.3999632297+rng.uniform(-.18,.18)
-    elevation=math.asin(.10+.88*(index+.5)/76)
+    elevation=math.asin(.10+.88*(index+.5)/104)
     base,normal=scalp_direction(Vector((math.sin(theta)*math.cos(elevation),math.sin(elevation),math.cos(theta)*math.cos(elevation))))
     if base is None or base.y<hairline(base)-.003:continue
-    comb=Vector((-.8,.08,-.6))
+    # A swept front crest, broken crown masses and close side strands have
+    # distinct volumes. Uniform locks previously read as a helmet silhouette.
+    front=base.z>.020 and base.y>.165
+    crown=base.y>.185
+    comb=Vector((-.8,.08,-.6)) if front else Vector((-.65,-.12,-.75))
     tangent=(comb-normal*comb.dot(normal)).normalized()
-    width=rng.uniform(.010,.018)
-    length=rng.uniform(.034,.057)
-    lift=rng.uniform(.006,.011)
-    if base.z>.035 and base.y>.17:
-        width*=1.2;length*=1.2;lift*=1.25
+    width=rng.uniform(.012,.021) if crown else rng.uniform(.006,.011)
+    length=rng.uniform(.055,.080) if front else rng.uniform(.028,.049)
+    lift=rng.uniform(.012,.018) if front else rng.uniform(.006,.010) if crown else rng.uniform(.002,.005)
     vv=[]
     for t in [0.,.30,.62,.84]:
         center,n=scalp_direction(base+tangent*length*t-scalp_center)
         if center is None:center=base;n=normal
         # Root is hidden by the cap. The lifted tip does not curve back to it.
-        center+=n*(-.001+lift*t)
+        center+=n*(-.003+lift*math.sin(t*math.pi*.80))
         across=n.cross(tangent).normalized()
         w=width*(1-t)**.8
-        ridge=.0015*(1-t)
+        ridge=.0012*(1-t)
         vv.extend([tuple(center-across*w),tuple(center-across*w*.22+n*ridge),
                    tuple(center+across*w*.22+n*ridge),tuple(center+across*w),tuple(center-n*.002)])
     tip,n=scalp_direction(base+tangent*length-scalp_center)
     if tip is None:tip=base+tangent*length;n=normal
-    vv.append(tuple(tip+n*(lift-.001)))
+    vv.append(tuple(tip+n*(lift*math.sin(math.pi*.80)-.001)))
     ff=[tuple(reversed(range(5)))]
     for k in range(3):
         for j in range(5):ff.append((k*5+j,k*5+(j+1)%5,(k+1)*5+(j+1)%5,(k+1)*5+j))

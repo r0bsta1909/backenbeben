@@ -37,7 +37,7 @@ void fragment() {
         vec3 paint=texture(face_ink,paint_uv).rgb;
         float paint_mask=smoothstep(.012,.065,local.z)*front_paint_weight;
         float ink=clamp(paint.r/.55,.055,1.2);
-        color*=mix(1.0,ink,paint_mask*.45);
+        color*=mix(1.0,ink,paint_mask*.65);
         float injury=skin_position.x<0.0?injury_left:injury_right;
         vec2 q=vec2(abs(skin_position.x),skin_position.y);
         float beard=(1.0-smoothstep(-.12,.0,q.y))*smoothstep(.05,.22,skin_position.z);
