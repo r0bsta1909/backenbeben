@@ -16,7 +16,7 @@ def rotation_vector(matrix):
     sine=np.linalg.norm(axis);angle=np.arctan2(sine,(np.trace(matrix)-1)*.5)
     return axis if sine<1e-12 else axis*(angle/sine)
 
-def run(fps=960,duration=.06,attached=False,compiled_embedding=True):
+def run(fps=960,duration=.06,attached=False,compiled_embedding=True,iterations=64):
     scored=score({'version':3,'points':[[.19+.34*i/40,.6,800*i/40,0,-15,0] for i in range(41)]})
     pose=min(scored['arm_path'],key=lambda r:abs(r['time']-scored['contact_time']))['pose']
     points=world_positions(pose,pose['finger_direction'],pose['palm_normal'])
@@ -34,7 +34,7 @@ def run(fps=960,duration=.06,attached=False,compiled_embedding=True):
         joint_velocity=np.clip(np.linalg.lstsq(jacobian,[-1.,0.,0.],rcond=None)[0],-11,11)
         initial_joint_velocity=joint_velocity.copy()
     else:hand.center[0]+=.003
-    cage=CompiledSideTissue();cage.prepare();cage.iterations=64;cage.residual_tolerance=1e-6
+    cage=CompiledSideTissue();cage.prepare();cage.iterations=iterations;cage.residual_tolerance=1e-6
     velocity=np.array([-1.,0.,0.]);angular_velocity=np.zeros(3);dt=1/fps
     if attached:
         future=np.asarray(arm.q)+joint_velocity*dt
@@ -43,7 +43,7 @@ def run(fps=960,duration=.06,attached=False,compiled_embedding=True):
         velocity=(future_center-hand.center)/dt
         angular_velocity=rotation_vector(future_rotation@hand.rotation.T)/dt
     initial_penetration=hand.penetration(cage)
-    frames=[];peak=0.;penetration=0.;contacts=0;wrist_error=0.;bond_residual=0.;started=time.perf_counter()
+    frames=[];peak=0.;penetration=0.;contacts=0;wrist_error=0.;bond_residual=0.;iteration_counts=[];unconverged=0;material_residual=0.;started=time.perf_counter()
     for step in range(round(duration*fps)):
         old_center=hand.center.copy();old_rotation=hand.rotation.copy()
         if attached:
@@ -56,6 +56,10 @@ def run(fps=960,duration=.06,attached=False,compiled_embedding=True):
             hand.project(tissue,dt)
         project.residual=lambda:max(hand.penetration(cage),bond.residual(dt) if attached else 0.)
         cage.step(dt,project_contact=project)
+        iteration_counts.append(cage.iterations_used)
+        current_material=max(cage.residuals['edge_m'],cage.residuals['volume_equivalent_m'])
+        material_residual=max(material_residual,current_material)
+        unconverged+=int(max(current_material,project.residual())>cage.residual_tolerance)
         if attached:
             joint_velocity=(np.asarray(arm.q)-old_q)/dt
             wrist_error=max(wrist_error,float(np.linalg.norm(bond.error()[:3])))
@@ -65,7 +69,7 @@ def run(fps=960,duration=.06,attached=False,compiled_embedding=True):
         peak=max(peak,float(np.max(np.linalg.norm(cage.p-cage.rest,axis=1))))
         penetration=max(penetration,hand.penetration(cage));contacts=max(contacts,hand.last_contacts)
         frames.append({'time':(step+1)*dt,'offsets':cage.replay_offsets(),'center':hand.center.tolist(),'rotation':hand.rotation.tolist(),'arm':arm.pose() if attached else None})
-    return {'compiled_embedding':compiled_embedding,'attached':attached,'initial_penetration_m':initial_penetration,'maximum_wrist_separation_m':wrist_error,'maximum_bond_residual_m':bond_residual,'initial_joint_velocity':initial_joint_velocity.tolist() if attached else None,'final_joint_velocity':joint_velocity.tolist() if attached else None,'fps':fps,'duration':duration,'hand_samples':len(points),'peak_active_contacts':contacts,
+    return {'iterations_cap':iterations,'iteration_counts':iteration_counts,'unconverged_steps':unconverged,'maximum_material_residual_m':material_residual,'compiled_embedding':compiled_embedding,'attached':attached,'initial_penetration_m':initial_penetration,'maximum_wrist_separation_m':wrist_error,'maximum_bond_residual_m':bond_residual,'initial_joint_velocity':initial_joint_velocity.tolist() if attached else None,'final_joint_velocity':joint_velocity.tolist() if attached else None,'fps':fps,'duration':duration,'hand_samples':len(points),'peak_active_contacts':contacts,
             'peak_deformation_m':peak,'maximum_penetration_m':penetration,'final_velocity':velocity.tolist(),
             'final_angular_velocity':angular_velocity.tolist(),'solve_ms':(time.perf_counter()-started)*1000,
             'side_cage':cage.replay_geometry(),'frames':frames,'hand_local':hand.local.tolist(),
@@ -73,7 +77,8 @@ def run(fps=960,duration=.06,attached=False,compiled_embedding=True):
 if __name__=='__main__':
     import argparse
     parser=argparse.ArgumentParser();parser.add_argument('--attached',action='store_true');parser.add_argument('--reference-embedding',action='store_true')
-    args=parser.parse_args();result=run(attached=args.attached,compiled_embedding=not args.reference_embedding)
+    parser.add_argument('--iterations',type=int,default=64);parser.add_argument('--duration',type=float,default=.06)
+    args=parser.parse_args();result=run(attached=args.attached,compiled_embedding=not args.reference_embedding,iterations=args.iterations,duration=args.duration)
     name='attached-side-contact' if args.attached else 'side-contact-lab'
     (ROOT/'logs'/f'{name}.json').write_text(json.dumps(result))
     summary={k:v for k,v in result.items() if k not in ['frames','side_cage','hand_local']}

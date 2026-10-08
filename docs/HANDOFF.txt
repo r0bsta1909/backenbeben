@@ -325,3 +325,30 @@ Weiterhin mehrere hundertmal langsamer als Echtzeit. Naechste Profilbereiche:
 Materialkernel mit vielen kleinen Arrayoperationen und numerischer
 Arm-Hand-Jacobian. Keine Genauigkeitsreduktion/Iterationskuerzung zur Kaschierung
 der Laufzeit. Physik-Konvergenz, flaechengefuehrter Schlag und Grafikgate offen.
+
+GEWEBEKERN MIT WIEDERVERWENDETEM SPEICHER UND KONVERGENZNACHWEIS
+Materialkernel ersetzt Arrayallokationen innerhalb der Kanten-/Tetraederschleife
+durch skalare Operationen und einmal angelegten Arbeitsspeicher. Reihenfolge,
+Formeln, Schwellen und Multiplikatorfortschreibung unveraendert. Alter Kernel
+als material_array_reference fuer Vergleiche erhalten. 24 Iterationen auf
+perturbiertem seitlichem Kaefig: alle Knoten und Multiplikatoren stimmen mit
+der Referenz innerhalb 1e-12 ueberein. Gekoppelter 0.012-s-Warmvergleich:
+5.059 s vorher, 3.395 s danach, alle aufgezeichneten Werte exakt identisch.
+Nachweis: validation/tissue-scratch-optimization.json. Vollsuite 63 Tests
+bestanden; anschliessend zusaetzlicher gekoppelter Integrationstest bestanden.
+Labor meldet nun Materialresiduum, Iterationszahlen und nicht konvergierte
+Zeitschritte. Bei Limit 96 (0.06 s): Handgelenkresiduum 8.31e-7 m, aber
+22 Schritte nicht konvergiert, Materialresiduum bis 1.50e-5 m. Das zuvor nur
+an der Handgelenkfeder gemessene Defizit war kein vollstaendiges Gewebegate.
+Bei Limit 384 (kritische erste 0.025 s): alle 24 Schritte konvergiert; 16..268
+Iterationen, Materialresiduum <=9.895e-7 m, Kopplung <=5.273e-8 m,
+Durchdringung <=6.874e-10 m. Laufzeit 16.0 s. Nachweise:
+validation/attached-contact-96.json und validation/attached-contact-384.json.
+Reproduzieren: scripts/run_side_contact_lab.py --attached --iterations 384
+--duration .025. Standardlimit bleibt explizit 64 fuer bisherige Vergleiche;
+kein allgemeines Konvergenzversprechen. test_coupled_contact_lab.py prueft
+den ersten tatsaechlich belasteten Schritt mit hoeherem Limit.
+Damit ist langsame Konvergenz dieses einzelnen Kontakts belegt, keine globale
+Physikabnahme. Weitere Treffervarianten, Zeitschrittverfeinerung, Muskelantrieb,
+Echtzeitlaufzeit und sichtbare Integration bleiben offen. Naechster Engpass:
+numerischer Arm-Hand-Jacobian; danach solverweite Reduktion des Python-Overheads.

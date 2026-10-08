@@ -1,0 +1,69 @@
+{
+  "iterations_cap": 384,
+  "iteration_counts": [
+    148,
+    156,
+    156,
+    160,
+    160,
+    148,
+    152,
+    148,
+    160,
+    160,
+    160,
+    160,
+    160,
+    160,
+    160,
+    268,
+    204,
+    148,
+    144,
+    140,
+    128,
+    100,
+    16,
+    24
+  ],
+  "unconverged_steps": 0,
+  "maximum_material_residual_m": 9.894513301528639e-07,
+  "compiled_embedding": true,
+  "attached": true,
+  "initial_penetration_m": 0.0,
+  "maximum_wrist_separation_m": 0.0026435360507128247,
+  "maximum_bond_residual_m": 5.2728885394353475e-08,
+  "initial_joint_velocity": [
+    -1.8996200585919927,
+    1.336272340719368,
+    -3.123360452458315
+  ],
+  "final_joint_velocity": [
+    1.9540029984630092,
+    1.292378374469374,
+    -0.6049975983328082
+  ],
+  "fps": 960,
+  "duration": 0.025,
+  "hand_samples": 114,
+  "peak_active_contacts": 4,
+  "peak_deformation_m": 0.0011365074895730517,
+  "maximum_penetration_m": 6.87340883503977e-10,
+  "final_velocity": [
+    0.6097828937720973,
+    0.49520101309399545,
+    -0.29678636044557005
+  ],
+  "final_angular_velocity": [
+    -0.19847171404778868,
+    -2.2465649204912057,
+    1.7697827369259018
+  ],
+  "solve_ms": 15997.995800000353,
+  "limits": [
+    "diagonal joint inertia, stationary torso, no active muscle drive",
+    "laboratory box inertia",
+    "no friction",
+    "not active in matches"
+  ]
+}

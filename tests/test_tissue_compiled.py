@@ -16,3 +16,17 @@ class CompiledTests(unittest.TestCase):
   np.testing.assert_allclose(a.p,b.p,atol=1e-12,rtol=0)
   np.testing.assert_allclose(ae,be,atol=1e-12,rtol=0)
   np.testing.assert_allclose(av,bv,atol=1e-12,rtol=0)
+
+ def test_scalar_kernel_matches_array_kernel_on_lateral_cage(self):
+  from tissue_compiled import CompiledTissue,material,material_array_reference
+  from side_cage import SideTissue
+  class SideCompiled(SideTissue,CompiledTissue):pass
+  t=SideCompiled();t.prepare()
+  a=t.p.copy();a+=np.random.default_rng(1909).normal(0,.0007,a.shape)*(t.w>0)[:,None]
+  b=a.copy();ae=np.zeros(len(t.ei));be=ae.copy();av=np.zeros(len(t.ti));bv=av.copy()
+  for _ in range(24):
+   material_array_reference(a,t.w,t.ei,t.ej,t.el,t.ti,t.tv,t.edge_order,t.volume_order,ae,av,6e-5*960**2,1e-9*960**2)
+   material(b,t.w,t.ei,t.ej,t.el,t.ti,t.tv,t.edge_order,t.volume_order,be,bv,6e-5*960**2,1e-9*960**2)
+  np.testing.assert_allclose(a,b,atol=1e-12,rtol=0)
+  np.testing.assert_allclose(ae,be,atol=1e-12,rtol=0)
+  np.testing.assert_allclose(av,bv,atol=1e-12,rtol=0)
