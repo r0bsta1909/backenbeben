@@ -43,7 +43,7 @@ var physics_material_updates := 0
 var emote_player := -1
 var emote_kind := 0
 var emote_remaining := 0.0
-var skins := [Color("cf946f"), Color("986345"), Color("683f30"), Color("e5b69a")]
+var skins := [Color("b48968"), Color("8c654e"), Color("634737"), Color("d2aa8c")]
 var shirts := [Color("6e242b"), Color("26354b"), Color("deb64c"), Color("534979")]
 var hairs := [Color("241b16"), Color("6b3624"), Color("b8afa0")]
 
@@ -141,8 +141,8 @@ func build_arena() -> void:
 	add_child(world)
 	var key := DirectionalLight3D.new()
 	key.rotation_degrees = Vector3(-30, -35, 0)
-	key.light_color = Color("ffe1b2")
-	key.light_energy = .85
+	key.light_color = Color("ffe9d2")
+	key.light_energy = .65
 	key.light_cull_mask = 1
 	key.shadow_enabled = true
 	key.directional_shadow_max_distance = 18.0
@@ -222,8 +222,9 @@ func build_mirror() -> void:
 	reflection = new_character(root)
 	prepare_materials(reflection)
 	var light := DirectionalLight3D.new()
-	light.rotation_degrees=Vector3(-20,-25,0)
-	light.light_energy=1.6
+	light.rotation_degrees=Vector3(-30,-35,0)
+	light.light_color=Color("ffe9d2")
+	light.light_energy=.65
 	root.add_child(light)
 	var mirror_env := WorldEnvironment.new()
 	mirror_env.environment=Environment.new()

@@ -2006,3 +2006,16 @@ PASS,errors[]. Gesunde/verletzte/Anspannansichtgesichtet; Beleg
 validation/brow-stubble-style.json plusdreiBilder. Gesamtstil/MenschabnahmeOFFEN.
 V11Download bleibtunveraendert vor diesemStilschritt. Goalaktiv. NaechsterFokus:
 Gesamteindruck vonBeleuchtung/Hauttoenen gegenReferenz, nichtnurGesichtsdetails.
+
+G2 GEDECKTE HAUTFARBEN UND ARENALICHT
+VierHautfarben b48968/8c654e/634737/d2aa8c ersetzenorangehellerePalette.
+Hauptlichtffe9d2/.65 stattffe1b2/.85; Spiegel nun gleicheHauptlichtfarbe/-richtung
+und.65 stattseparatemweissen1.6Licht. SpiegelweitervereinfachteeigeneSzene,keine
+physikalischeReflexion. Vorher/Nachher mitReferenz01 verglichen; gesunde/dunkle
+verletzteAnsicht undseitlicherBrowserkontaktgesichtet.
+32Haut/Seite/Verletzung/ResetRenderPASS, WebexportPASS, ganzerStandard-KO-Kampf
+inkl.Anspannen/Replayruecklauf/Resume/RevanchePASS,errors[]. Beleg
+validation/skin-light-style.json unddreiBilder. KeinePhysik-/Geometrieaenderung.
+Gesamtstil/BedienabnahmeweiterOFFEN; V11DownloadvorBrauen/Bart/Farbkorrektur.
+Goalaktiv. NaechsterSchrittG3: Probe-undHandneigungsbedienung alszusammenhaengenden
+Einstieg pruefen, besonders Blickwechsel zwischenHand,Wange,SeitenansichtundText.
