@@ -193,3 +193,7 @@ Kontaktreferenz weiter verfeinert bis 7680 Hz; Aenderung gegenueber 3840 Hz
 noch 2.8% Peak/4.4% Rueckprall. Spezialisierte Vektorrechnung lokal 22%
 schneller bei gleichen Iterationen/Positionen bis Rundung. Vier Referenztests
 bestanden; Solver noch nicht im Spiel. Details: COUPLED_CONTACT_PLAN.txt.
+
+Gruppen-Cache-Optimierung untersucht und verworfen: nur 1.4% lokaler Unterschied,
+kein belastbarer Speedgewinn. Referenzcode unveraendert. Naechste Richtung ist
+ein kompilierter Kernel mit Vergleich gegen die bestehende Referenz.

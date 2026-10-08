@@ -134,3 +134,14 @@ Nachweise: validation/coupled-fine.json und cross-optimization.json.
 Naechste Aufgabe: schnellere Ausfuehrung des verbleibenden Solverloops bei
 unveraenderten Residuenpruefungen; danach endliche Arm-Hand-Anbindung und
 mehrpunktiger Flaechenkontakt. Numerische Referenz fuer Vergleiche beibehalten.
+
+VERWORFENER CACHE-VERSUCH
+Nur 16 von 240 Volumenbedingungen sind vollstaendig fixiert; keine der 303
+Kantenbedingungen. Vorberechnung unveraenderlicher Gruppenwerte und Auslassen
+der fixierten Volumenbedingungen ergaben 1909.4 vs 1882.5 ms im lokalen
+Vergleich (ca. 1.4%). Positionen bitgleich, Iterationszahlen identisch, vier
+Referenztests bestanden. Das belegt keinen robusten praktischen Speedgewinn.
+Zusaetzliche Cacheimplementierung deshalb verworfen; Referenzsolver bleibt
+auf dem zuvor geprueften Stand. Messung: validation/batch-optimization.json.
+Naechste Richtung: kompilierter numerischer Kernel, separat gegen den erhaltenen
+NumPy-Referenzpfad vergleichen. Keine weiteren Mikro-Caches ohne Messbeleg.
