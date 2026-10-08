@@ -142,3 +142,16 @@ Assetvalidierung bestanden: beide Armhaeute zusammenhaengend, Gewichte gueltig,
 Kontakt-Replay, Kamerasprung und Markierungsschalter ohne Browserfehler.
 Echter Browsernachweis: docs/validation/hair-crown-contact.png und .json.
 Diese gezielte Grafikpruefung ersetzt keine erneute menschliche G7-Abnahme.
+
+ARENA: LICHTSTAFFELUNG
+Die fast schwarzen Wand- und Bodenmaterialien wurden angehoben. Zwei lokale
+warme/kuehle Lichtquellen hinter den Figuren beleuchten Tribuenen und Traversen;
+das Umgebungslicht betraegt jetzt .42. Charaktere verwenden weiterhin den
+separaten Comicshader. Das ist keine vollstaendig vereinheitlichte Beleuchtung.
+Kontakt-Replay im Browser geprueft, keine Fehler. Leistung mit zwei offenen
+1920x1080-Browseransichten auf RTX 2080: requestAnimationFrame-Abstaende p95
+13.9-14.0 ms in Ruhe, Bewegung, Treffer und Replay. Dies misst Frameabstaende,
+nicht isolierte GPU-Renderzeit; keine Zusage fuer andere Hardware.
+Bild und Messung: docs/validation/arena-light-contact.png und
+arena-light-performance.json. Publikum weiterhin einfache Silhouetten;
+Referenzqualitaet und menschliche Spielgefuehlsabnahme bleiben offen.

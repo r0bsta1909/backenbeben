@@ -132,7 +132,7 @@ func build_arena() -> void:
 	env.background_color = Color("131a29")
 	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	env.ambient_light_color = Color("a4b6cb")
-	env.ambient_light_energy = 0.18
+	env.ambient_light_energy = 0.42
 	world.environment = env
 	add_child(world)
 	var key := DirectionalLight3D.new()

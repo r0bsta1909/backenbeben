@@ -129,3 +129,7 @@ HAND_CONTACT_SURFACE.txt. Stil, gekoppelte Handnachgiebigkeit und G7 offen.
 Aktueller Art-Zwischenschritt: breite Haarstraehnen ueber dem ganzen Schaedel
 statt nur vorne. Quellasset und Browserbild geprueft; Anordnung noch zu
 regelmaessig. Details in LATERAL_REWORK.txt, G4/G5/G7 weiterhin offen.
+
+Arena-Lichtstaffelung verbessert und im Browser geprueft. Tribuenen verschwinden
+nicht mehr im Schwarz. Frameabstaende p95 13.9-14.0 ms auf RTX 2080; Details
+und echte Bilder in LATERAL_REWORK.txt / docs/validation/arena-light-*.
