@@ -1,0 +1,27 @@
+ARENA – TECHNISCHE VALIDIERUNG / 08.10.2026
+
+Godot 4.7.2, Compatibility/OpenGL, NVIDIA RTX 3090.
+ARENA_FINISHED_PASS: acht Werbeflaechen, 362 Zuschauer, Pultoberkante,
+Treffer/KO/Rewind/Wiederholung/Miss, Laden ohne erneuten Geometrieaufbau.
+Vier native Renderansichten gespeichert und visuell geprueft.
+Fehler bei Erstumsetzung korrigiert: Typinferenz, Pult-Fussluecke,
+verzerrte Logos, heller Logo-Hintergrund, geloeschte KFZ-Innenbuchstaben,
+Banner von Stahlstuetzen verdeckt, Schattenakne, ueberbelichtete Spielflaeche.
+Geometriespeicherung war anfangs im Dummy-Renderer unvollstaendig. Backen
+mit realem Renderer und erneutem Lade-/Rewindtest korrigierte diesen Fehler.
+
+Separater Web-Export erfolgreich. Chromium 1243, echtes WebGL,
+Browser-Viewport 1600x900; Vorschau folgt Godots Seitenverhaeltnis.
+Vier Kameras per Tastatur gewaehlt, Bilder gespeichert, acht Sponsoren und
+362 Zuschauer in jeder Ansicht bestaetigt. Keine JavaScript-/Konsolenfehler.
+Fehlendes favicon aus erstem Test durch vorhandenes exportiertes PNG ersetzt.
+Gemessene Frameintervalle p95 (Gesamt/Spiel/Kontakt/TV): 18.06 / 17.63 / 16.67 / 16.67 ms.
+Das sind lokale Browser-Frameintervalle mit VSync, keine GPU-Profilermessung,
+keine Garantie fuer andere Rechner oder die spaetere Kombination mit Matchphysik.
+
+Die Arena-Vorschau verwendet keinen Matchserver und veraendert main.tscn nicht.
+Die Pruefung ist kein vollstaendiger LAN-Spieltest und kein Spielrelease.
+Illustration und 3D-Version unterscheiden sich in konkreter Raumgeometrie und
+Publikumsdetails. Die menschliche optische Abnahme steht aus.
+Nachweise liegen lokal unter logs/arena-preview und logs/arena-web-preview;
+keine Rohlogs oder externen Referenzfotos werden publiziert.

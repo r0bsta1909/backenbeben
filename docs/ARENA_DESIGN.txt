@@ -1,0 +1,58 @@
+BACKENBEBEN – 3D-ARENA / 08.10.2026
+
+ZIEL UND UMFANG
+Die letzte vom Nutzer freigegebene Konzepttafel 05-arena-gesamtlook.png
+im lokalen Arena-Design-Ordner ist die optische Vorlage. Das vorherige
+Blockout ist zur ausgearbeiteten Arena erweitert: warme Industriehalle,
+Beton und Stahl, ovales gepolstertes Pult, ruhige matte Wettkampfflaeche,
+rote Einfassung, sechs Tribuenenreihen, Treppen, Gelaender, Wandlampen,
+Dachtrager und Lichttraverse, TV-Kameras, Produktionskisten und Kabel.
+362 sitzende Zuschauer mit Varianten, freien Sitzen, Haaren und Nasen.
+Comic-Materialien mit Konturen, Lichtstufen, sparsamen Gebrauchsspuren;
+warme Spielflaeche, kuehlere seitliche Zuschauer, dezenter Hallendunst.
+
+BENUTZUNG UND BEARBEITUNG
+Workspace START_ARENA.bat startet game/arena_preview.tscn.
+1 Spielkamera, 2 seitlicher Kontakt, 3 TV-Ansicht, 4 Gesamtansicht.
+WASD und Q/E bewegen die Kamera, rechte Maustaste dreht, H blendet Hinweise.
+game/arena_finished.tscn ist die komplette bearbeitbare Arena im Godot-Editor.
+Die neutralen Personen der Vorschau nutzen das vorhandene Spielrig als
+Massstabsfiguren. Charakter-Redesign ist nicht Teil dieser Arena-Arbeit.
+Der native Standard-Spielstart main.tscn und die Serverphysik sind unveraendert.
+
+BAUQUELLEN
+game/arena_final.gd baut die ausgearbeitete Geometrie und Lichtanlage.
+arena_blockout.gd liefert gemeinsame Werbe- und Geometrie-Helfer.
+Die gespeicherte Szene wird bei jedem Start geladen und erzeugt ihre
+Geometrie nicht erneut. Manuelle Editor-Aenderungen bleiben somit erhalten.
+Regenerieren nur bewusst: Godot mit echtem OpenGL-Renderer, --path game
+--script ../scripts/bake_arena.gd. Das ueberschreibt arena_finished.tscn.
+Nicht headless backen: der Dummy-Renderer speichert keine MultiMesh-Puffer.
+
+WERBUNG
+Acht Originaldateien aus dem vom Nutzer bereitgestellten WerbeLogos.zip
+liegen in game/assets/arena_sponsors. Werbung war in alten Projektplaenen
+zurueckgestellt; der aktuelle ausdrueckliche Nutzerauftrag autorisiert sie.
+Boden: AdiHash, Zahnersatz. Pult: INEOS. Podest: KFZ Koenig, Versino,
+Hoenhorst. Wand: Veltins und Katholische Kirche. Zentral BACKENBEBEN.
+Die Logos sind Texturen aus den gelieferten Dateien, keine KI-Neuzeichnung.
+Shader entfernen helle Foto-Hintergruende, bewahren KFZ-Innenbuchstaben
+und legen Kreuz/Text der Kirche im vertikalen Banner an. Auf dunklen
+Flaechen werden einzelne dunkle Druckfarben fuer Lesbarkeit aufgehellt.
+Die sehr kleine Hoenhorst-Datei und Versino-Unterzeile begrenzen weiterhin
+die Lesbarkeit. Kein Renderer kann fehlende Quelldetails rekonstruieren.
+Konzeptbilder und Power-Slap-Referenzfotos bleiben ausserhalb des Repos.
+
+TECHNISCHE PRUEFUNG UND GRENZEN
+tests/arena_finished.gd: acht Werbeflaechen, 362 Zuschauer, Pultoberkante,
+Treffer/KO/Rewind/Wiederholung/Miss und Laden ohne doppelte Geometrie.
+scripts/capture_arena_blockout.gd: vier echte OpenGL-Renderansichten.
+scripts/build_arena.ps1 erzeugt isolierte Web-Vorschau unter build/arena,
+ohne die Hauptprojekt-Konfiguration zu veraendern.
+scripts/check_arena_web.py prueft vier Kameras in echtem Chromium und
+schreibt Fehler, Framezeiten und Screenshots unter logs/arena-web-preview.
+Die Szene besitzt keine neue Gameplay-Kollision fuer Architektur: Zuschauer
+und Halle sind Kulisse. Integration in den Match-Start ist ein separater Schritt.
+Illustrationspanels sind keine metrischen Ansichten; ein gemeinsamer 3D-Raum
+vereinheitlicht Abweichungen. Automatische Tests ersetzen nicht die optische
+Abnahme des Nutzers. Dies ist kein neues Spielrelease.
