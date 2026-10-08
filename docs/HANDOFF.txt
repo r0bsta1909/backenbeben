@@ -968,3 +968,17 @@ Testhost8877 neu gestartet (Execsession89740). Arm-Pruefclips regeneriert.
 Totale gesichtet: sichtbare Aenderung klein, weiterhin stark abgewinkelte Wirkung.
 Kein G3-PASS. Naechster Eingriff muss Reichweite/Koerperstellung/Kameraperspektive
 zusammen betrachten, nicht Pole beliebig weiterdrehen. Neuer Goal bleibt aktiv.
+
+G3 RIGABGLEICH UND SEITLICHE TV-KAMERA
+arm_world_joints liefert tatsaechliche Skeleton-Gelenke in Hostmetern. Browseraudit
+vergleicht Schulter/Ellbogen/Wrist in allen9 Kontaktansichten gegen physicsFrame;
+Toleranz1e-5m bestanden. Bericht validation/rendered-arm-contact.json. Damit kein
+Gelenktransformationsfehler als Ursache der auffaelligen Verkürzung nachgewiesen.
+TV-Kamera blickte zuvor fast entlang des Unterarms; neue Position(4.8,.8,1.05),
+Ziel(0,-2,1.05), FOV65 zeigt seitlichen Armverlauf. Ego/nahe Dreiviertel bleiben
+FOV55. Erster Kameraversuch lag hinter Crowd und wurde nach Pixelkontrolle verworfen.
+Finale Seitenaufnahme gesichtet und als validation/lateral-contact-view.png gesichert:
+Armverlauf und seitliche Handlage besser lesbar, keine Crowdverdeckung des Kontakts.
+Webbuild und Replayaudit erfolgreich, errors[]. Kein G3-Gesamtpass: menschliche
+Verstaendlichkeit, Bewegungsablauf und Referenzstil weiterhin offen. Test prueft
+Gelenkpositionen, nicht jede deformierte Hautoberflaeche. Goal bleibt aktiv.

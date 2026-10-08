@@ -50,6 +50,7 @@ async def main():
   await page.wait_for_function('JSON.parse(physicsFrame).footprint.length===0')
   assert not await page.locator('#contactLegend').is_visible()
   if '--visual-contact' in sys.argv:
+   audit=[]
    for view in ('front','side','wide'):
     await page.locator('#replayCamera').select_option(view)
     for moment,label in ((.46,'before'),(.5,'contact'),(.54,'after')):
@@ -57,6 +58,11 @@ async def main():
      await page.wait_for_function('(s)=>{const f=JSON.parse(physicsFrame);return f.camera===s.view && Math.abs(f.time-s.time)<.002 && f.footprint.length===0}',arg={'view':view,'time':moment})
      await page.wait_for_timeout(200)
      await page.screenshot(path=f'logs/contact-audit-{view}-{label}.png')
+     record=await page.evaluate('({frame:JSON.parse(physicsFrame),rendered:godotStats.rendered_arm})')
+     record.update(camera=view,moment=label);audit.append(record)
+     for joint in ('shoulder','elbow','wrist'):
+      assert max(abs(a-b) for a,b in zip(record['frame']['arm']['pose'][joint],record['rendered'][joint]))<1e-5,(view,label,joint,record)
+   Path('logs/contact-arm-render-audit.json').write_text(json.dumps(audit,indent=2))
   await page.locator('#replayImpact').click()
   await page.locator('#replaySeek').evaluate('e=>{e.value=.7;e.dispatchEvent(new Event("input"))}')
   await page.wait_for_function('JSON.parse(physicsFrame).time>.6')

@@ -338,7 +338,7 @@ func _process(delta: float) -> void:
 			JavaScriptBridge.eval("window.contactSound=false")
 		mirror_focus=bool(JavaScriptBridge.eval("window.mirrorFocus || false",true))
 		AudioServer.set_bus_mute(0,bool(JavaScriptBridge.eval("window.muted || false",true)))
-		JavaScriptBridge.eval("window.godotStats="+JSON.stringify({"fps":Engine.get_frames_per_second(),"arm_data":hand_pose.has("arm"),"hand_wrist":str(hand.skeleton.get_bone_global_pose(hand.skeleton.find_bone("hand.R")).origin),"dragging":dragging,"samples":gesture.size(),"physics_time":physics_frame.get("time",-1),"physics_active":physics_frame.has("id"),"crowd_active":arena_stage.crowd_was_active,"camera_position":[camera.position.x,camera.position.y,camera.position.z],"mirror_draw_requests":mirror_draw_requests,"physics_material_updates":physics_material_updates,"muted":AudioServer.is_bus_mute(0)}))
+		JavaScriptBridge.eval("window.godotStats="+JSON.stringify({"fps":Engine.get_frames_per_second(),"arm_data":hand_pose.has("arm"),"rendered_arm":hand.arm_world_joints(),"hand_wrist":str(hand.skeleton.get_bone_global_pose(hand.skeleton.find_bone("hand.R")).origin),"dragging":dragging,"samples":gesture.size(),"physics_time":physics_frame.get("time",-1),"physics_active":physics_frame.has("id"),"crowd_active":arena_stage.crowd_was_active,"camera_position":[camera.position.x,camera.position.y,camera.position.z],"mirror_draw_requests":mirror_draw_requests,"physics_material_updates":physics_material_updates,"muted":AudioServer.is_bus_mute(0)}))
 	if appearance_timer>=.08:
 		appearance_timer=0
 		if state.has("players") and state.players.size()>1:
@@ -456,8 +456,9 @@ func drive_recorded_physics() -> void:
 	var side_view: bool = inspecting or (replaying and physics_frame.get("camera","") in ["side","wide"])
 	mirror_mount.visible=not (replaying or inspecting)
 	if replaying or inspecting:mirror_viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED
-	camera.position=Vector3(6.0,2.8,6.5) if wide_view else Vector3(3,.55,1.1) if side_view else Vector3(.30,.55,2.65)
-	camera.look_at(Vector3(0,-3.0,.4) if wide_view else Vector3(0,-.12,1.0) if side_view else Vector3(.22,-.18,0))
+	camera.position=Vector3(4.8,.8,1.05) if wide_view else Vector3(3,.55,1.1) if side_view else Vector3(.30,.55,2.65)
+	camera.fov=65.0 if wide_view else 55.0
+	camera.look_at(Vector3(0,-2.0,1.05) if wide_view else Vector3(0,-.12,1.0) if side_view else Vector3(.22,-.18,0))
 	hand.visible=true
 	hand.first_person(not side_view)
 	var defending_view: Node3D=fighter

@@ -230,3 +230,11 @@ func reset_all() -> void:
 	skeleton.reset_bone_poses()
 	has_pose=false
 	last_body=[]
+
+func arm_world_joints(side := "R") -> Dictionary:
+	var result: Dictionary={}
+	for pair in [["shoulder","upper_arm."+side],["elbow","forearm."+side],["wrist","hand."+side]]:
+		var index := skeleton.find_bone(pair[1])
+		var world := to_global(skeleton.get_bone_global_pose(index).origin)/unit_scale
+		result[pair[0]]=[world.x,world.y,world.z]
+	return result

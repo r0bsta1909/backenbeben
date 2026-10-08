@@ -1,0 +1,9 @@
+{
+  "views": 3,
+  "moments_per_view": 3,
+  "maximum_joint_error_m": 2.858118822168798e-08,
+  "contact_elbow_flex_deg": 41.6781066123632,
+  "browser_errors": [],
+  "human_acceptance": "open",
+  "scope": "Host joint positions versus rendered skeleton; not full surface collision validation"
+}
