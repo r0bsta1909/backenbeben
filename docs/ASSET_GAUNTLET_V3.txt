@@ -765,3 +765,22 @@ ungueltige Traegheit und explizite Nichtkonvergenz. Es bleibt diskreter Phasenfe
 Noch NICHT mit Kontaktsuche verbunden: deren konstante Weltwinkelgeschwindigkeit
 muss durch geeignete Bewegungsauswertung und sichere Geschwindigkeitsschranke
 ersetzt werden. Kein Arm-/Gewebedrehmoment, kein aktiver Matchsolver geaendert.
+
+SICHTBARE HELFER-RUHEPOSE STATT AUSGESTELLTER ARME
+Nach erneuter Sichtung der realen Front-/Kontaktansicht: Helferarme standen in
+Restpose seitlich ab und verdeckten die Gegnersilhouette. reach_toward startet
+nun an abgesenkter, koerperbezogener Handposition mit leicht entspannten Fingern.
+Beide Arme erhalten beim Aufbau eine Ruhepose; beim Auffangen bleibt der andere
+Arm abgesenkt. Kein Clear-all bei amount0 mehr, der andere Arm und Brustkorb
+werden dadurch nicht unbeabsichtigt zurueckgesetzt. Fingerorientierung geht
+kontinuierlich von unten zur Stuetzpose ueber.
+Godot-Webbuild erfolgreich; catcher_pose prueft Schulteranschluss, abgesenkten
+Wrist, kontinuierlichen Start und Replay-Rueckkehr fuer beide Arme. PASS.
+Browser replay_contact_view erfolgreich, errors[], Posekamera, Mausrad,
+Kontaktmarkierungen, Replay-Ruecklauf und Crowdreaktion unveraendert.
+Aktuelle Screenshots lokal logs/official-idle-front.png, contact-view.png und
+pose-inspection.png gesichtet. Arme sichtbar abgesenkt, aber grosse kantige
+Schulter-/Aermelformen verbleiben: Modell/Weights weiterhin visuell zu verbessern.
+Kein Nachweis, dass XIII-Artziel oder menschliche Verstaendlichkeit erreicht ist.
+Diese Aenderung betrifft sichtbare Kinematik; neuer physikalischer Laborpfad
+weiterhin separat und nicht in Match integriert.

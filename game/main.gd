@@ -523,6 +523,8 @@ func build_officials() -> void:
 				if base in ["Skin","FaceSkin"]:m.set_shader_parameter("base_color",skins[1].darkened(.20))
 				if base=="Hair":m.set_shader_parameter("base_color",Color("28262b") if i==0 else Color("58504b"))
 			if i==0 and str(node.name)=="HairCap":node.visible=false
+		actor.reach_toward(Vector3.ZERO,"L",0.0)
+		actor.reach_toward(Vector3.ZERO,"R",0.0)
 		actor.set_meta("home",actor.position)
 		officials.append(actor)
 
@@ -542,4 +544,5 @@ func update_officials(body: Array) -> void:
 			var bend := Basis(Vector3.FORWARD,float(body[3]))*Basis(Vector3.RIGHT,-float(body[2]))
 			var armpit := Vector3(-.18 if i==0 else .18,-.25,.025)
 			var support := (hip+drop+bend*(armpit-hip))*4.0
+			actor.reach_toward(Vector3.ZERO,"R" if i==0 else "L",0.0)
 			actor.reach_toward(support,"L" if i==0 else "R",catch_amount,Vector3.RIGHT if i==0 else Vector3.LEFT)
