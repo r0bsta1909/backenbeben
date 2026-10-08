@@ -1,0 +1,27 @@
+{
+  "geometry": "Sleeve cross-sections follow humerus instead of bent inset-root tangent; raised torso shoulder contour and inset sleeve root.",
+  "validation": "Character/closed hand/116 contact samples pass; native five-pose skeleton comparison pass; unchanged face and hand collision assets.",
+  "browser": {
+    "idle_material_uploads_skipped": true,
+    "mirror_visibility_updates": true,
+    "pose_camera_and_wheel": true,
+    "crowd_reaction_and_rewind": true,
+    "jump_to_contact": true,
+    "side_camera": true,
+    "marker_toggle": true,
+    "no_stale_markers": true,
+    "errors": [],
+    "coupled": {
+      "backend": "coupled",
+      "solve_ms": 1453.0,
+      "peak": 0.004645,
+      "contact_diagnostics": {
+        "maximum_wrist_separation_m": 6.3606328459373895e-06,
+        "maximum_penetration_m": 2.0733647294273745e-06,
+        "unconverged_steps": 15,
+        "maximum_material_residual_m": 0.0001290556447342085
+      }
+    }
+  },
+  "limitations": "Contour improvement only. Clothing creases, silhouette proportions and complete reference style remain open; no new human acceptance."
+}

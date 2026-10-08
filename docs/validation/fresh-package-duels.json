@@ -324,5 +324,10 @@
         "maximum_material_residual_m": 0.00015780912733322807
       }
     }
+  },
+  "published_download": {
+    "url": "https://github.com/r0bsta1909/backenbeben/releases/tag/v0.4.0-dev.20261008",
+    "sha256": "a34ab9bdb5c654c086d22de6723def80663d9d78a8113b632e77c99af92cfb98",
+    "matches_tested_archive": true
   }
 }

@@ -50,11 +50,11 @@ def curve(name, points, width, mat):
     bpy.ops.object.transform_apply(location=True,rotation=True,scale=True)
     return o
 
-def loft(name, rows, mat, n=32):
+def loft(name, rows, mat, n=32, section_axis=None):
     # rows: center, horizontal radius, depth radius. Normals follow the path.
     verts=[];faces=[]
     for j,(c,rx,rz) in enumerate(rows):
-        tangent=Vector(rows[min(j+1,len(rows)-1)][0])-Vector(rows[max(0,j-1)][0])
+        tangent=Vector(section_axis) if section_axis is not None else Vector(rows[min(j+1,len(rows)-1)][0])-Vector(rows[max(0,j-1)][0])
         tangent.normalize();depth=Vector((0,0,1));side=tangent.cross(depth).normalized()
         for i in range(n):
             a=i*math.tau/n;verts.append(Vector(c)+side*(rx*math.cos(a))+depth*(rz*math.sin(a)))
@@ -199,7 +199,7 @@ bpy.context.view_layer.objects.active=cap;bpy.ops.object.join();head_parts.appen
 head_parts.append(ell('MouthInterior',(0,-.025,.075),(.026,.009,.010),ink))
 head_parts.append(ell('Teeth',(0,-.026,.081),(.023,.004,.003),white))
 
-body=loft('Shirt',[((0,-.60,-.014),.175,.096),((0,-.51,-.012),.188,.106),((0,-.36,0),.22,.120),((0,-.23,0),.218,.117),((0,-.17,0),.218,.098),((0,-.125,0),.145,.070),((0,-.105,0),.054,.048)],shirt,64)
+body=loft('Shirt',[((0,-.60,-.014),.175,.096),((0,-.51,-.012),.188,.106),((0,-.36,0),.22,.120),((0,-.23,0),.218,.117),((0,-.145,0),.218,.085),((0,-.125,0),.145,.070),((0,-.105,0),.054,.048)],shirt,64)
 neck=loft('Neck',[((0,-.18,0),.070,.060),((0,-.12,0),.057,.05),((0,-.06,-.008),.049,.043)],skin)
 # A true crew-neck rim follows the neck opening instead of floating on the chest.
 collar_points=[(.056*math.cos(i*math.tau/48),-.107-.005*max(0,math.sin(i*math.tau/48)),.050*math.sin(i*math.tau/48)) for i in range(49)]
@@ -319,7 +319,9 @@ for sign,side in [(-1,'R'),(1,'L')]:
     hidden=[f for f in bm.faces if all((G(v.co)-sh).dot(upper)<.101 for v in f.verts)]
     bmesh.ops.delete(bm,geom=hidden,context='FACES');bm.to_mesh(arm.data);bm.free()
     arm_objects[arm.name]=(arm,None)
-    sleeve=loft('Sleeve.'+side,[(Vector((sign*.165,-.205,0)),.050,.045),(sh+upper*.020,.067,.060),(sh+upper*.080,.063,.056),(sh+upper*.135,.058,.051)],shirt)
+    # Sleeve sections stay perpendicular to the humerus. The inset root bends
+    # toward the chest; using that bend as its frame creates a raised horn.
+    sleeve=loft('Sleeve.'+side,[(Vector((sign*.180,-.150,0)),.040,.060),(sh+upper*.020,.067,.060),(sh+upper*.080,.063,.056),(sh+upper*.135,.058,.051)],shirt,section_axis=upper)
     arm_objects[sleeve.name]=(sleeve,'upper_arm.'+side)
     landmarks[side]={'shoulder':list(sh),'elbow':list(el),'wrist':list(wr),'palm_center':list(palm),'palm_normal':[0,0,1],'finger_direction':list(direction),'upper_length':(el-sh).length,'forearm_length':(wr-el).length,'palm_offset':.054}
 

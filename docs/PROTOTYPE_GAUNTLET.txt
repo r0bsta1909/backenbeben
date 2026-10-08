@@ -294,3 +294,19 @@ Finales Paket unterscheidet sich nur in SPIELEN.txt und Web-HTML; erneut entpack
 alle Dateien bytegenau verglichen, Browser-Replaycheck mit coupled erfolgreich.
 Beleg validation/fresh-package-duels.json mit Archivhash. G2/G3 bleiben offen,
 letzte menschliche Abnahme unverstaendlich. Naechster Schwerpunkt Figuren/Stil.
+
+G2 SCHULTERQUERSCHNITTE UND ANSCHLUSS KORRIGIERT
+Ursache der hochstehenden Aermel: Lofttangente am eingebogenen Ansatz kippte
+Querschnitt gegen Oberarmachse. Optionaler section_axis fixiert Aermelringe auf
+Humerus. Schulterkontur des Torsos und eingebetteter Ansatz anschliessend angepasst,
+da nur Achsenkorrektur noch deutlichen Einschnitt hinterliess. Quelle/GLB/Vorschau
+regeneriert,87919Polygone; Charakter/geschlossene Hand/116Kontaktsamples PASS.
+Face-/Handkollisionsdaten unveraendert. Webbuild und fuenf native Rueckholposen
+mit echtem Skelettvergleich PASS. Browserkontaktcheck mit neun Ansichten PASS,
+errors[]. Kontakt- und Ruheansicht gesichtet: Spitzen reduziert; Kleidungsfalten
+und Referenzstil weiterhin offen. Belege validation/shoulder-contour.json sowie
+shoulder-contact.png und shoulder-rest.png. Keine menschliche Abnahme.
+V0.4.0-dev.20261008 ist auf GitHub veroeffentlicht und heruntergeladen; SHA256
+stimmt mit geprueftem Paket ueberein. Dieses Paket enthaelt noch den Assetstand
+vor dieser Schulterkorrektur; naechstes Paket nach weiterem visuellen Meilenstein.
+Entwicklungshost8877 wieder aus Checkout, Execsession14518. Pakettesthost beendet.
