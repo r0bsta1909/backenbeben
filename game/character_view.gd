@@ -165,7 +165,7 @@ func collapsed_point(rest_point: Vector3) -> Vector3:
 	var bend := Basis(Vector3.FORWARD,float(last_body[3]))*Basis(Vector3.RIGHT,-float(last_body[2]))
 	return hip+offset+bend*(rest_point-hip)
 
-func reach_toward(world_target: Vector3, side: String, amount: float, world_normal := Vector3.BACK) -> void:
+func reach_toward(world_target: Vector3, side: String, amount: float, world_normal := Vector3.BACK, world_fingers := Vector3.UP) -> void:
 	var upper: Dictionary=metadata.bones["upper_arm."+side]
 	var fore: Dictionary=metadata.bones["forearm_twist."+side]
 	# The helper's chest has already bent with apply_collapse. Arm overrides are
@@ -173,7 +173,12 @@ func reach_toward(world_target: Vector3, side: String, amount: float, world_norm
 	var shoulder := collapsed_point(vector(upper.head))
 	var side_sign := 1.0 if side=="L" else -1.0
 	var resting_wrist := Vector3(side_sign*.29,-.685,.06)
-	var wrist := collapsed_point(resting_wrist).lerp(to_local(world_target),amount)
+	# The support target denotes the palm centre, not the wrist joint.
+	var catch_fingers := (global_basis.inverse()*world_fingers).normalized()
+	var finger_direction := Vector3.DOWN.rotated(Vector3.RIGHT,PI*amount)
+	finger_direction=Basis(Quaternion.IDENTITY.slerp(Quaternion(Vector3.UP,catch_fingers),amount))*finger_direction
+	var target_wrist := to_local(world_target)-catch_fingers*float(metadata.arms[side].palm_offset)
+	var wrist := collapsed_point(resting_wrist).lerp(target_wrist,amount)
 	var delta := wrist-shoulder
 	var a: float=metadata.arms[side].upper_length
 	var b: float=metadata.arms[side].forearm_length
@@ -192,7 +197,6 @@ func reach_toward(world_target: Vector3, side: String, amount: float, world_norm
 	var normal := resting_normal.slerp((global_basis.inverse()*world_normal).normalized(),amount)
 	orient_surface("forearm."+side,elbow,elbow.lerp(wrist,.5),normal)
 	orient_surface("forearm_twist."+side,elbow.lerp(wrist,.5),wrist,normal)
-	var finger_direction := Vector3.DOWN.rotated(Vector3.RIGHT,PI*amount)
 	orient_surface("hand."+side,wrist,wrist+finger_direction*.1,normal)
 	apply_finger_relax((1.0-amount)*.5,side)
 

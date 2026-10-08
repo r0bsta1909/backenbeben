@@ -901,3 +901,18 @@ Probe/Replay/Spiegel/Ruecklauf,errors[]. Front-/Weitwinkelkontakt gesichtet:
 Schulterkappen reduziert, erhobener Aermel verbunden; Gesamtfiguren weiterhin
 steifer als Referenz. Beleg validation/shoulder-tailoring.json/png.
 KeineArt- odermenschlicheBedienabnahme,Goalweiteraktiv. Host8877Checkout.
+
+G6 AUFFANGHAND UND KO-HALTUNG
+reach_toward steuert jetzt Handflaechenzentrum stattHandgelenk. Finger/Normalen
+folgen derKoerperneigung. Erster Zielpunkt innerhalbShirt trotzLandmarkenPASS
+visuell verworfen. ZieleunterOberarmen, Helferkniebeugung.13 statt.05 undSchritt
+1.10 statt.85Renderunits: reale380Stuetzhandsamples max1.33e-7mZielabweichung.
+Reproduktion: python scripts/audit_catcher_support.py erzeugt frischenHost-KO-
+Pfad undprueft echteSzenen/Riglandmarken mitGodot. SynthetischerRigtest prueft
+zusätzlichDrehung/Skalierung sowieRuhe-/Ruecklaufkontinuitaet. WebbuildPASS;
+vollerKO-Browserkampf inkl.Replayruecklauf/Resume/Revanche PASS,errors[].
+WideKOgesichtet: tiefereHelferhaltung, HaendeunterOberarmen stattvorBrust.
+Beleg validation/catcher-palm-support.json/png. WeitergefuehrterKO,keine
+physikalischeGriff-/Stoffkollision; keineGesamtbewegungs-/Stilabnahme.
+Host8877 JETZT WIEDER CHECKOUT,Session81546. V08bleibtunveraendertesRelease
+vor dieserAuffangkorrektur. Goalweiteraktiv.

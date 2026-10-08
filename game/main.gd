@@ -550,12 +550,12 @@ func update_officials(body: Array) -> void:
 		var catch_amount: float=float(body[4]) if body.size()>4 else 0.0
 		if i<2:
 			actor.position.x*=1.0-catch_amount*.25
-			actor.position.z+=catch_amount*.85
-			actor.apply_collapse([catch_amount*.05,0,catch_amount*.12,0,0])
+			actor.position.z+=catch_amount*1.10
+			actor.apply_collapse([catch_amount*.13,0,catch_amount*.12,0,0])
 			var hip := Vector3(0,-.6,0)
 			var drop := Vector3(0,-float(body[0]),-float(body[1]))
 			var bend := Basis(Vector3.FORWARD,float(body[3]))*Basis(Vector3.RIGHT,-float(body[2]))
-			var armpit := Vector3(-.18 if i==0 else .18,-.25,.025)
+			var armpit := Vector3(-.315 if i==0 else .315,-.30,.015)
 			var support := (hip+drop+bend*(armpit-hip))*4.0
 			actor.reach_toward(Vector3.ZERO,"R" if i==0 else "L",0.0)
-			actor.reach_toward(support,"L" if i==0 else "R",catch_amount,Vector3.RIGHT if i==0 else Vector3.LEFT)
+			actor.reach_toward(support,"L" if i==0 else "R",catch_amount,bend*Vector3(.88 if i==0 else -.88,-.46,0).normalized(),bend*Vector3(.46 if i==0 else -.46,.88,0).normalized())

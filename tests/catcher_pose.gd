@@ -41,6 +41,23 @@ func verify() -> void:
 		actor.reach_toward(Vector3.ZERO,side,0.0)
 		if idle.distance_to(actor.skeleton.get_bone_global_pose_override(wrist_index).origin)>.00001:
 			push_error("Official replay rewind did not restore idle arm");quit(1);return
+	# Evaluate the transformed exported palm landmark, independently of the IK
+	# wrist target, with actor scale/yaw and a tilted receiving torso.
+	actor.rotation.y=.22
+	for side in ["L","R"]:
+		actor.apply_collapse([.05,0.0,.12,0.0,0.0])
+		var local_target=Vector3(-.12 if side=="R" else .12,-.40,.25)
+		var world_target=actor.to_global(local_target)
+		var fingers=Vector3(0,.9,.3).normalized()
+		var normal=Vector3.RIGHT if side=="R" else Vector3.LEFT
+		actor.reach_toward(world_target,side,1.0,actor.global_basis*normal,actor.global_basis*fingers)
+		var index=actor.skeleton.find_bone("hand."+side)
+		var rest=actor.skeleton.get_bone_global_rest(index)
+		var pose=actor.skeleton.get_bone_global_pose_override(index)
+		var palm=actor.vector(actor.metadata.arms[side].palm_center)
+		var actual=pose*(rest.affine_inverse()*palm)
+		if actual.distance_to(local_target)>.00001:
+			push_error("Catcher palm missed support: "+str(actual.distance_to(local_target)));quit(1);return
 	actor.reset_all()
 	if not actor.last_body.is_empty():
 		quit(1);return
