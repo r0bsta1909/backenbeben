@@ -262,3 +262,28 @@ Gesichtsphysik oder Stil. Sichtpruefung: Haare noch schematisch/regelmaessig,
 Schulterformen rund/aufgesetzt, Publikum geometrische Platzhalter. Grafikgate
 offen. Erste Vorschau hatte uninitialisierte weisse Haut; Testinitialisierung
 auf regulaeres apply_fighter korrigiert, gespeicherte Vorschau danach erzeugt.
+
+HANDGELENK AN ECHTE ARMKOORDINATEN GEKOPPELT (LABOR)
+arm_hand_attachment.py verbindet Handposition und Orientierung nachgiebig mit
+Arm.q. Sechs Gleichungen, numerischer 6x9-Jacobian als Referenz, gemeinsame
+Loesung mit Handmasse, Welttraegheit und den vorhandenen diagonalen
+Gelenktraegheiten. Korrekturen wirken auf Hand und Schulter-/Ellbogenwinkel.
+Rotationen ueber SO(3); Forward Kinematics erhaelt die Segmentlaengen.
+Drei neue Tests: Ruhe, beidseitige Reaktion/Laengenerhalt, Rotationslogarithmus
+inklusive 180 Grad. Gesamte Python-Suite: 60 Tests bestanden.
+Reproduzierbarer Gesamtversuch: scripts/run_side_contact_lab.py --attached.
+Start am echten Meshkontakt ohne Anfangsdurchdringung; konsistente Anfangs-
+geschwindigkeit aus Gelenkwinkeln. 114 Punkte, 960 Hz, 0.06 s. Maximal vier
+aktive Kontakte, Gewebeverformung 1.124 mm, Durchdringung 2.59e-7 m.
+Handgelenkverbindung gibt maximal 2.644 mm nach. Schulter-Yaw-Geschwindigkeit
+von -1.900 auf +1.763 rad/s; Ellbogen von -3.123 auf -0.749 rad/s. Alle
+aufgezeichneten Gelenkgrenzen erhalten, Laengenfehler <=1.67e-16 m.
+Numerisches Gate NICHT bestanden: maximales Kopplungsresiduum 1.307e-6 m
+gegen geforderte 1e-6 m. Laufzeit 57.5 s fuer 0.06 s; nicht echtzeitfaehig.
+Nachweis: validation/attached-side-contact.json. Kein Matchsolverwechsel.
+Noch keine volle Koerperphysik: stationaerer Torso, diagonale statt vollstaendige
+Gelenkmassenmatrix, keine aktiven Muskelmotoren im Kontaktversuch, Boxtraegheit
+der Hand, keine Reibung. Die geringe Kontaktflaeche ist nicht als fertiger
+flacher Schlag akzeptiert. Naechste Schritte: Konvergenz/Laufzeit profilieren,
+Motoren und Handgelenknachgiebigkeit gemeinsam abstimmen, erst dann die
+sichtbare Arm-Hand-Aufzeichnung integrieren. Grafikgate weiterhin offen.

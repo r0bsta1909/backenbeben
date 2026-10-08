@@ -1,0 +1,44 @@
+{
+  "attached": true,
+  "initial_penetration_m": 0.0,
+  "maximum_wrist_separation_m": 0.0026435428128949606,
+  "maximum_bond_residual_m": 1.306716982278416e-06,
+  "initial_joint_velocity": [
+    -1.8996200585919927,
+    1.336272340719368,
+    -3.123360452458315
+  ],
+  "final_joint_velocity": [
+    1.763327844747602,
+    1.2543066007432158,
+    -0.7493027683817033
+  ],
+  "fps": 960,
+  "duration": 0.06,
+  "hand_samples": 114,
+  "peak_active_contacts": 4,
+  "peak_deformation_m": 0.0011241581750263043,
+  "maximum_penetration_m": 2.5843202537636295e-07,
+  "final_velocity": [
+    0.9397050432474341,
+    0.4700824671089965,
+    -0.1250327091660286
+  ],
+  "final_angular_velocity": [
+    0.3277898218697662,
+    -1.9365189568768757,
+    -0.7061579353786533
+  ],
+  "solve_ms": 57507.54830000005,
+  "limits": [
+    "diagonal joint inertia, stationary torso, no active muscle drive",
+    "laboratory box inertia",
+    "no friction",
+    "not active in matches"
+  ],
+  "maximum_bone_length_error_m": 1.6653345369377348e-16,
+  "joint_limits_preserved": true,
+  "python_tests_passed": 60,
+  "requested_residual_tolerance_m": 1e-06,
+  "bond_tolerance_met": false
+}
