@@ -1542,3 +1542,13 @@ Parameterabstimmung/diagonaleEulertraegheiten weiterhinPrototyp,keineAnatomie.
 OFFEN ALS NAECHSTES: spatial-ClipimBrowserwirklichrendern,7VariantenRueckholung
 mitvollerRotationrekonstruieren,Laufzeitmessen,erst dannDefaultentscheiden.
 KeineGesamtabnahmeausUnitTests. Host52990nochaltergeladenerServer,Webbuildneu.
+
+G4 SPATIAL RUECKHOLUNG UND LAUFZEIT
+Audit --spatial rekonstruiertRx/Ry/Rz+Translation genauso wieShader.7Varianten
+mit324Rueckholposen jeweilskeineDurchdringung,keinTischkontakt,Wrist<=85Grad.
+ErsterLaufca14-16s:MatrixallokationenimPinprojektor. AnalytischeSkalarform
+ersetzt diese;6TestsPASS inkl.nichttrivialerWinkelgegenMatrixreferenz1e-14.
+Erneuter7VariantenlaufPASS,Peakwinkelgleichbis1e-6,Laufzeitca2.8s.
+Belege spatial-head-replay-variants.json/spatial-head-performance.json.
+NAECHSTES: gezielterHostmitspatial=True,echteBrowserkontaktansichtenundDuell;
+nochkeineDefaultfreigabe. Host52990weiteraltergeladenerYawStandard.

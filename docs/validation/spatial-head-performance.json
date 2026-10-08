@@ -1,0 +1,8 @@
+{
+  "before_median_ms": 15891.6,
+  "after_median_ms": 2857.9,
+  "same_peak_rotations_within_rad": 1e-06,
+  "cases": 7,
+  "mechanical_tests": 6,
+  "limits": "Browser rendering and default activation remain unverified"
+}

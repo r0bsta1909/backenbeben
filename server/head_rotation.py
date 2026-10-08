@@ -28,15 +28,23 @@ def rotation_and_derivatives(angles):
 def project_spatial_pins(points,weights,rest,ids,angles,inverse_inertias,position,inverse_mass):
     for index in ids:
         for axis in range(3):
-            rotation,derivatives=rotation_and_derivatives(angles)
-            target=position[axis]+np.sum(rotation[axis]*rest[index])
-            gradient=np.empty(3)
-            for j in range(3):gradient[j]=-np.sum(derivatives[j,axis]*rest[index])
-            denominator=weights[index]+inverse_mass+np.sum(inverse_inertias*gradient*gradient)
-            delta=-(points[index,axis]-target)/denominator
+            cx,sx=np.cos(angles[0]),np.sin(angles[0]);cy,sy=np.cos(angles[1]),np.sin(angles[1]);cz,sz=np.cos(angles[2]),np.sin(angles[2])
+            x,y,z=rest[index];u=cx*y-sx*z;v=sx*y+cx*z
+            xx=cy*x-sy*v;zz=sy*x+cy*v
+            tx=cz*xx-sz*u;ty=sz*xx+cz*u
+            if axis==0:
+                target=tx;gx=cz*sy*u-sz*v;gy=cz*zz;gz=ty
+            elif axis==1:
+                target=ty;gx=sz*sy*u+cz*v;gy=sz*zz;gz=-tx
+            else:
+                target=zz;gx=-cy*u;gy=-xx;gz=0.
+            denominator=weights[index]+inverse_mass+inverse_inertias[0]*gx*gx+inverse_inertias[1]*gy*gy+inverse_inertias[2]*gz*gz
+            delta=-(points[index,axis]-target-position[axis])/denominator
             points[index,axis]+=weights[index]*delta
             position[axis]-=inverse_mass*delta
-            angles+=inverse_inertias*gradient*delta
+            angles[0]+=inverse_inertias[0]*gx*delta
+            angles[1]+=inverse_inertias[1]*gy*delta
+            angles[2]+=inverse_inertias[2]*gz*delta
     return angles
 
 

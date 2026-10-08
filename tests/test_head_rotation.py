@@ -30,6 +30,19 @@ class SpatialHeadTests(unittest.TestCase):
   yaw=project_mobile_pins(q,w,rest,ids,.1,50.,other,.2)
   np.testing.assert_allclose(p,q,atol=1e-14);np.testing.assert_allclose(position,other,atol=1e-14)
   self.assertAlmostEqual(angles[1],yaw,places=14)
+ def test_optimized_projection_matches_matrix_reference(self):
+  rest=np.array([[.03,.06,.09],[-.02,-.08,.07]])
+  p=rest.copy();q=p.copy();angles=np.array([.13,-.21,.08]);other=angles.copy()
+  position=np.array([.001,-.002,.003]);reference=position.copy();inertias=np.array([40.,50.,45.]);weights=np.array([10.,12.])
+  for index in range(2):
+   for axis in range(3):
+    rotation,derivatives=rotation_and_derivatives(other)
+    gradient=np.array([-(d@rest[index])[axis] for d in derivatives])
+    error=q[index,axis]-(rotation@rest[index]+reference)[axis]
+    delta=-error/(weights[index]+.2+np.sum(inertias*gradient**2))
+    q[index,axis]+=weights[index]*delta;reference[axis]-=.2*delta;other+=inertias*gradient*delta
+  project_spatial_pins(p,weights,rest,np.array([0,1]),angles,inertias,position,.2)
+  np.testing.assert_allclose(p,q,atol=1e-14);np.testing.assert_allclose(angles,other,atol=1e-14);np.testing.assert_allclose(position,reference,atol=1e-14)
  def test_spatial_shader_inverse_in_neck_blend(self):
   from moving_head_replay import local_offsets_spatial
   rest=np.array([[.03,-.10,.07],[-.06,-.06,.08],[.08,.1,.1]])
