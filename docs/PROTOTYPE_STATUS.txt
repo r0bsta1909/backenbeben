@@ -363,3 +363,18 @@ Beleg validation/standard-balance-ko.json/png. Gesamtstil/menschlicheBedienabnah
 undZwei-PC-Nachweis weiteroffen. V10Download enthaelt dieseAenderung NICHT.
 CheckoutHost8877Session8664. Goalaktiv; naechsterSchritt aktuelleszusammenhaengendes
 Paket bauen undfrischpruefen, danachoffeneReferenz-/Bedienqualitaetweiterbearbeiten.
+
+G7 PROTOTYP11 OEFFENTLICH UND FRISCH GEPRUEFT
+Release v0.11.0-dev.20261008, Quelle821a4919c33b856f3ea7c90e2a924ea0b0c7de12.
+68Dateien/23881671Bytes, SHA256
+2ef05ccb70ce97b0a31b22f5ba29579ec1640154d3c7aa97f97d97abd2670aaf.
+ZIP ausserhalbCheckout entpackt, frische.venv uebermitgeliefertesSetup mitPython3.12.
+START_HOST.bat auf8880 zeigtLANAdressen. VollerStandardkampf5TrefferbisKO PASS,
+Anspannen/Replayruecklauf/Resume/Revanche PASS, Browsererrors[],p95=27.9ms.
+GitHubDownloadhash undalle68Dateien gegenlaufendeInstallation exaktabgeglichen.
+NeuimPaket: Probekontakt-Mausradvergleich, Augen/Brauen/Kiefer, -18GradStart,
+sofortanlaufendeRueckholung, Grundschaden35. README-AlttextohneReibungkorrigiert.
+Beleg validation/v11-package.json undKontaktbild. ZweiBrowserauf1PC,keine
+physischeZwei-PC-Abnahme. Gesamtstil/menschlicheBedienabnahme weiterOFFEN.
+NaechsterFokusG2/G3: sichtbarenReferenzabstand derFiguren undBedienbarkeit
+imGesamtspiel verbessern. KeineweitereSolver-Laborkette. Goalaktiv.
