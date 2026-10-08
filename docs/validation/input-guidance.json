@@ -1,0 +1,45 @@
+{
+  "scope": "Visible practice/strike progression and context-sensitive gesture cue",
+  "browser": {
+    "repeat_practice_without_damage": true,
+    "idle_material_uploads_skipped": true,
+    "mirror_visibility_updates": true,
+    "pose_camera_and_wheel": true,
+    "crowd_reaction_and_rewind": true,
+    "jump_to_contact": true,
+    "side_camera": true,
+    "marker_toggle": true,
+    "no_stale_markers": true,
+    "errors": [],
+    "inspection_survives_original_deadline": false,
+    "coupled": {
+      "backend": "coupled-moving",
+      "solve_ms": 2486.3,
+      "peak": 0.046499,
+      "contact_diagnostics": {
+        "maximum_wrist_separation_m": 1.1004415516331783e-05,
+        "maximum_penetration_m": 2.3805790713396044e-06,
+        "unconverged_steps": 14,
+        "maximum_material_residual_m": 0.0002540136494195572
+      },
+      "head_response": {
+        "model": "coupled-yaw-through-contact-and-tail",
+        "braced": false,
+        "tail_pin_error_m": 7.020231063356758e-08,
+        "translation": true,
+        "parameters": "prototype tuning, three translations and yaw; pitch/roll fixed"
+      },
+      "maximum_head_yaw_rad": 0.08919
+    }
+  },
+  "assertions": [
+    "Initial practice step active",
+    "After practice strike step active",
+    "Repeat practice restores practice step and causes no damage"
+  ],
+  "visual_review": [
+    "Practice screenshot inspected",
+    "Strike screenshot inspected"
+  ],
+  "human_acceptance": "Still open; last human feedback remains incomprehensible"
+}

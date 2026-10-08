@@ -1457,3 +1457,11 @@ Schulteranbindung,seitlicherEllbogenabstand,stetigerUebergang,Ruecklauf PASS.
 Webexport und15Kontaktansichten PASS,errors[]. Frontbild gesichtet: seitliche
 EllbogenSilhouette korrigiert. Beleg validation/helper-rest-pose.json/png.
 Keine vollstaendige Helferanimation oderArtabnahme; Goalweiteraktiv.
+
+G3 SICHTBARE PROBE/SCHLAG-FUEHRUNG
+ZweiSchritte mit aktivemStatus; Probe gelb, echterSchlag korallfarben und
+explizit NaechsterZugZaehlt. BeimZiehen erklaert Text wasLoslassen ausloest.
+AktuelleHandneigung plusStartwert angezeigt ohneTrefferguete zu behaupten.
+Browserablauf prueft Probe->Schlag->erneuteProbe,ohneSchaden,danachReplay PASS.
+BeideZustaende alsSpielbildergesichtet. Beleg validation/input-guidance.json und
+zwei guidance-Bilder. MenschlicheVerstaendlichkeitsabnahme bleibtOFFEN.

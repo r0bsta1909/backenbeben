@@ -11,6 +11,8 @@ async def main():
   await page.goto('http://localhost:8877');await page.wait_for_function('window.gameReady',timeout=60000)
   await page.evaluate("()=>{window.sentActions=[];const original=sendAction;sendAction=d=>{sentActions.push(d);original(d)}}")
   await page.locator('#training').click();await page.wait_for_function("state?.phase==='aim'")
+  await page.wait_for_function("document.getElementById('posePanel').dataset.mode==='practice'")
+  await page.screenshot(path='logs/guidance-practice.png')
   await page.locator('#poseCamera').click()
   await page.wait_for_function('godotStats?.camera_position?.[0]===3')
   assert await page.locator('#poseCamera').get_attribute('aria-pressed')=='true'
@@ -35,9 +37,12 @@ async def main():
     await page.mouse.move(1920*(.8-.34/1.5*(i+1)/12),648);await page.wait_for_timeout(8)
    await page.mouse.up()
   await stroke();await page.wait_for_function('state.practice_done')
+  await page.wait_for_function("document.getElementById('posePanel').dataset.mode==='strike'")
+  await page.screenshot(path='logs/guidance-strike.png')
   first_event=await page.evaluate('state.event_id')
   await page.locator('#repeatPractice').click()
   await page.wait_for_function("document.getElementById('repeatPractice').textContent.includes('NUR PROBE')")
+  assert await page.locator('#practiceStep').get_attribute('aria-current')=='step'
   await stroke()
   await page.wait_for_function('(old)=>state.event_id>old',arg=first_event)
   assert await page.evaluate("state.phase==='aim' && state.hits===0 && state.event.kind==='practice'")
