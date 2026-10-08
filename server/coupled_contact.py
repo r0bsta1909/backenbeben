@@ -18,7 +18,7 @@ def rotation_vector(matrix):
     sine=np.linalg.norm(axis);angle=np.arctan2(sine,(np.trace(matrix)-1)*.5)
     return axis if sine<1e-12 else axis*(angle/sine)
 
-def simulate_contact(scored, fps=960,duration=.06,attached=False,compiled_embedding=True,iterations=64,residual_tolerance=1e-6,compiled_projection=True):
+def simulate_contact(scored, fps=960,duration=.06,attached=False,compiled_embedding=True,iterations=64,residual_tolerance=1e-6,compiled_projection=True,moving_head=False):
     pose=min(scored['arm_path'],key=lambda r:abs(r['time']-scored['contact_time']))['pose']
     points=world_positions(pose,pose['finger_direction'],pose['palm_normal'])
     from contact_embedding import embed_side_many
@@ -43,6 +43,10 @@ def simulate_contact(scored, fps=960,duration=.06,attached=False,compiled_embedd
         initial_joint_velocity=joint_velocity.copy()
     else:hand.center[0]+=.003
     cage=CompiledSideTissue(skin_state=tuple(scored.get("skin_state",(0.,0.,0.))));cage.prepare();cage.iterations=iterations;cage.residual_tolerance=residual_tolerance
+    head=None
+    if moving_head:
+        from head_attachment import HeadAttachment
+        head=HeadAttachment(cage)
     velocity=np.asarray(scored.get('impact_wrist_velocity',[0.,0.,0.]),dtype=float);angular_velocity=np.zeros(3);dt=1/fps
     if attached:
         # Initial physical state must not change when the solver dt changes.
@@ -59,10 +63,12 @@ def simulate_contact(scored, fps=960,duration=.06,attached=False,compiled_embedd
     initial_velocity=velocity.copy();initial_angular_velocity=angular_velocity.copy()
     initial_penetration=hand.penetration(cage)
     initial_energy=mechanical_energy(cage,hand,velocity,angular_velocity,bond,initial_joint_velocity)
+    if head is not None:initial_energy['head']=head.energy();initial_energy['total']+=head.energy()
     damping_loss=0.;cumulative_impulse=np.zeros(3);cumulative_moment=np.zeros(3)
     frames=[];peak=0.;penetration=0.;contacts=0;wrist_error=0.;bond_residual=0.;iteration_counts=[];unconverged=0;material_residual=0.;started=time.perf_counter()
     for step in range(round(duration*fps)):
         old_center=hand.center.copy();old_rotation=hand.rotation.copy()
+        if head is not None:head.begin_step(dt)
         if attached:
             old_q=np.asarray(arm.q).copy()
             arm.q=[float(np.clip(v,*limit)) for v,limit in zip(old_q+joint_velocity*dt,LIMITS)]
@@ -71,9 +77,11 @@ def simulate_contact(scored, fps=960,duration=.06,attached=False,compiled_embedd
         def project(tissue):
             if attached:bond.project(dt)
             hand.project(tissue,dt)
-        project.residual=lambda:max(hand.penetration(cage),bond.residual(dt) if attached else 0.)
+            if head is not None:head.project(dt)
+        project.residual=lambda:max(hand.penetration(cage),bond.residual(dt) if attached else 0.,head.residual() if head is not None else 0.)
         damping_loss+=float(.5*np.sum(cage.node_masses[:,None]*cage.v*cage.v))*(1-np.exp(-12*dt))
         cage.step(dt,project_contact=project)
+        if head is not None:head.finish_step(dt)
         iteration_counts.append(cage.iterations_used)
         current_material=max(cage.residuals['edge_m'],cage.residuals['volume_equivalent_m'])
         material_residual=max(material_residual,current_material)
@@ -89,13 +97,14 @@ def simulate_contact(scored, fps=960,duration=.06,attached=False,compiled_embedd
         cumulative_impulse+=hand.step_contact_impulse
         cumulative_moment+=hand.step_contact_moment
         energy=mechanical_energy(cage,hand,velocity,angular_velocity,bond,joint_velocity if attached else None)
+        if head is not None:energy['head']=head.energy();energy['total']+=head.energy()
         render_pose=arm.pose() if attached else None
         if render_pose is not None:
             render_pose['finger_direction']=(hand.rotation@np.asarray(pose['finger_direction'])).tolist()
             render_pose['palm_normal']=(hand.rotation@np.asarray(pose['palm_normal'])).tolist()
             render_pose['finger_relax']=0.
-        frames.append({'contact_moment_nms':hand.step_contact_moment.tolist(),'cumulative_contact_moment_nms':cumulative_moment.tolist(),'energy_j':energy,'explicit_damping_loss_j':damping_loss,'contact_impulse_ns':hand.step_contact_impulse.tolist(),'cumulative_contact_impulse_ns':cumulative_impulse.tolist(),'contact_switches':hand.step_contact_switches,'active_contact_samples':np.flatnonzero(hand.multipliers>0).tolist(),'time':(step+1)*dt,'offsets':cage.replay_offsets(),'center':hand.center.tolist(),'rotation':hand.rotation.tolist(),'arm':render_pose})
-    return {'initial_energy_j':initial_energy,'final_energy_j':frames[-1]['energy_j'] if frames else initial_energy,'explicit_damping_loss_j':damping_loss,'residual_tolerance_m':residual_tolerance,'initial_velocity':initial_velocity.tolist(),'initial_angular_velocity':initial_angular_velocity.tolist(),'iterations_cap':iterations,'iteration_counts':iteration_counts,'unconverged_steps':unconverged,'maximum_material_residual_m':material_residual,'compiled_embedding':compiled_embedding,'compiled_projection':compiled_projection,'attached':attached,'initial_penetration_m':initial_penetration,'maximum_wrist_separation_m':wrist_error,'maximum_bond_residual_m':bond_residual,'initial_joint_velocity':initial_joint_velocity.tolist() if attached else None,'final_joint_velocity':joint_velocity.tolist() if attached else None,'fps':fps,'duration':duration,'hand_samples':len(points),'peak_active_contacts':contacts,
+        frames.append({'head_angle':head.angle if head is not None else 0.,'head_velocity':head.velocity if head is not None else 0.,'head_attachment_residual_m':head.residual() if head is not None else 0.,'contact_moment_nms':hand.step_contact_moment.tolist(),'cumulative_contact_moment_nms':cumulative_moment.tolist(),'energy_j':energy,'explicit_damping_loss_j':damping_loss,'contact_impulse_ns':hand.step_contact_impulse.tolist(),'cumulative_contact_impulse_ns':cumulative_impulse.tolist(),'contact_switches':hand.step_contact_switches,'active_contact_samples':np.flatnonzero(hand.multipliers>0).tolist(),'time':(step+1)*dt,'offsets':cage.replay_offsets(),'center':hand.center.tolist(),'rotation':hand.rotation.tolist(),'arm':render_pose})
+    return {'moving_head':moving_head,'initial_energy_j':initial_energy,'final_energy_j':frames[-1]['energy_j'] if frames else initial_energy,'explicit_damping_loss_j':damping_loss,'residual_tolerance_m':residual_tolerance,'initial_velocity':initial_velocity.tolist(),'initial_angular_velocity':initial_angular_velocity.tolist(),'iterations_cap':iterations,'iteration_counts':iteration_counts,'unconverged_steps':unconverged,'maximum_material_residual_m':material_residual,'compiled_embedding':compiled_embedding,'compiled_projection':compiled_projection,'attached':attached,'initial_penetration_m':initial_penetration,'maximum_wrist_separation_m':wrist_error,'maximum_bond_residual_m':bond_residual,'initial_joint_velocity':initial_joint_velocity.tolist() if attached else None,'final_joint_velocity':joint_velocity.tolist() if attached else None,'fps':fps,'duration':duration,'hand_samples':len(points),'peak_active_contacts':contacts,
             'peak_deformation_m':peak,'maximum_penetration_m':penetration,'final_velocity':velocity.tolist(),
             'final_angular_velocity':angular_velocity.tolist(),'solve_ms':(time.perf_counter()-started)*1000,
             'side_cage':cage.replay_geometry(),'frames':frames,'hand_local':hand.local.tolist(),

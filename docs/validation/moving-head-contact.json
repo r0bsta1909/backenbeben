@@ -1,0 +1,83 @@
+{
+  "cases": [
+    {
+      "case": "flat",
+      "final_angle_rad": 0.06181191435957552,
+      "final_velocity_rad_s": 0.7451175880054106,
+      "maximum_pin_error_m": 7.205056693425446e-08,
+      "maximum_penetration_m": 2.923703998205892e-06,
+      "initial_energy_j": 0.6849073473640243,
+      "final_energy_j": 0.465669596302865,
+      "solve_ms": 1042.4363999991328,
+      "unconverged_steps": 14
+    },
+    {
+      "case": "glance",
+      "final_angle_rad": 0.05235621636884591,
+      "final_velocity_rad_s": 0.6657203800458422,
+      "maximum_pin_error_m": 9.15685648461255e-08,
+      "maximum_penetration_m": 5.383990292669987e-07,
+      "initial_energy_j": 0.7068993292893507,
+      "final_energy_j": 0.5476975378309368,
+      "solve_ms": 1132.7058000024408,
+      "unconverged_steps": 17
+    },
+    {
+      "case": "tips",
+      "final_angle_rad": 0.0718389843121498,
+      "final_velocity_rad_s": 0.9878400937101217,
+      "maximum_pin_error_m": 1.2448581286881747e-07,
+      "maximum_penetration_m": 5.853227557584753e-07,
+      "initial_energy_j": 0.587414915256225,
+      "final_energy_j": 0.4648398129217636,
+      "solve_ms": 1186.909600000945,
+      "unconverged_steps": 21
+    },
+    {
+      "case": "high-foul",
+      "final_angle_rad": 0.042532255221421046,
+      "final_velocity_rad_s": 0.5061009046231546,
+      "maximum_pin_error_m": 1.582420140665475e-07,
+      "maximum_penetration_m": 4.550671064368034e-07,
+      "initial_energy_j": 0.19690830070480092,
+      "final_energy_j": 0.10735708816691454,
+      "solve_ms": 817.6932999995188,
+      "unconverged_steps": 12
+    },
+    {
+      "case": "heel-foul",
+      "final_angle_rad": 0.03563067745592179,
+      "final_velocity_rad_s": 0.3957732957258697,
+      "maximum_pin_error_m": 2.0909184841085998e-07,
+      "maximum_penetration_m": 3.322072641615409e-07,
+      "initial_energy_j": 0.610304559295816,
+      "final_energy_j": 0.43292045759178294,
+      "solve_ms": 602.0615000015823,
+      "unconverged_steps": 7
+    },
+    {
+      "case": "swollen",
+      "final_angle_rad": 0.0617473133075997,
+      "final_velocity_rad_s": 0.7429022427557186,
+      "maximum_pin_error_m": 8.626552894642943e-08,
+      "maximum_penetration_m": 3.4232709353793327e-06,
+      "initial_energy_j": 0.6849420803843729,
+      "final_energy_j": 0.4655101889372394,
+      "solve_ms": 880.3392000045278,
+      "unconverged_steps": 13
+    },
+    {
+      "case": "jaw-injured",
+      "final_angle_rad": 0.07232616594033821,
+      "final_velocity_rad_s": 0.8740126577065865,
+      "maximum_pin_error_m": 2.031201067093413e-07,
+      "maximum_penetration_m": 3.7420613068329176e-08,
+      "initial_energy_j": 0.5874525206097225,
+      "final_energy_j": 0.3962627326921092,
+      "solve_ms": 840.2235999965342,
+      "unconverged_steps": 12
+    }
+  ],
+  "status": "Experimental contact interval only; replay tail and recovery must be integrated before default use.",
+  "limits": "Fixed translation and one yaw axis. Calibrated inertia/neck, numerical material residuals remain. No anatomical validation."
+}

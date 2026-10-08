@@ -1353,3 +1353,27 @@ bytegleich zur getestetenInstallation. Beleg validation/v06-package.json.
 Host8877 laeuft JETZT AUS PAKET Temp/backenbeben-v06-8kjtbtg4,Session59351;
 CheckoutHost beendet. Vor weiterenQuelltests wiederEntwicklungshost starten.
 KeineZwei-PC-/menschlicheAbnahme,Headkontakt weiterverankert,GesamtzielOFFEN.
+
+G4 BEWEGLICHE KOPFBASIS / ERSTER KONTAKT-INTEGRATIONSSCHRITT
+Experimenteller Parameter moving_head=True in simulate_contact. HeadAttachment
+macht massive bisher feste Rand-/Tiefenknoten dynamisch und bindet sie mit
+bilateralen Positionsconstraints an ein gemeinsames Yaw-DOF mit endlicher
+Traegheit und Halsfeder. Knoten/Kopf werden in denselben XPBD-Iterationen geloest.
+Unbenutzte masselose Knoten bleiben fest. Kopfenergie und Winkel/Geschwindigkeit/
+Anbindungsresiduum werden aufgezeichnet. Kein nachtraeglicher Kontaktimpuls-Kick.
+Sieben realeTreffervarianten inkl.Fouls/Verletzung: alleendlich, Pinfehler<.21um,
+Durchdringung<3.5um, Endenergie<Anfangsenergie. FlatendYaw.061812rad bei.745118rad/s.
+135Gesamttests PASS, danach4Headtests inkl.Encoder-Schutz PASS. Beleg
+validation/moving-head-contact.json; reproduzierbar scripts/audit_moving_head.py.
+NICHT DEFAULT / NICHT SPIELFERTIG: Translation fest,nurYaw,kalibrierteParameter,
+Materialrestfehler verbleiben. AlterEncoder weist diesen Kontakt explizit zurueck,
+damit bewegteOffsets nicht mit alterKopffeder doppelt verformt werden.
+NAECHSTER VERBINDLICHER INTEGRATIONSSCHRITT (kein weiterer isolierterBaustein):
+1 Vollstaendigen Gewebeendzustand inkl.Tiefenknoten und Geschwindigkeiten erhalten.
+2 Auslauf mit derselbenHeadAttachment fortsetzen; Gewebeoffsets passend zum
+  Kopfshader in lokalen Raum umrechnen, keine doppelteRotation.
+3 Rueckholkollision gegen dieselbe aufgezeichnete Kopfbewegung pruefen.
+4 Vollstaendigen337FrameClip rendern, Kontakt/Ruecklauf/Anspannen testen; erst
+  nach integriertem Nachweis Entscheidung zum Defaultpfad. Dieses ist der erste
+  Labor-Meilenstein seit letzter Spielintegration, keine unbegrenzteLaborkette.
+Host8877 weiterhin ausV06Paket(Session59351), keinQuellhostNeustart erforderlich.

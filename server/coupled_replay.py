@@ -26,6 +26,8 @@ def simulate(scored,braced=False):
 
 
 def encode(scored,contact,braced=False):
+    if contact.get('moving_head'):
+        raise ValueError('Moving head requires matching replay tail and recovery; integration pending')
     started=time.perf_counter()
     samples=contact['frames']
     if len(samples)<2:raise ValueError('Contact interval needs at least two samples')
