@@ -518,7 +518,7 @@ func zero_cage() -> Array:
 func build_officials() -> void:
 	for i in range(3):
 		var actor := new_character()
-		actor.position=Vector3((-1.55 if i==0 else 1.55) if i<2 else -2.7,0,-2.5 if i<2 else -.1)
+		actor.position=Vector3((-1.55 if i==0 else 1.55) if i<2 else -2.7,0,-2.5 if i<2 else -3.5)
 		actor.rotation.y=.22 if i==0 else -.22
 		prepare_materials(actor)
 		for node in actor.find_children("*","MeshInstance3D",true,false):

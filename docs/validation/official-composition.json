@@ -1,0 +1,42 @@
+{
+  "finding": "Third official silhouette overlapped receiving fighter head in wide replay. Mirror verified in separate World3D; no duplicate fighter mesh.",
+  "change": "Third official home z moved from -0.1 to -3.5. Two catchers unchanged. Fixed world placement, no per-camera hiding.",
+  "catcher_pose": "PASS",
+  "browser": {
+    "repeat_practice_without_damage": true,
+    "idle_material_uploads_skipped": true,
+    "mirror_visibility_updates": true,
+    "pose_camera_and_wheel": true,
+    "crowd_reaction_and_rewind": true,
+    "jump_to_contact": true,
+    "side_camera": true,
+    "marker_toggle": true,
+    "no_stale_markers": true,
+    "errors": [],
+    "coupled": {
+      "backend": "coupled",
+      "solve_ms": 1372.7,
+      "peak": 0.007035,
+      "contact_diagnostics": {
+        "maximum_wrist_separation_m": 9.434538295917618e-06,
+        "maximum_penetration_m": 3.210308844625239e-06,
+        "unconverged_steps": 13,
+        "maximum_material_residual_m": 0.00020265032793765063
+      },
+      "head_response": {
+        "model": "passive-yaw-after-anchored-contact",
+        "contact_moment_nms": [
+          0.023674119910435616,
+          0.04235729263168067,
+          -0.030238945864254404
+        ],
+        "inertia_kg_m2": 0.018,
+        "start_time": 0.5604166666666667,
+        "parameters": "prototype tuning, not anatomical validation"
+      },
+      "maximum_head_yaw_rad": 0.12029
+    }
+  },
+  "visual_review": "Front and wide contact inspected, receiving fighter silhouette no longer overlapped by third official.",
+  "limits": "Overall art, motion and human comprehension acceptance remain open."
+}

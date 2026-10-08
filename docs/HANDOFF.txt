@@ -1328,3 +1328,13 @@ unter5.0e-6rad(Rundung),errors[]. Beleg validation/head-moment.json und Bild.
 GRENZEN: Kontaktkaefig waehrend60ms weiterverankert, Kopfreaktion erst danach;
 keine vollgekoppelte bewegte Kopfbasis, nurYaw, Kiefer stilisiert. Kein G4-PASS.
 Host8877 Checkout neu gestartet,Session75214. V0.5-Paket noch aelter.
+
+G3/G6 FREIE KAEMPFERSILHOUETTE IN DER SEITENANSICHT
+DritterOffizieller ueberlagerte Empfaengerkopf in TV-Totale. Durch isolierte
+Renderpruefung zugeordnet; Spiegel hat separateWorld3D, keineDoppelfigur.
+Feste Position des drittenOffiziellen z=-.1 auf-3.5 verschoben. BeideCatchers
+und ihre Bewegungen unveraendert, kein kameraabhaengiges Ausblenden. Webbuild,
+Catcherpose,15Browseransichten/Replay PASS. Front/Totale gesichtet: Kaempferkopf
+frei,keineBrowserfehler. Beleg validation/official-composition.json und Bild.
+Gesamt-Art-/Bedienabnahme weiterhin offen. Naechster Auslieferungsschritt:
+Quellfortschritte seitv0.5 zu aktuellem geprueften Paket zusammenfuehren.
