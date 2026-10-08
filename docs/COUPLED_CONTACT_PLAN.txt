@@ -41,3 +41,19 @@ Verbindliche naechste Schritte:
 6. Reale Browserbilder, LAN-Gleichheit, Reversesuche und menschliche G7-Pruefung.
 Bestehenden Matchpfad erst nach bestandenem Vergleich ersetzen. Das Ziel bleibt
 eine sichtbare gegenseitige Reaktion, nicht nur ein zusaetzlicher Effektparameter.
+
+SI-LABOR ERSTER BEFUND
+server/coupled_lab.py verwendet den echten Gesichtskäfig in Metern (Position /4,
+Kanten /4, Volumen /64). Explizite Testmassen: 3 g pro beweglichem Knoten,
+180 g Handpunkt; keine anatomisch kalibrierten Werte. Ein einzelner Knoten ist
+der exakt eingebettete Kontaktpunkt. Keine Armfeder, keine Flaechenkopplung.
+Tissue.step hat eine optionale Projektionsschnittstelle und optionale
+Compliance-/Tiefenparameter; der Matchpfad ruft sie nicht auf und behält Defaults.
+Ergebnis: Ruhe exakt unveraendert; Kontakt reagiert auf beide Seiten, kein
+negativer Abstand. 240 Hz: Spitzenverformung 10.32 mm, Hand kehrt mit 0.598 m/s
+um. 480 Hz: 5.42 mm, 0.611 m/s. Detailmessung: validation/coupled-lab.json.
+INTEGRATIONSGATE DURCHGEFALLEN: Spitzenverformung nur 52.5% bei halbem Zeitschritt.
+Keine Freigabe aufgrund des stabil aussehenden Einzelversuchs. Naechste Aufgabe:
+Jacobi-Gradnormalisierung und Volumenkorrekturen des vorhandenen Kaefigsolvers
+gegen eine konsistente XPBD-Referenz pruefen. Diese sind ein Verdacht, keine
+bewiesene Ursache. Danach erst Handfeder und flaechenbasierte Kopplung.

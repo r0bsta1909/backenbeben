@@ -168,3 +168,8 @@ Kopplungsarbeit begonnen: experimentelle SI-XPBD-Kontaktprimitive mit vier
 bestandenen Tests. Noch NICHT im Match aktiv. Befund, Einheitenprobleme und
 naechste Integrationsschritte: COUPLED_CONTACT_PLAN.txt. Naechster Schritt:
 SI-Labor mit Handproxy und Kaefig ohne bisherigen einseitigen Lastkick.
+
+SI-Kopplungslabor implementiert, NICHT im Spiel aktiv. Kontakt bewegt Hand und
+Gewebe, Ruhe bleibt exakt. Schrittweitenvergleich durchgefallen (10.32 vs
+5.42 mm Verformung bei 240/480 Hz). Naechster Schritt: Kaefigsolver gegen
+konsistente XPBD-Referenz pruefen, nicht trotz Befund integrieren.

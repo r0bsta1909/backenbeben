@@ -48,9 +48,9 @@ class Tissue:
         kernels/=np.maximum(kernels.sum(axis=0,keepdims=True),1e-12)
         return kernels@areas/areas.sum()
 
-    def step(self,dt,force=None):
+    def step(self,dt,force=None,project_contact=None):
         np=self.np;p=self.p;w=self.w
-        if force is None and np.max(np.abs(self.v))<1e-9 and np.max(np.abs(p-self.rest))<1e-9:return
+        if force is None and project_contact is None and np.max(np.abs(self.v))<1e-9 and np.max(np.abs(p-self.rest))<1e-9:return
         old=p.copy()
         if force:
             centre,impulse=force[:2]
@@ -59,7 +59,7 @@ class Tissue:
         self.v*=math.exp(-6*dt)
         p+=self.v*dt
         le=np.zeros(len(self.ei));lv=np.zeros(len(self.ti))
-        alpha=.00006/(dt*dt);av=.000000000001/(dt*dt)
+        alpha=getattr(self,'edge_compliance',.00006)/(dt*dt);av=getattr(self,'volume_compliance',1e-12)/(dt*dt)
         for iteration in range(12):
             diff=p[self.ei]-p[self.ej];dist=np.maximum(1e-9,np.linalg.norm(diff,axis=1))
             error=dist-self.el;error=np.where(np.abs(error)<1e-10,0.,error)
@@ -77,8 +77,9 @@ class Tissue:
             delta[:]=0
             np.add.at(delta,self.ti.ravel(),(grads*(dl[:,None]*w[self.ti])[:,:,None]).reshape(-1,3))
             p+=1.7*delta/self.volume_degree
-            p[:,2]=np.maximum(self.rest[:,2]-.065,p[:,2])
+            p[:,2]=np.maximum(self.rest[:,2]-getattr(self,'depth_limit',.065),p[:,2])
             p[w==0]=self.rest[w==0]
+            if project_contact is not None:project_contact(self)
         self.v=(p-old)/dt
 
 def simulate(scored,braced=False):
