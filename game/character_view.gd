@@ -7,9 +7,7 @@ var unit_scale := 1.0
 var has_pose := false
 var defender_pose_active := false
 var last_defender_pose: Array = []
-var last_elbow := Vector3.INF
-var last_wrist := Vector3.INF
-var last_tilt := Vector2.INF
+var last_arm_frame: Array = []
 var is_first_person := false
 var last_body: Array = []
 var finger_rest_rotations: Dictionary = {}
@@ -72,13 +70,15 @@ func apply_arm(pose: Dictionary, yaw := 0.0, pitch := 0.0, side := "R") -> void:
 		defender_pose_active=false
 		last_defender_pose=[]
 		last_body=[]
-		last_wrist=Vector3.INF
+		has_pose=false
 	apply_finger_relax(float(pose.get("finger_relax",0.0)),side)
 	var shoulder := to_local(vector(pose.shoulder)*unit_scale)
 	var elbow := to_local(vector(pose.elbow)*unit_scale)
 	var wrist := to_local(vector(pose.wrist)*unit_scale)
-	if has_pose and elbow.distance_squared_to(last_elbow)<0.000000000001 and wrist.distance_squared_to(last_wrist)<0.000000000001 and last_tilt==Vector2(yaw,pitch):return
-	has_pose=true;last_elbow=elbow;last_wrist=wrist;last_tilt=Vector2(yaw,pitch)
+	# Recorded surface axes can rotate while joint positions remain fixed.
+	var frame: Array=[shoulder,elbow,wrist,yaw,pitch,side,float(pose.get("torso_yaw",0)),pose.get("finger_direction",[]),pose.get("palm_normal",[])]
+	if has_pose and frame==last_arm_frame:return
+	has_pose=true;last_arm_frame=frame.duplicate(true)
 	var chest_index := skeleton.find_bone("chest")
 	var chest_rest := skeleton.get_bone_global_rest(chest_index)
 	var chest_turn := Basis(Vector3.UP,float(pose.get("torso_yaw",0)))

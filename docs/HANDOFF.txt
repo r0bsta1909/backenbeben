@@ -2199,3 +2199,21 @@ V13 ist letzter gepruefter Download und liegt vor dieser Haaransatzkorrektur.
 Goal aktiv. Naechstes G2/G3-Thema: Kontaktansicht zeigt weiterhin steil gebeugtes
 Handgelenk; dieses anhand realer seitlicher Referenzen und Rigwinkel pruefen,
 nicht mit kosmetischer Handdrehung an der Hostkontaktgeometrie vorbeiarbeiten.
+
+G3/G4 HANDGELENKMESSUNG UND ORIENTIERUNGSCACHE
+Aktueller echter Kontaktclip: Unterarm/Fingerachse rund78.7Grad am Kontakt.
+Dies ist geometrischer Gesamtwinkel, keine anatomisch kalibrierte Zerlegung.
+Offizielle Regeln erneut gelesen: https://www.powerslap.com/rules/ verlangt
+zusammen treffende Handflaeche/Finger, liefert keine Gelenkwinkelgrenzen.
+85Grad-Spielkegel daher nicht aufgrund einer Perspektive beliebig geaendert.
+Konkreter Rigfehler: apply_arm-Cache verglich nur Ellbogen/Wrist/yaw/pitch und
+konnte reine neue Handachsen bei gleichen Gelenkpositionen ignorieren.
+Cache umfasst jetzt auch Finger/Palmnormalen, Schulter, Rumpfdrehung und Seite.
+Nativer Regressionstest prueft reine Fingerdrehung/Palmdrehung bei festem Wrist,
+Sollbasis, Wiederholung und Ruecklauf PASS. Webbuild und echter Browserkontakt
+mit15Ansichten, Probe/Kamera/Mausrad/Replay PASS,errors[].
+Beleg validation/wrist-orientation-audit.json; tests/arm_orientation_cache.gd.
+Keine Anatomie-/Gesamtstil-/Menschabnahme ableiten. V13 liegt vor Haaransatz
+und diesem Cachefix. Goal aktiv. Naechste Arbeit: anisotrope menschliche
+Handgelenkachsen anhand belastbarer Referenzen statt globalem85Grad-Kegel
+untersuchen; anschliessend nur als zusammenhaengende Arm-/Handaenderung testen.
