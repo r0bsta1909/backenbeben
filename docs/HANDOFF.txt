@@ -1338,3 +1338,18 @@ Catcherpose,15Browseransichten/Replay PASS. Front/Totale gesichtet: Kaempferkopf
 frei,keineBrowserfehler. Beleg validation/official-composition.json und Bild.
 Gesamt-Art-/Bedienabnahme weiterhin offen. Naechster Auslieferungsschritt:
 Quellfortschritte seitv0.5 zu aktuellem geprueften Paket zusammenfuehren.
+
+G8 PROTOTYP06 AUS FRISCHEM PAKET GEPRUEFT UND VEROEFFENTLICHT
+Releasev0.6.0-dev.20261008,Quellcommit4fc62d8cbe9d7c4f8b61b51f51880263f155bbda.
+58Dateien,21265139Bytes,SHA256
+2f337389b898ae9a1d69d7746b1826332f199caaa725e29bf43aa5bdb11ba1c8.
+FrischesTemp-Verzeichnis ausserhalbCheckout/eigenevenv. PortablePython3.12 legte
+venv an, weil WindowsLauncher py-3.12 nicht installiert fand; mitgeliefertesSetup
+installierteRequirements erfolgreich. Numpy/Numba/Aiohttp nachweislich paketlokal.
+START_HOST startet Defaultcoupled inkl.Warmup/LAN-Adressen. ZweiLAN-Browser:
+KO3Treffer und Standard10Treffer bestanden inkl.Resume/Materialruecklauf/KO-
+Ruecklauf/Revanche,errors[]. Replayp95beide14ms. Downloadhash und alleDateien
+bytegleich zur getestetenInstallation. Beleg validation/v06-package.json.
+Host8877 laeuft JETZT AUS PAKET Temp/backenbeben-v06-8kjtbtg4,Session59351;
+CheckoutHost beendet. Vor weiterenQuelltests wiederEntwicklungshost starten.
+KeineZwei-PC-/menschlicheAbnahme,Headkontakt weiterverankert,GesamtzielOFFEN.
