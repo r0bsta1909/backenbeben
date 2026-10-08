@@ -29,3 +29,14 @@ class SideCageTests(unittest.TestCase):
   self.assertTrue(np.isfinite(t.p).all())
   np.testing.assert_array_equal(t.p[t.w==0],rest[t.w==0])
   self.assertLess(np.linalg.norm(t.p-rest),before)
+
+ def test_replay_units_and_missing_surface(self):
+  from side_cage import SideTissue
+  t=SideTissue();t.prepare();g=t.replay_geometry()
+  self.assertEqual(g['bounds'],[-.44,.56,-.1,.4])
+  count=g['nx']*g['ny'];self.assertEqual(len(t.replay_offsets()),count*3)
+  self.assertTrue(all(x==0 for x in t.replay_offsets()))
+  index=int(np.flatnonzero(t.w>0)[0]);t.p[index,0]-=.001
+  self.assertAlmostEqual(t.replay_offsets()[index*3],-.004)
+  self.assertAlmostEqual(g['rest_x'][index],t.rest[index,0]*4)
+  for i in np.flatnonzero(t.node_masses[:count]==0):self.assertEqual(g['rest_x'][i],-1.)

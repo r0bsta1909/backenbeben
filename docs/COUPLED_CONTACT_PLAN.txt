@@ -217,3 +217,20 @@ Rasterrand fest. Geometrie-, Massen-, Ruhelage-, Anker- und Abklingtest bestande
 Noch NICHT im Match aktiv. Offene Voraussetzungen: mehrere Kontaktpunkte,
 Rueckwirkung auf Gelenke, passende sichtbare seitliche Deformationsabbildung,
 Konvergenz und Laufzeit mit neuer Topologie. Kein Physik-/Grafik-Abnahmebeleg.
+
+SEITLICHE DEFORMATIONSABBILDUNG IM RENDERER VORBEREITET
+side_cage.gdshaderinc wird von Haut und Kontur gemeinsam verwendet. Die
+Interpolation nutzt exakt a-b-c / b-d-c wie contact_embedding, keine bilineare
+Ersatzflaeche. Float-Textur enthaelt aufgezeichnete XYZ-Verschiebung und Ruhe-X;
+fehlende Oberflaeche ist explizit markiert. Tiefe Anker bei 20 mm, andere Wange
+und Punkte ausserhalb des Rasters bleiben unveraendert. Koordinaten mal vier
+entsprechen dem bestehenden Renderraum. SideTissue exportiert passende
+replay_geometry/replay_offsets. combat.js reicht optionale side_cage-Metadaten
+weiter, main.gd aktiviert sie nur fuer die betroffene Figur und beide Passes.
+GPU-Test mit echter OpenGL-Ausgabe auf RTX 2080 bestanden: beide Dreiecke,
+Diagonale, Rand, Tiefenverlauf, andere Wange, ausserhalb, fehlende Oberflaeche.
+Tests/side_cage_render.gd vergleicht gelesene Pixel mit analytischen Sollwerten.
+Drei SideTissue-Tests bestanden; Webexport und Browser-Kontaktreplay bestanden,
+keine Browserfehler. Das ist kein Beleg fuer gute Gesichtsanimation: aktuelle
+Matches erzeugen weiterhin alte Frames. Mehrpunktkontakt, Gelenkrueckwirkung,
+Normals/Beleuchtung der verformten Flaeche und sichtbare Gesamtpruefung offen.

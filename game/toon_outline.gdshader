@@ -2,6 +2,7 @@ shader_type spatial;
 render_mode unshaded, cull_front;
 uniform vec4 base_color : source_color = vec4(0.7,0.4,0.25,1.0);
 uniform vec3 cage[63];
+#include "res://side_cage.gdshaderinc"
 uniform vec3 part_origin = vec3(0.0);
 uniform float geometry_scale = 1.0;
 uniform bool tissue = false;
@@ -23,7 +24,7 @@ void vertex() {
     skin_position=p;
     if (tissue) {
         float front = smoothstep(0.02,0.22,p.z);
-        p += displacement(p)*front;
+        p += side_cage_enabled ? side_displacement(p) : displacement(p)*front;
         float swelling = (p.x<0.0?injury_left:injury_right)*exp(-pow((abs(p.x)-0.28)/0.17,2.0)-pow((p.y-0.17)/0.2,2.0))*front;
         p.z += swelling*0.035;
         float jaw = (1.0-smoothstep(-0.30,0.03,p.y))*smoothstep(-0.52,-0.3,p.y)*front;

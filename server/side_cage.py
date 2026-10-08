@@ -58,3 +58,16 @@ class SideTissue(ReferenceTissue):
                     if i<j and (self.w[i] or self.w[j]):pairs.add((int(i),int(j)))
         self.edges=[(i,j,float(np.linalg.norm(self.rest[i]-self.rest[j]))) for i,j in sorted(pairs)]
         self.edge_compliance=6e-5;self.volume_compliance=1e-9
+
+    def replay_geometry(self):
+        """Static metadata for the matching GPU triangulation (render units)."""
+        g=self.geometry;count=g['nx']*g['ny']
+        used=self.node_masses[:count]>0
+        return {'nx':g['nx'],'ny':g['ny'],
+                'bounds':[float(v*4) for v in (*g['y_bounds'],*g['z_bounds'])],
+                'rest_x':[float(self.rest[i,0]*4) if used[i] else -1. for i in range(count)]}
+
+    def replay_offsets(self):
+        """Unquantized render-unit offsets; clip encoder chooses its scale."""
+        count=self.geometry['nx']*self.geometry['ny']
+        return ((self.p[:count]-self.rest[:count])*4).ravel().tolist()

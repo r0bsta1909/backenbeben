@@ -105,7 +105,7 @@ function frame(now){
    const t=state.phase==='over'?2.8:state.phase==='replay'?replayT:clamp((now-phaseStart)/1000,0,2.8);
    const fi=Math.min(clip.frames.length-1,t*clip.fps),i=Math.floor(fi),j=Math.min(i+1,clip.frames.length-1),f=fi-i;
    const values=clip.frames[i].map((v,k)=>v+(clip.frames[j][k]-v)*f);
-   window.physicsFrame=JSON.stringify({id:clip.id,time:t,head:values[0],jaw:values[1],offsets:values.slice(2).map(v=>v*clip.scale),ko:!!clip.ko,body:clip.body_frames?.[Math.min(clip.body_frames.length-1,Math.floor(t*clip.fps))]||[0,0,0,0,0],target:clip.target,players:t<clip.contact?clip.before:clip.after,hand:handAt(t),arm:armAt(t),replay:state.phase==='replay',camera,footprint:showContact&&state.phase==='replay'&&Math.abs(t-clip.contact)<.025?clip.footprint:[]});
+   window.physicsFrame=JSON.stringify({id:clip.id,time:t,side_cage:clip.side_cage||{},head:values[0],jaw:values[1],offsets:values.slice(2).map(v=>v*clip.scale),ko:!!clip.ko,body:clip.body_frames?.[Math.min(clip.body_frames.length-1,Math.floor(t*clip.fps))]||[0,0,0,0,0],target:clip.target,players:t<clip.contact?clip.before:clip.after,hand:handAt(t),arm:armAt(t),replay:state.phase==='replay',camera,footprint:showContact&&state.phase==='replay'&&Math.abs(t-clip.contact)<.025?clip.footprint:[]});
    window.combatDiagnostics.time=t;window.combatDiagnostics.frame=i;window.combatDiagnostics.deformation=Math.max(...values.slice(2).map(Math.abs))*clip.scale;
    if(state.phase==='impact'&&t>=clip.contact&&!hitSound&&clip.contact_class!=='miss'){hitSound=true;window.contactSound=true;}
  }else window.physicsFrame='{}';

@@ -1,0 +1,25 @@
+{
+  "gpu_test": "tests/side_cage_render.gd",
+  "renderer": "OpenGL Compatibility, NVIDIA RTX 2080",
+  "passed": [
+    "lower_triangle",
+    "upper_triangle",
+    "diagonal",
+    "border",
+    "depth",
+    "opposite_cheek",
+    "outside",
+    "missing_surface"
+  ],
+  "side_cage_python_tests": 3,
+  "web_export": true,
+  "browser_contact_replay": {
+    "jump_to_contact": true,
+    "side_camera": true,
+    "marker_toggle": true,
+    "no_stale_markers": true,
+    "errors": []
+  },
+  "active_match_side_solver": false,
+  "visual_style_accepted": false
+}

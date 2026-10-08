@@ -411,6 +411,8 @@ func drive_recorded_physics() -> void:
 		var values: Array = physics_frame.get("offsets",[])
 		for i in range(mini(63,values.size()/3)):
 			offsets[i]=Vector3(float(values[i*3]),float(values[i*3+1]),float(values[i*3+2]))
+	var side_data: Dictionary = physics_frame.get("side_cage",{})
+	var side_texture: ImageTexture = preload("res://side_cage_view.gd").texture_for(side_data,physics_frame.get("offsets",[]))
 	var replaying: bool = physics_frame.get("replay",false)
 	for root in [fighter,reflection]:
 		var affected: bool = active and (replaying if root==fighter else false)
@@ -421,6 +423,11 @@ func drive_recorded_physics() -> void:
 		root.set_eye_closure(eye_closure)
 		if active:root.rotation=Vector3.ZERO;root.position.y=0
 		for m in physics_materials.get(root.get_instance_id(),[]):
+			m.set_shader_parameter("side_cage_enabled",affected and side_texture!=null)
+			if affected and side_texture!=null:
+				m.set_shader_parameter("side_cage_texture",side_texture)
+				var bounds: Array=side_data.get("bounds",[-.44,.56,-.10,.40])
+				m.set_shader_parameter("side_cage_bounds",Vector4(bounds[0],bounds[1],bounds[2],bounds[3]))
 			m.set_shader_parameter("cage",offsets if affected else empty_cage)
 			m.set_shader_parameter("head_angle",float(physics_frame.get("head",0)) if affected else 0.0)
 			m.set_shader_parameter("jaw_angle",float(physics_frame.get("jaw",0)) if affected else 0.0)
