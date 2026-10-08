@@ -1635,3 +1635,17 @@ Beleg validation/catcher-palm-support.json/png. WeitergefuehrterKO,keine
 physikalischeGriff-/Stoffkollision; keineGesamtbewegungs-/Stilabnahme.
 Host8877 JETZT WIEDER CHECKOUT,Session81546. V08bleibtunveraendertesRelease
 vor dieserAuffangkorrektur. Goalweiteraktiv.
+
+G6 HELFERSCHRITTE MIT FESTEN BODENKONTAKTEN
+Gemeinsame pose_leg-IK ausKO extrahiert. Helfer bewegenFuesse in zwei
+ueberlappendenSchritten; angehobenerFuss folgtBogen,max4.5cm,standenderFuss
+bleibtinWeltkoordinatenfest trotzwanderndemBecken.101Posen/beideHelfer:
+vor/nachSchritt keinGleiten,Beinlaengenfehler<1.2e-7m,RuecklaufPASS.
+Reproduktion Godot --headless --path game --script ../tests/helper_step.gd;
+ohneheadless undmit -- --render werden25/50/75Prozent alsBildererzeugt.
+DreiZwischenbildermitFuessegesichtet (nativeDefaultfarben,keineMatchauswahl).
+BestehenderStuetzaudit380Samples unveraendertPASS. WebbuildundvollerKO-Kampf
+inkl.Resume/Verletzungsruecklauf/KO-Ruecklauf/RevanchePASS,errors[].
+Beleg validation/helper-step.json/png. WeiteranimierteSchrittbahn,kein
+physikalischesGleichgewichts-/Gangmodell. Gesamtzielweiteroffen.
+Host8877CheckoutSession81546;V08PaketbleibtvorHelferhand-/Schrittkorrekturen.

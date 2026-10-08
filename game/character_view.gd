@@ -141,22 +141,36 @@ func apply_collapse(frame: Array) -> void:
 	var cr := skeleton.get_bone_global_rest(ci)
 	var bend := Basis(Vector3.FORWARD,float(frame[3]))*Basis(Vector3.RIGHT,-float(frame[2]))
 	skeleton.set_bone_global_pose_override(ci,Transform3D(bend*cr.basis,rest.origin+offset+bend*(cr.origin-rest.origin)),1.0,true)
+	for side in ["R","L"]:pose_leg(side,offset)
+
+func pose_leg(side: String, offset: Vector3, ankle_offset := Vector3.ZERO) -> void:
+	var thigh: Dictionary=metadata.bones["thigh."+side]
+	var shin: Dictionary=metadata.bones["shin."+side]
+	var foot: Dictionary=metadata.bones["foot."+side]
+	var hip := vector(thigh.head)+offset
+	var ankle := vector(shin.tail)+ankle_offset
+	var axis := (ankle-hip).normalized()
+	var length_a := vector(thigh.head).distance_to(vector(thigh.tail))
+	var length_b := vector(shin.head).distance_to(vector(shin.tail))
+	var reach := clampf(hip.distance_to(ankle),.01,length_a+length_b-.00001)
+	var along := (length_a*length_a-length_b*length_b+reach*reach)/(2*reach)
+	var pole := (Vector3.BACK-axis*axis.dot(Vector3.BACK)).normalized()
+	var knee := hip+axis*along+pole*sqrt(maxf(0,length_a*length_a-along*along))
+	orient_bone("thigh."+side,hip,knee)
+	orient_bone("shin."+side,knee,ankle)
+	orient_bone("foot."+side,ankle,vector(foot.tail)+ankle_offset)
+
+func step_feet(world_displacement: Vector3, progress: float, leading_side: String) -> void:
+	# Two overlapping steps. A planted foot keeps its world position while the
+	# pelvis moves; lifted feet follow a smooth arc and settle before support.
+	var local_travel := global_basis.inverse()*world_displacement
+	var full_travel := local_travel/maxf(progress,.000001)
+	var pelvis := Vector3(0,-float(last_body[0]),-float(last_body[1]))
 	for side in ["R","L"]:
-		var thigh: Dictionary=metadata.bones["thigh."+side]
-		var shin: Dictionary=metadata.bones["shin."+side]
-		var foot: Dictionary=metadata.bones["foot."+side]
-		var hip := vector(thigh.head)+offset
-		var ankle := vector(shin.tail)
-		var axis := (ankle-hip).normalized()
-		var length_a := vector(thigh.head).distance_to(vector(thigh.tail))
-		var length_b := vector(shin.head).distance_to(vector(shin.tail))
-		var reach := clampf(hip.distance_to(ankle),.01,length_a+length_b-.00001)
-		var along := (length_a*length_a-length_b*length_b+reach*reach)/(2*reach)
-		var pole := (Vector3.BACK-axis*axis.dot(Vector3.BACK)).normalized()
-		var knee := hip+axis*along+pole*sqrt(maxf(0,length_a*length_a-along*along))
-		orient_bone("thigh."+side,hip,knee)
-		orient_bone("shin."+side,knee,ankle)
-		orient_bone("foot."+side,ankle,vector(foot.tail))
+		var phase := clampf(progress/.58 if side==leading_side else (progress-.42)/.58,0,1)
+		var travel := smoothstep(0,1,phase)
+		var lift := .045*sin(PI*phase)
+		pose_leg(side,pelvis,full_travel*travel-local_travel+Vector3.UP*lift)
 
 func collapsed_point(rest_point: Vector3) -> Vector3:
 	if last_body.size()<5:return rest_point

@@ -552,6 +552,7 @@ func update_officials(body: Array) -> void:
 			actor.position.x*=1.0-catch_amount*.25
 			actor.position.z+=catch_amount*1.10
 			actor.apply_collapse([catch_amount*.13,0,catch_amount*.12,0,0])
+			actor.step_feet(actor.position-Vector3(actor.get_meta("home")),catch_amount,"L" if i==0 else "R")
 			var hip := Vector3(0,-.6,0)
 			var drop := Vector3(0,-float(body[0]),-float(body[1]))
 			var bend := Basis(Vector3.FORWARD,float(body[3]))*Basis(Vector3.RIGHT,-float(body[2]))

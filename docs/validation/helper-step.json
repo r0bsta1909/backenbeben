@@ -1,0 +1,160 @@
+{
+  "url": "http://192.168.178.67:8877",
+  "errors": [],
+  "hits": [
+    {
+      "kind": "hit",
+      "target": 1,
+      "damage": 16,
+      "quality": 0.547,
+      "braced": true,
+      "side": "R",
+      "ko": false,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+      "replay_id": "94a4f047a9c301628610"
+    },
+    {
+      "kind": "hit",
+      "target": 0,
+      "damage": 22.97,
+      "quality": 0.5104,
+      "braced": false,
+      "side": "R",
+      "ko": false,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+      "replay_id": "f0b3cd9be60990740a30"
+    },
+    {
+      "kind": "hit",
+      "target": 1,
+      "damage": 24.75,
+      "quality": 0.5499,
+      "braced": false,
+      "side": "R",
+      "ko": false,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+      "replay_id": "9867b3aca725bdba9496"
+    },
+    {
+      "kind": "hit",
+      "target": 0,
+      "damage": 28.95,
+      "quality": 0.6434,
+      "braced": false,
+      "side": "R",
+      "ko": true,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+      "replay_id": "66af96f5f47d8e73adfa"
+    }
+  ],
+  "configuration": {
+    "base_damage": 45,
+    "ko_threshold": 60,
+    "turn_seconds": 60
+  },
+  "single_tilt_control": true,
+  "physics_backend": "coupled-moving",
+  "moving_head_brace_consistent": true,
+  "solved_normal_impulse_ns": 1.0939400279725613,
+  "solved_quality_matches_hit": true,
+  "recorded_arm_frames": 532,
+  "clip_hash": "f4f3922aeb6cbf2e6d5daf7fa22d2d7747ef1bd03f9be72d00b116d2d7d786b7",
+  "replay": {
+    "clipId": "94a4f047a9c301628610",
+    "frameCount": 337,
+    "peak": 0.026611,
+    "time": 0.58331,
+    "frame": 69,
+    "deformation": 0.026610406399999998
+  },
+  "replay_frame_ms_p95": 14,
+  "viewport": [
+    1920,
+    1080
+  ],
+  "resume": true,
+  "injury_material_rewind": true,
+  "ko_body_recorded": true,
+  "ko_reverse_seek": true,
+  "winner": 1,
+  "audio": {
+    "mode": "buffer-fallback",
+    "played": 6,
+    "unlocked": true
+  },
+  "rematch_material_reset": true,
+  "rematch": true,
+  "leave": true,
+  "stats": {
+    "arm_data": true,
+    "camera_position": [
+      0.300000011920929,
+      0.550000011920929,
+      2.65000009536743
+    ],
+    "crowd_active": false,
+    "dragging": false,
+    "face_head_offset": [
+      0,
+      0,
+      0
+    ],
+    "face_head_rotation": [
+      0,
+      0,
+      0
+    ],
+    "face_injury": [
+      0,
+      0,
+      0
+    ],
+    "fps": 83,
+    "hand_wrist": "(-0.12, -0.49, -0.17)",
+    "mirror_draw_requests": 740,
+    "mirror_injury": [
+      0,
+      0,
+      0
+    ],
+    "muted": false,
+    "physics_active": false,
+    "physics_material_updates": 400,
+    "physics_time": -1,
+    "rendered_arm": {
+      "elbow": [
+        0.346037536859512,
+        -0.411999642848969,
+        0.622861385345459
+      ],
+      "shoulder": [
+        0.234999999403954,
+        -0.159999996423721,
+        0.524999976158142
+      ],
+      "wrist": [
+        0.120000019669533,
+        -0.490000009536743,
+        0.694999933242798
+      ]
+    },
+    "samples": 0
+  },
+  "step_check": {
+    "poses": 101,
+    "maximum_leg_length_error_m": 1.19209289550781e-07,
+    "peak_foot_lift_m": 0.0449999570846558,
+    "planted_world_contacts": true,
+    "rewind": true
+  },
+  "support_unchanged": {
+    "samples": 380,
+    "maximum_palm_error_m": 1.33280039449346e-07
+  },
+  "render_review": "Native actual scene at 25/50/75 percent step inspected with feet visible; browser KO/replay/rematch passed. Native preview uses default fighter colors, not match customization.",
+  "limits": "Authored two-step foot trajectory, no balance solver or physical gait; overall animation/style acceptance open."
+}
