@@ -634,3 +634,18 @@ Trennende und voll fixierte Faelle erzeugen keinen Impuls. 81 Python-Tests besta
 Keine Reibung bedeutet hier keinen Tangentialimpuls; durch Rotationskopplung kann
 sich tangentiale Kontaktpunktgeschwindigkeit trotzdem aendern. Noch Laborbaustein:
 TOI, simultane Mehrpunktkontakte und Einbau in den gekoppelten Clip bleiben offen.
+
+SIMULTANER MEHRPUNKT-IMPULSSOLVER
+contact_velocity_system.py baut J, inverse Massenmatrix W und A=J W J^T auf.
+Projizierter Gauss-Seidel loest akkumulierte nichtnegative Kontaktimpulse; diese
+koennen innerhalb der Iteration wieder sinken. Komplementaritaetsrest in m/s und
+Konvergenzstatus werden gemeldet; Iterationslimit ist kein Erfolgsnachweis.
+Kontrollierte Tests: symmetrischer flacher Aufprall ohne Kunstrotation, umgekehrte
+Kontaktreihenfolge mit gleichem Bewegungsresultat, Einzelkontaktgleichheit,
+doppelte Nebenbedingungen, explizite Nichtkonvergenz. Zusaetzlich zwei Kontakte
+mit gemeinsamem Gewebeknoten: Linear-/Drehimpuls erhalten, Energieverlust gleich
+-.5*lambda dot anfaengliche_Normalgeschwindigkeit. Vollsuite 86 Tests bestanden;
+anschliessend ergaenzter Gewebeknotentest mit allen sechs Modultests bestanden.
+Dichte Matrizen sind ein Referenz-Laborpfad, kein Echtzeitnachweis fuer 116 Samples.
+Nur bereits festgestellte Kontakte; TOI und Einbindung in den gekoppelten Clip
+weiterhin offen. Keine Aenderung am aktiven Match oder visueller Abnahme.
