@@ -1,0 +1,71 @@
+{
+  "native_renderer_test": "CROWD_REPLAY_PASS",
+  "parts": 1278,
+  "checks": [
+    "hit",
+    "KO",
+    "rewind",
+    "deterministic_repeat",
+    "miss",
+    "reset"
+  ],
+  "browser_replay": {
+    "crowd_reaction_and_rewind": true,
+    "jump_to_contact": true,
+    "side_camera": true,
+    "marker_toggle": true,
+    "no_stale_markers": true,
+    "errors": []
+  },
+  "performance": {
+    "stages": {
+      "idle": {
+        "samples": 229,
+        "p95": 15.800000000001091,
+        "median": 8.100000000000364
+      },
+      "moving": {
+        "samples": 104,
+        "p95": 15.799999999999272,
+        "median": 8
+      },
+      "windup": {
+        "samples": 137,
+        "p95": 15.80000000000291,
+        "median": 8
+      },
+      "resolving": {
+        "samples": 187,
+        "p95": 15.600000000002183,
+        "median": 8
+      },
+      "impact": {
+        "samples": 331,
+        "p95": 15,
+        "median": 7.700000000000728
+      },
+      "replay_moving": {
+        "samples": 223,
+        "p95": 14.700000000000728,
+        "median": 7.600000000002183
+      },
+      "replay_paused": {
+        "samples": 157,
+        "p95": 8.5,
+        "median": 7.600000000002183
+      }
+    },
+    "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 2080 (0x00001E87) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "godot": {
+      "arm_data": true,
+      "dragging": false,
+      "fps": 125,
+      "hand_wrist": "(-0.408669, -0.174095, 0.228139)",
+      "muted": false,
+      "physics_active": true,
+      "physics_time": 0.982536999999998,
+      "samples": 0
+    }
+  },
+  "style_accepted": false
+}

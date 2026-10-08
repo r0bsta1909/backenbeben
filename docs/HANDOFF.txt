@@ -460,3 +460,26 @@ Buehnenabbildung/-beschreibung. Veranstalterartikel direkt lesbar, einzelne
 Bilddatei nicht abrufbar. Abgeleitete eigene Gestaltungsentscheidung: helles
 Duell, dunklere Zuschauersilhouetten, sichtbare Traversen/Leuchten. Weiter offen:
 Publikumsreaktionen, Material-/Lichtabstimmung, Gesichtsstil und Spielgefuehl.
+
+PUBLIKUM REAGIERT REPRODUZIERBAR AUF TREFFER
+Publikumsoberkoerper lehnen sich nach Treffer zeitversetzt kurz zurueck und
+kehren zur Ausgangspose zurueck. K.o. staerker/laenger. Alle Teile eines
+Zuschauers bewegen sich gemeinsam um seinen Koerperanker; keine losen Arme.
+Animation haengt ausschliesslich von absoluter Clipzeit ab, nicht von addiertem
+Frame-delta. Fehlschlaege und Kontaktgeschwindigkeit <=0.05 m/s loesen keine
+Reaktion aus. Ausserhalb des Fensters kein wiederholtes MultiMesh-Update.
+combat.js reicht Kontaktzeit und Trefferkennzeichen weiter; main.gd steuert
+die Arena. Nach Rueckspulen entstehen identische Transformationen.
+Tests/crowd_replay.gd prueft alle 1,278 Teile: Treffer, K.o., Zurueckspulen,
+erneutes Abspielen, Fehlschlag, Ruecksetzen. Echter OpenGL-Renderer bestanden;
+Headless-Dummy kann MultiMesh-Transformationen nicht sinnvoll zuruecklesen und
+ist fuer diesen Test ungeeignet (erster Versuch deshalb fehlgeschlagen).
+Browser-Replaytest prueft nun zusaetzlich den von Godot gemeldeten aktiven
+Reaktionszustand bei 0.7 s, Abklingen bei 1.8 s und Reset am Kontaktzeitpunkt.
+Alle Pruefungen bestanden, keine Browserfehler. Webbuild aktualisiert.
+Zwei-Ansichten-Test RTX 2080: RAF-p95 maximal 15.8 ms. Bewegtes Replay 14.7 ms
+gegen vorher 8.2 ms; Median rund 7.6 ms. Zusaetzliche Updates sind messbar,
+obwohl der lokale Test innerhalb 60-Hz-Budget bleibt. Keine reine GPU-Zeit.
+Nachweis: validation/crowd-reaction.json. Noch kein animierter Applaus und
+keine Audioerweiterung. Gesamtstil, Arm-/Gesichtsphysik und menschliche
+Verstaendlichkeitsabnahme bleiben offen.

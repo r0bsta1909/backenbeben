@@ -33,16 +33,19 @@ async def main():
   await page.locator('#replayImpact').click()
   await page.locator('#replaySeek').evaluate('e=>{e.value=.7;e.dispatchEvent(new Event("input"))}')
   await page.wait_for_function('JSON.parse(physicsFrame).time>.6')
+  await page.wait_for_function('godotStats?.crowd_active===true')
   assert not await page.locator('#contactLegend').is_visible()
   assert not (await page.evaluate('JSON.parse(physicsFrame)'))['footprint']
   await page.locator('#replaySeek').evaluate('e=>{e.value=1.8;e.dispatchEvent(new Event("input"))}')
   await page.wait_for_function('JSON.parse(physicsFrame).arm.pose.finger_relax>.99')
+  await page.wait_for_function('godotStats?.crowd_active===false')
   await page.locator('#replayCamera').select_option('wide')
   await page.wait_for_timeout(250);await page.screenshot(path='logs/finger-recovery.png')
   await page.locator('#replayImpact').click()
   await page.wait_for_function('JSON.parse(physicsFrame).arm.pose.finger_relax===0')
+  await page.wait_for_function('godotStats?.crowd_active===false')
   assert not errors,errors
-  report={'jump_to_contact':True,'side_camera':True,'marker_toggle':True,'no_stale_markers':True,'errors':errors}
+  report={'crowd_reaction_and_rewind':True,'jump_to_contact':True,'side_camera':True,'marker_toggle':True,'no_stale_markers':True,'errors':errors}
   Path('logs/contact-view.json').write_text(json.dumps(report,indent=2));print(json.dumps(report))
   await browser.close()
 asyncio.run(main())

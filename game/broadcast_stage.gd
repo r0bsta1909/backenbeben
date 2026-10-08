@@ -18,15 +18,20 @@ func label(text: String,p: Vector3,size: int,c: Color) -> void:
 	var l := Label3D.new();l.text=text;l.position=p;l.font_size=size;l.pixel_size=.006;l.modulate=c;l.outline_size=4;add_child(l)
 var crowd_parts: Dictionary = {"head":[],"torso":[],"limb":[]}
 var crowd_rng := RandomNumberGenerator.new()
+var crowd_poses: Array[Transform3D] = []
+var crowd_batches: Dictionary = {}
+var current_spectator := -1
+var crowd_was_active := false
 func crowd_part(kind: String, pose: Transform3D, center: Vector3, size: Vector3, color: Color) -> void:
-	crowd_parts[kind].append([pose*Transform3D(Basis.from_scale(size),center),color])
+	crowd_parts[kind].append([pose*Transform3D(Basis.from_scale(size),center),color,current_spectator])
 func crowd_limb(pose: Transform3D, a: Vector3, b: Vector3, radius: float, color: Color) -> void:
 	var basis := Basis(Quaternion(Vector3.UP,(b-a).normalized()))*Basis.from_scale(Vector3(radius,a.distance_to(b)*.5,radius))
-	crowd_parts.limb.append([pose*Transform3D(basis,(a+b)*.5),color])
+	crowd_parts.limb.append([pose*Transform3D(basis,(a+b)*.5),color,current_spectator])
 func spectator(position: Vector3, yaw: float) -> void:
 	var height := crowd_rng.randf_range(.90,1.15)
 	var width := crowd_rng.randf_range(.88,1.12)
 	var pose := Transform3D(Basis(Vector3.UP,yaw+crowd_rng.randf_range(-.16,.16))*Basis.from_scale(Vector3(width,height,1)),position)
+	current_spectator=crowd_poses.size();crowd_poses.append(pose)
 	var shirts: Array[Color]=[Color("202a39"),Color("33282e"),Color("272d2a"),Color("30343b"),Color("24212d")]
 	var skins: Array[Color]=[Color("625044"),Color("514237"),Color("40352f"),Color("6a584d")]
 	var shirt: Color=shirts[crowd_rng.randi_range(0,shirts.size()-1)]
@@ -53,9 +58,33 @@ func finish_crowd() -> void:
 		var batch := MultiMesh.new();batch.transform_format=MultiMesh.TRANSFORM_3D;batch.use_colors=true;batch.mesh=primitive;batch.instance_count=crowd_parts[kind].size()
 		for i in range(batch.instance_count):
 			batch.set_instance_transform(i,crowd_parts[kind][i][0]);batch.set_instance_color(i,crowd_parts[kind][i][1])
+		crowd_batches[kind]=batch
 		var instance := MultiMeshInstance3D.new();instance.name="Crowd_"+kind;instance.multimesh=batch
 		var material := mat(Color(.48,.50,.58));material.vertex_color_use_as_albedo=true
 		instance.material_override=material;add_child(instance)
+
+func react_to_hit(time_since_contact: float, knockout: bool, hit: bool) -> void:
+	# Absolute clip time, never accumulated delta: rewind restores the same pose.
+	var active := hit and time_since_contact>.07 and time_since_contact<(.23+(1.25 if knockout else .85))
+	if not active and not crowd_was_active:return
+	crowd_was_active=active
+	var transforms: Array[Transform3D] = []
+	for i in range(crowd_poses.size()):
+		var age := time_since_contact-(.07+float((i*37)%17)*.01)
+		var duration := 1.25 if knockout else .85
+		var angle := 0.0
+		if hit and age>0.0 and age<duration:
+			var strength := (.18 if knockout else .10)*(.8+float((i*11)%9)*.04)
+			angle=-strength*sin(PI*age/duration)
+		var turn := Basis(Vector3.RIGHT,angle)
+		var pivot := Vector3(0,-.20,0)
+		var pose: Transform3D=crowd_poses[i]
+		transforms.append(pose*Transform3D(turn,pivot-turn*pivot)*pose.affine_inverse() if angle!=0.0 else Transform3D.IDENTITY)
+	for kind in crowd_parts:
+		var batch: MultiMesh=crowd_batches[kind]
+		for i in range(crowd_parts[kind].size()):
+			var part: Array=crowd_parts[kind][i]
+			batch.set_instance_transform(i,transforms[int(part[2])]*part[0])
 
 func _ready() -> void:
 	crowd_rng.seed=1909

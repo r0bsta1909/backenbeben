@@ -17,6 +17,7 @@ var you := 0
 var last_event := -1
 var last_match := -1
 var clock_time := 0.0
+var arena_stage: Node3D
 var impact := 0.0
 var swing := 0.0
 var mirror_focus := false
@@ -152,9 +153,9 @@ func build_arena() -> void:
 	add_child(camera)
 	camera.look_at(Vector3.ZERO)
 	camera.current = true
-	var stage := Node3D.new()
-	stage.set_script(load("res://broadcast_stage.gd"))
-	add_child(stage)
+	arena_stage = Node3D.new()
+	arena_stage.set_script(load("res://broadcast_stage.gd"))
+	add_child(arena_stage)
 
 func prepare_materials(root: Node) -> void:
 	physics_materials[root.get_instance_id()] = []
@@ -329,7 +330,7 @@ func _process(delta: float) -> void:
 			JavaScriptBridge.eval("window.contactSound=false")
 		mirror_focus=bool(JavaScriptBridge.eval("window.mirrorFocus || false",true))
 		AudioServer.set_bus_mute(0,bool(JavaScriptBridge.eval("window.muted || false",true)))
-		JavaScriptBridge.eval("window.godotStats="+JSON.stringify({"fps":Engine.get_frames_per_second(),"arm_data":hand_pose.has("arm"),"hand_wrist":str(hand.skeleton.get_bone_global_pose(hand.skeleton.find_bone("hand.R")).origin),"dragging":dragging,"samples":gesture.size(),"physics_time":physics_frame.get("time",-1),"physics_active":physics_frame.has("id"),"muted":AudioServer.is_bus_mute(0)}))
+		JavaScriptBridge.eval("window.godotStats="+JSON.stringify({"fps":Engine.get_frames_per_second(),"arm_data":hand_pose.has("arm"),"hand_wrist":str(hand.skeleton.get_bone_global_pose(hand.skeleton.find_bone("hand.R")).origin),"dragging":dragging,"samples":gesture.size(),"physics_time":physics_frame.get("time",-1),"physics_active":physics_frame.has("id"),"crowd_active":arena_stage.crowd_was_active,"muted":AudioServer.is_bus_mute(0)}))
 	if appearance_timer>=.08:
 		appearance_timer=0
 		if state.has("players") and state.players.size()>1:
@@ -407,6 +408,7 @@ func drive_recorded_physics() -> void:
 	var empty_cage := PackedVector3Array()
 	empty_cage.resize(63)
 	var active := physics_frame.has("id")
+	arena_stage.react_to_hit(float(physics_frame.get("time",0.0))-float(physics_frame.get("contact",.5)),bool(physics_frame.get("ko",false)),active and bool(physics_frame.get("crowd_hit",false)))
 	if active:
 		var values: Array = physics_frame.get("offsets",[])
 		for i in range(mini(63,values.size()/3)):
