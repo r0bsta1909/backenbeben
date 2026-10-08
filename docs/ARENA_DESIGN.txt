@@ -34,8 +34,10 @@ wird das Bild passend vergroessert; freie Kameradrehungen sind Designwerkzeuge.
 WERBUNG
 Sechs Original-Drucktexturen: AdiHash/Zahnersatz am Boden, INEOS am Pult,
 KFZ Koenig/Versino/Hoenhorst am Podest. Druckshader entfernen Hintergruende
-und bewahren KFZ-Innenbuchstaben. Hoenhorst wird aus den blauen Schriftpixeln
-freigestellt, um beige Fotoflecken zu entfernen.
+und bewahren KFZ-Innenbuchstaben. KFZ steht auf einer Podestseite, Versino
+und Hoenhorst auf der angrenzenden Seite. Die kleine Hoenhorst-Fotovorlage
+bleibt als kompaktes Werbeschild vollstaendig erhalten, weil eine Farbmaske
+den Praegeschriftzug beschaedigt. Weiche Alphakanten erhalten feine Druckdetails.
 Veltins, Kirche und BACKENBEBEN gehoeren zum gemalten Hallenbild. Sie folgen
 der Illustration; kleine Details sind keine pixelgenaue Originalreproduktion.
 

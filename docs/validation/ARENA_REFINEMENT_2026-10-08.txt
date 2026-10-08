@@ -1,0 +1,19 @@
+HYBRID-ARENA – VERFEINERUNG / 08.10.2026
+
+Gefundene Probleme: drei Podestlogos auf einer Flaeche, ungenutzte angrenzende
+Flaeche; loechrige kleine Hoenhorst-Schrift durch harte Freistellung; wenig
+Raum um den Gegnerkopf, Banner hinter dem Kopf und angeschnitten in Nahansichten.
+
+Aenderungen: KFZ auf einer Seite, Versino/Hoenhorst auf der angrenzenden Seite.
+Sanfte Alphakanten statt hartem Pixelverwerfen, keine kuenstliche Druckkoernung.
+Hoenhorst-Farbmasken erwiesen sich als ungeeignet fuer die fotografierte
+Praegeschrift. Originalbild als kleine gerahmte Sponsorplakette erhalten.
+Spielansicht etwas weiter, groesserer Bildwinkel, mehr sichtbares Pult;
+Hintergrund-Ausschnitt in beiden Nahansichten verschoben. Header wieder lesbarer.
+
+Plattform neu gespeichert, native vier Ansichten und zwei Detailbilder
+geprueft. ARENA_HYBRID_PASS: 2D-Halle, keine 3D-Hallen-/Zuschauergeometrie,
+sechs 3D-Werbeflaechen, vier Kameras und unveraenderte Tischoberkante.
+Separater Web-Build erfolgreich. Nachweis Browser: logs/arena-web-preview/result.json.
+Kulisse und Plattform bleiben getrennt. Keine Aenderung an main.tscn oder
+Serverphysik. Kleine Hoenhorst-Quelle (237x96) begrenzt Schaerfe in Nahaufnahmen.

@@ -68,14 +68,14 @@ func stage_deck() -> void:
 	koenig.material_override.set_shader_parameter("koenig_mask",true)
 	koenig.material_override.set_shader_parameter("uv_scale",Vector2(1,.57))
 	koenig.material_override.set_shader_parameter("uv_offset",Vector2(0,.215))
-	var versino:=artwork("FasciaVersino","versino.jpg",Vector3(.3,-5.7,7.064),Vector2(1.7,.80),Vector3.ZERO,true)
+	var versino:=artwork("FasciaVersino","versino.jpg",Vector3(7.024,-5.7,-1.4),Vector2(1.9,.89),Vector3(0,PI/2,0),true)
 	versino.material_override.set_shader_parameter("uv_scale",Vector2(1,.47))
 	versino.material_override.set_shader_parameter("uv_offset",Vector2(0,.20))
 	versino.material_override.set_shader_parameter("lighten_blue",true)
-	artwork("FasciaHoenhorst","hoenhorst.png",Vector3(4.0,-5.7,7.064),Vector2(2.0,.81),Vector3.ZERO,true,false,true)
-	sponsor_surfaces["FasciaHoenhorst"].material_override.set_shader_parameter("pale_low",.18)
-	sponsor_surfaces["FasciaHoenhorst"].material_override.set_shader_parameter("pale_high",.30)
-	sponsor_surfaces["FasciaHoenhorst"].material_override.set_shader_parameter("blue_mask",true)
+	# This small source is a photographed embossed wordmark. Keep its light/dark
+	# letter relief intact on a compact sponsor plaque rather than flattening it.
+	part("HoenhorstPlaque",Vector3(7.014,-5.7,3.3),Vector3(.014,.90,2.21),"b6a286")
+	artwork("FasciaHoenhorst","hoenhorst.png",Vector3(7.034,-5.7,3.3),Vector2(2.15,.87),Vector3(0,PI/2,0))
 	for x in [-7.0,7.0]:
 		part("DeckEdge",Vector3(x,-5.24,1.05),Vector3(.04,.06,12),"a29579")
 	for x in [-6.9,-4.0,-1.0,2.0,5.0,6.9]:

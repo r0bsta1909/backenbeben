@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode cull_disabled, depth_draw_opaque, specular_disabled;
+render_mode cull_disabled, depth_prepass_alpha, specular_disabled;
 uniform sampler2D artwork : source_color, filter_linear_mipmap, repeat_disable;
 uniform bool white_key = false;
 uniform bool circular = false;
@@ -28,7 +28,8 @@ void fragment() {
         // source_color samples are linear; remove both tones of baked pale backgrounds.
         alpha *= 1.0 - smoothstep(pale_low, pale_high, pale);
     }
-    if(blue_mask)alpha*=smoothstep(.008,.035,ink.b-ink.r);
+    // Hue isolates the blue lettering while retaining its lighter bevels.
+    if(blue_mask)alpha=ink.a*smoothstep(.001,.012,ink.b-ink.r);
     // Keep the white letters inside the purple band and the red triangular plate.
     if(koenig_mask) {
         bool band=source_uv.y>.287 && source_uv.y<.495;
@@ -36,12 +37,12 @@ void fragment() {
         alpha=ink.a*(band || plate ? 1.0 : 0.0);
     }
     if (circular) alpha *= 1.0 - smoothstep(0.488, 0.499, length(UV - vec2(0.5)));
-    if (alpha < 0.12) discard;
+    if (alpha < 0.005) discard;
+    ALPHA=alpha;
     // Muted print and a little substrate variation keep signage in the same space.
     vec3 print_color = ivory_ink ? vec3(0.82, 0.78, 0.66) : ink.rgb;
     if(lighten_blue && ink.b>ink.r*1.3 && ink.b>ink.g*1.2)print_color=mix(ink.rgb,vec3(.72,.77,.82),.75);
-    float grain=fract(sin(dot(floor(UV*900.0),vec2(12.9898,78.233)))*43758.5453);
-    ALBEDO = mix(print_color, vec3(dot(print_color,vec3(.3,.59,.11))), .12)*vec3(.92,.88,.78)*(.96+grain*.04);
+    ALBEDO = mix(print_color, vec3(dot(print_color,vec3(.3,.59,.11))), .12)*vec3(.92,.88,.78)*.98;
     EMISSION=ALBEDO*.13;
     ROUGHNESS = 0.95;
 }

@@ -32,5 +32,10 @@ func capture() -> void:
 	await process_frame
 	RenderingServer.force_draw(false)
 	root.get_texture().get_image().save_png(directory+"/podium.png")
+	scene.camera.position=Vector3(10,-5.2,4)
+	scene.camera.look_at(Vector3(7.024,-5.7,2.1))
+	await process_frame
+	RenderingServer.force_draw(false)
+	root.get_texture().get_image().save_png(directory+"/fascia.png")
 	print("ARENA_HYBRID_CAPTURE_OK: 2D hall, 6 platform/table logos, 4 camera views")
 	quit(0)
