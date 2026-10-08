@@ -7,16 +7,16 @@
       0
     ],
     "contact_class": "flat",
-    "solve_ms": 1503.2,
-    "peak_render_units": 0.004207,
-    "maximum_recovery_wrist_deg": 81.65080658357134,
-    "minimum_recovery_gap_m": 0.025859133364214748,
+    "solve_ms": 1510.7,
+    "peak_render_units": 0.00421,
+    "maximum_recovery_wrist_deg": 81.65073598618608,
+    "minimum_recovery_gap_m": 0.025849771635234733,
     "table_collision": false,
     "contact_diagnostics": {
-      "maximum_wrist_separation_m": 5.74685851467809e-06,
-      "maximum_penetration_m": 1.9242697800812538e-06,
+      "maximum_wrist_separation_m": 5.765908670589218e-06,
+      "maximum_penetration_m": 1.9324985630813894e-06,
       "unconverged_steps": 14,
-      "maximum_material_residual_m": 0.00012022550651699443
+      "maximum_material_residual_m": 0.00012043053438440731
     }
   },
   {
@@ -27,16 +27,16 @@
       0
     ],
     "contact_class": "glance",
-    "solve_ms": 1367.7,
-    "peak_render_units": 0.004293,
-    "maximum_recovery_wrist_deg": 84.81299335521881,
-    "minimum_recovery_gap_m": 0.012599908995191242,
+    "solve_ms": 1392.3,
+    "peak_render_units": 0.0042639999999999996,
+    "maximum_recovery_wrist_deg": 84.81305006336544,
+    "minimum_recovery_gap_m": 0.01257077013429063,
     "table_collision": false,
     "contact_diagnostics": {
-      "maximum_wrist_separation_m": 2.6105664749075587e-06,
-      "maximum_penetration_m": 3.6799577208232215e-07,
+      "maximum_wrist_separation_m": 2.6056092713037676e-06,
+      "maximum_penetration_m": 6.101221511344043e-07,
       "unconverged_steps": 17,
-      "maximum_material_residual_m": 0.00010052796523279616
+      "maximum_material_residual_m": 0.00010054823455729004
     }
   },
   {
@@ -47,16 +47,16 @@
       0
     ],
     "contact_class": "tips",
-    "solve_ms": 1503.3,
-    "peak_render_units": 0.0036569999999999997,
-    "maximum_recovery_wrist_deg": 76.71174584463466,
-    "minimum_recovery_gap_m": 0.013072859992210903,
+    "solve_ms": 1549.6,
+    "peak_render_units": 0.003656,
+    "maximum_recovery_wrist_deg": 76.71167426515117,
+    "minimum_recovery_gap_m": 0.013074189971235259,
     "table_collision": false,
     "contact_diagnostics": {
-      "maximum_wrist_separation_m": 1.804527239047213e-06,
-      "maximum_penetration_m": 2.64750232184708e-07,
+      "maximum_wrist_separation_m": 1.7994963676346777e-06,
+      "maximum_penetration_m": 2.6300585351305814e-07,
       "unconverged_steps": 21,
-      "maximum_material_residual_m": 0.00016181873778099568
+      "maximum_material_residual_m": 0.00016134753156961813
     }
   },
   {
@@ -67,16 +67,16 @@
       0
     ],
     "contact_class": "zone",
-    "solve_ms": 1114.1,
-    "peak_render_units": 0.00484,
-    "maximum_recovery_wrist_deg": 85.00000000000001,
-    "minimum_recovery_gap_m": 0.013000895761520567,
+    "solve_ms": 1097.4,
+    "peak_render_units": 0.0048059999999999995,
+    "maximum_recovery_wrist_deg": 85.00000000000003,
+    "minimum_recovery_gap_m": 0.012989414669894866,
     "table_collision": false,
     "contact_diagnostics": {
-      "maximum_wrist_separation_m": 2.783009363728373e-06,
-      "maximum_penetration_m": 1.4303718278020352e-06,
+      "maximum_wrist_separation_m": 2.799201141519093e-06,
+      "maximum_penetration_m": 2.7562909417266966e-07,
       "unconverged_steps": 12,
-      "maximum_material_residual_m": 8.636200573255536e-05
+      "maximum_material_residual_m": 8.594375266058192e-05
     }
   },
   {
@@ -87,16 +87,16 @@
       0
     ],
     "contact_class": "heel",
-    "solve_ms": 879.4,
+    "solve_ms": 902.0,
     "peak_render_units": 3.6e-05,
-    "maximum_recovery_wrist_deg": 85.0,
-    "minimum_recovery_gap_m": 0.014725737801811273,
+    "maximum_recovery_wrist_deg": 85.00000000000001,
+    "minimum_recovery_gap_m": 0.014744714694801694,
     "table_collision": false,
     "contact_diagnostics": {
-      "maximum_wrist_separation_m": 1.5372659078215263e-05,
-      "maximum_penetration_m": 2.0541351176883867e-07,
+      "maximum_wrist_separation_m": 1.5414853270258217e-05,
+      "maximum_penetration_m": 1.0187754088023305e-07,
       "unconverged_steps": 6,
-      "maximum_material_residual_m": 0.00021189834972485625
+      "maximum_material_residual_m": 0.00020888825664794233
     }
   },
   {
@@ -107,16 +107,16 @@
       0
     ],
     "contact_class": "flat",
-    "solve_ms": 1205.2,
-    "peak_render_units": 0.003846,
-    "maximum_recovery_wrist_deg": 81.64147953319797,
-    "minimum_recovery_gap_m": 0.026141189553359118,
+    "solve_ms": 1195.5,
+    "peak_render_units": 0.003848,
+    "maximum_recovery_wrist_deg": 81.6412724441041,
+    "minimum_recovery_gap_m": 0.02617006533686167,
     "table_collision": false,
     "contact_diagnostics": {
-      "maximum_wrist_separation_m": 6.393498029672921e-06,
-      "maximum_penetration_m": 2.1841107377632837e-06,
+      "maximum_wrist_separation_m": 6.414417556696195e-06,
+      "maximum_penetration_m": 2.1911000888678145e-06,
       "unconverged_steps": 14,
-      "maximum_material_residual_m": 0.00016108341545803138
+      "maximum_material_residual_m": 0.00016137519799686126
     }
   },
   {
@@ -127,16 +127,16 @@
       0.7
     ],
     "contact_class": "glance",
-    "solve_ms": 1140.4,
-    "peak_render_units": 0.003971,
-    "maximum_recovery_wrist_deg": 81.13386978862162,
-    "minimum_recovery_gap_m": 0.025711841438090036,
+    "solve_ms": 1121.7,
+    "peak_render_units": 0.003912,
+    "maximum_recovery_wrist_deg": 81.13397042957824,
+    "minimum_recovery_gap_m": 0.02554723389324022,
     "table_collision": false,
     "contact_diagnostics": {
-      "maximum_wrist_separation_m": 6.208995486777291e-06,
-      "maximum_penetration_m": 2.806025029365481e-08,
+      "maximum_wrist_separation_m": 6.2408733813733236e-06,
+      "maximum_penetration_m": 2.7547557092234805e-08,
       "unconverged_steps": 12,
-      "maximum_material_residual_m": 0.0001594304377159942
+      "maximum_material_residual_m": 0.0001563254425265098
     }
   }
 ]

@@ -1,5 +1,5 @@
 MakeHuman Community: CC0 base mesh and shape data.
-Adapted head and hand topology in character_v3.glb.
+Adapted head, arm and hand topology in character_v3.glb.
 Source: https://github.com/makehumancommunity/makehuman
 See assets-source/makehuman/PROVENANCE.txt for inputs.
 

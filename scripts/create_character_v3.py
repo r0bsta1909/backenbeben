@@ -233,13 +233,6 @@ for sign,side in [(-1,'R'),(1,'L')]:
     bones['forearm.'+side]=(el,tw,'upper_arm.'+side)
     bones['forearm_twist.'+side]=(tw,wr,'forearm.'+side)
     bones['hand.'+side]=(wr,wr+direction*.10,'forearm_twist.'+side)
-    rows=[]
-    for a,b,radii in [(sh,el,[(.064,.060),(.067,.058),(.055,.046),(.043,.039)]),(el,wr,[(.043,.039),(.048,.039),(.039,.030),(.027,.023)])]:
-        for j,(rx,rz) in enumerate(radii):
-            if rows and j==0:continue
-            rows.append((a.lerp(b,j/3),rx,rz))
-    rows.append((wr+direction*.005,.027,.023))
-    arm=loft('ArmSkin.'+side,rows,skin,32);parts=[arm]
     mhside='r' if side=='R' else 'l'
     def joint(name):
         ids=set(i for f in groups['joint-'+mhside+'-'+name] for i in f)
@@ -254,6 +247,40 @@ for sign,side in [(-1,'R'),(1,'L')]:
     def hand_transform_raw(v):
         d=v-source_wrist
         return wr+direction*(d.dot(source_finger)*.095)+target_width*(d.dot(source_width)*.080)+target_normal*(d.dot(source_normal)*.095)
+    # Retarget the anatomical upper/lower arm around the measured joints.
+    # Preserve transverse muscle/elbow form instead of circular loft tubes.
+    source_shoulder=joint('shoulder');source_elbow=joint('elbow')
+    source_upper=(source_elbow-source_shoulder).normalized()
+    source_fore=(source_wrist-source_elbow).normalized()
+    target_upper=(el-sh).normalized();target_fore=(wr-el).normalized()
+    upper_rotation=source_upper.rotation_difference(target_upper)
+    fore_rotation=source_fore.rotation_difference(target_fore)
+    upper_scale=(el-sh).length/(source_elbow-source_shoulder).length
+    fore_scale=(wr-el).length/(source_wrist-source_elbow).length
+    elbow_axis=(source_upper+source_fore).normalized()
+    def arm_transform(v):
+        q=v-source_elbow
+        upper=el+upper_rotation@(q*.095+source_upper*q.dot(source_upper)*(upper_scale-.095))
+        fore=el+fore_rotation@(q*.095+source_fore*q.dot(source_fore)*(fore_scale-.095))
+        p=upper.lerp(fore,smoothstep(-.35,.35,q.dot(elbow_axis)))
+        near_wrist=smoothstep(-.65,-.12,(v-source_wrist).dot(source_fore))
+        p=p.lerp(hand_transform_raw(v),near_wrist)
+        q=p-wr;along=q.dot(direction)
+        angle=math.atan2(q.dot(target_normal)/.023,q.dot(target_width)/.027)
+        radial=q-direction*along
+        wrist_ring=target_width*(.027*math.cos(angle))+target_normal*(.023*math.sin(angle))
+        return wr+direction*along+radial.lerp(wrist_ring,smoothstep(-.085,-.015,along))
+    arm_faces=[f for f in groups['body'] if all(sign*raw[i].x>1.8 and (raw[i]-source_wrist).dot(source_finger)<.06 for i in f)]
+    arm_indices=sorted(set(i for f in arm_faces for i in f));arm_lookup={old:new for new,old in enumerate(arm_indices)}
+    arm=mesh('ArmSkin.'+side,[arm_transform(raw[i]) for i in arm_indices],[tuple(arm_lookup[i] for i in f) for f in arm_faces],skin)
+    bpy.context.view_layer.objects.active=arm
+    subdivision=arm.modifiers.new('Anatomical arm surface','SUBSURF');subdivision.levels=1
+    bpy.ops.object.modifier_apply(modifier=subdivision.name)
+    bm=bmesh.new();bm.from_mesh(arm.data)
+    bmesh.ops.holes_fill(bm,edges=[e for e in bm.edges if e.is_boundary],sides=0)
+    bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces))
+    bm.to_mesh(arm.data);bm.free()
+    parts=[arm]
     # Adduct the four fingers around their own knuckles. Keep depth/curl and
     # thumb anatomy; this is the exported rest mesh, not a visual-only pose.
     digit_guides=[]
@@ -317,7 +344,21 @@ for sign,side in [(-1,'R'),(1,'L')]:
     # blended cloth/skin layers from fighting during shoulder rotation.
     bm=bmesh.new();bm.from_mesh(arm.data);upper=(el-sh).normalized()
     hidden=[f for f in bm.faces if all((G(v.co)-sh).dot(upper)<.101 for v in f.verts)]
-    bmesh.ops.delete(bm,geom=hidden,context='FACES');bm.to_mesh(arm.data);bm.free()
+    bmesh.ops.delete(bm,geom=hidden,context='FACES')
+    # The hidden shoulder cut can leave detached remnants inside the sleeve.
+    unseen=set(bm.verts);components=[]
+    while unseen:
+        start=unseen.pop();component={start};todo=[start]
+        while todo:
+            vertex=todo.pop()
+            for edge in vertex.link_edges:
+                other=edge.other_vert(vertex)
+                if other in unseen:unseen.remove(other);component.add(other);todo.append(other)
+        components.append(component)
+    if components:
+        largest=max(components,key=len)
+        bmesh.ops.delete(bm,geom=[v for c in components if c is not largest for v in c],context='VERTS')
+    bm.to_mesh(arm.data);bm.free()
     arm_objects[arm.name]=(arm,None)
     # Sleeve sections stay perpendicular to the humerus. The inset root bends
     # toward the chest; using that bend as its frame creates a raised horn.
@@ -403,6 +444,37 @@ for obj in [o for o in bpy.context.scene.objects if o.type=='MESH']:
     else:
         group=obj.vertex_groups.new(name=fixed);group.add(list(range(len(obj.data.vertices))),1,'REPLACE')
     mod=obj.modifiers.new('Character skeleton','ARMATURE');mod.object=rig;obj.parent=rig
+
+# Diffuse shoulder weights over the connected garment surface. Coordinate-only
+# products can leave a narrow hinge across the deltoid when the arm rises.
+# Pin chest and cuff so smoothing cannot detach the sleeve from the upper arm.
+adjacency=[[] for _ in body.data.vertices]
+for edge in body.data.edges:
+    a,b=edge.vertices
+    weight=1/max((body.data.vertices[a].co-body.data.vertices[b].co).length,.0001)
+    adjacency[a].append((b,weight));adjacency[b].append((a,weight))
+for side in ['R','L']:
+    group=body.vertex_groups['upper_arm.'+side]
+    shoulder=Vector(bones['upper_arm.'+side][0])
+    axis=(Vector(bones['upper_arm.'+side][1])-shoulder).normalized()
+    sign=-1 if side=='R' else 1
+    values=[];pins=[]
+    for v in body.data.vertices:
+        p=G(v.co);along=(p-shoulder).dot(axis)
+        values.append(next((g.weight for g in v.groups if g.group==group.index),0.))
+        pins.append(0. if sign*p.x<.145 or p.y<-.40 else 1. if along>.095 and sign*p.x>.23 else None)
+    for iteration in range(36):
+        updated=values.copy()
+        for i,links in enumerate(adjacency):
+            if pins[i] is not None:updated[i]=pins[i]
+            elif links:
+                average=sum(values[j]*w for j,w in links)/sum(w for j,w in links)
+                updated[i]=.5*values[i]+.5*average
+        values=updated
+    for i,w in enumerate(values):group.add([i],w,'REPLACE')
+for v in body.data.vertices:
+    arm_sum=sum(g.weight for g in v.groups if body.vertex_groups[g.group].name.startswith('upper_arm.'))
+    body.vertex_groups['chest'].add([v.index],max(0.,1-arm_sum),'REPLACE')
 
 # Recalculate all face normals (lofts and annuli have different winding axes).
 for obj in [o for o in bpy.context.scene.objects if o.type=='MESH']:

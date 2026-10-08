@@ -4,4 +4,4 @@ base.obj: makehuman/data/3dobjs/base.obj
 caucasian-male-young.target: makehuman/data/targets/macrodetails/caucasian-male-young.target
 License: LICENSE.md section C, LICENSE.ASSETS.md (CC0 1.0 Universal).
 No MakeHuman program code is incorporated. The Blender script reads geometric data,
-extracts/subdivides the head, adapts proportions, and adds our rig and materials.
+extracts/subdivides the head, arms and hands, adapts proportions, and adds our rig and materials.

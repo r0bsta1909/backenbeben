@@ -1172,3 +1172,22 @@ V0.4.0-dev.20261008 ist auf GitHub veroeffentlicht und heruntergeladen; SHA256
 stimmt mit geprueftem Paket ueberein. Dieses Paket enthaelt noch den Assetstand
 vor dieser Schulterkorrektur; naechstes Paket nach weiterem visuellen Meilenstein.
 Entwicklungshost8877 wieder aus Checkout, Execsession14518. Pakettesthost beendet.
+
+G2 ANATOMISCHE ARME STATT ROTATIONSSYMMETRISCHER ROEHREN
+MakeHuman-CC0-Oberarm/Ellenbogen/Unterarm auf bestehende Gelenklaengen retargetet;
+Handgelenk auf gemeinsamen elliptischen Anschluss gefuehrt. Erster Export hatte
+offene Schnittflaechen, zu breite Unterarme und abgetrennte verdeckte Reste; vor
+Uebernahme geschlossen, Breite angepasst und groesste Armkomponente behalten.
+Quellenherkunft erweitert. Alte ungenutzte Loftarm-Erzeugung entfernt. Kleidungs-
+gewichte ueber Meshnachbarschaft geglaettet, Brust und Aermelende verankert.
+Blenderquelle/GLB/Vorschau exportiert:80993Polygone. Charakter/geschlosseneHand/
+116Kontaktsamples PASS. Kontaktpunkte neu exportiert, deshalb121Python-Tests und
+sieben vollstaendige Treffer-/Verletzungsvarianten erneut geprueft:PASS. Webbuild,
+fuenf native Posen mit Skelettabgleich und neun Browser-Kontaktansichten PASS.
+Browser solve1367ms, errors[]. Anatomische Armform in Ego/Seite sichtbar; noch
+keine fertige Art-/Bedienabnahme. Belege validation/anatomical-arms.json und
+anatomical-arm-front.png / anatomical-arm-side.png. Gewebesolver zeigt weiterhin
+numerische Restfehler, nicht als vollstaendig korrekte Anatomie ausgeben.
+Host8877 mit neuen Kontaktdaten neu gestartet, Execsession50074. GitHub-Release
+v0.4 bleibt gepruefter vorheriger Paketstand; Quellprojekt ist neuer. Naechster
+groesserer sichtbarer Schritt: Kopf/Haar/Kleidung und Arena an Referenz angleichen.

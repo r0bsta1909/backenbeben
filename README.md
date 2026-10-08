@@ -18,7 +18,7 @@ Der frühere Prototyp 02 bleibt als Release v0.2.0 erhalten. Der
 Tests von Spielgefühlsfreigabe. Die [Konzeptbilder](docs/art-direction-v3/03-first-person.png)
 zeigen weiterhin das gestalterische Ziel.
 
-Der laufende seitliche Umbau ergänzt anatomische Kopf-/Handtopologie,
+Der laufende seitliche Umbau ergänzt anatomische Kopf-/Arm-/Handtopologie,
 eine explizite Handflächenorientierung, gleichsinnige Maussteuerung,
 gedämpfte Brustkorbdrehung, TV-Bühne und einen gespeicherten K.-o.-Körpertrack.
 [Recherche, Gauntlet und offene Grenzen](docs/LATERAL_REWORK.txt).
@@ -76,7 +76,7 @@ Weitere Referenzen: [Konzept](docs/KONZEPT.txt), [Backlog](docs/BACKLOG.txt),
 Fremde Referenzfotos/-screenshots, lokale Konfiguration, Zugangsdaten, Laufzeitdownloads
 und rohe Matchlogs werden nicht veröffentlicht. Die neuen Konzeptbilder wurden mit
 Imagegen erzeugt. Lizenzhinweise für den mitgelieferten Godot-Webruntime stehen unter
-`third-party/`. Kopf und Hände verwenden in Blender angepasste CC0-Topologie von
+`third-party/`. Kopf, Arme und Hände verwenden in Blender angepasste CC0-Topologie von
 MakeHuman; Quelldaten und Herkunft liegen unter `assets-source/makehuman/`. Für eigene Projektinhalte wurde bisher keine zusätzliche Lizenz gewählt.
 
 Die Kontaktwertung verwendet inzwischen 116 aus der sichtbaren Hand exportierte

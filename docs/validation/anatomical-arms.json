@@ -1,0 +1,34 @@
+{
+  "asset_polygons": 80993,
+  "connected_arm_vertices": {
+    "R": 12035,
+    "L": 11812
+  },
+  "contact_samples": 116,
+  "python_tests": 121,
+  "native_five_pose_check": "passed",
+  "browser": {
+    "idle_material_uploads_skipped": true,
+    "mirror_visibility_updates": true,
+    "pose_camera_and_wheel": true,
+    "crowd_reaction_and_rewind": true,
+    "jump_to_contact": true,
+    "side_camera": true,
+    "marker_toggle": true,
+    "no_stale_markers": true,
+    "errors": [],
+    "coupled": {
+      "backend": "coupled",
+      "solve_ms": 1367.0,
+      "peak": 0.0063939999999999995,
+      "contact_diagnostics": {
+        "maximum_wrist_separation_m": 8.632083492724803e-06,
+        "maximum_penetration_m": 3.0446688398729695e-06,
+        "unconverged_steps": 14,
+        "maximum_material_residual_m": 0.00018292459957918388
+      }
+    }
+  },
+  "variants": "coupled-variants.json; seven complete cases passed",
+  "scope": "Anatomical mesh retargeting and shoulder weights; no claim of finished reference style or complete anatomical physics."
+}
