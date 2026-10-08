@@ -1878,3 +1878,20 @@ Keine Gesamtfreigabe:Wartezeit weiterhin merklich,Art/Anatomie/menschliche
 Bedienabnahme offen. Naechster Schritt integrierten aktuellen Paketstand bauen
 und frisch installieren/pruefen; keine weitere Mikrooptimierungskette.
 AktiverHost8877Session30515. V09Download weiterhin aelter. Goalaktiv.
+
+G7/G8 PROTOTYP10 ALS FRISCH GEPRUEFTES HOSTPAKET VEROEFFENTLICHT
+Quellstand85984a3,Webbuildneu,68Dateien,23872720Bytes. Release:
+https://github.com/r0bsta1909/backenbeben/releases/tag/v0.10.0-dev.20261008
+SHA25647a5a86d81b37dae4e14328d136e285c19ab2df16a2b38ad9477536604d89de6.
+AusserhalbCheckout frische eigenePython3.12Umgebung mitPaketsetup erstellt,
+START_HOST.bat ohnePhysicsOverride gestartet. GitHubDownloadhashgleich undalle
+68Dateienbytegleich zu laufenderInstallation. Standardduell10Treffer ohneKO
+bestanden; separaterKO-Test5Treffer bestanden inkl.KO-Ruecklauf/Anspannen/Lider/
+Resume/Revanche. Beideerrors[],Replayp95je27.9ms1920x1080 aufdiesemRechner.
+Nachweis validation/v10-package.json undPaketkontaktbild. ZweiphysischePCs nicht
+geprueft. Source/Paket enthalten nunReibung/Optimierungen/Lider/Licht/Stofflinien.
+Paketkontaktbildergesichtet: seitlicherKontakt/Armanschluss erkennbar,Stilweiter
+schematischeralsReferenz. KEINEArt-/menschlicheBedienabnahme. Goalbleibtoffen.
+NAECHSTER PRODUKTSCHRITT: groesste sichtbareLuecken beiFiguren/Gesichtern und
+Verstaendlichkeit amaktuellenReferenzvergleich priorisieren,keineweitere
+Mikrooptimierungsserie. CheckoutHost8877Session30515 bleibt;Pakettesthostbeendet.

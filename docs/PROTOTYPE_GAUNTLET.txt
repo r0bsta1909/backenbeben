@@ -46,7 +46,7 @@ Aktuell: normaler Matchstart nutzt gekoppelte Kontakt-/Gewebe-/Arm-Replays.
 Batchstart und vollstaendiger LAN-Standardkampf sind geprueft. Legacy bleibt nur
 Vergleichsoption. Head-/Kieferreaktion und Kontaktwertung haben noch Modellgrenzen.
 Drei Kopftranslationen und drei Eulerrotationen sind im Quellstandard integriert;
-Kontakt, Auslauf, Shader und Rueckholung nutzen dieselbe Aufzeichnung. Offene
+Kontakt, Auslauf, Shader und Rueckholung nutzen dieselbe Aufzeichnung.
 Tangentiale Reibung ist im Quellstandard integriert (validation/friction-default.json).
 Grenzen: diagonale generalisierte Traegheit, Prototyp-Hals-/Reibungsparameter,
 stilisierter Kiefer und gefuehrter KO. Das ist keine fertige anatomische Simulation.
@@ -77,8 +77,8 @@ Gemessene Zielhardware-Leistung fuer Idle, Schlag, Impact und Replay; keine nur
 isolierte Solverzeit als FPS-Beweis. Fehlerliste abarbeiten. Aktuelles herunter-
 geladenes Paket ausserhalb Entwicklungsordner starten und G5/G7 erneut pruefen.
 Quellen, eigene Assets, Lizenzen, Anleitung, Wissenssicherung und Release konsistent.
-Oeffentliches v0.9-dev-Archiv enthaelt den integrierten Quellstand d67fdcf.
-Frischer KO-/Standardpakettest und Downloadhash: validation/v09-package.json.
+Oeffentliches v0.10-dev-Archiv enthaelt den integrierten Quellstand 85984a3.
+Frischer KO-/Standardpakettest und Downloadhash: validation/v10-package.json.
 Goal erst abschliessen, wenn alle Gates mit passenden Belegen bestanden sind.
 
 ZURUECKGESTELLT
