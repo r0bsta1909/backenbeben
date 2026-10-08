@@ -1102,3 +1102,25 @@ Kein Releasepakettest, keine neue menschliche Abnahme und kein voller G4-Pass:
 Trefferberechnung muss deutlich schneller werden; Kontaktwertung/Headreaktion
 bleiben teilweise bisheriges Modell. Naechster Schritt ist Laufzeit des jetzt
 spielbaren Pfades, keine weitere isolierte Physikfunktion.
+
+G4 INTEGRIERTER REPLAYPFAD BESCHLEUNIGT
+Sequenzielle Kontaktprojektion in rigid_hand_compiled.py mit gleicher Reihenfolge,
+116 Samples und unveraenderten dt/Iterationstoleranzen kompiliert. Kein fast-math.
+Forearm-FK in arm_frame_compiled.py gegen100 Posen aus Arm.joints geprueft. Die
+alte Pythonprojektion bleibt als Referenz waehlbar. Vollstaendige Kontaktframes,
+Impulse, aktive Samples, Gelenkwinkel und Iterationszahlen verglichen; maxGewebe-
+abweichung1.01e-13 Rendereinheiten, gleiche Iterationszahlen. Dreiecksvorabgrenzen
+inkl. baryzentrischer Randtoleranz und skalare statt temporaere Arrayoperationen.
+Kein SciPy hinzugefuegt; kleine3x3Operationen direkt gerechnet.120 Tests bestanden.
+Vollstaendige warme Replays1194/1212/1273ms; Kontakt allein874ms gegen3766ms Referenz.
+Beleg validation/compiled-game-replay.json. Das sind lokale Messungen, keine
+allgemeine Hardwaregarantie. Gekoppelte Worker werden nun vor Hostbereitschaft
+initialisiert, statt Erstkompilierung beim ersten Schlag abzuwarten.
+Testhost8877 mit --physics coupled neu gestartet, Execsession9237. Echter erster
+Browser-Treffer1363.3ms; Replay/Posekamera/Mausrad/Kontaktmarker/Ruecklauf/Crowd/
+Spiegelcheck erfolgreich, errors[]. Beleg validation/compiled-match-browser.json.
+Damit Standardpruefschlag im1.4sVorbereitungsfenster; Varianten und normale
+Start-/Paketabhaengigkeiten vor Standardaktivierung noch zu pruefen. G4 bleibt
+insgesamt offen; Kopf/Kiefer und Bewertung noch teilweise bisheriges Modell.
+Naechster Schritt: gekoppelten Pfad mit verschiedenen Trefferlagen/Verletzungs-
+zustaenden absichern, dann Standardstart und Paket mit passenden Dependencies.

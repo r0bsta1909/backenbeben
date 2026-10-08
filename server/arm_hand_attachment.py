@@ -30,11 +30,11 @@ def forearm_frame(arm,q):
     return np.column_stack((cross3(axis,normal),axis,normal))
 
 class ArmHandAttachment:
-    def __init__(self,hand,arm,position_compliance=2e-5,angle_compliance=2e-3):
+    def __init__(self,hand,arm,position_compliance=2e-5,angle_compliance=2e-3,frame_function=forearm_frame):
         if min(position_compliance,angle_compliance)<0:raise ValueError('Negative compliance')
-        self.hand=hand;self.arm=arm
+        self.hand=hand;self.arm=arm;self.frame=frame_function
         self.local_wrist=hand.rotation.T@(np.asarray(arm.joints(arm.q)[1])-hand.center)
-        self.relative_rotation=forearm_frame(arm,arm.q).T@hand.rotation
+        self.relative_rotation=self.frame(arm,arm.q).T@hand.rotation
         self.compliance=np.array([position_compliance]*3+[angle_compliance]*3)
         self.multiplier=np.zeros(6)
     def begin_step(self):self.multiplier[:]=0
@@ -42,7 +42,7 @@ class ArmHandAttachment:
         center=self.hand.center if center is None else center
         rotation=self.hand.rotation if rotation is None else rotation
         q=self.arm.q if q is None else q
-        wrist=np.asarray(self.arm.joints(q)[1]);target=forearm_frame(self.arm,q)@self.relative_rotation
+        wrist=np.asarray(self.arm.joints(q)[1]);target=self.frame(self.arm,q)@self.relative_rotation
         return np.r_[center+rotation@self.local_wrist-wrist,rotation_log(rotation@target.T)]
     def jacobian_numeric(self):
         # Numerical reference, deliberately kept simple for later kernel comparison.
@@ -77,10 +77,10 @@ class ArmHandAttachment:
                         [sy*radius,cy*height,cy*distal_sine]])
         c,s=np.cos(arm.torso_yaw),np.sin(arm.torso_yaw)
         result[:3,6:]=-np.array([[c,0,s],[0,1,0],[-s,0,c]])@wrist
-        frame=forearm_frame(arm,q);eps=1e-6
+        frame=self.frame(arm,q);eps=1e-6
         for i in range(3):
             delta=np.eye(3)[i]*eps
-            derivative=(forearm_frame(arm,q+delta)-forearm_frame(arm,q-delta))/(2*eps)
+            derivative=(self.frame(arm,q+delta)-self.frame(arm,q-delta))/(2*eps)
             angular=derivative@frame.T
             omega=np.array([angular[2,1]-angular[1,2],angular[0,2]-angular[2,0],angular[1,0]-angular[0,1]])*.5
             result[3:,i+6]=-right_inverse@omega

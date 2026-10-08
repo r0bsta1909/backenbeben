@@ -1,4 +1,4 @@
-"""Experimental shared rigid-hand contact sheet; not active match physics."""
+"""Reference rigid-hand contact sheet for the optional coupled match backend."""
 import numpy as np
 from contact_embedding import embed_side_many
 from contact_constraint import project_rigid_contact

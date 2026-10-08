@@ -27,3 +27,13 @@ class BatchEmbeddingTests(unittest.TestCase):
    if expected is None:self.assertIsNone(actual);continue
    np.testing.assert_array_equal(actual['indices'],expected['indices'])
    for key in ['position','weights','normal']:np.testing.assert_allclose(actual[key],expected[key],atol=1e-12,rtol=0)
+
+ def test_compiled_bounds_preserve_barycentric_edge_tolerance(self):
+  try:from contact_embedding_compiled import embed_side_many as compiled
+  except ImportError:self.skipTest('Optional Numba unavailable')
+  nodes=np.array([[.1,0.,0.],[.1,1.,0.],[.1,0.,1.]])
+  triangles=np.array([[0,1,2]])
+  points=np.array([[.2,u,v] for u,v in [(0.,0.),(1.,0.),(0.,1.),(-5e-10,.4),(-2e-9,.4),(.5,.5+5e-10),(.5,.5+2e-9),(.4,-5e-10),(.4,-2e-9)]])
+  for expected,actual in zip(embed_side_many(points,nodes,triangles),compiled(points,nodes,triangles)):
+   self.assertEqual(expected is None,actual is None)
+   if expected is not None:np.testing.assert_allclose(actual['weights'],expected['weights'],atol=1e-15,rtol=0)

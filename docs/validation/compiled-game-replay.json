@@ -1,0 +1,13 @@
+{
+  "complete_replay_warm_ms": [
+    1272.5,
+    1212.1,
+    1194.2
+  ],
+  "reference_contact_ms": 3765.8624000032432,
+  "compiled_contact_ms": 874.0684000003967,
+  "maximum_tissue_difference_render_units": 1.0096090630185017e-13,
+  "same_iteration_counts": true,
+  "frames": 337,
+  "samples": 116
+}

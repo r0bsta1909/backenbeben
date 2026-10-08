@@ -362,9 +362,22 @@ async def replay(request):
     return web.json_response(clip,headers={'Cache-Control':'private, max-age=60'})
 
 
+def prepare_physics_worker(backend):
+    if backend=='coupled':
+        from coupled_replay import simulate as prepare
+        prepare(v3_score(bot_stroke()))
+
+
+def physics_worker_ready():return True
+
+
 async def lifecycle(app):
     global POOL
-    POOL=ProcessPoolExecutor(max_workers=2)
+    backend=app.get('physics_backend','legacy')
+    POOL=ProcessPoolExecutor(max_workers=2,initializer=prepare_physics_worker,initargs=(backend,))
+    if backend=='coupled':
+        print('Gekoppelte Physik wird vorbereitet ...',flush=True)
+        await asyncio.gather(*(asyncio.get_running_loop().run_in_executor(POOL,physics_worker_ready) for _ in range(2)))
     def connection_error(loop,context):
         exc=context.get('exception')
         if isinstance(exc,ConnectionResetError) and getattr(exc,'winerror',None)==10054:return
@@ -386,7 +399,7 @@ def main():
         from coupled_replay import simulate as coupled_simulate
         simulate=coupled_simulate
     if not (ROOT/'build/web/index.pck').exists():raise SystemExit('Web-Build fehlt. Zuerst BUILD_GAME.bat ausführen.')
-    app=web.Application(client_max_size=32768);app.cleanup_ctx.append(lifecycle)
+    app=web.Application(client_max_size=32768);app['physics_backend']=args.physics;app.cleanup_ctx.append(lifecycle)
     app.router.add_get('/api/replay/{rid}',replay);app.router.add_get('/ws',socket_handler);app.router.add_get('/api/info',info);app.router.add_post('/api/admin',admin);app.router.add_get('/health',health);app.router.add_get('/',index)
     app.router.add_static('/',ROOT/'build/web',show_index=False)
     async def start(app):

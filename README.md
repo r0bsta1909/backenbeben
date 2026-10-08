@@ -59,8 +59,8 @@ Der gekoppelte Kontaktpfad kann gezielt mit
 `python server/host.py --port 8877 --no-browser --no-console --physics coupled`
 geprüft werden. Dafür zusätzlich `server/requirements-lab.txt` installieren.
 Er liefert vollständige Browser-Replays mit seitlichem Gewebe und durchgehender
-Arm-Rückholung. Die Berechnung benötigt derzeit mehrere Sekunden pro Treffer;
-Kopf/Kiefer bleiben eine stilisierte Reaktion. Der normale Start verwendet bis
+Arm-Rückholung. Die Rechenworker werden beim Hoststart vorbereitet; der geprüfte Browser-Treffer
+benötigte danach rund 1,36 Sekunden. Kopf/Kiefer bleiben eine stilisierte Reaktion. Der normale Start verwendet bis
 zur vollständigen Abnahme weiterhin den bisherigen Pfad. Der gezielte Browsercheck
 lautet `python tests/replay_contact_view.py --expect-coupled --visual-contact`.
 
