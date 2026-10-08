@@ -1,7 +1,7 @@
 """Full game-schema replay for the coupled contact integration candidate.
 
-The cheek and arm use solved contact data. Head/jaw remain the existing stylized
-spring response, delayed until the anchored contact interval has ended.
+The cheek and arm use solved contact data. Head yaw uses the solved contact moment and a calibrated passive neck.
+Jaw remains stylized; both follow the anchored contact interval.
 """
 import math
 import time
@@ -9,6 +9,7 @@ import numpy as np
 from coupled_contact import simulate_contact,CompiledSideTissue
 from coupled_recovery import recover
 from contact_outcome import resolve
+from head_response import yaw_state,YAW_INERTIA_KG_M2
 
 
 def simulate(scored,braced=False):
@@ -40,15 +41,15 @@ def encode(scored,contact,braced=False):
     area=scored.get('contact_area_m2',0.)
     outcome=resolve(scored,contact)
     strength=outcome['response_strength']
-    side=-1 if scored['position'][0]<0 else 1
-    frames=[];head=0.;hv=0.;jaw=0.;jv=0.;head_started=False;peak=0.
+    moment=np.asarray(samples[-1]['cumulative_contact_moment_nms'],dtype=float)
+    if moment.shape!=(3,) or not np.all(np.isfinite(moment)):raise ValueError('Invalid contact moment')
+    frames=[];jaw=0.;jv=0.;head_started=False;peak=0.
     scale=1e-6;dt=1/240
     for tick in range(673):
         relative=tick*dt-.5
         forcing=relative>=end and not head_started
         if forcing:head_started=True
-        hv+=(-90*(1.5 if braced else 1)*head-12*hv+(side*strength*600 if forcing else 0))*dt
-        head+=hv*dt
+        head,_=yaw_state(float(moment[1]),relative-end,braced)
         jv+=(-140*jaw-14*jv+(strength*450 if forcing else 0))*dt
         jaw=max(-.04,min(.22,jaw+jv*dt))
         if tick%2:continue
@@ -69,7 +70,7 @@ def encode(scored,contact,braced=False):
         frames.append([round(head,5),round(jaw,5),*encoded.tolist()])
     return dict(fps=120,duration=2.8,contact=.5,nx=cage.geometry['nx'],ny=cage.geometry['ny'],scale=scale,
                 frames=frames,peak=peak,solve_ms=round(contact['solve_ms']+(time.perf_counter()-started)*1000,1),
-                **outcome,version=3,physics_backend='coupled',side_cage=cage.replay_geometry(),
+                **outcome,head_response={'model':'passive-yaw-after-anchored-contact','contact_moment_nms':moment.tolist(),'inertia_kg_m2':YAW_INERTIA_KG_M2,'start_time':.5+end,'parameters':'prototype tuning, not anatomical validation'},version=3,physics_backend='coupled',side_cage=cage.replay_geometry(),
                 arm_path=recover(scored,contact),footprint=scored.get('footprint',[]),path=scored.get('path',[]),
                 contact_time=scored['contact_time'],position=scored['position'],diagnosis=outcome['score_update'].get('diagnosis',scored.get('diagnosis','')),
                 impact_speed_m_s=scored.get('impact_speed_m_s',0),contact_area_m2=area,

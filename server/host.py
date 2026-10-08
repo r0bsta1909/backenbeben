@@ -269,7 +269,14 @@ async def tick(app):
                 if ko:r['winner']=r['turn']
                 r['hits']+=1;r['emote_used']=False;r['diagnosis']=r['pending']['diagnosis']
                 if braced:
-                    for frame in clip['frames']:frame[0]=round(frame[0]*.65,5)
+                    if clip.get('head_response',{}).get('model')=='passive-yaw-after-anchored-contact':
+                        from head_response import yaw_state
+                        response=clip['head_response']
+                        for i,frame in enumerate(clip['frames']):
+                            frame[0]=round(yaw_state(response['contact_moment_nms'][1],i/clip['fps']-response['start_time'],True)[0],5)
+                        response['braced']=True
+                    else:
+                        for frame in clip['frames']:frame[0]=round(frame[0]*.65,5)
                 rid=secrets.token_hex(10);r['replay_id']=rid;r['replay_skip']=[]
                 clip.update(id=rid,target=target,attacker=r['turn'],before=before,after=copy.deepcopy(r['players']),
                             turn=r['turn_id'],braced=braced,ko=ko,body_frames=collapse_track(ko),contact_class=r['pending']['contact_class'])

@@ -29,7 +29,9 @@ Belege: validation/coupled-variants.json, compiled-game-replay.json.
 Die Wirkungsstaerke nutzt den geloesten Normalimpuls; Flaechenabdeckung und
 Foulklassifikation stammen weiterhin aus der ersten Kontaktgeometrie.
 Offen:
-Kopf/Kiefer stilisierte Federn, gefuehrter KO, numerische Kontaktrestfehler;
+Kopf-Yaw nutzt geloesten Drehimpuls mit kalibriertem passivem Halsmodell,
+aber erst nach dem verankerten Kontaktintervall; Kiefer stilisiert.
+Gefuehrter KO, numerische Kontaktrestfehler;
 keine vollstaendige anatomische Traegheits-/Reibungs-/Verletzungssimulation.
 Lidschwellung ist visuelle Zustandsanzeige, nicht Teil des Kontaktkaefigs.
 

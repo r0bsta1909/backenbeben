@@ -53,7 +53,7 @@ async def main():
    replay_id=await page.evaluate('state.replay_id')
    recorded=await (await page.request.get('http://localhost:8877/api/replay/'+replay_id)).json()
    assert recorded['physics_backend']=='coupled'
-   coupled_evidence={'backend':recorded['physics_backend'],'solve_ms':recorded['solve_ms'],'peak':recorded['peak'],'contact_diagnostics':recorded['contact_diagnostics']}
+   coupled_evidence={'backend':recorded['physics_backend'],'solve_ms':recorded['solve_ms'],'peak':recorded['peak'],'contact_diagnostics':recorded['contact_diagnostics'],'head_response':recorded.get('head_response'),'maximum_head_yaw_rad':max(abs(f[0]) for f in recorded['frames'])}
   await page.locator('#replayImpact').click()
   await page.wait_for_function("JSON.parse(physicsFrame).camera==='side' && JSON.parse(physicsFrame).time===.5")
   assert await page.locator('#contactLegend').is_visible()
@@ -67,7 +67,7 @@ async def main():
    audit=[]
    for view in ('front','side','wide'):
     await page.locator('#replayCamera').select_option(view)
-    for moment,label in ((.46,'before'),(.5,'contact'),(.54,'after')):
+    for moment,label in ((.46,'before'),(.5,'contact'),(.54,'after'),(.65,'head-response'),(.8,'recovery')):
      await page.locator('#replaySeek').evaluate('(e,t)=>{e.value=t;e.dispatchEvent(new Event("input"))}',moment)
      await page.wait_for_function('(s)=>{const f=JSON.parse(physicsFrame);return f.camera===s.view && Math.abs(f.time-s.time)<.002 && f.footprint.length===0}',arg={'view':view,'time':moment})
      await page.wait_for_timeout(200)

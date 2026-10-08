@@ -58,3 +58,14 @@ class RigidContactTests(unittest.TestCase):
    np.testing.assert_allclose(a.rotation,b.rotation,atol=1e-14,rtol=0)
    np.testing.assert_allclose(ref.p,opt.p,atol=1e-14,rtol=0)
    np.testing.assert_allclose(a.multipliers,b.multipliers,atol=1e-14,rtol=0)
+
+ def test_contact_moment_uses_surface_lever_arm_and_resets(self):
+  from types import SimpleNamespace
+  from rigid_hand_contact import RigidHandContact
+  cage=SimpleNamespace(p=np.array([[0.,-1.,-1.],[0.,-1.,1.],[0.,1.,-1.],[0.,1.,1.]]),w=np.zeros(4),geometry={'triangles':np.array([[0,1,2],[1,3,2]])})
+  hand=RigidHandContact([[-.005,0.,.1]],[1.])
+  hand.begin_step();hand.project(cage,1/960)
+  expected=np.cross([0.,0.,.1],hand.step_contact_impulse)
+  self.assertGreater(abs(expected[1]),0)
+  np.testing.assert_allclose(hand.step_contact_moment,expected,atol=1e-12)
+  hand.begin_step();np.testing.assert_array_equal(hand.step_contact_moment,np.zeros(3))

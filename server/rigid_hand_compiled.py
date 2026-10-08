@@ -33,7 +33,7 @@ def rotation_increment(v):
 @njit(cache=True)
 def project_sheet(center,rotation,local,inverse_mass,inertia,nodes,w,triangles,
                   best,weights,normals,multipliers,keys,dt,skip_separated):
-    contacts=0;switches=0;impulse=np.zeros(3)
+    contacts=0;switches=0;impulse=np.zeros(3);moment=np.zeros(3)
     for i in range(len(local)):
         triangle=best[i]
         if triangle<0:
@@ -56,9 +56,10 @@ def project_sheet(center,rotation,local,inverse_mass,inertia,nodes,w,triangles,
         center=center+inverse_mass*delta*normal
         rotation=matmul(rotation_increment(matvec(world_inertia,angular)*delta),rotation)
         for j in range(3):nodes[ids[j]]-=w[ids[j]]*a[j]*delta*normal
-        impulse+=delta*normal/dt
+        increment=delta*normal/dt
+        impulse+=increment;moment+=np.cross(surface,increment)
         contacts+=int(updated>0.)
-    return center,rotation,contacts,switches,impulse
+    return center,rotation,contacts,switches,impulse,moment
 
 class CompiledRigidHandContact(RigidHandContact):
     def __init__(self,*args,**kwargs):
@@ -69,11 +70,11 @@ class CompiledRigidHandContact(RigidHandContact):
     def project(self,cage,dt,skip_separated=True):
         if not np.isfinite(dt) or dt<=0:raise ValueError('Positive finite timestep required')
         best,weights,_,normals=intersections(self.points(),cage.p,cage.geometry['triangles'])
-        self.center,self.rotation,self.last_contacts,switches,impulse=project_sheet(
+        self.center,self.rotation,self.last_contacts,switches,impulse,moment=project_sheet(
             self.center,self.rotation,self.local,self.inverse_mass,self.inverse_inertia,
             cage.p,cage.w,cage.geometry['triangles'],best,weights,normals,
             self.multipliers,self.triangle_keys,dt,skip_separated)
-        self.step_contact_switches+=switches;self.step_contact_impulse+=impulse
+        self.step_contact_switches+=switches;self.step_contact_impulse+=impulse;self.step_contact_moment+=moment
     def penetration(self,cage):
         points=self.points()
         best,_,positions,normals=intersections(points,cage.p,cage.geometry['triangles'])

@@ -1,0 +1,148 @@
+{
+  "unit_tests": "130 full-suite tests passed, then 7 contact and 3 replay tests including two new checks passed.",
+  "browser_views": {
+    "repeat_practice_without_damage": true,
+    "idle_material_uploads_skipped": true,
+    "mirror_visibility_updates": true,
+    "pose_camera_and_wheel": true,
+    "crowd_reaction_and_rewind": true,
+    "jump_to_contact": true,
+    "side_camera": true,
+    "marker_toggle": true,
+    "no_stale_markers": true,
+    "errors": [],
+    "coupled": {
+      "backend": "coupled",
+      "solve_ms": 1464.5,
+      "peak": 0.004615,
+      "contact_diagnostics": {
+        "maximum_wrist_separation_m": 6.153514904877613e-06,
+        "maximum_penetration_m": 1.9901984959399675e-06,
+        "unconverged_steps": 15,
+        "maximum_material_residual_m": 0.00012370784520957467
+      },
+      "head_response": {
+        "model": "passive-yaw-after-anchored-contact",
+        "contact_moment_nms": [
+          0.027396507855218754,
+          0.0418385166074042,
+          -0.035998017112556346
+        ],
+        "inertia_kg_m2": 0.018,
+        "parameters": "prototype tuning, not anatomical validation"
+      },
+      "maximum_head_yaw_rad": 0.11882
+    }
+  },
+  "duel": {
+    "errors": [],
+    "hits": [
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 24.53,
+        "quality": 0.8385,
+        "braced": true,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "0e71846ca1800767b74b"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 35.46,
+        "quality": 0.7879,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "1414a8c81d965eb97afb"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 28.22,
+        "quality": 0.6271,
+        "braced": false,
+        "side": "R",
+        "ko": true,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "75d4cd95de5dd0785fe6"
+      }
+    ],
+    "configuration": {
+      "base_damage": 45,
+      "ko_threshold": 60,
+      "turn_seconds": 60
+    },
+    "single_tilt_control": true,
+    "physics_backend": "coupled",
+    "solved_normal_impulse_ns": 1.6770071398349062,
+    "solved_quality_matches_hit": true,
+    "recorded_arm_frames": 530,
+    "clip_hash": "177784f34020154846a5f53f59e5244bcbadf5f8c6cf40f6cd146a31cb7b2b48",
+    "replay": {
+      "clipId": "0e71846ca1800767b74b",
+      "frameCount": 337,
+      "peak": 0.006372999999999999,
+      "time": 0.508313,
+      "frame": 60,
+      "deformation": 0.00635744988
+    },
+    "replay_frame_ms_p95": 14,
+    "viewport": [
+      1920,
+      1080
+    ],
+    "resume": true,
+    "injury_material_rewind": true,
+    "ko_body_recorded": true,
+    "ko_reverse_seek": true,
+    "winner": 0,
+    "audio": {
+      "mode": "buffer-fallback",
+      "played": 5,
+      "unlocked": true
+    },
+    "rematch_material_reset": true,
+    "rematch": true,
+    "leave": true,
+    "head_curve_verification": [
+      {
+        "braced": true,
+        "moment_nms": [
+          0.021740834491623107,
+          0.0396867068279275,
+          -0.029287380787843174
+        ],
+        "maximum_yaw_rad": 0.10202,
+        "max_recording_error_rad": 4.9742006058449485e-06
+      },
+      {
+        "braced": false,
+        "moment_nms": [
+          0.018678467594060784,
+          0.03681057940762679,
+          -0.028079618551167782
+        ],
+        "maximum_yaw_rad": 0.10454,
+        "max_recording_error_rad": 4.989781966992517e-06
+      },
+      {
+        "braced": false,
+        "moment_nms": [
+          0.022175872206557496,
+          0.03581003855809,
+          -0.03237398819132378
+        ],
+        "maximum_yaw_rad": 0.1017,
+        "max_recording_error_rad": 4.97350586569603e-06
+      }
+    ]
+  },
+  "limits": "Yaw only. Contact cage remains anchored during 60ms interval; yaw follows afterwards. Inertia and neck coefficients are prototype tuning, not anatomical measurements. Jaw remains stylized. No claim of complete head/contact coupling."
+}

@@ -1312,3 +1312,19 @@ Gesundreset bytegleich einschliesslich Spiegel. NativeOpenGL und Webbuild PASS.
 Vollstaendiger Browserkampf: keine Fehler, Materialruecklauf und Revanche PASS.
 Beleg validation/bilateral-injury.json und zwei Bilder. Kein Cross-GPU-/Zwei-PC-
 Nachweis; Kopf-/Halsmodell unveraendert stilisiert, Gesamtziel weiterhin offen.
+
+G4 GEMESSENER KONTAKTDREHIMPULS TREIBT KOPF-YAW
+Referenz/kompilierter Handkontakt summieren cross(Kontaktort,Impuls) ueber echte
+Gewebekontaktpunkte; proSchritt und kumuliert aufgezeichnet. Beide Solverwerte
+innerhalb1e-9 gleich. Kopf-Yaw nun aus gemessenem Y-Drehimpuls statt Seitenzeichen
+und Spielqualitaet. Analytische passive Antwort mit I=.018kgm2,k=1.62Nm/rad,
+c=.216Nms/rad; ausdruecklich Prototypkalibrierung, keine anatomische Messung.
+Anspannen verwendet1.5facheSteifigkeit statt nachtraeglicher.65Animationsskalierung.
+130Gesamttests PASS; nach zwei weiterenTests Kontakt7/Replay3 PASS. Tests fuer
+Hebelarm, Impulsbilanz, Richtung, Energieabnahme und aufgezeichnete Yawkurve.
+15Browseransichten erweitert um.65/.8s, Arm-/Replaychecks PASS. Voller LAN-KO-Kampf
+PASS; drei gespeicherte Kopfkurven inkl.Anspannen gegen Modell geprueft, Fehler
+unter5.0e-6rad(Rundung),errors[]. Beleg validation/head-moment.json und Bild.
+GRENZEN: Kontaktkaefig waehrend60ms weiterverankert, Kopfreaktion erst danach;
+keine vollgekoppelte bewegte Kopfbasis, nurYaw, Kiefer stilisiert. Kein G4-PASS.
+Host8877 Checkout neu gestartet,Session75214. V0.5-Paket noch aelter.

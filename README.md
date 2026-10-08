@@ -61,7 +61,7 @@ Nach einem Update einmal `SETUP_HOST.bat` ausführen; die benötigte Kompilierun
 ist jetzt in `server/requirements.txt` enthalten.
 Er liefert vollständige Browser-Replays mit seitlichem Gewebe und durchgehender
 Arm-Rückholung. Die Rechenworker werden beim Hoststart vorbereitet; der geprüfte Browser-Treffer
-benötigte danach rund 1,36 Sekunden. Kopf/Kiefer bleiben eine stilisierte Reaktion. `--physics legacy` hält den bisherigen Pfad für technische Vergleiche verfügbar.
+benötigte danach rund 1,36 Sekunden. Kopf-Yaw verwendet inzwischen den gelösten Kontaktdrehimpuls mit einem kalibrierten passiven Halsmodell. Der Kopf bleibt während des Kontaktintervalls noch verankert; die Kieferreaktion ist stilisiert. `--physics legacy` hält den bisherigen Pfad für technische Vergleiche verfügbar.
 Der gezielte Browsercheck
 lautet `python tests/replay_contact_view.py --expect-coupled --visual-contact`.
 
