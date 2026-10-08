@@ -67,6 +67,35 @@ def material(p,w,ei,ej,el,ti,tv,edge_order,volume_order,le,lv,alpha,av):
         for vertex in range(4):
             for axis in range(3):p[ids[vertex],axis]+=gradients[vertex,axis]*dl*w[ids[vertex]]
 
+@njit(cache=True)
+def residuals(p,ei,ej,el,ti,tv,le,lv,alpha,av):
+    """Full compliant residuals; same constraints and units as the reference."""
+    edge_max=0.;volume_max=0.;equivalent_max=0.
+    directions=np.empty((3,3));gradients=np.empty((4,3))
+    for k in range(len(ei)):
+        squared=0.
+        for axis in range(3):
+            delta=p[ei[k],axis]-p[ej[k],axis];squared+=delta*delta
+        edge_max=max(edge_max,abs(math.sqrt(squared)-el[k]+alpha*le[k]))
+    for k in range(len(ti)):
+        ids=ti[k]
+        for vertex in range(3):
+            for axis in range(3):directions[vertex,axis]=p[ids[vertex+1],axis]-p[ids[0],axis]
+        for vertex in range(3):
+            left=(vertex+1)%3;right=(vertex+2)%3
+            for axis in range(3):
+                a=(axis+1)%3;b=(axis+2)%3
+                gradients[vertex+1,axis]=(directions[left,a]*directions[right,b]-directions[left,b]*directions[right,a])/6
+        for axis in range(3):gradients[0,axis]=-gradients[1,axis]-gradients[2,axis]-gradients[3,axis]
+        volume=0.;squared=0.
+        for axis in range(3):volume+=directions[0,axis]*gradients[1,axis]
+        for vertex in range(4):
+            for axis in range(3):squared+=gradients[vertex,axis]*gradients[vertex,axis]
+        error=abs(volume-tv[k]+av*lv[k])
+        volume_max=max(volume_max,error)
+        equivalent_max=max(equivalent_max,error/max(math.sqrt(squared),1e-15))
+    return edge_max,volume_max,equivalent_max
+
 class CompiledTissue(ReferenceTissue):
     def prepare(self):
         super().prepare()
@@ -74,3 +103,6 @@ class CompiledTissue(ReferenceTissue):
         self.volume_order=np.concatenate(self.volume_batches)
     def solve_material(self,le,lv,alpha,av):
         material(self.p,self.w,self.ei,self.ej,self.el,self.ti,self.tv,self.edge_order,self.volume_order,le,lv,alpha,av)
+    def measure_residuals(self,le,lv,alpha,av):
+        values=residuals(self.p,self.ei,self.ej,self.el,self.ti,self.tv,le,lv,alpha,av)
+        return dict(zip(('edge_m','volume_m3','volume_equivalent_m'),values))

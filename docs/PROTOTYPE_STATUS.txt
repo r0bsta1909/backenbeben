@@ -249,3 +249,18 @@ measure_brace_latency.py. VeralteteDocstring zuKopfsolveraktivierung korrigiert.
 AktiverNormalhost8877Session2501 mitneuemCode. V09Downloadweiterhistorisch.
 Goalaktiv; naechsterEngpass lautProfil Materialresiduen(.737sGesamt), danach
 Spiel-/Paketintegration bewerten stattunbeschraenkteMikrooptimierung.
+
+G4/G8 GEWEBERESTFEHLER OHNE PRUEFUNGSREDUKTION BESCHLEUNIGT
+Vollstaendige Kanten-/Volumenresiduen kompiliert, gleiche Gleichungen/Einheiten,
+keine Toleranz oder Iterationsgrenze geaendert. 80 deformierte/degenerierte
+Referenzfaelle bestehen. Gesamte Python-Suite:162Tests PASS.
+Drei volle Replayvergleiche: Frames/Kopf/Arm/Wertung/Reibung exakt identisch.
+Median2918.2->2274.7ms. Reale WebSocket-Schlaege mit Anspannen:3.548s Median;
+vorheriger Meilenstein4.567s, keine interleavte Netzwerkmessung. Impuls/Wertung
+unveraendert. Voller LAN-Browserkampf PASS:Anspannen/Lider,Replay,KO,Ruecklauf,
+Resume,Revanche;errors[],p95=27.8ms aufTestrechner. Beleg validation/
+tissue-residual-performance.json; Reproduktion measure_tissue_residuals.py.
+Keine Gesamtfreigabe:Wartezeit weiterhin merklich,Art/Anatomie/menschliche
+Bedienabnahme offen. Naechster Schritt integrierten aktuellen Paketstand bauen
+und frisch installieren/pruefen; keine weitere Mikrooptimierungskette.
+AktiverHost8877Session30515. V09Download weiterhin aelter. Goalaktiv.

@@ -1,0 +1,181 @@
+{
+  "replay_comparison": {
+    "runs": [
+      {
+        "reference_ms": 2912.6,
+        "optimized_ms": 2274.3,
+        "recordings_identical": true
+      },
+      {
+        "reference_ms": 2936.3,
+        "optimized_ms": 2274.7,
+        "recordings_identical": true
+      },
+      {
+        "reference_ms": 2918.2,
+        "optimized_ms": 2412.4,
+        "recordings_identical": true
+      }
+    ],
+    "reference_median_ms": 2918.2,
+    "optimized_median_ms": 2274.7
+  },
+  "network_previous": {
+    "trials": [
+      {
+        "seconds_to_impact": 4.542841299989959,
+        "solve_ms": 3330.3,
+        "normal_impulse_ns": 1.0133145361808191,
+        "quality": 0.5067
+      },
+      {
+        "seconds_to_impact": 4.695631599999615,
+        "solve_ms": 3446.3,
+        "normal_impulse_ns": 1.0133145361808191,
+        "quality": 0.5067
+      },
+      {
+        "seconds_to_impact": 4.567488600005163,
+        "solve_ms": 3323.7,
+        "normal_impulse_ns": 1.0133145361808191,
+        "quality": 0.5067
+      }
+    ],
+    "median_seconds": 4.567488600005163
+  },
+  "network_after": {
+    "trials": [
+      {
+        "seconds_to_impact": 3.547696099994937,
+        "solve_ms": 2344.6,
+        "normal_impulse_ns": 1.0133145361808191,
+        "quality": 0.5067
+      },
+      {
+        "seconds_to_impact": 3.5447329000016907,
+        "solve_ms": 2342.8,
+        "normal_impulse_ns": 1.0133145361808191,
+        "quality": 0.5067
+      },
+      {
+        "seconds_to_impact": 3.5718263999879127,
+        "solve_ms": 2369.1,
+        "normal_impulse_ns": 1.0133145361808191,
+        "quality": 0.5067
+      }
+    ],
+    "median_seconds": 3.547696099994937
+  },
+  "browser": {
+    "errors": [],
+    "hits": [
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 12.93,
+        "quality": 0.4422,
+        "braced": true,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber – mit der flachen Hand getroffen.",
+        "replay_id": "a56340d360a3e8d46b59"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 18,
+        "quality": 0.4,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber – mit der flachen Hand getroffen.",
+        "replay_id": "7459064d1fd1a723962c"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 20.64,
+        "quality": 0.4586,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber – mit der flachen Hand getroffen.",
+        "replay_id": "9501a41c6c9f131c8081"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 19.79,
+        "quality": 0.4397,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber – mit der flachen Hand getroffen.",
+        "replay_id": "7f35da65720f50a78f0e"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 19.75,
+        "quality": 0.4388,
+        "braced": false,
+        "side": "R",
+        "ko": true,
+        "foul": false,
+        "diagnosis": "Sauber – mit der flachen Hand getroffen.",
+        "replay_id": "3cfa2d62aa4e5013ff18"
+      }
+    ],
+    "configuration": {
+      "base_damage": 45,
+      "ko_threshold": 60,
+      "turn_seconds": 60
+    },
+    "single_tilt_control": true,
+    "physics_backend": "coupled-moving",
+    "moving_head_brace_consistent": true,
+    "solved_normal_impulse_ns": 0.8844115770542934,
+    "solved_quality_matches_hit": true,
+    "friction": {
+      "coefficient": 0.2,
+      "maximum_residual_m": 2.993232638961047e-05,
+      "maximum_cone_error": 0.0
+    },
+    "recorded_arm_frames": 574,
+    "clip_hash": "4966663ec98e5b09a3f9b3cbf380d264eab943ca67f83a9e124206c2c1c1d8e4",
+    "brace_expression_stable_in_paused_replay": true,
+    "replay": {
+      "clipId": "a56340d360a3e8d46b59",
+      "frameCount": 337,
+      "peak": 0.021814999999999998,
+      "time": 0.58331,
+      "frame": 69,
+      "deformation": 0.021814694799999996
+    },
+    "replay_frame_ms_p95": 27.80000000000291,
+    "viewport": [
+      1920,
+      1080
+    ],
+    "msaa_3d": 1,
+    "resume": true,
+    "injury_material_rewind": true,
+    "ko_body_recorded": true,
+    "ko_reverse_seek": true,
+    "winner": 0,
+    "audio": {
+      "mode": "buffer-fallback",
+      "played": 7,
+      "unlocked": true
+    },
+    "rematch_material_reset": true,
+    "rematch": true,
+    "leave": true
+  },
+  "unit_tests": 162,
+  "limits": "Same machine; network baseline from preceding milestone, not an interleaved experiment. Residual tolerances and iteration cap unchanged. Remaining latency and anatomical/art/human acceptance limitations remain open."
+}
