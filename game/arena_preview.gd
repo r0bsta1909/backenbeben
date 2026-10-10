@@ -73,8 +73,8 @@ func _ready() -> void:
 	table_wash.light_color=Color("ffe0b3");table_wash.light_energy=.22;table_wash.omni_range=6
 	add_child(table_wash)
 	table_accent=SpotLight3D.new();table_accent.name="TableDistanceAccent"
-	table_accent.position=Vector3(-2,-2.3,3.2);add_child(table_accent)
-	table_accent.look_at(Vector3(0,-3.8,.65));table_accent.spot_angle=20
+	table_accent.position=Vector3(-2,-1.8,3.2);add_child(table_accent)
+	table_accent.look_at(Vector3(0,-2.8,.65));table_accent.spot_angle=24
 	table_accent.spot_range=5.2;table_accent.light_energy=1.4
 	table_accent.light_color=Color("fff0d4")
 	stage=load("res://arena_platform.tscn").instantiate();add_child(stage)

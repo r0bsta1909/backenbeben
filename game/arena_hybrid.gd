@@ -28,6 +28,10 @@ func bevel_box(size: Vector3, bevel: float, corner: float) -> ArrayMesh:
 func worn_material(node: MeshInstance3D, color: Color, kind: int, amount: float) -> void:
 	var material: ShaderMaterial=finished_material(color,kind,false,false).duplicate()
 	material.set_shader_parameter("wear_amount",amount)
+	material.set_shader_parameter("paint_amount",.45)
+	material.set_shader_parameter("wear_origin",node.position)
+	material.set_shader_parameter("wear_span",node.mesh.get_aabb().size*node.scale.abs())
+	material.set_shader_parameter("wear_layout",1 if kind==4 else (2 if "Step" in node.name else 3))
 	node.material_override=material
 
 func ring_mesh(rings: Array, ellipse: Vector2, cap_ends: bool=false) -> ArrayMesh:
@@ -69,10 +73,14 @@ func podium() -> void:
 	for x in [-.28,.28]:beam(Vector3(x,-4.99,.92),Vector3(x,-1.49,.92),.009,Color("6c3733"))
 	for x in [-.45,.45]:
 		for z in [.42,.88]:round_part("FootFixing",Vector3(x,-5.029,z),Vector3(.055,.018,.055),"7d8079")
-	worn_material(find_child("PodiumTop",true,false),Color("50544e"),5,.08)
+	worn_material(find_child("PodiumTop",true,false),Color("5c5d54"),5,.08)
+	find_child("PodiumTop",true,false).material_override.set_shader_parameter("light_softness",.18)
+	worn_material(padding,Color("303532"),5,.06)
+	padding.material_override.set_shader_parameter("light_softness",.20)
 	find_child("PodiumTop",true,false).mesh.radial_segments=96
 	find_child("PodiumTop",true,false).scale=Vector3(2.021,.018,.7144)
 	worn_material(find_child("PodiumBody",true,false),Color("303839"),6,.08)
+	find_child("PodiumBody",true,false).material_override.set_shader_parameter("light_softness",.35)
 	worn_material(find_child("PodiumFoot",true,false),Color("272e30"),6,.12)
 	var red_band: MeshInstance3D=find_child("PodiumRedBand",true,false)
 	red_band.position.y=-1.29;red_band.scale=Vector3.ONE

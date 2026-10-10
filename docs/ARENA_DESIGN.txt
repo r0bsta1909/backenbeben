@@ -110,9 +110,8 @@ Spiel-/Kontaktkamera behalten ihre Beleuchtung. Die Gesamtkamera blickt jetzt
 von links vorne und zeigt die Treppe. Versino sitzt auf der linken Fascia,
 vom Aufgang getrennt, mit etwas angehobenem Druckkontrast und Originalaspekt.
 Neue Bilder: Arena-Design/14-arena-mit-aufgang.png und 14-versino-detail.png.
-Hoenhorst ist weiterhin das kleine Original. Keine groessere Vorlage lokal
-gefunden, keine eindeutig zuordenbare Quelle in der Websuche. Rueckfrage nach
-vollstaendigem Betrieb/Website gestellt; der Austausch ist noch offen.
+Hoenhorst bleibt auf ausdruecklichen Nutzerwunsch so. Dieser Punkt ist
+abgeschlossen; keine weitere Quellensuche oder Aenderung des Schildes.
 
 ANOMALIENPRUEFUNG 2026-10-09
 AdiHash hatte einen dunklen Quelldateirand, der als Linie neben dem Bodendruck
@@ -127,6 +126,17 @@ Figurenumschaltung und Fernlichtgrenze bestanden. Regressionspruefungen fuer
 Polsterabdeckung, Druckschatten, Stufenboden und Figuren-/Lichtwechsel ergaenzt.
 Neue Bilder: Arena-Design/15-arena-geprueft.png und 15-arena-tischdetail.png.
 Gesamtbericht: docs/validation/ARENA_ANOMALY_AUDIT_2026-10-09.txt.
+
+LETZTER QUALITATIVER FEINSCHLIFF 2026-10-10
+Opt-in-Materialnuancen verbinden Tisch/Podest mit der gemalten Halle: langsame,
+dezente Farbvariation und leicht warme Toene, keine Aenderung am Hallenbild.
+Tischinsert heller, Polster/Saeule mit weicheren Lichtuebergaengen innerhalb
+des Comiclooks. Fernlicht etwas hoeher ausgerichtet, weiterhin nur in 3/4 aktiv.
+Regelmaessige sinusfoermige Abriebmuster ersetzt: unregelmaessige Flecken an vier
+Standflaechen, vorderen Trittkanten und wenigen Metallkanten. Intensitaet dezent.
+Hoenhorst-Schild und Originaldatei unveraendert, Nutzerentscheidung respektiert.
+Neue Bilder: Arena-Design/16-arena-feinschliff.png, 16-arena-spielansicht.png
+und 16-arena-tischdetail.png. Technikpruefung getrennt von Nutzer-Artfreigabe.
 
 HISTORISCH
 arena_finished.tscn, bake_arena.gd und tests/arena_finished.gd gehoeren zur

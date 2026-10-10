@@ -1,0 +1,27 @@
+Arena: letzter qualitativer Material-/Lichtpass, 10.10.2026
+
+Drei beauftragte Punkte: gemalte Materialnuancen, klarere Tisch-Lichtstaffelung,
+gezielte unregelmaessige Gebrauchsspuren. Hoenhorst explizit ausgeschlossen und
+als abgeschlossen dokumentiert; kein Asset-, Text-, Positions- oder Shader-
+Parameterwechsel am Schild. Neue Materialparameter standardmaessig deaktiviert,
+nur an Tisch/Podest/Stufen eingeschaltet. Gemalter Hallenhintergrund unveraendert.
+
+Material: langsame Farbnuancen statt nur gleichmaessiger Oberflaeche. Tisch-
+oberseite aufgehellt, Polster matt, Lichtuebergaenge am Tisch etwas weicher;
+Comic-Abstufung bleibt. Spot in der Ferne hoeher auf Saeule/Polster ausgerichtet,
+gleiche Energie, weiterhin nur Kameras 3/4.
+Abrieb: keine regelmaessigen Sinusstreifen mehr. Lokalisierte, leicht asymmetrische
+Standspuren, vordere Trittkanten und sparsame Metallkanten; keine neuen Motive.
+
+Plattform neu gebacken, erweiterter ARENA_HYBRID_PASS. Native vier Kameras und
+Details erfasst. Spielansicht, Gesamt ohne Figuren und Stufen visuell kontrolliert;
+keine neuen klaren Geometrie-/Shaderfehler in diesen Bildern festgestellt.
+Isolierter Web-Export erfolgreich. Chromium prueft alle vier Kameras in vier
+Fensterformaten sowie Figurenumschaltung und Fernlichtgrenze. Ergebnisbericht
+liegt lokal unter logs/arena-web-preview/result.json.
+Abschliessend bestanden: 16 Kamera-/Fensterkombinationen, errors[], sechs
+Druckmotive und 2D-Kulisse. Figurenumschaltung/16:9-Referenzbild/Fernlichtgrenze
+bestanden. Lokale p95-Frameintervalle rund 16.67 ms, keine Hardware-Leistungszusage.
+Matchstart, Serverphysik, Pultoberkante, Sponsorverteilung und Kameras unveraendert.
+Freie Designkamera bleibt durch die feste 2D-Malperspektive begrenzt. Keine
+menschliche Gesamt-Artabnahme behauptet.

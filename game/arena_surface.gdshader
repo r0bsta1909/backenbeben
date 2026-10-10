@@ -4,6 +4,11 @@ uniform vec4 base_color : source_color = vec4(.4,.35,.3,1.0);
 uniform bool instance_color = false;
 uniform int surface_kind = 0;
 uniform float wear_amount = 0.0;
+uniform float paint_amount = 0.0;
+uniform float light_softness = 0.0;
+uniform int wear_layout = 0;
+uniform vec3 wear_origin = vec3(0.0);
+uniform vec3 wear_span = vec3(1.0);
 varying vec3 position_world;
 float hash(vec3 p) { return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453); }
 float soft_noise(vec2 p) {
@@ -18,6 +23,11 @@ void fragment() {
     float grain=sin(p.x*34.0+p.z*27.0)*sin(p.y*23.0+p.z*43.0)*.5+.5;
     float mottling=hash(floor(p*2.0));
     color*=.96+grain*.025+mottling*.03;
+    if(paint_amount>0.0) {
+        float brush=soft_noise(p.xz*.85+vec2(p.y*.63,p.y*.27));
+        color*=1.0+(brush-.5)*.24*paint_amount;
+        color=mix(color,color*vec3(1.07,1.0,.90),paint_amount*.25);
+    }
     if(surface_kind==1) {
         vec2 tile=abs(fract(p.xz/2.4)-.5);
         float joint=smoothstep(.484,.499,max(tile.x,tile.y));
@@ -46,13 +56,22 @@ void fragment() {
         color*=.97+soft_noise(p.xz*18.0)*.04;
     }
     if(wear_amount>0.0) {
-        float patches=smoothstep(.48,.78,soft_noise(p.xz*2.8+vec2(p.y*3.0)));
-        float streak=1.0-smoothstep(.015,.08,abs(sin(p.x*7.2+p.z*1.7)));
-        float wear=patches*streak;
-        if(surface_kind==4) {
-            float feet=exp(-dot(p.xz-vec2(.55,0.0),p.xz-vec2(.55,0.0))*2.0)
-                      +exp(-dot(p.xz-vec2(-.55,2.1),p.xz-vec2(-.55,2.1))*2.0);
-            wear=wear*.35+feet*soft_noise(p.xz*6.0)*.40;
+        vec3 q=(p-wear_origin)/max(wear_span,vec3(.001));
+        float patches=smoothstep(.38,.74,soft_noise(p.xz*5.3+vec2(p.y*1.7)));
+        float wear=patches*.10;
+        if(wear_layout==1) {
+            vec2 f0=(p.xz-vec2(-.52,-.06))/vec2(.38,.27);
+            vec2 f1=(p.xz-vec2(.57,.10))/vec2(.34,.29);
+            vec2 f2=(p.xz-vec2(-.49,2.02))/vec2(.35,.28);
+            vec2 f3=(p.xz-vec2(.54,2.18))/vec2(.40,.26);
+            wear=(exp(-dot(f0,f0))+exp(-dot(f1,f1))+exp(-dot(f2,f2))+exp(-dot(f3,f3)))*patches;
+        } else if(wear_layout==2) {
+            float leading=1.0-smoothstep(.025,.13,abs(q.x+.47));
+            float tread=smoothstep(.30,.46,q.y)*exp(-q.z*q.z*9.0);
+            wear=(leading*.45+tread*.55)*patches;
+        } else if(wear_layout==3) {
+            float edge_wear=1.0-smoothstep(.015,.07,abs(q.y-.47));
+            wear=edge_wear*patches*.65;
         }
         color=mix(color,color*1.16+vec3(.01,.008,.005),wear*wear_amount);
     }
@@ -64,5 +83,6 @@ void fragment() {
 void light() {
     float facing=dot(normalize(NORMAL),normalize(LIGHT));
     float band=facing>.65 ? 1.0 : (facing>.15 ? .68 : .16);
+    band=mix(band,.18+.82*smoothstep(-.2,.75,facing),light_softness);
     DIFFUSE_LIGHT+=band*ATTENUATION*LIGHT_COLOR/PI;
 }
