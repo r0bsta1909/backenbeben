@@ -1256,3 +1256,17 @@ inkl.zusaetzlicherProbe/Spiegel/Replay PASS,errors[]. Beleg validation/v05-packa
 Host8877 laeuft JETZT AUS PAKET in Temp/backenbeben-v05-8yoq704w, Session91026;
 Entwicklungshost beendet. Vor Quellcode-Spieltests wieder Checkoutserver starten.
 Oeffentliche README und PROTOTYPE_STATUS aktuell; keine Gesamtabnahme behauptet.
+
+ARENA FREIGEGEBEN UND IM MATCH INTEGRIERT — 10.10.2026
+Nutzer hat den Arena-Look freigegeben und Integration bestaetigt. Gemeinsames
+arena_presentation.gd fuer Vorschau/main.tscn: gemalte Halle/Crowd, nur Podest/Pult
+und Spielakteure 3D. Originalwerbung auf Nutzerauftrag, Hoenhorst akzeptiert.
+Live-/Kontakt-/TV-Kameras, Beleuchtung und Bodenschatten abgestimmt. Offizielle
+und Spiegel erhalten. Crowd statisch statt frueherer 3D-Reaktion. Serverphysik und
+Charakterassets unveraendert. Webbuild erneuert, kein neues Releasepaket.
+Native ARENA_HYBRID_PASS/ARENA_MATCH_PASS. Echte gekoppelte Kontakt-/Replaypruefung
+mit neun Ansichten/Armgelenkabgleich, KO3Treffer und Standard10Treffer mit zwei
+Browserclients, Resume, Revanche, Verletzungsruecklauf und Leave bestanden, errors[].
+Belege und Testkorrekturen: validation/ARENA_MATCH_INTEGRATION_2026-10-10.txt.
+Temporären Checkout-Testhost8879 beendet; vorhandene Spielsitzungen nicht ersetzt.
+Freigabe betrifft Arena-Look, keine allgemeine G2/G3/G7- oder Zwei-PC-Abnahme.

@@ -11,6 +11,11 @@ enthält anatomische Arm-/Handmodelle, körpergebundene seitliche Schläge und v
 aufgezeichnete Kontakt-/Gesichtsreplays. Weitere schadensfreie Probeschwünge sind
 wählbar; Verletzungen und geschwollene Augen erscheinen auch im eigenen Spiegel.
 
+Der Quellstand enthält zusätzlich die freigegebene Arena: gemalte Halle und
+Publikum, ein 3D-Podest mit gepolstertem Tisch und verteilten Werbemotiven.
+Spiel und Replay nutzen dieselbe Kulisse wie die Designvorschau. Diese neuere
+Arena ist noch nicht im oben verlinkten v0.5-Releasepaket enthalten.
+
 Standardkampf, KO, Replay-Rücklauf, Wiedereinstieg und Revanche sind mit zwei
 Browserclients geprüft. Das Hostpaket wurde außerhalb des Projekts mit frischer
 Python-Umgebung getestet und der GitHub-Download per SHA256 abgeglichen.

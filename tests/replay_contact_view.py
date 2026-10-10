@@ -1,14 +1,16 @@
 """Exercise contact-view controls against a real training replay on port 8877."""
-import asyncio,json,sys
+import asyncio,json,sys,os
 from pathlib import Path
 from playwright.async_api import async_playwright
+TEST_URL='http://localhost:'+os.environ.get('BACKENBEBEN_TEST_PORT','8877')
+CHROME=os.environ.get('BACKENBEBEN_TEST_CHROME',str(Path(__file__).resolve().parents[1]/'tools/playwright-browsers/chromium-1243/chrome-win64/chrome.exe'))
 async def main():
  async with async_playwright() as p:
-  browser=await p.chromium.launch(executable_path=r'C:\Program Files\Google\Chrome\Application\chrome.exe',headless=True)
+  browser=await p.chromium.launch(executable_path=CHROME,headless=True)
   page=await browser.new_page(viewport={'width':1920,'height':1080});errors=[]
   page.on('pageerror',lambda e:errors.append(str(e)))
   page.on('console',lambda m:errors.append(m.text) if m.type=='error' else None)
-  await page.goto('http://localhost:8877');await page.wait_for_function('window.gameReady',timeout=60000)
+  await page.goto(TEST_URL);await page.wait_for_function('window.gameReady',timeout=60000)
   await page.evaluate("()=>{window.sentActions=[];const original=sendAction;sendAction=d=>{sentActions.push(d);original(d)}}")
   await page.locator('#training').click();await page.wait_for_function("state?.phase==='aim'")
   await page.locator('#poseCamera').click()
@@ -51,7 +53,7 @@ async def main():
   if '--expect-coupled' in sys.argv:
    await page.wait_for_function('JSON.parse(physicsFrame).side_cage.nx===17')
    replay_id=await page.evaluate('state.replay_id')
-   recorded=await (await page.request.get('http://localhost:8877/api/replay/'+replay_id)).json()
+   recorded=await (await page.request.get(TEST_URL+'/api/replay/'+replay_id)).json()
    assert recorded['physics_backend']=='coupled'
    coupled_evidence={'backend':recorded['physics_backend'],'solve_ms':recorded['solve_ms'],'peak':recorded['peak'],'contact_diagnostics':recorded['contact_diagnostics']}
   await page.locator('#replayImpact').click()
@@ -80,7 +82,7 @@ async def main():
   await page.locator('#replayImpact').click()
   await page.locator('#replaySeek').evaluate('e=>{e.value=.7;e.dispatchEvent(new Event("input"))}')
   await page.wait_for_function('JSON.parse(physicsFrame).time>.6')
-  await page.wait_for_function('godotStats?.crowd_active===true')
+  await page.wait_for_function('godotStats?.arena_backdrop===true && godotStats?.arena_audience_3d===0 && godotStats?.arena_sponsors===6')
   assert not await page.locator('#contactLegend').is_visible()
   assert not (await page.evaluate('JSON.parse(physicsFrame)'))['footprint']
   await page.locator('#replaySeek').evaluate('e=>{e.value=1.8;e.dispatchEvent(new Event("input"))}')
@@ -92,7 +94,7 @@ async def main():
   await page.wait_for_function('JSON.parse(physicsFrame).arm.pose.finger_relax===0')
   await page.wait_for_function('godotStats?.crowd_active===false')
   assert not errors,errors
-  report={'repeat_practice_without_damage':True,'idle_material_uploads_skipped':True,'mirror_visibility_updates':True,'pose_camera_and_wheel':True,'crowd_reaction_and_rewind':True,'jump_to_contact':True,'side_camera':True,'marker_toggle':True,'no_stale_markers':True,'errors':errors}
+  report={'repeat_practice_without_damage':True,'idle_material_uploads_skipped':True,'mirror_visibility_updates':True,'pose_camera_and_wheel':True,'painted_arena_during_replay_and_rewind':True,'jump_to_contact':True,'side_camera':True,'marker_toggle':True,'no_stale_markers':True,'errors':errors}
   if coupled_evidence:report['coupled']=coupled_evidence
   Path('logs/contact-view.json').write_text(json.dumps(report,indent=2));print(json.dumps(report))
   await browser.close()

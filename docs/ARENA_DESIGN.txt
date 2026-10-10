@@ -50,8 +50,9 @@ Hintergrundauflosung, vier Kameras und unveraenderte Pultoberkante.
 scripts/capture_arena_blockout.gd schreibt nach logs/arena-hybrid-preview.
 scripts/build_arena.ps1 erzeugt build/arena; check_arena_web.py prueft die
 vier Ansichten in Chromium und protokolliert Browserfehler/Frameintervalle.
-Der normale Match-Start main.tscn und die Serverphysik sind unveraendert.
-Die Kulisse ist eine separate Vorschau mit wiederverwendbarer Plattform.
+Der normale Match-Start main.tscn verwendet jetzt dieselbe freigegebene Arena.
+arena_presentation.gd teilt Kulisse, Beleuchtung und Bodenschatten mit der Vorschau.
+Die Serverphysik bleibt unveraendert.
 Menschliche optische Abnahme ist von Techniktests getrennt.
 
 MATERIAL- UND DETAILPASS 2026-10-08
@@ -137,6 +138,19 @@ Standflaechen, vorderen Trittkanten und wenigen Metallkanten. Intensitaet dezent
 Hoenhorst-Schild und Originaldatei unveraendert, Nutzerentscheidung respektiert.
 Neue Bilder: Arena-Design/16-arena-feinschliff.png, 16-arena-spielansicht.png
 und 16-arena-tischdetail.png. Technikpruefung getrennt von Nutzer-Artfreigabe.
+
+NUTZERFREIGABE UND MATCH-INTEGRATION 2026-10-10
+Nutzer hat den Arena-Look freigegeben und die vorgeschlagene Integration bestaetigt.
+Freigabe gilt fuer die Kulisse, nicht fuer alle offenen Charakter-/Spielgefuehlgates.
+main.gd instanziert jetzt arena_platform.tscn ueber arena_presentation.gd.
+Hintergrund, Lampen, Referenzformat und Kontaktschatten teilen sich Match/Vorschau.
+Livekamera entspricht der freigegebenen Spielansicht, Kontaktkamera bleibt seitlich,
+TV-Replay nutzt die freigegebene Totale. Spiegel und drei Offizielle bleiben erhalten.
+Die 2D-Zuschauer sind statisch; die fruehere volumetrische Crowd-Reaktion entfällt
+entsprechend der gewaehlten 2D-Kulisse. Schlag-, Treffer- und KO-Daten unveraendert.
+Normaler Webbuild neu exportiert. START_HOST.bat im Repository startet diesen Stand.
+Arena-Vorschau bleibt ueber START_ARENA.bat im Workspace erreichbar.
+Belege/Pruefgrenzen: docs/validation/ARENA_MATCH_INTEGRATION_2026-10-10.txt.
 
 HISTORISCH
 arena_finished.tscn, bake_arena.gd und tests/arena_finished.gd gehoeren zur

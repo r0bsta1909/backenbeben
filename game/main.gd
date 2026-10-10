@@ -18,6 +18,7 @@ var last_event := -1
 var last_match := -1
 var clock_time := 0.0
 var arena_stage: Node3D
+var arena_presentation: Node3D
 var impact := 0.0
 var swing := 0.0
 var mirror_focus := false
@@ -130,39 +131,13 @@ func sign3d(text: String, pos: Vector3, size: int, color: Color) -> Label3D:
 	return l
 
 func build_arena() -> void:
-	var world := WorldEnvironment.new()
-	var env := Environment.new()
-	env.background_mode = Environment.BG_COLOR
-	env.background_color = Color("131a29")
-	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	env.ambient_light_color = Color("a4b6cb")
-	env.ambient_light_energy = 0.42
-	world.environment = env
-	add_child(world)
-	var key := DirectionalLight3D.new()
-	key.rotation_degrees = Vector3(-30, -35, 0)
-	key.light_color = Color("ffe1b2")
-	key.light_energy = .85
-	key.shadow_enabled = true
-	key.directional_shadow_max_distance = 18.0
-	key.shadow_bias = .1
-	key.shadow_normal_bias = 2.0
-	add_child(key)
-	var rim := OmniLight3D.new()
-	rim.position = Vector3(-2, 1, -0.5)
-	rim.light_color = Color("43a8c1")
-	rim.light_energy = .8
-	rim.omni_range = 6.0
-	add_child(rim)
-	camera = Camera3D.new()
-	camera.position = Vector3(.30,.55,2.65)
-	camera.fov = 55
-	add_child(camera)
-	camera.look_at(Vector3.ZERO)
-	camera.current = true
-	arena_stage = Node3D.new()
-	arena_stage.set_script(load("res://broadcast_stage.gd"))
-	add_child(arena_stage)
+	arena_presentation=Node3D.new();arena_presentation.name="ApprovedArena"
+	arena_presentation.set_script(load("res://arena_presentation.gd"));add_child(arena_presentation)
+	arena_presentation.build_presentation()
+	arena_stage=arena_presentation.stage
+	camera=Camera3D.new();camera.position=Vector3(.30,.70,3.3);camera.fov=62
+	add_child(camera);camera.look_at(Vector3(.22,-.55,0));camera.current=true
+	arena_presentation.sync_camera(camera,true,false)
 
 func prepare_materials(root: Node) -> void:
 	physics_materials[root.get_instance_id()] = []
@@ -343,7 +318,7 @@ func _process(delta: float) -> void:
 			JavaScriptBridge.eval("window.contactSound=false")
 		mirror_focus=bool(JavaScriptBridge.eval("window.mirrorFocus || false",true))
 		AudioServer.set_bus_mute(0,bool(JavaScriptBridge.eval("window.muted || false",true)))
-		JavaScriptBridge.eval("window.godotStats="+JSON.stringify({"fps":Engine.get_frames_per_second(),"face_injury":injury_material_state(fighter),"mirror_injury":injury_material_state(reflection),"arm_data":hand_pose.has("arm"),"rendered_arm":hand.arm_world_joints(),"hand_wrist":str(hand.skeleton.get_bone_global_pose(hand.skeleton.find_bone("hand.R")).origin),"dragging":dragging,"samples":gesture.size(),"physics_time":physics_frame.get("time",-1),"physics_active":physics_frame.has("id"),"crowd_active":arena_stage.crowd_was_active,"camera_position":[camera.position.x,camera.position.y,camera.position.z],"mirror_draw_requests":mirror_draw_requests,"physics_material_updates":physics_material_updates,"muted":AudioServer.is_bus_mute(0)}))
+		JavaScriptBridge.eval("window.godotStats="+JSON.stringify({"fps":Engine.get_frames_per_second(),"face_injury":injury_material_state(fighter),"mirror_injury":injury_material_state(reflection),"arm_data":hand_pose.has("arm"),"rendered_arm":hand.arm_world_joints(),"hand_wrist":str(hand.skeleton.get_bone_global_pose(hand.skeleton.find_bone("hand.R")).origin),"dragging":dragging,"samples":gesture.size(),"physics_time":physics_frame.get("time",-1),"physics_active":physics_frame.has("id"),"crowd_active":arena_stage.crowd_was_active,"arena_backdrop":true,"arena_sponsors":arena_stage.sponsor_surfaces.size(),"arena_audience_3d":arena_stage.crowd_poses.size(),"camera_position":[camera.position.x,camera.position.y,camera.position.z],"mirror_draw_requests":mirror_draw_requests,"physics_material_updates":physics_material_updates,"muted":AudioServer.is_bus_mute(0)}))
 	if appearance_timer>=.08:
 		appearance_timer=0
 		if state.has("players") and state.players.size()>1:
@@ -461,9 +436,10 @@ func drive_recorded_physics() -> void:
 	var side_view: bool = inspecting or (replaying and physics_frame.get("camera","") in ["side","wide"])
 	mirror_mount.visible=not (replaying or inspecting)
 	if replaying or inspecting:mirror_viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED
-	camera.position=Vector3(4.8,.8,1.05) if wide_view else Vector3(3,.55,1.1) if side_view else Vector3(.30,.55,2.65)
-	camera.fov=65.0 if wide_view else 55.0
-	camera.look_at(Vector3(0,-2.0,1.05) if wide_view else Vector3(0,-.12,1.0) if side_view else Vector3(.22,-.18,0))
+	camera.position=Vector3(7,.8,22) if wide_view else Vector3(3,.55,1.1) if side_view else Vector3(.30,.70,3.3)
+	camera.fov=58.0 if wide_view else (55.0 if side_view else 62.0)
+	camera.look_at(Vector3(0,-1.4,1.05) if wide_view else Vector3(0,-.12,1.0) if side_view else Vector3(.22,-.55,0))
+	arena_presentation.sync_camera(camera,not wide_view,wide_view)
 	hand.visible=true
 	hand.first_person(not side_view)
 	var defending_view: Node3D=fighter

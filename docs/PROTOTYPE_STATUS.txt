@@ -6,12 +6,15 @@ G1 / INVENTAR
 Quelle: game/, server/, scripts/, tests/; Blender: assets-source/character-v3.blend.
 Gauntlet und historische Entscheidungen: PROTOTYPE_GAUNTLET.txt, HANDOFF.txt.
 Aktueller Spielstand ist als experimentelles v0.5-Hostpaket veroeffentlicht.
+Der Arbeitsbaum ist neuer: freigegebene hybride Arena im Match integriert,
+siehe validation/ARENA_MATCH_INTEGRATION_2026-10-10.txt. Releasepaket unveraendert.
 
 G2 / FIGUREN UND COMICSTIL — OFFEN
 Vorhanden: anatomischer Kopf, Arme/Haende, vollstaendiges Rig, Haargeometrie,
 Kleidung, Toonmaterialien, vier Haut-/vier Trikot-/drei Haarfarben.
 Belege: validation/anatomical-arms.json, face-hair-style.json; Blenderquelle.
-Offen: Referenzlook als Gesamtbild, Kleidung und Publikum weiter ausarbeiten.
+Arena-Look separat vom Nutzer freigegeben: gemalte Halle/Publikum, 3D-Podest/Pult.
+Offen: Figurenlook als Gesamtbild und Kleidung weiter ausarbeiten.
 Technischer Export oder bestandener Rendercheck ersetzt keine Artabnahme.
 
 G3 / SEITLICHER KONTAKT UND BEDIENUNG — OFFEN
@@ -37,7 +40,8 @@ Diegetische Lesbarkeit weiterhin gesondert menschlich beurteilen.
 
 G6 / KO UND UEBERTRAGUNG — OFFEN
 Vorhanden: gefuehrter Zusammenbruch, Helfer, Replaykameras, Ergebnisgrafik,
-Arena und reagierendes Publikum. Kein automatischer KO bei jedem sauberen Schlag.
+Freigegebene hybride Arena mit statisch gemaltem Publikum. Kein automatischer KO
+bei jedem sauberen Schlag. Alte volumetrische Crowd-Reaktion nicht mehr aktiv.
 Offen: Gesamtqualitaet von Figuren, Bewegung und TV-Inszenierung.
 
 G7 / LAN UND START — EIN-PC-PRUEFUNG BESTANDEN, ZWEI-PC-NACHWEIS OFFEN
@@ -49,4 +53,5 @@ G8 / AUSLIEFERUNG — OFFEN FUER ENDSTAND
 v0.5-Prerelease mit aktuellen Assets/Bedienung/Verletzungen in frischer Umgebung
 geprueft, heruntergeladen und SHA256 verglichen. Beleg: validation/v05-package.json.
 Ein als abgeschlossen abgenommener Endstand fehlt weiterhin.
-Turniere, ElevenLabs und Werbung bleiben wie vereinbart zurueckgestellt.
+Turniere und ElevenLabs bleiben zurueckgestellt. Arenawerbung auf ausdruecklichen
+Nutzerauftrag umgesetzt; Hoenhorst in vorliegender Form akzeptiert.

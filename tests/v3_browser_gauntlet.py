@@ -1,15 +1,17 @@
 """Two real browser clients, LAN HTTP, pointer input, recorded replay and resume."""
-import asyncio,json,socket,hashlib,sys
+import asyncio,json,socket,hashlib,sys,os
 from pathlib import Path
 from playwright.async_api import async_playwright
 
+PORT=int(os.environ.get('BACKENBEBEN_TEST_PORT','8877'))
+CHROME=os.environ.get('BACKENBEBEN_TEST_CHROME',str(Path(__file__).resolve().parents[1]/'tools/playwright-browsers/chromium-1243/chrome-win64/chrome.exe'))
 async def main():
     ip=next(i[4][0] for i in socket.getaddrinfo(socket.gethostname(),None,socket.AF_INET) if not i[4][0].startswith(('127.','169.254.')))
     standard='--standard-balance' in sys.argv
     balance={'base_damage':25 if standard else 45,'ko_threshold':100 if standard else 60,'turn_seconds':25 if standard else 60}
-    url=f'http://{ip}:8877';report={'url':url,'errors':[],'hits':[],'configuration':balance}
+    url=f'http://{ip}:{PORT}';report={'url':url,'errors':[],'hits':[],'configuration':balance}
     async with async_playwright() as p:
-        browser=await p.chromium.launch(executable_path=r'C:\Program Files\Google\Chrome\Application\chrome.exe',headless=True,args=['--enable-webgl'])
+        browser=await p.chromium.launch(executable_path=CHROME,headless=True,args=['--enable-webgl'])
         pages=[]
         for _ in range(2):
             c=await browser.new_context(viewport={'width':1920,'height':1080})
@@ -18,9 +20,10 @@ async def main():
             page.on('console',lambda m:report['errors'].append(m.text) if m.type=='error' else None)
             await page.goto(url);await page.wait_for_function('window.gameReady',timeout=60000)
             assert await page.evaluate('audioFallback && !isSecureContext')
+            await page.wait_for_function('godotStats?.arena_backdrop===true && godotStats?.arena_audience_3d===0 && godotStats?.arena_sponsors===6')
         a,b=pages
         async def admin(command):
-            response=await a.request.post('http://localhost:8877/api/admin',headers={'Origin':'http://localhost:8877'},data={'command':command})
+            response=await a.request.post(f'http://localhost:{PORT}/api/admin',headers={'Origin':f'http://localhost:{PORT}'},data={'command':command})
             assert response.ok
         try:
             for key,value in balance.items():await admin(f'set {key} {value}')
@@ -61,8 +64,13 @@ async def main():
                 await attacker.wait_for_function("JSON.parse(renderState).state.phase==='impact'",timeout=10000)
                 hit=(await state(attacker))['event'];assert hit['damage']>0,hit
                 report['hits'].append(hit)
-                await attacker.wait_for_function("JSON.parse(renderState).state.phase==='replay'",timeout=6000)
-                await defender.wait_for_function("JSON.parse(renderState).state.phase==='replay'",timeout=6000)
+                try:
+                    await attacker.wait_for_function("JSON.parse(renderState).state.phase==='replay'",timeout=15000)
+                    await defender.wait_for_function("JSON.parse(renderState).state.phase==='replay'",timeout=15000)
+                except Exception:
+                    report['failure_states']=[await state(a),await state(b)]
+                    Path('logs/match-replay-failure.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
+                    raise
                 sa,sb=await state(a),await state(b);assert sa['replay_id']==sb['replay_id']
                 if turn==0:
                     clip=await (await a.request.get(url+'/api/replay/'+sa['replay_id'])).json()
@@ -115,6 +123,8 @@ async def main():
                 if (await state(a))['phase']=='recover':
                     await defender.locator('[data-emote="2"]').click()
                     await defender.wait_for_function("JSON.parse(renderState).state.event.kind==='emote'")
+            await a.wait_for_function("JSON.parse(renderState).state.phase==='over'",timeout=5000)
+            await b.wait_for_function("JSON.parse(renderState).state.phase==='over'",timeout=5000)
             sa,sb=await state(a),await state(b)
             assert sa['phase']==sb['phase']=='over';assert sa['players']==sb['players'] and sa['winner']==sb['winner']
             assert report['hits'][0]['braced'];report['winner']=sa['winner']

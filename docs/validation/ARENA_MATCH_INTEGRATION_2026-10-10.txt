@@ -1,0 +1,51 @@
+Freigegebene Arena im echten Match, 10.10.2026
+
+Nutzerfreigabe: "ja" zur Abnahme des Arena-Looks und vorgeschlagenen Integration.
+Kulisse freigegeben; keine neue pauschale Figuren-/G7-Abnahme daraus abgeleitet.
+
+UMSETZUNG
+Gemeinsames arena_presentation.gd aus bisheriger Vorschau extrahiert. Vorschau
+und Hauptspiel laden denselben Hintergrund, Plattform, Tisch, Lampen, Schatten
+und 16:9-Referenzrahmen. Keine zweite oder doppelte Hallengeometrie.
+main.gd ersetzt alte broadcast_stage-Instanz durch diese freigegebene Plattform.
+Livekamera passend zur Vorschau; seitliche Kontaktkamera erhalten, TV-Replay
+passend zur Totale. Drei vorhandene Offizielle und eigener Spiegel-Viewport erhalten.
+Hoenhorst unveraendert. Gemalte Crowd statisch statt alter 3D-Zuschauerreaktion.
+Server, Solver, Matchregeln, Arm-/Gesichtsassets und Kontaktpunkte unveraendert.
+Normaler Webbuild aktualisiert; kein neues Releasepaket veroeffentlicht.
+
+PRUEFUNG
+ARENA_HYBRID_PASS nach gemeinsamer Darstellung. Neuer ARENA_MATCH_PASS prueft
+echte main.tscn, sechs Druckmotive, keine volumetrische Crowd, drei Offizielle,
+eigenen Spiegel und Front/Seite/TV inklusive Lichtumschaltung. Native Renderbilder.
+Web-Export erfolgreich. Import-Metadateien hatten nur erzeugte Zeilenendungen;
+diese unbeabsichtigten Aenderungen wieder zurueckgenommen.
+Separater Checkout-Testhost auf Port 8879, vorhandene Spielsitzung nicht ersetzt.
+Replay-Kontakttest mit echter gekoppelter Physik bestanden: wiederholte Probe,
+Mausrad, Kameras, Kontaktmarkierungen, Spiegel/Idleupdates, Finger-Rueckholung,
+Vor-/Nachkontakt und neun Bilder. Sichtbare Armgelenke gegen Replaydaten verglichen.
+Front/Seite/TV im Browser visuell gesichtet; errors[].
+Beschleunigter KO-Zweiclientkampf: drei Treffer, identische Clips, Verletzungs-
+ruecklauf, KO-Track, Wiederverbindung, Revanche/Reset und Leave bestanden, errors[].
+Lokale p95-Frameintervalle in diesem Lauf 16.8 ms, keine Hardware-Leistungszusage.
+Standardkampf mit zehn Treffern bis zur Punkteentscheidung ebenfalls bestanden:
+identische Replays/Zustaende, Verletzungs-Ruecklauf, Resume, Revanche und Leave,
+errors[]. Lokale p95-Frameintervalle 16.8 ms. Beide Tests mit coupled-Backend.
+Testhost anschliessend beendet. Lokale Rohbelege contact-view.json,
+contact-arm-render-audit.json, v3-browser-gauntlet.json und v3-standard-duel.json
+unter logs/; Screenshots im Workspace Arena-Design/17-arena-*.png.
+
+TESTKORREKTUREN
+Browserpfad/Port konfigurierbar fuer lokale vorhandene Laufzeit. Der alte Test
+erwartete bewegte 3D-Crowd; prueft nun bewusst die freigegebene gemalte Kulisse.
+Endzustand beider Clients explizit abwarten statt einen asynchronen Snapshot zu
+vergleichen. Standardlauf traf eine zu enge Replay-Wartefrist; nun 15 Sekunden
+plus Fehlerzustandsbericht. Keine Performancefreigabe daraus abgeleitet.
+Erster Kaltstart brauchte laenger fuer die Physikvorbereitung; Hostbereitschaft
+wird vor Browserstart geprueft. Temporärer Testhost wird anschliessend beendet.
+
+GRENZEN
+Zwei Browserkontexte auf einem PC, kein Test zweier physischer LAN-Rechner.
+Arena ist keine frei begehbare 3D-Halle. Bekanntes Gewebemodell mit numerischen
+Restfehlern unveraendert; keine vollstaendig anatomische Physik behauptet.
+Arena-Look freigegeben; menschliches Spielgefuehl und Figurenstil bleiben separat.
