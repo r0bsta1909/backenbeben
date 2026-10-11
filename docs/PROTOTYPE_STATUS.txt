@@ -5,7 +5,7 @@ Diese Uebersicht trennt Liefergegenstaende, vorhandene Nachweise und offene Arbe
 G1 / INVENTAR
 Quelle: game/, server/, scripts/, tests/; Blender: assets-source/character-v3.blend.
 Gauntlet und historische Entscheidungen: PROTOTYPE_GAUNTLET.txt, HANDOFF.txt.
-Gemeinsame Arena-Version: v0.14.0-dev.20261011.
+Zuletzt veroeffentlicht und frisch geprueft: v0.14.0-dev.20261011.
 Vorheriges veroeffentlichtes Paket: v0.13.0-dev.20261008.
 Aktuelle Integrations-/Paketpruefung: validation/ARENA_MAIN_V14_2026-10-11.txt.
 Quellstand umfasst zusaetzlich vertieften Kragen, Buildfehler-Abbruch und

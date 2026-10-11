@@ -60,3 +60,10 @@ Frischer Paket-StandardKO-Test ebenfalls bestanden: aktuelle Produktionsphysik,
 Reibung/Anspannlider/Kopfbewegung, KO-Begleitkamera und alle3altenKO-Ansichten,
 Verletzungs-/KO-Ruecklauf, identischeClips, Resume/Revanche/Reset/Leave, errors[].
 Eigener START_HOST-Prozessbaum auf8881 beendet. Vorherige Hosts nicht ersetzt.
+
+VEROEFFENTLICHT
+main und Arena-Branch enthalten den Merge bf932c0d42ecc247c17036a3e24c42a7bfdb10a3.
+Prerelease https://github.com/r0bsta1909/backenbeben/releases/tag/v0.14.0-dev.20261011
+GitHub-ZIP erneut heruntergeladen: SHA256 und alle68Dateien bytegleich zur
+frischen geprueften Installation. Downloadverification PASS.
+Paket-Standardkampf6TrefferbisKO, keine Browserfehler. Keine menschliche Abnahme.

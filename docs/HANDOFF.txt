@@ -2277,3 +2277,9 @@ SHA256 587af3c49308c461f7db1eacfba3ae3a80486fa79355ceba299af7feda6168c5.
 Alle Paketdateien bytegleich zur frischen Installation. Eigene Testhosts8879/8881
 beendet. Beleg validation/ARENA_MAIN_V14_2026-10-11.txt. Menschliche Abnahme,
 Zwei-PC-Test und allgemeines Spielziel bleiben offen. Hoenhorst unveraendert.
+
+V14 VEROEFFENTLICHT UND DOWNLOAD VERIFIZIERT
+main/Arena-Merge bf932c0. Release v0.14.0-dev.20261011 auf GitHub.
+Frischer Paketkampf6TrefferbisKO PASS. Erneuter GitHubdownload: SHA256 und
+alle68Dateien bytegleich zur geprueften Installation, PASS. Hauptbranch main
+ist nun der gemeinsame Entwicklungsstand. Menschlicher Zwei-PC-Spieltest folgt.
