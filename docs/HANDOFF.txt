@@ -2293,3 +2293,13 @@ ARENA_HYBRID_PASS/ARENA_MATCH_PASS, strenger Webbuild und echter Produktions-
 Kontakt-/Replaybrowsercheck PASS,errors[]. Eigener Testhost8879 beendet.
 Beleg validation/TABLE_DESIGN_2026-10-11.txt. Bilder Arena-Design/21-*.png.
 Aktueller Quellstand/Webbuild neuer als v14-Download, kein neues Paket erstellt.
+
+KOMPAKTER TISCH NACH BILDRECHERCHE — 11.10.2026
+Offizielle Power-Slap-Wettkampffotos als Referenz, keine Fremdfotos importiert.
+Tisch 6 cm abgesenkt, nun ca.98 cm ueber der Matte. Sockel gekuerzt, Polster-
+dicke erhalten, Naehte/Lichtkante/Frontfeld passend neu positioniert. Fuss bleibt
+verankert, Hoenhorst unveraendert. Unterarm-/Handgelenkproxy ebenso abgesenkt.
+165 Unittests und 12 Kontaktchecks PASS, Bake/nativeArena/Match/strengerWebbuild
+PASS. Echter Produktionskontakt-/Replaybrowsercheck errors[], PASS.
+Eigener Testhost8879 beendet. Bilder Arena-Design/22-*.png und Nachweis
+validation/TABLE_COMPACT_2026-10-11.txt. V14-Paket bleibt vorherige Tischfassung.

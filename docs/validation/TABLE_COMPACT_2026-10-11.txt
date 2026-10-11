@@ -1,0 +1,31 @@
+BACKENBEBEN — KOMPAKTER TISCH / 11.10.2026
+
+Nutzerauftrag: echte Internetbilder recherchieren, Tisch nicht zu hoch gestalten.
+Bildreferenzen: offizielle Wettkampffotos von Power Slap, insbesondere
+https://www.powerslap.com/news/power-slap-5-da-crazy-hawaiian-vs-vakameilalo-results/
+https://www.powerslap.com/news/episode-11-recap-power-slap-road-to-the-title-season-2/
+Referenzen dienen der Polster-/Sockelproportion, keine exakten Masse aus Fotos
+abgeleitet. Keine fremden Fotos oder Sponsoren in das Projekt aufgenommen.
+
+Eigene Designentscheidung: Oberflaeche um 6 cm absenken. Vier Renderunits/metre;
+Matte oben Y=-5.17, Tisch oben Y=-1.246, somit 0.981 m ueber der Matte.
+Sockel um .24 Renderunits kuerzer, unterer Anschluss und Fuss bleiben verankert.
+Polsterdicke/ovale Breite erhalten, Paspel/Naehte/Rotband/Lichtkante mit abgesenkt.
+INEOS-Frontfeld entlang des kuerzeren Sockels neu ausgerichtet, Originalgrafik
+und Seitenverhaeltnis erhalten. Hoenhorst und Arena unveraendert.
+Physik: Unterarm-/Handgelenk-Tischproxy ebenfalls 6 cm abgesenkt; bisheriger
+konservativer Sicherheitsabstand bleibt. Kontakttests auf neue Kante angepasst,
+zusaetzlich freier Arm an ehemaliger Tischhoehe nachgewiesen.
+
+165 Python-Unittests PASS. Bake, ARENA_HYBRID_PASS, ARENA_MATCH_PASS und
+strenger Webbuild PASS. Vier Detailansichten und Ansicht mit zwei Figuren
+gerendert und gesichtet. Workspace: Arena-Design/22-tisch-kompakt.png,
+22-tisch-mit-spielern.png,22-kompakt-polster.png.
+Echter Browserkontakt-/Replaycheck mit Produktionssolver PASS, errors[].
+Probe ohne Schaden, Mausrad, neun Kontakt-/Kamerabilder, Gelenkaufzeichnung,
+Marker, Ruecklauf und Spiegel bestehen. Solve 2597.9 ms, gekoppelte raeumliche
+Kopfreaktion. Inspektionsdeadline in diesem Lauf nicht eigens geprueft.
+Eigener temporaerer Testhost8879 beendet. Weitere 12 Kontakt-Unittests PASS
+nach Erweiterung des Regressionstests fuer die ehemalige Tischhoehe.
+Menschliche Spielabnahme offen. V14-Download enthaelt die fruehere Tischversion;
+aktueller Quellstand und lokaler Webbuild enthalten die kompakte Fassung.

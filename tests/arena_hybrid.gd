@@ -18,8 +18,8 @@ func verify() -> void:
 		if stage.get_child_count()!=count:push_error("Camera switch duplicated geometry");quit(1);return
 		if not scene.painted_background.is_visible_in_tree():push_error("Background hidden");quit(1);return
 	var podium: MeshInstance3D=stage.find_child("PodiumTop",true,false)
-	if absf(podium.position.y+1.015)>.001:
-		push_error("Table height changed");quit(1);return
+	if absf(podium.position.y+1.255)>.001:
+		push_error("Compact table height changed");quit(1);return
 	# The flat insert must cover the open upper ring of the upholstery.
 	var padding: MeshInstance3D=stage.find_child("PodiumPadding",true,false)
 	var vertices: PackedVector3Array=padding.mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX]

@@ -150,7 +150,8 @@ def forearm_hits_table(elbow,wrist):
     Coordinates are metres. This is a rigid box/capsule proxy; rounded corner
     detail and skin compression are intentionally not represented here.
     """
-    lower=(-.30,-.335,.045);upper=(.30,-.227,.28)
+    # Match the compact arena table: upholstery lowered by .06 metres.
+    lower=(-.30,-.395,.045);upper=(.30,-.287,.28)
     enter,leave=0.,1.
     for start,end,low,high in zip(elbow,wrist,lower,upper):
         delta=end-start
@@ -164,7 +165,7 @@ def forearm_hits_table(elbow,wrist):
 
 
 def table_collision(elbow,wrist):
-    return (wrist[1]<-.235 and abs(wrist[0])<.30 and .06<wrist[2]<.30) or forearm_hits_table(elbow,wrist)
+    return (wrist[1]<-.295 and abs(wrist[0])<.30 and .06<wrist[2]<.30) or forearm_hits_table(elbow,wrist)
 
 def collision(tilt,skin_state=(0.,0.,0.)):
     def blocked(elbow,wrist):

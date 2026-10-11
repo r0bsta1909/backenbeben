@@ -12,7 +12,7 @@ func capture() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	var views=[
 		["hero",Vector3(3.6,-1.5,7),Vector3(0,-3,.65),42.0],
-		["padding",Vector3(1.6,.1,2.8),Vector3(0,-1.15,.65),48.0],
+		["padding",Vector3(1.6,-.14,2.8),Vector3(0,-1.39,.65),48.0],
 		["front",Vector3(0,-2.65,4),Vector3(0,-2.7,.65),44.0],
 		["foot",Vector3(1.6,-4,3.2),Vector3(0,-5,.65),42.0]]
 	for view in views:
@@ -21,5 +21,11 @@ func capture() -> void:
 		await process_frame
 		RenderingServer.force_draw(false)
 		root.get_texture().get_image().save_png(directory+"/"+view[0]+".png")
+	for actor in scene.actors:actor.show()
+	scene.camera.position=Vector3(7,-1.2,7);scene.camera.fov=47
+	scene.camera.look_at(Vector3(0,-2,.65));scene.sync_camera(scene.camera,true,false)
+	await process_frame
+	RenderingServer.force_draw(false)
+	root.get_texture().get_image().save_png(directory+"/scale.png")
 	print("TABLE_DESIGN_CAPTURE_PASS: full table, padding, INEOS front and foot")
 	quit(0)
