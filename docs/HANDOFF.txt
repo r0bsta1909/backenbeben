@@ -1281,3 +1281,13 @@ Replay-Layout in vier Formaten PASS. Vollstaendiger KO3Treffer-Zweiclienttest
 inkl.Resume/Revanche/Ruecklauf PASS,errors[]. Testhost8879 beendet.
 Beleg validation/CAMERA_UI_2026-10-11.txt. Keine menschliche Zwei-PC-Abnahme;
 v0.5-Paket bleibt aelter als Quellprojekt.
+
+TREFFER-/KO-ANSICHT UND NAMEN — 11.10.2026
+Neue TREFFER-NAH-Kamera am aufgezeichneten Kontaktpunkt, ZUM TREFFER nutzt sie.
+Neue KO-BEGLEITUNG mit KO-ANSEHEN nur fuer geladenen KO-Clip; folgt Koerperkopf.
+Namen als Ellipse mit Tooltip/aria-Vollname, Rollen separat/aktive goldfarben.
+Arena/Hoenhorst und Solver/Charakterassets unveraendert. Webbuild erneuert.
+ARENA_MATCH_PASS: hohe/tiefe Kontakte, Helferhand-Schulterziele, KO-Ruecklauf.
+Gekoppelter Kontaktbrowsercheck und KO4Treffer-Zweiclientkampf mit Ruecklauf,
+Resume/Revanche/Leave bestanden, errors[]. Testhost8879 beendet.
+Beleg validation/REPLAY_DETAIL_2026-10-11.txt; menschliche Zwei-PC-Abnahme offen.

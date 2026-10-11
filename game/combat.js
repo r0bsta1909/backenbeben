@@ -5,7 +5,7 @@ const panel=document.createElement('aside');panel.id='posePanel';panel.className
 panel.innerHTML='<small>HANDWERK / EINS → ZWEI</small><h3 id="poseTitle">PROBESCHWUNG</h3><p>LINKE MAUSTASTE halten<br><b>← MAUS NACH LINKS ZIEHEN</b><br>Höher / tiefer: Treffhöhe<br>MAUSRAD: Handfläche kippen</p><div id="poseReadout"></div><p id="contactVerdict">Nach links ziehen: Die rechte Hand schwingt seitlich zur Wange.</p><button id="poseCamera" aria-pressed="false">HAND VON DER SEITE ANSEHEN</button><p id="poseCameraHint" hidden>Auch hier: nach links ziehen. Die Ansicht ändert nur die Kamera.</p><button id="repeatPractice" hidden>NOCH EINMAL OHNE SCHADEN ÜBEN</button><button id="resetPose">HALTUNG ZURÜCKSETZEN</button>';
 document.body.append(panel);
 const replayPanel=document.createElement('aside');replayPanel.id='replayPanel';replayPanel.className='panel';
-replayPanel.innerHTML='<div class="row"><strong>REPLAY · KONTAKTLABOR</strong><span id="replayTime"></span></div><input id="replaySeek" aria-label="Replay-Zeit" type="range" min="0" max="2.8" step="0.008333" value="0"><div class="row"><button id="replayPlay">PAUSE</button><button id="replayStep">+ EIN BILD</button><select id="replaySpeed" aria-label="Replay-Geschwindigkeit"><option value="0.1">0,1×</option><option value="0.25" selected>0,25×</option><option value="1">1×</option></select><select id="replayCamera" aria-label="Replay-Kamera"><option value="front">FRONT</option><option value="side">DREIVIERTEL</option><option value="wide">TV · TOTALE</option></select><button id="replayImpact">ZUM TREFFER</button><button id="replayContact">PUNKTE AN</button><button id="replaySkip">WEITER</button></div><p id="replayVerdict"></p><div id="contactLegend" hidden><span style="color:#59dfbe">● Handfläche</span> · <span style="color:#ffd078">● Finger</span> · <span style="color:#ee93b3">● Handballen</span></div>';
+replayPanel.innerHTML='<div class="row"><strong>REPLAY · KONTAKTLABOR</strong><span id="replayTime"></span></div><input id="replaySeek" aria-label="Replay-Zeit" type="range" min="0" max="2.8" step="0.008333" value="0"><div class="row"><button id="replayPlay">PAUSE</button><button id="replayStep">+ EIN BILD</button><select id="replaySpeed" aria-label="Replay-Geschwindigkeit"><option value="0.1">0,1×</option><option value="0.25" selected>0,25×</option><option value="1">1×</option></select><select id="replayCamera" aria-label="Replay-Kamera"><option value="contact">TREFFER · NAH</option><option value="ko" disabled>KO · BEGLEITUNG</option><option value="front">FRONT</option><option value="side">DREIVIERTEL</option><option value="wide">TV · TOTALE</option></select><button id="replayImpact">ZUM TREFFER</button><button id="replayContact">PUNKTE AN</button><button id="replayKO" hidden>KO ANSEHEN</button><button id="replaySkip">WEITER</button></div><p id="replayVerdict"></p><div id="contactLegend" hidden><span style="color:#59dfbe">● Handfläche</span> · <span style="color:#ffd078">● Finger</span> · <span style="color:#ee93b3">● Handballen</span></div>';
 document.body.append(replayPanel);
 const style=document.createElement('style');style.textContent=`#posePanel{position:fixed;left:25px;top:25%;width:220px;padding:18px;z-index:4;border-left:3px solid #e8c167}#posePanel small{color:#e8c167;font-size:10px;letter-spacing:1px}#posePanel h3{margin:10px 0}#posePanel p{font-size:12px;line-height:1.65;color:#bec6d0}#poseReadout{font:12px/1.8 monospace;color:#e8c167}#contactVerdict{min-height:40px}#replayPanel{position:fixed;bottom:162px;left:50%;transform:translateX(-50%);width:min(760px,90vw);padding:16px;z-index:6}#replayPanel strong{font-size:12px;color:#e8c167}#replayPanel .row{align-items:center;justify-content:space-between}#replayPanel input{padding:0;width:100%;accent-color:#e8c167}#replayPanel select{width:auto;font-size:10px}#replayPanel button{font-size:10px;padding:10px}#replayPanel p{font-size:12px;margin-bottom:0;color:#e8c167}#posePanel[hidden],#replayPanel[hidden]{display:none}`;document.head.append(style);
 const replayLayout=document.createElement('style');
@@ -18,6 +18,9 @@ body.replaying #replayPanel{bottom:12px;width:min(900px,calc(100vw - 32px));padd
 #replayPanel>.row:nth-of-type(2){flex-wrap:wrap;justify-content:flex-start;gap:6px}
 #replayPanel button,#replayPanel select{min-height:34px;padding:7px 10px}
 #replayPanel p{margin:6px 0 0;line-height:1.35}
+#scorebug .playerName{display:block;max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+#scorebug div{min-width:0}
+#scorebug [data-active=true] small{color:#ffe6a0;font-weight:900}
 #contactLegend{font-size:12px;margin-top:5px}
 body.replaying .toast{bottom:155px}
 @media(max-width:1000px){.playing header .version{display:none}}
@@ -60,8 +63,9 @@ document.getElementById('replaySeek').oninput=e=>{playing=false;replayT=+e.targe
 document.getElementById('replaySpeed').onchange=e=>speed=+e.target.value;
 document.getElementById('replayCamera').onchange=e=>camera=e.target.value;
 document.getElementById('replayContact').onclick=()=>showContact=!showContact;
-document.getElementById('replayImpact').onclick=()=>{if(!clip)return;playing=false;replayT=clip.contact;showContact=true;camera='side';document.getElementById('replayCamera').value=camera;};
+document.getElementById('replayImpact').onclick=()=>{if(!clip)return;playing=false;replayT=clip.contact;showContact=true;camera='contact';document.getElementById('replayCamera').value=camera;};
 document.getElementById('replaySkip').onclick=()=>sendAction({action:'skip_replay'});
+document.getElementById('replayKO').onclick=()=>{if(!clip?.ko)return;playing=false;replayT=2;camera='ko';document.getElementById('replayCamera').value=camera;};
 function armAt(t){
  const path=clip.arm_path;if(!path?.length)return null;
  const time=clip.contact_time+(t-clip.contact);
@@ -83,7 +87,7 @@ function handAt(t){
  return pose;
 }
 async function fetchClip(id){
- loading=id;try{const response=await fetch('/api/replay/'+id);if(!response.ok)throw Error('Replay nicht verfügbar');const data=await response.json();if(state?.replay_id===id){clip=data;window.combatDiagnostics.clipId=id;window.combatDiagnostics.frameCount=data.frames.length;window.combatDiagnostics.peak=data.peak;}}
+ loading=id;try{const response=await fetch('/api/replay/'+id);if(!response.ok)throw Error('Replay nicht verfügbar');const data=await response.json();if(state?.replay_id===id){clip=data;if(camera==='ko'&&!clip.ko){camera='wide';document.getElementById('replayCamera').value=camera;}window.combatDiagnostics.clipId=id;window.combatDiagnostics.frameCount=data.frames.length;window.combatDiagnostics.peak=data.peak;}}
  catch(e){toast(e.message);window.combatDiagnostics.error=e.message;}finally{loading='';}
 }
 function frame(now){
@@ -112,6 +116,8 @@ function frame(now){
       document.getElementById('phaseTitle').textContent='DER KONTAKT ENTSCHEIDET';document.getElementById('phaseHint').textContent='Gespeicherte Physik · beide Spieler sehen denselben Treffer';
       if(playing)replayT=Math.min(2.8,replayT+dt*speed);
       if(replayT>=2.8)playing=false;
+      document.getElementById('replayKO').hidden=!(clip?.id===state.replay_id&&clip.ko);
+      document.querySelector('#replayCamera option[value=ko]').disabled=!(clip?.id===state.replay_id&&clip.ko);
       document.getElementById('replaySeek').value=replayT;
       document.getElementById('replayPlay').textContent=playing?'PAUSE':'ABSPIELEN';
       document.getElementById('replayTime').textContent=replayT.toFixed(2)+' s · noch '+Math.ceil(state.remaining)+' s';
@@ -128,7 +134,7 @@ function frame(now){
    const t=state.phase==='over'?2.8:state.phase==='replay'?replayT:clamp((now-phaseStart)/1000,0,2.8);
    const fi=Math.min(clip.frames.length-1,t*clip.fps),i=Math.floor(fi),j=Math.min(i+1,clip.frames.length-1),f=fi-i;
    const values=clip.frames[i].map((v,k)=>v+(clip.frames[j][k]-v)*f);
-   window.physicsFrame=JSON.stringify({id:clip.id,time:t,contact:clip.contact,crowd_hit:clip.contact_class!=='miss'&&(clip.impact_speed_m_s||0)>.05,side_cage:clip.side_cage||{},head:values[0],jaw:values[1],offsets:values.slice(2).map(v=>v*clip.scale),ko:!!clip.ko,body:clip.body_frames?.[Math.min(clip.body_frames.length-1,Math.floor(t*clip.fps))]||[0,0,0,0,0],target:clip.target,players:t<clip.contact?clip.before:clip.after,hand:handAt(t),arm:armAt(t),replay:state.phase==='replay',camera,footprint:showContact&&state.phase==='replay'&&Math.abs(t-clip.contact)<.025?clip.footprint:[]});
+   window.physicsFrame=JSON.stringify({id:clip.id,time:t,contact:clip.contact,crowd_hit:clip.contact_class!=='miss'&&(clip.impact_speed_m_s||0)>.05,side_cage:clip.side_cage||{},head:values[0],jaw:values[1],offsets:values.slice(2).map(v=>v*clip.scale),ko:!!clip.ko,body:clip.body_frames?.[Math.min(clip.body_frames.length-1,Math.floor(t*clip.fps))]||[0,0,0,0,0],target:clip.target,players:t<clip.contact?clip.before:clip.after,hand:handAt(t),arm:armAt(t),replay:state.phase==='replay',camera,contact_focus:clip.position||[.25,.1,.25],footprint:showContact&&state.phase==='replay'&&Math.abs(t-clip.contact)<.025?clip.footprint:[]});
    window.combatDiagnostics.time=t;window.combatDiagnostics.frame=i;window.combatDiagnostics.deformation=Math.max(...values.slice(2).map(Math.abs))*clip.scale;
    if(state.phase==='impact'&&t>=clip.contact&&!hitSound&&clip.contact_class!=='miss'){hitSound=true;window.contactSound=true;}
  }else window.physicsFrame='{}';

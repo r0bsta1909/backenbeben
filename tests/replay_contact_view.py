@@ -12,6 +12,7 @@ async def main():
   page.on('console',lambda m:errors.append(m.text) if m.type=='error' else None)
   await page.goto(TEST_URL);await page.wait_for_function('window.gameReady',timeout=60000)
   await page.evaluate("()=>{window.sentActions=[];const original=sendAction;sendAction=d=>{sentActions.push(d);original(d)}}")
+  await page.locator('#nickname').fill('WMWMWMWMWMWMWMWMWM')
   await page.locator('#training').click();await page.wait_for_function("state?.phase==='aim'")
   await page.locator('#poseCamera').click()
   await page.wait_for_function('godotStats?.camera_position?.[0]===3')
@@ -57,8 +58,11 @@ async def main():
    assert recorded['physics_backend']=='coupled'
    coupled_evidence={'backend':recorded['physics_backend'],'solve_ms':recorded['solve_ms'],'peak':recorded['peak'],'contact_diagnostics':recorded['contact_diagnostics']}
   await page.locator('#replayImpact').click()
-  await page.wait_for_function("JSON.parse(physicsFrame).camera==='side' && JSON.parse(physicsFrame).time===.5")
+  await page.wait_for_function("JSON.parse(physicsFrame).camera==='contact' && JSON.parse(physicsFrame).time===.5")
   assert await page.locator('#contactLegend').is_visible()
+  assert not await page.locator('#replayKO').is_visible()
+  assert await page.locator('#scoreRed .playerName').get_attribute('title')=='WMWMWMWMWMWMWMWMWM'
+  assert 'Am Schlag' in await page.locator('#scoreRed').get_attribute('aria-label')
   assert await page.evaluate('godotStats.physics_material_updates')>idle_updates
   frame=await page.evaluate('JSON.parse(physicsFrame)');assert frame['footprint']
   await page.wait_for_timeout(300);await page.screenshot(path='logs/contact-view.png')
@@ -67,7 +71,9 @@ async def main():
   assert not await page.locator('#contactLegend').is_visible()
   if '--visual-contact' in sys.argv:
    audit=[]
-   for view in ('front','side','wide'):
+   # Nine captures fit the real replay window; the fixed side view is tested
+   # separately through pose inspection above.
+   for view in ('contact','front','wide'):
     await page.locator('#replayCamera').select_option(view)
     for moment,label in ((.46,'before'),(.5,'contact'),(.54,'after')):
      await page.locator('#replaySeek').evaluate('(e,t)=>{e.value=t;e.dispatchEvent(new Event("input"))}',moment)
@@ -88,6 +94,7 @@ async def main():
       return {panel:rect('replayPanel'),score:rect('scorebug'),buttons:[...document.querySelectorAll('#replayPanel button,#replayPanel select')].map(e=>{const r=e.getBoundingClientRect();return {x:r.x,y:r.y,right:r.right,bottom:r.bottom}}),bottom:getComputedStyle(document.querySelector('.bottom')).display};
     }''')
     assert boxes['bottom']=='none',boxes
+    assert await page.locator('#scoreRed .playerName').evaluate("e=>getComputedStyle(e).textOverflow==='ellipsis' && e.clientWidth<=e.parentElement.clientWidth")
     assert boxes['score']['bottom']<boxes['panel']['y'],boxes
     for box in [boxes['panel'],boxes['score'],*boxes['buttons']]:
      assert box['x']>=0 and box['y']>=0 and box['right']<=width and box['bottom']<=height,boxes

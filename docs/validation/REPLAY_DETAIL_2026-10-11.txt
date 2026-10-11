@@ -1,0 +1,47 @@
+BACKENBEBEN — TREFFER-/KO-ANSICHT UND NAMEN / 11.10.2026
+
+Nutzerauftrag: drei vorgeschlagene Verbesserungen umsetzen.
+Arena, Werbung, Hoenhorst, Charakterassets und Solver unveraendert.
+
+TREFFER
+Neue Replay-Auswahl TREFFER · NAH. ZUM TREFFER springt zur Kontaktzeit,
+aktiviert Kontaktpunkte und diese Ansicht. Fokus aus clip.position im
+aufgezeichneten Weltkoordinatensystem, unabhaengig vom Marker-An/Aus-Schalter.
+Kameraoffset(2.7,.35,1.15), FOV50, Blickzentrum leicht zur Wange versetzt.
+Fokus bleibt stabil beim Vor-/Ruecklauf; keine Verfolgung des zurueckgezogenen Arms.
+Bestehende Front-, Dreiviertel- und TV-Ansichten bleiben verfuegbar.
+
+NAMEN
+Eigene playerName-Spans mit Ellipse, Vollname im Tooltip und aria-label.
+Rollen bleiben getrennte kleine Zeile. Aktive Rolle goldfarben hervorgehoben.
+Kein HTML aus Nutzernamen; weiterhin textContent.
+
+KO
+Neue Auswahl KO · BEGLEITUNG, nur fuer den aktuell geladenen KO-Clip aktiv.
+KO ANSEHEN springt pausiert zu2s. Kamerazentrum folgt dem Kopfpunkt, der mit
+dem aufgezeichneten Body-Transform bewegt wird; Blick etwas unterhalb zum Torso.
+Offset(6,2,7), FOV48. Nachfolgender Nicht-KO-Clip setzt alte KO-Kamerawahl auf TV.
+Keine Aenderung des aufgezeichneten Sturzes oder der Helferanimation.
+
+NACHWEISE
+Godot-Pruefung und nativer OpenGL-Render bestanden: tiefer/hoher Kontaktfokus
+im mittleren Bildbereich, bei Stuetzhaltung beide Helferhandgelenke am
+vorgegebenen Schulterziel (<.01 Welteinheiten; gemessen unter1e-6).
+Native KO-Ansicht gesichtet. Webbuild neu exportiert.
+Gekoppelte Browser-Kontaktpruefung bestanden: neun Aufnahmen vor/bei/nach Treffer
+in Nah-/Front-/TV-Ansicht, Arm-Gelenkabgleich <1e-5, Marker an/aus, Ruecklauf,
+Posekamera/Mausrad/Spiegel. Lange18-Zeichen-Namen, Tooltip/aria-label und
+Ellipsenlayout geprueft. Vier Fensterformate ohne herausragende Bedienelemente.
+errors[]. Lokale Rohbelege in logs/, nicht zur Publikation vorgesehen.
+Vollstaendiger KO-Kampf4Treffer mit zwei Browserclients bestanden: identische
+Clips, Verletzungsruecklauf, KO ANSEHEN bei2s, KO-Ruecklauf, Resume,
+Revanche/Materialreset und Verlassen. errors[]. KO-Browserbild gesichtet;
+Gesicht und beide Helfer sichtbar. Eigener Testhost8879 beendet.
+Neue Vorschaubilder: Arena-Design/19-treffer-nah.png und19-ko-begleitung.png.
+
+Testkorrektur: zunaechst12Aufnahmen; Replay-Ende waehrend letzter Aufnahme
+fuehrte zu fehlendem arm-Feld. Pruefung auf9Aufnahmen verteilt; fixe Seitenkamera
+bereits durch Pose-Inspektion abgedeckt. Regulaere Spielzeit unveraendert.
+
+Grenzen: technischer Test, keine menschliche Spielgefuehl-/Zwei-PC-Abnahme.
+V0.5-Releasepaket aelter als aktueller Quellstand.

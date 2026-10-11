@@ -433,7 +433,7 @@ func drive_recorded_physics() -> void:
 			m.set_shader_parameter("jaw_angle",float(physics_frame.get("jaw",0)) if affected else 0.0)
 	var wide_view: bool = replaying and physics_frame.get("camera","")=="wide"
 	var inspecting: bool = not active and bool(hand_pose.get("active",false)) and hand_pose.get("camera","")=="side"
-	var side_view: bool = inspecting or (replaying and physics_frame.get("camera","") in ["side","wide"])
+	var side_view: bool = inspecting or (replaying and physics_frame.get("camera","") in ["side","wide","contact","ko"])
 	mirror_mount.visible=not (replaying or inspecting)
 	if replaying or inspecting:mirror_viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED
 	camera.position=Vector3(14,3,20) if wide_view else Vector3(3,.55,1.1) if side_view else Vector3(.30,.70,3.3)
@@ -465,6 +465,17 @@ func drive_recorded_physics() -> void:
 		target_view.apply_collapse(body_frame)
 	var guard_body: Array=physics_frame.get("body",[0,0,0,0,0])
 	defending_view.pose_defender(1.0-smoothstep(.02,.25,float(guard_body[0])))
+	if replaying and physics_frame.get("camera","")=="contact":
+		var focus: Array=physics_frame.get("contact_focus",[.25,.1,.25])
+		var center:=Vector3(float(focus[0]),float(focus[1]),float(focus[2]))
+		camera.position=center+Vector3(2.7,.35,1.15)
+		camera.fov=50.0
+		camera.look_at(center+Vector3(-.18,0,.1))
+	elif replaying and physics_frame.get("camera","")=="ko" and physics_frame.get("ko",false):
+		var center: Vector3=fighter.to_global(fighter.collapsed_point(Vector3(0,.12,0)))
+		camera.position=center+Vector3(6,2,7)
+		camera.fov=48.0
+		camera.look_at(center+Vector3(0,-.6,0))
 	if contact_marks.is_empty():
 		var contact_surface: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/hand_contact_surface_v3.json"))
 		for i in range(contact_surface.samples.size()):
@@ -526,5 +537,6 @@ func update_officials(body: Array) -> void:
 			var bend := Basis(Vector3.FORWARD,float(body[3]))*Basis(Vector3.RIGHT,-float(body[2]))
 			var armpit := Vector3(-.18 if i==0 else .18,-.25,.025)
 			var support := (hip+drop+bend*(armpit-hip))*4.0
+			actor.set_meta("support_target",support)
 			actor.reach_toward(Vector3.ZERO,"R" if i==0 else "L",0.0)
 			actor.reach_toward(support,"L" if i==0 else "R",catch_amount,Vector3.RIGHT if i==0 else Vector3.LEFT)

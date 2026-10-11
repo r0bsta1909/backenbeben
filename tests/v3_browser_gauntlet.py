@@ -109,7 +109,8 @@ async def main():
                     assert ko_clip['body_frames'][-1][0]>.20
                     report['ko_body_recorded']=True
                     await attacker.locator('#replaySeek').evaluate('e=>{e.value=2;e.dispatchEvent(new Event("input"))}')
-                    await attacker.locator('#replayCamera').select_option('wide')
+                    await attacker.locator('#replayKO').click()
+                    await attacker.wait_for_function("JSON.parse(physicsFrame).camera==='ko' && JSON.parse(physicsFrame).time===2")
                     await attacker.wait_for_timeout(250)
                     await attacker.screenshot(path='logs/lateral-ko-side.png')
                     await attacker.locator('#replaySeek').evaluate('e=>{e.value=.2;e.dispatchEvent(new Event("input"))}')

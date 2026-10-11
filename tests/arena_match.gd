@@ -28,5 +28,33 @@ func verify() -> void:
 		if not DisplayServer.get_name()=="headless":
 			RenderingServer.force_draw(false)
 			root.get_texture().get_image().save_png(directory+"/"+mode+".png")
-	print("ARENA_MATCH_PASS: main scene, 2D hall, six sponsors, officials, mirror, front/side/wide cameras")
+	for focus in [[.25,-.2,.25],[.25,.34,.25]]:
+		scene.physics_frame={"id":3,"replay":true,"camera":"contact","contact_focus":focus,"body":[0,0,0,0,0]}
+		scene.drive_recorded_physics()
+		var projected: Vector2=scene.camera.unproject_position(Vector3(focus[0],focus[1],focus[2]))
+		if projected.x<560 or projected.x>1040 or projected.y<315 or projected.y>585:
+			push_error("Contact focus not centered at strike height");quit(1);return
+		await process_frame
+		if not DisplayServer.get_name()=="headless":
+			RenderingServer.force_draw(false)
+			root.get_texture().get_image().save_png(directory+"/contact-"+str(focus[1])+".png")
+	scene.physics_frame={"id":4,"replay":true,"camera":"ko","ko":true,"body":[.25,.12,.3,.1,1]}
+	scene.drive_recorded_physics()
+	for i in range(2):
+		var actor: Node3D=scene.officials[i]
+		var wrist: Array=actor.arm_world_joints("L" if i==0 else "R").wrist
+		var gap:=Vector3(wrist[0],wrist[1],wrist[2])*4.0-Vector3(actor.get_meta("support_target"))
+		print("KO_SUPPORT_GAP ",i,": ",gap.length())
+		if gap.length()>.01:
+			push_error("KO helper hand lost shoulder support");quit(1);return
+	await process_frame
+	if not DisplayServer.get_name()=="headless":
+		RenderingServer.force_draw(false)
+		root.get_texture().get_image().save_png(directory+"/ko-follow.png")
+	var dropped_camera_y: float=scene.camera.position.y
+	scene.physics_frame.body=[0,0,0,0,0]
+	scene.drive_recorded_physics()
+	if scene.camera.position.y<dropped_camera_y+.3:
+		push_error("KO camera did not follow the body on rewind");quit(1);return
+	print("ARENA_MATCH_PASS: main scene, contact height framing, KO tracking, officials and mirror")
 	quit(0)
