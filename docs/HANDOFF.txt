@@ -2283,3 +2283,13 @@ main/Arena-Merge bf932c0. Release v0.14.0-dev.20261011 auf GitHub.
 Frischer Paketkampf6TrefferbisKO PASS. Erneuter GitHubdownload: SHA256 und
 alle68Dateien bytegleich zur geprueften Installation, PASS. Hauptbranch main
 ist nun der gemeinsame Entwicklungsstand. Menschlicher Zwei-PC-Spieltest folgt.
+
+TISCH VERFEINERT — 11.10.2026
+Polsternähte/Paspel/Abrieb, klarere Front-/Seitenfelder, breiter Fuss mit Kragen,
+schmale warme Lichtkante und eingefasste INEOS-Originalgrafik umgesetzt.
+Tischhoehe/Polsterkontaktform/Solver unveraendert; Hoenhorst/andere Werbung bleibt.
+Vorschau-Hintergrundzoom an neuen MSAA-Pfad angepasst. Bake/native vierDetails,
+ARENA_HYBRID_PASS/ARENA_MATCH_PASS, strenger Webbuild und echter Produktions-
+Kontakt-/Replaybrowsercheck PASS,errors[]. Eigener Testhost8879 beendet.
+Beleg validation/TABLE_DESIGN_2026-10-11.txt. Bilder Arena-Design/21-*.png.
+Aktueller Quellstand/Webbuild neuer als v14-Download, kein neues Paket erstellt.

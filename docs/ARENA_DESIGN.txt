@@ -161,3 +161,9 @@ Die TV-Matchkamera ist jetzt seitlicher und hoeher (14,3,20), FOV52.
 Designvorschau bleibt beim freigegebenen Kameralayout. Replay-Leiste unten,
 Spielstand oben; Offizielle weiter seitlich/hinten. Gemalte Kulisse und
 Podestgestaltung unveraendert. Beleg validation/CAMERA_UI_2026-10-11.txt.
+
+TISCHDETAILS 2026-10-11
+Polsternaht/Paspel, dezenter Kontaktabrieb, abgerundeter Koerper mit flachen
+Paneelen, breiter Fuss/Kragen, eingefasste INEOS-Front und warme schmale
+Lichtkante. Kontaktkontur/Hoehe unveraendert. NativeDetailbilder und Browser-
+Replay geprüft. Beleg validation/TABLE_DESIGN_2026-10-11.txt.

@@ -32,9 +32,7 @@ func set_view(number: int) -> void:
 	camera.position=POSITIONS[number-1]
 	camera.fov=62 if number==1 else (58 if number>=3 else 55)
 	camera.look_at(TARGETS[number-1])
-	update_ground_shadow()
-	backdrop.material.set_shader_parameter("zoom",1.5 if number<=2 else 1.0)
-	backdrop.material.set_shader_parameter("focus",Vector2(.5,.56) if number==1 else (Vector2(.5,.56) if number==2 else Vector2(.5,.5)))
+	sync_camera(camera,number<=2,number>=3)
 	caption.text="BACKENBEBEN · "+VIEW_NAMES[number-1]+"\n1 Spiel · 2 Kontakt · 3 TV · 4 Gesamt\nP: Figuren ein/aus · H: Hinweise\nWASD + Q/E: bewegen · rechte Maustaste: Blick drehen"
 
 func _ready() -> void:

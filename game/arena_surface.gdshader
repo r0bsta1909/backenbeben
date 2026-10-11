@@ -72,6 +72,11 @@ void fragment() {
         } else if(wear_layout==3) {
             float edge_wear=1.0-smoothstep(.015,.07,abs(q.y-.47));
             wear=edge_wear*patches*.65;
+        } else if(wear_layout==4) {
+            // Two soft, irregular contact patches on the padded tabletop only.
+            vec2 left=(p.xz-vec2(-.43,.65))/vec2(.24,.20);
+            vec2 right=(p.xz-vec2(.43,.65))/vec2(.26,.18);
+            wear=(exp(-dot(left,left))+exp(-dot(right,right)))*patches;
         }
         color=mix(color,color*1.16+vec3(.01,.008,.005),wear*wear_amount);
     }

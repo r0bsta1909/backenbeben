@@ -1,7 +1,7 @@
 extends "res://arena_final.gd"
 ## Only the actual competition platform and padded table are volumetric.
 ## Architecture and spectators belong to the painted background, not this tree.
-func bevel_box(size: Vector3, bevel: float, corner: float) -> ArrayMesh:
+func bevel_box(size: Vector3, bevel: float, corner: float, flat_panels: bool=false) -> ArrayMesh:
 	var surface:=SurfaceTool.new();surface.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var rings: Array[PackedVector3Array]=[]
 	for profile in [Vector2(-size.y/2,bevel),Vector2(-size.y/2+bevel,0),Vector2(size.y/2-bevel,0),Vector2(size.y/2,bevel)]:
@@ -16,6 +16,7 @@ func bevel_box(size: Vector3, bevel: float, corner: float) -> ArrayMesh:
 		rings.append(points)
 	for row in range(3):
 		for n in range(20):
+			surface.set_smooth_group(-1 if flat_panels and n%5==4 else 0)
 			var next: int=(n+1)%20
 			for p in [rings[row][n],rings[row][next],rings[row+1][next],rings[row][n],rings[row+1][next],rings[row+1][n]]:surface.add_vertex(p)
 	surface.set_smooth_group(-1)
@@ -64,12 +65,14 @@ func podium() -> void:
 	padding.mesh=ring_mesh([Vector2(.48,-.12),Vector2(.495,-.072),Vector2(.5,0),Vector2(.485,.086),Vector2(.47,.12)],Vector2(2.15,.76))
 	for node in get_children():
 		if node is MeshInstance3D and node.mesh is CylinderMesh and is_equal_approx(node.mesh.top_radius,.007) and absf(node.position.y+1.13)<.005:
-			node.mesh.height=.035;node.mesh.top_radius=.004;node.mesh.bottom_radius=.004
+			var angle:=atan2((node.position.z-.65)/.373,node.position.x/1.055)
+			node.position=Vector3(cos(angle)*1.073,-1.155,.65+sin(angle)*.380)
+			node.mesh.height=.026;node.mesh.top_radius=.004;node.mesh.bottom_radius=.004
 			node.material_override=mat(Color("777669"))
 	# A closed oval piping seam gives the upholstery a soft, finished silhouette.
 	for n in range(64):
 		var a: float=TAU*n/64.0;var b: float=TAU*(n+1)/64.0
-		beam(Vector3(cos(a)*1.064,-1.12,.65+sin(a)*.376),Vector3(cos(b)*1.064,-1.12,.65+sin(b)*.376),.006,Color("393f3c"))
+		beam(Vector3(cos(a)*1.068,-1.12,.65+sin(a)*.378),Vector3(cos(b)*1.068,-1.12,.65+sin(b)*.378),.006,Color("545a52"))
 	for x in [-.28,.28]:beam(Vector3(x,-4.99,.92),Vector3(x,-1.49,.92),.009,Color("6c3733"))
 	for x in [-.45,.45]:
 		for z in [.42,.88]:round_part("FootFixing",Vector3(x,-5.029,z),Vector3(.055,.018,.055),"7d8079")
@@ -86,6 +89,53 @@ func podium() -> void:
 	red_band.position.y=-1.29;red_band.scale=Vector3.ONE
 	red_band.mesh=ring_mesh([Vector2(.47,-.0425),Vector2(.493,-.027),Vector2(.5,0),Vector2(.493,.027),Vector2(.47,.0425)],Vector2(2.12,.73),true)
 	red_band.material_override=finished_material(Color("883c38"),0,false,false)
+	refine_table()
+
+func refine_table() -> void:
+	# Keep the padded contact silhouette, height and collision envelope unchanged.
+	var top: MeshInstance3D=find_child("PodiumTop",true,false)
+	top.material_override.set_shader_parameter("wear_layout",4)
+	top.material_override.set_shader_parameter("wear_amount",.22)
+	var body: MeshInstance3D=find_child("PodiumBody",true,false)
+	body.scale=Vector3.ONE
+	body.mesh=bevel_box(Vector3(.92,3.90,.66),.045,.13,true)
+	worn_material(body,Color("303839"),6,.08)
+	body.material_override.set_shader_parameter("light_softness",.35)
+	var foot: MeshInstance3D=find_child("PodiumFoot",true,false)
+	foot.scale=Vector3.ONE;foot.position.y=-5.095
+	foot.mesh=bevel_box(Vector3(1.58,.18,.96),.03,.16,true)
+	worn_material(foot,Color("343b3b"),6,.12)
+	var collar:=part("PodiumFootCollar",Vector3(0,-5.00,.65),Vector3(1.04,.10,.72),"222a2b")
+	collar.mesh=bevel_box(Vector3(1.04,.10,.72),.018,.10,true)
+	worn_material(collar,Color("222a2b"),6,.08)
+	for fixing in find_children("FootFixing*","MeshInstance3D",true,false):
+		fixing.position=Vector3(signf(fixing.position.x)*.65,-4.998,.65+signf(fixing.position.z-.65)*.28)
+	for x in [-.365,.365]:
+		part("BodyPanelJoin",Vector3(x,-3.28,.988),Vector3(.009,2.75,.008),"1d2527")
+	for y in [-1.77,-4.79]:
+		part("BodyPanelJoin",Vector3(0,y,.988),Vector3(.62,.012,.008),"1d2527")
+	for side in [-1.0,1.0]:
+		for y in [-3.95,-4.12,-4.29]:
+			part("SidePanelJoin",Vector3(side*.464,y,.65),Vector3(.008,.022,.20),"1d2527")
+	var plaque:=part("INEOSInsetFrame",Vector3(0,-2.75,.979),Vector3(.84,.56,.028),"6b7167")
+	plaque.mesh=bevel_box(Vector3(.84,.56,.028),.005,.03)
+	plaque.material_override=finished_material(Color("6b7167"),6,false,false)
+	var inset:=part("INEOSInsetPanel",Vector3(0,-2.75,.995),Vector3(.79,.51,.006),"20292a")
+	inset.mesh=bevel_box(Vector3(.79,.51,.006),.002,.02)
+	inset.material_override=finished_material(Color("20292a"),0,false,false)
+	var logo: MeshInstance3D=find_child("PodiumINEOS",true,false)
+	logo.position=Vector3(0,-2.75,.9996);logo.mesh.size=Vector2(.78,.468)
+	logo.material_override.set_shader_parameter("substrate_color",Color("20292a"))
+	logo.material_override.set_shader_parameter("substrate_mix",.12)
+	var light_edge:=MeshInstance3D.new();light_edge.name="PodiumWarmLightEdge"
+	light_edge.position=Vector3(0,-1.35,.65)
+	light_edge.mesh=ring_mesh([Vector2(.486,-.008),Vector2(.5,-.006),Vector2(.5,.006),Vector2(.486,.008),Vector2(.486,-.008)],Vector2(2.10,.72))
+	var edge_material:=StandardMaterial3D.new()
+	edge_material.shading_mode=BaseMaterial3D.SHADING_MODE_UNSHADED
+	edge_material.albedo_color=Color("8c7950");edge_material.emission_enabled=true
+	edge_material.emission=Color("8c7950");edge_material.emission_energy_multiplier=.12
+	light_edge.material_override=edge_material
+	light_edge.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;add_child(light_edge)
 
 func stage_deck() -> void:
 	super.stage_deck()
