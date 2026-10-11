@@ -79,6 +79,22 @@ async def main():
      for joint in ('shoulder','elbow','wrist'):
       assert max(abs(a-b) for a,b in zip(record['frame']['arm']['pose'][joint],record['rendered'][joint]))<1e-5,(view,label,joint,record)
    Path('logs/contact-arm-render-audit.json').write_text(json.dumps(audit,indent=2))
+   layout_audit=[]
+   for width,height in ((1920,1080),(1280,720),(1280,1024),(900,1200)):
+    await page.set_viewport_size({'width':width,'height':height})
+    await page.wait_for_timeout(150)
+    boxes=await page.evaluate('''()=>{
+      const rect=id=>{const r=document.getElementById(id).getBoundingClientRect();return {x:r.x,y:r.y,right:r.right,bottom:r.bottom}};
+      return {panel:rect('replayPanel'),score:rect('scorebug'),buttons:[...document.querySelectorAll('#replayPanel button,#replayPanel select')].map(e=>{const r=e.getBoundingClientRect();return {x:r.x,y:r.y,right:r.right,bottom:r.bottom}}),bottom:getComputedStyle(document.querySelector('.bottom')).display};
+    }''')
+    assert boxes['bottom']=='none',boxes
+    assert boxes['score']['bottom']<boxes['panel']['y'],boxes
+    for box in [boxes['panel'],boxes['score'],*boxes['buttons']]:
+     assert box['x']>=0 and box['y']>=0 and box['right']<=width and box['bottom']<=height,boxes
+    await page.screenshot(path=f'logs/replay-layout-{width}x{height}.png')
+    layout_audit.append({'width':width,'height':height,**boxes})
+   Path('logs/replay-layout-audit.json').write_text(json.dumps(layout_audit,indent=2))
+   await page.set_viewport_size({'width':1920,'height':1080})
   await page.locator('#replayImpact').click()
   await page.locator('#replaySeek').evaluate('e=>{e.value=.7;e.dispatchEvent(new Event("input"))}')
   await page.wait_for_function('JSON.parse(physicsFrame).time>.6')

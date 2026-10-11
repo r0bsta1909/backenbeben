@@ -1,0 +1,40 @@
+BACKENBEBEN — KAMERA UND ANZEIGEN / 11.10.2026
+
+Auftrag: Punkt 4, Sichtbarkeit von Spielern, Treffern und Wiederholungen pruefen.
+Arena-Art, Originalwerbung und Hoenhorst unveraendert.
+
+Befunde und Aenderungen
+- Alte Replay-Leiste und unterer Spielstand lagen ueber Unterarm/Podestfront.
+  Replay nun als kompakte Leiste am unteren Fensterrand; Spielstand oben.
+  Unbenutzte Schwung-/Emotehinweise und doppelte Replay-Phasenbeschreibung
+  werden nur waehrend Replay ausgeblendet. Steuerungshilfe bleibt erreichbar.
+- Drei Offizielle erhalten; Vordergrund-Schiedsrichter nach hinten versetzt,
+  beide Faenger weiter seitlich. KO-Fanganimation weiterhin aktiv.
+- Match-TV-Kamera seitlicher/hoeher: (14,3,20), FOV52, Ziel(0,-1.4,1.05).
+  Front/Kontaktkameras und freigegebene separate Arena-Vorschau unveraendert.
+- Replay-Buttons umbrechen bei wenig Platz, Seitenpanels auf niedrigen Fenstern
+  scrollbar; schmale Header ohne ueberlappenden Versionshinweis.
+
+Pruefungen
+- Godot ARENA_MATCH_PASS und Web-Export bestanden.
+- Echte gekoppelte Browser-Kontaktpruefung bestanden, errors[]. Front/Seite/TV
+  vor, bei und nach Kontakt gesichtet; gerenderte Schulter/Ellbogen/Handgelenk
+  stimmen mit Replay-Daten ueberein (<1e-5). Marker an/aus, Ruecklauf,
+  Mausrad/Posekamera und Spiegel-Updatepruefung bestanden.
+- Replay-Layout in 1920x1080,1280x720,1280x1024,900x1200: Leiste, Spielstand,
+  Buttons und Auswahlfelder innerhalb Fenster, Spielstand oberhalb der Leiste.
+  Hochformat behaelt das Arena-Seitenverhaeltnis mit schwarzen Raendern.
+- Lokale Belege (nicht veroeffentlichte Rohlogs): contact-view.json,
+  contact-arm-render-audit.json, replay-layout-audit.json, neun Kontaktbilder.
+- Sichtbare Vergleichsbilder im Workspace: Arena-Design/18-kontakt-und-anzeigen.png,
+  18-tv-und-anzeigen.png,18-replay-720p.png.
+- Vollstaendiger beschleunigter KO-Kampf mit zwei Browserclients bestanden:
+  drei Treffer, Abwehr, identische Replay-Daten, Verletzungsruecklauf, KO-Koerper,
+  KO-Ruecklauf, Wiederverbindung, Revanche und Verlassen; errors[].
+  KO-TV-Bild gesichtet: Empfaenger und unterstuetzende Faenger sichtbar.
+  p95 Replay-Bildzeit 16.8ms auf diesem Test-PC, kein allgemeines Leistungsversprechen.
+  Eigener temporaerer Testhost8879 beendet, bestehende Hosts nicht ersetzt.
+
+Grenzen: Browsertests auf einem PC; kein menschlicher Zwei-PC-Spieltest und
+keine neue Charakter-/Spielgefuehlabnahme. Physik/Charakterassets unveraendert.
+Releasepaket v0.5 enthaelt diese Quellcode-Aenderungen noch nicht.

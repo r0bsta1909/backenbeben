@@ -155,3 +155,9 @@ Belege/Pruefgrenzen: docs/validation/ARENA_MATCH_INTEGRATION_2026-10-10.txt.
 HISTORISCH
 arena_finished.tscn, bake_arena.gd und tests/arena_finished.gd gehoeren zur
 Voll-3D-Fassung. Die aktuelle Vorschau instanziert diese Szene nicht.
+
+MATCHKAMERA/UI 2026-10-11
+Die TV-Matchkamera ist jetzt seitlicher und hoeher (14,3,20), FOV52.
+Designvorschau bleibt beim freigegebenen Kameralayout. Replay-Leiste unten,
+Spielstand oben; Offizielle weiter seitlich/hinten. Gemalte Kulisse und
+Podestgestaltung unveraendert. Beleg validation/CAMERA_UI_2026-10-11.txt.

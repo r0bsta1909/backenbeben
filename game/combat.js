@@ -8,6 +8,23 @@ const replayPanel=document.createElement('aside');replayPanel.id='replayPanel';r
 replayPanel.innerHTML='<div class="row"><strong>REPLAY · KONTAKTLABOR</strong><span id="replayTime"></span></div><input id="replaySeek" aria-label="Replay-Zeit" type="range" min="0" max="2.8" step="0.008333" value="0"><div class="row"><button id="replayPlay">PAUSE</button><button id="replayStep">+ EIN BILD</button><select id="replaySpeed" aria-label="Replay-Geschwindigkeit"><option value="0.1">0,1×</option><option value="0.25" selected>0,25×</option><option value="1">1×</option></select><select id="replayCamera" aria-label="Replay-Kamera"><option value="front">FRONT</option><option value="side">DREIVIERTEL</option><option value="wide">TV · TOTALE</option></select><button id="replayImpact">ZUM TREFFER</button><button id="replayContact">PUNKTE AN</button><button id="replaySkip">WEITER</button></div><p id="replayVerdict"></p><div id="contactLegend" hidden><span style="color:#59dfbe">● Handfläche</span> · <span style="color:#ffd078">● Finger</span> · <span style="color:#ee93b3">● Handballen</span></div>';
 document.body.append(replayPanel);
 const style=document.createElement('style');style.textContent=`#posePanel{position:fixed;left:25px;top:25%;width:220px;padding:18px;z-index:4;border-left:3px solid #e8c167}#posePanel small{color:#e8c167;font-size:10px;letter-spacing:1px}#posePanel h3{margin:10px 0}#posePanel p{font-size:12px;line-height:1.65;color:#bec6d0}#poseReadout{font:12px/1.8 monospace;color:#e8c167}#contactVerdict{min-height:40px}#replayPanel{position:fixed;bottom:162px;left:50%;transform:translateX(-50%);width:min(760px,90vw);padding:16px;z-index:6}#replayPanel strong{font-size:12px;color:#e8c167}#replayPanel .row{align-items:center;justify-content:space-between}#replayPanel input{padding:0;width:100%;accent-color:#e8c167}#replayPanel select{width:auto;font-size:10px}#replayPanel button{font-size:10px;padding:10px}#replayPanel p{font-size:12px;margin-bottom:0;color:#e8c167}#posePanel[hidden],#replayPanel[hidden]{display:none}`;document.head.append(style);
+const replayLayout=document.createElement('style');
+replayLayout.textContent=`
+body.replaying .bottom,body.replaying .status,body.replaying header .live{display:none}
+body.replaying #scorebug{top:16px;bottom:auto;width:min(540px,44vw);height:48px;grid-template-columns:1fr 90px 1fr}
+body.replaying #scorebug div{font-size:14px;padding:6px 12px;min-width:0;overflow:hidden;text-overflow:ellipsis}
+body.replaying #scorebug small{font-size:8px;letter-spacing:1px}
+body.replaying #replayPanel{bottom:12px;width:min(900px,calc(100vw - 32px));padding:10px 14px;background:#111722f5}
+#replayPanel>.row:nth-of-type(2){flex-wrap:wrap;justify-content:flex-start;gap:6px}
+#replayPanel button,#replayPanel select{min-height:34px;padding:7px 10px}
+#replayPanel p{margin:6px 0 0;line-height:1.35}
+#contactLegend{font-size:12px;margin-top:5px}
+body.replaying .toast{bottom:155px}
+@media(max-width:1000px){.playing header .version{display:none}}
+@media(max-width:1000px){body.replaying header .eyebrow{display:none}body.replaying #scorebug{top:62px;width:min(540px,90vw)}.playing .tools{top:12px;right:12px}.playing .status{left:16px;width:200px}#posePanel{left:12px;width:195px;padding:12px}#posePanel p{line-height:1.4}#posePanel button{font-size:10px;padding:8px;width:100%}}
+@media(max-height:700px){header{height:54px;padding:10px 20px}header .eyebrow,header .live{display:none}.playing .tools{top:12px}.playing .status{top:64px}.playing .status strong{font-size:16px}#posePanel{top:145px;max-height:calc(100vh - 230px);overflow-y:auto}#bracePanel{top:145px;max-height:calc(100vh - 230px);overflow-y:auto}}
+`;
+document.head.append(replayLayout);
 let originX=.8,inspectPose=false,repeatPractice=false;
 let yaw=0,pitch=-15,depth=0,mouse=[.19,.60],points=[],drag=false,rotate=false,start=0,length=0,previous=mouse.slice(),lastSend=0;
 let phaseKey='',phaseStart=0,clip=null,loading='',replayT=0,playing=true,speed=.25,showContact=true,camera='front',lastFrame=performance.now(),hitSound=false;
@@ -73,6 +90,7 @@ function frame(now){
  const dt=Math.min(.1,(now-lastFrame)/1000);lastFrame=now;
  const active=!!state&&document.body.classList.contains('playing');
  panel.hidden=!active||!ownTurn();replayPanel.hidden=!active||state.phase!=='replay';
+ document.body.classList.toggle('replaying',active&&state.phase==='replay');
  if(active){
    const clock=document.getElementById('scoreClock');if(clock){const seconds=Math.max(0,Math.ceil(state.remaining));const label=state.phase==='replay'?'ZEITLUPE':state.phase==='over'?'ENTSCHEIDUNG':Math.floor(seconds/60)+':'+String(seconds%60).padStart(2,'0');if(clock.textContent!==label)clock.textContent=label;}
    const key=state.match_id+':'+state.turn_id+':'+state.phase;

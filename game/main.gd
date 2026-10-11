@@ -436,8 +436,8 @@ func drive_recorded_physics() -> void:
 	var side_view: bool = inspecting or (replaying and physics_frame.get("camera","") in ["side","wide"])
 	mirror_mount.visible=not (replaying or inspecting)
 	if replaying or inspecting:mirror_viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED
-	camera.position=Vector3(7,.8,22) if wide_view else Vector3(3,.55,1.1) if side_view else Vector3(.30,.70,3.3)
-	camera.fov=58.0 if wide_view else (55.0 if side_view else 62.0)
+	camera.position=Vector3(14,3,20) if wide_view else Vector3(3,.55,1.1) if side_view else Vector3(.30,.70,3.3)
+	camera.fov=52.0 if wide_view else (55.0 if side_view else 62.0)
 	camera.look_at(Vector3(0,-1.4,1.05) if wide_view else Vector3(0,-.12,1.0) if side_view else Vector3(.22,-.55,0))
 	arena_presentation.sync_camera(camera,not wide_view,wide_view)
 	hand.visible=true
@@ -494,7 +494,7 @@ func zero_cage() -> Array:
 func build_officials() -> void:
 	for i in range(3):
 		var actor := new_character()
-		actor.position=Vector3((-1.55 if i==0 else 1.55) if i<2 else -2.7,0,-2.5 if i<2 else -.1)
+		actor.position=Vector3((-2.25 if i==0 else 2.25) if i<2 else -3.4,0,-2.5 if i<2 else -3.2)
 		actor.rotation.y=.22 if i==0 else -.22
 		prepare_materials(actor)
 		for node in actor.find_children("*","MeshInstance3D",true,false):

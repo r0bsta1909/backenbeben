@@ -1270,3 +1270,14 @@ Browserclients, Resume, Revanche, Verletzungsruecklauf und Leave bestanden, erro
 Belege und Testkorrekturen: validation/ARENA_MATCH_INTEGRATION_2026-10-10.txt.
 Temporären Checkout-Testhost8879 beendet; vorhandene Spielsitzungen nicht ersetzt.
 Freigabe betrifft Arena-Look, keine allgemeine G2/G3/G7- oder Zwei-PC-Abnahme.
+
+KAMERA UND UI GEPRUEFT — 11.10.2026
+Nutzerauftrag Punkt4: Replay-Leiste nach unten, Spielstand nach oben,
+redundante Hinweise nur im Replay ausgeblendet. Drei Offizielle weiter
+seitlich/hinten, TV-Matchkamera seitlicher/hoeher fuer bessere Trennung.
+Arena/Hoenhorst und eigenstaendige Designvorschau unveraendert.
+ARENA_MATCH_PASS, Webbuild, gekoppelte Kontaktpruefung mit neun Bildern und
+Replay-Layout in vier Formaten PASS. Vollstaendiger KO3Treffer-Zweiclienttest
+inkl.Resume/Revanche/Ruecklauf PASS,errors[]. Testhost8879 beendet.
+Beleg validation/CAMERA_UI_2026-10-11.txt. Keine menschliche Zwei-PC-Abnahme;
+v0.5-Paket bleibt aelter als Quellprojekt.
