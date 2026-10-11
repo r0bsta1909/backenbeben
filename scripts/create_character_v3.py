@@ -22,8 +22,8 @@ def material(name, color):
     return m
 skin=material('Skin',(.64,.34,.21)); shirt=material('Shirt',(.025,.065,.105))
 ink=material('Ink',(.012,.016,.026)); hair=material('Hair',(.034,.022,.024))
-lip=material('Lip',(.42,.18,.135)); white=material('EyeWhite',(.78,.75,.64))
-iris=material('Iris',(.12,.20,.14)); seam=material('SkinShadow',(.32,.16,.11))
+lip=material('Lip',(.42,.18,.135)); white=material('EyeWhite',(.55,.51,.43))
+iris=material('Iris',(.12,.14,.10)); seam=material('SkinShadow',(.32,.16,.11))
 trim=material('ShirtTrim',(.70,.46,.14)); nail=material('Nail',(.68,.43,.31))
 
 def mesh(name, verts, faces, mat):
@@ -82,8 +82,9 @@ for line in (SRC/'makehuman/caucasian-male-young.target').read_text().splitlines
     if len(fields)==4 and fields[0].isdigit():raw[int(fields[0])]+=Vector(tuple(map(float,fields[1:])))
 def head_transform(v):
     x,y,z=v
-    # Broaden lower jaw slightly while preserving authored eyelid/mouth loops.
+    # Broaden the lower jaw toward the square comic reference, preserving eyelid topology.
     width=1+.13*math.exp(-((y-7.25)/.35)**2)
+    width+=.17*math.exp(-((y-7.15)/.20)**2)*(1-smoothstep(7.35,7.62,y))
     p=Vector((x*.13*width,(y-8.2164)*.13+.09,z*.105-.058))
     if p.y<-.05:
         blend=1-smoothstep(-.11,-.05,p.y)
@@ -121,14 +122,40 @@ head_parts=[face]
 for sign,suffix in [(-1,'L'),(1,'R')]:
     ex=sign*.293125*.13;ey=.09;ez=1.30435*.105-.058
     head_parts.append(ell('Eye'+suffix,(ex,ey,ez),(.012,.012,.012),white))
-    head_parts.append(ell('Iris'+suffix,(ex,ey,ez+.0114),(.0045,.0045,.001),iris))
+    head_parts.append(ell('Iris'+suffix,(ex,ey,ez+.0114),(.0056,.0056,.001),iris))
     head_parts.append(ell('Pupil'+suffix,(ex,ey,ez+.0122),(.0022,.0027,.0005),ink))
-    pts=[skinpoint(sign*x,y) for x,y in [(.017,.106),(.028,.111),(.044,.116),(.060,.108)]]
-    head_parts.append(curve('Brow'+suffix,pts,.0028,hair))
+    # Rest-space upper-lid occlusion, invariant under head/eye skinning.
+    # UV2.x stores normalized eyeball height; UV2.y is deliberately unused.
+    for eye_part in head_parts[-3:-1]:
+        socket_uv=eye_part.data.uv_layers.new(name='EyeSocket')
+        for loop in eye_part.data.loops:
+            height=G(eye_part.data.vertices[loop.vertex_index].co).y
+            socket_uv.data[loop.index].uv=(max(0,min(1,.5+(height-ey)/.024)),.5)
+        eye_part.data.uv_layers.active_index=0
+    # A tapered skin-hugging brow ribbon, not a constant-radius tube.
+    stations=[(.016,.101,.0020),(.023,.103,.0034),(.032,.106,.0035),(.043,.108,.0030),(.052,.107,.0022),(.060,.104,.0010),(.064,.102,.00015)]
+    brow_vertices=[];brow_faces=[]
+    rows=[]
+    for a,b in zip(stations,stations[1:]):
+        for step in range(3):
+            t=step/3;rows.append(tuple(a[i]*(1-t)+b[i]*t for i in range(3)))
+    rows.append(stations[-1])
+    for x,y,width in rows:
+        for dy,offset in [(-width,.0009),(width,.0009),(width,.0002),(-width,.0002)]:
+            brow_vertices.append(skinpoint(sign*x,y+dy,offset))
+    for j in range(len(rows)-1):
+        for i in range(4):brow_faces.append((j*4+i,j*4+(i+1)%4,(j+1)*4+(i+1)%4,(j+1)*4+i))
+    brow_faces.extend([(3,2,1,0),tuple((len(rows)-1)*4+i for i in range(4))])
+    head_parts.append(mesh('Brow'+suffix,brow_vertices,brow_faces,hair))
 # Scalp follows the real head. Short swept clumps vary in length and direction.
 def hairline(p):
     ear_notch=.025*math.exp(-((p.z-.020)/.035)**2)*smoothstep(.075,.10,abs(p.x))
-    return .100+.063*smoothstep(-.005,.08,p.z)-.005*smoothstep(.055,.10,abs(p.x))+ear_notch+.0015*math.sin(p.x*110)
+    # Close-cropped sides descend behind the ear; a tapered temple point breaks
+    # the former horizontal helmet edge without covering the forehead or ear.
+    side=smoothstep(.060,.095,abs(p.x))
+    temple=.037*math.exp(-((p.z-.056)/.016)**2)*side
+    rear=.019*(1-smoothstep(-.005,.025,p.z))
+    return .100+.063*smoothstep(-.005,.08,p.z)-.005*smoothstep(.055,.10,abs(p.x))+ear_notch-temple-rear+.0015*math.sin(p.x*110)
 hv=[];hf=[]
 for f in faces:
     center=sum((Vector(verts[i]) for i in f),Vector())/len(f)
@@ -201,10 +228,18 @@ bpy.context.view_layer.objects.active=cap;bpy.ops.object.join();head_parts.appen
 head_parts.append(ell('MouthInterior',(0,-.025,.075),(.026,.009,.010),ink))
 head_parts.append(ell('Teeth',(0,-.026,.081),(.023,.004,.003),white))
 
-body=loft('Shirt',[((0,-.60,-.014),.175,.096),((0,-.51,-.012),.188,.106),((0,-.36,0),.22,.120),((0,-.23,0),.218,.117),((0,-.145,0),.218,.085),((0,-.125,0),.145,.070),((0,-.105,0),.054,.048)],shirt,64)
+body=loft('Shirt',[((0,-.60,-.014),.175,.096),((0,-.51,-.012),.188,.106),((0,-.36,0),.22,.120),((0,-.23,0),.218,.117),((0,-.150,0),.205,.085),((0,-.125,0),.135,.070),((0,-.105,0),.054,.048)],shirt,64)
+# A crew neck is lower in front, exposing the throat without moving the rig.
+for vertex in body.data.vertices:
+    point=G(vertex.co)
+    front=max(0,min(1,point.z/.048))
+    opening=smoothstep(-.19,-.11,point.y)
+    point.y-=.045*opening*front
+    point.z+=.012*opening*front
+    vertex.co=B(point)
 neck=loft('Neck',[((0,-.18,0),.070,.060),((0,-.12,0),.057,.05),((0,-.06,-.008),.049,.043)],skin)
 # A true crew-neck rim follows the neck opening instead of floating on the chest.
-collar_points=[(.056*math.cos(i*math.tau/48),-.107-.005*max(0,math.sin(i*math.tau/48)),.050*math.sin(i*math.tau/48)) for i in range(49)]
+collar_points=[(.056*math.cos(i*math.tau/48),-.107-.045*max(0,math.sin(i*math.tau/48)),.050*math.sin(i*math.tau/48)+.014*max(0,math.sin(i*math.tau/48))) for i in range(49)]
 curve('Collar',collar_points,.004,ink)
 
 
@@ -362,9 +397,25 @@ for sign,side in [(-1,'R'),(1,'L')]:
         bmesh.ops.delete(bm,geom=[v for c in components if c is not largest for v in c],context='VERTS')
     bm.to_mesh(arm.data);bm.free()
     arm_objects[arm.name]=(arm,None)
+    # Sparse dorsal joint creases, projected onto the final skin rather than
+    # floating at guessed finger heights. Same distance-based skinning as arm.
+    hand_bvh=BVHTree.FromPolygons([G(v.co) for v in arm.data.vertices],[list(f.vertices) for f in arm.data.polygons])
+    for digit in range(4):
+        for joint_index in [1,2]:
+            center=Vector(bones[f'finger{digit}_{joint_index}.{side}'][0])
+            stroke=[]
+            for sample in range(7):
+                u=(sample-3)/3
+                guide=center+target_width*(u*.0042)+direction*(.0025*(1-u*u))
+                hit=hand_bvh.ray_cast(guide-target_normal*.045,target_normal,.09)
+                if hit[0] is not None:stroke.append(hit[0]+hit[1]*.00025)
+            if len(stroke)==7:
+                detail=curve(f'HandCrease{digit}_{joint_index}.{side}',stroke,.00024,ink)
+                arm_objects[detail.name]=(detail,None)
+
     # Sleeve sections stay perpendicular to the humerus. The inset root bends
     # toward the chest; using that bend as its frame creates a raised horn.
-    sleeve=loft('Sleeve.'+side,[(Vector((sign*.180,-.150,0)),.040,.060),(sh+upper*.020,.067,.060),(sh+upper*.080,.063,.056),(sh+upper*.135,.058,.051)],shirt,section_axis=upper)
+    sleeve=loft('Sleeve.'+side,[(Vector((sign*.175,-.158,0)),.042,.058),(sh-upper*.005,.057,.057),(sh+upper*.035,.061,.058),(sh+upper*.080,.058,.054),(sh+upper*.135,.054,.049)],shirt,section_axis=upper)
     arm_objects[sleeve.name]=(sleeve,'upper_arm.'+side)
     landmarks[side]={'shoulder':list(sh),'elbow':list(el),'wrist':list(wr),'palm_center':list(palm),'palm_normal':[0,0,1],'finger_direction':list(direction),'upper_length':(el-sh).length,'forearm_length':(wr-el).length,'palm_offset':.054}
 
@@ -382,15 +433,49 @@ bpy.context.view_layer.objects.active=body;bpy.ops.object.join()
 rem=body.modifiers.new('Continuous shirt and sleeve seams','REMESH');rem.mode='VOXEL';rem.voxel_size=.0035;rem.use_smooth_shade=True
 bpy.ops.object.modifier_apply(modifier=rem.name)
 sm=body.modifiers.new('Tailored shoulder transition','SMOOTH');sm.factor=.6;sm.iterations=5;bpy.ops.object.modifier_apply(modifier=sm.name)
-# Small broad folds follow armpit and hem tension instead of separate painted bars.
+shoulder_group=body.vertex_groups.new(name='ShoulderTransition')
+for v in body.data.vertices:
+    p=G(v.co);weight=smoothstep(.10,.17,abs(p.x))*(1-smoothstep(.27,.34,abs(p.x)))*smoothstep(-.30,-.22,p.y)
+    if weight>0:shoulder_group.add([v.index],weight,'REPLACE')
+sm=body.modifiers.new('Soft cloth armhole','SMOOTH');sm.factor=.8;sm.iterations=60;sm.vertex_group=shoulder_group.name;bpy.ops.object.modifier_apply(modifier=sm.name)
+body.vertex_groups.remove(body.vertex_groups['ShoulderTransition'])
+# A relaxed T-shirt follows the clavicle slope; suppress raised sleeve caps.
 for v in body.data.vertices:
     p=G(v.co)
-    if p.z>0:
-        weight=math.exp(-((abs(p.x)-.16)/.07)**2-((p.y+.27)/.15)**2)
-        p.z+=weight*.0035*math.sin((p.y+abs(p.x)*.7)*90)
-        p.z+=.002*math.sin(p.x*55)*math.exp(-((p.y+.56)/.04)**2)
+    ceiling=-.105-.23*abs(p.x)
+    if abs(p.x)>.09 and p.y>ceiling:
+        p.y=ceiling;v.co=B(p)
+sm=body.modifiers.new('Round tailored shoulder surface','SMOOTH');sm.factor=.7;sm.iterations=16;bpy.ops.object.modifier_apply(modifier=sm.name)
+
+# Authored tension folds: tapered ridges from the armholes, a few broad chest
+# diagonals and short compressed hem folds. Avoid uniform sine-wave ribbing.
+cloth_folds=[
+    ((-.19,-.26),(-.07,-.34),.0055,.010),
+    ((-.18,-.34),(-.03,-.38),.0040,.009),
+    ((.18,-.25),(.065,-.30),.0060,.011),
+    ((.17,-.35),(.035,-.41),.0045,.009),
+    ((-.15,-.48),(.09,-.445),.0045,.013),
+    ((-.12,-.535),(.16,-.56),.0050,.010),
+    ((-.16,-.575),(-.035,-.555),.0035,.008),
+    ((.02,-.585),(.13,-.578),.0030,.007),
+]
+def cloth_fold(x,y,a,b,height,width):
+    dx,dy=b[0]-a[0],b[1]-a[1]
+    length_squared=dx*dx+dy*dy
+    t=((x-a[0])*dx+(y-a[1])*dy)/length_squared
+    if t<=0 or t>=1:return 0.
+    distance=((x-a[0])*dy-(y-a[1])*dx)/math.sqrt(length_squared)
+    taper=math.sin(math.pi*t)**.7
+    w=width*(.3+.7*taper)
+    ridge=math.exp(-(distance/w)**2)-.38*math.exp(-((distance-w*1.3)/(w*1.5))**2)
+    return height*taper*ridge
+for v in body.data.vertices:
+    p=G(v.co)
+    front=smoothstep(.015,.065,p.z)*(1-smoothstep(.19,.24,abs(p.x)))
+    if front>0:
+        p.z+=front*sum(cloth_fold(p.x,p.y,*fold) for fold in cloth_folds)
         v.co=B(p)
-dec=body.modifiers.new('Cloth budget' ,'DECIMATE');dec.ratio=.10;bpy.ops.object.modifier_apply(modifier=dec.name)
+dec=body.modifiers.new('Cloth budget' ,'DECIMATE');dec.ratio=.16;bpy.ops.object.modifier_apply(modifier=dec.name)
 
 bpy.ops.object.select_all(action='DESELECT');bpy.ops.object.armature_add()
 rig=bpy.context.object;rig.name='CharacterRig';bpy.ops.object.mode_set(mode='EDIT');rig.data.edit_bones.remove(rig.data.edit_bones[0])
@@ -405,7 +490,7 @@ for obj in [o for o in bpy.context.scene.objects if o.type=='MESH']:
     candidates=None;fixed='chest'
     if obj.name in leg_bindings:fixed=leg_bindings[obj.name]
     if obj in head_parts:fixed='head'
-    if obj==neck:fixed='neck'
+    if obj in [face,neck]:candidates=['chest','neck','head']
     if obj.name in arm_objects:
         _,fixed=arm_objects[obj.name]
         if fixed is None:
@@ -415,6 +500,12 @@ for obj in [o for o in bpy.context.scene.objects if o.type=='MESH']:
         groups={name:obj.vertex_groups.new(name=name) for name in candidates}
         for v in obj.data.vertices:
             p=G(v.co)
+            if obj in [face,neck]:
+                head_weight=smoothstep(-.135,-.075,p.y)
+                neck_weight=(1-head_weight)*smoothstep(-.185,-.140,p.y)
+                for name,weight in [('head',head_weight),('neck',neck_weight),('chest',1-head_weight-neck_weight)]:
+                    if weight>1e-8:groups[name].add([v.index],weight,'REPLACE')
+                continue
             if obj==body:
                 # Smooth armhole ownership: no horizontal cut through the sleeve.
                 side='L' if p.x>0 else 'R'
@@ -478,6 +569,41 @@ for v in body.data.vertices:
     arm_sum=sum(g.weight for g in v.groups if body.vertex_groups[g.group].name.startswith('upper_arm.'))
     body.vertex_groups['chest'].add([v.index],max(0.,1-arm_sum),'REPLACE')
 
+# Sparse garment ink follows the final cloth surface and its smoothed weights.
+# Sampling the actual triangles avoids detached lines when the shoulder rises.
+from mathutils.geometry import barycentric_transform
+body.data.calc_loop_triangles()
+cloth_triangles=[tuple(t.vertices) for t in body.data.loop_triangles]
+cloth_vertices=[G(v.co) for v in body.data.vertices]
+cloth_bvh=BVHTree.FromPolygons(cloth_vertices,cloth_triangles,all_triangles=True)
+cloth_groups=['chest','upper_arm.R','upper_arm.L']
+cloth_weights=[]
+for v in body.data.vertices:
+    weights={body.vertex_groups[g.group].name:g.weight for g in v.groups}
+    cloth_weights.append(Vector([weights.get(name,0.) for name in cloth_groups]))
+ink_paths=[]
+for a,b,height,width in cloth_folds:
+    dx,dy=b[0]-a[0],b[1]-a[1];length=math.hypot(dx,dy)
+    ink_paths.append([(a[0]+dx*t-dy/length*width*.65,a[1]+dy*t+dx/length*width*.65) for t in [.14,.24,.34,.44,.54,.64,.74,.84]])
+for sign in [-1,1]:
+    ink_paths.append([(sign*x,y) for x,y in [(.195,-.175),(.205,-.195),(.212,-.22),(.211,-.245),(.199,-.27)]])
+for index,path in enumerate(ink_paths):
+    points=[]
+    for x,y in path:
+        hit,normal,triangle,distance_hit=cloth_bvh.ray_cast(Vector((x,y,.35)),Vector((0,0,-1)),.6)
+        if hit is not None:points.append(hit+normal*.00055)
+    if len(points)<3:continue
+    detail=curve('ClothInk%02d'%index,points,.00048,ink)
+    groups=[detail.vertex_groups.new(name=name) for name in cloth_groups]
+    for v in detail.data.vertices:
+        hit,normal,triangle,distance_hit=cloth_bvh.find_nearest(G(v.co))
+        ia,ib,ic=cloth_triangles[triangle]
+        weights=barycentric_transform(hit,cloth_vertices[ia],cloth_vertices[ib],cloth_vertices[ic],cloth_weights[ia],cloth_weights[ib],cloth_weights[ic])
+        weights=Vector([max(0.,w) for w in weights]);weights/=sum(weights)
+        for group,weight in zip(groups,weights):
+            if weight>1e-8:group.add([v.index],weight,'REPLACE')
+    mod=detail.modifiers.new('Follow garment weights','ARMATURE');mod.object=rig;detail.parent=rig
+
 # Recalculate all face normals (lofts and annuli have different winding axes).
 for obj in [o for o in bpy.context.scene.objects if o.type=='MESH']:
     bpy.ops.object.select_all(action='DESELECT');obj.select_set(True);bpy.context.view_layer.objects.active=obj
@@ -488,11 +614,22 @@ for obj in [o for o in bpy.context.scene.objects if o.type=='MESH']:
             p=G(obj.data.vertices[obj.data.loops[li].vertex_index].co);obj.data.uv_layers.active.data[li].uv=((p.x+.19)/.38,(p.y+.135)/.38) if obj==face else (p.x+.5,p.y+.8)
     bpy.ops.object.mode_set(mode='EDIT');bpy.ops.mesh.select_all(action='SELECT');bpy.ops.mesh.normals_make_consistent(inside=False);bpy.ops.object.mode_set(mode='OBJECT')
 
+# Preserve rest-space paint coordinates/mask through skeletal head rotation.
+# glTF flips V on import: encode 1-z so Godot UV2.y retains rest depth.
+rest_uv=face.data.uv_layers.new(name='RestPaint')
+for poly in face.data.polygons:
+    for li in poly.loop_indices:
+        vertex=face.data.vertices[face.data.loops[li].vertex_index]
+        p=G(vertex.co);normal=G(vertex.normal).normalized()
+        mask=smoothstep(.35,.80,normal.z)*smoothstep(.012,.065,p.z)
+        rest_uv.data[li].uv=(mask,1-p.z)
+face.data.uv_layers.active_index=0
+
 # The paint guide uses a fixed front projection; keep it editable and packed in
 # the Blender source. Runtime adds its own light and injury layers to this ink.
-if (OUT/'face_ink_v1.png').exists():
+if (OUT/'face_ink_v2.png').exists():
     face_material=skin.copy();face_material.name='FaceSkin'
-    image=bpy.data.images.load(str(OUT/'face_ink_v1.png'));image.pack()
+    image=bpy.data.images.load(str(OUT/'face_ink_v2.png'));image.pack()
     tex=face_material.node_tree.nodes.new('ShaderNodeTexImage');tex.image=image
     face_material.node_tree.links.new(tex.outputs['Color'],face_material.node_tree.nodes.get('Principled BSDF').inputs['Base Color'])
     face.data.materials[0]=face_material

@@ -1,0 +1,363 @@
+{
+  "source_commit": "c24b7bc1a29c0e84e6a7b50c475249f82ae9569f",
+  "sha256": "b63ffd99a35104b6c234306202159a0ab5e05515a9d5d25bcecd9a65ba8dd499",
+  "bytes": 23713923,
+  "files": 64,
+  "all_packaged_files_match_running_install": true,
+  "fresh_environment": true,
+  "outside_checkout": true,
+  "ko": {
+    "url": "http://192.168.178.67:8877",
+    "errors": [],
+    "hits": [
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 15.54,
+        "quality": 0.5312,
+        "braced": true,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "81df0cf3440d6055ec2f"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 21.84,
+        "quality": 0.4854,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "8b9f617baf6ba87c944f"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 28.77,
+        "quality": 0.6394,
+        "braced": false,
+        "side": "R",
+        "ko": true,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "06a36469817a2ace7867"
+      }
+    ],
+    "configuration": {
+      "base_damage": 45,
+      "ko_threshold": 60,
+      "turn_seconds": 60
+    },
+    "single_tilt_control": true,
+    "physics_backend": "coupled-moving",
+    "moving_head_brace_consistent": true,
+    "solved_normal_impulse_ns": 1.0624819946361705,
+    "solved_quality_matches_hit": true,
+    "recorded_arm_frames": 530,
+    "clip_hash": "50d9034e1152224cf738f25c664debe77fbfb3ca164881c9215046f509302424",
+    "replay": {
+      "clipId": "81df0cf3440d6055ec2f",
+      "frameCount": 337,
+      "peak": 0.025751,
+      "time": 0.58331,
+      "frame": 69,
+      "deformation": 0.025750420399999998
+    },
+    "replay_frame_ms_p95": 14,
+    "viewport": [
+      1920,
+      1080
+    ],
+    "resume": true,
+    "injury_material_rewind": true,
+    "ko_body_recorded": true,
+    "ko_reverse_seek": true,
+    "winner": 0,
+    "audio": {
+      "mode": "buffer-fallback",
+      "played": 5,
+      "unlocked": true
+    },
+    "rematch_material_reset": true,
+    "rematch": true,
+    "leave": true,
+    "stats": {
+      "arm_data": true,
+      "camera_position": [
+        0.300000011920929,
+        0.550000011920929,
+        2.65000009536743
+      ],
+      "crowd_active": false,
+      "dragging": false,
+      "face_head_offset": [
+        0,
+        0,
+        0
+      ],
+      "face_head_rotation": [
+        0,
+        0,
+        0
+      ],
+      "face_injury": [
+        0,
+        0,
+        0
+      ],
+      "fps": 72,
+      "hand_wrist": "(-0.12, -0.49, -0.17)",
+      "mirror_draw_requests": 593,
+      "mirror_injury": [
+        0,
+        0,
+        0
+      ],
+      "muted": false,
+      "physics_active": false,
+      "physics_material_updates": 323,
+      "physics_time": -1,
+      "rendered_arm": {
+        "elbow": [
+          0.346037536859512,
+          -0.411999642848969,
+          0.622861385345459
+        ],
+        "shoulder": [
+          0.234999999403954,
+          -0.159999996423721,
+          0.524999976158142
+        ],
+        "wrist": [
+          0.120000019669533,
+          -0.490000009536743,
+          0.694999933242798
+        ]
+      },
+      "samples": 0
+    }
+  },
+  "standard": {
+    "url": "http://192.168.178.67:8877",
+    "errors": [],
+    "hits": [
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 9.42,
+        "quality": 0.5794,
+        "braced": true,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "e0a4a0608adca1460ee9"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 14.72,
+        "quality": 0.5889,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "89a2e9dbe169671c81ae"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 14.19,
+        "quality": 0.5677,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "ac40fb813239bdf6abba"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 13.98,
+        "quality": 0.559,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "b1a971ea88c4f733a721"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 14.1,
+        "quality": 0.564,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "f807f89943168bc5275d"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 11.84,
+        "quality": 0.4737,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "ff9e805c60c7a41a08a2"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 14.83,
+        "quality": 0.5931,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "1daee69571ce2682b547"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 13.76,
+        "quality": 0.5502,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "33804509663786e55938"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 12.33,
+        "quality": 0.4931,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "c87dead96bc508a14ad6"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 12.07,
+        "quality": 0.483,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "b08f89c799c8ca7c3afe"
+      }
+    ],
+    "configuration": {
+      "base_damage": 25,
+      "ko_threshold": 100,
+      "turn_seconds": 25
+    },
+    "single_tilt_control": true,
+    "physics_backend": "coupled-moving",
+    "moving_head_brace_consistent": true,
+    "solved_normal_impulse_ns": 1.1587987196525775,
+    "solved_quality_matches_hit": true,
+    "recorded_arm_frames": 524,
+    "clip_hash": "2821716645a2ac47d96953606971eae9de49eb3894d76e36a4df058b39a7b4f0",
+    "replay": {
+      "clipId": "e0a4a0608adca1460ee9",
+      "frameCount": 337,
+      "peak": 0.028152999999999997,
+      "time": 0.58331,
+      "frame": 69,
+      "deformation": 0.028152325199999998
+    },
+    "replay_frame_ms_p95": 14,
+    "viewport": [
+      1920,
+      1080
+    ],
+    "resume": true,
+    "injury_material_rewind": true,
+    "winner": 1,
+    "audio": {
+      "mode": "buffer-fallback",
+      "played": 11,
+      "unlocked": true
+    },
+    "rematch_material_reset": true,
+    "rematch": true,
+    "leave": true,
+    "stats": {
+      "arm_data": true,
+      "camera_position": [
+        0.300000011920929,
+        0.550000011920929,
+        2.65000009536743
+      ],
+      "crowd_active": false,
+      "dragging": false,
+      "face_head_offset": [
+        0,
+        0,
+        0
+      ],
+      "face_head_rotation": [
+        0,
+        0,
+        0
+      ],
+      "face_injury": [
+        0,
+        0,
+        0
+      ],
+      "fps": 66,
+      "hand_wrist": "(-0.473, -0.643, 0.02)",
+      "mirror_draw_requests": 1967,
+      "mirror_injury": [
+        0,
+        0,
+        0
+      ],
+      "muted": false,
+      "physics_active": false,
+      "physics_material_updates": 854,
+      "physics_time": -1,
+      "rendered_arm": {
+        "elbow": [
+          0.387999951839447,
+          -0.409000039100647,
+          0.524999916553497
+        ],
+        "shoulder": [
+          0.23499995470047,
+          -0.159999996423721,
+          0.524999976158142
+        ],
+        "wrist": [
+          0.472999960184097,
+          -0.64300000667572,
+          0.504999876022339
+        ]
+      },
+      "samples": 0
+    }
+  },
+  "unit_tests": 153,
+  "download_hash_verified": true
+}

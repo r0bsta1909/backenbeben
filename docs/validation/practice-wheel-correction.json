@@ -1,0 +1,14 @@
+{
+  "before": "Probe: Nur Fingerspitzen. Handfl\u00e4che weiter nach vorne kippen. Tipp fuer diese Probe: Mausrad eine Rastung nach unten (zu dir). Danach Noch einmal ueben waehlen und erneut ziehen.",
+  "after": "Probe: Sauber \u2013 mit der flachen Hand getroffen. Haltung beibehalten. Der naechste Zug zaehlt; mit Noch einmal ueben bleibt er schadensfrei.",
+  "genuine_pointer_and_wheel": true,
+  "tilt_before": -21,
+  "tilt_after": -15,
+  "diagnosis_history": [
+    "Probe: Nur Fingerspitzen. Handfl\u00e4che weiter nach vorne kippen. Tipp fuer diese Probe: Mausrad eine Rastung nach unten (zu dir). Danach Noch einmal ueben waehlen und erneut ziehen.",
+    "Probe: Gestreift. Handfl\u00e4che flacher zur Wange stellen. Tipp fuer diese Probe: Mausrad eine Rastung nach unten (zu dir). Danach Noch einmal ueben waehlen und erneut ziehen.",
+    "Probe: Sauber \u2013 mit der flachen Hand getroffen. Haltung beibehalten. Der naechste Zug zaehlt; mit Noch einmal ueben bleibt er schadensfrei."
+  ],
+  "no_damage": true,
+  "errors": []
+}

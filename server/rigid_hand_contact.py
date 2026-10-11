@@ -16,10 +16,10 @@ class RigidHandContact:
         self.inverse_inertia=np.diag(12/(mass*(np.sum(dimensions**2)-dimensions**2)))
         self.multipliers=np.zeros(len(points));self.keys=[None]*len(points)
         self.last_contacts=0
-        self.step_contact_impulse=np.zeros(3);self.step_contact_switches=0
+        self.step_contact_impulse=np.zeros(3);self.step_contact_moment=np.zeros(3);self.step_contact_switches=0
     def begin_step(self):
         self.multipliers[:]=0;self.keys=[None]*len(self.local)
-        self.step_contact_impulse[:]=0;self.step_contact_switches=0
+        self.step_contact_impulse[:]=0;self.step_contact_moment[:]=0;self.step_contact_switches=0
     def points(self):return self.local@self.rotation.T+self.center
     def project(self,cage,dt,skip_separated=True):
         embeddings=self.embedding(self.points(),cage.p,cage.geometry['triangles'])
@@ -37,11 +37,15 @@ class RigidHandContact:
                 # Exact zero correction for a separated, unloaded unilateral contact.
                 # Re-evaluate after preceding contacts, not from stale embedding positions.
                 if gap>=0:continue
+            surface=e["weights"]@cage.p[ids]
             previous_multiplier=float(self.multipliers[i])
             self.center,self.rotation,updated,self.multipliers[i]=project_rigid_contact(
                 self.center,self.rotation,self.local[i],self.inverse_mass,self.inverse_inertia,
                 cage.p[ids],cage.w[ids],e['weights'],e['normal'],dt,multiplier=self.multipliers[i])
-            self.step_contact_impulse+=(self.multipliers[i]-previous_multiplier)*e["normal"]/dt
+            impulse=(self.multipliers[i]-previous_multiplier)*e["normal"]/dt
+            self.step_contact_impulse+=impulse
+            # Moment about world origin, at the common tissue contact point.
+            self.step_contact_moment+=np.cross(surface,impulse)
             cage.p[ids]=updated
             self.last_contacts+=int(self.multipliers[i]>0)
     def penetration(self,cage):

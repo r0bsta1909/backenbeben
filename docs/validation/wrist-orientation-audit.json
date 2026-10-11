@@ -1,0 +1,44 @@
+{
+  "observed_pose_angles": [
+    {
+      "moment": "before",
+      "forearm_finger_angle_deg": 77.9532737136865,
+      "forearm_normal_component": 0.8981610081579448
+    },
+    {
+      "moment": "contact",
+      "forearm_finger_angle_deg": 78.70110927620156,
+      "forearm_normal_component": 0.886668449406447
+    },
+    {
+      "moment": "after",
+      "forearm_finger_angle_deg": 78.71453280956747,
+      "forearm_normal_component": 0.8867012171476955
+    },
+    {
+      "moment": "head-response",
+      "forearm_finger_angle_deg": 72.69553638382837,
+      "forearm_normal_component": 0.9493744358080644
+    },
+    {
+      "moment": "recovery",
+      "forearm_finger_angle_deg": 42.77846117387465,
+      "forearm_normal_component": 0.6714301604555268
+    }
+  ],
+  "interpretation": "Geometric axis angles, not calibrated anatomical flexion/deviation measurements. No new wrist limits inferred.",
+  "rules_source": "https://www.powerslap.com/rules/",
+  "rules_relevance": "Palm and fingers contact together; this does not specify anatomical joint angle limits.",
+  "fixed": "Rig pose cache formerly ignored changes in recorded palm normal and finger direction if wrist/elbow and legacy tilt stayed equal. Cache now includes full orientation, shoulder, torso and arm side.",
+  "native_test": "ARM_ORIENTATION_CACHE_PASS stationary wrist / palm twist / finger tilt / repeated pose / rewind",
+  "limits": [
+    "Does not establish anatomical wrist realism",
+    "Does not establish human gameplay acceptance"
+  ],
+  "browser_contact_test": {
+    "exit": 0,
+    "errors": [],
+    "view_count": 15,
+    "practice_camera_wheel_replay": true
+  }
+}

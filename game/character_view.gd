@@ -7,9 +7,7 @@ var unit_scale := 1.0
 var has_pose := false
 var defender_pose_active := false
 var last_defender_pose: Array = []
-var last_elbow := Vector3.INF
-var last_wrist := Vector3.INF
-var last_tilt := Vector2.INF
+var last_arm_frame: Array = []
 var is_first_person := false
 var last_body: Array = []
 var finger_rest_rotations: Dictionary = {}
@@ -72,13 +70,15 @@ func apply_arm(pose: Dictionary, yaw := 0.0, pitch := 0.0, side := "R") -> void:
 		defender_pose_active=false
 		last_defender_pose=[]
 		last_body=[]
-		last_wrist=Vector3.INF
+		has_pose=false
 	apply_finger_relax(float(pose.get("finger_relax",0.0)),side)
 	var shoulder := to_local(vector(pose.shoulder)*unit_scale)
 	var elbow := to_local(vector(pose.elbow)*unit_scale)
 	var wrist := to_local(vector(pose.wrist)*unit_scale)
-	if has_pose and elbow.distance_squared_to(last_elbow)<0.000000000001 and wrist.distance_squared_to(last_wrist)<0.000000000001 and last_tilt==Vector2(yaw,pitch):return
-	has_pose=true;last_elbow=elbow;last_wrist=wrist;last_tilt=Vector2(yaw,pitch)
+	# Recorded surface axes can rotate while joint positions remain fixed.
+	var frame: Array=[shoulder,elbow,wrist,yaw,pitch,side,float(pose.get("torso_yaw",0)),pose.get("finger_direction",[]),pose.get("palm_normal",[])]
+	if has_pose and frame==last_arm_frame:return
+	has_pose=true;last_arm_frame=frame.duplicate(true)
 	var chest_index := skeleton.find_bone("chest")
 	var chest_rest := skeleton.get_bone_global_rest(chest_index)
 	var chest_turn := Basis(Vector3.UP,float(pose.get("torso_yaw",0)))
@@ -141,22 +141,36 @@ func apply_collapse(frame: Array) -> void:
 	var cr := skeleton.get_bone_global_rest(ci)
 	var bend := Basis(Vector3.FORWARD,float(frame[3]))*Basis(Vector3.RIGHT,-float(frame[2]))
 	skeleton.set_bone_global_pose_override(ci,Transform3D(bend*cr.basis,rest.origin+offset+bend*(cr.origin-rest.origin)),1.0,true)
+	for side in ["R","L"]:pose_leg(side,offset)
+
+func pose_leg(side: String, offset: Vector3, ankle_offset := Vector3.ZERO) -> void:
+	var thigh: Dictionary=metadata.bones["thigh."+side]
+	var shin: Dictionary=metadata.bones["shin."+side]
+	var foot: Dictionary=metadata.bones["foot."+side]
+	var hip := vector(thigh.head)+offset
+	var ankle := vector(shin.tail)+ankle_offset
+	var axis := (ankle-hip).normalized()
+	var length_a := vector(thigh.head).distance_to(vector(thigh.tail))
+	var length_b := vector(shin.head).distance_to(vector(shin.tail))
+	var reach := clampf(hip.distance_to(ankle),.01,length_a+length_b-.00001)
+	var along := (length_a*length_a-length_b*length_b+reach*reach)/(2*reach)
+	var pole := (Vector3.BACK-axis*axis.dot(Vector3.BACK)).normalized()
+	var knee := hip+axis*along+pole*sqrt(maxf(0,length_a*length_a-along*along))
+	orient_bone("thigh."+side,hip,knee)
+	orient_bone("shin."+side,knee,ankle)
+	orient_bone("foot."+side,ankle,vector(foot.tail)+ankle_offset)
+
+func step_feet(world_displacement: Vector3, progress: float, leading_side: String) -> void:
+	# Two overlapping steps. A planted foot keeps its world position while the
+	# pelvis moves; lifted feet follow a smooth arc and settle before support.
+	var local_travel := global_basis.inverse()*world_displacement
+	var full_travel := local_travel/maxf(progress,.000001)
+	var pelvis := Vector3(0,-float(last_body[0]),-float(last_body[1]))
 	for side in ["R","L"]:
-		var thigh: Dictionary=metadata.bones["thigh."+side]
-		var shin: Dictionary=metadata.bones["shin."+side]
-		var foot: Dictionary=metadata.bones["foot."+side]
-		var hip := vector(thigh.head)+offset
-		var ankle := vector(shin.tail)
-		var axis := (ankle-hip).normalized()
-		var length_a := vector(thigh.head).distance_to(vector(thigh.tail))
-		var length_b := vector(shin.head).distance_to(vector(shin.tail))
-		var reach := clampf(hip.distance_to(ankle),.01,length_a+length_b-.00001)
-		var along := (length_a*length_a-length_b*length_b+reach*reach)/(2*reach)
-		var pole := (Vector3.BACK-axis*axis.dot(Vector3.BACK)).normalized()
-		var knee := hip+axis*along+pole*sqrt(maxf(0,length_a*length_a-along*along))
-		orient_bone("thigh."+side,hip,knee)
-		orient_bone("shin."+side,knee,ankle)
-		orient_bone("foot."+side,ankle,vector(foot.tail))
+		var phase := clampf(progress/.58 if side==leading_side else (progress-.42)/.58,0,1)
+		var travel := smoothstep(0,1,phase)
+		var lift := .045*sin(PI*phase)
+		pose_leg(side,pelvis,full_travel*travel-local_travel+Vector3.UP*lift)
 
 func collapsed_point(rest_point: Vector3) -> Vector3:
 	if last_body.size()<5:return rest_point
@@ -165,29 +179,65 @@ func collapsed_point(rest_point: Vector3) -> Vector3:
 	var bend := Basis(Vector3.FORWARD,float(last_body[3]))*Basis(Vector3.RIGHT,-float(last_body[2]))
 	return hip+offset+bend*(rest_point-hip)
 
-func reach_toward(world_target: Vector3, side: String, amount: float, world_normal := Vector3.BACK) -> void:
+func look_toward(world_target: Vector3) -> void:
+	var ni := skeleton.find_bone("neck")
+	var hi := skeleton.find_bone("head")
+	var neck_rest := skeleton.get_bone_global_rest(ni)
+	var head_rest := skeleton.get_bone_global_rest(hi)
+	var body_basis := Basis.IDENTITY
+	if last_body.size()>=5:
+		body_basis=Basis(Vector3.FORWARD,float(last_body[3]))*Basis(Vector3.RIGHT,-float(last_body[2]))
+	var neck_origin := collapsed_point(neck_rest.origin)
+	var yaw := 0.0
+	var pitch := 0.0
+	var neck_turn := Basis.IDENTITY
+	var head_turn := Basis.IDENTITY
+	var head_origin := collapsed_point(head_rest.origin)
+	# Turning shifts the eyes around the neck pivot. Refine against that moving
+	# origin, especially when the caught fighter is close to the helper's face.
+	for iteration in range(12):
+		var eye := head_origin+body_basis*head_turn*(Vector3(0,.09,.09)-head_rest.origin)
+		var direction := body_basis.inverse()*(to_local(world_target)-eye)
+		yaw=lerpf(yaw,clampf(atan2(direction.x,direction.z),-1.20,1.20),.6)
+		pitch=lerpf(pitch,clampf(-atan2(direction.y,Vector2(direction.x,direction.z).length()),-.35,.90),.6)
+		neck_turn=Basis(Vector3.UP,yaw*.35)*Basis(Vector3.RIGHT,pitch*.35)
+		head_turn=Basis(Vector3.UP,yaw)*Basis(Vector3.RIGHT,pitch)
+		head_origin=neck_origin+body_basis*neck_turn*(head_rest.origin-neck_rest.origin)
+	skeleton.set_bone_global_pose_override(ni,Transform3D(body_basis*neck_turn*neck_rest.basis,neck_origin),1.0,true)
+	skeleton.set_bone_global_pose_override(hi,Transform3D(body_basis*head_turn*head_rest.basis,head_origin),1.0,true)
+
+func reach_toward(world_target: Vector3, side: String, amount: float, world_normal := Vector3.BACK, world_fingers := Vector3.UP) -> void:
 	var upper: Dictionary=metadata.bones["upper_arm."+side]
 	var fore: Dictionary=metadata.bones["forearm_twist."+side]
 	# The helper's chest has already bent with apply_collapse. Arm overrides are
 	# skeleton-global, so their origins must follow that same body transform.
 	var shoulder := collapsed_point(vector(upper.head))
 	var side_sign := 1.0 if side=="L" else -1.0
-	var resting_wrist := Vector3(side_sign*.27,-.62,.035)
-	var wrist := collapsed_point(resting_wrist).lerp(to_local(world_target),amount)
+	var resting_wrist := Vector3(side_sign*.29,-.685,.06)
+	# The support target denotes the palm centre, not the wrist joint.
+	var catch_fingers := (global_basis.inverse()*world_fingers).normalized()
+	var finger_direction := Vector3.DOWN.rotated(Vector3.RIGHT,PI*amount)
+	finger_direction=Basis(Quaternion.IDENTITY.slerp(Quaternion(Vector3.UP,catch_fingers),amount))*finger_direction
+	var target_wrist := to_local(world_target)-catch_fingers*float(metadata.arms[side].palm_offset)
+	var wrist := collapsed_point(resting_wrist).lerp(target_wrist,amount)
 	var delta := wrist-shoulder
 	var a: float=metadata.arms[side].upper_length
 	var b: float=metadata.arms[side].forearm_length
 	var reach := clampf(delta.length(),absf(a-b)+.001,a+b-.001)
 	var axis := delta.normalized();wrist=shoulder+axis*reach
-	var pole := Vector3(1 if side=="L" else -1,-.4,.2)
+	var rest_pole := Vector3(side_sign*.12,-.1,1.0)
+	var catch_pole := Vector3(side_sign,-.4,.2)
+	var pole := rest_pole.lerp(catch_pole,amount)
+	pole=(collapsed_point(vector(upper.head)+pole)-shoulder).normalized()
 	pole=(pole-axis*pole.dot(axis)).normalized()
 	var along := (a*a-b*b+reach*reach)/(2*reach)
 	var elbow := shoulder+axis*along+pole*sqrt(maxf(0,a*a-along*along))
 	orient_bone("upper_arm."+side,shoulder,elbow)
-	var normal := (global_basis.inverse()*world_normal).normalized()
+	var resting_normal := Vector3(-side_sign,0,.15).normalized()
+	resting_normal=(collapsed_point(resting_wrist+resting_normal)-collapsed_point(resting_wrist)).normalized()
+	var normal := resting_normal.slerp((global_basis.inverse()*world_normal).normalized(),amount)
 	orient_surface("forearm."+side,elbow,elbow.lerp(wrist,.5),normal)
 	orient_surface("forearm_twist."+side,elbow.lerp(wrist,.5),wrist,normal)
-	var finger_direction := Vector3.DOWN.rotated(Vector3.RIGHT,PI*amount)
 	orient_surface("hand."+side,wrist,wrist+finger_direction*.1,normal)
 	apply_finger_relax((1.0-amount)*.5,side)
 

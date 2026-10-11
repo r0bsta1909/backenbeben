@@ -1,0 +1,39 @@
+{
+  "change": "Lower back hairline and tapered temple points on exported scalp",
+  "asset_polygons": 90210,
+  "asset_validator": "PASS connected arms/shirt, closed strike hand, 116 contact samples",
+  "web_build": "PASS",
+  "browser_contact_test": {
+    "exit": 0,
+    "errors": [],
+    "views": 15,
+    "camera_modes": [
+      "front",
+      "side",
+      "wide"
+    ],
+    "times": [
+      "before",
+      "contact",
+      "after",
+      "head-response",
+      "recovery"
+    ]
+  },
+  "visually_reviewed": [
+    "Blender source preview",
+    "front contact",
+    "side contact",
+    "side head response"
+  ],
+  "unchanged": [
+    "face collision mesh",
+    "hand contact surface",
+    "rig landmarks"
+  ],
+  "limits": [
+    "Overall comic style remains open",
+    "Human control acceptance remains open",
+    "Published V13 predates this hairline change"
+  ]
+}

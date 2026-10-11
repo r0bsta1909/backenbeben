@@ -1,0 +1,100 @@
+[
+  {
+    "case": "flat",
+    "spatial": true,
+    "max_rotation_rad": [
+      0.033238,
+      0.067255,
+      0.043827
+    ],
+    "solve_ms": 2982.9,
+    "minimum_recorded_recovery_gap_m": 0.011340095721819767,
+    "maximum_wrist_deg": 81.65400752574787,
+    "tail_pin_error_m": 1.1310158797874244e-07,
+    "max_yaw_rad": 0.06725
+  },
+  {
+    "case": "glance",
+    "spatial": true,
+    "max_rotation_rad": [
+      0.045784,
+      0.061706,
+      0.013811
+    ],
+    "solve_ms": 2900.9,
+    "minimum_recorded_recovery_gap_m": 0.0035655869254997328,
+    "maximum_wrist_deg": 84.82109285155076,
+    "tail_pin_error_m": 1.0219644059148065e-07,
+    "max_yaw_rad": 0.06171
+  },
+  {
+    "case": "tips",
+    "spatial": true,
+    "max_rotation_rad": [
+      0.030545,
+      0.069002,
+      0.151988
+    ],
+    "solve_ms": 3080.7,
+    "minimum_recorded_recovery_gap_m": 0.0020759700966007056,
+    "maximum_wrist_deg": 76.67890760407282,
+    "tail_pin_error_m": 1.0108600759063541e-07,
+    "max_yaw_rad": 0.069
+  },
+  {
+    "case": "high-foul",
+    "spatial": true,
+    "max_rotation_rad": [
+      0.03308,
+      0.040901,
+      0.090574
+    ],
+    "solve_ms": 2653.2,
+    "minimum_recorded_recovery_gap_m": 0.006800530232013391,
+    "maximum_wrist_deg": 85.00000000000001,
+    "tail_pin_error_m": 9.347415260333281e-08,
+    "max_yaw_rad": 0.0409
+  },
+  {
+    "case": "heel-foul",
+    "spatial": true,
+    "max_rotation_rad": [
+      0.011176,
+      0.038415,
+      0.049977
+    ],
+    "solve_ms": 2520.0,
+    "minimum_recorded_recovery_gap_m": 0.00705587519937204,
+    "maximum_wrist_deg": 85.00000000000006,
+    "tail_pin_error_m": 1.062098887517499e-07,
+    "max_yaw_rad": 0.03842
+  },
+  {
+    "case": "swollen",
+    "spatial": true,
+    "max_rotation_rad": [
+      0.027455,
+      0.068248,
+      0.037534
+    ],
+    "solve_ms": 2766.8,
+    "minimum_recorded_recovery_gap_m": 0.01028193219434875,
+    "maximum_wrist_deg": 81.64352015169067,
+    "tail_pin_error_m": 1.1505006943807577e-07,
+    "max_yaw_rad": 0.06825
+  },
+  {
+    "case": "jaw-injured",
+    "spatial": true,
+    "max_rotation_rad": [
+      0.033611,
+      0.083557,
+      0.021267
+    ],
+    "solve_ms": 2857.9,
+    "minimum_recorded_recovery_gap_m": 0.011594473959832903,
+    "maximum_wrist_deg": 81.1410439770686,
+    "tail_pin_error_m": 7.793491372169136e-08,
+    "max_yaw_rad": 0.08356
+  }
+]

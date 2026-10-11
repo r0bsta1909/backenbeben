@@ -7,10 +7,10 @@ from contact_v3 import score,side_surfaces,table_collision,WRIST_LIMIT
 from coupled_replay import simulate
 from hand_surface import world_positions
 
-CASES=[('flat',.6,-15,(0,0,0)),('glance',.6,-10,(0,0,0)),
-       ('tips',.6,-20,(0,0,0)),('high-foul',.1,0,(0,0,0)),
-       ('heel-foul',.35,35,(0,0,0)),('swollen',.6,-15,(0,.8,0)),
-       ('jaw-injured',.6,-15,(0,.8,.7))]
+CASES=[('flat',.6,-18,(0,0,0)),('glance',.6,-12,(0,0,0)),
+       ('tips',.6,-24,(0,0,0)),('high-foul',.1,0,(0,0,0)),
+       ('heel-foul',.35,35,(0,0,0)),('swollen',.6,-18,(0,.8,0)),
+       ('jaw-injured',.6,-18,(0,.8,.7))]
 
 def run():
     report=[]

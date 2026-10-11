@@ -12,7 +12,7 @@ class CompiledHandTests(unittest.TestCase):
   compiled=simulate_contact(scored,attached=True,compiled_projection=True)
   self.assertEqual(reference['iteration_counts'],compiled['iteration_counts'])
   for a,b in zip(reference['frames'],compiled['frames']):
-   for key in ['offsets','center','rotation','contact_impulse_ns','cumulative_contact_impulse_ns']:
+   for key in ['offsets','center','rotation','contact_impulse_ns','cumulative_contact_impulse_ns','contact_moment_nms','cumulative_contact_moment_nms']:
     np.testing.assert_allclose(a[key],b[key],atol=1e-9,rtol=0,err_msg=key)
    self.assertEqual(a['active_contact_samples'],b['active_contact_samples'])
    self.assertEqual(a['contact_switches'],b['contact_switches'])

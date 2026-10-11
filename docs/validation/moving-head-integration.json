@@ -1,0 +1,116 @@
+{
+  "unit_tests": 138,
+  "browser": {
+    "repeat_practice_without_damage": true,
+    "idle_material_uploads_skipped": true,
+    "mirror_visibility_updates": true,
+    "pose_camera_and_wheel": true,
+    "crowd_reaction_and_rewind": true,
+    "jump_to_contact": true,
+    "side_camera": true,
+    "marker_toggle": true,
+    "no_stale_markers": true,
+    "errors": [],
+    "coupled": {
+      "backend": "coupled-moving",
+      "solve_ms": 2277.7,
+      "peak": 0.033171,
+      "contact_diagnostics": {
+        "maximum_wrist_separation_m": 1.4794663094992942e-05,
+        "maximum_penetration_m": 3.992512245591034e-06,
+        "unconverged_steps": 14,
+        "maximum_material_residual_m": 0.0003765739825105183
+      },
+      "head_response": {
+        "model": "coupled-yaw-through-contact-and-tail",
+        "braced": false,
+        "tail_pin_error_m": 3.5583318954915613e-08,
+        "parameters": "prototype tuning, fixed translation, yaw only"
+      },
+      "maximum_head_yaw_rad": 0.10731
+    }
+  },
+  "duel": {
+    "errors": [],
+    "hits": [
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 23.92,
+        "quality": 0.8178,
+        "braced": true,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "b8cbe3dd616ff917005c"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 34.26,
+        "quality": 0.7614,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "086db479b62a490e370c"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 28.49,
+        "quality": 0.6332,
+        "braced": false,
+        "side": "R",
+        "ko": true,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "f9c67a63d61f538664a4"
+      }
+    ],
+    "configuration": {
+      "base_damage": 45,
+      "ko_threshold": 60,
+      "turn_seconds": 60
+    },
+    "single_tilt_control": true,
+    "physics_backend": "coupled-moving",
+    "moving_head_brace_consistent": true,
+    "solved_normal_impulse_ns": 1.635567092787007,
+    "solved_quality_matches_hit": true,
+    "recorded_arm_frames": 530,
+    "clip_hash": "fff27ed8b85a6757aec9187e65b6ccb4dbbf4dfe86a96338fbd06bbe30f6ab0e",
+    "replay": {
+      "clipId": "b8cbe3dd616ff917005c",
+      "frameCount": 337,
+      "peak": 0.027844999999999998,
+      "time": 0.616642,
+      "frame": 73,
+      "deformation": 0.027844647759999997
+    },
+    "replay_frame_ms_p95": 14,
+    "viewport": [
+      1920,
+      1080
+    ],
+    "resume": true,
+    "injury_material_rewind": true,
+    "ko_body_recorded": true,
+    "ko_reverse_seek": true,
+    "winner": 0,
+    "audio": {
+      "mode": "buffer-fallback",
+      "played": 5,
+      "unlocked": true
+    },
+    "rematch_material_reset": true,
+    "rematch": true,
+    "leave": true
+  },
+  "first_duel_attempt": "Timeout during actual injury material rewind. Diagnostic repeat passed without loosening assertions; initial failure cause remains unproven.",
+  "variant_check": "Seven complete clips; recovery checked against reconstructed quantized moving replay surface, no table collision, wrist within 85 degrees. See moving-head-replay-variants.json.",
+  "activation": "Explicit --physics coupled-moving; default remains coupled pending remaining integration acceptance.",
+  "limits": "Fixed head translation, yaw only, tuned inertia/neck, stylized jaw and guided KO. Late brace currently recalculates entire coupled clip and adds wait time."
+}

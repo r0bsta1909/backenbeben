@@ -1,0 +1,404 @@
+{
+  "texture_check": "32 uploads byte-identical to fresh texture; resource identity reused; resize creates new resource; invalid input returns null",
+  "performance": {
+    "segments": [
+      {
+        "phase": "loading",
+        "ms": 286.9
+      },
+      {
+        "phase": "lobby",
+        "ms": 27522
+      },
+      {
+        "phase": "waiting",
+        "ms": 298.90000000000146
+      },
+      {
+        "phase": "aim_idle",
+        "ms": 1335
+      },
+      {
+        "phase": "stroke",
+        "ms": 493.7999999999993
+      },
+      {
+        "phase": "aim_idle",
+        "ms": 591.0999999999985
+      },
+      {
+        "phase": "stroke",
+        "ms": 472.7999999999993
+      },
+      {
+        "phase": "aim_idle",
+        "ms": 55.60000000000218
+      },
+      {
+        "phase": "windup",
+        "ms": 1369.8999999999978
+      },
+      {
+        "phase": "resolving",
+        "ms": 2989.9000000000015
+      },
+      {
+        "phase": "impact",
+        "ms": 2802.300000000003
+      },
+      {
+        "phase": "replay_playing",
+        "ms": 653.5999999999985
+      },
+      {
+        "phase": "replay_paused",
+        "ms": 4158.299999999996
+      },
+      {
+        "phase": "disconnected",
+        "ms": 55.60000000000582
+      },
+      {
+        "phase": "replay_paused",
+        "ms": 41.69999999999709
+      },
+      {
+        "phase": "replay_playing",
+        "ms": 3219.5
+      },
+      {
+        "phase": "replay_paused",
+        "ms": 903.9000000000015
+      },
+      {
+        "phase": "recover",
+        "ms": 2315.5999999999985
+      },
+      {
+        "phase": "aim_idle",
+        "ms": 2259.9000000000015
+      },
+      {
+        "phase": "windup",
+        "ms": 1369.7999999999956
+      },
+      {
+        "phase": "resolving",
+        "ms": 2023.4000000000015
+      },
+      {
+        "phase": "impact",
+        "ms": 2830.0999999999985
+      },
+      {
+        "phase": "replay_paused",
+        "ms": 34.80000000000291
+      },
+      {
+        "phase": "replay_playing",
+        "ms": 445.09999999999854
+      },
+      {
+        "phase": "replay_paused",
+        "ms": 876.0999999999985
+      },
+      {
+        "phase": "recover",
+        "ms": 2322.4000000000015
+      },
+      {
+        "phase": "aim_idle",
+        "ms": 862.2000000000044
+      },
+      {
+        "phase": "stroke",
+        "ms": 521.5999999999985
+      },
+      {
+        "phase": "aim_idle",
+        "ms": 618.9000000000015
+      },
+      {
+        "phase": "stroke",
+        "ms": 514.5
+      },
+      {
+        "phase": "aim_idle",
+        "ms": 69.5
+      },
+      {
+        "phase": "windup",
+        "ms": 1356.0999999999913
+      },
+      {
+        "phase": "resolving",
+        "ms": 2649.2000000000116
+      },
+      {
+        "phase": "impact",
+        "ms": 2830
+      },
+      {
+        "phase": "replay_paused",
+        "ms": 34.79999999998836
+      },
+      {
+        "phase": "replay_playing",
+        "ms": 396.40000000000873
+      },
+      {
+        "phase": "replay_paused",
+        "ms": 848.3000000000029
+      },
+      {
+        "phase": "recover",
+        "ms": 2350.2999999999884
+      },
+      {
+        "phase": "aim_idle",
+        "ms": 2433.7000000000116
+      },
+      {
+        "phase": "windup",
+        "ms": 1355.8999999999942
+      },
+      {
+        "phase": "resolving",
+        "ms": 2392.100000000006
+      },
+      {
+        "phase": "impact",
+        "ms": 2816.199999999997
+      },
+      {
+        "phase": "replay_paused",
+        "ms": 34.69999999999709
+      },
+      {
+        "phase": "replay_playing",
+        "ms": 431.1000000000058
+      },
+      {
+        "phase": "replay_paused",
+        "ms": 855.3999999999942
+      },
+      {
+        "phase": "recover",
+        "ms": 2350.199999999997
+      },
+      {
+        "phase": "aim_idle",
+        "ms": 744.1000000000058
+      },
+      {
+        "phase": "stroke",
+        "ms": 451.8999999999942
+      },
+      {
+        "phase": "aim_idle",
+        "ms": 674.5
+      },
+      {
+        "phase": "stroke",
+        "ms": 465.90000000000873
+      },
+      {
+        "phase": "aim_idle",
+        "ms": 62.5
+      },
+      {
+        "phase": "windup",
+        "ms": 1349
+      },
+      {
+        "phase": "resolving",
+        "ms": 2454.699999999997
+      },
+      {
+        "phase": "impact",
+        "ms": 2816.0999999999913
+      },
+      {
+        "phase": "replay_paused",
+        "ms": 27.90000000000873
+      },
+      {
+        "phase": "replay_playing",
+        "ms": 438
+      },
+      {
+        "phase": "replay_paused",
+        "ms": 834.3999999999942
+      },
+      {
+        "phase": "recover",
+        "ms": 2308.600000000006
+      },
+      {
+        "phase": "aim_idle",
+        "ms": 2336.399999999994
+      },
+      {
+        "phase": "windup",
+        "ms": 1348.9000000000087
+      },
+      {
+        "phase": "resolving",
+        "ms": 2266.899999999994
+      },
+      {
+        "phase": "impact",
+        "ms": 2788.399999999994
+      },
+      {
+        "phase": "replay_paused",
+        "ms": 62.5
+      },
+      {
+        "phase": "replay_playing",
+        "ms": 417.20000000001164
+      },
+      {
+        "phase": "replay_paused",
+        "ms": 2002.699999999997
+      },
+      {
+        "phase": "over",
+        "ms": 1015.0999999999913
+      },
+      {
+        "phase": "aim_idle",
+        "ms": 542.4000000000087
+      },
+      {
+        "phase": "disconnected",
+        "ms": 147.29999999403663
+      }
+    ],
+    "viewport": [
+      1920,
+      1080
+    ],
+    "devicePixelRatio": 1,
+    "hardwareConcurrency": 12,
+    "phases": {
+      "lobby": {
+        "frames": 265,
+        "median_ms": 13.9,
+        "p95_ms": 27.9,
+        "max_ms": 22904.7,
+        "over_33ms": 9,
+        "over_50ms": 3,
+        "over_100ms": 1
+      },
+      "waiting": {
+        "frames": 10,
+        "median_ms": 20.9,
+        "p95_ms": 55.5,
+        "max_ms": 55.5,
+        "over_33ms": 2,
+        "over_50ms": 1,
+        "over_100ms": 0
+      },
+      "aim_idle": {
+        "frames": 412,
+        "median_ms": 27.8,
+        "p95_ms": 34.9,
+        "max_ms": 72,
+        "over_33ms": 139,
+        "over_50ms": 3,
+        "over_100ms": 0
+      },
+      "stroke": {
+        "frames": 89,
+        "median_ms": 27.9,
+        "p95_ms": 34.9,
+        "max_ms": 48.7,
+        "over_33ms": 36,
+        "over_50ms": 0,
+        "over_100ms": 0
+      },
+      "windup": {
+        "frames": 259,
+        "median_ms": 27.9,
+        "p95_ms": 41.7,
+        "max_ms": 48.6,
+        "over_33ms": 108,
+        "over_50ms": 0,
+        "over_100ms": 0
+      },
+      "resolving": {
+        "frames": 490,
+        "median_ms": 27.8,
+        "p95_ms": 34.8,
+        "max_ms": 41.8,
+        "over_33ms": 155,
+        "over_50ms": 0,
+        "over_100ms": 0
+      },
+      "impact": {
+        "frames": 552,
+        "median_ms": 27.8,
+        "p95_ms": 62.5,
+        "max_ms": 90.5,
+        "over_33ms": 173,
+        "over_50ms": 36,
+        "over_100ms": 0
+      },
+      "replay_playing": {
+        "frames": 254,
+        "median_ms": 20.9,
+        "p95_ms": 41.7,
+        "max_ms": 125.2,
+        "over_33ms": 30,
+        "over_50ms": 4,
+        "over_100ms": 1
+      },
+      "replay_paused": {
+        "frames": 466,
+        "median_ms": 20.9,
+        "p95_ms": 27.9,
+        "max_ms": 41.8,
+        "over_33ms": 19,
+        "over_50ms": 0,
+        "over_100ms": 0
+      },
+      "recover": {
+        "frames": 393,
+        "median_ms": 27.8,
+        "p95_ms": 34.9,
+        "max_ms": 62.6,
+        "over_33ms": 106,
+        "over_50ms": 2,
+        "over_100ms": 0
+      },
+      "over": {
+        "frames": 42,
+        "median_ms": 20.9,
+        "p95_ms": 34.8,
+        "max_ms": 48.7,
+        "over_33ms": 3,
+        "over_50ms": 0,
+        "over_100ms": 0
+      },
+      "disconnected": {
+        "frames": 4,
+        "median_ms": 34.8,
+        "p95_ms": 34.9,
+        "max_ms": 34.9,
+        "over_33ms": 2,
+        "over_50ms": 0,
+        "over_100ms": 0
+      }
+    },
+    "limits": "Browser requestAnimationFrame intervals, not GPU timings. Two headless clients and host share one PC. Transition-crossing frames excluded; phase segment durations retained. Primary client only, including replay inspection pauses."
+  },
+  "functional": {
+    "ko_body_recorded": true,
+    "ko_reverse_seek": true,
+    "rematch": true,
+    "resume": true,
+    "errors": []
+  },
+  "conclusion": "Avoids per-frame texture allocation, but no impact frame-time improvement demonstrated: prior p95 62.6ms, this run 62.5ms. Different real-input matches, not controlled A/B. Replay p95 increased 34.9 to 41.7ms; do not claim overall speedup."
+}

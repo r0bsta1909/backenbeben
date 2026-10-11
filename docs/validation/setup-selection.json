@@ -1,0 +1,8 @@
+{
+  "explicit_python_312": true,
+  "missing_explicit_python_rejected": true,
+  "check_only_does_not_create_environment": true,
+  "invalid_existing_environment_preserved": true,
+  "fresh_full_install_and_imports": true,
+  "checkout_auto_detected_portable_312": true
+}

@@ -6,7 +6,7 @@ from coupled_contact import simulate_contact
 from contact_v3 import score
 
 def run(fps=960,duration=.06,attached=False,compiled_embedding=True,iterations=64,residual_tolerance=1e-6):
-    scored=score({'version':3,'points':[[.19+.34*i/40,.6,800*i/40,0,-15,0] for i in range(41)]})
+    scored=score({'version':3,'points':[[.19+.34*i/40,.6,800*i/40,0,-18,0] for i in range(41)]})
     return simulate_contact(scored,fps,duration,attached,compiled_embedding,iterations,residual_tolerance)
 
 if __name__=='__main__':

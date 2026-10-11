@@ -6,15 +6,29 @@ Der Look orientiert sich an kantiger Comicgrafik und dem ursprünglichen XIII.
 
 ## Aktueller Stand
 
-Der aktuelle [Prototyp 05](https://github.com/r0bsta1909/backenbeben/releases/tag/v0.5.0-dev.20261008)
+Der aktuelle [Prototyp 14](https://github.com/r0bsta1909/backenbeben/releases/tag/v0.14.0-dev.20261011)
 enthält anatomische Arm-/Handmodelle, körpergebundene seitliche Schläge und vom Host
 aufgezeichnete Kontakt-/Gesichtsreplays. Weitere schadensfreie Probeschwünge sind
 wählbar; Verletzungen und geschwollene Augen erscheinen auch im eigenen Spiegel.
+Der Kontaktimpuls steuert die Wirkung; Kopfverschiebung und Drehung um drei Achsen
+sind mit dem Gewebe gekoppelt. Eine konkretere Mausradhilfe begleitet die Proben; Gesichtstextur und
+Schulterform sind überarbeitet. Die tatsächliche Probe lässt sich als Kontaktstandbild
+betrachten; die Dreiviertelansicht zeigt den gesamten Schlagarm. Helfer setzen ihre
+Füße, stützen den Kämpfer und folgen ihm mit dem Blick. Gesichtszeichnung und Hals
+bleiben bei Kopfdrehungen verbunden. Modellierte Stofffalten ergänzen die Comicfiguren; das Publikum gehört zur gemalten Arena. Der aktuelle Stand
+ergänzt Stofflinien, ruhigere Helferbeleuchtung und sichtbares Anspannen der Augenlider.
+Tangentiale Reibung ist in den Hand-/Gewebekontakt integriert; die Berechnung wurde
+beschleunigt, ohne Replayframes oder Solverprüfungen zu reduzieren.
+Nach jeder Probe erscheint automatisch der seitliche Kontakt. Die Handneigung lässt
+sich dort mit dem Mausrad vergleichen; „Zum Schlag bereitmachen“ führt zur
+Egoansicht und Ausholhaltung zurück. Brauen, Bartzeichnung, Hautfarben und Beleuchtung
+sind näher an den Konzeptbildern abgestimmt. Augen,
+Brauen und Unterkiefer wurden überarbeitet; Startneigung ist −18°. Die Standardbalance
+mit Grundschaden 35 ermöglicht K. o. durch mehrere starke Treffer.
 
-Der Quellstand enthält zusätzlich die freigegebene Arena: gemalte Halle und
+Das Paket enthält die freigegebene Arena: gemalte Halle und
 Publikum, ein 3D-Podest mit gepolstertem Tisch und verteilten Werbemotiven.
-Spiel und Replay nutzen dieselbe Kulisse wie die Designvorschau. Diese neuere
-Arena ist noch nicht im oben verlinkten v0.5-Releasepaket enthalten.
+Spiel und Replay nutzen dieselbe Kulisse wie die Designvorschau. Treffer-Nahaufnahme, KO-Begleitkamera und kompakte Replay-Anzeigen sind enthalten.
 
 Standardkampf, KO, Replay-Rücklauf, Wiedereinstieg und Revanche sind mit zwei
 Browserclients geprüft. Das Hostpaket wurde außerhalb des Projekts mit frischer
@@ -28,7 +42,7 @@ Kopf/Kiefer, Wertung und KO verwenden teilweise vereinfachte Modelle. Der
 [verbindliche Gauntlet](docs/PROTOTYPE_GAUNTLET.txt) nennen die offenen Anforderungen.
 Die [Konzeptbilder](docs/art-direction-v3/03-first-person.png) bleiben das Stilziel.
 
-![Seitlicher Kontakt im aktuellen Browserprototyp](docs/validation/face-hair-side.png)
+![Seitlicher Kontakt im aktuellen Browserprototyp](docs/validation/skin-light-contact.png)
 
 ## Spielen unter Windows
 
@@ -59,16 +73,28 @@ Netzwerk freigeben; `ALLOW_LAN.bat` richtet eine begrenzte Regel für Port 8765 
 - Aktuelle Integrationstests: `tests/v3_browser_gauntlet.py` und `tests/v3_network_gauntlet.py`
   gegen einen separaten Host auf Port 8877. Playwright und Chrome werden dafür benötigt.
 
-Der normale Hoststart verwendet den gekoppelten Kontaktpfad. Für einen separaten
-Testhost:
-`python server/host.py --port 8877 --no-browser --no-console --physics coupled`
-Nach einem Update einmal `SETUP_HOST.bat` ausführen; die benötigte Kompilierung
-ist jetzt in `server/requirements.txt` enthalten.
-Er liefert vollständige Browser-Replays mit seitlichem Gewebe und durchgehender
-Arm-Rückholung. Die Rechenworker werden beim Hoststart vorbereitet; der geprüfte Browser-Treffer
-benötigte danach rund 1,36 Sekunden. Kopf/Kiefer bleiben eine stilisierte Reaktion. `--physics legacy` hält den bisherigen Pfad für technische Vergleiche verfügbar.
+Der normale Hoststart im aktuellen Quellstand verwendet `coupled-friction`:
+Kopfverschiebung, drei Rotationsachsen und tangentiale Hand-Gewebe-Reibung werden
+gekoppelt berechnet. Der Reibungskoeffizient 0,2 und die Halsparameter sind
+Prototypabstimmungen; die Kieferreaktion und der KO bleiben vereinfacht.
+Kontakt, Auslauf und Arm-Rückholung verwenden dieselbe Aufzeichnung.
+
+Ein separater Testhost lässt sich mit
+`python server/host.py --port 8877 --no-browser --no-console` starten.
+Nach einem Update einmal `SETUP_HOST.bat` ausführen. Die Rechenworker werden beim
+Hoststart vorbereitet. Laufzeit und numerische Restfehler sind in den
+[Vergleichsmessungen](docs/validation/friction-default.json) dokumentiert.
+
+Für technische Vergleiche bleiben `--physics coupled-spatial` (ohne Reibung),
+`--physics coupled-moving` (nur Yaw), `--physics coupled` (verankerter Kopf)
+und `--physics legacy` verfügbar. Der öffentliche Download Prototyp 14 verwendet
+standardmäßig den gekoppelten Kontakt mit Reibung.
 Der gezielte Browsercheck
-lautet `python tests/replay_contact_view.py --expect-coupled --visual-contact`.
+lautet `python tests/replay_contact_view.py --expect-moving --expect-spatial --inspect-timeout --visual-contact`.
+
+Der vertiefte Kragen macht den Hals sichtbar. Im K.-o.-Replay folgen Front- und
+Dreiviertelkamera dem absinkenden Kopf; die Totale bleibt fest. Der Build bricht
+auch bei Godot-Skriptfehlern mit irreführendem Exitcode 0 ab.
 
 ## Wissenssicherung
 
@@ -85,3 +111,9 @@ MakeHuman; Quelldaten und Herkunft liegen unter `assets-source/makehuman/`. Für
 
 Die Kontaktwertung verwendet inzwischen 116 aus der sichtbaren Hand exportierte
 Oberflächenpunkte. [Geometrieprüfung, Integration und Grenzen](docs/HAND_CONTACT_SURFACE.txt).
+
+Die aktuelle Quellversion koppelt die Wirkungsstaerke an den vom Kontaktsolver
+berechneten Normalimpuls. Flaechenabdeckung und Foulregeln bleiben Teil der
+Spielwertung. Die Umrechnung (2 N·s fuer volle Impulsstaerke) ist Spielbalance,
+keine medizinische Verletzungsschwelle. Das v0.6-Paket enthält diese Integration einschließlich der vereinfachten
+Kopfantwort aus dem Kontaktdrehimpuls.

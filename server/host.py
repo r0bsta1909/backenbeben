@@ -8,7 +8,7 @@ from contact_v3 import score as v3_score, input_target, collision as arm_collisi
 from arm import Arm, DT, lab_collision
 
 def bot_stroke():
-    return {'version':3,'points':[[.19+.34*i/60,.60,800*i/60,0,-15,0] for i in range(61)]}
+    return {'version':3,'points':[[.19+.34*i/60,.60,800*i/60,0,-18,0] for i in range(61)]}
 
 def skin_state(player):
     return (min(1,player.get('zones',{}).get('L',0)/75),min(1,player.get('zones',{}).get('R',0)/75),max(0,min(1,(player.get('damage',0)-50)/40)))
@@ -21,6 +21,7 @@ from concurrent.futures import ProcessPoolExecutor
 ROOT = Path(__file__).resolve().parents[1]
 ROOMS, CLIENTS, REPLAYS = {}, {}, {}
 POOL = None
+PHYSICS_BACKEND = 'legacy'
 SETTINGS = dict(DEFAULTS)
 REVISION = 1
 SEQ = 0
@@ -68,7 +69,7 @@ def new_room(client, training):
 
 def public(room):
     now=time.monotonic()
-    return {k: room[k] for k in ('id','players','phase','turn','turn_id','hits','event','event_id','match_id','winner','training','revision')} | {'remaining':max(0.,room['deadline']-now),'max_pairs':room['settings']['max_pairs'], 'windup_seconds':WINDUP_SECONDS, 'brace_window_ms':room['settings']['brace_window_ms'], 'brace_used':room['brace'] is not None, 'brace_result':room.get('brace_result',''), 'practice_done':room.get('practice_done',False), 'replay_id':room.get('replay_id'), 'replay_skip':room.get('replay_skip',[]), 'diagnosis':room.get('diagnosis','')}
+    return {k: room[k] for k in ('id','players','phase','turn','turn_id','hits','event','event_id','match_id','winner','training','revision')} | {'remaining':max(0.,room['deadline']-now),'max_pairs':room['settings']['max_pairs'], 'windup_seconds':WINDUP_SECONDS, 'brace_window_ms':room['settings']['brace_window_ms'], 'brace_used':room['brace'] is not None, 'brace_result':room.get('brace_result',''), 'practice_done':room.get('practice_done',False), 'replay_id':room.get('replay_id'), 'replay_skip':room.get('replay_skip',[]), 'diagnosis':room.get('diagnosis',''), 'practice_pose':room.get('practice_pose') if room.get('practice_done') else None, 'practice_id':room.get('practice_id') if room.get('practice_done') else None}
 
 
 async def broadcast(room):
@@ -96,6 +97,17 @@ async def leave(c):
         event(room,'disconnect',text='Gegner hat das Duell verlassen. Zur Lobby für ein neues Duell.')
         await broadcast(room)
     else: ROOMS.pop(room['id'],None)
+
+
+def start_braced_solve(room):
+    if PHYSICS_BACKEND not in ('coupled-moving','coupled-spatial','coupled-friction') or room.get('brace_result')!='ready':
+        return False
+    previous=room['solve']
+    room['solve']=asyncio.get_running_loop().run_in_executor(POOL,simulate,room['pending'],True)
+    # Cancellation drops an obsolete queued result. A running process may finish
+    # its old calculation, while the other worker handles the accepted brace.
+    previous.cancel()
+    return True
 
 
 async def command(c, d):
@@ -139,11 +151,33 @@ async def command(c, d):
                 try:await other['ws'].send_json({'type':'arm_pose','attacker':me,'pose':pose,'tilt':tilt})
                 except ConnectionError:pass
         return
+    if action=='inspect_practice':
+        if room['phase']!='aim' or room['turn']!=me or not room.get('practice_done') or d.get('turn_id')!=room['turn_id'] or d.get('practice_id')!=room.get('practice_id'):return
+        from practice_guidance import tilted_probe
+        candidate=tilted_probe(room['practice_data'],d.get('tilt'))
+        if now-c.get('last_practice_inspection',0)<.12:return
+        c['last_practice_inspection']=now
+        preview=score_contact(candidate,room['players'][1-me])
+        records=preview.get('arm_path',[])
+        moment=min(records,key=lambda r:abs(r['time']-preview['contact_time'])) if records else None
+        await c['ws'].send_json({'type':'practice_preview','turn_id':room['turn_id'],'practice_id':room['practice_id'],'tilt':d['tilt'],'arm':dict(moment,attacker=me) if moment else None,'diagnosis':preview['diagnosis']})
+        return
     if action=='practice':
         if room['phase']!='aim' or room['turn']!=me or d.get('turn_id')!=room['turn_id']: raise ValueError('Du bist nicht am Zug.')
         preview=score_contact(d,room["players"][1-me])
-        room['practice_done']=True;room['diagnosis']='Probe: '+preview['diagnosis']
+        from practice_guidance import wheel_hint
+        hint=wheel_hint(d,preview,lambda candidate:score_contact(candidate,room['players'][1-me]))
+        records=preview.get('arm_path',[])
+        moment=min(records,key=lambda r:abs(r['time']-preview['contact_time'])) if records else None
+        room['practice_data']=copy.deepcopy(d);room['practice_id']=secrets.token_hex(6)
+        room['practice_pose']=dict(moment,attacker=me) if moment else None
+        room['practice_done']=True;room['diagnosis']='Probe: '+preview['diagnosis']+' '+hint
         event(room,'practice',diagnosis=room['diagnosis']);await broadcast(room);return
+    if action=='inspect_replay':
+        from replay_timing import extend_inspection
+        if me not in room.get('replay_skip',[]) and extend_inspection(room,d.get('replay_id'),now):
+            await broadcast(room)
+        return
     if action=='skip_replay' and room['phase']=='replay':
         ready=room.setdefault('replay_skip',[])
         if me not in ready:ready.append(me)
@@ -162,6 +196,7 @@ async def command(c, d):
             room['brace']=now
             remaining=room['deadline']-now
             room['brace_result']='ready' if 0 <= remaining <= room['settings']['brace_window_ms']/1000 else 'early'
+            start_braced_solve(room)
             await c['ws'].send_json({'type':'notice','text':'Richtig getimt – du fängst den Schlag ab.' if room['brace_result']=='ready' else 'Zu früh! Dein Versuch ist verbraucht. Beim nächsten Schlag auf GRÜN warten.'})
             await broadcast(room)
         elif room['phase']=='windup' and me!=room['turn']:
@@ -258,6 +293,10 @@ async def tick(app):
                     record(dict(kind='physics_error',error=str(exc)));r['phase']='disconnected';event(r,'disconnect',text='Physik konnte nicht berechnet werden. Bitte neues Duell starten.');await broadcast(r);continue
                 target=1-r['turn'];p=r['players'][target]
                 braced=r['brace'] is not None and 0 <= r['deadline']-r['brace'] <= r['settings']['brace_window_ms']/1000
+                if braced and clip.get('head_response',{}).get('model')=='coupled-yaw-through-contact-and-tail' and not clip['head_response'].get('braced'):
+                    r['solve']=asyncio.get_running_loop().run_in_executor(POOL,simulate,r['pending'],True)
+                    r['phase']='resolving';await broadcast(r);continue
+                r['pending'].update(clip.get('score_update',{}))
                 before=copy.deepcopy(r['players'])
                 damage,ko=apply_hit(p,r['pending'],r['settings'],braced)
                 attacker=r['players'][r['turn']]
@@ -268,7 +307,14 @@ async def tick(app):
                 if ko:r['winner']=r['turn']
                 r['hits']+=1;r['emote_used']=False;r['diagnosis']=r['pending']['diagnosis']
                 if braced:
-                    for frame in clip['frames']:frame[0]=round(frame[0]*.65,5)
+                    if clip.get('head_response',{}).get('model')=='passive-yaw-after-anchored-contact':
+                        from head_response import yaw_state
+                        response=clip['head_response']
+                        for i,frame in enumerate(clip['frames']):
+                            frame[0]=round(yaw_state(response['contact_moment_nms'][1],i/clip['fps']-response['start_time'],True)[0],5)
+                        response['braced']=True
+                    elif clip.get('head_response',{}).get('model')!='coupled-yaw-through-contact-and-tail':
+                        for frame in clip['frames']:frame[0]=round(frame[0]*.65,5)
                 rid=secrets.token_hex(10);r['replay_id']=rid;r['replay_skip']=[]
                 clip.update(id=rid,target=target,attacker=r['turn'],before=before,after=copy.deepcopy(r['players']),
                             turn=r['turn_id'],braced=braced,ko=ko,body_frames=collapse_track(ko),contact_class=r['pending']['contact_class'])
@@ -281,7 +327,8 @@ async def tick(app):
                 r['phase']='impact';r['deadline']=now+clip['duration']
                 await broadcast(r)
             elif phase=='impact' and now>=r['deadline']:
-                r['phase']='replay';r['deadline']=now+12.;await broadcast(r)
+                from replay_timing import REPLAY_SECONDS,MAX_REPLAY_SECONDS
+                r['phase']='replay';r['deadline']=now+REPLAY_SECONDS;r['replay_limit']=now+MAX_REPLAY_SECONDS;await broadcast(r)
             elif phase=='replay' and now>=r['deadline']:
                 if r['winner']>=0:
                     r['phase']='over';r['deadline']=0
@@ -363,8 +410,15 @@ async def replay(request):
 
 
 def prepare_physics_worker(backend):
-    if backend=='coupled':
-        from coupled_replay import simulate as prepare
+    if backend in ('coupled','coupled-moving','coupled-spatial','coupled-friction'):
+        if backend=='coupled-friction':
+            from friction_head_replay import simulate as prepare
+        elif backend=='coupled-spatial':
+            from spatial_head_replay import simulate as prepare
+        elif backend=='coupled-moving':
+            from moving_head_replay import simulate as prepare
+        else:
+            from coupled_replay import simulate as prepare
         prepare(v3_score(bot_stroke()))
 
 
@@ -375,7 +429,7 @@ async def lifecycle(app):
     global POOL
     backend=app.get('physics_backend','legacy')
     POOL=ProcessPoolExecutor(max_workers=2,initializer=prepare_physics_worker,initargs=(backend,))
-    if backend=='coupled':
+    if backend in ('coupled','coupled-moving','coupled-spatial','coupled-friction'):
         print('Gekoppelte Physik wird vorbereitet ...',flush=True)
         await asyncio.gather(*(asyncio.get_running_loop().run_in_executor(POOL,physics_worker_ready) for _ in range(2)))
     def connection_error(loop,context):
@@ -393,11 +447,19 @@ async def lifecycle(app):
 
 
 def main():
-    global simulate
-    parser=argparse.ArgumentParser();parser.add_argument('--port',type=int,default=8765);parser.add_argument('--no-browser',action='store_true');parser.add_argument('--no-console',action='store_true');parser.add_argument('--physics',choices=['legacy','coupled'],default='coupled');args=parser.parse_args()
-    if args.physics=='coupled':
+    global simulate,PHYSICS_BACKEND
+    parser=argparse.ArgumentParser();parser.add_argument('--port',type=int,default=8765);parser.add_argument('--no-browser',action='store_true');parser.add_argument('--no-console',action='store_true');parser.add_argument('--physics',choices=['legacy','coupled','coupled-moving','coupled-spatial','coupled-friction'],default='coupled-friction');args=parser.parse_args()
+    PHYSICS_BACKEND=args.physics
+    if args.physics in ('coupled','coupled-moving','coupled-spatial','coupled-friction'):
         try:
-            from coupled_replay import simulate as coupled_simulate
+            if args.physics=='coupled-friction':
+                from friction_head_replay import simulate as coupled_simulate
+            elif args.physics=='coupled-spatial':
+                from spatial_head_replay import simulate as coupled_simulate
+            elif args.physics=='coupled-moving':
+                from moving_head_replay import simulate as coupled_simulate
+            else:
+                from coupled_replay import simulate as coupled_simulate
         except ModuleNotFoundError as exc:
             raise SystemExit('Host-Abhaengigkeit fehlt: '+str(exc.name)+'. Bitte SETUP_HOST.bat ausfuehren.') from exc
         simulate=coupled_simulate
@@ -409,7 +471,7 @@ def main():
         url=f'http://localhost:{args.port}'
         addresses=lan_addresses()
         links='\n'.join(f'LAN: http://{address}:{args.port}' for address in addresses) or 'LAN: Keine aktive IPv4-Adresse gefunden. Netzwerkverbindung prüfen.'
-        print('\nBACKENBEBEN / HOST\n'+url+'\n'+links+'\nDiese LAN-Adresse auf dem Client öffnen.\nAdmin: help, get, set base_damage 25, save, load, reset, status\n',flush=True)
+        print('\nBACKENBEBEN / HOST\n'+url+'\n'+links+'\nDiese LAN-Adresse auf dem Client öffnen.\nAdmin: help, get, set base_damage 35, save, load, reset, status\n',flush=True)
         if not args.no_browser:asyncio.get_running_loop().call_later(1,webbrowser.open,url)
         if not args.no_console:
             import threading

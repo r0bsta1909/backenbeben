@@ -1,0 +1,143 @@
+{
+  "skin_palette": [
+    "b48968",
+    "8c654e",
+    "634737",
+    "d2aa8c"
+  ],
+  "key_color": "ffe9d2",
+  "key_energy": 0.65,
+  "mirror_key_color": "ffe9d2",
+  "mirror_key_energy": 0.65,
+  "injury_states_rendered": 32,
+  "healthy_reset_exact": true,
+  "browser": {
+    "url": "LAN HTTP / two browser clients on one PC",
+    "errors": [],
+    "hits": [
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 18.43,
+        "quality": 0.81,
+        "braced": true,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "0f5011c5791c190efb3f"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 25.78,
+        "quality": 0.7365,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "d9c3cf1c39d7b5a37dc1"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 28.69,
+        "quality": 0.8196,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "4b5b1051103bd0ecd754"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 30.43,
+        "quality": 0.8694,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "289679ba2061788e8e2b"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 34.15,
+        "quality": 0.9758,
+        "braced": false,
+        "side": "R",
+        "ko": true,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "f523117e8994b6ead009"
+      }
+    ],
+    "configuration": {
+      "base_damage": 35.0,
+      "brace_window_ms": 450.0,
+      "brace_reduction": 0.35,
+      "recovery": 6.0,
+      "ko_threshold": 100.0,
+      "turn_seconds": 25.0,
+      "max_pairs": 5.0
+    },
+    "skilled_standard": true,
+    "single_tilt_control": true,
+    "input_duration_ms": [
+      451.1,
+      430.2,
+      430.5,
+      432.1,
+      439.4,
+      437.5,
+      440.4,
+      418.5,
+      449.8,
+      427.9
+    ],
+    "physics_backend": "coupled-moving",
+    "moving_head_brace_consistent": true,
+    "solved_normal_impulse_ns": 2.0280274955738524,
+    "solved_quality_matches_hit": true,
+    "friction": {
+      "coefficient": 0.2,
+      "maximum_residual_m": 0.00021889760772669757,
+      "maximum_cone_error": 0.0
+    },
+    "recorded_arm_frames": 479,
+    "clip_hash": "76567327166abcaeb06949e72d6aee3028647dded572fb381e2e5902c206b012",
+    "brace_expression_stable_in_paused_replay": true,
+    "replay": {
+      "clipId": "0f5011c5791c190efb3f",
+      "frameCount": 337,
+      "peak": 0.058060999999999995,
+      "time": 0.591643,
+      "frame": 70,
+      "deformation": 0.0580608154
+    },
+    "replay_frame_ms_p95": 27.900000000001455,
+    "viewport": [
+      1920,
+      1080
+    ],
+    "msaa_3d": 1,
+    "resume": true,
+    "injury_material_rewind": true,
+    "ko_body_recorded": true,
+    "ko_reverse_seek": true,
+    "winner": 0,
+    "audio": {
+      "mode": "buffer-fallback",
+      "played": 7,
+      "unlocked": true
+    },
+    "rematch_material_reset": true,
+    "rematch": true,
+    "leave": true
+  },
+  "limits": "Visual reference comparison, not complete art acceptance. Mirror uses its own simplified lighting scene; not a physical reflection."
+}

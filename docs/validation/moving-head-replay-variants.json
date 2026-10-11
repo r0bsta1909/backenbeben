@@ -1,0 +1,58 @@
+[
+  {
+    "case": "flat",
+    "solve_ms": 2798.5,
+    "minimum_recorded_recovery_gap_m": 0.011605222009637272,
+    "maximum_wrist_deg": 81.65390518244627,
+    "tail_pin_error_m": 7.194294393915571e-08,
+    "max_yaw_rad": 0.0724
+  },
+  {
+    "case": "glance",
+    "solve_ms": 2292.7,
+    "minimum_recorded_recovery_gap_m": 0.005719019320193595,
+    "maximum_wrist_deg": 84.82025875515468,
+    "tail_pin_error_m": 7.003399303224452e-08,
+    "max_yaw_rad": 0.06133
+  },
+  {
+    "case": "tips",
+    "solve_ms": 2441.7,
+    "minimum_recorded_recovery_gap_m": 0.009123433339262615,
+    "maximum_wrist_deg": 76.6920814177338,
+    "tail_pin_error_m": 6.537519065467501e-08,
+    "max_yaw_rad": 0.09213
+  },
+  {
+    "case": "high-foul",
+    "solve_ms": 2013.5,
+    "minimum_recorded_recovery_gap_m": 0.008226807633908227,
+    "maximum_wrist_deg": 85.00000000000001,
+    "tail_pin_error_m": 5.876567411873642e-08,
+    "max_yaw_rad": 0.05082
+  },
+  {
+    "case": "heel-foul",
+    "solve_ms": 1867.2,
+    "minimum_recorded_recovery_gap_m": 0.005897139131443774,
+    "maximum_wrist_deg": 85.00000000000001,
+    "tail_pin_error_m": 7.015668750251439e-08,
+    "max_yaw_rad": 0.04011
+  },
+  {
+    "case": "swollen",
+    "solve_ms": 2143.0,
+    "minimum_recorded_recovery_gap_m": 0.009927871725334145,
+    "maximum_wrist_deg": 81.6437512544708,
+    "tail_pin_error_m": 7.17000805568591e-08,
+    "max_yaw_rad": 0.07172
+  },
+  {
+    "case": "jaw-injured",
+    "solve_ms": 2069.6,
+    "minimum_recorded_recovery_gap_m": 0.011370887561963564,
+    "maximum_wrist_deg": 81.14062736388634,
+    "tail_pin_error_m": 6.928012338162036e-08,
+    "max_yaw_rad": 0.08355
+  }
+]

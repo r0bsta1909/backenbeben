@@ -1,0 +1,37 @@
+{
+  "change": "Removed shader random beard stipple; broad tone and resolution-faded shadow hatching",
+  "browser": {
+    "repeat_practice_without_damage": true,
+    "idle_material_uploads_skipped": true,
+    "mirror_visibility_updates": true,
+    "pose_camera_and_wheel": true,
+    "crowd_reaction_and_rewind": true,
+    "jump_to_contact": true,
+    "side_camera": true,
+    "marker_toggle": true,
+    "no_stale_markers": true,
+    "errors": [],
+    "inspection_survives_original_deadline": false,
+    "coupled": {
+      "backend": "coupled-moving",
+      "solve_ms": 2464.0,
+      "peak": 0.053065,
+      "contact_diagnostics": {
+        "maximum_wrist_separation_m": 1.5066678500586545e-05,
+        "maximum_penetration_m": 2.1850254237779984e-05,
+        "unconverged_steps": 13,
+        "maximum_material_residual_m": 0.0004248413895864833
+      },
+      "head_response": {
+        "model": "coupled-yaw-through-contact-and-tail",
+        "braced": false,
+        "tail_pin_error_m": 6.950713230953937e-08,
+        "translation": true,
+        "parameters": "prototype tuning, three translations and yaw; pitch/roll fixed"
+      },
+      "maximum_head_yaw_rad": 0.09617
+    }
+  },
+  "injury_render": "Both sides, four skin colors, 0/35/75/0 with exact healthy reset passed",
+  "visual_limit": "Fine grain remains in face texture; overall art target remains open"
+}

@@ -1,0 +1,154 @@
+{
+  "url": "http://192.168.178.67:8877",
+  "errors": [],
+  "hits": [
+    {
+      "kind": "hit",
+      "target": 1,
+      "damage": 15.59,
+      "quality": 0.5331,
+      "braced": true,
+      "side": "R",
+      "ko": false,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+      "replay_id": "c0e9ac234ebdc0349170"
+    },
+    {
+      "kind": "hit",
+      "target": 0,
+      "damage": 30.16,
+      "quality": 0.6702,
+      "braced": false,
+      "side": "R",
+      "ko": false,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+      "replay_id": "7324e78471b0ac45386b"
+    },
+    {
+      "kind": "hit",
+      "target": 1,
+      "damage": 20.66,
+      "quality": 0.4591,
+      "braced": false,
+      "side": "R",
+      "ko": false,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+      "replay_id": "ceb3b3136a255b5d698d"
+    },
+    {
+      "kind": "hit",
+      "target": 0,
+      "damage": 24.14,
+      "quality": 0.5365,
+      "braced": false,
+      "side": "R",
+      "ko": true,
+      "foul": false,
+      "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+      "replay_id": "23e1317908cb93181fcd"
+    }
+  ],
+  "configuration": {
+    "base_damage": 45,
+    "ko_threshold": 60,
+    "turn_seconds": 60
+  },
+  "single_tilt_control": true,
+  "physics_backend": "coupled-moving",
+  "moving_head_brace_consistent": true,
+  "solved_normal_impulse_ns": 1.096914994745412,
+  "solved_quality_matches_hit": true,
+  "recorded_arm_frames": 530,
+  "clip_hash": "e6cbbd79aa7f33bce81115b33e7f328a8007e5ca5f88e812d6f367668057d6a0",
+  "replay": {
+    "clipId": "c0e9ac234ebdc0349170",
+    "frameCount": 337,
+    "peak": 0.026789,
+    "time": 0.58331,
+    "frame": 69,
+    "deformation": 0.026788384
+  },
+  "replay_frame_ms_p95": 14,
+  "viewport": [
+    1920,
+    1080
+  ],
+  "resume": true,
+  "injury_material_rewind": true,
+  "ko_body_recorded": true,
+  "ko_reverse_seek": true,
+  "winner": 1,
+  "audio": {
+    "mode": "buffer-fallback",
+    "played": 6,
+    "unlocked": true
+  },
+  "rematch_material_reset": true,
+  "rematch": true,
+  "leave": true,
+  "stats": {
+    "arm_data": true,
+    "camera_position": [
+      0.300000011920929,
+      0.550000011920929,
+      2.65000009536743
+    ],
+    "crowd_active": false,
+    "dragging": false,
+    "face_head_offset": [
+      0,
+      0,
+      0
+    ],
+    "face_head_rotation": [
+      0,
+      0,
+      0
+    ],
+    "face_injury": [
+      0,
+      0,
+      0
+    ],
+    "fps": 83,
+    "hand_wrist": "(-0.12, -0.49, -0.17)",
+    "mirror_draw_requests": 781,
+    "mirror_injury": [
+      0,
+      0,
+      0
+    ],
+    "muted": false,
+    "physics_active": false,
+    "physics_material_updates": 387,
+    "physics_time": -1,
+    "rendered_arm": {
+      "elbow": [
+        0.346037536859512,
+        -0.411999642848969,
+        0.622861385345459
+      ],
+      "shoulder": [
+        0.234999999403954,
+        -0.159999996423721,
+        0.524999976158142
+      ],
+      "wrist": [
+        0.120000019669533,
+        -0.490000009536743,
+        0.694999933242798
+      ]
+    },
+    "samples": 0
+  },
+  "support_track": {
+    "samples": 380,
+    "maximum_palm_landmark_error_m": 1.33280039449346e-07,
+    "command": "python scripts/audit_catcher_support.py"
+  },
+  "visual_review": "Actual wide KO at 2 seconds inspected. Lower crouched helpers and hands under the upper arms replace high chest palms. First target inside shirt rejected despite passing landmark test.",
+  "limits": "Authored support targets and guided KO; no hand-cloth collision or physical grip simulation. Overall human movement and style acceptance remain open."
+}

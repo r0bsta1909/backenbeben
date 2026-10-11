@@ -101,7 +101,7 @@ async def main():
         await b.locator('#lobbyButton').click()
         await a.wait_for_function("JSON.parse(renderState).state.phase==='disconnected'")
         report['leave']=True
-        await admin('set base_damage 25');await admin('set ko_threshold 100');await admin('set turn_seconds 25')
+        await admin('set base_damage 35');await admin('set ko_threshold 100');await admin('set turn_seconds 25')
         report['stats']=await a.evaluate('godotStats')
         assert not report['errors'],report['errors']
         Path('logs/v2-browser-gauntlet.json').write_text(json.dumps(report,indent=2),encoding='utf-8')

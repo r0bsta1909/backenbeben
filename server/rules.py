@@ -1,6 +1,6 @@
 """Authoritative, deterministic slap scoring. No renderer dependencies."""
 import math
-DEFAULTS = {'base_damage': 25.0, 'brace_window_ms': 450.0, 'brace_reduction': .35,
+DEFAULTS = {'base_damage': 35.0, 'brace_window_ms': 450.0, 'brace_reduction': .35,
             'recovery': 6.0, 'ko_threshold': 100.0, 'turn_seconds': 25.0, 'max_pairs': 5.0}
 RANGES = {'base_damage': (5, 45), 'brace_window_ms': (80, 500), 'brace_reduction': (0, .65),
           'recovery': (0, 15), 'ko_threshold': (60, 150), 'turn_seconds': (5, 60), 'max_pairs': (2, 12)}

@@ -33,9 +33,15 @@ var bell_audio: AudioStreamPlayer
 var opponent_base := Vector3.ZERO
 var mat_cache: Dictionary = {}
 var js_timer := 0.0
+var profile_cpu := false
+var cpu_samples := {}
 var appearance_timer := 0.0
 var particles: Array = []
 var mirror_mount: Node3D
+var recorded_side_texture: ImageTexture
+var mirror_appearance_hash := 0
+var mirror_physics_active := false
+var mirror_eye_closure := -1.0
 var mirror_dirty := true
 var mirror_draw_requests := 0
 var mirror_viewport: SubViewport
@@ -44,11 +50,12 @@ var physics_material_updates := 0
 var emote_player := -1
 var emote_kind := 0
 var emote_remaining := 0.0
-var skins := [Color("cf946f"), Color("986345"), Color("683f30"), Color("e5b69a")]
+var skins := [Color("b48968"), Color("8c654e"), Color("634737"), Color("d2aa8c")]
 var shirts := [Color("6e242b"), Color("26354b"), Color("deb64c"), Color("534979")]
 var hairs := [Color("241b16"), Color("6b3624"), Color("b8afa0")]
 
 func _ready() -> void:
+	profile_cpu=OS.has_feature("web") and bool(JavaScriptBridge.eval("window.profileCPU === true",true))
 	RenderingServer.set_default_clear_color(Color("111623"))
 	build_arena()
 	fighter = new_character()
@@ -58,7 +65,7 @@ func _ready() -> void:
 	hand.rotation.y = PI
 	hand.first_person(true)
 	var ready_pose: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/lateral_ready.json"))
-	hand.apply_arm(ready_pose,0.0,-15.0)
+	hand.apply_arm(ready_pose,0.0,-18.0)
 	prepare_materials(hand)
 	opponent_hand = Node3D.new()
 	add_child(opponent_hand)
@@ -134,6 +141,13 @@ func build_arena() -> void:
 	arena_presentation=Node3D.new();arena_presentation.name="ApprovedArena"
 	arena_presentation.set_script(load("res://arena_presentation.gd"));add_child(arena_presentation)
 	arena_presentation.build_presentation()
+	# Preserve main's separate, restrained light for officials in the painted hall.
+	for light in arena_presentation.get_children():
+		if light is Light3D:light.light_cull_mask=1
+	var support_light:=DirectionalLight3D.new()
+	support_light.rotation_degrees=Vector3(-55,-25,0)
+	support_light.light_color=Color("b8c5d8");support_light.light_energy=.32
+	support_light.light_cull_mask=2;add_child(support_light)
 	arena_stage=arena_presentation.stage
 	camera=Camera3D.new();camera.position=Vector3(.30,.70,3.3);camera.fov=62
 	add_child(camera);camera.look_at(Vector3(.22,-.55,0));camera.current=true
@@ -162,7 +176,8 @@ func prepare_materials(root: Node) -> void:
 				copy.set_shader_parameter("geometry_scale",4.0)
 				copy.set_shader_parameter("face_skin",str(node.name)=="Face")
 				copy.set_shader_parameter("hair_surface",m.resource_name=="Hair")
-				if str(node.name)=="Face":copy.set_shader_parameter("face_ink",load("res://assets/face_ink_v1.png"))
+				copy.set_shader_parameter("eye_surface",m.resource_name in ["EyeWhite","Iris"])
+				if str(node.name)=="Face":copy.set_shader_parameter("face_ink",load("res://assets/face_ink_v2.png"))
 				copy.set_shader_parameter("tissue",str(node.name) in ["Face","FaceInk","MouthLine","LidsL","LidsR"])
 				copy.set_shader_parameter("head_part",str(node.name) in ["Face","FaceInk","MouthLine","MouthInterior","Teeth","LidsL","LidsR","EyeL","EyeR","IrisL","IrisR","PupilL","PupilR","BrowL","BrowR","HairCap","EarL","EarR","EarFoldL","EarFoldR","NostrilL","NostrilR"])
 				physics_materials[root.get_instance_id()].append(copy)
@@ -188,8 +203,9 @@ func build_mirror() -> void:
 	reflection = new_character(root)
 	prepare_materials(reflection)
 	var light := DirectionalLight3D.new()
-	light.rotation_degrees=Vector3(-20,-25,0)
-	light.light_energy=1.6
+	light.rotation_degrees=Vector3(-30,-35,0)
+	light.light_color=Color("ffe9d2")
+	light.light_energy=.65
 	root.add_child(light)
 	var mirror_env := WorldEnvironment.new()
 	mirror_env.environment=Environment.new()
@@ -230,12 +246,20 @@ func injury_material_state(actor: Node3D) -> Array:
 	var material: ShaderMaterial=face.get_surface_override_material(0)
 	return [material.get_shader_parameter("injury_left"),material.get_shader_parameter("injury_right"),material.get_shader_parameter("injury_jaw")]
 
+func head_offset_state(actor: Node3D, parameter := "head_offset") -> Array:
+	var material: ShaderMaterial=actor.face_mesh.get_surface_override_material(0)
+	var value: Vector3=material.get_shader_parameter(parameter)
+	return [value.x,value.y,value.z]
+
 func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
-	if root==reflection:mirror_dirty=true
 	var damage := float(data.get("damage",0))
 	var ratio := clampf(damage/100.,0,1)
 	var fractured := clampf((damage-50)/40,0,1)
 	var emote_active := emote_remaining>0 and ((is_enemy and emote_player!=you) or (not is_enemy and emote_player==you))
+	if root==reflection:
+		var appearance_hash: int=[data,emote_active,emote_kind if emote_active else -1].hash()
+		if appearance_hash!=mirror_appearance_hash:mirror_dirty=true
+		mirror_appearance_hash=appearance_hash
 	for node in root.find_children("*", "MeshInstance3D", true, false):
 		var n := str(node.name)
 		var side: String = "L" if n.ends_with("L") else "R"
@@ -262,7 +286,8 @@ func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 				var shape := str(node.mesh.get_blend_shape_name(i))
 				var amount := 0.0
 				if shape=="grin" and emote_active:amount=.8
-				if shape=="blink":amount=1.0 if physics_frame.get("ko",false) and float(physics_frame.get("time",0))>.65 else clampf((sin(clock_time*1.1)-.99)*100,0,1)
+				# The contact driver owns lids, including paused replay frames.
+				if shape=="blink":continue
 				if shape=="swelling": amount=ratio
 				if shape=="jaw_broken": amount=clampf((damage-50)/40,0,1)
 				if shape=="cheek_hit_L" and data.get("side","L")=="L": amount=impact if is_enemy else 0
@@ -287,6 +312,20 @@ func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 	root.rotation=Vector3.ZERO
 
 
+func record_cpu(section: String, started: int) -> void:
+	var phase: String=str(state.get("phase","lobby"))
+	if phase=="impact":phase+="_receiver" if int(physics_frame.get("target",-1))==you else "_striker"
+	var key:=phase+"/"+section
+	if not cpu_samples.has(key):cpu_samples[key]=[]
+	if cpu_samples[key].size()<4096:cpu_samples[key].append((Time.get_ticks_usec()-started)/1000.0)
+
+func cpu_summary() -> Dictionary:
+	var result: Dictionary={}
+	for key in cpu_samples:
+		var values: Array=cpu_samples[key].duplicate();values.sort()
+		result[key]={"samples":values.size(),"median_ms":values[values.size()/2],"p95_ms":values[mini(values.size()-1,int(values.size()*.95))],"max_ms":values[-1]}
+	return result
+
 func _process(delta: float) -> void:
 	clock_time+=delta
 	appearance_timer+=delta
@@ -295,13 +334,14 @@ func _process(delta: float) -> void:
 	swing=maxf(0,swing-delta*2.6)
 	js_timer+=delta
 	if OS.has_feature("web") and js_timer>.033:
+		var bridge_started: int=Time.get_ticks_usec() if profile_cpu else 0
 		js_timer=0
 		var raw=JavaScriptBridge.eval("window.renderState || '{}'",true)
 		var parsed=JSON.parse_string(str(raw))
 		if parsed is Dictionary and parsed.has("state"):
 			state=parsed.state;you=int(parsed.you)
 			if int(state.match_id)!=last_match:
-				last_match=int(state.match_id);last_event=-1
+				last_match=int(state.match_id);last_event=-1;mirror_dirty=true
 				for view in [fighter,hand,reflection]:view.reset_all()
 				play_sound(bell_audio,"bell")
 			if int(state.event_id)!=last_event:
@@ -318,8 +358,13 @@ func _process(delta: float) -> void:
 			JavaScriptBridge.eval("window.contactSound=false")
 		mirror_focus=bool(JavaScriptBridge.eval("window.mirrorFocus || false",true))
 		AudioServer.set_bus_mute(0,bool(JavaScriptBridge.eval("window.muted || false",true)))
-		JavaScriptBridge.eval("window.godotStats="+JSON.stringify({"fps":Engine.get_frames_per_second(),"face_injury":injury_material_state(fighter),"mirror_injury":injury_material_state(reflection),"arm_data":hand_pose.has("arm"),"rendered_arm":hand.arm_world_joints(),"hand_wrist":str(hand.skeleton.get_bone_global_pose(hand.skeleton.find_bone("hand.R")).origin),"dragging":dragging,"samples":gesture.size(),"physics_time":physics_frame.get("time",-1),"physics_active":physics_frame.has("id"),"crowd_active":arena_stage.crowd_was_active,"arena_backdrop":true,"arena_sponsors":arena_stage.sponsor_surfaces.size(),"arena_audience_3d":arena_stage.crowd_poses.size(),"camera_position":[camera.position.x,camera.position.y,camera.position.z],"mirror_draw_requests":mirror_draw_requests,"physics_material_updates":physics_material_updates,"muted":AudioServer.is_bus_mute(0)}))
+		JavaScriptBridge.eval("window.godotStats="+JSON.stringify({"face_eye_closure":fighter.face_mesh.get_blend_shape_value(fighter.blink_index),"msaa_3d":get_viewport().msaa_3d,"fps":Engine.get_frames_per_second(),"face_head_offset":head_offset_state(fighter),"face_head_rotation":head_offset_state(fighter,"head_rotation"),"face_injury":injury_material_state(fighter),"mirror_injury":injury_material_state(reflection),"arm_data":hand_pose.has("arm"),"rendered_arm":hand.arm_world_joints(),"hand_wrist":str(hand.skeleton.get_bone_global_pose(hand.skeleton.find_bone("hand.R")).origin),"dragging":dragging,"samples":gesture.size(),"physics_time":physics_frame.get("time",-1),"physics_active":physics_frame.has("id"),"crowd_active":arena_stage.crowd_was_active,"arena_backdrop":true,"arena_sponsors":arena_stage.sponsor_surfaces.size(),"arena_audience_3d":arena_stage.crowd_poses.size(),"camera_position":[camera.position.x,camera.position.y,camera.position.z],"mirror_draw_requests":mirror_draw_requests,"physics_material_updates":physics_material_updates,"muted":AudioServer.is_bus_mute(0)}))
+		if profile_cpu:
+			record_cpu("bridge",bridge_started)
+			if bool(JavaScriptBridge.eval("window.profileCPURead === true",true)):
+				JavaScriptBridge.eval("window.cpuProfile="+JSON.stringify(cpu_summary())+";window.profileCPURead=false")
 	if appearance_timer>=.08:
+		var appearance_started: int=Time.get_ticks_usec() if profile_cpu else 0
 		appearance_timer=0
 		if state.has("players") and state.players.size()>1:
 			var shown_players: Array = physics_frame.get("players",state.players)
@@ -335,7 +380,10 @@ func _process(delta: float) -> void:
 				if data is Dictionary:preview=data
 			apply_fighter(fighter,preview,true)
 			apply_fighter(reflection,preview,false)
+		if profile_cpu:record_cpu("appearance",appearance_started)
+	var drive_started: int=Time.get_ticks_usec() if profile_cpu else 0
 	drive_recorded_physics()
+	if profile_cpu:record_cpu("recorded_motion",drive_started)
 	if mirror_mount.visible and mirror_dirty:
 		mirror_viewport.render_target_update_mode=SubViewport.UPDATE_ONCE
 		mirror_draw_requests+=1
@@ -397,7 +445,6 @@ func drive_recorded_physics() -> void:
 	var physics_changed: bool=frame_hash!=last_physics_hash
 	if physics_frame.has("id") and not physics_changed:return
 	if physics_changed:
-		mirror_dirty=true
 		physics_material_updates+=1
 	last_physics_hash=frame_hash
 	var offsets := PackedVector3Array()
@@ -411,14 +458,25 @@ func drive_recorded_physics() -> void:
 		for i in range(mini(63,values.size()/3)):
 			offsets[i]=Vector3(float(values[i*3]),float(values[i*3+1]),float(values[i*3+2]))
 	var side_data: Dictionary = physics_frame.get("side_cage",{})
-	var side_texture: ImageTexture = preload("res://side_cage_view.gd").texture_for(side_data,physics_frame.get("offsets",[]))
+	var side_texture: ImageTexture = preload("res://side_cage_view.gd").texture_for(side_data,physics_frame.get("offsets",[]),recorded_side_texture)
+	if side_texture!=null:recorded_side_texture=side_texture
 	var replaying: bool = physics_frame.get("replay",false)
+	var own_physics: bool=active and not replaying and int(physics_frame.get("target",-1))==you
+	if physics_changed and (own_physics or mirror_physics_active):mirror_dirty=true
+	mirror_physics_active=own_physics
 	for root in [fighter,reflection]:
 		var affected: bool = active and (replaying if root==fighter else false)
 		if not replaying:affected=active and ((root==fighter and int(physics_frame.target)!=you) or (root==reflection and int(physics_frame.target)==you))
-		var eye_closure := 0.0
+		var eye_closure := 0.0 if active else clampf((sin(clock_time*1.1)-.99)*100,0,1)
+		var defending: bool = (root==fighter and int(state.get("turn",you))==you) or (root==reflection and int(state.get("turn",you))!=you)
+		if not active and defending and state.get("phase","") in ["windup","resolving"] and state.get("brace_result","")=="ready":
+			eye_closure=.35
+		if affected and bool(physics_frame.get("braced",false)):
+			eye_closure=.35*(1.0-smoothstep(.5,.85,float(physics_frame.get("time",0.0))))
 		if affected and bool(physics_frame.get("ko",false)):
-			eye_closure=smoothstep(.62,.82,float(physics_frame.get("time",0.0)))
+			eye_closure=maxf(eye_closure,smoothstep(.62,.82,float(physics_frame.get("time",0.0))))
+		if root==reflection and eye_closure!=mirror_eye_closure:
+			mirror_dirty=true;mirror_eye_closure=eye_closure
 		root.set_eye_closure(eye_closure)
 		if active:root.rotation=Vector3.ZERO;root.position.y=0
 		for m in (physics_materials.get(root.get_instance_id(),[]) if physics_changed else []):
@@ -429,6 +487,8 @@ func drive_recorded_physics() -> void:
 				m.set_shader_parameter("side_cage_bounds",Vector4(bounds[0],bounds[1],bounds[2],bounds[3]))
 			m.set_shader_parameter("cage_deformed",affected)
 			m.set_shader_parameter("cage",offsets if affected else empty_cage)
+			m.set_shader_parameter("head_offset",fighter.vector(physics_frame.get("head_offset",[0,0,0])) if affected else Vector3.ZERO)
+			m.set_shader_parameter("head_rotation",fighter.vector(physics_frame.get("head_rotation",[0,0,0])) if affected else Vector3.ZERO)
 			m.set_shader_parameter("head_angle",float(physics_frame.get("head",0)) if affected else 0.0)
 			m.set_shader_parameter("jaw_angle",float(physics_frame.get("jaw",0)) if affected else 0.0)
 	var wide_view: bool = replaying and physics_frame.get("camera","")=="wide"
@@ -436,9 +496,9 @@ func drive_recorded_physics() -> void:
 	var side_view: bool = inspecting or (replaying and physics_frame.get("camera","") in ["side","wide","contact","ko"])
 	mirror_mount.visible=not (replaying or inspecting)
 	if replaying or inspecting:mirror_viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED
-	camera.position=Vector3(14,3,20) if wide_view else Vector3(3,.55,1.1) if side_view else Vector3(.30,.70,3.3)
+	camera.position=Vector3(14,3,20) if wide_view else Vector3(3.5,.65,1.1) if side_view else Vector3(.30,.70,3.3)
 	camera.fov=52.0 if wide_view else (55.0 if side_view else 62.0)
-	camera.look_at(Vector3(0,-1.4,1.05) if wide_view else Vector3(0,-.12,1.0) if side_view else Vector3(.22,-.55,0))
+	camera.look_at(Vector3(0,-1.4,1.05) if wide_view else Vector3(0,-.45,1.0) if side_view else Vector3(.22,-.55,0))
 	arena_presentation.sync_camera(camera,not wide_view,wide_view)
 	hand.visible=true
 	hand.first_person(not side_view)
@@ -463,6 +523,10 @@ func drive_recorded_physics() -> void:
 		var body_frame: Array=physics_frame.get("body",[0,0,0,0,0])
 		var target_view: Node3D=fighter if replaying or int(physics_frame.target)!=you else reflection
 		target_view.apply_collapse(body_frame)
+		if replaying and bool(physics_frame.get("ko",false)) and not wide_view:
+			# Follow the recorded collapse, never wall-clock interpolation: reverse
+			# seeking restores the exact contact framing and leaves physical poses intact.
+			camera.position+=fighter.global_basis*fighter.collapsed_point(Vector3.ZERO)*.8
 	var guard_body: Array=physics_frame.get("body",[0,0,0,0,0])
 	defending_view.pose_defender(1.0-smoothstep(.02,.25,float(guard_body[0])))
 	if replaying and physics_frame.get("camera","")=="contact":
@@ -508,6 +572,8 @@ func build_officials() -> void:
 		actor.position=Vector3((-2.25 if i==0 else 2.25) if i<2 else -3.4,0,-2.5 if i<2 else -3.2)
 		actor.rotation.y=.22 if i==0 else -.22
 		prepare_materials(actor)
+		for mesh in actor.find_children("*", "MeshInstance3D", true, false):
+			mesh.layers = 2
 		for node in actor.find_children("*","MeshInstance3D",true,false):
 			for j in range(node.mesh.get_surface_count()):
 				var m=node.get_surface_override_material(j)
@@ -524,19 +590,25 @@ func build_officials() -> void:
 func update_officials(body: Array) -> void:
 	if body==officials_frame:return
 	officials_frame=body.duplicate()
+	var body_hip := Vector3(0,-.6,0)
+	var body_drop := Vector3(0,-float(body[0]),-float(body[1]))
+	var body_bend := Basis(Vector3.FORWARD,float(body[3]))*Basis(Vector3.RIGHT,-float(body[2]))
+	var gaze_target := (body_hip+body_drop+body_bend*(Vector3(0,.06,0)-body_hip))*4.0
 	for i in range(officials.size()):
 		var actor: Node3D=officials[i]
 		actor.position=actor.get_meta("home")
 		var catch_amount: float=float(body[4]) if body.size()>4 else 0.0
 		if i<2:
 			actor.position.x*=1.0-catch_amount*.25
-			actor.position.z+=catch_amount*.85
-			actor.apply_collapse([catch_amount*.05,0,catch_amount*.12,0,0])
+			actor.position.z+=catch_amount*1.10
+			actor.apply_collapse([catch_amount*.13,0,catch_amount*.12,0,0])
+			actor.step_feet(actor.position-Vector3(actor.get_meta("home")),catch_amount,"L" if i==0 else "R")
 			var hip := Vector3(0,-.6,0)
 			var drop := Vector3(0,-float(body[0]),-float(body[1]))
 			var bend := Basis(Vector3.FORWARD,float(body[3]))*Basis(Vector3.RIGHT,-float(body[2]))
-			var armpit := Vector3(-.18 if i==0 else .18,-.25,.025)
+			var armpit := Vector3(-.315 if i==0 else .315,-.30,.015)
 			var support := (hip+drop+bend*(armpit-hip))*4.0
 			actor.set_meta("support_target",support)
 			actor.reach_toward(Vector3.ZERO,"R" if i==0 else "L",0.0)
-			actor.reach_toward(support,"L" if i==0 else "R",catch_amount,Vector3.RIGHT if i==0 else Vector3.LEFT)
+			actor.reach_toward(support,"L" if i==0 else "R",catch_amount,bend*Vector3(.88 if i==0 else -.88,-.46,0).normalized(),bend*Vector3(.46 if i==0 else -.46,.88,0).normalized())
+		actor.look_toward(gaze_target)

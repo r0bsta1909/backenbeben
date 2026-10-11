@@ -1,0 +1,156 @@
+{
+  "native": "Roles, rejected input, phase reset, replay rewind, KO priority and appearance refresh preserving paused lids passed.",
+  "browser": {
+    "url": "http://192.168.178.67:8877",
+    "errors": [],
+    "hits": [
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 15.22,
+        "quality": 0.5205,
+        "braced": true,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber – mit der flachen Hand getroffen.",
+        "replay_id": "17c21e69a202076d8564"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 24.77,
+        "quality": 0.5504,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber – mit der flachen Hand getroffen.",
+        "replay_id": "cd2258394d582a187302"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 25.77,
+        "quality": 0.5727,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber – mit der flachen Hand getroffen.",
+        "replay_id": "38781828c39cbb26c7f6"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 23.39,
+        "quality": 0.5197,
+        "braced": false,
+        "side": "R",
+        "ko": true,
+        "foul": false,
+        "diagnosis": "Sauber – mit der flachen Hand getroffen.",
+        "replay_id": "04af71856a2ba9e52ccb"
+      }
+    ],
+    "configuration": {
+      "base_damage": 45,
+      "ko_threshold": 60,
+      "turn_seconds": 60
+    },
+    "single_tilt_control": true,
+    "physics_backend": "coupled-moving",
+    "moving_head_brace_consistent": true,
+    "solved_normal_impulse_ns": 1.0409052894322992,
+    "solved_quality_matches_hit": true,
+    "recorded_arm_frames": 551,
+    "clip_hash": "a92caff369979c9a1daa86ad70b8f71056df8726b75a2d6db0e71ae04a5b2d86",
+    "brace_expression_stable_in_paused_replay": true,
+    "replay": {
+      "clipId": "17c21e69a202076d8564",
+      "frameCount": 337,
+      "peak": 0.025093999999999998,
+      "time": 0.58331,
+      "frame": 69,
+      "deformation": 0.0250934316
+    },
+    "replay_frame_ms_p95": 20.900000000001455,
+    "viewport": [
+      1920,
+      1080
+    ],
+    "msaa_3d": 1,
+    "resume": true,
+    "injury_material_rewind": true,
+    "ko_body_recorded": true,
+    "ko_reverse_seek": true,
+    "winner": 1,
+    "audio": {
+      "mode": "buffer-fallback",
+      "played": 6,
+      "unlocked": true
+    },
+    "rematch_material_reset": true,
+    "rematch": true,
+    "leave": true,
+    "stats": {
+      "arm_data": true,
+      "camera_position": [
+        0.300000011920929,
+        0.550000011920929,
+        2.65000009536743
+      ],
+      "crowd_active": false,
+      "dragging": false,
+      "face_eye_closure": 0,
+      "face_head_offset": [
+        0,
+        0,
+        0
+      ],
+      "face_head_rotation": [
+        0,
+        0,
+        0
+      ],
+      "face_injury": [
+        0,
+        0,
+        0
+      ],
+      "fps": 66,
+      "hand_wrist": "(-0.12, -0.49, -0.17)",
+      "mirror_draw_requests": 755,
+      "mirror_injury": [
+        0,
+        0,
+        0
+      ],
+      "msaa_3d": 1,
+      "muted": false,
+      "physics_active": false,
+      "physics_material_updates": 407,
+      "physics_time": -1,
+      "rendered_arm": {
+        "elbow": [
+          0.346037536859512,
+          -0.411999642848969,
+          0.622861385345459
+        ],
+        "shoulder": [
+          0.234999999403954,
+          -0.159999996423721,
+          0.524999976158142
+        ],
+        "wrist": [
+          0.120000019669533,
+          -0.490000009536743,
+          0.694999933242798
+        ]
+      },
+      "samples": 0
+    }
+  },
+  "visual_review": "Actual paused browser replay at .4s inspected: slight eye narrowing, eyes remain open.",
+  "limits": "Visual cue for server-confirmed brace; not a muscle simulation. Human understanding and overall art acceptance remain open."
+}

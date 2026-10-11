@@ -33,3 +33,12 @@ class CoupledReplayTests(unittest.TestCase):
   peak=max(abs(v) for v in clip['frames'][first][2:])
   self.assertGreater(peak,0)
   self.assertLess(max(abs(v) for v in clip['frames'][-1][2:]),peak)
+
+ def test_recorded_head_uses_measured_signed_moment(self):
+  from head_response import yaw_state
+  moment=self.contact['frames'][-1]['cumulative_contact_moment_nms']
+  self.assertEqual(self.clip['head_response']['contact_moment_nms'],moment)
+  end=self.contact['frames'][-1]['time']
+  for i,frame in enumerate(self.clip['frames']):
+   expected=yaw_state(moment[1],i/120-.5-end)[0]
+   self.assertAlmostEqual(frame[0],expected,places=4)

@@ -14,8 +14,10 @@ async def main():
   await page.evaluate("()=>{window.sentActions=[];const original=sendAction;sendAction=d=>{sentActions.push(d);original(d)}}")
   await page.locator('#nickname').fill('WMWMWMWMWMWMWMWMWM')
   await page.locator('#training').click();await page.wait_for_function("state?.phase==='aim'")
+  await page.wait_for_function("document.getElementById('posePanel').dataset.mode==='practice'")
+  await page.screenshot(path='logs/guidance-practice.png')
   await page.locator('#poseCamera').click()
-  await page.wait_for_function('godotStats?.camera_position?.[0]===3')
+  await page.wait_for_function('godotStats?.camera_position?.[0]===3.5')
   assert await page.locator('#poseCamera').get_attribute('aria-pressed')=='true'
   await page.wait_for_timeout(150)
   hidden_draws=await page.evaluate('godotStats.mirror_draw_requests')
@@ -24,10 +26,10 @@ async def main():
   assert await page.evaluate('godotStats.mirror_draw_requests')==hidden_draws
   assert await page.evaluate('godotStats.physics_material_updates')==idle_updates
   await page.mouse.move(1536,648);await page.mouse.wheel(0,120)
-  await page.wait_for_function('window.netArm?.tilt===-12')
+  await page.wait_for_function('window.netArm?.tilt===-15')
   await page.screenshot(path='logs/pose-inspection.png')
   await page.locator('#resetPose').click()
-  await page.wait_for_function('window.netArm?.tilt===-15')
+  await page.wait_for_function('window.netArm?.tilt===-18')
   await page.locator('#poseCamera').click()
   await page.wait_for_function('godotStats?.camera_position?.[0]<1')
   await page.wait_for_function('(n)=>godotStats.mirror_draw_requests>n',arg=hidden_draws)
@@ -38,9 +40,12 @@ async def main():
     await page.mouse.move(1920*(.8-.34/1.5*(i+1)/12),648);await page.wait_for_timeout(8)
    await page.mouse.up()
   await stroke();await page.wait_for_function('state.practice_done')
+  await page.wait_for_function("document.getElementById('posePanel').dataset.mode==='strike'")
+  await page.screenshot(path='logs/guidance-strike.png')
   first_event=await page.evaluate('state.event_id')
   await page.locator('#repeatPractice').click()
   await page.wait_for_function("document.getElementById('repeatPractice').textContent.includes('NUR PROBE')")
+  assert await page.locator('#practiceStep').get_attribute('aria-current')=='step'
   await stroke()
   await page.wait_for_function('(old)=>state.event_id>old',arg=first_event)
   assert await page.evaluate("state.phase==='aim' && state.hits===0 && state.event.kind==='practice'")
@@ -51,12 +56,19 @@ async def main():
    await page.screenshot(path='logs/contact-view-failure.png')
    await browser.close();raise
   coupled_evidence=None
-  if '--expect-coupled' in sys.argv:
+  if '--expect-coupled' in sys.argv or '--expect-moving' in sys.argv:
    await page.wait_for_function('JSON.parse(physicsFrame).side_cage.nx===17')
    replay_id=await page.evaluate('state.replay_id')
    recorded=await (await page.request.get(TEST_URL+'/api/replay/'+replay_id)).json()
-   assert recorded['physics_backend']=='coupled'
-   coupled_evidence={'backend':recorded['physics_backend'],'solve_ms':recorded['solve_ms'],'peak':recorded['peak'],'contact_diagnostics':recorded['contact_diagnostics']}
+   assert recorded['physics_backend']==('coupled-moving' if '--expect-moving' in sys.argv else 'coupled')
+   if '--expect-spatial' in sys.argv:assert recorded['head_response']['spatial_rotation'] is True
+   coupled_evidence={'backend':recorded['physics_backend'],'solve_ms':recorded['solve_ms'],'peak':recorded['peak'],'contact_diagnostics':recorded['contact_diagnostics'],'head_response':recorded.get('head_response'),'maximum_head_yaw_rad':max(abs(f[0]) for f in recorded['frames'])}
+  if '--inspect-timeout' in sys.argv:
+   await page.wait_for_function("state.phase==='replay' && state.remaining<3",timeout=15000)
+   await page.locator('#replayImpact').click()
+   await page.wait_for_function("state.phase==='replay' && state.remaining>10",timeout=3000)
+   await page.wait_for_timeout(4000)
+   assert await page.evaluate("state.phase==='replay'"), 'Inspection expired at original deadline'
   await page.locator('#replayImpact').click()
   await page.wait_for_function("JSON.parse(physicsFrame).camera==='contact' && JSON.parse(physicsFrame).time===.5")
   assert await page.locator('#contactLegend').is_visible()
@@ -75,13 +87,15 @@ async def main():
    # separately through pose inspection above.
    for view in ('contact','front','wide'):
     await page.locator('#replayCamera').select_option(view)
-    for moment,label in ((.46,'before'),(.5,'contact'),(.54,'after')):
-     await page.locator('#replaySeek').evaluate('(e,t)=>{e.value=t;e.dispatchEvent(new Event("input"))}',moment)
+    for moment,label in ((.46,'before'),(.5,'contact'),(.54,'after'),(.65,'head-response'),(.8,'recovery')):
+     await page.locator('#replaySeek').evaluate('(e,t)=>{e.value=t;e.dispatchEvent(new Event("input",{bubbles:true}))}',moment)
      await page.wait_for_function('(s)=>{const f=JSON.parse(physicsFrame);return f.camera===s.view && Math.abs(f.time-s.time)<.002 && f.footprint.length===0}',arg={'view':view,'time':moment})
      await page.wait_for_timeout(200)
      await page.screenshot(path=f'logs/contact-audit-{view}-{label}.png')
-     record=await page.evaluate('({frame:JSON.parse(physicsFrame),rendered:godotStats.rendered_arm})')
+     record=await page.evaluate('({frame:JSON.parse(physicsFrame),rendered:godotStats.rendered_arm,head_offset:godotStats.face_head_offset,head_rotation:godotStats.face_head_rotation})')
      record.update(camera=view,moment=label);audit.append(record)
+     assert max(abs(a-b) for a,b in zip(record['head_rotation'],record['frame'].get('head_rotation',[0,0,0])))<1e-5
+     assert max(abs(a-b) for a,b in zip(record['head_offset'],record['frame'].get('head_offset',[0,0,0])))<1e-5
      for joint in ('shoulder','elbow','wrist'):
       assert max(abs(a-b) for a,b in zip(record['frame']['arm']['pose'][joint],record['rendered'][joint]))<1e-5,(view,label,joint,record)
    Path('logs/contact-arm-render-audit.json').write_text(json.dumps(audit,indent=2))
@@ -103,12 +117,12 @@ async def main():
    Path('logs/replay-layout-audit.json').write_text(json.dumps(layout_audit,indent=2))
    await page.set_viewport_size({'width':1920,'height':1080})
   await page.locator('#replayImpact').click()
-  await page.locator('#replaySeek').evaluate('e=>{e.value=.7;e.dispatchEvent(new Event("input"))}')
+  await page.locator('#replaySeek').evaluate('e=>{e.value=.7;e.dispatchEvent(new Event("input",{bubbles:true}))}')
   await page.wait_for_function('JSON.parse(physicsFrame).time>.6')
   await page.wait_for_function('godotStats?.arena_backdrop===true && godotStats?.arena_audience_3d===0 && godotStats?.arena_sponsors===6')
   assert not await page.locator('#contactLegend').is_visible()
   assert not (await page.evaluate('JSON.parse(physicsFrame)'))['footprint']
-  await page.locator('#replaySeek').evaluate('e=>{e.value=1.8;e.dispatchEvent(new Event("input"))}')
+  await page.locator('#replaySeek').evaluate('e=>{e.value=1.8;e.dispatchEvent(new Event("input",{bubbles:true}))}')
   await page.wait_for_function('JSON.parse(physicsFrame).arm.pose.finger_relax>.99')
   await page.wait_for_function('godotStats?.crowd_active===false')
   await page.locator('#replayCamera').select_option('wide')
@@ -117,7 +131,7 @@ async def main():
   await page.wait_for_function('JSON.parse(physicsFrame).arm.pose.finger_relax===0')
   await page.wait_for_function('godotStats?.crowd_active===false')
   assert not errors,errors
-  report={'repeat_practice_without_damage':True,'idle_material_uploads_skipped':True,'mirror_visibility_updates':True,'pose_camera_and_wheel':True,'painted_arena_during_replay_and_rewind':True,'jump_to_contact':True,'side_camera':True,'marker_toggle':True,'no_stale_markers':True,'errors':errors}
+  report={'repeat_practice_without_damage':True,'idle_material_uploads_skipped':True,'mirror_visibility_updates':True,'pose_camera_and_wheel':True,'painted_arena_during_replay_and_rewind':True,'jump_to_contact':True,'side_camera':True,'marker_toggle':True,'no_stale_markers':True,'errors':errors,'inspection_survives_original_deadline':'--inspect-timeout' in sys.argv}
   if coupled_evidence:report['coupled']=coupled_evidence
   Path('logs/contact-view.json').write_text(json.dumps(report,indent=2));print(json.dumps(report))
   await browser.close()

@@ -1,0 +1,62 @@
+BACKENBEBEN — GEMEINSAMER ARENA-/MAIN-STAND / 11.10.2026
+
+Ausgangsstaende: Arena ca88873039e0cad461f3a4c8f31b123750e08f85;
+GitHub-main fe05508f2f19ba21fcd6318325e29457d5283ee3.
+Zusammenfuehrung auf Nutzerauftrag; keine fremden Commits ueberschrieben.
+
+Integration
+- Freigegebene 2D-Halle mit 3D-Podest/Pult und Originalwerbung bleibt bestehen.
+  Hoenhorst unveraendert. Neuere Charakter-/Haar-/Halsassets aus main uebernommen.
+- Kopftranslation/Rotation, Tangentialreibung, Standardbalance35, automatische
+  Probe-/Neigungsvergleich und Bereitmachen, Replay-Inspektionszeitverlaengerung,
+  gezielte Spiegel-/Texturupdates, opt-in Profiling und strenger Buildcheck erhalten.
+- Helferbewegung aus main: Handflaechenkontakt, Schritte, Blickrichtung,
+  zurueckgenommene separate Beleuchtung. Arena-Stellplaetze integriert.
+- Front-/TV-/Nah-/KO-Kameras und kompakte Anzeigen erhalten; feste seitliche
+  Probeansicht nutzt die neuere main-Kamera(3.5,.65,1.1), Ziel(0,-.45,1).
+- MSAA2x aus main verdeckte den negativen Canvas-Hintergrund. Gemalte Halle und
+  Bodenschatten jetzt auf flacher bildfuellender Ebene im 3D-Renderpass mit
+  hinterer OpenGL-Clip-Tiefe. Bild bleibt 2D, keine modellierte Halle/Crowd.
+  Native und Browserbilder mit Hintergrund UND Spielobjekten kontrolliert.
+
+Pruefungen
+- Vollstaendige165Python-Tests PASS (32.272s im abgeschlossenen Lauf).
+- Blender: CHARACTER_ASSET_VALIDATION_PASS,116Handkontaktpunkte, geschlossene
+  Schlaghand bestanden. Keine Assets durch den Validator veraendert.
+- ARENA_MATCH_PASS / ARENA_HYBRID_PASS. Kontaktfokus hoch/tief und KO-Ruecklauf.
+- Helfer:101Schrittposen, Fusskontakte/Ruecklauf, Beinlaengenfehler<1.2e-7m;
+  380Stuetzsamples mit Handflaechenfehler<1.1e-7m;337Blickframes/Hals/Ruecklauf.
+- Strenger Godot-Import/Export ohne ERROR/SCRIPT ERROR bestanden.
+- Checkout-Standardkampf5TrefferbisKO: aktuelle Produktionsphysik, Reibung,
+  Kopfbewegung, Anspannlider, identischeClips, Replay/KO-Ruecklauf, Resume,
+  Revanche/Materialreset und Leave PASS, Browserfehler leer.
+- Frisches Paket-Setup mit eigener Python3.12-venv und Requirements bestanden.
+  START_HOST.bat startet Paket auf8881. Browser-Probe/Nahkontakt/Marker/Ruecklauf,
+  Inspektion ueber urspruengliche Deadline, neun Bilder und vier Layouts PASS.
+  Technische Menschen-/Zwei-PC-Abnahme bleibt separat offen.
+
+Testkorrekturen
+Alter Arena-Wristtest passte nicht zum neuen Handflaechen-Stuetzziel; jetzt
+tatsaechlichen Palmzentrum-Transform mit identischer strenger Fehlergrenze
+geprueft. Fusspruefung benutzt aktuelle Homeposition, keine alte1.55Konstante.
+Helferaudits erhalten echte337Bodyframes aus server/body.py als lokales Fixture.
+Erster eingeschraenkter Multiprocessing-Testlauf ohne Ausgabe abgebrochen;
+vollstaendige Tests im passenden lokalen Ausfuehrungskontext bestanden.
+
+Paket v0.14.0-dev.20261011
+68Dateien,27352665Bytes, SHA256
+587af3c49308c461f7db1eacfba3ae3a80486fa79355ceba299af7feda6168c5.
+Alle enthaltenen Dateien bytegleich zur frischen geprueften Installation.
+Allowlist ohne Runtimes, Zugangsdaten, lokale Balance oder rohe Sitzungslogs.
+Lokale Belege: integration-python-tests.txt, merged-character-validation.txt,
+v14-contact.json, v14-standard-duel.json, Replay-/KO-Bilder in logs/.
+Workspace-Vorschau: Arena-Design/20-gemeinsame-version.png.
+
+Grenzen: zwei Browserclients und Host auf einem PC, keine physische Zwei-PC-
+Abnahme. Physikmodell hat dokumentierte numerische Restfehler; kein vollstaendig
+fertiges Spiel, keine pauschale60FPS-Garantie oder allgemeine Art-Abnahme.
+
+Frischer Paket-StandardKO-Test ebenfalls bestanden: aktuelle Produktionsphysik,
+Reibung/Anspannlider/Kopfbewegung, KO-Begleitkamera und alle3altenKO-Ansichten,
+Verletzungs-/KO-Ruecklauf, identischeClips, Resume/Revanche/Reset/Leave, errors[].
+Eigener START_HOST-Prozessbaum auf8881 beendet. Vorherige Hosts nicht ersetzt.

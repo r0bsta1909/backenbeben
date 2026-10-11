@@ -1,0 +1,640 @@
+{
+  "geometry": {
+    "topology_unchanged": true,
+    "vertices": 17113,
+    "maximum_surface_change_m": 0.010770576667020417,
+    "jaw_width_before_m": 0.16155805438756943,
+    "jaw_width_after_m": 0.1634376496076584,
+    "upper_face_max_change_m": 0.0,
+    "jaw_sections": [
+      {
+        "height_m": -0.05,
+        "width_before_m": 0.11221785470843315,
+        "width_after_m": 0.12875963002443314
+      },
+      {
+        "height_m": -0.04,
+        "width_before_m": 0.13391388952732086,
+        "width_after_m": 0.14997342973947525
+      },
+      {
+        "height_m": -0.03,
+        "width_before_m": 0.14944536983966827,
+        "width_after_m": 0.16033510863780975
+      },
+      {
+        "height_m": -0.02,
+        "width_before_m": 0.1572471410036087,
+        "width_after_m": 0.1626371443271637
+      },
+      {
+        "height_m": -0.01,
+        "width_before_m": 0.1613202467560768,
+        "width_after_m": 0.1634376496076584
+      }
+    ]
+  },
+  "default_tilt_degrees": -18,
+  "contact_regions_fixture": {
+    "flat": -18,
+    "glance": -12,
+    "tips": -24
+  },
+  "reference_stroke_ms": 800,
+  "firm_deformation_fixture_ms": 700,
+  "thresholds_unchanged": true,
+  "recovery_fix": {
+    "previous_glance_penetration_m": 0.003251148253666829,
+    "withdrawal_target_time_constant_seconds": 0.09,
+    "joint_motor_limits_unchanged": true,
+    "contact_record_preserved": true,
+    "variants": [
+      {
+        "case": "flat",
+        "first_recovery_wrist_step_m": 0.0013474610578334074,
+        "first_recovery_normal_step_deg": 0.4568874191126374,
+        "spatial": true,
+        "friction_coefficient": 0.2,
+        "max_rotation_rad": [
+          0.045964,
+          0.062258,
+          0.083499
+        ],
+        "solve_ms": 2729.3,
+        "minimum_recorded_recovery_gap_m": 0.007606107146249583,
+        "maximum_wrist_deg": 78.67860542730106,
+        "tail_pin_error_m": 9.959974028273165e-08,
+        "max_yaw_rad": 0.06226
+      },
+      {
+        "case": "glance",
+        "first_recovery_wrist_step_m": 0.001230995647951334,
+        "first_recovery_normal_step_deg": 0.5236382155265251,
+        "spatial": true,
+        "friction_coefficient": 0.2,
+        "max_rotation_rad": [
+          0.029709,
+          0.046392,
+          0.004905
+        ],
+        "solve_ms": 2320.6,
+        "minimum_recorded_recovery_gap_m": 0.0007506964972743247,
+        "maximum_wrist_deg": 84.12715101448129,
+        "tail_pin_error_m": 7.740162021788417e-08,
+        "max_yaw_rad": 0.04639
+      },
+      {
+        "case": "tips",
+        "first_recovery_wrist_step_m": 0.0023254453214802484,
+        "first_recovery_normal_step_deg": 0.31870166001869293,
+        "spatial": true,
+        "friction_coefficient": 0.2,
+        "max_rotation_rad": [
+          0.046964,
+          0.0485,
+          0.153321
+        ],
+        "solve_ms": 2775.9,
+        "minimum_recorded_recovery_gap_m": 0.004194036707761931,
+        "maximum_wrist_deg": 72.60337369992874,
+        "tail_pin_error_m": 9.597063689158022e-08,
+        "max_yaw_rad": 0.0485
+      },
+      {
+        "case": "high-foul",
+        "first_recovery_wrist_step_m": 0.0019672745595306984,
+        "first_recovery_normal_step_deg": 0.09985454823944469,
+        "spatial": true,
+        "friction_coefficient": 0.2,
+        "max_rotation_rad": [
+          0.019134,
+          0.057433,
+          0.099419
+        ],
+        "solve_ms": 1780.6,
+        "minimum_recorded_recovery_gap_m": 0.007344342999480658,
+        "maximum_wrist_deg": 85.0,
+        "tail_pin_error_m": 1.0615286660141142e-07,
+        "max_yaw_rad": 0.05743
+      },
+      {
+        "case": "heel-foul",
+        "first_recovery_wrist_step_m": 0.0011326431821397462,
+        "first_recovery_normal_step_deg": 0.42558628443232815,
+        "spatial": true,
+        "friction_coefficient": 0.2,
+        "max_rotation_rad": [
+          0.013534,
+          0.031322,
+          0.053808
+        ],
+        "solve_ms": 1774.6,
+        "minimum_recorded_recovery_gap_m": 0.007769677949036484,
+        "maximum_wrist_deg": 85.00000000000001,
+        "tail_pin_error_m": 1.082730396201338e-07,
+        "max_yaw_rad": 0.03132
+      },
+      {
+        "case": "swollen",
+        "first_recovery_wrist_step_m": 0.0014160491056515365,
+        "first_recovery_normal_step_deg": 0.4459554308120042,
+        "spatial": true,
+        "friction_coefficient": 0.2,
+        "max_rotation_rad": [
+          0.04446,
+          0.063164,
+          0.087258
+        ],
+        "solve_ms": 2426.6,
+        "minimum_recorded_recovery_gap_m": 0.007611554477291499,
+        "maximum_wrist_deg": 78.640393261492,
+        "tail_pin_error_m": 1.0388368144695229e-07,
+        "max_yaw_rad": 0.06316
+      },
+      {
+        "case": "jaw-injured",
+        "first_recovery_wrist_step_m": 0.0014909402852541142,
+        "first_recovery_normal_step_deg": 0.4318750157187294,
+        "spatial": true,
+        "friction_coefficient": 0.2,
+        "max_rotation_rad": [
+          0.002721,
+          0.065687,
+          0.046736
+        ],
+        "solve_ms": 2068.1,
+        "minimum_recorded_recovery_gap_m": 0.01324549229662267,
+        "maximum_wrist_deg": 78.15257468702474,
+        "tail_pin_error_m": 7.149124273167628e-08,
+        "max_yaw_rad": 0.06569
+      }
+    ]
+  },
+  "python_tests": 165,
+  "injury_render_states": 32,
+  "rest_uv_error_m": 6.7570646e-08,
+  "asset_validation": true,
+  "browser_views": [
+    {
+      "camera": "front",
+      "moment": "before",
+      "replay_time_s": 0.458315,
+      "maximum_joint_coordinate_error_m": 2.609098814776445e-08,
+      "head_offset": [
+        0,
+        0,
+        0
+      ],
+      "head_rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "camera": "front",
+      "moment": "contact",
+      "replay_time_s": 0.49998,
+      "maximum_joint_coordinate_error_m": 2.7826091542060283e-08,
+      "head_offset": [
+        0,
+        0,
+        0
+      ],
+      "head_rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "camera": "front",
+      "moment": "after",
+      "replay_time_s": 0.541645,
+      "maximum_joint_coordinate_error_m": 3.217782620912324e-08,
+      "head_offset": [
+        -0.0163133703172207,
+        0.0050040134228766,
+        -0.00634939223527908
+      ],
+      "head_rotation": [
+        -0.0224187225103378,
+        0.0343045704066753,
+        0.0384584851562977
+      ]
+    },
+    {
+      "camera": "front",
+      "moment": "head-response",
+      "replay_time_s": 0.649974,
+      "maximum_joint_coordinate_error_m": 2.743587435016792e-08,
+      "head_offset": [
+        -0.0171344466507435,
+        0.00442292029038072,
+        -0.00620607659220695
+      ],
+      "head_rotation": [
+        -0.0469505153596401,
+        0.0656019896268845,
+        0.0859164893627167
+      ]
+    },
+    {
+      "camera": "front",
+      "moment": "recovery",
+      "replay_time_s": 0.799968,
+      "maximum_joint_coordinate_error_m": 3.1235312558663964e-08,
+      "head_offset": [
+        -0.00535662425681949,
+        0.00094035710208118,
+        -0.00144857983104885
+      ],
+      "head_rotation": [
+        -0.0194342993199825,
+        0.0325405485928059,
+        0.0415460243821144
+      ]
+    },
+    {
+      "camera": "side",
+      "moment": "before",
+      "replay_time_s": 0.458315,
+      "maximum_joint_coordinate_error_m": 2.609098814776445e-08,
+      "head_offset": [
+        0,
+        0,
+        0
+      ],
+      "head_rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "camera": "side",
+      "moment": "contact",
+      "replay_time_s": 0.49998,
+      "maximum_joint_coordinate_error_m": 2.7826091542060283e-08,
+      "head_offset": [
+        0,
+        0,
+        0
+      ],
+      "head_rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "camera": "side",
+      "moment": "after",
+      "replay_time_s": 0.541645,
+      "maximum_joint_coordinate_error_m": 3.217782620912324e-08,
+      "head_offset": [
+        -0.0163133703172207,
+        0.0050040134228766,
+        -0.00634939223527908
+      ],
+      "head_rotation": [
+        -0.0224187225103378,
+        0.0343045704066753,
+        0.0384584851562977
+      ]
+    },
+    {
+      "camera": "side",
+      "moment": "head-response",
+      "replay_time_s": 0.649974,
+      "maximum_joint_coordinate_error_m": 2.743587435016792e-08,
+      "head_offset": [
+        -0.0171344466507435,
+        0.00442292029038072,
+        -0.00620607659220695
+      ],
+      "head_rotation": [
+        -0.0469505153596401,
+        0.0656019896268845,
+        0.0859164893627167
+      ]
+    },
+    {
+      "camera": "side",
+      "moment": "recovery",
+      "replay_time_s": 0.799968,
+      "maximum_joint_coordinate_error_m": 3.1235312558663964e-08,
+      "head_offset": [
+        -0.00535662425681949,
+        0.00094035710208118,
+        -0.00144857983104885
+      ],
+      "head_rotation": [
+        -0.0194342993199825,
+        0.0325405485928059,
+        0.0415460243821144
+      ]
+    },
+    {
+      "camera": "wide",
+      "moment": "before",
+      "replay_time_s": 0.458315,
+      "maximum_joint_coordinate_error_m": 2.609098814776445e-08,
+      "head_offset": [
+        0,
+        0,
+        0
+      ],
+      "head_rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "camera": "wide",
+      "moment": "contact",
+      "replay_time_s": 0.49998,
+      "maximum_joint_coordinate_error_m": 2.7826091542060283e-08,
+      "head_offset": [
+        0,
+        0,
+        0
+      ],
+      "head_rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "camera": "wide",
+      "moment": "after",
+      "replay_time_s": 0.541645,
+      "maximum_joint_coordinate_error_m": 3.217782620912324e-08,
+      "head_offset": [
+        -0.0163133703172207,
+        0.0050040134228766,
+        -0.00634939223527908
+      ],
+      "head_rotation": [
+        -0.0224187225103378,
+        0.0343045704066753,
+        0.0384584851562977
+      ]
+    },
+    {
+      "camera": "wide",
+      "moment": "head-response",
+      "replay_time_s": 0.649974,
+      "maximum_joint_coordinate_error_m": 2.743587435016792e-08,
+      "head_offset": [
+        -0.0171344466507435,
+        0.00442292029038072,
+        -0.00620607659220695
+      ],
+      "head_rotation": [
+        -0.0469505153596401,
+        0.0656019896268845,
+        0.0859164893627167
+      ]
+    },
+    {
+      "camera": "wide",
+      "moment": "recovery",
+      "replay_time_s": 0.799968,
+      "maximum_joint_coordinate_error_m": 3.1235312558663964e-08,
+      "head_offset": [
+        -0.00535662425681949,
+        0.00094035710208118,
+        -0.00144857983104885
+      ],
+      "head_rotation": [
+        -0.0194342993199825,
+        0.0325405485928059,
+        0.0415460243821144
+      ]
+    }
+  ],
+  "practice": {
+    "viewport": [
+      1366,
+      768
+    ],
+    "msaa_3d": 1,
+    "host_recorded_pose": {
+      "time": 0.558333,
+      "pose": {
+        "root": [
+          0,
+          0,
+          0.525
+        ],
+        "shoulder": [
+          0.23439907456178258,
+          -0.16,
+          0.5082049458298019
+        ],
+        "torso_yaw": 0.07152929590953296,
+        "elbow": [
+          0.2738270333015275,
+          -0.13969033257446084,
+          0.21933999176710411
+        ],
+        "wrist": [
+          0.11417045503824161,
+          -0.08090147831964614,
+          0.03648857364435221
+        ],
+        "angles": [
+          -0.17803213265850926,
+          -0.23220553173022337,
+          0.8582791311081786
+        ],
+        "blocked": true,
+        "wrist_limited": false,
+        "finger_direction": [
+          -0.06322083535051838,
+          0.9975640502598242,
+          -0.029480359678902977
+        ],
+        "palm_normal": [
+          -0.9041000668182987,
+          -0.0697564737441253,
+          -0.42158878489581864
+        ]
+      },
+      "tilt": -24,
+      "attacker": 0
+    },
+    "actual_rig_matches": true,
+    "side_and_front": true,
+    "wheel_compares_same_probe": true,
+    "original_restore": true,
+    "comparison_rig_matches": true,
+    "next_actual_probe_uses_selected_tilt": true,
+    "saved_probe_unchanged": true,
+    "repeat_exits": true,
+    "no_damage": true,
+    "errors": []
+  },
+  "duel": {
+    "errors": [],
+    "hits": [
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 7.78,
+        "quality": 0.2661,
+        "braced": true,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber – mit der flachen Hand getroffen.",
+        "replay_id": "78def367e7f14f51b18b"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 12.49,
+        "quality": 0.2775,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber – mit der flachen Hand getroffen.",
+        "replay_id": "19488b790ed094b35c2b"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 12.54,
+        "quality": 0.2787,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber – mit der flachen Hand getroffen.",
+        "replay_id": "991aaa8bc0635381e422"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 11.99,
+        "quality": 0.2664,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber – mit der flachen Hand getroffen.",
+        "replay_id": "fa8951becf79dc5b739d"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 12.45,
+        "quality": 0.2767,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber – mit der flachen Hand getroffen.",
+        "replay_id": "15ff9a767fa2b28c19af"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 11.29,
+        "quality": 0.2508,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber – mit der flachen Hand getroffen.",
+        "replay_id": "77e18507e94a2459acbb"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 11.72,
+        "quality": 0.2604,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber – mit der flachen Hand getroffen.",
+        "replay_id": "7fa39ca88b841f91da24"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 12.29,
+        "quality": 0.273,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber – mit der flachen Hand getroffen.",
+        "replay_id": "3f9cc590e7a0944a9dc2"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 12.35,
+        "quality": 0.2745,
+        "braced": false,
+        "side": "R",
+        "ko": true,
+        "foul": false,
+        "diagnosis": "Sauber – mit der flachen Hand getroffen.",
+        "replay_id": "9c4de31496c30c13165a"
+      }
+    ],
+    "configuration": {
+      "base_damage": 45,
+      "ko_threshold": 60,
+      "turn_seconds": 60
+    },
+    "single_tilt_control": true,
+    "physics_backend": "coupled-moving",
+    "moving_head_brace_consistent": true,
+    "solved_normal_impulse_ns": 0.7579974287685702,
+    "solved_quality_matches_hit": true,
+    "friction": {
+      "coefficient": 0.2,
+      "maximum_residual_m": 2.1836738844370253e-05,
+      "maximum_cone_error": 0.0
+    },
+    "recorded_arm_frames": 581,
+    "clip_hash": "0f1aaa1ae210e0434b30570aebcaaf9211873df6702f98145ba64c3ea06b3a11",
+    "brace_expression_stable_in_paused_replay": true,
+    "replay": {
+      "clipId": "78def367e7f14f51b18b",
+      "frameCount": 337,
+      "peak": 0.019639,
+      "time": 0.633308,
+      "frame": 75,
+      "deformation": 0.01963868384
+    },
+    "replay_frame_ms_p95": 22,
+    "viewport": [
+      1920,
+      1080
+    ],
+    "msaa_3d": 1,
+    "resume": true,
+    "injury_material_rewind": true,
+    "ko_body_recorded": true,
+    "ko_reverse_seek": true,
+    "winner": 0,
+    "audio": {
+      "mode": "buffer-fallback",
+      "played": 11,
+      "unlocked": true
+    },
+    "rematch_material_reset": true,
+    "rematch": true,
+    "leave": true
+  },
+  "limits": "Prototype geometry and motor model; seven checked recovery scenarios do not prove every possible gesture. Human style/understanding acceptance and anatomical calibration remain open. KO duel uses accelerated test balance."
+}

@@ -851,3 +851,98 @@ erklaert. Beleg validation/face-hair-style.json und face-hair-front/side.png.
 Host8877 weiterhin Session50074. Releasepaketv0.4 bleibt aelterer gepruefter Stand.
 Naechster Durchlauf sollte groessere offene Produktluecke bearbeiten: Kleidung/
 Arena und klare aktive Bedienfuehrung im echten Erstkontakt mit dem Spiel.
+
+G2 GEZIELTE STOFFFALTEN IM SPIELASSET
+Regelmaessige Sinuswellen auf Shirt durch acht auslaufende modellierte Falten
+(Achselspannung, Brustdiagonalen, Saumkompression) ersetzt. Lokales Profil erzeugt
+Grat und benachbarte Mulde, mit auslaufender Breite/Staerke. Clothdecimation.10
+auf.16 erhoeht fuer Erhalt der Form; Gesamt88040Polygone,Shirt12287Vertices.
+Blenderquelle/GLB/Vorschau regeneriert. Charakter-/Hand-/Kontaktpruefung PASS;
+Gesichts-/Handkollisionsdateien unveraendert. Fuenf native Rueckholposen/Skelett-
+abgleich und neun Browserkontaktansichten samt Replay/Probe/Spiegel PASS,errors[].
+Blenderpreview und echte Kontaktpose gesichtet: Stoffform lesbarer, kein fertiger
+Referenzlook behauptet. Statische modellierte Falten mit Skinning, keine Clothsim.
+Belege validation/cloth-folds.json und cloth-contact.png. Naechste groessere
+sichtbare Luecke: Publikum als Figuren statt offensichtlich einfache Koerper.
+
+G2/G6 PUBLIKUM MIT ABGELEITETEN FIGURENASSETS
+Neue reproduzierbare Blenderquelle crowd.blend und crowd.glb: Kopf499Polygone,
+Haar208, Oberkoerper62. Kopf aus CC0-Charakter abgeleitet, Herkunft erweitert.
+142Zuschauer in5MultiMesh-Batches statt Kugelkopf/Zylindertorso; Schultern/Taille,
+Gesichter und Haarvarianten. Haende bleiben vereinfachte separate Geometrie.
+Native Renderpruefung: Geometrie vorhanden, Normal-/KO-Reaktion bewegt echte
+Instanztransformationen, Haare bleiben am Kopf, Ruecklauf aller Teile PASS.
+Headless-Dummy kann MultiMesh-Transformationen nicht nachweisen; Test verlangt
+aktiven Compatibility-Renderer. Webbuild/native5Posen/neunBrowseransichten PASS.
+Vollstaendiger LAN-KO-Kampf3Treffer, Verletzungsruecklauf/Resume/KO-Ruecklauf/
+Revanche PASS,errors[]. Replayp95=20.8ms bei1920x1080, hardwareabhaengig und kein
+Nachweis fuer zwei physische PCs. Belege validation/crowd-assets.json und
+crowd-contact.png. Gesamt-Artabnahme/Bedienabnahme/volle Physik weiterhin offen.
+Host8877 weiter aus Checkout. Oeffentliches v0.5-Paket ist aelterer Stand.
+
+G2/G6 HELFER-RUHEPOSE KORRIGIERT
+Seitlich abgespreizte Ellbogen und nachvorn gerichtete Handflaechen durch
+koerpernahe leichtgebeugte Arme mit Handflaechen zumKoerper ersetzt. Ellbogenpole
+folgt gebeugtemBrustkorb und interpoliert zurAuffangpose. NativePruefung:
+Schulteranbindung,seitlicherEllbogenabstand,stetigerUebergang,Ruecklauf PASS.
+Webexport und15Kontaktansichten PASS,errors[]. Frontbild gesichtet: seitliche
+EllbogenSilhouette korrigiert. Beleg validation/helper-rest-pose.json/png.
+Keine vollstaendige Helferanimation oderArtabnahme; Goalweiteraktiv.
+
+G2 SCHULTERFORM UND AERMELANSATZ
+Schmalere Aermelquerschnitte, lokal geglaetteter verbundener Armlochbereich,
+abfallende Schulterlinie und anschliessende Rundung ersetzen hochstehende
+Aermelkappen. Erster Formversuch zeigte weiter eine Kerbe und wurde verworfen.
+Blender-Gruppenreferenz nach Modifieranwendung neu aufgeloest; Export erfolgreich.
+Blenderquelle/GLB/Vorschau aktualisiert; Shirt zusammenhaengend12274Vertices,
+geschlossene Schlaghand/116Kontaktpunkte PASS, Kollisionsdateien unveraendert.
+Webbuild und15Browserkontaktansichten PASS: echte Knochen-/Kopfshaderdaten,
+Probe/Replay/Spiegel/Ruecklauf,errors[]. Front-/Weitwinkelkontakt gesichtet:
+Schulterkappen reduziert, erhobener Aermel verbunden; Gesamtfiguren weiterhin
+steifer als Referenz. Beleg validation/shoulder-tailoring.json/png.
+KeineArt- odermenschlicheBedienabnahme,Goalweiteraktiv. Host8877Checkout.
+
+G6 AUFFANGHAND UND KO-HALTUNG
+reach_toward steuert jetzt Handflaechenzentrum stattHandgelenk. Finger/Normalen
+folgen derKoerperneigung. Erster Zielpunkt innerhalbShirt trotzLandmarkenPASS
+visuell verworfen. ZieleunterOberarmen, Helferkniebeugung.13 statt.05 undSchritt
+1.10 statt.85Renderunits: reale380Stuetzhandsamples max1.33e-7mZielabweichung.
+Reproduktion: python scripts/audit_catcher_support.py erzeugt frischenHost-KO-
+Pfad undprueft echteSzenen/Riglandmarken mitGodot. SynthetischerRigtest prueft
+zusätzlichDrehung/Skalierung sowieRuhe-/Ruecklaufkontinuitaet. WebbuildPASS;
+vollerKO-Browserkampf inkl.Replayruecklauf/Resume/Revanche PASS,errors[].
+WideKOgesichtet: tiefereHelferhaltung, HaendeunterOberarmen stattvorBrust.
+Beleg validation/catcher-palm-support.json/png. WeitergefuehrterKO,keine
+physikalischeGriff-/Stoffkollision; keineGesamtbewegungs-/Stilabnahme.
+Host8877 JETZT WIEDER CHECKOUT,Session81546. V08bleibtunveraendertesRelease
+vor dieserAuffangkorrektur. Goalweiteraktiv.
+
+G6 HELFERSCHRITTE MIT FESTEN BODENKONTAKTEN
+Gemeinsame pose_leg-IK ausKO extrahiert. Helfer bewegenFuesse in zwei
+ueberlappendenSchritten; angehobenerFuss folgtBogen,max4.5cm,standenderFuss
+bleibtinWeltkoordinatenfest trotzwanderndemBecken.101Posen/beideHelfer:
+vor/nachSchritt keinGleiten,Beinlaengenfehler<1.2e-7m,RuecklaufPASS.
+Reproduktion Godot --headless --path game --script ../tests/helper_step.gd;
+ohneheadless undmit -- --render werden25/50/75Prozent alsBildererzeugt.
+DreiZwischenbildermitFuessegesichtet (nativeDefaultfarben,keineMatchauswahl).
+BestehenderStuetzaudit380Samples unveraendertPASS. WebbuildundvollerKO-Kampf
+inkl.Resume/Verletzungsruecklauf/KO-Ruecklauf/RevanchePASS,errors[].
+Beleg validation/helper-step.json/png. WeiteranimierteSchrittbahn,kein
+physikalischesGleichgewichts-/Gangmodell. Gesamtzielweiteroffen.
+Host8877CheckoutSession81546;V08PaketbleibtvorHelferhand-/Schrittkorrekturen.
+
+G2 COMIC-HANDDETAILS UND KANTEN
+16 kurze gekruemmteRueckenfalten auffinalesHandmesh projiziert,mitgleicher
+DistanzgewichtungwieArm anRig gebunden. ErstezuGeradeRingstricheverworfen.
+Blenderquelle/GLB/Vorschau regeneriert; geschlosseneSchlaghand/116Kontaktpunkte
+undCharaktervalidierungPASS; Kollisions-/Landmarkendateienunveraendert.
+Toonbandgrenzenpixelbreit geglaettet, HaarlinienunterPixelaufloesungausgeblendet;
+2xMSAA fuerGeometriekonturen. GodotDoku: https://docs.godotengine.org/en/stable/tutorials/3d/3d_antialiasing.html
+15Browserkontaktansichten/Probe/Replay/SpiegelPASS. KontaktundRueckholung
+gesichtet;nativergleichePoseVergleichMSAA0/1. EinzelneAermelstricheimweiten
+BildnichtalsvollstaendiggeklaerteUrsachebehaupten. BrowserViewportmsaa_3d=1
+separatimProbetestbestätigt. VollerLAN-KO inkl.Resume/Verletzungsruecklauf/
+KO-Reverse/RevanchePASS,errors[],Replayp95=20.9ms bei1920x1080. Keine60FPS-
+oderMehrhardwarezusage. Beleg validation/comic-hand-detail.json/png.
+Gesamtstil-/menschlicheAbnahmeweiteroffen. Host8877CheckoutSession18596;
+V08PaketweiterhistorischvorletztenHelfer-/Probe-/Handdetailkorrekturen.

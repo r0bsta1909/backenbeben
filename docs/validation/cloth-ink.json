@@ -1,0 +1,46 @@
+{
+  "garment_ink": "Eight short fold strokes and two front armhole seam strokes projected onto final decimated garment; barycentric transfer of diffused chest/upper-arm skin weights.",
+  "polygons_total": 89772,
+  "asset_validation": true,
+  "collision_files_unchanged": true,
+  "contact": {
+    "repeat_practice_without_damage": true,
+    "idle_material_uploads_skipped": true,
+    "mirror_visibility_updates": true,
+    "pose_camera_and_wheel": true,
+    "crowd_reaction_and_rewind": true,
+    "jump_to_contact": true,
+    "side_camera": true,
+    "marker_toggle": true,
+    "no_stale_markers": true,
+    "errors": [],
+    "inspection_survives_original_deadline": false,
+    "coupled": {
+      "backend": "coupled-moving",
+      "solve_ms": 2976.6,
+      "peak": 0.034055999999999996,
+      "contact_diagnostics": {
+        "maximum_wrist_separation_m": 1.2282382545889348e-05,
+        "maximum_penetration_m": 3.823079722789613e-06,
+        "unconverged_steps": 13,
+        "maximum_material_residual_m": 0.00032824608921522497
+      },
+      "head_response": {
+        "model": "coupled-yaw-through-contact-and-tail",
+        "braced": false,
+        "tail_pin_error_m": 1.2016917469397551e-07,
+        "spatial_rotation": true,
+        "translation": true,
+        "parameters": "prototype tuning, three translations and three Euler rotations; diagonal generalized inertia"
+      },
+      "maximum_head_yaw_rad": 0.07873
+    }
+  },
+  "body_pose_check": {
+    "poses": 101,
+    "rewind": true,
+    "maximum_leg_length_error_m": 1.19209289550781e-07
+  },
+  "visual_review": "Browser side contact/front recovery and native bent-body pose inspected; sparse cloth strokes remain attached. Native preview uses default appearance rather than selected match colors.",
+  "limits": "Added garment line detail, not a cloth simulation or overall reference-style acceptance."
+}

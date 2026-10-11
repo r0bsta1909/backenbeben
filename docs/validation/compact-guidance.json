@@ -1,0 +1,44 @@
+{
+  "viewports": [
+    {
+      "viewport": [
+        1920,
+        1080
+      ],
+      "panel": {
+        "x": 25,
+        "y": 270,
+        "width": 220,
+        "height": 521.484375
+      },
+      "reset_and_camera_reachable": true
+    },
+    {
+      "viewport": [
+        1366,
+        768
+      ],
+      "panel": {
+        "x": 16,
+        "y": 215,
+        "width": 215,
+        "height": 410.734375
+      },
+      "reset_and_camera_reachable": true
+    },
+    {
+      "viewport": [
+        1280,
+        720
+      ],
+      "panel": {
+        "x": 16,
+        "y": 215,
+        "width": 215,
+        "height": 410.734375
+      },
+      "reset_and_camera_reachable": true
+    }
+  ],
+  "errors": []
+}

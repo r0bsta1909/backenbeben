@@ -16,7 +16,7 @@ func beam(a: Vector3,b: Vector3,r: float,c: Color) -> void:
 	o.quaternion=Quaternion(Vector3.UP,direction)
 func label(text: String,p: Vector3,size: int,c: Color) -> void:
 	var l := Label3D.new();l.text=text;l.position=p;l.font_size=size;l.pixel_size=.006;l.modulate=c;l.outline_size=4;add_child(l)
-var crowd_parts: Dictionary = {"head":[],"torso":[],"limb":[]}
+var crowd_parts: Dictionary = {"head":[],"hair":[],"torso":[],"limb":[],"palm":[]}
 var crowd_rng := RandomNumberGenerator.new()
 var crowd_poses: Array[Transform3D] = []
 var crowd_batches: Dictionary = {}
@@ -38,7 +38,11 @@ func spectator(position: Vector3, yaw: float) -> void:
 	var skin: Color=skins[crowd_rng.randi_range(0,skins.size()-1)]
 	crowd_part("torso",pose,Vector3(0,.01,0),Vector3(.22,.25,.14),shirt)
 	crowd_part("limb",pose,Vector3(0,.30,0),Vector3(.052,.055,.052),skin)
-	crowd_part("head",pose,Vector3(crowd_rng.randf_range(-.025,.025),.47,.01),Vector3(.108,.145,.10),skin)
+	var head_center := Vector3(crowd_rng.randf_range(-.025,.025),.47,.01)
+	crowd_part("head",pose,head_center,Vector3(.108,.145,.10),skin)
+	if crowd_rng.randf()>.20:
+		var hair_colors: Array[Color]=[Color("171416"),Color("35261b"),Color("54483a"),Color("575859")]
+		crowd_part("hair",pose,head_center,Vector3(.108,.145,.10),hair_colors[crowd_rng.randi_range(0,3)])
 	var clapping := crowd_rng.randf()<.24
 	for side in [-1.0,1.0]:
 		var shoulder := Vector3(side*.17,.20,0)
@@ -46,15 +50,19 @@ func spectator(position: Vector3, yaw: float) -> void:
 		var hand := Vector3(side*(.045 if clapping else .115),.25 if clapping else -.105,.20)
 		crowd_limb(pose,shoulder,elbow,.057,shirt)
 		crowd_limb(pose,elbow,hand,.037,skin)
-		crowd_part("head",pose,hand,Vector3(.044,.052,.033),skin)
+		crowd_part("palm",pose,hand,Vector3(.044,.052,.033),skin)
 func finish_crowd() -> void:
+	var source=load("res://assets/crowd.glb").instantiate()
+	var authored: Dictionary={"head":"CrowdHead","hair":"CrowdHair","torso":"CrowdTorso"}
 	for kind in crowd_parts:
-		var primitive: PrimitiveMesh
-		if kind=="head":
+		var primitive: Mesh
+		if authored.has(kind):
+			primitive=source.find_child(authored[kind],true,false).mesh
+		elif kind=="palm":
 			var sphere := SphereMesh.new();sphere.radius=1;sphere.height=2;sphere.radial_segments=10;sphere.rings=5;primitive=sphere
 		else:
 			var cylinder := CylinderMesh.new();cylinder.height=2;cylinder.radial_segments=8
-			cylinder.top_radius=.8 if kind=="torso" else 1.0;cylinder.bottom_radius=.58 if kind=="torso" else 1.0;primitive=cylinder
+			cylinder.top_radius=1.0;cylinder.bottom_radius=1.0;primitive=cylinder
 		var batch := MultiMesh.new();batch.transform_format=MultiMesh.TRANSFORM_3D;batch.use_colors=true;batch.mesh=primitive;batch.instance_count=crowd_parts[kind].size()
 		for i in range(batch.instance_count):
 			batch.set_instance_transform(i,crowd_parts[kind][i][0]);batch.set_instance_color(i,crowd_parts[kind][i][1])
@@ -62,6 +70,8 @@ func finish_crowd() -> void:
 		var instance := MultiMeshInstance3D.new();instance.name="Crowd_"+kind;instance.multimesh=batch
 		var material := mat(Color(.48,.50,.58));material.vertex_color_use_as_albedo=true
 		instance.material_override=material;add_child(instance)
+
+	source.free()
 
 func react_to_hit(time_since_contact: float, knockout: bool, hit: bool) -> void:
 	# Absolute clip time, never accumulated delta: rewind restores the same pose.

@@ -22,7 +22,7 @@ func verify() -> void:
 		scene.drive_recorded_physics()
 		if scene.arena_presentation.table_accent.visible!=(mode=="wide"):
 			push_error("Match arena light mode is inconsistent");quit(1);return
-		if not scene.arena_presentation.backdrop.visible:
+		if scene.arena_presentation.background_material.get_shader_parameter("painted_hall")==null:
 			push_error("Match lost its painted backdrop");quit(1);return
 		await process_frame
 		if not DisplayServer.get_name()=="headless":
@@ -42,8 +42,12 @@ func verify() -> void:
 	scene.drive_recorded_physics()
 	for i in range(2):
 		var actor: Node3D=scene.officials[i]
-		var wrist: Array=actor.arm_world_joints("L" if i==0 else "R").wrist
-		var gap:=Vector3(wrist[0],wrist[1],wrist[2])*4.0-Vector3(actor.get_meta("support_target"))
+		var side: String="L" if i==0 else "R"
+		var index: int=actor.skeleton.find_bone("hand."+side)
+		var rest: Transform3D=actor.skeleton.get_bone_global_rest(index)
+		var pose: Transform3D=actor.skeleton.get_bone_global_pose_override(index)
+		var palm: Vector3=actor.to_global(pose*(rest.affine_inverse()*actor.vector(actor.metadata.arms[side].palm_center)))
+		var gap:=palm-Vector3(actor.get_meta("support_target"))
 		print("KO_SUPPORT_GAP ",i,": ",gap.length())
 		if gap.length()>.01:
 			push_error("KO helper hand lost shoulder support");quit(1);return

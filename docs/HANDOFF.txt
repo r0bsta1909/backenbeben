@@ -1257,6 +1257,979 @@ Host8877 laeuft JETZT AUS PAKET in Temp/backenbeben-v05-8yoq704w, Session91026;
 Entwicklungshost beendet. Vor Quellcode-Spieltests wieder Checkoutserver starten.
 Oeffentliche README und PROTOTYPE_STATUS aktuell; keine Gesamtabnahme behauptet.
 
+G4 WIRKUNGSSTAERKE AN GELOESTEN KONTAKT ANGEBUNDEN
+Bisher verwendeten Matchschaden und Kopffeder nur initiale Kontaktgeometrie/Tempo.
+contact_outcome.resolve verwendet jetzt auf Kontaktnormale projizierten kumulierten
+Solverimpuls.2Ns fuer volle Impulsstaerke ist explizite Spielkalibrierung. Abdeckung
+und erste Kontaktklasse/Foulregel bleiben Geometrie-/Regelanteil. Ohne aktive
+Kontaktsamples und positiven Normalimpuls kein Schaden. Host uebernimmt score_update
+aus berechnetem Clip VOR apply_hit; keine Clientwertung. Kopffeder nutzt gleiche
+physische Wirkungsstaerke, auch bei Fouls, deren Wertungsschaden null bleibt.
+Replay enthaelt Impuls und aufgeloeste Qualitaet. Stale Laborlimittext korrigiert.
+126Tests bestanden; letzte Foulreaktionskorrektur separat5Tests bestanden. Reale
+LAN-KO- und Standardkaempfe PASS inkl.Materialruecklauf/Revanche. Replayqualitaet
+entspricht nachweislich Match-Hitqualitaet,errors[]. Beleg solved-contact-outcome.json.
+Kein vollstaendiger G4-Pass: Kopf/Kiefer bleiben stilisiert, Reibung/Anatomie und
+Solverrestfehler offen. Neues Modul wird durch Paketallowlist automatisch erfasst.
+Host8877 WIEDER AUS CHECKOUT,Session47462; v0.5-Pakettesthost beendet. V0.5-Release
+enthaelt noch vorige Wertung, README kennzeichnet dies. Neue menschliche Antwort
+weiterhin ausstehend; alle bisherigen negativen Abnahmebefunde bleiben erhalten.
+
+G2 GEZIELTE STOFFFALTEN IM SPIELASSET
+Regelmaessige Sinuswellen auf Shirt durch acht auslaufende modellierte Falten
+(Achselspannung, Brustdiagonalen, Saumkompression) ersetzt. Lokales Profil erzeugt
+Grat und benachbarte Mulde, mit auslaufender Breite/Staerke. Clothdecimation.10
+auf.16 erhoeht fuer Erhalt der Form; Gesamt88040Polygone,Shirt12287Vertices.
+Blenderquelle/GLB/Vorschau regeneriert. Charakter-/Hand-/Kontaktpruefung PASS;
+Gesichts-/Handkollisionsdateien unveraendert. Fuenf native Rueckholposen/Skelett-
+abgleich und neun Browserkontaktansichten samt Replay/Probe/Spiegel PASS,errors[].
+Blenderpreview und echte Kontaktpose gesichtet: Stoffform lesbarer, kein fertiger
+Referenzlook behauptet. Statische modellierte Falten mit Skinning, keine Clothsim.
+Belege validation/cloth-folds.json und cloth-contact.png. Naechste groessere
+sichtbare Luecke: Publikum als Figuren statt offensichtlich einfache Koerper.
+
+G2/G6 PUBLIKUM MIT ABGELEITETEN FIGURENASSETS
+Neue reproduzierbare Blenderquelle crowd.blend und crowd.glb: Kopf499Polygone,
+Haar208, Oberkoerper62. Kopf aus CC0-Charakter abgeleitet, Herkunft erweitert.
+142Zuschauer in5MultiMesh-Batches statt Kugelkopf/Zylindertorso; Schultern/Taille,
+Gesichter und Haarvarianten. Haende bleiben vereinfachte separate Geometrie.
+Native Renderpruefung: Geometrie vorhanden, Normal-/KO-Reaktion bewegt echte
+Instanztransformationen, Haare bleiben am Kopf, Ruecklauf aller Teile PASS.
+Headless-Dummy kann MultiMesh-Transformationen nicht nachweisen; Test verlangt
+aktiven Compatibility-Renderer. Webbuild/native5Posen/neunBrowseransichten PASS.
+Vollstaendiger LAN-KO-Kampf3Treffer, Verletzungsruecklauf/Resume/KO-Ruecklauf/
+Revanche PASS,errors[]. Replayp95=20.8ms bei1920x1080, hardwareabhaengig und kein
+Nachweis fuer zwei physische PCs. Belege validation/crowd-assets.json und
+crowd-contact.png. Gesamt-Artabnahme/Bedienabnahme/volle Physik weiterhin offen.
+Host8877 weiter aus Checkout. Oeffentliches v0.5-Paket ist aelterer Stand.
+
+G5 BILATERALE VERLETZUNGSDARSTELLUNG / SHADERDEFINITION
+Drei Gaussprofile fuer Wangenverformung/Haematom/Augenhaematom verwendeten
+pow mit potentiell negativer Basis (laut GLSL undefiniert). Durch dot(d,d)
+ersetzt, Profilparameter unveraendert. Renderpruefung auf beide Seiten erweitert:
+4Hautvarianten x2Seiten x4Zustaende=32Bilder; Verletzungen aendern Pixel,
+Gesundreset bytegleich einschliesslich Spiegel. NativeOpenGL und Webbuild PASS.
+Vollstaendiger Browserkampf: keine Fehler, Materialruecklauf und Revanche PASS.
+Beleg validation/bilateral-injury.json und zwei Bilder. Kein Cross-GPU-/Zwei-PC-
+Nachweis; Kopf-/Halsmodell unveraendert stilisiert, Gesamtziel weiterhin offen.
+
+G4 GEMESSENER KONTAKTDREHIMPULS TREIBT KOPF-YAW
+Referenz/kompilierter Handkontakt summieren cross(Kontaktort,Impuls) ueber echte
+Gewebekontaktpunkte; proSchritt und kumuliert aufgezeichnet. Beide Solverwerte
+innerhalb1e-9 gleich. Kopf-Yaw nun aus gemessenem Y-Drehimpuls statt Seitenzeichen
+und Spielqualitaet. Analytische passive Antwort mit I=.018kgm2,k=1.62Nm/rad,
+c=.216Nms/rad; ausdruecklich Prototypkalibrierung, keine anatomische Messung.
+Anspannen verwendet1.5facheSteifigkeit statt nachtraeglicher.65Animationsskalierung.
+130Gesamttests PASS; nach zwei weiterenTests Kontakt7/Replay3 PASS. Tests fuer
+Hebelarm, Impulsbilanz, Richtung, Energieabnahme und aufgezeichnete Yawkurve.
+15Browseransichten erweitert um.65/.8s, Arm-/Replaychecks PASS. Voller LAN-KO-Kampf
+PASS; drei gespeicherte Kopfkurven inkl.Anspannen gegen Modell geprueft, Fehler
+unter5.0e-6rad(Rundung),errors[]. Beleg validation/head-moment.json und Bild.
+GRENZEN: Kontaktkaefig waehrend60ms weiterverankert, Kopfreaktion erst danach;
+keine vollgekoppelte bewegte Kopfbasis, nurYaw, Kiefer stilisiert. Kein G4-PASS.
+Host8877 Checkout neu gestartet,Session75214. V0.5-Paket noch aelter.
+
+G3/G6 FREIE KAEMPFERSILHOUETTE IN DER SEITENANSICHT
+DritterOffizieller ueberlagerte Empfaengerkopf in TV-Totale. Durch isolierte
+Renderpruefung zugeordnet; Spiegel hat separateWorld3D, keineDoppelfigur.
+Feste Position des drittenOffiziellen z=-.1 auf-3.5 verschoben. BeideCatchers
+und ihre Bewegungen unveraendert, kein kameraabhaengiges Ausblenden. Webbuild,
+Catcherpose,15Browseransichten/Replay PASS. Front/Totale gesichtet: Kaempferkopf
+frei,keineBrowserfehler. Beleg validation/official-composition.json und Bild.
+Gesamt-Art-/Bedienabnahme weiterhin offen. Naechster Auslieferungsschritt:
+Quellfortschritte seitv0.5 zu aktuellem geprueften Paket zusammenfuehren.
+
+G8 PROTOTYP06 AUS FRISCHEM PAKET GEPRUEFT UND VEROEFFENTLICHT
+Releasev0.6.0-dev.20261008,Quellcommit4fc62d8cbe9d7c4f8b61b51f51880263f155bbda.
+58Dateien,21265139Bytes,SHA256
+2f337389b898ae9a1d69d7746b1826332f199caaa725e29bf43aa5bdb11ba1c8.
+FrischesTemp-Verzeichnis ausserhalbCheckout/eigenevenv. PortablePython3.12 legte
+venv an, weil WindowsLauncher py-3.12 nicht installiert fand; mitgeliefertesSetup
+installierteRequirements erfolgreich. Numpy/Numba/Aiohttp nachweislich paketlokal.
+START_HOST startet Defaultcoupled inkl.Warmup/LAN-Adressen. ZweiLAN-Browser:
+KO3Treffer und Standard10Treffer bestanden inkl.Resume/Materialruecklauf/KO-
+Ruecklauf/Revanche,errors[]. Replayp95beide14ms. Downloadhash und alleDateien
+bytegleich zur getestetenInstallation. Beleg validation/v06-package.json.
+Host8877 laeuft JETZT AUS PAKET Temp/backenbeben-v06-8kjtbtg4,Session59351;
+CheckoutHost beendet. Vor weiterenQuelltests wiederEntwicklungshost starten.
+KeineZwei-PC-/menschlicheAbnahme,Headkontakt weiterverankert,GesamtzielOFFEN.
+
+G4 BEWEGLICHE KOPFBASIS / ERSTER KONTAKT-INTEGRATIONSSCHRITT
+Experimenteller Parameter moving_head=True in simulate_contact. HeadAttachment
+macht massive bisher feste Rand-/Tiefenknoten dynamisch und bindet sie mit
+bilateralen Positionsconstraints an ein gemeinsames Yaw-DOF mit endlicher
+Traegheit und Halsfeder. Knoten/Kopf werden in denselben XPBD-Iterationen geloest.
+Unbenutzte masselose Knoten bleiben fest. Kopfenergie und Winkel/Geschwindigkeit/
+Anbindungsresiduum werden aufgezeichnet. Kein nachtraeglicher Kontaktimpuls-Kick.
+Sieben realeTreffervarianten inkl.Fouls/Verletzung: alleendlich, Pinfehler<.21um,
+Durchdringung<3.5um, Endenergie<Anfangsenergie. FlatendYaw.061812rad bei.745118rad/s.
+135Gesamttests PASS, danach4Headtests inkl.Encoder-Schutz PASS. Beleg
+validation/moving-head-contact.json; reproduzierbar scripts/audit_moving_head.py.
+NICHT DEFAULT / NICHT SPIELFERTIG: Translation fest,nurYaw,kalibrierteParameter,
+Materialrestfehler verbleiben. AlterEncoder weist diesen Kontakt explizit zurueck,
+damit bewegteOffsets nicht mit alterKopffeder doppelt verformt werden.
+NAECHSTER VERBINDLICHER INTEGRATIONSSCHRITT (kein weiterer isolierterBaustein):
+1 Vollstaendigen Gewebeendzustand inkl.Tiefenknoten und Geschwindigkeiten erhalten.
+2 Auslauf mit derselbenHeadAttachment fortsetzen; Gewebeoffsets passend zum
+  Kopfshader in lokalen Raum umrechnen, keine doppelteRotation.
+3 Rueckholkollision gegen dieselbe aufgezeichnete Kopfbewegung pruefen.
+4 Vollstaendigen337FrameClip rendern, Kontakt/Ruecklauf/Anspannen testen; erst
+  nach integriertem Nachweis Entscheidung zum Defaultpfad. Dieses ist der erste
+  Labor-Meilenstein seit letzter Spielintegration, keine unbegrenzteLaborkette.
+Host8877 weiterhin ausV06Paket(Session59351), keinQuellhostNeustart erforderlich.
+
+G4 BEWEGLICHER KOPF IN VOLLSTAENDIGEM SPIELCLIP INTEGRIERT
+moving_head_replay.simulate erhaelt volleEndpositionen/-geschwindigkeiten aller
+Gewebeknoten und HeadAttachment-Zustand. Kontakt UND Auslauf mit demselbenModell.
+LokaleOffsets invertieren exakt den YawBlend des Shaders, keineDoppelrotation.
+Handrueckholung prueft zeitinterpolierte geloesteWeltoberflaeche.337Frames/120Hz.
+Hostoption --physics coupled-moving inkl.Warmup; DEFAULT weitercoupled. Spaetes
+korrektesAnspannen berechnet gesamtenClip mit steiferemHals erneut statt einer
+nachtraeglichenBildskalierung (zusaetzlicheWartezeit, nochzuoptimieren).
+138Tests PASS.15Browseransichten/Proben/Spiegel/Ruecklauf PASS. Siebenvollstaendige
+Treffervarianten: rekonstruierteQuantisierungsoberflaeche gegen324Rueckholposen,
+keineDurchdringung/keinTischkontakt,Wrist<=85Grad. Solve1.76-2.32s imVariantenlauf.
+ErsterLAN-Kampf scheiterte am3sMaterial-Ruecklaufcheck. Diagnosewiederholung mit
+unveraendertenAssertions bestandKO/Anspannen/identischeClips/Resume/Revanche.
+ErsteUrsache bleibtUNGEKLAERT; keineDefaultfreigabe daraus ableiten. Diagnose-
+Aufzeichnung imTest ergaenzt fuer erneutesAuftreten. Belege moving-head-integration,
+moving-head-replay-variants.json und zwei Spielbilder. Dies ist die geforderte
+Spielintegration nach erstemKontaktlabor, keinweiterer isolierterBaustein.
+Offen: Standardduell/Timingursache/Defaultentscheidung; festeTranslation,nurYaw,
+Kieferstilisiert,kalibrierteAnatomie undnumerischeRestfehler. KeineGesamtabnahme.
+Host8877 JETZT Checkout mit --physics coupled-moving,Session37411. V06PaketHost
+beendet; oeffentlichesV06 enthaelt weiterhin vorherigengeprueftenDefaultpfad.
+
+G4/G5 BEWEGLICHER KOPF ALS QUELLSTANDARD / REPLAYBETRACHTUNG
+Standardduell10Treffer mitcoupled-moving bestanden inkl.Materialruecklauf/
+Revanche. AktiveReplaybedienung (Pause/Spulen/Kamera/Marker) sendet gebremste
+inspect_replay-Aktion; Host verlaengert12s abBedienung,insgesamtmax45s. Veraltete
+IDs/beendeteReplays/abgegebeneWeiterstimmen koennen nichtverlaengern. Gemeinsames
+Weiter bleibtsofortig. DreiTimingtests PASS. EchterBrowser wartetbis<3s,bedient,
+prueftVerlaengerung>10s undueberlebturspruenglicheFrist;15Ansichten/ReplayPASS.
+Default imQuellhost nun coupled-moving; Batch ohnePhysicsOverride neu gestartet
+undvollerLAN-KO-KampfPASS inkl.AnspannenSolverflag/identischeClips/Ruecklauf/
+Resume/Revanche,errors[]. Beleg validation/moving-head-default.json.
+ErsterhistorischerTimeout weiterhin nichtursacheneindeutig belegt; nichtals
+bewiesenerShaderfehler oderbewiesenerFristfehler ausgeben. Folgelaeufe bestanden.
+README/SPIELEN/Status aktualisiert. OeffentlichesV06 bleibtvorigerDefault.
+Host8877 CheckoutOHNEOverride,Session42933. Goalweiteroffen: PhysiknurYaw/
+Translationfest,kalibrierteAnatomie,Kiefer/KOstilisiert,Art-/Bedienabnahmeoffen.
+
+G4 ANSPANN-LATENZ REDUZIERT / REPLAY-TESTFEHLER EINGEGRENZT
+GueltigesAnspannen startet coupled-moving-Neuberechnung sofort im zweitenWorker,
+veraltetesFuture wirdverworfen (laufendeBerechnung kannnochfertigwerden). Fruehe
+Versuche und Vergleichsbackends unveraendert.3identischeNetzwerkschlaegevor/nach:
+Median4.247s->3.358s vomSchlagauftragbisImpact,20.94%weniger aufdiesemRechner.
+Normalimpuls/Trefferqualitaet jeweilsidentisch. Messskript measure_brace_latency.py.
+143TestsPASS. ErsterBrowserlauf scheiterte erneut amRuecklauf; jetzigerDiagnose-
+Snapshot beweist phase=aim,physics_time=-1: Replaybereitsabgelaufen,aktuelles
+Verletzungsmaterial stattVor-Trefferzustand. SynthetischeTests erzeugten input ohne
+bubbles undumgingen neuenReplaypanel-Listener. Events jetztbubbles:true wieechte
+Browserbedienung; Assertionsnichtgelockert. ErneuterkompletterBrowserkampfPASS
+inkl.Anspannen/Materialruecklauf/KO/Resume/Revanche,errors[]. Beleg brace-latency.json.
+AeltereFehlerohneSnapshot nichtnachtraeglichalszweifelsgleichbehaupten. Neuer
+reproduzierterFehleristzugeordnet. Host8877 normalerCheckoutDefault,Session1639.
+OeffentlichesV06weiteraeltererStand,Goalweiteroffen.
+
+G4 KOPFTRANSLATION IM SPIEL INTEGRIERT
+Drei Verschiebungsachsen zusaetzlich zu Yaw: Gewebeanker wirken auf Kopfmasse,
+Kontaktzustand wird ohne Reset in Auslauf uebernommen. Shader blendet Translation
+am Hals; lokale Gewebeoffsets invertieren dieselbe Transformation. Rueckholung
+prueft die bewegte Weltoberflaeche. Parameter:4.5kg,800/1200/800N/m,120Ns/m;
+ausdruecklich Prototypabstimmung, keine anatomische Kalibrierung. Pitch/Roll fest.
+144Tests PASS inkl.Massenzentrum und Shader-Roundtrip. Sieben komplette Varianten
+bestehen Rueckholkollision/Wristlimit.15Browseransichten vergleichen echte
+Face-Materialtranslation mit Replaydaten,errors[]. VollerLAN-KO-Kampf bestanden
+inkl.Anspannen/identischerClips/Resume/Materialruecklauf/Revanche; Kopftranslation
+nachRevanche exaktNull. Beleg validation/head-translation.json pluszweiBilder.
+Sichtpruefung: Halsanschluss erhalten, seitlicher Handkontakt; Figuren/Helfer und
+Oberflaechen weiterhin hinterReferenz. KeineArt-/Bedienabnahme behauptet.
+Host8877 aktuellerCheckoutDefault,Session11116. V06PaketweiterhistorischerStand.
+Naechste Arbeit: sichtbare Figuren-/Helferbewegung und verstaendliche Bedienfuehrung
+im Gesamtspiel verbessern; Gesamtabnahme und Zwei-PC-Nachweis bleiben offen.
+
+G2/G6 HELFER-RUHEPOSE KORRIGIERT
+Seitlich abgespreizte Ellbogen und nachvorn gerichtete Handflaechen durch
+koerpernahe leichtgebeugte Arme mit Handflaechen zumKoerper ersetzt. Ellbogenpole
+folgt gebeugtemBrustkorb und interpoliert zurAuffangpose. NativePruefung:
+Schulteranbindung,seitlicherEllbogenabstand,stetigerUebergang,Ruecklauf PASS.
+Webexport und15Kontaktansichten PASS,errors[]. Frontbild gesichtet: seitliche
+EllbogenSilhouette korrigiert. Beleg validation/helper-rest-pose.json/png.
+Keine vollstaendige Helferanimation oderArtabnahme; Goalweiteraktiv.
+
+G3 SICHTBARE PROBE/SCHLAG-FUEHRUNG
+ZweiSchritte mit aktivemStatus; Probe gelb, echterSchlag korallfarben und
+explizit NaechsterZugZaehlt. BeimZiehen erklaert Text wasLoslassen ausloest.
+AktuelleHandneigung plusStartwert angezeigt ohneTrefferguete zu behaupten.
+Browserablauf prueft Probe->Schlag->erneuteProbe,ohneSchaden,danachReplay PASS.
+BeideZustaende alsSpielbildergesichtet. Beleg validation/input-guidance.json und
+zwei guidance-Bilder. MenschlicheVerstaendlichkeitsabnahme bleibtOFFEN.
+
+G3 BEDIENPANEL IN KLEINEREN PC-FENSTERN
+Kompaktes Layout unter800pxHoehe,begrenztePanelhoehe undinternerScroll;
+Replaybuttons duerfenumbrechen. Browserpruefung1920x1080/1366x768/1280x720:
+PanelimViewport,Zuruecksetzen/Kameraechteklickbar,errors[].720pSichtpruefung
+zeigtePhasenhinweisueberlagerung;Panelnachuntenversetzt,erneutbestanden.
+Belege validation/compact-guidance.json/compact-guidance-720p.png.
+Keine neue menschlicheAbnahme; Gesamtzielweiteroffen.
+
+G8 PROTOTYP07 ALS GEPRUEFTES PRERELEASE
+Quelle41ce4f1;61Dateien,21271314Bytes. Frisch ausserhalbCheckout entpackt,eigene
+venv mitportablePython3.12 erstellt,Paketsetup installiertRequirements.
+AlleZIPDateien bytegleichmitlaufenderInstallation. KO4Treffer undStandard10
+bestanden inkl.Anspannen,Replay,Verletzungsruecklauf,Resume,Revanche,errors[].
+GitHubRelease v0.7.0-dev.20261008 veroeffentlicht,heruntergeladen,SHA256gleich.
+Beleg validation/v07-package.json. Host8877 JETZT ausfrischemPaket,Session90663;
+Entwicklungsserver beendet. Paketpfad lokal logs/v07-location.txt.
+Weiterhinexperimentell: Art-/Bedienabnahme,Zwei-PC-Nachweis,Physikgrenzenoffen.
+
+G7 SETUP-PYTHONAUSWAHL ROBUSTER
+Setup validiertPython3.12 bevorvenv/Pip. Launcherohne3.12 blockiertweitere
+Kandidaten nichtmehr;PATH undCheckoutportablewerdengeprueft. Expliziter
+-PythonPath plus-CheckOnly. Falschebestehendevenv wirdnichtgeloescht,sondern
+mitUmbenennungshinweisabgelehnt. IsolierteAuswahltestsPASS;komplettfrische
+InstallationdurchScript inkl.venvErzeugung/Pip/ImportsPASS. Beleg
+validation/setup-selection.json. SPIELEN-Versionstitelneutralisiert.
+OeffentlichesV07bleibtunveraendert,vorgenannteSetupkorrektur nuraktuellerQuellstand.
+
+G2 HAUTSHADER-PUNKTMUSTER ENTFERNT
+ZufaelligesBartstipple durchbreitenTon undaufloesungsabhaengigausblendende
+Schattenschraffurersetzt. Webbuild/15KontaktansichtenPASS;Verletzungsrender
+beideSeiten/vierHautfarben0/35/75/0 inkl.exaktemResetPASS. Bildgesichtet:
+feineKoernungausGesichtstexturbleibt;naechsterAnsatzTextur,nichtfertigerStil.
+Beleg validation/skin-ink.json/png. Host8877 wiederCheckout,Session52990;
+V07Paketserverbeendet. OeffentlichesPaketunveraendert. Gesamtzieloffen.
+
+G2 GESICHTSTEXTUR V2 IN SPIEL
+Built-inImagegen bearbeitetv1 zuv2:Papierkoernung/Bartpunkte entfernt,
+Konturen/Framing erhalten. VersioniertePNG plusPromptgesichert. main.gd und
+Charaktergeneratornutzenv2. Webbuild/15Kontaktansichten/Verletzungsrender
+beideSeiten/vierFarben/exakterResetPASS. Bildgesichtet:Stippleweg.
+WICHTIG NAECHSTER SCHRITT: bestehendecharacter-v3.blend undGLB enthalten
+nochaltegepackteTextur;Generatoraktualisiert,NeuerzeugungnochOFFEN.
+RuntimeShadernutztv2 bereitsdirekt. Beleg validation/face-ink-v2.json/png.
+KeinGesamt-Artabschluss,Goalaktiv. Host52990weiterCheckout.
+
+G2 V2-TEXTURQUELLE SYNCHRONISIERT
+Generatorerneutgelaufen:character-v3.blend/GLB/Vorschaumitv2. GepacktePNG
+bytegenaugegenface_ink_v2geprueft.88040Polygone,Rig-/Kontaktmetadaten
+unveraendert. Assetvalidatorinkl.116Kontaktpunkten/geschlossenerHandPASS.
+GodotNeuimport/Webbuild/15BrowserkontaktansichtenPASS,errors[]. Blenderpreview
+gesichtet. GodotextrahierteGLBTexturressourceebenfallsmitgesichert.
+VorigeroffenerQuellabgleichdamiterledigt,Gesamt-Artabnahmeweiteroffen.
+
+G4 DREIACHSIGE ROTATION: MATHEMATISCHE GRUNDLAGE
+server/head_rotation.py: Rz(roll)*Ry(-yaw)*Rx(pitch),exakteAbleitungen,
+gekoppelteTranslations-/Rotationsprojektion. KeineSciPyAbhaengigkeit:kleine
+Matrizenexplizitmultipliziert.3TestsPASS:Orthogonalitaet/Determinante/Jacobian
+gegenfiniteDifferenzen,jedeDrehmomentrichtung+Massenzentrum,Yaw-onlybis1e-14
+gleichbestehendemProjektor. NochNICHTimSpielaktiv;keinPhysikabschluss.
+NAECHSTER VERBINDLICHER SCHRITT: SpatialHeadAttachment-Zustand inKontakt+Tail
+integrieren,Anglesaufzeichnen,Shader-/InverseTransformation angleBlendgleich,
+Rueckholoberflaeche+Browseransichtenpruefen. KeineweitereisolierteLaborkette.
+AktuellesSpielweiter3Translationen+Yaw,Pitch/Rollfest.
+
+G4 DREIACHSIGE KOPFROTATION DURCH KONTAKT/TAIL/SHADER
+SpatialHeadAttachment optional in simulate_contact(spatial_head=True),
+moving_head_replay.simulate(spatial=True). DreiWinkel/Geschwindigkeitenwerden
+imKontaktaufgezeichnet,imTailvollstaendigfortgesetzt,head_rotations337Frames
+transportiert. InverseShaderblend30Fixpunktiterationen;ShaderRx,Ry(-yaw),Rz
+plusTranslation. Normalpfad spatial=False bleibtbisherigergepruefterStandard.
+149TestsPASS inkl.HalsblendRoundtrip1e-12 undvollstaendigem3AchsenClip;
+WebexportPASS. ErsterClipPeakwinkel .033/.067/.044rad,Tailpin1.13e-7m.
+Parameterabstimmung/diagonaleEulertraegheiten weiterhinPrototyp,keineAnatomie.
+OFFEN ALS NAECHSTES: spatial-ClipimBrowserwirklichrendern,7VariantenRueckholung
+mitvollerRotationrekonstruieren,Laufzeitmessen,erst dannDefaultentscheiden.
+KeineGesamtabnahmeausUnitTests. Host52990nochaltergeladenerServer,Webbuildneu.
+
+G4 SPATIAL RUECKHOLUNG UND LAUFZEIT
+Audit --spatial rekonstruiertRx/Ry/Rz+Translation genauso wieShader.7Varianten
+mit324Rueckholposen jeweilskeineDurchdringung,keinTischkontakt,Wrist<=85Grad.
+ErsterLaufca14-16s:MatrixallokationenimPinprojektor. AnalytischeSkalarform
+ersetzt diese;6TestsPASS inkl.nichttrivialerWinkelgegenMatrixreferenz1e-14.
+Erneuter7VariantenlaufPASS,Peakwinkelgleichbis1e-6,Laufzeitca2.8s.
+Belege spatial-head-replay-variants.json/spatial-head-performance.json.
+NAECHSTES: gezielterHostmitspatial=True,echteBrowserkontaktansichtenundDuell;
+nochkeineDefaultfreigabe. Host52990weiteraltergeladenerYawStandard.
+
+G4 SPATIAL IM ECHTEN BROWSER UND LAN-DUELL
+ExpliziterHost --physics coupled-spatial inklusiveWorkerWarmup undfrueher
+Anspannneuberechnung. Standardweitercoupled-moving.150TestsPASS.
+15Browseransichten: tatsächlicheFaceShaderRotationen stimmenmitReplaydaten
+ueberein,FrontNeigunggesichtet,errors[]. VollerLAN-KO-TestPASS inkl.Anspannen,
+identischerClips,Verletzungsruecklauf,Resume,KO,RevancheundRotationResetNull.
+Beleg validation/spatial-head-integration.json/spatial-head-front.png.
+Host8877 aktuellcoupled-spatial,Session20874. NAECHSTES StandardbalanceDuell
+undDefaultentscheidung;keineweiterenisoliertenMechanikbausteinevordieserAbnahme.
+ParameterweiterPrototyp/EulerDiagonaltraegheit,keinevollstaendigeAnatomie.
+
+G4 SPATIAL ALS QUELLSTANDARD
+StandardbalanceDuell10TrefferPASS inkl.Anspannen,Verletzungsruecklauf,
+identischerReplays,Resume,Ergebnis,Revanche,errors[]. Defaultaufcoupled-spatial
+umgestellt. START_HOST.bat ohnePhysicsOverride neugestartet;Browsercheck
+fordertspatial_rotation=trueundbestehtProbe/Replay/Spiegel/Kameras,errors[].
+Beleg validation/spatial-head-default.json. READMEundStatusaktualisiert,
+DownloadlinkkorrigiertaufV07;PaketV07weiteralterYawPfad. Host8877Default
+Session2909. NaechsteProduktprioritaetwiederG3Lesbarkeit/G2Bewegung;kein
+weitererPhysiklaborausbauohneProduktnutzen. Anatomie/Reibungweiteroffen.
+
+G3 KONKRETE MAUSRADHILFE NACH PROBE
+practice_guidance prueftzweiNachbarhaltungen +/-3Grad mitderselbenKontaktgeometrie
+undVerletzungslage;nenntnurRichtungwennKlasse/Handflaechenabdeckungbesser.
+KeinEingriffinHandhaltung/Eingabedaten,keineWirkungsprognose. SaubereProbe
+empfiehltBeibehalten;ohneVerbesserungSeitenansichtstattgeratenerRichtung.
+3TestsPASS:Tips/GlanceunterschiedlicheRichtung,keineMutation,keinRatohneNutzen.
+BrowsergegenHostmitaufgezeichnetenProbedaten:beideHinweisesichtbar,keinSchaden,
+errors[].1366x768Bildgesichtet. Beleg validation/practice-advice.json/png.
+MenschlicheAbnahmebleibtoffen. Host8877aktuellerDefault,Session82509.
+
+G3 ECHTER MAUS-KORREKTURABLAUF
+NeueBrowserpruefungpractice_wheel_correction.py verwendetechteMauszuegeund
+Mausradevents stattgesendeterfertigerPunkte. -21Grad:Tips,Hintnachunten;
+-18Grad:Glance,erneuterHintnachunten;-15Grad:Flat. JeweilsNochEinmalUeben,
+keinSchaden,errors[]. ErsteTestannahme(eineRastunggleichFlat)wardurchrealen
+Ablaufwiderlegt;HinweisversprichtnurVerbesserung,Testprueftnunmehrstufigen
+Lernablauf. Beleg validation/practice-wheel-correction.json/png.
+DiesbelegttechnischeKorrigierbarkeit,nichtmenschlicheVerstaendlichkeitsabnahme.
+
+G2 SCHULTERFORM UND AERMELANSATZ
+Schmalere Aermelquerschnitte, lokal geglaetteter verbundener Armlochbereich,
+abfallende Schulterlinie und anschliessende Rundung ersetzen hochstehende
+Aermelkappen. Erster Formversuch zeigte weiter eine Kerbe und wurde verworfen.
+Blender-Gruppenreferenz nach Modifieranwendung neu aufgeloest; Export erfolgreich.
+Blenderquelle/GLB/Vorschau aktualisiert; Shirt zusammenhaengend12274Vertices,
+geschlossene Schlaghand/116Kontaktpunkte PASS, Kollisionsdateien unveraendert.
+Webbuild und15Browserkontaktansichten PASS: echte Knochen-/Kopfshaderdaten,
+Probe/Replay/Spiegel/Ruecklauf,errors[]. Front-/Weitwinkelkontakt gesichtet:
+Schulterkappen reduziert, erhobener Aermel verbunden; Gesamtfiguren weiterhin
+steifer als Referenz. Beleg validation/shoulder-tailoring.json/png.
+KeineArt- odermenschlicheBedienabnahme,Goalweiteraktiv. Host8877Checkout.
+
+G8 PROTOTYP08 FRISCH GEPRUEFT UND VEROEFFENTLICHT
+Quelle c24b7bc1a29c0e84e6a7b50c475249f82ae9569f,64Dateien,23713923Bytes.
+SHA256 b63ffd99a35104b6c234306202159a0ab5e05515a9d5d25bcecd9a65ba8dd499.
+Setup mit explizitemPython3.12 erzeugt frischevenv ausserhalbCheckout. Alle64
+Dateien bytegleich zur laufendenInstallation. START_HOST ohnePhysicsOverride:
+dreiKopfachsen,KO3Treffer undStandard10Treffer,Anspannen,identischeClips,Resume,
+Verletzungsruecklauf,KO-Ruecklauf,Revanche PASS,errors[]. Replayp95je14ms.
+153QuelltestsPASS. GitHubReleasev0.8.0-dev.20261008 erstellt,DownloadSHAidentisch.
+Beleg validation/v08-package.json. README/Status/Plan aufneuesPaketabgeglichen.
+Host8877 laeuftJETZT AUS PAKET Temp/backenbeben-v08-rn9jkj0y,Session88801.
+Vor weiterenQuelltests CheckoutHost wiederstarten. GesamtzielweiterOFFEN:
+Figurenbewegung/Referenzlook,physikalischeModellgrenzen,menschlicheBedienabnahme.
+NaechsterProduktdurchlauf: auffaelligsteFiguren-/Helferbewegung imKOundSchwung
+verbessern; keineweitereisoliertePhysiklaborkette. Zwei-PC-Nachweisweiteroffen.
+
+G6 AUFFANGHAND UND KO-HALTUNG
+reach_toward steuert jetzt Handflaechenzentrum stattHandgelenk. Finger/Normalen
+folgen derKoerperneigung. Erster Zielpunkt innerhalbShirt trotzLandmarkenPASS
+visuell verworfen. ZieleunterOberarmen, Helferkniebeugung.13 statt.05 undSchritt
+1.10 statt.85Renderunits: reale380Stuetzhandsamples max1.33e-7mZielabweichung.
+Reproduktion: python scripts/audit_catcher_support.py erzeugt frischenHost-KO-
+Pfad undprueft echteSzenen/Riglandmarken mitGodot. SynthetischerRigtest prueft
+zusätzlichDrehung/Skalierung sowieRuhe-/Ruecklaufkontinuitaet. WebbuildPASS;
+vollerKO-Browserkampf inkl.Replayruecklauf/Resume/Revanche PASS,errors[].
+WideKOgesichtet: tiefereHelferhaltung, HaendeunterOberarmen stattvorBrust.
+Beleg validation/catcher-palm-support.json/png. WeitergefuehrterKO,keine
+physikalischeGriff-/Stoffkollision; keineGesamtbewegungs-/Stilabnahme.
+Host8877 JETZT WIEDER CHECKOUT,Session81546. V08bleibtunveraendertesRelease
+vor dieserAuffangkorrektur. Goalweiteraktiv.
+
+G6 HELFERSCHRITTE MIT FESTEN BODENKONTAKTEN
+Gemeinsame pose_leg-IK ausKO extrahiert. Helfer bewegenFuesse in zwei
+ueberlappendenSchritten; angehobenerFuss folgtBogen,max4.5cm,standenderFuss
+bleibtinWeltkoordinatenfest trotzwanderndemBecken.101Posen/beideHelfer:
+vor/nachSchritt keinGleiten,Beinlaengenfehler<1.2e-7m,RuecklaufPASS.
+Reproduktion Godot --headless --path game --script ../tests/helper_step.gd;
+ohneheadless undmit -- --render werden25/50/75Prozent alsBildererzeugt.
+DreiZwischenbildermitFuessegesichtet (nativeDefaultfarben,keineMatchauswahl).
+BestehenderStuetzaudit380Samples unveraendertPASS. WebbuildundvollerKO-Kampf
+inkl.Resume/Verletzungsruecklauf/KO-Ruecklauf/RevanchePASS,errors[].
+Beleg validation/helper-step.json/png. WeiteranimierteSchrittbahn,kein
+physikalischesGleichgewichts-/Gangmodell. Gesamtzielweiteroffen.
+Host8877CheckoutSession81546;V08PaketbleibtvorHelferhand-/Schrittkorrekturen.
+
+G3 TATSAECHLICHE PROBE ALS KONTAKTSTANDBILD
+Host speichert denArmrecord am bewertetenKontaktzeitpunkt; publicstate zeigt ihn
+nurbei practice_done. NeuerButton ProbeAmKontaktAnsehen zeigt dieseunveraenderte
+Pose inSeiten-/Egoansicht. EindeutigeStandbildueberschrift, gespeicherteNeigung
+undaktuelleEinstellung. Mausrad/neuerZug/Reset/erneuteProbe verlassenStandbild;
+keine versteckteHaltungskorrektur. ErsterEntwurf hatteHinweis unterScrollrand,
+daherKennzeichnung nachobenverschoben. Browser1366x768 mit echtenZuegen:
+Flat undTips, gerenderteSchulter/Ellbogen/Wrist entsprechenHostpose<1e-5,
+Kamerwechsel, Radexit, unveraenderteAufzeichnung, keinSchaden PASS.
+Mauskorrekturablauf und3kompakteFensterPASS;153Tests undvollerLAN-KO-Kampf
+inkl.Resume/Verletzungsruecklauf/KO-Reverse/RevanchePASS,errors[].
+Beleg validation/practice-still.json plusFlat/Tips-Seitenbildergesichtet.
+MenschlicheVerstaendlichkeitsabnahme weiterOFFEN, nichtausTestsableiten.
+Host8877CheckoutSession18596;V08Download enthaeltnochkeineStandbildhilfe
+undkeineletztenHelferkorrekturen. Goalweiteraktiv.
+
+G2 COMIC-HANDDETAILS UND KANTEN
+16 kurze gekruemmteRueckenfalten auffinalesHandmesh projiziert,mitgleicher
+DistanzgewichtungwieArm anRig gebunden. ErstezuGeradeRingstricheverworfen.
+Blenderquelle/GLB/Vorschau regeneriert; geschlosseneSchlaghand/116Kontaktpunkte
+undCharaktervalidierungPASS; Kollisions-/Landmarkendateienunveraendert.
+Toonbandgrenzenpixelbreit geglaettet, HaarlinienunterPixelaufloesungausgeblendet;
+2xMSAA fuerGeometriekonturen. GodotDoku: https://docs.godotengine.org/en/stable/tutorials/3d/3d_antialiasing.html
+15Browserkontaktansichten/Probe/Replay/SpiegelPASS. KontaktundRueckholung
+gesichtet;nativergleichePoseVergleichMSAA0/1. EinzelneAermelstricheimweiten
+BildnichtalsvollstaendiggeklaerteUrsachebehaupten. BrowserViewportmsaa_3d=1
+separatimProbetestbestätigt. VollerLAN-KO inkl.Resume/Verletzungsruecklauf/
+KO-Reverse/RevanchePASS,errors[],Replayp95=20.9ms bei1920x1080. Keine60FPS-
+oderMehrhardwarezusage. Beleg validation/comic-hand-detail.json/png.
+Gesamtstil-/menschlicheAbnahmeweiteroffen. Host8877CheckoutSession18596;
+V08PaketweiterhistorischvorletztenHelfer-/Probe-/Handdetailkorrekturen.
+
+G2/G6 BLICKRICHTUNG, HALS UND FESTE GESICHTSZEICHNUNG
+Helfer richten Augenlinie ueber Hals/Kopf auf den aufgefangenen Kaempfer.
+337 echte KO-Frames: maximaler Zielfehler 0.001899 rad; maximaler Framewinkel
+0.03033 rad; Halsanschluss und deterministischer Ruecklauf bestanden.
+Blender-Hautgewichte verbinden unteren Kopf mit Hals/Brust. Gesichtsbemalung
+nutzt unverformte UV-Koordinaten statt bereits gedrehter Vertexpositionen;
+damit verschwinden doppelte/verrutschte Gesichtsmerkmale bei Helferrotation.
+Exportierte UVs an 17113 Vertices geprueft, maximaler Restpositionsfehler
+6.22e-8 m. Blenderquelle, GLB und Vorschau erneuert. Assetvalidierung und
+Webbuild bestanden. 15 Browserkontaktansichten und kompletter LAN-KO-Kampf
+inklusive Anspannen, Ruecklauf, Resume und Revanche bestanden, errors[].
+32 native Verletzungszustaende mit vier Hautvarianten bestanden. Kontakt-/KO-
+Bilder gesichtet. Beleg validation/helper-gaze-face-uv.json/png.
+Weiter gefuehrte Bewegung, keine physikalische Griffsimulation; Gesamtstil,
+menschliche Verstaendlichkeit und Zwei-PC-Nachweis bleiben offen.
+Host8877 Checkout Session18596. V08-Download enthaelt diese Korrekturen nicht.
+
+G3 ARMKETTE IM DREIVIERTELBILD SICHTBAR
+Replaypanel verdeckte in der bisherigen Dreiviertelkamera Ellbogen/Oberarm.
+Kamera weiter zur Seite gesetzt und Ziel gesenkt; Schulter bis Kontakt bleiben
+nun oberhalb des Panels sichtbar. Gleiche Kamera fuer Probestandbild.
+15 Browserkontaktansichten/Replay geprueft, errors[]. Probestandbild1366x768
+mit echtem Mauszug: Hostpose entspricht Rig, Kamerawechsel/Radexit/keinSchaden
+bestanden. Beide Spielbilder gesichtet; Belege validation/arm-framing.json,
+arm-framing-replay.png und arm-framing-practice.png. Erste Pruefung erwartete
+noch exakt alte Kamera-x=3 und lief in Timeout; Erwartung auf3.5 aktualisiert,
+sonstige Assertions erhalten. Keine neue menschliche Abnahme ableiten.
+Goal aktiv; Host8877 aktueller Checkout. V08-Paket weiterhin historisch.
+
+G8 PROTOTYP 09 ALS GEPRUEFTES TESTPAKET VERÖFFENTLICHT
+Release v0.9.0-dev.20261008, Spielquelle d67fdcf00470369ee06609ef0a42871706407eef.
+Frische Installation ausserhalb Checkout mit eigener Python3.12-venv, 64Dateien
+bytegleich zum ZIP. Paketbatch aufPort8880; LAN-HTTP mit zwei Browserclients:
+KO4Treffer und Standard10Treffer bestanden inklusive Anspannen, identischeClips,
+Verletzungs-/KO-Ruecklauf, Resume und Revanche; errors[]. Replayp95=21.0/20.9ms
+auf diesem Rechner bei1920x1080. GitHubdownload SHA256 abgeglichen.
+Beleg validation/v09-package.json. Paket enthaelt Probe-Standbild, Armkamera,
+Helferhaende/Schritte/Blick, Handdetails, Halsgewichte und feste Gesichts-UVs.
+Browsergauntlet nimmt nun --port fuer getrennte Pakettests; bisheriger8877Default
+bleibt. Paket README beschreibt zum Erstellzeitpunkt nochV08, OnlineREADME istV09;
+Spielinhalte entsprechen exakt genanntem Quellcommit, kein neuer Export danach.
+Gesamtziel weiterhin offen: Referenzstil, menschliche Verstaendlichkeit,
+Physikmodellgrenzen und Zwei-PC-Nachweis. Keine Endabnahme aus Pakettest ableiten.
+CheckoutHost8877 Session18596, PaketHost8880 Session18599.
+
+G2/G6 LICHTFOKUS AUF HAND UND WANGE
+Helfer standen ebenso hell wie Kaempfer direkt hinter der Kontaktstelle.
+Separates kuehleres Helferlicht (.32) und Lichtlayer2 setzen sie zurueck;
+warmes Hauptlicht .85 bleibt fuer Kampf/Arena aufLayer1, vorhandenes Randlicht
+bleibt. Ego-/Dreiviertelkontakt und KO-Totale gesichtet: Gesichter und stützende
+Haende erkennbar, Gegner/Schlaghand deutlich heller. 15Kontaktansichten und
+kompletter KO-Browserkampf mit Replay/Resume/Revanche bestanden, errors[].
+Beleg validation/bout-light.json sowie Kontakt-/KO-Bilder. Keine Gesamtstil-
+oder menschliche Bedienabnahme. V09-Paket bleibt Stand vor dieser Lichtkorrektur.
+Goal weiter aktiv. CheckoutHost8877 Session18596; PaketHost8880 Session18599.
+
+G3 BESTAETIGTES ANSPANNEN AM GESICHT
+Vorhandene Empfaengerpose bereits hinterRuecken; keine doppelte Pose eingebaut.
+Bestaetigtes brace_result=ready verengt Lider leicht(.35), falscher/frueherVersuch
+nicht. Rollen fuer Gegner und eigenenSpiegel getrennt; Replay uebernimmt clip.braced,
+entspannt .5-.85s, KO hatVorrang. Gesichtsappearance konnte zuvor pausierteLider
+ueberschreiben: Blinksteuerung jetzt allein im Kontakt-/Idle-Treiber.
+NativerSzenentest: beideRollen,early/ready,Phasenreset,Ruecklauf,KO und Appearance-
+Refresh bestanden. EchterLAN-KO-Kampf finalBuild bestanden; Browser misst .35
+auch nach350msPause,Clipflag korrekt,Resume/Verletzungsruecklauf/Revanche,errors[].
+Spielbild bei.4s gesichtet: leichtverengte,weiteroffeneAugen. Beleg validation/
+brace-expression.json/png. KeineMuskelphysik odermenschlicheAbnahme behauptet.
+V09-Paket bleibt vor Licht-/Lidkorrektur. Goalaktiv; Checkout8877Session18596.
+
+G2 TRIKOTLINIEN AUF DER TATSAECHLICHEN STOFFOBERFLAECHE
+Acht kurze Faltenstriche und zwei vordere Armlochlinien auf finales dezimiertes
+Trikot projiziert. Baryzentrische Uebertragung der geglaetteten Brust/Oberarm-
+Riggewichte haelt Linien beim Heben/Biegen am Stoff. Blenderquelle, GLB und
+Vorschau erneuert; insgesamt89772Polygone. Kollisions-/Landmarkendateien
+unveraendert. Assetvalidierung und Webbuild bestanden.15Browseransichten/
+Probe/Replay bestanden,errors[]. Nativer101PosenKoerpertest mit Ruecklauf
+bestanden; Kontakt/Rueckholung und geneigterKoerper gesichtet. NativeVorschau
+nutztDefaultfarben. Beleg validation/cloth-ink.json pluszweiBilder.
+Linien bewusst sparsam; keineStoffsimulation oderGesamtstilabnahme.
+Goalaktiv; V09-Paketweiterhistorisch vorLicht/Lid/Trikotdetails.
+
+G4 REIBUNG — ERSTER BAUSTEIN, NOCH NICHT IM SPIEL
+AktiverPfad untersucht: spatial_head_replay -> moving_head_replay ->
+coupled_contact -> CompiledRigidHandContact.project/project_sheet.
+Derzeit werden ausschliesslich normale Multiplikatoren projiziert.
+Neue contact_friction.tangent_correction loest einen 2D-Tangentialblock mit
+Coulomb-Scheibengrenze mu*lambda_n in Positionssolver-Einheiten. Anisotrope
+Massenmatrix wird als beschraenktes quadratisches Problem geloest; einfaches
+radiales Abschneiden der freien Loesung waere im Allgemeinen falsch.
+Fuenf Tests bestanden: analytisches Haften/Gleiten, keinNormalkontakt/mu0,
+100anisotropeFaelle mit Grenze/Energie/Stationaritaet, Rotationsinvarianz,
+ungueltigeEingaben. Dies belegt NUR den lokalen Block, keine Gesamtenergie-
+oder Reibungsvalidierung des gekoppelten Schlags. Ein Koeffizient, keine
+kalibrierten Hautwerte. Noch kein Default-/Gameplayunterschied.
+Primaerquelle: https://matthias-research.github.io/pages/publications/flex.pdf
+Abschnitt6.1 beschreibt relative tangentiale Positionskorrektur, statische/
+kinetische Grenzen und Iterationsabhaengigkeit; unser anisotroper Block ist
+eine eigene Erweiterung, keine wortgetreue Umsetzung dieser Partikelformel.
+VERBINDLICH NAECHSTES: In hand-sheet-Projektion Vorpositionsanker und angesammelte
+Tangentialmultiplikatoren integrieren, bei Kontaktwechsel sauber zuruecksetzen;
+Handtranslation/-rotation und dreiGewebeknoten mit gleicherGegenkorrektur.
+Normalmultiplikator begrenzt Tangentialbetrag, kein separater Kick amClipende.
+Mit mu0 bisherigenPfad exakt vergleichen; reale seitlicheSchlaege, Kontakt-
+wechsel, Energie, Rueckholung und Browserclip pruefen. Maximal ein weiterer
+reiner Labor-Meilenstein, danach Integrationsentscheidung gemaessGauntlet.
+Goalaktiv. V09 und aktivesSpiel weiterhin ohneReibung, nichtandersbehaupten.
+
+G4 REIBUNG IN KONTAKTITERATION GEKOPPELT / NOCH KEIN SPIELDEFAULT
+HandSheetFriction nachNormalprojektion eingebunden, Vorpositionsanker proStep,
+materialfeste baryzentrischeGewichte, Welt-Tangentialmultiplikatoren, Reset bei
+Dreieckswechsel. Gegenkorrektur aufHandtranslation/Rotation unddreiGewebeknoten;
+Normalimpuls fuerWertung bleibtseparat. Reibungsresiduum inAbbruchpruefung.
+simulate_contact(...,friction_coefficient=.2) aktiviert Kandidat,Default0 bleibt.
+SechsTests PASS inkl.echterDreieckskontakt/equal-oppositeKorrektur/Reset.
+RealerSchlag mit raeumlichemKopf,12.5ms/12Steps/32Iterationen: mu0 Framesexakt
+identisch,mu.2 endlich/Coulombgrenzebestanden,Endenergie .54061->.47252J.
+ABER Rechenzeit13.85s,12von12Stepsnichtkonvergent,Reibungsrest84.9um,
+Penetration4.58um,Wrist33.9um. KeineEnergiegesamtgarantie oderGameplayfreigabe.
+Reproduktion scripts/audit_friction_contact.py; --duration .06 --iterations 64
+fuer Vollintervall. Beleg validation/friction-coupling.json.
+ZweiterLabor-Meilenstein: Integrationsentscheidung KEIN DEFAULT wegenkonkreter
+Laufzeit/Restfehler. NAECHSTES dieseBlocker beheben (kompilierterTangentialblock,
+Restfehler/Kontaktwechsel pruefen), dannvollstaendigenmoving_head_replay.encode
+mitKandidat/Rueckholung pruefen undimBrowser integrieren. Keineweiteren isolierten
+Physikfeatures. AktiverHost/V09 weiterhinreibungsfrei. Goalaktiv.
+
+G4 REIBUNG BESCHLEUNIGT UND IM VOLLEN SPIEL INTEGRIERT
+Kompilierte identische Tangentialprojektion ohneFastMath/SciPy/neueAbhaengigkeit.
+100Blockvergleiche max1.11e-16; realer12.5msKontakt: Positions-/Rotationsdifferenzen
+<7e-14,Impulsdifferenz2.28e-13. Rechenzeit14.16s->.520s aufdiesemRechner.
+Vollkontakt60ms/58Steps/64Iterationen1.51s,mu0 weiterhinFramesexaktidentisch.
+Restfehleroffen: Reibung42.2um,Penetration1.59um,Wrist12.3um,14Steps erreichen
+1umZielnicht. Vollstaendiger337FrameReplay samt551Armframes3.59s.
+Hostoption --physics coupled-friction,mu=.2 alsPrototypabstimmung;Warmup/zweiter
+Anspannworker verwendenKandidat. Normaldefault coupled-spatial bleibtunveraendert.
+EchterLAN-Browserkampf auf8881 mit6Treffern: Reibungsflag/Grenze,Anspannen,
+Abwehrlider,identischeClips,Ruecklauf,KO,Resume,Revanche bestanden,errors[].
+Replayp95=20.9ms1920x1080. Peakbildgesichtet. SiebenVariantenmitje324Rueckholposen
+gegenrekonstruiertebewegteOberflaeche bestanden,keinTischkontakt,Wrist<=85Grad.
+160PythonTests PASS. Belege validation/friction-integration.json/png und
+friction-replay-variants.json. Reproduktion audit_friction_contact.py nunmit
+--compare-reference; audit_moving_head_replay.py --friction; Browsergauntlet
+--port8881 --expect-moving --expect-spatial --expect-friction.
+Integrationsschritt erledigt,keineweitereisolierteLaborkette. NAECHSTES Standard-
+Duell/Restfehlervergleich und Defaultentscheidung; keineanatomischeKalibrierung
+behaupten. AktiveHosts: normal8877Session18596,experimentell8881Session64436,
+V09Paket8880Session18599. OeffentlichesV09enthaeltReibungnochNICHT. Goalaktiv.
+
+G4 REIBUNG ALS QUELLSTANDARD / KONVERGENZVERGLEICH
+Standardduell10Treffer mitgekoppelterReibung bestanden,errors[],Anspannen,
+Replayruecklauf,Resume/Revanche. Vergleich identischer60msSchlaege bei64/128/256
+Iterationen ohneparallelenBrowserlauf: Reibung64Impuls1.01296Ns,256=1.00888Ns,
+Abweichung0.405%; Materialrest233/50/11.6um,Reibungsrest42.2/13.5/.489um.
+Kontaktzeiten1.67/2.70/4.44s aufTestrechner. Auch reibungsfreierVergleich
+hatRestfehler; HoehereCaps erreichen1umZielnichtinallenSchritten.
+Entscheidung: coupled-friction mitbisherigem64Cap alsPrototypstandard.
+KeineToleranzenangehoben,keineanatomischeKalibrierungbehauptet. MehrGenauigkeit
+hatdeutlichenLatenzpreis bei<.5%Impulsabweichung indiesemVergleichsfall.
+NormalerSTART_HOST.bat OHNEPhysicsOverride neu gestartet;vollerKO-Browserkampf
+mitReibungsassertion,Anspannen/Lidern,Ruecklauf,Resume/Revanche bestanden.
+Beleg validation/friction-default.json;Reproduktion audit_friction_convergence.py.
+READMEbereinigt,DefaultinHostaktualisiert. V09Download bleibtvorReibung/Licht/
+Lid/Trikotdetails; keinneuesPaket indiesemSchritt. Goalweiteroffen,insbesondere
+Gesamtstil/menschlicheAbnahme,Physikgrenzen undZwei-PC-Test.
+AktiverCheckoutHost8877Session63488. Testhosts8880/8881 beendet.
+
+G4/G8 REPLAY-UMRECHNUNG BESCHLEUNIGT OHNE DATENREDUKTION
+Profil des aufgewärmten Reibungsreplays: local_offsets_spatial groesster einzelner
+Pythonzeitanteil(.604sSelf/.768sGesamt). Gleiche30Fixpunktiterationen proVertex
+kompiliert,keineFrames/Vertices/Toleranzen entfernt. Referenzfunktion erhalten.
+SiebengezielteTests PASS inkl.Shader-Roundtrip,20x289VertexReferenzvergleiche.
+DreivollstaendigeReplayvergleiche: frames,head_positions,head_rotations,arm_path,
+score_update,friction EXAKTgleich;MedianSolver3503.4->2937.0ms.
+Je3realeWebSocketSchlaege mitkorrektemAnspannen vor/nachHostneustart:
+Median5.2467->4.5675s bisImpact(~12.9%);Normalimpuls/Wertung exaktgleich.
+Wartezeit bleibtspuerbar,keineLatenzgesamtabnahme. Beleg validation/
+spatial-inverse-performance.json; Reproduktion measure_spatial_inverse.py und
+measure_brace_latency.py. VeralteteDocstring zuKopfsolveraktivierung korrigiert.
+AktiverNormalhost8877Session2501 mitneuemCode. V09Downloadweiterhistorisch.
+Goalaktiv; naechsterEngpass lautProfil Materialresiduen(.737sGesamt), danach
+Spiel-/Paketintegration bewerten stattunbeschraenkteMikrooptimierung.
+
+G4/G8 GEWEBERESTFEHLER OHNE PRUEFUNGSREDUKTION BESCHLEUNIGT
+Vollstaendige Kanten-/Volumenresiduen kompiliert, gleiche Gleichungen/Einheiten,
+keine Toleranz oder Iterationsgrenze geaendert. 80 deformierte/degenerierte
+Referenzfaelle bestehen. Gesamte Python-Suite:162Tests PASS.
+Drei volle Replayvergleiche: Frames/Kopf/Arm/Wertung/Reibung exakt identisch.
+Median2918.2->2274.7ms. Reale WebSocket-Schlaege mit Anspannen:3.548s Median;
+vorheriger Meilenstein4.567s, keine interleavte Netzwerkmessung. Impuls/Wertung
+unveraendert. Voller LAN-Browserkampf PASS:Anspannen/Lider,Replay,KO,Ruecklauf,
+Resume,Revanche;errors[],p95=27.8ms aufTestrechner. Beleg validation/
+tissue-residual-performance.json; Reproduktion measure_tissue_residuals.py.
+Keine Gesamtfreigabe:Wartezeit weiterhin merklich,Art/Anatomie/menschliche
+Bedienabnahme offen. Naechster Schritt integrierten aktuellen Paketstand bauen
+und frisch installieren/pruefen; keine weitere Mikrooptimierungskette.
+AktiverHost8877Session30515. V09Download weiterhin aelter. Goalaktiv.
+
+G7/G8 PROTOTYP10 ALS FRISCH GEPRUEFTES HOSTPAKET VEROEFFENTLICHT
+Quellstand85984a3,Webbuildneu,68Dateien,23872720Bytes. Release:
+https://github.com/r0bsta1909/backenbeben/releases/tag/v0.10.0-dev.20261008
+SHA25647a5a86d81b37dae4e14328d136e285c19ab2df16a2b38ad9477536604d89de6.
+AusserhalbCheckout frische eigenePython3.12Umgebung mitPaketsetup erstellt,
+START_HOST.bat ohnePhysicsOverride gestartet. GitHubDownloadhashgleich undalle
+68Dateienbytegleich zu laufenderInstallation. Standardduell10Treffer ohneKO
+bestanden; separaterKO-Test5Treffer bestanden inkl.KO-Ruecklauf/Anspannen/Lider/
+Resume/Revanche. Beideerrors[],Replayp95je27.9ms1920x1080 aufdiesemRechner.
+Nachweis validation/v10-package.json undPaketkontaktbild. ZweiphysischePCs nicht
+geprueft. Source/Paket enthalten nunReibung/Optimierungen/Lider/Licht/Stofflinien.
+Paketkontaktbildergesichtet: seitlicherKontakt/Armanschluss erkennbar,Stilweiter
+schematischeralsReferenz. KEINEArt-/menschlicheBedienabnahme. Goalbleibtoffen.
+NAECHSTER PRODUKTSCHRITT: groesste sichtbareLuecken beiFiguren/Gesichtern und
+Verstaendlichkeit amaktuellenReferenzvergleich priorisieren,keineweitere
+Mikrooptimierungsserie. CheckoutHost8877Session30515 bleibt;Pakettesthostbeendet.
+
+G3 HANDNEIGUNG DIREKT AM GESPEICHERTEN PROBEKONTAKT VERGLEICHEN
+KonkreteLuecke: MausradverliessKontaktstandbild zurAusholhaltung,keindirekter
+Neigungsvergleich. JetztbleibtAnsichtstehen; expliziteMausradneigung bewertet
+identischegespeicherteMausbahn neuaufHost. AlleSamplesbekommendiegewaehlteNeigung,
+keineautomatischeAusrichtung. Originalprobe bleibtunveraendert undperButton
+wiederherstellbar. NeueNeigung giltfuernächsten realgezogenenSchwung;dessen
+andereMausbahn kannanders treffen. Vorschau istgeometrischeProbe,keinGewebereplay.
+ProtokollprueftZug/Angreifer/Probe-ID/finiteGrenzen undbegrenztAnfragen;Client
+verwirftveralteteAntworten,entprelltWheel undwiederholtausbleibendeAntworten.
+6gezieltePythonTests PASS. Browser1366x768:flacherStartundFingerspitzenfall,
+Originalwiederherstellung,exaktesgerendertesRig,keineSchaeden,neueechteProbe
+uebernimmtgewaehlteNeigung PASS. Tips -21 -> -18 -> -15 ergibtflacheHand ohne
+Kamerasprung. Front/Seite gesichtet,Originalbutton nachSichtpruefung nachoben.
+GanzerLAN-Kampf5Treffer PASS inkl.KO/Ruecklauf/Anspannen/Resume/Revanche,errors[].
+Beleg validation/practice-comparison.json undzweiAnsichten; tests/practice_still.py
+optional--tips. MenschlicheVerstaendlichkeit NICHTalsbestandenmarkiert.
+Quellhost8877Session83200. OeffentlichesV10Paket enthaeltdiesenNeuschrittnicht.
+Goalaktiv. NaechstersichtbarerSchwerpunktG2:ReferenzvergleichGesichter/Helfer/
+Oberflaechen undnatuerlicheFigurenwirkung;nichterneutSolvermikrooptimierungen.
+
+G2 AUGEN UND BRAUEN AN REFERENZ ANGEPASST
+Referenz01-character-face erneutgesichtet: groessereIris,zurueckhaltendesAugenweiss,
+Oberlidschatten stattauffaellighellerAugen. Blenderquelle: Irisradius4.5->5.6mm,
+ruhigereOlive-/Augenweissfarben; BrauenhautnaheverjuengtegeschlosseneBaender
+stattgleichdickerRoehren. Gesamt89872Polygone. GLB/Blend/Previewneugeneriert.
+AugenUV2.x traegtnormierteRuhehoehe fuerangedeutetenOberlidschatten; folgtSkinning,
+keinedynamischeLid-Lichtsimulation. Importtest4Meshesmax2.98e-8,24Augenmaterialien
+beiKaempfern/Spiegel/Helfern korrektaktiv. KeineKontakt-/Gewebegeometriegeaendert.
+AssetvalidierungPASS;32Haut/Seite/Verletzung/ResetRenderPASS;Anspannlidrollen/
+Ruecklauf/KO-TestPASS. Gesunde/dunkleVerletzungs-/Anspannbildergesichtet.
+BrowserProbevergleichPASS;ganzerLAN-Kampf6TrefferPASS inkl.KO/Replay/Resume/
+Revanche,errors[],Replayp95=34.8ms in diesemLauf (keineLeistungsabnahme).
+Beleg validation/eye-brow-style.json unddreiBilder. AktiveQuelle/Webbuildaktuell,
+Host8877Session83200. OeffentlichesV10Paket weiterhinvorProbevergleich/Augen.
+Gesamtstil/Gesichtsproportionen/menschlicheVerstaendlichkeit weiterOFFEN.
+NaechsterG2Schwerpunkt: Kopfsilhouette/Kiefer undGesichtscharakter amReferenz-
+vergleich pruefen;Aenderungen anKontaktflaechen mitphysikalischemExportabgleichen.
+Goalaktiv,keineGesamtabnahme.
+
+G2/G3/G4 KANTIGERER UNTERKIEFER MIT KONSISTENTEM KONTAKT
+Unterkieferbreite lokal erhoeht; Topologie17113Gesichtsvertices unveraendert.
+UntererQuerschnitt y=-.04m:13.39->15.00cm;oberesGesicht y>.07m exaktunveraendert.
+Blend/GLB/Kollisionsmesh gemeinsamregeneriert. Referenz-/Spiegel-/Seitenbilder
+gesichtet. Die neueForm veraendert echteKontaktklassen: sichtbarerStart/Reset
+jetzt-18Grad (vorher-15),Mausradweiter3Grad. Referenzfaelle flat-18,glance-12,
+tips-24. KeineKlassifikations/Kollisions/Konvergenzgrenzen gelockert. Fixture-
+Eingaben explizit aktualisiert; LegacyDeformationsnachweis nutztkraeftigen700ms
+Schlag statt800ms bei weiterhin>3mmSchwelle. Anleitung/Bot/Browserkonsistent.
+ZusaetzlicherRückholtest fand3.25mmDurchdringung beiStreifer: dasanfangszu langsam
+anlaufendeRueckholziel liessHandstehenwaehrendKopfweiterlief. Ziel laeuftnun
+exponentiellmit90msZeitkonstante sofortan; Gelenkmotor/Drehmomentgrenzen und
+Kontaktaufzeichnungunveraendert. SenkenbleibtverzoegertnachFreiraum.
+SiebenVariantenx324Rueckholposen PASS; minimalerAbstand.751mm,ersterSchrittmax
+2.326mm/.524Grad; keineTischkollision,Wrist<=85Grad. Nachweisistfallbezogen,
+keineuniverselleKollisions-/Anatomiegarantie. ErgaenzteUebergangsassertionen.
+Final165PythonTestsPASS,AssetvalidierungPASS,32VerletzungsrenderPASS,RestUVPASS.
+15echteBrowseransichtenPASS,ProbevergleichmitMausPASS;ganzerLAN-Kampf9Treffer
+bisKO/Replay/Resume/RevanchePASS,errors[],p95=22ms aufTestrechner.
+Beleg validation/jaw-shape-contact.json unddreiSpielbilder. Quellhost8877
+Session51992. V10DownloadvorProbevergleich/Augen/Kiefer;nochkeinneuesPaket.
+Goalaktiv. NaechsterG5-Schritt: erreichbarenKOmitNORMALERSpielbalance pruefen;
+bisherigerStandardpaketkampf10Treffer endeteohneKO,KO-Testsmitbeschleunigter
+Testbalance. Das ersetztkeinenNachweisderErreichbarkeitimnormalenSpiel.
+Gesamtstil/menschlicheVerstaendlichkeit/physikalischeModellgrenzenweiteroffen.
+
+G5 KO MIT STANDARD-BALANCE ERREICHBAR
+Grundschaden35 statt25; KO100, Anspannen450ms/35%, Erholung6, Zug25s und
+maximal5Schlagpaare unveraendert. Produktionssolver-Reihe mit verletzterGeometrie:
+35 erreicht bei3starken ungeschuetztenTreffern KO; bei5durchgehendangespannten
+Treffern keinKO. BegrenzteTestreihe, keineglobaleBalancegarantie.
+EchterLAN-Browserkampf mit --skilled-standard PASS: Standardwerte vollstaendig
+vomHost verifiziert, schnellerMauszug mit explizit-15Grad/Hohe.64. KO-Aufzeichnung,
+Ruecklauf, ersterTrefferangespannt, identischeClips, Resume, Revanche/Reset PASS.
+Browsererrors[]. 165PythonTests PASS, Webexport PASS.
+Testfehler behoben:24sequenziellePointerbefehle dauerten~2s statt350ms; nun4echte
+Pointerbewegungen, gemesseneDauer~.4s. KeineZeitstempelmanipulation/Schlag-RPC.
+TestbewahrtvorherigeAdminwerte undsichertDiagnoseinkl.tatsaechlicherWS-Eingaben.
+Beleg validation/standard-balance-ko.json/png. Gesamtstil/menschlicheBedienabnahme
+undZwei-PC-Nachweis weiteroffen. V10Download enthaelt dieseAenderung NICHT.
+CheckoutHost8877Session8664. Goalaktiv; naechsterSchritt aktuelleszusammenhaengendes
+Paket bauen undfrischpruefen, danachoffeneReferenz-/Bedienqualitaetweiterbearbeiten.
+
+G7 PROTOTYP11 OEFFENTLICH UND FRISCH GEPRUEFT
+Release v0.11.0-dev.20261008, Quelle821a4919c33b856f3ea7c90e2a924ea0b0c7de12.
+68Dateien/23881671Bytes, SHA256
+2ef05ccb70ce97b0a31b22f5ba29579ec1640154d3c7aa97f97d97abd2670aaf.
+ZIP ausserhalbCheckout entpackt, frische.venv uebermitgeliefertesSetup mitPython3.12.
+START_HOST.bat auf8880 zeigtLANAdressen. VollerStandardkampf5TrefferbisKO PASS,
+Anspannen/Replayruecklauf/Resume/Revanche PASS, Browsererrors[],p95=27.9ms.
+GitHubDownloadhash undalle68Dateien gegenlaufendeInstallation exaktabgeglichen.
+NeuimPaket: Probekontakt-Mausradvergleich, Augen/Brauen/Kiefer, -18GradStart,
+sofortanlaufendeRueckholung, Grundschaden35. README-AlttextohneReibungkorrigiert.
+Beleg validation/v11-package.json undKontaktbild. ZweiBrowserauf1PC,keine
+physischeZwei-PC-Abnahme. Gesamtstil/menschlicheBedienabnahme weiterOFFEN.
+NaechsterFokusG2/G3: sichtbarenReferenzabstand derFiguren undBedienbarkeit
+imGesamtspiel verbessern. KeineweitereSolver-Laborkette. Goalaktiv.
+
+G2 BRAUENAUSDRUCK UND BARTZEICHNUNG
+Referenz01-character-face mit aktuellemFrontbild verglichen. Brauen innen tiefer
+und wenigergewölbt, weiterhinhautnahgeschlossenesMesh; kurzegefilterteBartstriche
+imRuhekoordinatensystem stattgroberDiagonalschraffur. Lippenzoneausgespart.
+Blenderquelle/GLB/Previewregeneriert. Gesichts-Kollisionsmesh/Handdatenunveraendert.
+ErstrenderzeigteNaN-Schwarzflaechen durchpow(negative,4); absBasis korrigiert,
+neue32Renderueber4Hautfarben/beideSeiten/Verletzung/Reset PASS undgesichtet.
+Assetvalidator/116HandpunktePASS; RestUVmax6.757e-8. WebexportPASS. Voller
+Standard-KO-Browserkampf inklusiveAnspannlid/Replayruecklauf/Resume/Revanche
+PASS,errors[]. Gesunde/verletzte/Anspannansichtgesichtet; Beleg
+validation/brow-stubble-style.json plusdreiBilder. Gesamtstil/MenschabnahmeOFFEN.
+V11Download bleibtunveraendert vor diesemStilschritt. Goalaktiv. NaechsterFokus:
+Gesamteindruck vonBeleuchtung/Hauttoenen gegenReferenz, nichtnurGesichtsdetails.
+
+G2 GEDECKTE HAUTFARBEN UND ARENALICHT
+VierHautfarben b48968/8c654e/634737/d2aa8c ersetzenorangehellerePalette.
+Hauptlichtffe9d2/.65 stattffe1b2/.85; Spiegel nun gleicheHauptlichtfarbe/-richtung
+und.65 stattseparatemweissen1.6Licht. SpiegelweitervereinfachteeigeneSzene,keine
+physikalischeReflexion. Vorher/Nachher mitReferenz01 verglichen; gesunde/dunkle
+verletzteAnsicht undseitlicherBrowserkontaktgesichtet.
+32Haut/Seite/Verletzung/ResetRenderPASS, WebexportPASS, ganzerStandard-KO-Kampf
+inkl.Anspannen/Replayruecklauf/Resume/RevanchePASS,errors[]. Beleg
+validation/skin-light-style.json unddreiBilder. KeinePhysik-/Geometrieaenderung.
+Gesamtstil/BedienabnahmeweiterOFFEN; V11DownloadvorBrauen/Bart/Farbkorrektur.
+Goalaktiv. NaechsterSchrittG3: Probe-undHandneigungsbedienung alszusammenhaengenden
+Einstieg pruefen, besonders Blickwechsel zwischenHand,Wange,SeitenansichtundText.
+
+G3 PROBE ZEIGT AUTOMATISCH DEN SEITLICHEN KONTAKT
+Jede neueeigeneProbe oeffnetdirektgespeicherteKontaktpose inDreiviertelansicht.
+MausradvergleichtweiterdieselbeBahn, keineautomatischeHandkorrektur. Benutzer
+kannEgoansicht/aktuelleHaltung waehlen; naechsterZugzaehltalsSchlag explizit
+angezeigt. ErneutohneSchadenueben vorKamerabuttons platziert, bei1366x768sichtbar.
+RealerFingerspitzen-TestPASS:automatischeAnsicht, Originalpose/gerendertesRig,
+-24->-21->-18Mausradvergleich bisflacheHand, Originalwiederherstellung, neueechte
+Probe mitgewaehlterNeigung, keinSchaden. KompaktesEndlayoutgesichtet.
+GanzerStandard-KO-Kampfinkl.Replay/Anspannen/Resume/RevanchePASS,errors[].
+SPIELEN aktualisiert. Beleg validation/automatic-practice-view.json/png.
+MenschlicheVerstaendlichkeitsabnahmebleibtoffen. V11PaketvordiesenAenderungen.
+Goalaktiv; naechsterSchrittG3: nahtlosenWechselvomKontaktvergleichzumSchwung
+pruefen, insbesondereKamerarueckkehrundraeumlicheOrientierung.
+
+G3 EXPLIZIT ZUM SCHLAG BEREITMACHEN
+Kontaktvergleich hatnunexplizitenVorbereitungsschritt: Egoansicht, neueHostpose
+amAusholstart, gewaehlteNeigungbleibt. KlickloestkeinenSchlag aus. Erneutueben
+nutztdenselbenRueckweg. DirekterMauszugausVergleichbleibtmoeglichwieangekuendigt.
+ZweiBrowserfaelle flat/tips PASS: Vergleich/Original/Neigung/weitereProbe/kein
+Schaden. FlatprueftzusaetzlichWrist>10cmvomKontaktentfernt undgerenderte
+Schulter/Ellbogen/Wrist innerhalb1e-5m zurfrischenHostpose. Egoansichtgesichtet.
+WebexportPASS;Beleg validation/practice-ready.json/png;Anleitungaktualisiert.
+BewussterAnsichtsmoduswechsel, keinephysikalischeRueckholanimation behauptet.
+MenschlicheAbnahmeweiteroffen. V11weiterhistorischesPaket. Goalaktiv.
+NaechsterG8Schritt: fehlendenvollstaendigenLeistungsnachweis fuerIdle/Schwung/
+Impact/Replay imaktuellenSpiel erheben; bisherigeMessungbetrafvorallemReplay.
+
+G8 FRAMEZEITEN UEBER VOLLSTAENDIGES DUELL
+Reproduzierbar im v3_browser_gauntlet.py: rAFIntervalleproPhase,Median/p95/Max,
+>33/>50/>100msZaehler undPhasendauern. UebergangsintervalleausFramegruppen
+ausgeschlossen; Segmentdauernbleiben. Hauptclient,2HeadlessBrowser+Host auf1PC.
+Ryzen53600/RTX2080/15.9GiB,Chrome154.0.8037.98,1920x1080.
+AimIdle p95=41.7ms,Schwung34.9ms,Impact62.6ms,Replaylaufend34.9ms,pausiert27.9ms.
+Resolving2.07-3.25s. Kein60FPS-PASS. Lobbymax23.36s imLaufmitzweitemBrowserstart;
+Ursachenichtisoliert,nichtalsnormalerIdlewertverschweigen. Screenshots/Automation
+beeinflussendenLauf. KeineGPUProfiler-/ZweiPC-Aussage.
+Standardduell5TrefferbisKO/Anspannen/Replayruecklauf/Resume/RevanchePASS,errors[].
+Beleg validation/phase-performance.json. MessungschliesstNachweisluecke, nicht
+Leistungsabnahme. Goalaktiv. NaechsterkonkreterEngpass: RenderpfadbeimImpact
+inkl.Gesichts-/Spiegelaktualisierungprofilieren; keinisolierterSolveroptimierungsloop.
+
+G8 DEFORMATIONSTEXTUR WIEDERVERWENDEN
+side_cage_view.texture_for akzeptiertvorherigeImageTexture undaktualisiertbei
+gleicherGroesse perupdate; sonstNeuanlage. mainhaeltRessourceproSzene. Keine
+Gewebepunkte/Replayframes/Shaderqualitaet reduziert. Native32Uploads bytegenau
+gegenfrischeTexturen, identischeRessource, Resize/InvalidPASS.
+WebexportundStandardduell6TrefferbisKO/Replayruecklauf/Resume/RevanchePASS,errors[].
+Impactp9562.5ms vs62.6msvorher: KEINnachgewiesenerFramezeitgewinn. Replayp95
+41.7msvs34.9ms;unterschiedlicheechteKampfe,keinkontrolliertesAB,keineSpeedupzusage.
+Beleg validation/side-texture-reuse.json; testside_cage_reuse.gd.
+Goalaktiv. NaechsterSchritt: ImpactmessungnachAngreifer/Empfaengertrennen und
+Spiegel-Neuzeichnungenzaehlen,bevorweitereOptimierung. V11Downloadunveraendert.
+
+G8 UNVERAENDERTEN SPIEGEL NICHT NEU ZEICHNEN
+Rollenmessung zeigt langsamere Frames beim Angreifer: Impact p95 62.6 ms,
+Empfaenger 34.8 ms. Vorher 50-61 Spiegelzeichnungen je gegnerischem Treffer.
+Spiegel jetzt nur bei geaendertem Aussehen/Emote, eigener Physik oder deren
+Reset sowie Lidbewegung und Matchwechsel als veraendert markieren.
+Native Pruefung fuer statischen Zustand, beide Trefferrollen, Reset, Verletzung,
+Blinzeln und Emote bestanden. Webexport und kompletter Standard-KO-Kampf samt
+Replay/Resume/Revanche bestanden, Browserfehler leer.
+Danach beim Angreifer 3-7 Spiegelzeichnungen je Treffer; eigene Treffer bleiben
+mit 56-58 Zeichnungen sichtbar. Impact p95 weiterhin 62.6 ms: KEIN belegter
+Framezeitgewinn. Andere echte Mausduelle, kein identisches Replay-A/B.
+Beleg validation/mirror-dirty-performance.json; tests/mirror_dirty.gd.
+Goal aktiv. Naechster Schritt: CPU-Zeit der Browserbruecke, Erscheinungsupdates
+und drive_recorded_physics getrennt messen, bevor weitere Optimierung.
+V11-Download bleibt vor diesen Quellaenderungen; Gesamtabnahme weiter offen.
+
+G8 CPU-PROFIL IM ECHTEN DUELL
+Opt-in --profile-cpu im v3_browser_gauntlet.py aktiviert nur im Prueflauf
+Time.get_ticks_usec-Messung von Browserbruecke, Erscheinungsupdate und
+aufgezeichneter Bewegung. Pro Phase maximal4096Werte; Auswertung erst auf
+Anforderung am Ende, keine fortlaufende Uebertragung grosser Messarrays.
+Beim Angreifer-Impact p95: Bruecke1.6ms, Erscheinung1.9ms, Bewegung1.7ms.
+Diese Abschnitte erklaeren die langen Browserbildintervalle nicht. GPU/Engine-
+Renderarbeit und Browserplanung nicht enthalten; Perzentile nicht addieren.
+Webexport und kompletter Standard-KO-Kampf samt Replay/Resume/Revanche PASS,
+Browserfehler leer. Beleg validation/cpu-phase-profile.json.
+Goal aktiv. Naechster Schritt: Renderkosten und Konkurrenz zweier Browser auf
+demselben Rechner trennen; keine weitere Optimierung dieser CPU-Abschnitte auf
+Verdacht. V11-Download bleibt historisch, Gesamtziel weiterhin offen.
+
+G8 EIN BROWSER AUF DEM SPIELERRECHNER
+Gemeinsame Frameinstrumentierung in tests/browser_phase_profile.js extrahiert;
+LAN-Test und neuer single_browser_performance.py nutzen denselben Code.
+Ein Headless-Chrome1920x1080 plus lokaler Host, Standardtraining mit echten
+Mauszuegen und Bot:5Treffer beobachtet, beide Rollen und laufendes Replay erfasst.
+Ryzen53600/RTX2080/15.9GiB. Median13.9ms; p95 Idle/Schwung/Replay20.9ms,
+Angreifer-Impact34.8ms, Empfaenger20.9ms. Angreifermax66ms (1Frame>50ms).
+Vorher zwei Browser: Angreiferp95 62.6ms. Unterschiedliche reale Schlaege;
+keine isolierte GPU-Ursachenmessung, keine allgemeine60FPS-Garantie.
+Beleg validation/single-browser-performance.json. Keine Grafikqualitaet reduziert.
+Der Zweicliententest misst deutlich andere gemeinsame Rechnerlast. Weitere
+CPU-Optimierung auf Verdacht wird zugunsten des Gesamtprodukts zurueckgestellt.
+Goal aktiv. Naechster Schritt: aktuelles zusammenhaengendes Paket mit Stil-,
+Probe-, Bereitmachen- und Renderkorrekturen bauen/frisch pruefen. V11 liegt
+vor diesen Aenderungen. Menschliche Bedien-/Stilabnahme bleibt eigenstaendig offen.
+
+G7/G8 PROTOTYP12 VERÖFFENTLICHT UND FRISCH GEPRUEFT
+Release v0.12.0-dev.20261008, Quelle b9c4399c2a7cd9417926fede654053046f020f38.
+68Dateien/23884159Bytes, SHA256
+6db77eee8210a8aeeda65dc18e72ef79b5e4ba3c2815d1c98135eff43c96ea86.
+Frische .venv ausserhalb Checkout, mitgeliefertes Setup und START_HOST.bat8880.
+Echte Probe: automatische Seitenansicht, Mausradkorrektur, Originalhaltung,
+Vorbereitung mit Rigabgleich, weitere schadensfreie Probe PASS.
+Vollstaendiger Standardkampf5Treffer bisKO/Anspannen/Replayruecklauf/Resume/
+Revanche PASS, Browserfehler leer. GitHub-Downloadhash und alle68Dateien exakt
+gegen getestete Installation abgeglichen. Beleg validation/v12-package.json/png.
+Paket umfasst aktuelle Brauen/Bart/Farben/Licht, automatische Probe, Vorbereitung,
+Texturwiederverwendung und gezielte Spiegelaktualisierung. Profiling standardmaessig aus.
+Gesamtstil/menschliche Verstaendlichkeit/physischer Zwei-PC-Test bleiben offen.
+Goal aktiv. Naechster Schwerpunkt: aktuellen Gesamtstand erneut markerfrei gegen
+Referenzen pruefen und groesste sichtbare Figuren-/Bewegungsluecke bearbeiten.
+
+G2 SICHTBARER HALS UND KORREKTER BUILD-FEHLERABBRUCH
+Vorderen Crewneck um45mm vertieft, Kragen und vordere Tiefe mitgefuehrt;
+Kopf/Schultergelenke/Kontaktmesh unveraendert. Blender/GLB/Preview gemeinsam
+regeneriert,89901Polygone. Front/Spiegel und erhobene seitliche Schlagpose
+visuell geprueft: Hals sichtbar, geschlossener Anschluss. Assetvalidator und
+116Handkontaktpunkte PASS,32Verletzungsrender mit gesundem Reset PASS.
+Dabei nativen Parserfehler aus vorheriger CPU-Profiling-Ergaenzung entdeckt:
+gemischte Leerzeichen/Tab-Einrueckung. Korrigiert. build.ps1 prueft jetzt neben
+Exitcode auch SCRIPT ERROR/ERROR-Zeilen; vorher konnte Godot trotz Parserfehler
+Exitcode0 liefern. Absichtlich erzeugter Scriptfehler mit Exit0 wird abgewiesen.
+Danach frischer Import/Export ohne Fehler; kompletter Standard-KO-Kampf mit
+Replay/Resume/Revanche bestanden, Browserfehler leer.
+Beleg validation/crew-neck-style.json und zwei Bilder. V12 bleibt getestetes
+historisches Browserpaket vor Ausschnitt und nativem Parser-/Buildfix.
+Goal aktiv; Gesamtstil/Menschabnahme weiter offen. Naechster G2/G4-Schritt:
+Kopf-/Halsverbindung bei deutlicher Nachbewegung und KO markerfrei pruefen,
+nicht allein neutrale Frontansicht als Beleg fuer alle Posen verwenden.
+
+G4 KO-KAMERA UND HALS IN BEWEGUNG
+Markerfreie KO-Aufnahmen bei .75/1.3/2.4s aus Front/Seite/Totale erzeugt.
+Front2.4 und Seite1.3 visuell geprueft: Hals/Kragen zusammenhaengend; vorher
+sank der Kopf hinter die Replaybedienung. Front/Seite folgen jetzt zu80% dem
+aufgezeichneten Kollaps am Kopfursprung; Totale unveraendert. Keine Aenderung
+an Koerper-/Kontaktphysik. Pausen bleiben stabil, Ruecklauf stellt die originale
+Kontaktkamera exakt wieder her (tests/ko_camera.gd PASS). Frischer Webbuild und
+vollstaendiger Standardkampf bisKO/Replay/Resume/Revanche PASS, Exit0.
+Beleg validation/ko-camera-follow.json und zwei markerfreie Aufnahmen.
+Gefuehrter Kollaps bleibt vereinfachte Animation, keine vollstaendige Ragdoll.
+Goal aktiv. Naechster Gesamtprodukt-Schritt: Helferabstand und Kopfueberdeckung
+im KO pruefen, dann aktuellen Asset-/Build-/Kamerastand ins Release integrieren.
+V12 liegt weiterhin vor Crewneck/Buildguard/Kamera. Menschabnahme offen.
+
+G7/G8 V13 VERÖFFENTLICHT UND DOWNLOAD GEPRUEFT
+Quelle db866b44d4a7793d221f5b14ec457f4fe2eeb0c1; Release v0.13.0-dev.20261008.
+68Dateien/23883206Bytes; SHA256
+07760957e6e9f3f5874beac8af4c43b929f4498b349b2c49a0f8afd5bab19daa.
+Eigene frische venv ausserhalb Checkout, Paketsetup und START_HOST.bat8880.
+Probe/Mausrad/Original/Bereitmachen PASS; echter Standardkampf mit5Treffern bisKO,
+Anspannen,9markerfreieKOAnsichten,Ruecklauf,Resume,Revanche PASS;errors[].
+GitHubdownload und alle68Dateien bytegleich zur laufenden Installation.
+Paket umfasst Crewneck/Buildguard/KO-Kamera. Helfertests aktuell wiederholt:
+380Stuetzpunkte max1.33e-7m;337Blickframes max.001899rad;101Schrittposen;
+Schulteranschluss und Ruecklauf PASS. Front.75/Totale2.4 und Paketseite1.3
+visuell geprueft; kein neuer Positionseingriff allein wegen Perspektivueberdeckung.
+Beleg validation/v13-package.json/png. Statusuebersicht verweist nun aufV13;
+alte Durchlaufnotizen als historisch markiert statt weiterhin aktuelle Hinweise.
+Goal aktiv. Gesamtstil, menschliche Verstaendlichkeit, anatomische Modellgrenzen
+und physischer Zwei-PC-Nachweis offen. Naechster Schwerpunkt G2/G3: aktuellen
+seitlichen Kontakt nochmals direkt neben Konzeptreferenz bewerten und groesste
+sichtbare Form-/Bewegungsluecke bearbeiten, keine weiteren Release-Mikrozyklen.
+
+G2 HAARANSATZ AN SCHLAEFEN UND HINTER OHREN
+Vergleich mit03-first-person: bisher hohe durchgehende Kappenkante an Seiten.
+Hinteren Ansatz19mm gesenkt, schmalen Schlaefenkeil bis37mm ergaenzt;
+Stirn/Ohrfreistellung erhalten. Blenderquelle/GLB/Vorschau neu,90210Polygone.
+Riglandmarken, Gesichtskollision und116Handkontaktpunkte unveraendert.
+Assetvalidator/Webbuild PASS. EchterBrowserkontaktcheck mit15Ansichten,
+Probe/Kamera/Mausrad/Replay/Crowdruecklauf PASS,errors[]. Front/Seitenkontakt,
+seitlicheKopfnachbewegung und Blender-Vorschau gesichtet. Belege validation/
+hairline-temples.json und hairline-front/side.png. Kein Gesamtstil-PASS.
+V13 ist letzter gepruefter Download und liegt vor dieser Haaransatzkorrektur.
+Goal aktiv. Naechstes G2/G3-Thema: Kontaktansicht zeigt weiterhin steil gebeugtes
+Handgelenk; dieses anhand realer seitlicher Referenzen und Rigwinkel pruefen,
+nicht mit kosmetischer Handdrehung an der Hostkontaktgeometrie vorbeiarbeiten.
+
+G3/G4 HANDGELENKMESSUNG UND ORIENTIERUNGSCACHE
+Aktueller echter Kontaktclip: Unterarm/Fingerachse rund78.7Grad am Kontakt.
+Dies ist geometrischer Gesamtwinkel, keine anatomisch kalibrierte Zerlegung.
+Offizielle Regeln erneut gelesen: https://www.powerslap.com/rules/ verlangt
+zusammen treffende Handflaeche/Finger, liefert keine Gelenkwinkelgrenzen.
+85Grad-Spielkegel daher nicht aufgrund einer Perspektive beliebig geaendert.
+Konkreter Rigfehler: apply_arm-Cache verglich nur Ellbogen/Wrist/yaw/pitch und
+konnte reine neue Handachsen bei gleichen Gelenkpositionen ignorieren.
+Cache umfasst jetzt auch Finger/Palmnormalen, Schulter, Rumpfdrehung und Seite.
+Nativer Regressionstest prueft reine Fingerdrehung/Palmdrehung bei festem Wrist,
+Sollbasis, Wiederholung und Ruecklauf PASS. Webbuild und echter Browserkontakt
+mit15Ansichten, Probe/Kamera/Mausrad/Replay PASS,errors[].
+Beleg validation/wrist-orientation-audit.json; tests/arm_orientation_cache.gd.
+Keine Anatomie-/Gesamtstil-/Menschabnahme ableiten. V13 liegt vor Haaransatz
+und diesem Cachefix. Goal aktiv. Naechste Arbeit: anisotrope menschliche
+Handgelenkachsen anhand belastbarer Referenzen statt globalem85Grad-Kegel
+untersuchen; anschliessend nur als zusammenhaengende Arm-/Handaenderung testen.
+
+G4 UNTERARMREFERENZ VOR ANATOMISCHEN GRENZEN
+Primaerstudie Crisco2011 gelesen; winkelabhaengige schraege Bewegungshuelle,
+keine direkte Kalibrierung fuer Slap. Aktuelle Referenzen unterscheidbar:
+Solver nutzt Armbeugeebene, Rig projiziert Handnormalen. Echter Browserclip
+gegen amKontakt kalibrierten Solverrahmen: Nachbewegung39.48Grad/Rueckholung
+54.37Grad Drift; nachKontakt.05Grad. Keine anatomische Ueberschreitung daraus
+behaupten, Rueckholung darf aktiv pronieren. Reproduzierbarer Audit committed.
+Naechste Integration konkret in WRIST_REFERENCE.txt: explizite aufgezeichnete
+Unterarmnormalen, kontinuierlicher Kontakt/Rueckholuebergang, Godotabgleich,
+Browserkontakt und Standardduell. Erst dann anatomische Winkelhuelle.
+Goal aktiv. Keine Produktionswinkel oder Trefferwertung in diesem Audit geaendert.
+
 ARENA FREIGEGEBEN UND IM MATCH INTEGRIERT — 10.10.2026
 Nutzer hat den Arena-Look freigegeben und Integration bestaetigt. Gemeinsames
 arena_presentation.gd fuer Vorschau/main.tscn: gemalte Halle/Crowd, nur Podest/Pult
@@ -1291,3 +2264,16 @@ ARENA_MATCH_PASS: hohe/tiefe Kontakte, Helferhand-Schulterziele, KO-Ruecklauf.
 Gekoppelter Kontaktbrowsercheck und KO4Treffer-Zweiclientkampf mit Ruecklauf,
 Resume/Revanche/Leave bestanden, errors[]. Testhost8879 beendet.
 Beleg validation/REPLAY_DETAIL_2026-10-11.txt; menschliche Zwei-PC-Abnahme offen.
+
+GEMEINSAMER ARENA-/MAIN-STAND / PROTOTYP14 — 11.10.2026
+Arena ca88873 mit GitHub-main fe05508 zusammengefuehrt. Neuere Figuren,
+Produktionssolver/Reibung/Kopfbewegung/Probe/Renderoptimierungen erhalten.
+MSAA-Hintergrundintegration korrigiert; Halle plus Spielobjekte nativ/Web sichtbar.
+165PythonTests, Blenderasset-/116Kontaktpunkte, Arena-/Helferaudits PASS.
+Checkout-StandardKO5Treffer und frisches Paket nach eigenemSetup/START_HOST
+inkl. Kontakt-/Replay-/KO-/Resume-/Revanche-/Leave-Checks PASS, errors[].
+Paket v0.14.0-dev.20261011,68Dateien,27352665Bytes,
+SHA256 587af3c49308c461f7db1eacfba3ae3a80486fa79355ceba299af7feda6168c5.
+Alle Paketdateien bytegleich zur frischen Installation. Eigene Testhosts8879/8881
+beendet. Beleg validation/ARENA_MAIN_V14_2026-10-11.txt. Menschliche Abnahme,
+Zwei-PC-Test und allgemeines Spielziel bleiben offen. Hoenhorst unveraendert.

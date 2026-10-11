@@ -1,0 +1,134 @@
+{
+  "flat": {
+    "viewport": [
+      1366,
+      768
+    ],
+    "msaa_3d": 1,
+    "host_recorded_pose": {
+      "time": 0.654167,
+      "pose": {
+        "root": [
+          0,
+          0,
+          0.525
+        ],
+        "shoulder": [
+          0.23465946752481123,
+          -0.16,
+          0.5123534866080783
+        ],
+        "torso_yaw": 0.05384095963523467,
+        "elbow": [
+          0.25129919952572916,
+          -0.13679909101973825,
+          0.2215015563267223
+        ],
+        "wrist": [
+          0.09728060462788093,
+          -0.08042637359923363,
+          0.03313653135351641
+        ],
+        "angles": [
+          -0.22534541301748068,
+          -0.18474027975858165,
+          0.7475181301117921
+        ],
+        "blocked": true,
+        "wrist_limited": false,
+        "finger_direction": [
+          0.03162968562513652,
+          0.9993908270190958,
+          0.014749164632036231
+        ],
+        "palm_normal": [
+          -0.9057556888204041,
+          0.03489949670250097,
+          -0.4223608141144103
+        ]
+      },
+      "tilt": -18,
+      "attacker": 0
+    },
+    "explicit_ready_returns_to_front": true,
+    "ready_preserves_tilt_without_striking": true,
+    "automatic_contact_view": true,
+    "actual_rig_matches": true,
+    "side_and_front": true,
+    "wheel_compares_same_probe": true,
+    "original_restore": true,
+    "comparison_rig_matches": true,
+    "next_actual_probe_uses_selected_tilt": true,
+    "saved_probe_unchanged": true,
+    "repeat_exits": true,
+    "no_damage": true,
+    "errors": []
+  },
+  "tips": {
+    "viewport": [
+      1366,
+      768
+    ],
+    "msaa_3d": 1,
+    "host_recorded_pose": {
+      "time": 0.595833,
+      "pose": {
+        "root": [
+          0,
+          0,
+          0.525
+        ],
+        "shoulder": [
+          0.2344422856555204,
+          -0.16,
+          0.5088193109968898
+        ],
+        "torso_yaw": 0.0689085168248691,
+        "elbow": [
+          0.27407731040333744,
+          -0.13898281227950982,
+          0.22003331611395727
+        ],
+        "wrist": [
+          0.11446371090980412,
+          -0.07959933933533656,
+          0.0373365852328531
+        ],
+        "angles": [
+          -0.18027348830495918,
+          -0.22980331810198068,
+          0.8589374706065859
+        ],
+        "blocked": true,
+        "wrist_limited": false,
+        "finger_direction": [
+          -0.06322083535051838,
+          0.9975640502598242,
+          -0.029480359678902977
+        ],
+        "palm_normal": [
+          -0.9041000668182987,
+          -0.0697564737441253,
+          -0.42158878489581864
+        ]
+      },
+      "tilt": -24,
+      "attacker": 0
+    },
+    "explicit_ready_returns_to_front": true,
+    "ready_preserves_tilt_without_striking": true,
+    "automatic_contact_view": true,
+    "actual_rig_matches": true,
+    "side_and_front": true,
+    "wheel_compares_same_probe": true,
+    "original_restore": true,
+    "comparison_rig_matches": true,
+    "next_actual_probe_uses_selected_tilt": true,
+    "saved_probe_unchanged": true,
+    "repeat_exits": true,
+    "no_damage": true,
+    "errors": []
+  },
+  "verification": "Flat case additionally verifies wrist moves >10cm from contact and rendered shoulder/elbow/wrist match the fresh host pose within 1e-5m. Both cases use real clicks/wheel and preserve zero damage.",
+  "limits": "Explicit inspection-to-ready mode change, not a simulated physical return animation. Human usability acceptance remains open."
+}

@@ -1,0 +1,201 @@
+{
+  "helper_gaze": {
+    "frames": 337,
+    "maximum_aim_error_rad": 0.00189898011740297,
+    "maximum_frame_turn_rad": 0.0303298011422157,
+    "neck_attached": true,
+    "rewind": true
+  },
+  "face_rest_uv": {
+    "vertices": 17113,
+    "maximum_rest_error_m": 6.21409270706863e-08,
+    "painted_vertices": 4821,
+    "masked_vertices": 9663
+  },
+  "contact_views": {
+    "repeat_practice_without_damage": true,
+    "idle_material_uploads_skipped": true,
+    "mirror_visibility_updates": true,
+    "pose_camera_and_wheel": true,
+    "crowd_reaction_and_rewind": true,
+    "jump_to_contact": true,
+    "side_camera": true,
+    "marker_toggle": true,
+    "no_stale_markers": true,
+    "errors": [],
+    "inspection_survives_original_deadline": false,
+    "coupled": {
+      "backend": "coupled-moving",
+      "solve_ms": 3295.6,
+      "peak": 0.034385,
+      "contact_diagnostics": {
+        "maximum_wrist_separation_m": 1.2109388155374826e-05,
+        "maximum_penetration_m": 3.5558324555388934e-06,
+        "unconverged_steps": 13,
+        "maximum_material_residual_m": 0.0003236335516221488
+      },
+      "head_response": {
+        "model": "coupled-yaw-through-contact-and-tail",
+        "braced": false,
+        "tail_pin_error_m": 1.1588635388927969e-07,
+        "spatial_rotation": true,
+        "translation": true,
+        "parameters": "prototype tuning, three translations and three Euler rotations; diagonal generalized inertia"
+      },
+      "maximum_head_yaw_rad": 0.08151
+    }
+  },
+  "duel": {
+    "url": "http://192.168.178.67:8877",
+    "errors": [],
+    "hits": [
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 15.28,
+        "quality": 0.5223,
+        "braced": true,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber – mit der flachen Hand getroffen.",
+        "replay_id": "95fc85cc0074fd4ed7da"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 26.14,
+        "quality": 0.581,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber – mit der flachen Hand getroffen.",
+        "replay_id": "aeddf1a79e41f8b18b49"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 21.16,
+        "quality": 0.4702,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber – mit der flachen Hand getroffen.",
+        "replay_id": "995dbb97f33382260004"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 22.19,
+        "quality": 0.4931,
+        "braced": false,
+        "side": "R",
+        "ko": true,
+        "foul": false,
+        "diagnosis": "Sauber – mit der flachen Hand getroffen.",
+        "replay_id": "8c277c73f5e3252c5507"
+      }
+    ],
+    "configuration": {
+      "base_damage": 45,
+      "ko_threshold": 60,
+      "turn_seconds": 60
+    },
+    "single_tilt_control": true,
+    "physics_backend": "coupled-moving",
+    "moving_head_brace_consistent": true,
+    "solved_normal_impulse_ns": 1.044680396804064,
+    "solved_quality_matches_hit": true,
+    "recorded_arm_frames": 544,
+    "clip_hash": "b95d8da4c151753ad7c56d3bebc1b957deba877d49e04125e11a437ae3e10661",
+    "replay": {
+      "clipId": "95fc85cc0074fd4ed7da",
+      "frameCount": 337,
+      "peak": 0.02532,
+      "time": 0.58331,
+      "frame": 69,
+      "deformation": 0.0253193756
+    },
+    "replay_frame_ms_p95": 20.900000000001455,
+    "viewport": [
+      1920,
+      1080
+    ],
+    "msaa_3d": 1,
+    "resume": true,
+    "injury_material_rewind": true,
+    "ko_body_recorded": true,
+    "ko_reverse_seek": true,
+    "winner": 1,
+    "audio": {
+      "mode": "buffer-fallback",
+      "played": 6,
+      "unlocked": true
+    },
+    "rematch_material_reset": true,
+    "rematch": true,
+    "leave": true,
+    "stats": {
+      "arm_data": true,
+      "camera_position": [
+        0.300000011920929,
+        0.550000011920929,
+        2.65000009536743
+      ],
+      "crowd_active": false,
+      "dragging": false,
+      "face_head_offset": [
+        0,
+        0,
+        0
+      ],
+      "face_head_rotation": [
+        0,
+        0,
+        0
+      ],
+      "face_injury": [
+        0,
+        0,
+        0
+      ],
+      "fps": 64,
+      "hand_wrist": "(-0.12, -0.49, -0.17)",
+      "mirror_draw_requests": 768,
+      "mirror_injury": [
+        0,
+        0,
+        0
+      ],
+      "msaa_3d": 1,
+      "muted": false,
+      "physics_active": false,
+      "physics_material_updates": 420,
+      "physics_time": -1,
+      "rendered_arm": {
+        "elbow": [
+          0.346037536859512,
+          -0.411999642848969,
+          0.622861385345459
+        ],
+        "shoulder": [
+          0.234999999403954,
+          -0.159999996423721,
+          0.524999976158142
+        ],
+        "wrist": [
+          0.120000019669533,
+          -0.490000009536743,
+          0.694999933242798
+        ]
+      },
+      "samples": 0
+    }
+  },
+  "injury_render": "32 states: four skin variants, both sides, healthy/injured/restored; native pixel checks passed.",
+  "asset_validation": "Closed strike hand, 116 contact points, finite normalized weights, packed paint texture passed.",
+  "visual_review": "Browser contact and KO reviewed: paint remains attached during head rotation; neck transition connected; helpers follow the caught fighter.",
+  "limits": "Authored helper motion and guided KO; no physical grip or anatomical gaze validation. Overall style and human readability acceptance remain open."
+}

@@ -1,0 +1,35 @@
+{
+  "samples": [
+    {
+      "moment": "before",
+      "time": 0.458315,
+      "roll_difference_deg": -2.549637262147127
+    },
+    {
+      "moment": "contact",
+      "time": 0.49998,
+      "roll_difference_deg": 0.0
+    },
+    {
+      "moment": "after",
+      "time": 0.541645,
+      "roll_difference_deg": 0.04956912808301515
+    },
+    {
+      "moment": "head-response",
+      "time": 0.649974,
+      "roll_difference_deg": -39.482454245041154
+    },
+    {
+      "moment": "recovery",
+      "time": 0.799968,
+      "roll_difference_deg": -54.36561359599877
+    }
+  ],
+  "reference": "Arm-plane frame, calibrated to rendered forearm at sampled contact",
+  "limits": [
+    "Sparse replay samples, not a full time-series bound",
+    "Reference difference is not an anatomical joint angle",
+    "Carried reference assumes no independent pronation motor; recovery may intentionally change orientation"
+  ]
+}

@@ -16,7 +16,7 @@ func verify() -> void:
 	for i in range(1,5):
 		scene.set_view(i)
 		if stage.get_child_count()!=count:push_error("Camera switch duplicated geometry");quit(1);return
-		if not scene.backdrop.is_visible_in_tree():push_error("Background hidden");quit(1);return
+		if not scene.painted_background.is_visible_in_tree():push_error("Background hidden");quit(1);return
 	var podium: MeshInstance3D=stage.find_child("PodiumTop",true,false)
 	if absf(podium.position.y+1.015)>.001:
 		push_error("Table height changed");quit(1);return

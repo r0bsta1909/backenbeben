@@ -1,6 +1,6 @@
 extends RefCounted
 ## Upload recorded lateral offsets. Schema uses render units throughout.
-static func texture_for(data: Dictionary, offsets: Array) -> ImageTexture:
+static func texture_for(data: Dictionary, offsets: Array, previous: ImageTexture = null) -> ImageTexture:
 	var nx := int(data.get("nx",0))
 	var ny := int(data.get("ny",0))
 	var rest_x: Array = data.get("rest_x",[])
@@ -8,4 +8,7 @@ static func texture_for(data: Dictionary, offsets: Array) -> ImageTexture:
 	var img := Image.create(nx,ny,false,Image.FORMAT_RGBAF)
 	for i in range(nx*ny):
 		img.set_pixel(i%nx,i/nx,Color(float(offsets[i*3]),float(offsets[i*3+1]),float(offsets[i*3+2]),float(rest_x[i])))
+	if previous!=null and previous.get_width()==nx and previous.get_height()==ny:
+		previous.update(img)
+		return previous
 	return ImageTexture.create_from_image(img)

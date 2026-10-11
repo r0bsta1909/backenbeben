@@ -1,0 +1,620 @@
+{
+  "change": "Front crew-neck opening lowered 45mm with matched collar depth; shoulder joints, face collision and hand samples unchanged",
+  "asset_polygons": 89901,
+  "asset_validation": true,
+  "injury_render_states": 32,
+  "healthy_reset_exact": true,
+  "browser": {
+    "url": "LAN HTTP / two browser clients on one PC",
+    "errors": [],
+    "hits": [
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 15.75,
+        "quality": 0.6924,
+        "braced": true,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "a6095bd97c6c6041199f"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 28.25,
+        "quality": 0.8071,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "a03ca5e373ed1616382f"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 31.43,
+        "quality": 0.8979,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "856dbfa46af49c7708a6"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 27.84,
+        "quality": 0.7955,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "ce199cd325bde4764ca6"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 30.59,
+        "quality": 0.8741,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "ac65cc05ee5e55dfb4aa"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 24.1,
+        "quality": 0.6887,
+        "braced": false,
+        "side": "R",
+        "ko": true,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "f4dd615ad4c103b18ca5"
+      }
+    ],
+    "configuration": {
+      "base_damage": 35.0,
+      "brace_window_ms": 450.0,
+      "brace_reduction": 0.35,
+      "recovery": 6.0,
+      "ko_threshold": 100.0,
+      "turn_seconds": 25.0,
+      "max_pairs": 5.0
+    },
+    "skilled_standard": true,
+    "single_tilt_control": true,
+    "input_duration_ms": [
+      477.7,
+      502.0,
+      437.2,
+      449.3,
+      525.1,
+      432.0,
+      426.5,
+      451.6,
+      410.3,
+      433.9,
+      406.5,
+      447.2
+    ],
+    "physics_backend": "coupled-moving",
+    "moving_head_brace_consistent": true,
+    "solved_normal_impulse_ns": 1.7096626559153851,
+    "solved_quality_matches_hit": true,
+    "friction": {
+      "coefficient": 0.2,
+      "maximum_residual_m": 0.00017665117165330079,
+      "maximum_cone_error": 0.0
+    },
+    "recorded_arm_frames": 491,
+    "clip_hash": "7187341cad897af2bf4f21ed7ea1a8da7804ece81a9aeacb85e5898036bbd886",
+    "brace_expression_stable_in_paused_replay": true,
+    "replay": {
+      "clipId": "a6095bd97c6c6041199f",
+      "frameCount": 337,
+      "peak": 0.048931999999999996,
+      "time": 0.591643,
+      "frame": 70,
+      "deformation": 0.0489318438
+    },
+    "replay_frame_ms_p95": 27.900000000001455,
+    "viewport": [
+      1920,
+      1080
+    ],
+    "msaa_3d": 1,
+    "resume": true,
+    "injury_material_rewind": true,
+    "ko_body_recorded": true,
+    "ko_reverse_seek": true,
+    "winner": 1,
+    "audio": {
+      "mode": "buffer-fallback",
+      "played": 8,
+      "unlocked": true
+    },
+    "rematch_material_reset": true,
+    "rematch": true,
+    "leave": true,
+    "phase_performance": {
+      "segments": [
+        {
+          "phase": "loading",
+          "ms": 307.2,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "lobby",
+          "ms": 27494.2,
+          "mirror_draws": 16
+        },
+        {
+          "phase": "waiting",
+          "ms": 271.1999999999971,
+          "mirror_draws": 1
+        },
+        {
+          "phase": "aim_idle",
+          "ms": 1244.7000000000007,
+          "mirror_draws": 1
+        },
+        {
+          "phase": "stroke",
+          "ms": 521.5,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "aim_idle",
+          "ms": 598,
+          "mirror_draws": 3
+        },
+        {
+          "phase": "stroke",
+          "ms": 528.4000000000015,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "aim_idle",
+          "ms": 55.70000000000073,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "windup",
+          "ms": 1362.8999999999978,
+          "mirror_draws": 1
+        },
+        {
+          "phase": "resolving",
+          "ms": 3497.5000000000036,
+          "mirror_draws": 8
+        },
+        {
+          "phase": "impact_striker",
+          "ms": 2830.0999999999985,
+          "mirror_draws": 3
+        },
+        {
+          "phase": "replay_playing",
+          "ms": 646.7999999999956,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "replay_paused",
+          "ms": 4241.5,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "disconnected",
+          "ms": 20.900000000001455,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "replay_paused",
+          "ms": 27.900000000001455,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "replay_playing",
+          "ms": 3261.0999999999985,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "replay_paused",
+          "ms": 757.9000000000015,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "recover",
+          "ms": 2301.699999999997,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "aim_idle",
+          "ms": 2183.4000000000015,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "windup",
+          "ms": 1356,
+          "mirror_draws": 10
+        },
+        {
+          "phase": "resolving",
+          "ms": 1967.800000000003,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "impact_receiver",
+          "ms": 2843.9000000000015,
+          "mirror_draws": 58
+        },
+        {
+          "phase": "replay_paused",
+          "ms": 48.69999999999709,
+          "mirror_draws": 1
+        },
+        {
+          "phase": "replay_playing",
+          "ms": 452,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "replay_paused",
+          "ms": 827.5,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "recover",
+          "ms": 2301.5999999999985,
+          "mirror_draws": 3
+        },
+        {
+          "phase": "aim_idle",
+          "ms": 806.5999999999985,
+          "mirror_draws": 1
+        },
+        {
+          "phase": "stroke",
+          "ms": 563.4000000000015,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "aim_idle",
+          "ms": 646.5,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "stroke",
+          "ms": 431.09999999999854,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "aim_idle",
+          "ms": 55.700000000004366,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "windup",
+          "ms": 1348.9000000000015,
+          "mirror_draws": 1
+        },
+        {
+          "phase": "resolving",
+          "ms": 2621.5999999999913,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "impact_striker",
+          "ms": 2830,
+          "mirror_draws": 3
+        },
+        {
+          "phase": "replay_paused",
+          "ms": 20.80000000000291,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "replay_playing",
+          "ms": 389.5,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "replay_paused",
+          "ms": 883.1000000000058,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "recover",
+          "ms": 2301.699999999997,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "aim_idle",
+          "ms": 2482.300000000003,
+          "mirror_draws": 12
+        },
+        {
+          "phase": "windup",
+          "ms": 1328.0999999999913,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "resolving",
+          "ms": 2398.9000000000087,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "impact_receiver",
+          "ms": 2858,
+          "mirror_draws": 53
+        },
+        {
+          "phase": "replay_paused",
+          "ms": 27.80000000000291,
+          "mirror_draws": 1
+        },
+        {
+          "phase": "replay_playing",
+          "ms": 424.09999999999127,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "replay_paused",
+          "ms": 904,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "recover",
+          "ms": 2336.300000000003,
+          "mirror_draws": 12
+        },
+        {
+          "phase": "aim_idle",
+          "ms": 771.8999999999942,
+          "mirror_draws": 1
+        },
+        {
+          "phase": "stroke",
+          "ms": 445,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "aim_idle",
+          "ms": 535.4000000000087,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "stroke",
+          "ms": 459,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "aim_idle",
+          "ms": 55.59999999999127,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "windup",
+          "ms": 1369.9000000000087,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "resolving",
+          "ms": 2280.699999999997,
+          "mirror_draws": 10
+        },
+        {
+          "phase": "impact_striker",
+          "ms": 2830.100000000006,
+          "mirror_draws": 3
+        },
+        {
+          "phase": "replay_paused",
+          "ms": 27.89999999999418,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "replay_playing",
+          "ms": 465.8999999999942,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "replay_paused",
+          "ms": 896.9000000000087,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "recover",
+          "ms": 2294.699999999997,
+          "mirror_draws": 10
+        },
+        {
+          "phase": "aim_idle",
+          "ms": 2322.399999999994,
+          "mirror_draws": 1
+        },
+        {
+          "phase": "windup",
+          "ms": 1349,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "resolving",
+          "ms": 1981.800000000003,
+          "mirror_draws": 9
+        },
+        {
+          "phase": "impact_receiver",
+          "ms": 2830,
+          "mirror_draws": 48
+        },
+        {
+          "phase": "replay_paused",
+          "ms": 55.69999999999709,
+          "mirror_draws": 1
+        },
+        {
+          "phase": "replay_playing",
+          "ms": 431,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "replay_paused",
+          "ms": 1919.2000000000116,
+          "mirror_draws": 0
+        },
+        {
+          "phase": "over",
+          "ms": 918,
+          "mirror_draws": 1
+        },
+        {
+          "phase": "aim_idle",
+          "ms": 528.3999999999942,
+          "mirror_draws": 2
+        },
+        {
+          "phase": "disconnected",
+          "ms": 144
+        }
+      ],
+      "viewport": [
+        1920,
+        1080
+      ],
+      "devicePixelRatio": 1,
+      "hardwareConcurrency": 12,
+      "phases": {
+        "lobby": {
+          "frames": 269,
+          "median_ms": 13.9,
+          "p95_ms": 27.9,
+          "max_ms": 22821.4,
+          "over_33ms": 9,
+          "over_50ms": 3,
+          "over_100ms": 1
+        },
+        "waiting": {
+          "frames": 10,
+          "median_ms": 20.9,
+          "p95_ms": 48.7,
+          "max_ms": 48.7,
+          "over_33ms": 2,
+          "over_50ms": 0,
+          "over_100ms": 0
+        },
+        "aim_idle": {
+          "frames": 423,
+          "median_ms": 27.8,
+          "p95_ms": 34.8,
+          "max_ms": 69.6,
+          "over_33ms": 76,
+          "over_50ms": 1,
+          "over_100ms": 0
+        },
+        "stroke": {
+          "frames": 90,
+          "median_ms": 27.9,
+          "p95_ms": 41.8,
+          "max_ms": 68.8,
+          "over_33ms": 27,
+          "over_50ms": 2,
+          "over_100ms": 0
+        },
+        "windup": {
+          "frames": 270,
+          "median_ms": 27.8,
+          "p95_ms": 41.6,
+          "max_ms": 59.1,
+          "over_33ms": 63,
+          "over_50ms": 1,
+          "over_100ms": 0
+        },
+        "resolving": {
+          "frames": 471,
+          "median_ms": 27.9,
+          "p95_ms": 41.8,
+          "max_ms": 48.7,
+          "over_33ms": 180,
+          "over_50ms": 0,
+          "over_100ms": 0
+        },
+        "impact_striker": {
+          "frames": 317,
+          "median_ms": 27.8,
+          "p95_ms": 34.8,
+          "max_ms": 69.5,
+          "over_33ms": 39,
+          "over_50ms": 4,
+          "over_100ms": 0
+        },
+        "replay_playing": {
+          "frames": 252,
+          "median_ms": 20.9,
+          "p95_ms": 34.8,
+          "max_ms": 153.1,
+          "over_33ms": 28,
+          "over_50ms": 2,
+          "over_100ms": 1
+        },
+        "replay_paused": {
+          "frames": 471,
+          "median_ms": 20.9,
+          "p95_ms": 27.9,
+          "max_ms": 41.8,
+          "over_33ms": 10,
+          "over_50ms": 0,
+          "over_100ms": 0
+        },
+        "recover": {
+          "frames": 401,
+          "median_ms": 27.8,
+          "p95_ms": 41.7,
+          "max_ms": 62.5,
+          "over_33ms": 77,
+          "over_50ms": 3,
+          "over_100ms": 0
+        },
+        "impact_receiver": {
+          "frames": 269,
+          "median_ms": 27.8,
+          "p95_ms": 62.6,
+          "max_ms": 76.5,
+          "over_33ms": 78,
+          "over_50ms": 35,
+          "over_100ms": 0
+        },
+        "over": {
+          "frames": 43,
+          "median_ms": 20.8,
+          "p95_ms": 27.8,
+          "max_ms": 48.7,
+          "over_33ms": 2,
+          "over_50ms": 0,
+          "over_100ms": 0
+        },
+        "disconnected": {
+          "frames": 4,
+          "median_ms": 27.9,
+          "p95_ms": 27.9,
+          "max_ms": 27.9,
+          "over_33ms": 0,
+          "over_50ms": 0,
+          "over_100ms": 0
+        }
+      },
+      "limits": "Browser requestAnimationFrame intervals, not GPU timings. Two headless clients and host share one PC. Transition-crossing frames excluded; phase segment durations retained. Primary client only, including replay inspection pauses."
+    }
+  },
+  "build_fix": "Mixed indentation in earlier CPU profiling helpers caused a native GDScript parse error. Fixed indentation; build now rejects SCRIPT ERROR/ERROR log lines even with exit code0. Injected exit-zero script error confirmed rejected.",
+  "limits": "Incremental reference/style correction, no full art acceptance. V12 packaged browser passed its tests but native source now has an additional parser/build fix; V12 remains unchanged."
+}

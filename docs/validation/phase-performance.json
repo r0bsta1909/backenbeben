@@ -1,0 +1,395 @@
+{
+  "source_commit": "6fa39f9",
+  "hardware": {
+    "memory_gib": 15.9,
+    "cpu": {
+      "Name": "AMD Ryzen 5 3600 6-Core Processor              ",
+      "NumberOfCores": 6,
+      "NumberOfLogicalProcessors": 12
+    },
+    "gpu": {
+      "Name": "NVIDIA GeForce RTX 2080",
+      "DriverVersion": "32.0.15.9186"
+    }
+  },
+  "browser": "Chrome 154.0.8037.98 headless",
+  "configuration": {
+    "base_damage": 35.0,
+    "brace_window_ms": 450.0,
+    "brace_reduction": 0.35,
+    "recovery": 6.0,
+    "ko_threshold": 100.0,
+    "turn_seconds": 25.0,
+    "max_pairs": 5.0
+  },
+  "performance": {
+    "segments": [
+      {
+        "phase": "loading",
+        "ms": 284.3
+      },
+      {
+        "phase": "lobby",
+        "ms": 28252.100000000002
+      },
+      {
+        "phase": "waiting",
+        "ms": 285
+      },
+      {
+        "phase": "aim_idle",
+        "ms": 1251.7000000000007
+      },
+      {
+        "phase": "stroke",
+        "ms": 479.7999999999993
+      },
+      {
+        "phase": "aim_idle",
+        "ms": 702.7999999999993
+      },
+      {
+        "phase": "stroke",
+        "ms": 514.0999999999985
+      },
+      {
+        "phase": "aim_idle",
+        "ms": 69.5
+      },
+      {
+        "phase": "windup",
+        "ms": 1314.2000000000044
+      },
+      {
+        "phase": "resolving",
+        "ms": 3247.2999999999956
+      },
+      {
+        "phase": "impact",
+        "ms": 2837
+      },
+      {
+        "phase": "replay_playing",
+        "ms": 625.8000000000029
+      },
+      {
+        "phase": "replay_paused",
+        "ms": 4346
+      },
+      {
+        "phase": "disconnected",
+        "ms": 55.599999999998545
+      },
+      {
+        "phase": "replay_paused",
+        "ms": 55.69999999999709
+      },
+      {
+        "phase": "replay_playing",
+        "ms": 3949.5
+      },
+      {
+        "phase": "replay_paused",
+        "ms": 820.6000000000058
+      },
+      {
+        "phase": "recover",
+        "ms": 2301.5999999999985
+      },
+      {
+        "phase": "aim_idle",
+        "ms": 2433.699999999997
+      },
+      {
+        "phase": "windup",
+        "ms": 1342
+      },
+      {
+        "phase": "resolving",
+        "ms": 2072.2000000000044
+      },
+      {
+        "phase": "impact",
+        "ms": 2871.7999999999956
+      },
+      {
+        "phase": "replay_paused",
+        "ms": 48.599999999998545
+      },
+      {
+        "phase": "replay_playing",
+        "ms": 528.5
+      },
+      {
+        "phase": "replay_paused",
+        "ms": 848.4000000000015
+      },
+      {
+        "phase": "recover",
+        "ms": 2322.4000000000015
+      },
+      {
+        "phase": "aim_idle",
+        "ms": 904
+      },
+      {
+        "phase": "stroke",
+        "ms": 452
+      },
+      {
+        "phase": "aim_idle",
+        "ms": 549.3999999999942
+      },
+      {
+        "phase": "stroke",
+        "ms": 465.8000000000029
+      },
+      {
+        "phase": "aim_idle",
+        "ms": 83.5
+      },
+      {
+        "phase": "windup",
+        "ms": 1328
+      },
+      {
+        "phase": "resolving",
+        "ms": 2371.199999999997
+      },
+      {
+        "phase": "impact",
+        "ms": 2802.2000000000116
+      },
+      {
+        "phase": "replay_paused",
+        "ms": 28
+      },
+      {
+        "phase": "replay_playing",
+        "ms": 417.09999999999127
+      },
+      {
+        "phase": "replay_paused",
+        "ms": 813.6000000000058
+      },
+      {
+        "phase": "recover",
+        "ms": 2308.5
+      },
+      {
+        "phase": "aim_idle",
+        "ms": 2343.300000000003
+      },
+      {
+        "phase": "windup",
+        "ms": 1349
+      },
+      {
+        "phase": "resolving",
+        "ms": 2969.199999999997
+      },
+      {
+        "phase": "impact",
+        "ms": 2809.199999999997
+      },
+      {
+        "phase": "replay_paused",
+        "ms": 27.80000000000291
+      },
+      {
+        "phase": "replay_playing",
+        "ms": 375.5
+      },
+      {
+        "phase": "replay_paused",
+        "ms": 806.5999999999913
+      },
+      {
+        "phase": "recover",
+        "ms": 2350.300000000003
+      },
+      {
+        "phase": "aim_idle",
+        "ms": 737.1000000000058
+      },
+      {
+        "phase": "stroke",
+        "ms": 417.09999999999127
+      },
+      {
+        "phase": "aim_idle",
+        "ms": 549.4000000000087
+      },
+      {
+        "phase": "stroke",
+        "ms": 465.8999999999942
+      },
+      {
+        "phase": "aim_idle",
+        "ms": 62.60000000000582
+      },
+      {
+        "phase": "windup",
+        "ms": 1342.0999999999913
+      },
+      {
+        "phase": "resolving",
+        "ms": 2405.800000000003
+      },
+      {
+        "phase": "impact",
+        "ms": 2830.100000000006
+      },
+      {
+        "phase": "replay_paused",
+        "ms": 62.5
+      },
+      {
+        "phase": "replay_playing",
+        "ms": 445.1999999999971
+      },
+      {
+        "phase": "replay_paused",
+        "ms": 2113.800000000003
+      },
+      {
+        "phase": "over",
+        "ms": 945.6999999999971
+      },
+      {
+        "phase": "aim_idle",
+        "ms": 528.3999999999942
+      },
+      {
+        "phase": "disconnected",
+        "ms": 166.50000000596629
+      }
+    ],
+    "viewport": [
+      1920,
+      1080
+    ],
+    "devicePixelRatio": 1,
+    "hardwareConcurrency": 12,
+    "phases": {
+      "lobby": {
+        "frames": 266,
+        "median_ms": 14,
+        "p95_ms": 27.9,
+        "max_ms": 23356.8,
+        "over_33ms": 13,
+        "over_50ms": 3,
+        "over_100ms": 1
+      },
+      "waiting": {
+        "frames": 10,
+        "median_ms": 20.9,
+        "p95_ms": 41.8,
+        "max_ms": 41.8,
+        "over_33ms": 2,
+        "over_50ms": 0,
+        "over_100ms": 0
+      },
+      "aim_idle": {
+        "frames": 332,
+        "median_ms": 27.8,
+        "p95_ms": 41.7,
+        "max_ms": 62.9,
+        "over_33ms": 116,
+        "over_50ms": 2,
+        "over_100ms": 0
+      },
+      "stroke": {
+        "frames": 85,
+        "median_ms": 27.9,
+        "p95_ms": 34.9,
+        "max_ms": 49.9,
+        "over_33ms": 31,
+        "over_50ms": 0,
+        "over_100ms": 0
+      },
+      "windup": {
+        "frames": 204,
+        "median_ms": 28,
+        "p95_ms": 41.7,
+        "max_ms": 48.7,
+        "over_33ms": 100,
+        "over_50ms": 0,
+        "over_100ms": 0
+      },
+      "resolving": {
+        "frames": 414,
+        "median_ms": 27.9,
+        "p95_ms": 41.6,
+        "max_ms": 48.7,
+        "over_33ms": 197,
+        "over_50ms": 0,
+        "over_100ms": 0
+      },
+      "impact": {
+        "frames": 469,
+        "median_ms": 27.8,
+        "p95_ms": 62.6,
+        "max_ms": 76.5,
+        "over_33ms": 131,
+        "over_50ms": 37,
+        "over_100ms": 0
+      },
+      "replay_playing": {
+        "frames": 266,
+        "median_ms": 20.9,
+        "p95_ms": 34.9,
+        "max_ms": 181,
+        "over_33ms": 36,
+        "over_50ms": 2,
+        "over_100ms": 1
+      },
+      "replay_paused": {
+        "frames": 429,
+        "median_ms": 20.9,
+        "p95_ms": 27.9,
+        "max_ms": 41.8,
+        "over_33ms": 15,
+        "over_50ms": 0,
+        "over_100ms": 0
+      },
+      "recover": {
+        "frames": 321,
+        "median_ms": 27.8,
+        "p95_ms": 34.8,
+        "max_ms": 62.6,
+        "over_33ms": 70,
+        "over_50ms": 2,
+        "over_100ms": 0
+      },
+      "over": {
+        "frames": 43,
+        "median_ms": 20.8,
+        "p95_ms": 27.9,
+        "max_ms": 62.6,
+        "over_33ms": 1,
+        "over_50ms": 1,
+        "over_100ms": 0
+      },
+      "disconnected": {
+        "frames": 4,
+        "median_ms": 34.8,
+        "p95_ms": 34.8,
+        "max_ms": 34.8,
+        "over_33ms": 3,
+        "over_50ms": 0,
+        "over_100ms": 0
+      }
+    },
+    "limits": "Browser requestAnimationFrame intervals, not GPU timings. Two headless clients and host share one PC. Transition-crossing frames excluded; phase segment durations retained. Primary client only, including replay inspection pauses."
+  },
+  "functional": {
+    "ko_body_recorded": true,
+    "ko_reverse_seek": true,
+    "rematch": true,
+    "resume": true,
+    "injury_material_rewind": true,
+    "errors": []
+  },
+  "interpretation": "Not a 60fps acceptance. Impact p95 62.6ms; running replay p95 34.9ms; resolving intervals 2.07-3.25s. Lobby maximum 23.36s occurred in a run that loads a second browser after the first; cause not isolated. Screenshots, protocol automation, two contexts and host share hardware. No separate GPU timings or independent-PC measurement."
+}

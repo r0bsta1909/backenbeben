@@ -1,0 +1,323 @@
+{
+  "flat": {
+    "viewport": [
+      1366,
+      768
+    ],
+    "host_recorded_pose": {
+      "time": 0.445833,
+      "pose": {
+        "root": [
+          0,
+          0,
+          0.525
+        ],
+        "shoulder": [
+          0.23456068914043351,
+          -0.16,
+          0.5106374406888986
+        ],
+        "torso_yaw": 0.06115538653685705,
+        "elbow": [
+          0.24412442314756452,
+          -0.13610366455976589,
+          0.21952318760030082
+        ],
+        "wrist": [
+          0.08891278445143197,
+          -0.07996805667717422,
+          0.03206883524285592
+        ],
+        "angles": [
+          -0.23427892921355137,
+          -0.17608267923516083,
+          0.7292758026709851
+        ],
+        "blocked": true,
+        "wrist_limited": false,
+        "finger_direction": [
+          0.07898992833716563,
+          0.9961946980917455,
+          0.03683360850073487
+        ],
+        "palm_normal": [
+          -0.9028590122851735,
+          0.08715574274765817,
+          -0.4210100716628344
+        ]
+      },
+      "tilt": -15,
+      "attacker": 0
+    },
+    "actual_rig_matches": true,
+    "side_and_front": true,
+    "wheel_exits_to_live_pose": true,
+    "saved_probe_unchanged": true,
+    "repeat_exits": true,
+    "no_damage": true,
+    "errors": []
+  },
+  "tips": {
+    "viewport": [
+      1366,
+      768
+    ],
+    "host_recorded_pose": {
+      "time": 0.433333,
+      "pose": {
+        "root": [
+          0,
+          0,
+          0.525
+        ],
+        "shoulder": [
+          0.23446534659108315,
+          -0.16,
+          0.5091569810981854
+        ],
+        "torso_yaw": 0.06746827563575104,
+        "elbow": [
+          0.26419987122718697,
+          -0.1382344113018848,
+          0.2192395352618698
+        ],
+        "wrist": [
+          0.10566102495490487,
+          -0.07996937839513316,
+          0.03525145510485306
+        ],
+        "angles": [
+          -0.1979142050649402,
+          -0.21356521685242774,
+          0.818159202058587
+        ],
+        "blocked": true,
+        "wrist_limited": false,
+        "finger_direction": [
+          -0.015817251856638605,
+          0.9998476951563913,
+          -0.007375705671716951
+        ],
+        "palm_normal": [
+          -0.9061697519708839,
+          -0.01745240643728351,
+          -0.42255389493243883
+        ]
+      },
+      "tilt": -21,
+      "attacker": 0
+    },
+    "actual_rig_matches": true,
+    "side_and_front": true,
+    "wheel_exits_to_live_pose": true,
+    "saved_probe_unchanged": true,
+    "repeat_exits": true,
+    "no_damage": true,
+    "errors": []
+  },
+  "duel": {
+    "url": "http://192.168.178.67:8877",
+    "errors": [],
+    "hits": [
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 13.78,
+        "quality": 0.471,
+        "braced": true,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "4215c1bef85db635abf7"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 21.17,
+        "quality": 0.4705,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "9ae94d1f5c0930e4ef41"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 24.17,
+        "quality": 0.5371,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "e8a0d92073a83e586810"
+      },
+      {
+        "kind": "hit",
+        "target": 0,
+        "damage": 24.65,
+        "quality": 0.5478,
+        "braced": false,
+        "side": "R",
+        "ko": false,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "327957ba6a157c78a94a"
+      },
+      {
+        "kind": "hit",
+        "target": 1,
+        "damage": 29.07,
+        "quality": 0.6461,
+        "braced": false,
+        "side": "R",
+        "ko": true,
+        "foul": false,
+        "diagnosis": "Sauber \u2013 mit der flachen Hand getroffen.",
+        "replay_id": "d7f60231f4f716bc4510"
+      }
+    ],
+    "configuration": {
+      "base_damage": 45,
+      "ko_threshold": 60,
+      "turn_seconds": 60
+    },
+    "single_tilt_control": true,
+    "physics_backend": "coupled-moving",
+    "moving_head_brace_consistent": true,
+    "solved_normal_impulse_ns": 1.0261081640656855,
+    "solved_quality_matches_hit": true,
+    "recorded_arm_frames": 515,
+    "clip_hash": "7825e24e00c000aaaad5b4bc2e15bc9876a475a6773ed845cca86ca9f70055ef",
+    "replay": {
+      "clipId": "4215c1bef85db635abf7",
+      "frameCount": 337,
+      "peak": 0.024914,
+      "time": 0.58331,
+      "frame": 69,
+      "deformation": 0.024913322399999997
+    },
+    "replay_frame_ms_p95": 20.900000000001455,
+    "viewport": [
+      1920,
+      1080
+    ],
+    "resume": true,
+    "injury_material_rewind": true,
+    "ko_body_recorded": true,
+    "ko_reverse_seek": true,
+    "winner": 0,
+    "audio": {
+      "mode": "buffer-fallback",
+      "played": 7,
+      "unlocked": true
+    },
+    "rematch_material_reset": true,
+    "rematch": true,
+    "leave": true,
+    "stats": {
+      "arm_data": true,
+      "camera_position": [
+        0.300000011920929,
+        0.550000011920929,
+        2.65000009536743
+      ],
+      "crowd_active": false,
+      "dragging": false,
+      "face_head_offset": [
+        0,
+        0,
+        0
+      ],
+      "face_head_rotation": [
+        0,
+        0,
+        0
+      ],
+      "face_injury": [
+        0,
+        0,
+        0
+      ],
+      "fps": 78,
+      "hand_wrist": "(-0.12, -0.49, -0.17)",
+      "mirror_draw_requests": 911,
+      "mirror_injury": [
+        0,
+        0,
+        0
+      ],
+      "muted": false,
+      "physics_active": false,
+      "physics_material_updates": 478,
+      "physics_time": -1,
+      "rendered_arm": {
+        "elbow": [
+          0.346037536859512,
+          -0.411999642848969,
+          0.622861385345459
+        ],
+        "shoulder": [
+          0.234999999403954,
+          -0.159999996423721,
+          0.524999976158142
+        ],
+        "wrist": [
+          0.120000019669533,
+          -0.490000009536743,
+          0.694999933242798
+        ]
+      },
+      "samples": 0
+    }
+  },
+  "compact": {
+    "viewports": [
+      {
+        "viewport": [
+          1920,
+          1080
+        ],
+        "panel": {
+          "x": 25,
+          "y": 270,
+          "width": 220,
+          "height": 521.484375
+        },
+        "reset_and_camera_reachable": true
+      },
+      {
+        "viewport": [
+          1366,
+          768
+        ],
+        "panel": {
+          "x": 16,
+          "y": 215,
+          "width": 215,
+          "height": 410.734375
+        },
+        "reset_and_camera_reachable": true
+      },
+      {
+        "viewport": [
+          1280,
+          720
+        ],
+        "panel": {
+          "x": 16,
+          "y": 215,
+          "width": 215,
+          "height": 410.734375
+        },
+        "reset_and_camera_reachable": true
+      }
+    ],
+    "errors": []
+  },
+  "unit_tests": 153,
+  "human_acceptance": "open; last user feedback remains unclear"
+}

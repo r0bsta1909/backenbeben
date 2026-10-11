@@ -1,0 +1,32 @@
+{
+  "polygons": 88040,
+  "shirt_vertices": 12287,
+  "source": "assets-source/character-v3.blend",
+  "source_preview": "assets-source/character-v3-preview.png",
+  "native_five_pose_check": "passed",
+  "geometry_validation": "Character, closed hand, 116 contact samples passed; hand and face collision files unchanged.",
+  "browser": {
+    "repeat_practice_without_damage": true,
+    "idle_material_uploads_skipped": true,
+    "mirror_visibility_updates": true,
+    "pose_camera_and_wheel": true,
+    "crowd_reaction_and_rewind": true,
+    "jump_to_contact": true,
+    "side_camera": true,
+    "marker_toggle": true,
+    "no_stale_markers": true,
+    "errors": [],
+    "coupled": {
+      "backend": "coupled",
+      "solve_ms": 1296.0,
+      "peak": 0.006954999999999999,
+      "contact_diagnostics": {
+        "maximum_wrist_separation_m": 9.426757013702462e-06,
+        "maximum_penetration_m": 3.2521964060471665e-06,
+        "unconverged_steps": 13,
+        "maximum_material_residual_m": 0.0002024782789346689
+      }
+    }
+  },
+  "limits": "Authored static garment folds with skinning, not cloth simulation; full reference style remains open."
+}

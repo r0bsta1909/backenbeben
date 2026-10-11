@@ -1,0 +1,18 @@
+{
+  "zero_identical": true,
+  "duration": 0.0125,
+  "steps": 12,
+  "coefficient": 0.2,
+  "friction_impulse_sum_ns": [
+    0.019766873432038336,
+    0.11232123254702657,
+    0.11012783102754797
+  ],
+  "maximum_friction_residual_m": 8.492882955117574e-05,
+  "maximum_penetration_m": 4.5812561326824385e-06,
+  "wrist_error_m": 3.389837641318061e-05,
+  "unconverged_steps": 12,
+  "solve_ms": 13851.810200008913,
+  "final_energy_without_friction_j": 0.5406092162798956,
+  "final_energy_with_friction_j": 0.47251947706150255
+}

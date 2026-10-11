@@ -1,0 +1,102 @@
+{
+  "change": "Three-quarter camera moved from (3,.55,1.1) to (3.5,.65,1.1), look target lowered from (0,-.12,1) to (0,-.45,1).",
+  "purpose": "Keep shoulder, elbow and forearm visible above replay controls while preserving a readable cheek/palm contact.",
+  "contact": {
+    "repeat_practice_without_damage": true,
+    "idle_material_uploads_skipped": true,
+    "mirror_visibility_updates": true,
+    "pose_camera_and_wheel": true,
+    "crowd_reaction_and_rewind": true,
+    "jump_to_contact": true,
+    "side_camera": true,
+    "marker_toggle": true,
+    "no_stale_markers": true,
+    "errors": [],
+    "inspection_survives_original_deadline": false,
+    "coupled": {
+      "backend": "coupled-moving",
+      "solve_ms": 3170.1,
+      "peak": 0.035204,
+      "contact_diagnostics": {
+        "maximum_wrist_separation_m": 1.2568419402456567e-05,
+        "maximum_penetration_m": 3.7749385662119513e-06,
+        "unconverged_steps": 13,
+        "maximum_material_residual_m": 0.0003354291863522439
+      },
+      "head_response": {
+        "model": "coupled-yaw-through-contact-and-tail",
+        "braced": false,
+        "tail_pin_error_m": 1.1920721222302056e-07,
+        "spatial_rotation": true,
+        "translation": true,
+        "parameters": "prototype tuning, three translations and three Euler rotations; diagonal generalized inertia"
+      },
+      "maximum_head_yaw_rad": 0.0831
+    }
+  },
+  "practice": {
+    "viewport": [
+      1366,
+      768
+    ],
+    "msaa_3d": 1,
+    "host_recorded_pose": {
+      "time": 0.504167,
+      "pose": {
+        "root": [
+          0,
+          0,
+          0.525
+        ],
+        "shoulder": [
+          0.234561714141006,
+          -0.16,
+          0.5106541901855284
+        ],
+        "torso_yaw": 0.06108397874858916,
+        "elbow": [
+          0.2436280274638161,
+          -0.13635099565220885,
+          0.21950382566050441
+        ],
+        "wrist": [
+          0.08868382178343982,
+          -0.0805613629423805,
+          0.03172522335178629
+        ],
+        "angles": [
+          -0.23458024175223974,
+          -0.17587846751741915,
+          0.726006091719406
+        ],
+        "blocked": true,
+        "wrist_limited": false,
+        "finger_direction": [
+          0.07898992833716563,
+          0.9961946980917455,
+          0.03683360850073487
+        ],
+        "palm_normal": [
+          -0.9028590122851735,
+          0.08715574274765817,
+          -0.4210100716628344
+        ]
+      },
+      "tilt": -15,
+      "attacker": 0
+    },
+    "actual_rig_matches": true,
+    "side_and_front": true,
+    "wheel_exits_to_live_pose": true,
+    "saved_probe_unchanged": true,
+    "repeat_exits": true,
+    "no_damage": true,
+    "errors": []
+  },
+  "visual_review": {
+    "1920x1080": "Contact arm chain now visible above replay panel.",
+    "1366x768": "Recorded practice arm and cheek unobstructed by left guidance and lower scoreboard."
+  },
+  "test_adjustment": "Initial run timed out on old exact camera x=3 assertion; changed expected position to 3.5, all original gesture/rig/replay assertions retained.",
+  "limits": "Camera framing improvement only; no human comprehension acceptance or complete art/physics approval."
+}
