@@ -99,6 +99,9 @@ func podium() -> void:
 func refine_table() -> void:
 	# Preserve upholstery thickness and shorten the support; collision proxy follows.
 	var top: MeshInstance3D=find_child("PodiumTop",true,false)
+	# Roll the insert edge into the upholstery without raising its contact surface.
+	top.mesh=ring_mesh([Vector2(.5,-.009),Vector2(.5,-.001),Vector2(.498,.005),Vector2(.493,.009)],Vector2(2.021,.7144),true)
+	top.scale=Vector3.ONE
 	top.material_override.set_shader_parameter("wear_layout",4)
 	top.material_override.set_shader_parameter("wear_amount",.22)
 	var body: MeshInstance3D=find_child("PodiumBody",true,false)
@@ -116,10 +119,11 @@ func refine_table() -> void:
 	worn_material(collar,Color("222a2b"),6,.08)
 	for fixing in find_children("FootFixing*","MeshInstance3D",true,false):
 		fixing.position=Vector3(signf(fixing.position.x)*.65,-4.998,.65+signf(fixing.position.z-.65)*.28)
-	for x in [-.365,.365]:
+	# Stay on the flat front even at the narrow end of the tapered support.
+	for x in [-.26,.26]:
 		part("BodyPanelJoin",Vector3(x,-3.40,.988),Vector3(.009,2.51,.008),"1d2527")
 	for y in [-2.01,-4.79]:
-		part("BodyPanelJoin",Vector3(0,y,.988),Vector3(.62,.012,.008),"1d2527")
+		part("BodyPanelJoin",Vector3(0,y,.988),Vector3(.50,.012,.008),"1d2527")
 	for side in [-1.0,1.0]:
 		for y in [-3.95,-4.12,-4.29]:
 			var taper: float=lerpf(.82,1.0,(y+5.10)/3.66)

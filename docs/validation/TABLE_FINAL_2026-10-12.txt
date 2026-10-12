@@ -1,0 +1,40 @@
+BACKENBEBEN — TISCH DESIGNABSCHLUSS / 12.10.2026
+
+Auftrag: Tisch finalisieren, nach Blender-Gespraech mit bearbeitbarer Modellquelle.
+Gestaltung abgeschlossen: kompakte Hoehe 0.981m, ovales gepolstertes Oberteil,
+dezent sichtbare Naehte/Paspel, burgunderfarbener Rand, warme schmale Lichtkante,
+verjuengter Sockel, breite Bodenbasis und eingelassene INEOS-Frontgrafik.
+Letzter Detailpass: Einlage hat einen gerundeten Rand statt harter Zylinderkante;
+oberste Kontaktflaeche/Hoehe/Maximalbreite bleiben erhalten. Frontfugen sitzen
+nun auch unten auf der ebenen Front des verjuengten Sockels statt am Eckradius.
+Keine Physik-/Kollisions-/Hoenhorst-/Hallen-Aenderung.
+
+assets-source/table-final.blend: 122 getrennt bearbeitbare Meshobjekte, metrische
+Einheiten, eingebettete INEOS-Originalgrafik, matte Vorschaumaterialien,
+Kamera und Licht in separater Preview-Studio-Collection. Keine Abhaengigkeit
+von absoluten Texturpfaden beim Oeffnen. Blender-Materialien sind Studiovorschau;
+der freigegebene Comiclook des Spiels bleibt in Godots nativen Shadern.
+Spielmodell bleibt game/arena_platform.tscn, erzeugt aus arena_hybrid.gd.
+Blender-Datei ist die geometrisch identische bearbeitbare Momentaufnahme.
+Ein spaeterer Blender-Edit wird nicht automatisch ins Spiel synchronisiert.
+
+Reproduktion im Repository, mit lokalem Godot/Blender:
+1. Godot --headless --path game --script ../scripts/bake_arena_hybrid.gd
+2. Godot --headless --path game --script ../scripts/export_table_source.gd
+3. Blender --background --python scripts/build_table_blender.py
+4. Blender --background assets-source/table-final.blend --python scripts/validate_table_blender.py
+Die Schritte erzeugen die Blender-Datei neu; manuelle Aenderungen zuvor sichern.
+Zwischenexport logs/table-source.json und rohe Renderlogs bleiben lokal.
+
+QA: Bake PASS; ARENA_HYBRID_PASS; ARENA_MATCH_PASS nativ mit Kontakt-/KO- und
+Helferpruefung; strenger Webbuild PASS. Details, ganze Form, beide Figuren und
+Spielkameras gerendert/gesichtet. Blender-Render gesichtet; erneut geoeffnete
+Datei validiert: alle Meshvertices entsprechen Godot <1e-6m, Logo gepackt,
+Hoehe .981m, metrisch, Studio separat. TABLE_BLENDER_REOPEN_PASS.
+Keine erneute Browser-/Solverpruefung fuer reine Oberflaechen-/Detailaenderungen.
+Vorheriger realer Kontakt-/Replaycheck der gleichen Tischhoehe vom 11.10. PASS.
+
+Vorschauen im Workspace Arena-Design/24-tisch-final.png,24-polster-final.png,
+24-tisch-mit-spielern.png,24-spielkamera.png,24-tisch-blender.png.
+Designfassung bereit zur Nutzeransicht. Menschliche Spielabnahme bleibt offen.
+V14-Download bleibt aeltere Tischfassung; Quellstand/Webbuild sind aktualisiert.

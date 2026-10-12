@@ -802,9 +802,17 @@ shader_parameter/wear_layout = 4
 shader_parameter/wear_origin = Vector3(0, -1.255, 0.65)
 shader_parameter/wear_span = Vector3(2.02, 0.018, 0.67)
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_mcjpv"]
-height = 1.0
-radial_segments = 96
+[sub_resource type="ArrayMesh" id="ArrayMesh_mcjpv"]
+_surfaces = [{
+"aabb": AABB(-1.0105, -0.009, -0.3572, 2.021, 0.018, 0.7144),
+"format": 34359742471,
+"index_count": 2304,
+"index_data": PackedByteArray("AAABAAIAAAACAAMAAQAEAAUAAQAFAAIABAAGAAcABAAHAAUABgAIAAkABgAJAAcACAAKAAsACAALAAkACgAMAA0ACgANAAsADAAOAA8ADAAPAA0ADgAQABEADgARAA8AEAASABMAEAATABEAEgAUABUAEgAVABMAFAAWABcAFAAXABUAFgAYABkAFgAZABcAGAAaABsAGAAbABkAGgAcAB0AGgAdABsAHAAeAB8AHAAfAB0AHgAgACEAHgAhAB8AIAAiACMAIAAjACEAIgAkACUAIgAlACMAJAAmACcAJAAnACUAJgAoACkAJgApACcAKAAqACsAKAArACkAKgAsAC0AKgAtACsALAAuAC8ALAAvAC0ALgAwADEALgAxAC8AMAAyADMAMAAzADEAMgA0ADUAMgA1ADMANAA2ADcANAA3ADUANgA4ADkANgA5ADcAOAA6ADsAOAA7ADkAOgA8AD0AOgA9ADsAPAA+AD8APAA/AD0APgBAAEEAPgBBAD8AQABCAEMAQABDAEEAQgBEAEUAQgBFAEMARABGAEcARABHAEUARgBIAEkARgBJAEcASABKAEsASABLAEkASgBMAE0ASgBNAEsATABOAE8ATABPAE0ATgBQAFEATgBRAE8AUABSAFMAUABTAFEAUgBUAFUAUgBVAFMAVABWAFcAVABXAFUAVgBYAFkAVgBZAFcAWABaAFsAWABbAFkAWgBcAF0AWgBdAFsAXABeAF8AXABfAF0AXgBgAGEAXgBhAF8AYABiAGMAYABjAGEAYgBkAGUAYgBlAGMAZABmAGcAZABnAGUAZgBoAGkAZgBpAGcAaABqAGsAaABrAGkAagBsAG0AagBtAGsAbABuAG8AbABvAG0AbgBwAHEAbgBxAG8AcAByAHMAcABzAHEAcgB0AHUAcgB1AHMAdAB2AHcAdAB3AHUAdgB4AHkAdgB5AHcAeAB6AHsAeAB7AHkAegB8AH0AegB9AHsAfAB+AH8AfAB/AH0AfgCAAIEAfgCBAH8AgACCAIMAgACDAIEAggCEAIUAggCFAIMAhACGAIcAhACHAIUAhgCIAIkAhgCJAIcAiACKAIsAiACLAIkAigCMAI0AigCNAIsAjACOAI8AjACPAI0AjgCQAJEAjgCRAI8AkACSAJMAkACTAJEAkgCUAJUAkgCVAJMAlACWAJcAlACXAJUAlgCYAJkAlgCZAJcAmACaAJsAmACbAJkAmgCcAJ0AmgCdAJsAnACeAJ8AnACfAJ0AngCgAKEAngChAJ8AoACiAKMAoACjAKEAogCkAKUAogClAKMApACmAKcApACnAKUApgCoAKkApgCpAKcAqACqAKsAqACrAKkAqgCsAK0AqgCtAKsArACuAK8ArACvAK0ArgCwALEArgCxAK8AsACyALMAsACzALEAsgC0ALUAsgC1ALMAtAC2ALcAtAC3ALUAtgC4ALkAtgC5ALcAuAC6ALsAuAC7ALkAugC8AL0AugC9ALsAvAC+AL8AvAC/AL0AvgDAAMEAvgDBAL8AAwACAMIAAwDCAMMAAgAFAMQAAgDEAMIABQAHAMUABQDFAMQABwAJAMYABwDGAMUACQALAMcACQDHAMYACwANAMgACwDIAMcADQAPAMkADQDJAMgADwARAMoADwDKAMkAEQATAMsAEQDLAMoAEwAVAMwAEwDMAMsAFQAXAM0AFQDNAMwAFwAZAM4AFwDOAM0AGQAbAM8AGQDPAM4AGwAdANAAGwDQAM8AHQAfANEAHQDRANAAHwAhANIAHwDSANEAIQAjANMAIQDTANIAIwAlANQAIwDUANMAJQAnANUAJQDVANQAJwApANYAJwDWANUAKQArANcAKQDXANYAKwAtANgAKwDYANcALQAvANkALQDZANgALwAxANoALwDaANkAMQAzANsAMQDbANoAMwA1ANwAMwDcANsANQA3AN0ANQDdANwANwA5AN4ANwDeAN0AOQA7AN8AOQDfAN4AOwA9AOAAOwDgAN8APQA/AOEAPQDhAOAAPwBBAOIAPwDiAOEAQQBDAOMAQQDjAOIAQwBFAOQAQwDkAOMARQBHAOUARQDlAOQARwBJAOYARwDmAOUASQBLAOcASQDnAOYASwBNAOgASwDoAOcATQBPAOkATQDpAOgATwBRAOoATwDqAOkAUQBTAOsAUQDrAOoAUwBVAOwAUwDsAOsAVQBXAO0AVQDtAOwAVwBZAO4AVwDuAO0AWQBbAO8AWQDvAO4AWwBdAPAAWwDwAO8AXQBfAPEAXQDxAPAAXwBhAPIAXwDyAPEAYQBjAPMAYQDzAPIAYwBlAPQAYwD0APMAZQBnAPUAZQD1APQAZwBpAPYAZwD2APUAaQBrAPcAaQD3APYAawBtAPgAawD4APcAbQBvAPkAbQD5APgAbwBxAPoAbwD6APkAcQBzAPsAcQD7APoAcwB1APwAcwD8APsAdQB3AP0AdQD9APwAdwB5AP4AdwD+AP0AeQB7AP8AeQD/AP4AewB9AAABewAAAf8AfQB/AAEBfQABAQABfwCBAAIBfwACAQEBgQCDAAMBgQADAQIBgwCFAAQBgwAEAQMBhQCHAAUBhQAFAQQBhwCJAAYBhwAGAQUBiQCLAAcBiQAHAQYBiwCNAAgBiwAIAQcBjQCPAAkBjQAJAQgBjwCRAAoBjwAKAQkBkQCTAAsBkQALAQoBkwCVAAwBkwAMAQsBlQCXAA0BlQANAQwBlwCZAA4BlwAOAQ0BmQCbAA8BmQAPAQ4BmwCdABABmwAQAQ8BnQCfABEBnQARARABnwChABIBnwASAREBoQCjABMBoQATARIBowClABQBowAUARMBpQCnABUBpQAVARQBpwCpABYBpwAWARUBqQCrABcBqQAXARYBqwCtABgBqwAYARcBrQCvABkBrQAZARgBrwCxABoBrwAaARkBsQCzABsBsQAbARoBswC1ABwBswAcARsBtQC3AB0BtQAdARwBtwC5AB4BtwAeAR0BuQC7AB8BuQAfAR4BuwC9ACABuwAgAR8BvQC/ACEBvQAhASABvwDBACIBvwAiASEBwwDCACMBwwAjASQBwgDEACUBwgAlASMBxADFACYBxAAmASUBxQDGACcBxQAnASYBxgDHACgBxgAoAScBxwDIACkBxwApASgByADJACoByAAqASkByQDKACsByQArASoBygDLACwBygAsASsBywDMAC0BywAtASwBzADNAC4BzAAuAS0BzQDOAC8BzQAvAS4BzgDPADABzgAwAS8BzwDQADEBzwAxATAB0ADRADIB0AAyATEB0QDSADMB0QAzATIB0gDTADQB0gA0ATMB0wDUADUB0wA1ATQB1ADVADYB1AA2ATUB1QDWADcB1QA3ATYB1gDXADgB1gA4ATcB1wDYADkB1wA5ATgB2ADZADoB2AA6ATkB2QDaADsB2QA7AToB2gDbADwB2gA8ATsB2wDcAD0B2wA9ATwB3ADdAD4B3AA+AT0B3QDeAD8B3QA/AT4B3gDfAEAB3gBAAT8B3wDgAEEB3wBBAUAB4ADhAEIB4ABCAUEB4QDiAEMB4QBDAUIB4gDjAEQB4gBEAUMB4wDkAEUB4wBFAUQB5ADlAEYB5ABGAUUB5QDmAEcB5QBHAUYB5gDnAEgB5gBIAUcB5wDoAEkB5wBJAUgB6ADpAEoB6ABKAUkB6QDqAEsB6QBLAUoB6gDrAEwB6gBMAUsB6wDsAE0B6wBNAUwB7ADtAE4B7ABOAU0B7QDuAE8B7QBPAU4B7gDvAFAB7gBQAU8B7wDwAFEB7wBRAVAB8ADxAFIB8ABSAVEB8QDyAFMB8QBTAVIB8gDzAFQB8gBUAVMB8wD0AFUB8wBVAVQB9AD1AFYB9ABWAVUB9QD2AFcB9QBXAVYB9gD3AFgB9gBYAVcB9wD4AFkB9wBZAVgB+AD5AFoB+ABaAVkB+QD6AFsB+QBbAVoB+gD7AFwB+gBcAVsB+wD8AF0B+wBdAVwB/AD9AF4B/ABeAV0B/QD+AF8B/QBfAV4B/gD/AGAB/gBgAV8B/wAAAWEB/wBhAWABAAEBAWIBAAFiAWEBAQECAWMBAQFjAWIBAgEDAWQBAgFkAWMBAwEEAWUBAwFlAWQBBAEFAWYBBAFmAWUBBQEGAWcBBQFnAWYBBgEHAWgBBgFoAWcBBwEIAWkBBwFpAWgBCAEJAWoBCAFqAWkBCQEKAWsBCQFrAWoBCgELAWwBCgFsAWsBCwEMAW0BCwFtAWwBDAENAW4BDAFuAW0BDQEOAW8BDQFvAW4BDgEPAXABDgFwAW8BDwEQAXEBDwFxAXABEAERAXIBEAFyAXEBEQESAXMBEQFzAXIBEgETAXQBEgF0AXMBEwEUAXUBEwF1AXQBFAEVAXYBFAF2AXUBFQEWAXcBFQF3AXYBFgEXAXgBFgF4AXcBFwEYAXkBFwF5AXgBGAEZAXoBGAF6AXkBGQEaAXsBGQF7AXoBGgEbAXwBGgF8AXsBGwEcAX0BGwF9AXwBHAEdAX4BHAF+AX0BHQEeAX8BHQF/AX4BHgEfAYABHgGAAX8BHwEgAYEBHwGBAYABIAEhAYIBIAGCAYEBIQEiAYMBIQGDAYIBhAGFAYYBhwGIAYkBigGLAYwBhwGJAY0BigGOAYsBhwGNAY8BigGQAY4BhwGPAZEBigGSAZABhwGRAZMBigGUAZIBhwGTAZUBigGWAZQBhwGVAZcBigGYAZYBhwGXAZkBigGaAZgBhwGZAZsBigGcAZoBhwGbAZ0BigGeAZwBhwGdAZ8BigGgAZ4BhwGfAaEBigGiAaABhwGhAaMBigGkAaIBhwGjAaUBigGmAaQBhwGlAacBigGoAaYBhwGnAakBigGqAagBhwGpAasBigGsAaoBhwGrAa0BigGuAawBhwGtAa8BigGwAa4BhwGvAbEBigGyAbABhwGxAbMBigG0AbIBhwGzAbUBigG2AbQBhwG1AbcBigG4AbYBhwG3AbkBugG7AbwBhwG5Ab0BigG+Ab8BhwG9AcABigHBAb4BhwHAAcIBigHDAcEBhwHCAcQBigHFAcMBhwHEAcYBigHHAcUBhwHGAcgBigHJAccBhwHIAcoBigHLAckBhwHKAcwBigHNAcsBhwHMAc4BigHPAc0BhwHOAdABigHRAc8BhwHQAdIBigHTAdEBhwHSAdQBigHVAdMBhwHUAdYBigHXAdUBhwHWAdgBigHZAdcBhwHYAdoBigHbAdkBhwHaAdwBigHdAdsBhwHcAd4BigHfAd0BhwHeAeABigHhAd8BhwHgAeIBigHjAeEBhwHiAeQBigHlAeMBhwHkAeYBigHnAeUBhwHmAegBigHpAecBhwHoAeoBigHrAekBhwHqAewBigHtAesB7gHvAfABigHxAe0BhwHyAfMBigH0AfEBhwHzAfUBigH2AfQBhwH1AfcBigH4AfYBhwH3AfkBigH6AfgBhwH5AfsBigH8AfoBhwH7Af0BigH+AfwBhwH9Af8BigEAAv4BhwH/AQECigECAgAChwEBAgMCigEEAgIChwEDAgUCigEGAgQChwEFAgcCigEIAgYChwEHAgkCigEKAggChwEJAgsCigEMAgoChwELAg0CigEOAgwChwENAg8CigEQAg4ChwEPAhECigESAhAChwERAhMCigEUAhIChwETAhUCigEWAhQChwEVAhcCigEYAhYChwEXAhkCigEaAhgChwEZAhsCigEcAhoChwEbAh0CigEeAhwChwEdAh8CigEgAh4CIQIiAiMCigEkAiAChwElAiYCigEnAiQChwEmAigCigEpAicChwEoAioCigErAikChwEqAiwCigEtAisChwEsAi4CigEvAi0ChwEuAjACigExAi8ChwEwAjICigEzAjEChwEyAjQCigE1AjMChwE0AjYCigE3AjUChwE2AjgCigE5AjcChwE4AjoCigE7AjkChwE6AjwCigE9AjsChwE8Aj4CigE/Aj0ChwE+AkACigFBAj8ChwFAAkICigFDAkEChwFCAkQCigFFAkMChwFEAkYCigFHAkUChwFGAkgCigFJAkcChwFIAkoCigFLAkkChwFKAkwCigFNAksChwFMAk4CigFPAk0ChwFOAlACigFRAk8ChwFQAlIC"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 595,
+"vertex_data": PackedByteArray("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C+rjvgrXozumXqM+ndMAvwrXozswwJ0+/CQPvwrXozvLdJc+b9kcvwrXozteg5A+8eEpvwrXozuG84g+ODA2vwrXozuNzYA+xrZBvwrXozvCNHA++WhMvwrXozsXx10+GDtWvwrXoztOZko+XiJfvwrXozukJzY+CRVnvwrXoztMISE+YQpuvwrXoztQags+yPpzvwrXozsANeo9ud94vwrXozuhlLw917N8vwrXozuHJY498HJ/vwrXozs1NT49AY2AvwrXozuvnb48ndOAvwrXozv660gkAY2AvwrXozuvnb688HJ/vwrXozs1NT6917N8vwrXozuHJY69ud94vwrXozuhlLy9yPpzvwrXozsANeq9YQpuvwrXoztQagu+CRVnvwrXoztMISG+XiJfvwrXozukJza+GDtWvwrXoztOZkq++WhMvwrXozsXx12+xrZBvwrXozvCNHC+ODA2vwrXozuNzYC+8eEpvwrXozuG84i+b9kcvwrXozteg5C+/CQPvwrXozvLdJe+ndMAvwrXozswwJ2+C+rjvgrXozumXqO+AjPFvgrXozsFSqi+zKOlvgrXozvofKy+Al+FvgrXozu18q++BxBJvgrXozuhp7K+oYUGvgrXozu0mLS+hc+GvQrXozvNw7W+ICZVpQrXozukJ7a+hc+GPQrXozvNw7W+oYUGPgrXozu0mLS+BxBJPgrXozuhp7K+Al+FPgrXozu18q++zKOlPgrXozvofKy+AjPFPgrXozsFSqi+C+rjPgrXozumXqO+ndMAPwrXozswwJ2+/CQPPwrXozvLdJe+b9kcPwrXozteg5C+8eEpPwrXozuG84i+ODA2PwrXozuNzYC+xrZBPwrXozvCNHC++WhMPwrXozsXx12+GDtWPwrXoztOZkq+XiJfPwrXozukJza+CRVnPwrXoztMISG+YQpuPwrXoztQagu+yPpzPwrXozsANeq9ud94PwrXozuhlLy917N8PwrXozuHJY698HJ/PwrXozs1NT69AY2APwrXozuvnb68ndOAPwrXozv668ikLoV+P7x0EzzAs7w8/RB/P7x0EzwAAAAAXeJ8P7x0EzxRTDw9Uyp6P7x0EzwsuIw9DGB2P7x0Ezzsr7o9r4dxP7x0EzwG2+c9jaZrP7x0Ezz6Awo+F8NkP7x0Ezwmgx8+2uRcP7x0Ezx0UzQ+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u0ek5Q0jVqWGRS3nsCNko5RDreiEJJeh3UEn6nol759eQJvrhCZpnhI/Cu2WJwGd9D117qoot5sCPd7vtymImjk8RfG5KnGZmDur8qwrcpgdOxL0iyyJl8U6efVVLbSWkjri9gYu9JWBOk/4nC5GlZM6v/kVL6uUyDo0+20vJJQhO6/8oy+vk587Mf60L06TQjy8/5wvAZMtxLT+Vy/LkrfEL/3hLq2SHMWy+zUuqZJdxTv6Ti3DknvFyfgjLP6SdsVb96wqX5NOxfH14SjukwPFifS0JrGUk8Qj8xgkspX/w7zx+yD9lkPDVvBLHaKYX8Lu7vAYtJpRwYPtzRNJnRTAFuzDDYGgpr6k6q4Gf6QDvSzpkAGQ1yW7rueSCY3XB7ko5pkQNNeitpjksxaC1u2z/uLqG3TV37BX4UsgBNRrraLf3CMm0oSp3N0mKWjRpKag3Ocr1ND/fwAAAAD/v/9/AAAAAP+//38AAAAA/7//f///AAD/v/9///8AAP+//3///wAA/7//fwAAAAD/v/9/AAAAAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9/AAAAAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/7//fwAAAAD/v/9///8AAP+//38AAAAA/7//f///AAD/v/9/AAAAAP+//3///wAA/78=")
+}]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_n87cl"]
 render_priority = 0
@@ -1550,10 +1558,10 @@ size = Vector3(0.009, 2.51, 0.008)
 size = Vector3(0.009, 2.51, 0.008)
 
 [sub_resource type="BoxMesh" id="BoxMesh_kobri"]
-size = Vector3(0.62, 0.012, 0.008)
+size = Vector3(0.5, 0.012, 0.008)
 
 [sub_resource type="BoxMesh" id="BoxMesh_b38fy"]
-size = Vector3(0.62, 0.012, 0.008)
+size = Vector3(0.5, 0.012, 0.008)
 
 [sub_resource type="BoxMesh" id="BoxMesh_q3xpt"]
 size = Vector3(0.008, 0.022, 0.2)
@@ -1639,157 +1647,157 @@ _surfaces = [{
 "vertex_data": PackedByteArray("BaOCP28SA7wAAAAAaluCP28SA7wje7s8uxyGP6abxLu24cA8ZmaGP6abxLsAAAAA6YSBP28SA7xgFDs9DECFP6abxLv9d0A9bCCAP28SA7wNz4s9StGDP6abxLsR1o899F58P28SA7ymerk9B9KBP6abxLt20r49aGh3P28SA7zrWuY96Yh+P6abxLus/ew9pGJxP28SA7xWHwk+vFZ4P6abxLuLEg0+RFRqP28SA7zkeh4+UhRxP6abxLuZCyM+AkViP28SA7y3KDM+ocloP6abxLvsUTg+tT1ZP28SA7wkEkc+wH9fP6abxLswzkw+Q0hPP28SA7xXIVo+3UBVP6abxLvwaWA+lm9EP28SA7xrQWw+MxhKP6abxLuuD3M+kr84P28SA7yBXn0+/xE+P6abxLt8VYI+CEUsP28SA7zrsoY+bjsxP6abxLtBlIo+pA0fP28SA7ztIo4+lKIjP6abxLscO5I+5CcRP28SA7we95Q+V1YVP6abxLupQZk+BaMCP28SA7wCKJs+ZmYGP6abxLs1oJ8+4R3nPm8SA7zQrqA+PsbtPqabxLvET6U+XPjHPm8SA7x5haU+CbvNPqabxLscSqo+oPenPm8SA7yvpqk+TM6sPqabxLvFia4+wz6HPm8SA7zqDa0+ICSLPqabxLsaCrI+RuNLPm8SA7xwt68+2MJRPqabxLtCx7Q+hWkIPm8SA7xWoLE+fVcMPqabxLs9vrY+c7SIPW8SA7yExrI+lKSMPaabxLvl7Lc+kRiQJG8SA7y3KLM+Mz+UJKabxLvsUbg+c7SIvW8SA7yExrI+lKSMvaabxLvl7Lc+hWkIvm8SA7xWoLE+fVcMvqabxLs9vrY+RuNLvm8SA7xwt68+2MJRvqabxLtCx7Q+wz6Hvm8SA7zqDa0+ICSLvqabxLsaCrI+oPenvm8SA7yvpqk+TM6svqabxLvFia4+XPjHvm8SA7x5haU+CbvNvqabxLscSqo+4R3nvm8SA7zQrqA+PsbtvqabxLvET6U+BaMCv28SA7wCKJs+ZmYGv6abxLs1oJ8+5CcRv28SA7we95Q+V1YVv6abxLupQZk+pA0fv28SA7ztIo4+lKIjv6abxLscO5I+CEUsv28SA7zrsoY+bjsxv6abxLtBlIo+kr84v28SA7yBXn0+/xE+v6abxLt8VYI+lm9Ev28SA7xrQWw+MxhKv6abxLuuD3M+Q0hPv28SA7xXIVo+3UBVv6abxLvwaWA+tT1Zv28SA7wkEkc+wH9fv6abxLswzkw+AkViv28SA7y3KDM+oclov6abxLvsUTg+RFRqv28SA7zkeh4+UhRxv6abxLuZCyM+pGJxv28SA7xWHwk+vFZ4v6abxLuLEg0+aGh3v28SA7zrWuY96Yh+v6abxLus/ew99F58v28SA7ymerk9B9KBv6abxLt20r49bCCAv28SA7wNz4s9StGDv6abxLsR1o896YSBv28SA7xgFDs9DECFv6abxLv9d0A9aluCv28SA7wje7s8uxyGv6abxLu24cA8BaOCv28SA7wJnkUkZmaGv6abxLtdT0skaluCv28SA7wje7u8uxyGv6abxLu24cC86YSBv28SA7xgFDu9DECFv6abxLv9d0C9bCCAv28SA7wNz4u9StGDv6abxLsR1o+99F58v28SA7ymerm9B9KBv6abxLt20r69aGh3v28SA7zrWua96Yh+v6abxLus/ey9pGJxv28SA7xWHwm+vFZ4v6abxLuLEg2+RFRqv28SA7zkeh6+UhRxv6abxLuZCyO+AkViv28SA7y3KDO+oclov6abxLvsUTi+tT1Zv28SA7wkEke+wH9fv6abxLswzky+Q0hPv28SA7xXIVq+3UBVv6abxLvwaWC+lm9Ev28SA7xrQWy+MxhKv6abxLuuD3O+kr84v28SA7yBXn2+/xE+v6abxLt8VYK+CEUsv28SA7zrsoa+bjsxv6abxLtBlIq+pA0fv28SA7ztIo6+lKIjv6abxLscO5K+5CcRv28SA7we95S+V1YVv6abxLupQZm+BaMCv28SA7wCKJu+ZmYGv6abxLs1oJ++4R3nvm8SA7zQrqC+PsbtvqabxLvET6W+XPjHvm8SA7x5haW+CbvNvqabxLscSqq+oPenvm8SA7yvpqm+TM6svqabxLvFia6+wz6Hvm8SA7zqDa2+ICSLvqabxLsaCrK+RuNLvm8SA7xwt6++2MJRvqabxLtCx7S+hWkIvm8SA7xWoLG+fVcMvqabxLs9vra+c7SIvW8SA7yExrK+lKSMvaabxLvl7Le+2SRYpW8SA7y3KLO+zF5epaabxLvsUbi+c7SIPW8SA7yExrK+lKSMPaabxLvl7Le+hWkIPm8SA7xWoLG+fVcMPqabxLs9vra+RuNLPm8SA7xwt6++2MJRPqabxLtCx7S+wz6HPm8SA7zqDa2+ICSLPqabxLsaCrK+oPenPm8SA7yvpqm+TM6sPqabxLvFia6+XPjHPm8SA7x5haW+CbvNPqabxLscSqq+4R3nPm8SA7zQrqC+PsbtPqabxLvET6W+BaMCP28SA7wCKJu+ZmYGP6abxLs1oJ++5CcRP28SA7we95S+V1YVP6abxLupQZm+pA0fP28SA7ztIo6+lKIjP6abxLscO5K+CEUsP28SA7zrsoa+bjsxP6abxLtBlIq+kr84P28SA7yBXn2+/xE+P6abxLt8VYK+lm9EP28SA7xrQWy+MxhKP6abxLuuD3O+Q0hPP28SA7xXIVq+3UBVP6abxLvwaWC+tT1ZP28SA7wkEke+wH9fP6abxLswzky+AkViP28SA7y3KDO+ocloP6abxLvsUTi+RFRqP28SA7zkeh6+UhRxP6abxLuZCyO+pGJxP28SA7xWHwm+vFZ4P6abxLuLEg2+aGh3P28SA7zrWua96Yh+P6abxLus/ey99F58P28SA7ymerm9B9KBP6abxLt20r69bCCAP28SA7wNz4u9StGDP6abxLsR1o+96YSBP28SA7xgFDu9DECFP6abxLv9d0C9aluCP28SA7wje7u8uxyGP6abxLu24cC8BaOCP28SA7wJnsWkZmaGP6abxLtdT8ukuxyGP6abxDu24cA8ZmaGP6abxDsAAAAADECFP6abxDv9d0A9StGDP6abxDsR1o89B9KBP6abxDt20r496Yh+P6abxDus/ew9vFZ4P6abxDuLEg0+UhRxP6abxDuZCyM+ocloP6abxDvsUTg+wH9fP6abxDswzkw+3UBVP6abxDvwaWA+MxhKP6abxDuuD3M+/xE+P6abxDt8VYI+bjsxP6abxDtBlIo+lKIjP6abxDscO5I+V1YVP6abxDupQZk+ZmYGP6abxDs1oJ8+PsbtPqabxDvET6U+CbvNPqabxDscSqo+TM6sPqabxDvFia4+ICSLPqabxDsaCrI+2MJRPqabxDtCx7Q+fVcMPqabxDs9vrY+lKSMPaabxDvl7Lc+Mz+UJKabxDvsUbg+lKSMvaabxDvl7Lc+fVcMvqabxDs9vrY+2MJRvqabxDtCx7Q+ICSLvqabxDsaCrI+TM6svqabxDvFia4+CbvNvqabxDscSqo+PsbtvqabxDvET6U+ZmYGv6abxDs1oJ8+V1YVv6abxDupQZk+lKIjv6abxDscO5I+bjsxv6abxDtBlIo+/xE+v6abxDt8VYI+MxhKv6abxDuuD3M+3UBVv6abxDvwaWA+wH9fv6abxDswzkw+oclov6abxDvsUTg+UhRxv6abxDuZCyM+vFZ4v6abxDuLEg0+6Yh+v6abxDus/ew9B9KBv6abxDt20r49StGDv6abxDsR1o89DECFv6abxDv9d0A9uxyGv6abxDu24cA8ZmaGv6abxDtdT0skuxyGv6abxDu24cC8DECFv6abxDv9d0C9StGDv6abxDsR1o+9B9KBv6abxDt20r696Yh+v6abxDus/ey9vFZ4v6abxDuLEg2+UhRxv6abxDuZCyO+oclov6abxDvsUTi+wH9fv6abxDswzky+3UBVv6abxDvwaWC+MxhKv6abxDuuD3O+/xE+v6abxDt8VYK+bjsxv6abxDtBlIq+lKIjv6abxDscO5K+V1YVv6abxDupQZm+ZmYGv6abxDs1oJ++PsbtvqabxDvET6W+CbvNvqabxDscSqq+TM6svqabxDvFia6+ICSLvqabxDsaCrK+2MJRvqabxDtCx7S+fVcMvqabxDs9vra+lKSMvaabxDvl7Le+zF5epaabxDvsUbi+lKSMPaabxDvl7Le+fVcMPqabxDs9vra+2MJRPqabxDtCx7S+ICSLPqabxDsaCrK+TM6sPqabxDvFia6+CbvNPqabxDscSqq+PsbtPqabxDvET6W+ZmYGP6abxDs1oJ++V1YVP6abxDupQZm+lKIjP6abxDscO5K+bjsxP6abxDtBlIq+/xE+P6abxDt8VYK+MxhKP6abxDuuD3O+3UBVP6abxDvwaWC+wH9fP6abxDswzky+ocloP6abxDvsUTi+UhRxP6abxDuZCyO+vFZ4P6abxDuLEg2+6Yh+P6abxDus/ey9B9KBP6abxDt20r69StGDP6abxDsR1o+9DECFP6abxDv9d0C9uxyGP6abxDu24cC8ZmaGP6abxDtdT8ukaluCP28SAzwje7s8BaOCP28SAzwAAAAA6YSBP28SAzxgFDs9bCCAP28SAzwNz4s99F58P28SAzymerk9aGh3P28SAzzrWuY9pGJxP28SAzxWHwk+RFRqP28SAzzkeh4+AkViP28SAzy3KDM+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")
 }]
 
-[node name="CompetitionPlatform" type="Node3D" unique_id=52745069]
+[node name="CompetitionPlatform" type="Node3D" unique_id=726633100]
 script = ExtResource("1_6q8ju")
 metadata/baked_hybrid = true
 
-[node name="Platform" type="MeshInstance3D" parent="." unique_id=771477404]
+[node name="Platform" type="MeshInstance3D" parent="." unique_id=1669210879]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.7, 1.05)
 material_override = SubResource("ShaderMaterial_m2hu0")
 mesh = SubResource("ArrayMesh_mkvcn")
 
-[node name="RubberMat" type="MeshInstance3D" parent="." unique_id=449311335]
+[node name="RubberMat" type="MeshInstance3D" parent="." unique_id=1639577535]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.185, 1.05)
 material_override = SubResource("ShaderMaterial_imy5l")
 mesh = SubResource("ArrayMesh_nqsb8")
 
-[node name="MatSideStripe" type="MeshInstance3D" parent="." unique_id=719519775]
+[node name="MatSideStripe" type="MeshInstance3D" parent="." unique_id=1726515018]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.65, -5.165, 1.05)
 material_override = SubResource("ShaderMaterial_8h6jx")
 mesh = SubResource("BoxMesh_lfjhi")
 
-[node name="MatSideStripe2" type="MeshInstance3D" parent="." unique_id=1881638437]
+[node name="MatSideStripe2" type="MeshInstance3D" parent="." unique_id=704677766]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.65, -5.165, 1.05)
 material_override = SubResource("ShaderMaterial_8h6jx")
 mesh = SubResource("BoxMesh_gl3wr")
 
-[node name="MatEndStripe" type="MeshInstance3D" parent="." unique_id=340899264]
+[node name="MatEndStripe" type="MeshInstance3D" parent="." unique_id=1878611256]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.165, -4.6)
 material_override = SubResource("ShaderMaterial_8h6jx")
 mesh = SubResource("BoxMesh_ig5uy")
 
-[node name="MatEndStripe2" type="MeshInstance3D" parent="." unique_id=596860526]
+[node name="MatEndStripe2" type="MeshInstance3D" parent="." unique_id=1652717117]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.165, 6.7)
 material_override = SubResource("ShaderMaterial_8h6jx")
 mesh = SubResource("BoxMesh_mpa8d")
 
-[node name="AccessStep0" type="MeshInstance3D" parent="." unique_id=1223262972]
+[node name="AccessStep0" type="MeshInstance3D" parent="." unique_id=685426464]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.28, -5.72, 4.2)
 material_override = SubResource("ShaderMaterial_a5oho")
 mesh = SubResource("ArrayMesh_c0mqf")
 
-[node name="StepLip" type="MeshInstance3D" parent="." unique_id=876139258]
+[node name="StepLip" type="MeshInstance3D" parent="." unique_id=1842413553]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.51, -5.235, 4.2)
 material_override = SubResource("ShaderMaterial_1npbf")
 mesh = SubResource("BoxMesh_cbe8q")
 
-[node name="AccessStep1" type="MeshInstance3D" parent="." unique_id=2059537825]
+[node name="AccessStep1" type="MeshInstance3D" parent="." unique_id=550382222]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.76, -5.83, 4.2)
 material_override = SubResource("ShaderMaterial_v0jjg")
 mesh = SubResource("ArrayMesh_hl7xo")
 
-[node name="StepLip2" type="MeshInstance3D" parent="." unique_id=1110290546]
+[node name="StepLip2" type="MeshInstance3D" parent="." unique_id=1580731645]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.99, -5.455, 4.2)
 material_override = SubResource("ShaderMaterial_k2m1x")
 mesh = SubResource("BoxMesh_snpnf")
 
-[node name="AccessStep2" type="MeshInstance3D" parent="." unique_id=1613831886]
+[node name="AccessStep2" type="MeshInstance3D" parent="." unique_id=1534760834]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.24, -5.94, 4.2)
 material_override = SubResource("ShaderMaterial_ii56q")
 mesh = SubResource("ArrayMesh_4jg5p")
 
-[node name="StepLip3" type="MeshInstance3D" parent="." unique_id=328113631]
+[node name="StepLip3" type="MeshInstance3D" parent="." unique_id=21363608]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.47, -5.675, 4.2)
 material_override = SubResource("ShaderMaterial_juyws")
 mesh = SubResource("BoxMesh_mvdno")
 
-[node name="AccessStep3" type="MeshInstance3D" parent="." unique_id=2111123556]
+[node name="AccessStep3" type="MeshInstance3D" parent="." unique_id=758052454]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.72, -6.05, 4.2)
 material_override = SubResource("ShaderMaterial_ysbc3")
 mesh = SubResource("ArrayMesh_inmes")
 
-[node name="StepLip4" type="MeshInstance3D" parent="." unique_id=1271495912]
+[node name="StepLip4" type="MeshInstance3D" parent="." unique_id=1390809841]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.95, -5.895, 4.2)
 material_override = SubResource("ShaderMaterial_i5qbj")
 mesh = SubResource("BoxMesh_2l4k0")
 
-[node name="FloorAdiHash" type="MeshInstance3D" parent="." unique_id=643055393]
+[node name="FloorAdiHash" type="MeshInstance3D" parent="." unique_id=741286368]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -3.8, -5.167, 1.1)
 material_override = SubResource("ShaderMaterial_q83gi")
 cast_shadow = 0
 mesh = SubResource("QuadMesh_j0js8")
 
-[node name="FloorTooth" type="MeshInstance3D" parent="." unique_id=1145066174]
+[node name="FloorTooth" type="MeshInstance3D" parent="." unique_id=1387717212]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 3.8, -5.167, 1.1)
 material_override = SubResource("ShaderMaterial_3qpy0")
 cast_shadow = 0
 mesh = SubResource("QuadMesh_m8wcf")
 
-[node name="FasciaKoenig" type="MeshInstance3D" parent="." unique_id=189798240]
+[node name="FasciaKoenig" type="MeshInstance3D" parent="." unique_id=1220768836]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, -5.7, 7.064)
 material_override = SubResource("ShaderMaterial_jiaud")
 cast_shadow = 0
 mesh = SubResource("QuadMesh_ul181")
 
-[node name="FasciaVersino" type="MeshInstance3D" parent="." unique_id=1934201702]
+[node name="FasciaVersino" type="MeshInstance3D" parent="." unique_id=462549875]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -7.024, -5.7, -1.2)
 material_override = SubResource("ShaderMaterial_8msw1")
 cast_shadow = 0
 mesh = SubResource("QuadMesh_0omna")
 
-[node name="HoenhorstPlaque" type="MeshInstance3D" parent="." unique_id=1236731825]
+[node name="HoenhorstPlaque" type="MeshInstance3D" parent="." unique_id=1600596202]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3, -5.7, 7.064)
 material_override = SubResource("ShaderMaterial_8x1ae")
 mesh = SubResource("BoxMesh_xmcwu")
 
-[node name="FasciaHoenhorst" type="MeshInstance3D" parent="." unique_id=63902589]
+[node name="FasciaHoenhorst" type="MeshInstance3D" parent="." unique_id=1565378575]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3, -5.61, 7.082)
 material_override = SubResource("ShaderMaterial_dapby")
 cast_shadow = 0
 mesh = SubResource("QuadMesh_y2ql8")
 
-[node name="FasciaBolt" type="MeshInstance3D" parent="." unique_id=121719141]
+[node name="FasciaBolt" type="MeshInstance3D" parent="." unique_id=263693181]
 transform = Transform3D(0.032, 0, 0, 0, -6.993822e-10, -0.032, 0, 0.016, -1.3987644e-09, -6.9, -5.45, 7.071)
 material_override = SubResource("ShaderMaterial_otesg")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_hqugo")
 
-[node name="@MeshInstance3D@19" type="MeshInstance3D" parent="." unique_id=983242775]
+[node name="@MeshInstance3D@19" type="MeshInstance3D" parent="." unique_id=1982222893]
 transform = Transform3D(0.032, 0, 0, 0, -6.993822e-10, -0.032, 0, 0.016, -1.3987644e-09, -4, -5.45, 7.071)
 material_override = SubResource("ShaderMaterial_d153j")
 mesh = SubResource("CylinderMesh_we0nk")
 
-[node name="@MeshInstance3D@20" type="MeshInstance3D" parent="." unique_id=1498447983]
+[node name="@MeshInstance3D@20" type="MeshInstance3D" parent="." unique_id=6601278]
 transform = Transform3D(0.032, 0, 0, 0, -6.993822e-10, -0.032, 0, 0.016, -1.3987644e-09, -1, -5.45, 7.071)
 material_override = SubResource("ShaderMaterial_d153j")
 mesh = SubResource("CylinderMesh_0hfat")
 
-[node name="@MeshInstance3D@21" type="MeshInstance3D" parent="." unique_id=750936911]
+[node name="@MeshInstance3D@21" type="MeshInstance3D" parent="." unique_id=738782555]
 transform = Transform3D(0.032, 0, 0, 0, -6.993822e-10, -0.032, 0, 0.016, -1.3987644e-09, 2, -5.45, 7.071)
 material_override = SubResource("ShaderMaterial_d153j")
 mesh = SubResource("CylinderMesh_2oud1")
 
-[node name="@MeshInstance3D@22" type="MeshInstance3D" parent="." unique_id=1495969425]
+[node name="@MeshInstance3D@22" type="MeshInstance3D" parent="." unique_id=616679028]
 transform = Transform3D(0.032, 0, 0, 0, -6.993822e-10, -0.032, 0, 0.016, -1.3987644e-09, 5, -5.45, 7.071)
 material_override = SubResource("ShaderMaterial_d153j")
 mesh = SubResource("CylinderMesh_fq00g")
 
-[node name="@MeshInstance3D@23" type="MeshInstance3D" parent="." unique_id=1865851725]
+[node name="@MeshInstance3D@23" type="MeshInstance3D" parent="." unique_id=2062462331]
 transform = Transform3D(0.032, 0, 0, 0, -6.993822e-10, -0.032, 0, 0.016, -1.3987644e-09, 6.9, -5.45, 7.071)
 material_override = SubResource("ShaderMaterial_d153j")
 mesh = SubResource("CylinderMesh_ddgme")
 
-[node name="RoundedDeckTrim" type="MeshInstance3D" parent="." unique_id=1100148612]
+[node name="RoundedDeckTrim" type="MeshInstance3D" parent="." unique_id=1298341691]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.205, 1.05)
 material_override = SubResource("ShaderMaterial_l3p2f")
 mesh = SubResource("ArrayMesh_l1xe2")
 
-[node name="HoenhorstCaptionStrip" type="MeshInstance3D" parent="." unique_id=1803771640]
+[node name="HoenhorstCaptionStrip" type="MeshInstance3D" parent="." unique_id=815562103]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3, -6.05, 7.082)
 material_override = SubResource("ShaderMaterial_khvjw")
 mesh = SubResource("BoxMesh_bdslx")
 
-[node name="HoenhorstIdentifier" type="Label3D" parent="." unique_id=1206633218]
+[node name="HoenhorstIdentifier" type="Label3D" parent="." unique_id=1978258716]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3, -6.05, 7.097)
 pixel_size = 0.0032
 modulate = Color(0.77254903, 0.74509805, 0.6627451, 1)
@@ -1797,896 +1805,896 @@ text = "HOENHORST"
 font_size = 48
 outline_size = 2
 
-[node name="PlaqueFixing" type="MeshInstance3D" parent="." unique_id=460691280]
+[node name="PlaqueFixing" type="MeshInstance3D" parent="." unique_id=7736231]
 transform = Transform3D(0.028, 0, 0, 0, -6.119594e-10, -0.028, 0, 0.014, -1.2239189e-09, 2.3, -6.07, 7.097)
 material_override = SubResource("ShaderMaterial_2guy1")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_n7npj")
 
-[node name="@MeshInstance3D@26" type="MeshInstance3D" parent="." unique_id=86547918]
+[node name="@MeshInstance3D@26" type="MeshInstance3D" parent="." unique_id=658329630]
 transform = Transform3D(0.028, 0, 0, 0, -6.119594e-10, -0.028, 0, 0.014, -1.2239189e-09, 4.3, -6.07, 7.097)
 material_override = SubResource("ShaderMaterial_683oe")
 mesh = SubResource("CylinderMesh_tbh4x")
 
-[node name="@MeshInstance3D@27" type="MeshInstance3D" parent="." unique_id=195071684]
+[node name="@MeshInstance3D@27" type="MeshInstance3D" parent="." unique_id=50942051]
 transform = Transform3D(0.028, 0, 0, 0, -6.119594e-10, -0.028, 0, 0.014, -1.2239189e-09, 2.3, -5.33, 7.097)
 material_override = SubResource("ShaderMaterial_683oe")
 mesh = SubResource("CylinderMesh_ho2lf")
 
-[node name="@MeshInstance3D@28" type="MeshInstance3D" parent="." unique_id=363878069]
+[node name="@MeshInstance3D@28" type="MeshInstance3D" parent="." unique_id=1845387838]
 transform = Transform3D(0.028, 0, 0, 0, -6.119594e-10, -0.028, 0, 0.014, -1.2239189e-09, 4.3, -5.33, 7.097)
 material_override = SubResource("ShaderMaterial_683oe")
 mesh = SubResource("CylinderMesh_tphyt")
 
-[node name="FootCorner" type="MeshInstance3D" parent="." unique_id=1826339528]
+[node name="FootCorner" type="MeshInstance3D" parent="." unique_id=890537632]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, -5.151, -0.42)
 material_override = SubResource("ShaderMaterial_es7ta")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_qkkrv")
 
-[node name="FootCorner2" type="MeshInstance3D" parent="." unique_id=1909057271]
+[node name="FootCorner2" type="MeshInstance3D" parent="." unique_id=1211766535]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.88, -5.151, -0.34)
 material_override = SubResource("ShaderMaterial_es7ta")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_2y7gu")
 
-[node name="FootCorner3" type="MeshInstance3D" parent="." unique_id=1172490574]
+[node name="FootCorner3" type="MeshInstance3D" parent="." unique_id=102808034]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, -5.151, 0.42)
 material_override = SubResource("ShaderMaterial_es7ta")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_axtxp")
 
-[node name="FootCorner4" type="MeshInstance3D" parent="." unique_id=1906434004]
+[node name="FootCorner4" type="MeshInstance3D" parent="." unique_id=270774727]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.88, -5.151, 0.34)
 material_override = SubResource("ShaderMaterial_es7ta")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_qov3e")
 
-[node name="FootCorner5" type="MeshInstance3D" parent="." unique_id=536950675]
+[node name="FootCorner5" type="MeshInstance3D" parent="." unique_id=1040137535]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, -5.151, -0.42)
 material_override = SubResource("ShaderMaterial_es7ta")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_jdx1f")
 
-[node name="FootCorner6" type="MeshInstance3D" parent="." unique_id=1829663119]
+[node name="FootCorner6" type="MeshInstance3D" parent="." unique_id=1961197424]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.88, -5.151, -0.34)
 material_override = SubResource("ShaderMaterial_es7ta")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_hw30k")
 
-[node name="FootCorner7" type="MeshInstance3D" parent="." unique_id=1999584101]
+[node name="FootCorner7" type="MeshInstance3D" parent="." unique_id=1754870327]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, -5.151, 0.42)
 material_override = SubResource("ShaderMaterial_es7ta")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_x2642")
 
-[node name="FootCorner8" type="MeshInstance3D" parent="." unique_id=928316305]
+[node name="FootCorner8" type="MeshInstance3D" parent="." unique_id=1506405983]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.88, -5.151, 0.34)
 material_override = SubResource("ShaderMaterial_es7ta")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_2x68o")
 
-[node name="FootCorner9" type="MeshInstance3D" parent="." unique_id=653235949]
+[node name="FootCorner9" type="MeshInstance3D" parent="." unique_id=1368054405]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, -5.151, 1.68)
 material_override = SubResource("ShaderMaterial_es7ta")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_cgf23")
 
-[node name="FootCorner10" type="MeshInstance3D" parent="." unique_id=345830032]
+[node name="FootCorner10" type="MeshInstance3D" parent="." unique_id=1238848706]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.88, -5.151, 1.76)
 material_override = SubResource("ShaderMaterial_es7ta")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_12k8k")
 
-[node name="FootCorner11" type="MeshInstance3D" parent="." unique_id=1029285116]
+[node name="FootCorner11" type="MeshInstance3D" parent="." unique_id=1006963924]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, -5.151, 2.52)
 material_override = SubResource("ShaderMaterial_es7ta")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_xbqiq")
 
-[node name="FootCorner12" type="MeshInstance3D" parent="." unique_id=1920035821]
+[node name="FootCorner12" type="MeshInstance3D" parent="." unique_id=1050292864]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.88, -5.151, 2.44)
 material_override = SubResource("ShaderMaterial_es7ta")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_8ids3")
 
-[node name="FootCorner13" type="MeshInstance3D" parent="." unique_id=1694744562]
+[node name="FootCorner13" type="MeshInstance3D" parent="." unique_id=459554818]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, -5.151, 1.68)
 material_override = SubResource("ShaderMaterial_es7ta")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_nqjt6")
 
-[node name="FootCorner14" type="MeshInstance3D" parent="." unique_id=1262121169]
+[node name="FootCorner14" type="MeshInstance3D" parent="." unique_id=151382865]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.88, -5.151, 1.76)
 material_override = SubResource("ShaderMaterial_es7ta")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_42vbg")
 
-[node name="FootCorner15" type="MeshInstance3D" parent="." unique_id=634071962]
+[node name="FootCorner15" type="MeshInstance3D" parent="." unique_id=122413547]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, -5.151, 2.52)
 material_override = SubResource("ShaderMaterial_es7ta")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_qd8k6")
 
-[node name="FootCorner16" type="MeshInstance3D" parent="." unique_id=683643817]
+[node name="FootCorner16" type="MeshInstance3D" parent="." unique_id=1219555538]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.88, -5.151, 2.44)
 material_override = SubResource("ShaderMaterial_es7ta")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_j05ut")
 
-[node name="FasciaPanelJoin" type="MeshInstance3D" parent="." unique_id=937877992]
+[node name="FasciaPanelJoin" type="MeshInstance3D" parent="." unique_id=585116082]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.008, -5.72, -3.8)
 material_override = SubResource("ShaderMaterial_tcvj3")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_rfm1e")
 
-[node name="FasciaPanelJoin2" type="MeshInstance3D" parent="." unique_id=352593536]
+[node name="FasciaPanelJoin2" type="MeshInstance3D" parent="." unique_id=1233313393]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.008, -5.72, 0.8)
 material_override = SubResource("ShaderMaterial_tcvj3")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_03p06")
 
-[node name="FasciaPanelJoin3" type="MeshInstance3D" parent="." unique_id=360824233]
+[node name="FasciaPanelJoin3" type="MeshInstance3D" parent="." unique_id=1680792730]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.008, -5.72, 5.8)
 material_override = SubResource("ShaderMaterial_tcvj3")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_uqro4")
 
-[node name="FasciaPanelJoin4" type="MeshInstance3D" parent="." unique_id=272348263]
+[node name="FasciaPanelJoin4" type="MeshInstance3D" parent="." unique_id=1518843382]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.8, -5.72, 7.058)
 material_override = SubResource("ShaderMaterial_tcvj3")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_tmdyf")
 
-[node name="FasciaPanelJoin5" type="MeshInstance3D" parent="." unique_id=1006662351]
+[node name="FasciaPanelJoin5" type="MeshInstance3D" parent="." unique_id=863812601]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, -5.72, 7.058)
 material_override = SubResource("ShaderMaterial_tcvj3")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_83kvo")
 
-[node name="FasciaPanelJoin6" type="MeshInstance3D" parent="." unique_id=85043263]
+[node name="FasciaPanelJoin6" type="MeshInstance3D" parent="." unique_id=250284544]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.8, -5.72, 7.058)
 material_override = SubResource("ShaderMaterial_tcvj3")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_hy3d4")
 
-[node name="SideFasciaFixing" type="MeshInstance3D" parent="." unique_id=313420918]
+[node name="SideFasciaFixing" type="MeshInstance3D" parent="." unique_id=1021278610]
 transform = Transform3D(-1.5298985e-09, -0.018, 0, 0.035, -7.8680495e-10, 0, 0, 0, 0.035, 7.023, -5.43, -4.6)
 material_override = SubResource("ShaderMaterial_y238s")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_i62ei")
 
-[node name="@MeshInstance3D@51" type="MeshInstance3D" parent="." unique_id=1667870896]
+[node name="@MeshInstance3D@51" type="MeshInstance3D" parent="." unique_id=1135035105]
 transform = Transform3D(-1.5298985e-09, -0.018, 0, 0.035, -7.8680495e-10, 0, 0, 0, 0.035, 7.023, -5.43, -0.2)
 material_override = SubResource("ShaderMaterial_0u02f")
 mesh = SubResource("CylinderMesh_oqyc2")
 
-[node name="@MeshInstance3D@52" type="MeshInstance3D" parent="." unique_id=393587637]
+[node name="@MeshInstance3D@52" type="MeshInstance3D" parent="." unique_id=1059269792]
 transform = Transform3D(-1.5298985e-09, -0.018, 0, 0.035, -7.8680495e-10, 0, 0, 0, 0.035, 7.023, -5.43, 2.2)
 material_override = SubResource("ShaderMaterial_0u02f")
 mesh = SubResource("CylinderMesh_ar5jy")
 
-[node name="@MeshInstance3D@53" type="MeshInstance3D" parent="." unique_id=1609223391]
+[node name="@MeshInstance3D@53" type="MeshInstance3D" parent="." unique_id=979927698]
 transform = Transform3D(-1.5298985e-09, -0.018, 0, 0.035, -7.8680495e-10, 0, 0, 0, 0.035, 7.023, -5.43, 6.5)
 material_override = SubResource("ShaderMaterial_0u02f")
 mesh = SubResource("CylinderMesh_rtcq1")
 
-[node name="PodiumFoot" type="MeshInstance3D" parent="." unique_id=1265900302]
+[node name="PodiumFoot" type="MeshInstance3D" parent="." unique_id=1130565867]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.095, 0.65)
 material_override = SubResource("ShaderMaterial_aiaxu")
 mesh = SubResource("ArrayMesh_sgjl1")
 
-[node name="PodiumBody" type="MeshInstance3D" parent="." unique_id=1287438418]
+[node name="PodiumBody" type="MeshInstance3D" parent="." unique_id=155344978]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.27, 0.65)
 material_override = SubResource("ShaderMaterial_diwvm")
 mesh = SubResource("ArrayMesh_vat74")
 
-[node name="PodiumRedBand" type="MeshInstance3D" parent="." unique_id=158648170]
+[node name="PodiumRedBand" type="MeshInstance3D" parent="." unique_id=1226325292]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.53, 0.65)
 material_override = SubResource("ShaderMaterial_fobip")
 mesh = SubResource("ArrayMesh_2gb6h")
 
-[node name="PodiumPadding" type="MeshInstance3D" parent="." unique_id=485426474]
+[node name="PodiumPadding" type="MeshInstance3D" parent="." unique_id=2099317444]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.38, 0.65)
 material_override = SubResource("ShaderMaterial_aa3a7")
 mesh = SubResource("ArrayMesh_x7ucr")
 
-[node name="PodiumTop" type="MeshInstance3D" parent="." unique_id=1669999887]
-transform = Transform3D(2.021, 0, 0, 0, 0.018, 0, 0, 0, 0.7144, 0, -1.255, 0.65)
+[node name="PodiumTop" type="MeshInstance3D" parent="." unique_id=1749366009]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.255, 0.65)
 material_override = SubResource("ShaderMaterial_3dywr")
-mesh = SubResource("CylinderMesh_mcjpv")
+mesh = SubResource("ArrayMesh_mcjpv")
 
-[node name="@MeshInstance3D@54" type="MeshInstance3D" parent="." unique_id=1875911733]
+[node name="@MeshInstance3D@54" type="MeshInstance3D" parent="." unique_id=1617544427]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.073, -1.395, 0.65)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_upwkl")
 
-[node name="@MeshInstance3D@55" type="MeshInstance3D" parent="." unique_id=1778438237]
+[node name="@MeshInstance3D@55" type="MeshInstance3D" parent="." unique_id=488187576]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0523826, -1.395, 0.72413427)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_4jsa7")
 
-[node name="@MeshInstance3D@56" type="MeshInstance3D" parent="." unique_id=1648664531]
+[node name="@MeshInstance3D@56" type="MeshInstance3D" parent="." unique_id=1567347827]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9913227, -1.395, 0.79541975)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_i7wfu")
 
-[node name="@MeshInstance3D@57" type="MeshInstance3D" parent="." unique_id=1400659914]
+[node name="@MeshInstance3D@57" type="MeshInstance3D" parent="." unique_id=1941951551]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8921669, -1.395, 0.8611167)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_vhphn")
 
-[node name="@MeshInstance3D@58" type="MeshInstance3D" parent="." unique_id=1015525124]
+[node name="@MeshInstance3D@58" type="MeshInstance3D" parent="." unique_id=1284484263]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7587256, -1.395, 0.9187006)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_75ilc")
 
-[node name="@MeshInstance3D@59" type="MeshInstance3D" parent="." unique_id=1735972066]
+[node name="@MeshInstance3D@59" type="MeshInstance3D" parent="." unique_id=1724764518]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5961269, -1.395, 0.9659584)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_xm6ii")
 
-[node name="@MeshInstance3D@60" type="MeshInstance3D" parent="." unique_id=1269220585]
+[node name="@MeshInstance3D@60" type="MeshInstance3D" parent="." unique_id=1371930267]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4106193, -1.395, 1.0010742)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_qemly")
 
-[node name="@MeshInstance3D@61" type="MeshInstance3D" parent="." unique_id=1352984713]
+[node name="@MeshInstance3D@61" type="MeshInstance3D" parent="." unique_id=1795317768]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.20933193, -1.395, 1.0226984)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_f7u6r")
 
-[node name="@MeshInstance3D@62" type="MeshInstance3D" parent="." unique_id=1652349705]
+[node name="@MeshInstance3D@62" type="MeshInstance3D" parent="." unique_id=1322946379]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.570013e-17, -1.395, 1.03)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_ah8ik")
 
-[node name="@MeshInstance3D@63" type="MeshInstance3D" parent="." unique_id=1698463596]
+[node name="@MeshInstance3D@63" type="MeshInstance3D" parent="." unique_id=923051262]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.20933193, -1.395, 1.0226984)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_b47ks")
 
-[node name="@MeshInstance3D@64" type="MeshInstance3D" parent="." unique_id=1035633877]
+[node name="@MeshInstance3D@64" type="MeshInstance3D" parent="." unique_id=249086926]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4106193, -1.395, 1.0010742)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_e3d85")
 
-[node name="@MeshInstance3D@65" type="MeshInstance3D" parent="." unique_id=1697014577]
+[node name="@MeshInstance3D@65" type="MeshInstance3D" parent="." unique_id=1025788826]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5961269, -1.395, 0.9659584)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_gpgsf")
 
-[node name="@MeshInstance3D@66" type="MeshInstance3D" parent="." unique_id=685752319]
+[node name="@MeshInstance3D@66" type="MeshInstance3D" parent="." unique_id=633895263]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7587256, -1.395, 0.9187006)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_vmwj5")
 
-[node name="@MeshInstance3D@67" type="MeshInstance3D" parent="." unique_id=433816828]
+[node name="@MeshInstance3D@67" type="MeshInstance3D" parent="." unique_id=1782684434]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8921669, -1.395, 0.8611167)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_l0mlv")
 
-[node name="@MeshInstance3D@68" type="MeshInstance3D" parent="." unique_id=175703391]
+[node name="@MeshInstance3D@68" type="MeshInstance3D" parent="." unique_id=2009637845]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9913227, -1.395, 0.79541975)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_snwj6")
 
-[node name="@MeshInstance3D@69" type="MeshInstance3D" parent="." unique_id=1697103086]
+[node name="@MeshInstance3D@69" type="MeshInstance3D" parent="." unique_id=160091270]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0523826, -1.395, 0.72413427)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_oy3eb")
 
-[node name="@MeshInstance3D@70" type="MeshInstance3D" parent="." unique_id=1382500472]
+[node name="@MeshInstance3D@70" type="MeshInstance3D" parent="." unique_id=177213199]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.073, -1.395, 0.65)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_l1x53")
 
-[node name="@MeshInstance3D@71" type="MeshInstance3D" parent="." unique_id=1987526566]
+[node name="@MeshInstance3D@71" type="MeshInstance3D" parent="." unique_id=1132389625]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0523826, -1.395, 0.5758657)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_jrg1p")
 
-[node name="@MeshInstance3D@72" type="MeshInstance3D" parent="." unique_id=1926106252]
+[node name="@MeshInstance3D@72" type="MeshInstance3D" parent="." unique_id=463147840]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9913227, -1.395, 0.50458026)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_blsxu")
 
-[node name="@MeshInstance3D@73" type="MeshInstance3D" parent="." unique_id=226317780]
+[node name="@MeshInstance3D@73" type="MeshInstance3D" parent="." unique_id=451386592]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8921669, -1.395, 0.4388833)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_b7jy1")
 
-[node name="@MeshInstance3D@74" type="MeshInstance3D" parent="." unique_id=1820320713]
+[node name="@MeshInstance3D@74" type="MeshInstance3D" parent="." unique_id=176586690]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7587256, -1.395, 0.38129944)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_5wymg")
 
-[node name="@MeshInstance3D@75" type="MeshInstance3D" parent="." unique_id=414355544]
+[node name="@MeshInstance3D@75" type="MeshInstance3D" parent="." unique_id=779968229]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5961269, -1.395, 0.33404157)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_4uqn4")
 
-[node name="@MeshInstance3D@76" type="MeshInstance3D" parent="." unique_id=1221297189]
+[node name="@MeshInstance3D@76" type="MeshInstance3D" parent="." unique_id=1113030924]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.41061932, -1.395, 0.2989258)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_qle7o")
 
-[node name="@MeshInstance3D@77" type="MeshInstance3D" parent="." unique_id=1080077396]
+[node name="@MeshInstance3D@77" type="MeshInstance3D" parent="." unique_id=946733804]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.20933191, -1.395, 0.27730158)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_nshsm")
 
-[node name="@MeshInstance3D@78" type="MeshInstance3D" parent="." unique_id=536658159]
+[node name="@MeshInstance3D@78" type="MeshInstance3D" parent="." unique_id=1870035655]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7255373e-16, -1.395, 0.27)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_1ugqp")
 
-[node name="@MeshInstance3D@79" type="MeshInstance3D" parent="." unique_id=668704412]
+[node name="@MeshInstance3D@79" type="MeshInstance3D" parent="." unique_id=1063780107]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.20933191, -1.395, 0.27730158)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_5qv2b")
 
-[node name="@MeshInstance3D@80" type="MeshInstance3D" parent="." unique_id=632787866]
+[node name="@MeshInstance3D@80" type="MeshInstance3D" parent="." unique_id=1742077481]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.41061932, -1.395, 0.2989258)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_ymk02")
 
-[node name="@MeshInstance3D@81" type="MeshInstance3D" parent="." unique_id=2141481510]
+[node name="@MeshInstance3D@81" type="MeshInstance3D" parent="." unique_id=2108195414]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5961269, -1.395, 0.33404157)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_e1g2s")
 
-[node name="@MeshInstance3D@82" type="MeshInstance3D" parent="." unique_id=1825009951]
+[node name="@MeshInstance3D@82" type="MeshInstance3D" parent="." unique_id=676716783]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7587256, -1.395, 0.38129944)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_tsotm")
 
-[node name="@MeshInstance3D@83" type="MeshInstance3D" parent="." unique_id=583466559]
+[node name="@MeshInstance3D@83" type="MeshInstance3D" parent="." unique_id=738135491]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8921669, -1.395, 0.4388833)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_te8l4")
 
-[node name="@MeshInstance3D@84" type="MeshInstance3D" parent="." unique_id=1989278901]
+[node name="@MeshInstance3D@84" type="MeshInstance3D" parent="." unique_id=1054779899]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9913227, -1.395, 0.50458026)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_utqou")
 
-[node name="@MeshInstance3D@85" type="MeshInstance3D" parent="." unique_id=85626763]
+[node name="@MeshInstance3D@85" type="MeshInstance3D" parent="." unique_id=608179265]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0523826, -1.395, 0.5758657)
 material_override = SubResource("ShaderMaterial_n87cl")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_of4p3")
 
-[node name="PodiumINEOS" type="MeshInstance3D" parent="." unique_id=1973879734]
+[node name="PodiumINEOS" type="MeshInstance3D" parent="." unique_id=1135319920]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.87, 0.9996)
 material_override = SubResource("ShaderMaterial_lo0pi")
 cast_shadow = 0
 mesh = SubResource("QuadMesh_30el5")
 
-[node name="@MeshInstance3D@86" type="MeshInstance3D" parent="." unique_id=1579381984]
+[node name="@MeshInstance3D@86" type="MeshInstance3D" parent="." unique_id=817498895]
 transform = Transform3D(0.9810981, -0.13748412, 0.13617857, 0.13748412, 0, -0.99050397, 0.13617857, 0.99050397, 0.018901885, 1.0654286, -1.36, 0.6685252)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_0dvqu")
 
-[node name="@MeshInstance3D@87" type="MeshInstance3D" parent="." unique_id=1477443925]
+[node name="@MeshInstance3D@87" type="MeshInstance3D" parent="." unique_id=1016348053]
 transform = Transform3D(0.8505926, -0.3865325, 0.35648957, 0.3865325, 0, -0.9222758, 0.35648957, 0.9222758, 0.14940733, 1.0551679, -1.36, 0.7053973)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_cwahm")
 
-[node name="@MeshInstance3D@88" type="MeshInstance3D" parent="." unique_id=1972858237]
+[node name="@MeshInstance3D@88" type="MeshInstance3D" parent="." unique_id=1318703839]
 transform = Transform3D(0.66627705, -0.57768756, 0.4715421, 0.57768756, -1.1920929e-07, -0.816258, 0.4715421, 0.816258, 0.33372283, 1.0347455, -1.36, 0.7417359)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_b3g47")
 
-[node name="@MeshInstance3D@89" type="MeshInstance3D" parent="." unique_id=261677852]
+[node name="@MeshInstance3D@89" type="MeshInstance3D" parent="." unique_id=1084281196]
 transform = Transform3D(0.49455863, -0.710944, 0.4999704, 0.710944, 0, -0.7032486, 0.4999704, 0.7032486, 0.5054413, 1.0043578, -1.36, 0.7771909)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_sy1u3")
 
-[node name="@MeshInstance3D@90" type="MeshInstance3D" parent="." unique_id=1899158628]
+[node name="@MeshInstance3D@90" type="MeshInstance3D" parent="." unique_id=431635379]
 transform = Transform3D(0.35897195, -0.80064225, 0.47969905, 0.80064225, -1.1920929e-07, -0.5991428, 0.47969905, 0.5991428, 0.6410279, 0.96429765, -1.36, 0.81142116)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_hwn2n")
 
-[node name="@MeshInstance3D@91" type="MeshInstance3D" parent="." unique_id=404599754]
+[node name="@MeshInstance3D@91" type="MeshInstance3D" parent="." unique_id=479225175]
 transform = Transform3D(0.25854087, -0.8610802, 0.43783274, 0.8610802, 0, -0.50846916, 0.43783274, 0.50846916, 0.74145913, 0.9149507, -1.36, 0.8440968)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_fp8nr")
 
-[node name="@MeshInstance3D@92" type="MeshInstance3D" parent="." unique_id=1708489331]
+[node name="@MeshInstance3D@92" type="MeshInstance3D" parent="." unique_id=1316949404]
 transform = Transform3D(0.18549633, -0.90249854, 0.38869974, 0.90249854, 0, -0.4306929, 0.38869974, 0.4306929, 0.8145036, 0.85679233, -1.36, 0.8749031)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_65w7p")
 
-[node name="@MeshInstance3D@93" type="MeshInstance3D" parent="." unique_id=959328167]
+[node name="@MeshInstance3D@93" type="MeshInstance3D" parent="." unique_id=950910905]
 transform = Transform3D(0.13231587, -0.93149567, 0.33883393, 0.93149567, 0, -0.36375257, 0.33883393, 0.36375257, 0.86768407, 0.7903826, -1.36, 0.9035435)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_wl87r")
 
-[node name="@MeshInstance3D@94" type="MeshInstance3D" parent="." unique_id=1443068200]
+[node name="@MeshInstance3D@94" type="MeshInstance3D" parent="." unique_id=1446110309]
 transform = Transform3D(0.09330279, -0.95220655, 0.2908563, 0.95220655, 0, -0.30545506, 0.2908563, 0.30545506, 0.9066972, 0.71636105, -1.36, 0.92974216)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_s6d8j")
 
-[node name="@MeshInstance3D@95" type="MeshInstance3D" parent="." unique_id=705971390]
+[node name="@MeshInstance3D@95" type="MeshInstance3D" parent="." unique_id=1536202652]
 transform = Transform3D(0.06446147, -0.9672324, 0.24557312, 0.9672324, 0, -0.25389257, 0.24557312, 0.25389257, 0.93553853, 0.63544047, -1.36, 0.9532467)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_bh587")
 
-[node name="@MeshInstance3D@96" type="MeshInstance3D" parent="." unique_id=2042229469]
+[node name="@MeshInstance3D@96" type="MeshInstance3D" parent="." unique_id=2086267954]
 transform = Transform3D(0.04306501, -0.97823054, 0.20300351, 0.97823054, 0, -0.20752113, 0.20300351, 0.20752113, 0.956935, 0.54840034, -1.36, 0.9738309)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_swmgm")
 
-[node name="@MeshInstance3D@97" type="MeshInstance3D" parent="." unique_id=1473604957]
+[node name="@MeshInstance3D@97" type="MeshInstance3D" parent="." unique_id=1315852191]
 transform = Transform3D(0.027258098, -0.9862768, 0.16283448, 0.9862768, 0, -0.16510019, 0.16283448, 0.16510019, 0.9727419, 0.45607883, -1.36, 0.99129635)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_nlpo1")
 
-[node name="@MeshInstance3D@98" type="MeshInstance3D" parent="." unique_id=650759469]
+[node name="@MeshInstance3D@98" type="MeshInstance3D" parent="." unique_id=1730903636]
 transform = Transform3D(0.015784204, -0.9920765, 0.12463981, 0.9920765, 0, -0.12563528, 0.12463981, 0.12563528, 0.9842158, 0.359365, -1.36, 1.0054749)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_0lcgt")
 
-[node name="@MeshInstance3D@99" type="MeshInstance3D" parent="." unique_id=1687927512]
+[node name="@MeshInstance3D@99" type="MeshInstance3D" parent="." unique_id=1241673535]
 transform = Transform3D(0.0077985525, -0.9960931, 0.08796438, 0.9960931, 0, -0.0883094, 0.08796438, 0.0883094, 0.99220145, 0.25919026, -1.36, 1.0162301)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_smmnq")
 
-[node name="@MeshInstance3D@100" type="MeshInstance3D" parent="." unique_id=1122465203]
+[node name="@MeshInstance3D@100" type="MeshInstance3D" parent="." unique_id=833264654]
 transform = Transform3D(0.0027487278, -0.99862474, 0.05235649, 0.99862474, 0, -0.052428596, 0.05235649, 0.052428596, 0.9972513, 0.15651938, -1.36, 1.0234582)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_5mno2")
 
-[node name="@MeshInstance3D@101" type="MeshInstance3D" parent="." unique_id=1916324472]
+[node name="@MeshInstance3D@101" type="MeshInstance3D" parent="." unique_id=1152493121]
 transform = Transform3D(0.00030219555, -0.9998489, 0.01738266, 0.9998489, 0, -0.017385287, 0.01738266, 0.017385287, 0.99969774, 0.052341152, -1.36, 1.0270898)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_tu718")
 
-[node name="@MeshInstance3D@102" type="MeshInstance3D" parent="." unique_id=1107421986]
+[node name="@MeshInstance3D@102" type="MeshInstance3D" parent="." unique_id=69025500]
 transform = Transform3D(0.00030219555, -0.9998489, -0.01738266, 0.9998489, 0, 0.017385287, -0.01738266, -0.017385287, 0.99969774, -0.052341152, -1.36, 1.0270898)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_tsf00")
 
-[node name="@MeshInstance3D@103" type="MeshInstance3D" parent="." unique_id=709416848]
+[node name="@MeshInstance3D@103" type="MeshInstance3D" parent="." unique_id=1240718194]
 transform = Transform3D(0.0027487278, -0.99862474, -0.05235649, 0.99862474, 0, 0.052428596, -0.05235649, -0.052428596, 0.9972513, -0.15651938, -1.36, 1.0234582)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_u7rsn")
 
-[node name="@MeshInstance3D@104" type="MeshInstance3D" parent="." unique_id=776162884]
+[node name="@MeshInstance3D@104" type="MeshInstance3D" parent="." unique_id=1922824840]
 transform = Transform3D(0.0077985525, -0.9960931, -0.08796438, 0.9960931, 0, 0.0883094, -0.08796438, -0.0883094, 0.99220145, -0.25919026, -1.36, 1.0162301)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_5ffi2")
 
-[node name="@MeshInstance3D@105" type="MeshInstance3D" parent="." unique_id=522947819]
+[node name="@MeshInstance3D@105" type="MeshInstance3D" parent="." unique_id=1849477431]
 transform = Transform3D(0.015784204, -0.9920765, -0.12463981, 0.9920765, 0, 0.12563528, -0.12463981, -0.12563528, 0.9842158, -0.359365, -1.36, 1.0054749)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_i3ah2")
 
-[node name="@MeshInstance3D@106" type="MeshInstance3D" parent="." unique_id=113625590]
+[node name="@MeshInstance3D@106" type="MeshInstance3D" parent="." unique_id=452634033]
 transform = Transform3D(0.027258098, -0.9862768, -0.16283448, 0.9862768, 0, 0.16510019, -0.16283448, -0.16510019, 0.9727419, -0.45607883, -1.36, 0.99129635)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_6ftwc")
 
-[node name="@MeshInstance3D@107" type="MeshInstance3D" parent="." unique_id=604790331]
+[node name="@MeshInstance3D@107" type="MeshInstance3D" parent="." unique_id=2059553918]
 transform = Transform3D(0.04306501, -0.97823054, -0.20300351, 0.97823054, 0, 0.20752113, -0.20300351, -0.20752113, 0.956935, -0.54840034, -1.36, 0.9738309)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_bb8dr")
 
-[node name="@MeshInstance3D@108" type="MeshInstance3D" parent="." unique_id=529922072]
+[node name="@MeshInstance3D@108" type="MeshInstance3D" parent="." unique_id=1739168359]
 transform = Transform3D(0.06446147, -0.9672324, -0.24557312, 0.9672324, 0, 0.25389257, -0.24557312, -0.25389257, 0.93553853, -0.63544047, -1.36, 0.9532467)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_l7xsn")
 
-[node name="@MeshInstance3D@109" type="MeshInstance3D" parent="." unique_id=783693248]
+[node name="@MeshInstance3D@109" type="MeshInstance3D" parent="." unique_id=182769924]
 transform = Transform3D(0.09330279, -0.95220655, -0.2908563, 0.95220655, 0, 0.30545506, -0.2908563, -0.30545506, 0.9066972, -0.71636105, -1.36, 0.92974216)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_mpk32")
 
-[node name="@MeshInstance3D@110" type="MeshInstance3D" parent="." unique_id=1121458994]
+[node name="@MeshInstance3D@110" type="MeshInstance3D" parent="." unique_id=1302411183]
 transform = Transform3D(0.13231587, -0.93149567, -0.33883393, 0.93149567, 0, 0.36375257, -0.33883393, -0.36375257, 0.86768407, -0.7903826, -1.36, 0.9035435)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_g4t5d")
 
-[node name="@MeshInstance3D@111" type="MeshInstance3D" parent="." unique_id=1420824932]
+[node name="@MeshInstance3D@111" type="MeshInstance3D" parent="." unique_id=702709155]
 transform = Transform3D(0.18549633, -0.90249854, -0.38869974, 0.90249854, 0, 0.4306929, -0.38869974, -0.4306929, 0.8145036, -0.85679233, -1.36, 0.8749031)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_5db8f")
 
-[node name="@MeshInstance3D@112" type="MeshInstance3D" parent="." unique_id=276833608]
+[node name="@MeshInstance3D@112" type="MeshInstance3D" parent="." unique_id=2080927718]
 transform = Transform3D(0.25854087, -0.8610802, -0.43783274, 0.8610802, 0, 0.50846916, -0.43783274, -0.50846916, 0.74145913, -0.9149507, -1.36, 0.8440968)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_a183l")
 
-[node name="@MeshInstance3D@113" type="MeshInstance3D" parent="." unique_id=1949601991]
+[node name="@MeshInstance3D@113" type="MeshInstance3D" parent="." unique_id=424933747]
 transform = Transform3D(0.35897195, -0.80064225, -0.47969905, 0.80064225, -1.1920929e-07, 0.5991428, -0.47969905, -0.5991428, 0.6410279, -0.96429765, -1.36, 0.81142116)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_r1715")
 
-[node name="@MeshInstance3D@114" type="MeshInstance3D" parent="." unique_id=418202187]
+[node name="@MeshInstance3D@114" type="MeshInstance3D" parent="." unique_id=2095259610]
 transform = Transform3D(0.49455863, -0.710944, -0.4999704, 0.710944, 0, 0.7032486, -0.4999704, -0.7032486, 0.5054413, -1.0043578, -1.36, 0.7771909)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_ntnlg")
 
-[node name="@MeshInstance3D@115" type="MeshInstance3D" parent="." unique_id=257096333]
+[node name="@MeshInstance3D@115" type="MeshInstance3D" parent="." unique_id=292803281]
 transform = Transform3D(0.66627705, -0.57768756, -0.4715421, 0.57768756, -1.1920929e-07, 0.816258, -0.4715421, -0.816258, 0.33372283, -1.0347455, -1.36, 0.7417359)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_y8jpe")
 
-[node name="@MeshInstance3D@116" type="MeshInstance3D" parent="." unique_id=1742881810]
+[node name="@MeshInstance3D@116" type="MeshInstance3D" parent="." unique_id=1074159672]
 transform = Transform3D(0.8505926, -0.3865325, -0.35648957, 0.3865325, 0, 0.9222758, -0.35648957, -0.9222758, 0.14940733, -1.0551679, -1.36, 0.7053973)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_tfh0q")
 
-[node name="@MeshInstance3D@117" type="MeshInstance3D" parent="." unique_id=1331156349]
+[node name="@MeshInstance3D@117" type="MeshInstance3D" parent="." unique_id=814717407]
 transform = Transform3D(0.9810981, -0.13748412, -0.13617857, 0.13748412, 0, 0.99050397, -0.13617857, -0.99050397, 0.018901885, -1.0654286, -1.36, 0.6685252)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_143gj")
 
-[node name="@MeshInstance3D@118" type="MeshInstance3D" parent="." unique_id=165151900]
+[node name="@MeshInstance3D@118" type="MeshInstance3D" parent="." unique_id=1456687114]
 transform = Transform3D(0.98109806, 0.13748436, 0.1361788, -0.13748436, -1.1920929e-07, 0.99050397, 0.1361788, -0.99050397, 0.018901885, -1.0654286, -1.36, 0.63147473)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_e4ye0")
 
-[node name="@MeshInstance3D@119" type="MeshInstance3D" parent="." unique_id=750918016]
+[node name="@MeshInstance3D@119" type="MeshInstance3D" parent="." unique_id=1874574931]
 transform = Transform3D(0.8505926, 0.3865325, 0.35648957, -0.3865325, 0, 0.9222758, 0.35648957, -0.9222758, 0.14940733, -1.0551679, -1.36, 0.5946027)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_qjpqc")
 
-[node name="@MeshInstance3D@120" type="MeshInstance3D" parent="." unique_id=328976683]
+[node name="@MeshInstance3D@120" type="MeshInstance3D" parent="." unique_id=1847181802]
 transform = Transform3D(0.66627705, 0.57768756, 0.4715421, -0.57768756, -1.1920929e-07, 0.816258, 0.4715421, -0.816258, 0.33372283, -1.0347455, -1.36, 0.55826414)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_wqt1s")
 
-[node name="@MeshInstance3D@121" type="MeshInstance3D" parent="." unique_id=431094722]
+[node name="@MeshInstance3D@121" type="MeshInstance3D" parent="." unique_id=1741906866]
 transform = Transform3D(0.49455947, 0.7109434, 0.4999704, -0.7109434, 0, 0.7032492, 0.4999704, -0.7032492, 0.5054405, -1.0043578, -1.36, 0.522809)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_leaev")
 
-[node name="@MeshInstance3D@122" type="MeshInstance3D" parent="." unique_id=140533197]
+[node name="@MeshInstance3D@122" type="MeshInstance3D" parent="." unique_id=2043456681]
 transform = Transform3D(0.35897166, 0.80064243, 0.47969884, -0.80064243, 0, 0.5991424, 0.47969884, -0.5991424, 0.6410284, -0.96429765, -1.36, 0.48857886)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_kq13o")
 
-[node name="@MeshInstance3D@123" type="MeshInstance3D" parent="." unique_id=1572253324]
+[node name="@MeshInstance3D@123" type="MeshInstance3D" parent="." unique_id=114978231]
 transform = Transform3D(0.2585405, 0.8610804, 0.43783253, -0.8610804, 0, 0.5084688, 0.43783253, -0.5084688, 0.7414595, -0.9149507, -1.36, 0.45590323)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_qklw7")
 
-[node name="@MeshInstance3D@124" type="MeshInstance3D" parent="." unique_id=944582948]
+[node name="@MeshInstance3D@124" type="MeshInstance3D" parent="." unique_id=591969332]
 transform = Transform3D(0.18549633, 0.90249854, 0.38869974, -0.90249854, 0, 0.4306929, 0.38869974, -0.4306929, 0.8145036, -0.85679233, -1.36, 0.4250969)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_tlw4a")
 
-[node name="@MeshInstance3D@125" type="MeshInstance3D" parent="." unique_id=760835353]
+[node name="@MeshInstance3D@125" type="MeshInstance3D" parent="." unique_id=1366667391]
 transform = Transform3D(0.13231611, 0.9314955, 0.33883417, -0.9314955, 0, 0.36375287, 0.33883417, -0.36375287, 0.8676838, -0.7903826, -1.36, 0.39645648)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_qehxr")
 
-[node name="@MeshInstance3D@126" type="MeshInstance3D" parent="." unique_id=799945378]
+[node name="@MeshInstance3D@126" type="MeshInstance3D" parent="." unique_id=2136002443]
 transform = Transform3D(0.09330231, 0.95220673, 0.29085574, -0.95220673, -1.1920929e-07, 0.30545434, 0.29085574, -0.30545434, 0.90669763, -0.71636105, -1.36, 0.37025785)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_jvll5")
 
-[node name="@MeshInstance3D@127" type="MeshInstance3D" parent="." unique_id=1470952036]
+[node name="@MeshInstance3D@127" type="MeshInstance3D" parent="." unique_id=2035499236]
 transform = Transform3D(0.06446177, 0.9672322, 0.24557371, -0.9672322, 0, 0.25389323, 0.24557371, -0.25389323, 0.93553823, -0.63544047, -1.36, 0.34675327)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_73oqq")
 
-[node name="@MeshInstance3D@128" type="MeshInstance3D" parent="." unique_id=307774015]
+[node name="@MeshInstance3D@128" type="MeshInstance3D" parent="." unique_id=125898582]
 transform = Transform3D(0.043064833, 0.9782306, 0.20300324, -0.9782306, -1.1920929e-07, 0.20752084, 0.20300324, -0.20752084, 0.9569351, -0.54840034, -1.36, 0.32616913)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_845p3")
 
-[node name="@MeshInstance3D@129" type="MeshInstance3D" parent="." unique_id=1391224658]
+[node name="@MeshInstance3D@129" type="MeshInstance3D" parent="." unique_id=214409858]
 transform = Transform3D(0.027258158, 0.9862768, 0.16283478, -0.9862768, 0, 0.16510049, 0.16283478, -0.16510049, 0.97274184, -0.45607883, -1.36, 0.30870366)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_kqd4i")
 
-[node name="@MeshInstance3D@130" type="MeshInstance3D" parent="." unique_id=1559621800]
+[node name="@MeshInstance3D@130" type="MeshInstance3D" parent="." unique_id=361075552]
 transform = Transform3D(0.015784323, 0.99207646, 0.124640115, -0.99207646, 0, 0.1256356, 0.124640115, -0.1256356, 0.9842157, -0.359365, -1.36, 0.29452503)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_1gvbx")
 
-[node name="@MeshInstance3D@131" type="MeshInstance3D" parent="." unique_id=1598540950]
+[node name="@MeshInstance3D@131" type="MeshInstance3D" parent="." unique_id=384565546]
 transform = Transform3D(0.0077984333, 0.9960931, 0.087964095, -0.9960931, -1.1920929e-07, 0.0883091, 0.087964095, -0.0883091, 0.9922015, -0.25919026, -1.36, 0.28376985)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_iihff")
 
-[node name="@MeshInstance3D@132" type="MeshInstance3D" parent="." unique_id=1021230983]
+[node name="@MeshInstance3D@132" type="MeshInstance3D" parent="." unique_id=801435697]
 transform = Transform3D(0.0027487874, 0.9986246, 0.052356776, -0.9986246, 0, 0.052428883, 0.052356776, -0.052428883, 0.9972512, -0.15651938, -1.36, 0.27654165)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_tuavs")
 
-[node name="@MeshInstance3D@133" type="MeshInstance3D" parent="." unique_id=2071702832]
+[node name="@MeshInstance3D@133" type="MeshInstance3D" parent="." unique_id=334920984]
 transform = Transform3D(0.00030219555, 0.9998489, 0.017382089, -0.9998489, 0, 0.017384715, 0.017382089, -0.017384715, 0.99969774, -0.052341152, -1.36, 0.2729101)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_86f7q")
 
-[node name="@MeshInstance3D@134" type="MeshInstance3D" parent="." unique_id=428837165]
+[node name="@MeshInstance3D@134" type="MeshInstance3D" parent="." unique_id=2050935787]
 transform = Transform3D(0.00030219555, 0.9998489, -0.017382089, -0.9998489, 0, -0.017384715, -0.017382089, 0.017384715, 0.99969774, 0.052341152, -1.36, 0.2729101)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_7kxu1")
 
-[node name="@MeshInstance3D@135" type="MeshInstance3D" parent="." unique_id=212635855]
+[node name="@MeshInstance3D@135" type="MeshInstance3D" parent="." unique_id=926801594]
 transform = Transform3D(0.0027487874, 0.9986246, -0.052356776, -0.9986246, 0, -0.052428883, -0.052356776, 0.052428883, 0.9972512, 0.15651938, -1.36, 0.27654165)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_wp1qk")
 
-[node name="@MeshInstance3D@136" type="MeshInstance3D" parent="." unique_id=744263422]
+[node name="@MeshInstance3D@136" type="MeshInstance3D" parent="." unique_id=1536898598]
 transform = Transform3D(0.0077984333, 0.9960931, -0.087964095, -0.9960931, -1.1920929e-07, -0.0883091, -0.087964095, 0.0883091, 0.9922015, 0.25919026, -1.36, 0.28376985)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_ugooe")
 
-[node name="@MeshInstance3D@137" type="MeshInstance3D" parent="." unique_id=1794316911]
+[node name="@MeshInstance3D@137" type="MeshInstance3D" parent="." unique_id=1981531627]
 transform = Transform3D(0.015784323, 0.99207646, -0.124640115, -0.99207646, 0, -0.1256356, -0.124640115, 0.1256356, 0.9842157, 0.359365, -1.36, 0.29452503)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_u8gwo")
 
-[node name="@MeshInstance3D@138" type="MeshInstance3D" parent="." unique_id=1485431080]
+[node name="@MeshInstance3D@138" type="MeshInstance3D" parent="." unique_id=1128447201]
 transform = Transform3D(0.027258158, 0.9862768, -0.16283478, -0.9862768, 0, -0.16510049, -0.16283478, 0.16510049, 0.97274184, 0.45607883, -1.36, 0.30870366)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_pn1ph")
 
-[node name="@MeshInstance3D@139" type="MeshInstance3D" parent="." unique_id=94596969]
+[node name="@MeshInstance3D@139" type="MeshInstance3D" parent="." unique_id=1927844103]
 transform = Transform3D(0.043064833, 0.9782306, -0.20300324, -0.9782306, -1.1920929e-07, -0.20752084, -0.20300324, 0.20752084, 0.9569351, 0.54840034, -1.36, 0.32616913)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_crsio")
 
-[node name="@MeshInstance3D@140" type="MeshInstance3D" parent="." unique_id=1152199643]
+[node name="@MeshInstance3D@140" type="MeshInstance3D" parent="." unique_id=1220348295]
 transform = Transform3D(0.06446177, 0.9672322, -0.24557371, -0.9672322, 0, -0.25389323, -0.24557371, 0.25389323, 0.93553823, 0.63544047, -1.36, 0.34675327)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_eplgq")
 
-[node name="@MeshInstance3D@141" type="MeshInstance3D" parent="." unique_id=530962323]
+[node name="@MeshInstance3D@141" type="MeshInstance3D" parent="." unique_id=273446078]
 transform = Transform3D(0.09330231, 0.95220673, -0.29085574, -0.95220673, -1.1920929e-07, -0.30545434, -0.29085574, 0.30545434, 0.90669763, 0.71636105, -1.36, 0.37025785)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_xvr48")
 
-[node name="@MeshInstance3D@142" type="MeshInstance3D" parent="." unique_id=537956960]
+[node name="@MeshInstance3D@142" type="MeshInstance3D" parent="." unique_id=263323488]
 transform = Transform3D(0.13231611, 0.9314955, -0.33883417, -0.9314955, 0, -0.36375287, -0.33883417, 0.36375287, 0.8676838, 0.7903826, -1.36, 0.39645648)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_2mudt")
 
-[node name="@MeshInstance3D@143" type="MeshInstance3D" parent="." unique_id=537440140]
+[node name="@MeshInstance3D@143" type="MeshInstance3D" parent="." unique_id=1065232074]
 transform = Transform3D(0.18549633, 0.90249854, -0.38869974, -0.90249854, 0, -0.4306929, -0.38869974, 0.4306929, 0.8145036, 0.85679233, -1.36, 0.4250969)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_sq7e1")
 
-[node name="@MeshInstance3D@144" type="MeshInstance3D" parent="." unique_id=1733322787]
+[node name="@MeshInstance3D@144" type="MeshInstance3D" parent="." unique_id=1302920717]
 transform = Transform3D(0.2585405, 0.8610804, -0.43783253, -0.8610804, 0, -0.5084688, -0.43783253, 0.5084688, 0.7414595, 0.9149507, -1.36, 0.45590323)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_nlejq")
 
-[node name="@MeshInstance3D@145" type="MeshInstance3D" parent="." unique_id=1925123942]
+[node name="@MeshInstance3D@145" type="MeshInstance3D" parent="." unique_id=1060891321]
 transform = Transform3D(0.35897166, 0.80064243, -0.47969884, -0.80064243, 0, -0.5991424, -0.47969884, 0.5991424, 0.6410284, 0.96429765, -1.36, 0.48857886)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_i63ct")
 
-[node name="@MeshInstance3D@146" type="MeshInstance3D" parent="." unique_id=1736886604]
+[node name="@MeshInstance3D@146" type="MeshInstance3D" parent="." unique_id=1208837028]
 transform = Transform3D(0.49455947, 0.7109434, -0.4999704, -0.7109434, 0, -0.7032492, -0.4999704, 0.7032492, 0.5054405, 1.0043578, -1.36, 0.522809)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_wgy8w")
 
-[node name="@MeshInstance3D@147" type="MeshInstance3D" parent="." unique_id=1990203645]
+[node name="@MeshInstance3D@147" type="MeshInstance3D" parent="." unique_id=797994100]
 transform = Transform3D(0.66627705, 0.57768756, -0.4715421, -0.57768756, -1.1920929e-07, -0.816258, -0.4715421, 0.816258, 0.33372283, 1.0347455, -1.36, 0.55826414)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_fsq1e")
 
-[node name="@MeshInstance3D@148" type="MeshInstance3D" parent="." unique_id=457710440]
+[node name="@MeshInstance3D@148" type="MeshInstance3D" parent="." unique_id=477293506]
 transform = Transform3D(0.8505926, 0.3865325, -0.35648957, -0.3865325, 0, -0.9222758, -0.35648957, 0.9222758, 0.14940733, 1.0551679, -1.36, 0.5946027)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_frae2")
 
-[node name="@MeshInstance3D@149" type="MeshInstance3D" parent="." unique_id=456011698]
+[node name="@MeshInstance3D@149" type="MeshInstance3D" parent="." unique_id=2132668452]
 transform = Transform3D(0.98109806, 0.13748436, -0.1361788, -0.13748436, -1.1920929e-07, -0.99050397, -0.1361788, 0.99050397, 0.018901885, 1.0654286, -1.36, 0.63147473)
 material_override = SubResource("ShaderMaterial_5e5gj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_k4ksg")
 
-[node name="@MeshInstance3D@150" type="MeshInstance3D" parent="." unique_id=1786653785]
+[node name="@MeshInstance3D@150" type="MeshInstance3D" parent="." unique_id=1602121922]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.28, -3.36, 0.92)
 material_override = SubResource("ShaderMaterial_rxyhi")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_w40bt")
 
-[node name="@MeshInstance3D@151" type="MeshInstance3D" parent="." unique_id=1187841710]
+[node name="@MeshInstance3D@151" type="MeshInstance3D" parent="." unique_id=601928024]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.28, -3.36, 0.92)
 material_override = SubResource("ShaderMaterial_rxyhi")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_h10ng")
 
-[node name="FootFixing" type="MeshInstance3D" parent="." unique_id=383936028]
+[node name="FootFixing" type="MeshInstance3D" parent="." unique_id=1514310177]
 transform = Transform3D(0.055, 0, 0, 0, 0.018, 0, 0, 0, 0.055, -0.65, -4.998, 0.37)
 material_override = SubResource("ShaderMaterial_b44bn")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_qbqlj")
 
-[node name="@MeshInstance3D@152" type="MeshInstance3D" parent="." unique_id=1087807270]
+[node name="@MeshInstance3D@152" type="MeshInstance3D" parent="." unique_id=1788555855]
 transform = Transform3D(0.055, 0, 0, 0, 0.018, 0, 0, 0, 0.055, -0.45, -5.029, 0.88)
 material_override = SubResource("ShaderMaterial_him5x")
 mesh = SubResource("CylinderMesh_jepfw")
 
-[node name="@MeshInstance3D@153" type="MeshInstance3D" parent="." unique_id=1353761400]
+[node name="@MeshInstance3D@153" type="MeshInstance3D" parent="." unique_id=1280714893]
 transform = Transform3D(0.055, 0, 0, 0, 0.018, 0, 0, 0, 0.055, 0.45, -5.029, 0.42)
 material_override = SubResource("ShaderMaterial_him5x")
 mesh = SubResource("CylinderMesh_o2u58")
 
-[node name="@MeshInstance3D@154" type="MeshInstance3D" parent="." unique_id=1441333708]
+[node name="@MeshInstance3D@154" type="MeshInstance3D" parent="." unique_id=656487713]
 transform = Transform3D(0.055, 0, 0, 0, 0.018, 0, 0, 0, 0.055, 0.45, -5.029, 0.88)
 material_override = SubResource("ShaderMaterial_him5x")
 mesh = SubResource("CylinderMesh_mxkw8")
 
-[node name="PodiumFootCollar" type="MeshInstance3D" parent="." unique_id=2031832249]
+[node name="PodiumFootCollar" type="MeshInstance3D" parent="." unique_id=1349092503]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0.65)
 material_override = SubResource("ShaderMaterial_8j4lc")
 mesh = SubResource("ArrayMesh_rs7u8")
 
-[node name="BodyPanelJoin" type="MeshInstance3D" parent="." unique_id=2096230638]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.365, -3.4, 0.988)
+[node name="BodyPanelJoin" type="MeshInstance3D" parent="." unique_id=1098697842]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.26, -3.4, 0.988)
 material_override = SubResource("ShaderMaterial_d4n6q")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_nnap2")
 
-[node name="BodyPanelJoin2" type="MeshInstance3D" parent="." unique_id=1220842899]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.365, -3.4, 0.988)
+[node name="BodyPanelJoin2" type="MeshInstance3D" parent="." unique_id=2138537262]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.26, -3.4, 0.988)
 material_override = SubResource("ShaderMaterial_d4n6q")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_ver4e")
 
-[node name="BodyPanelJoin3" type="MeshInstance3D" parent="." unique_id=1285280477]
+[node name="BodyPanelJoin3" type="MeshInstance3D" parent="." unique_id=815084436]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.01, 0.988)
 material_override = SubResource("ShaderMaterial_d4n6q")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_kobri")
 
-[node name="BodyPanelJoin4" type="MeshInstance3D" parent="." unique_id=1594415742]
+[node name="BodyPanelJoin4" type="MeshInstance3D" parent="." unique_id=827447914]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.79, 0.988)
 material_override = SubResource("ShaderMaterial_d4n6q")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_b38fy")
 
-[node name="SidePanelJoin" type="MeshInstance3D" parent="." unique_id=1106137908]
+[node name="SidePanelJoin" type="MeshInstance3D" parent="." unique_id=1180943959]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4072164, -3.95, 0.69073606)
 material_override = SubResource("ShaderMaterial_d4n6q")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_q3xpt")
 
-[node name="SidePanelJoin2" type="MeshInstance3D" parent="." unique_id=295466869]
+[node name="SidePanelJoin2" type="MeshInstance3D" parent="." unique_id=613073001]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4033705, -4.12, 0.6934951)
 material_override = SubResource("ShaderMaterial_d4n6q")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_5r5b5")
 
-[node name="SidePanelJoin3" type="MeshInstance3D" parent="." unique_id=1314652240]
+[node name="SidePanelJoin3" type="MeshInstance3D" parent="." unique_id=1750049132]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3995246, -4.29, 0.6962541)
 material_override = SubResource("ShaderMaterial_d4n6q")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_7447w")
 
-[node name="SidePanelJoin4" type="MeshInstance3D" parent="." unique_id=376493729]
+[node name="SidePanelJoin4" type="MeshInstance3D" parent="." unique_id=152958793]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4072164, -3.95, 0.69073606)
 material_override = SubResource("ShaderMaterial_d4n6q")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_624h4")
 
-[node name="SidePanelJoin5" type="MeshInstance3D" parent="." unique_id=1489366080]
+[node name="SidePanelJoin5" type="MeshInstance3D" parent="." unique_id=189094182]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4033705, -4.12, 0.6934951)
 material_override = SubResource("ShaderMaterial_d4n6q")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_t8pnd")
 
-[node name="SidePanelJoin6" type="MeshInstance3D" parent="." unique_id=921969558]
+[node name="SidePanelJoin6" type="MeshInstance3D" parent="." unique_id=1754337988]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3995246, -4.29, 0.6962541)
 material_override = SubResource("ShaderMaterial_d4n6q")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_xwmab")
 
-[node name="INEOSInsetFrame" type="MeshInstance3D" parent="." unique_id=254008074]
+[node name="INEOSInsetFrame" type="MeshInstance3D" parent="." unique_id=983291108]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.87, 0.986)
 material_override = SubResource("ShaderMaterial_1vecw")
 mesh = SubResource("ArrayMesh_6dj57")
 
-[node name="INEOSInsetPanel" type="MeshInstance3D" parent="." unique_id=896732308]
+[node name="INEOSInsetPanel" type="MeshInstance3D" parent="." unique_id=1206340185]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.87, 0.995)
 material_override = SubResource("ShaderMaterial_f2qvf")
 mesh = SubResource("ArrayMesh_jsanx")
 
-[node name="PodiumWarmLightEdge" type="MeshInstance3D" parent="." unique_id=58952985]
+[node name="PodiumWarmLightEdge" type="MeshInstance3D" parent="." unique_id=1402852929]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.59, 0.65)
 material_override = SubResource("StandardMaterial3D_x488i")
 cast_shadow = 0

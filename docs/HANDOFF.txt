@@ -2312,3 +2312,14 @@ Hoehe ca.98cm und Kollisionsdaten unveraendert, Hoenhorst unveraendert.
 Bake/Arena/Match headless+nativ/strengerWebbuild PASS. Detail-, Figuren- und
 Spielkamerabilder gesichtet: Arena-Design/23-*.png. Nachweis
 validation/TABLE_FINISH_2026-10-12.txt. V14-Download bleibt aeltere Fassung.
+
+TISCH DESIGNABSCHLUSS — 12.10.2026
+Einlage mit gerundetem Rand, Frontfugen auf ebene Sockelflaeche gesetzt.
+Hoehe .981m, Kontaktform, Physik, Arena/Hoenhorst unveraendert.
+assets-source/table-final.blend: 122 editierbare Meshes, metrisch, Original-
+INEOS gepackt, separates Vorschaustudio. Spielgeometrie bleibt Godot-nativ;
+Blender ist geometrisch identische Momentaufnahme mit matten Studiomaterialien.
+Export-/Aufbau-/Reopen-Pruefskripte committed; keine automatische Ruecksynchronisation.
+Bake/Arena/Match nativ/Webbuild/Blender-Reopen PASS. Bilder Arena-Design/24-*.png.
+Nachweis validation/TABLE_FINAL_2026-10-12.txt. Nutzeransicht bereit, allgemeine
+Spielabnahme weiterhin offen. V14-Paket bleibt aeltere Fassung.
