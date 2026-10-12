@@ -1,0 +1,41 @@
+BACKENBEBEN — CHARAKTERAUSWAHL / 12.10.2026
+
+Nutzerentscheidung: Charakterauswahl bauen, statt zuerst Grundfigur umzugestalten.
+Vorhandenes geriggtes Grundmodell bleibt Basis. Kampfname, vier Hautfarben,
+drei Haarfarben, vier Trikotfarben, drei Frisuren: strukturiert, kurz, Glatze.
+Direkte 3D-Vorschau, Ganzkoerper/Gesicht, Drehung in30Grad-Schritten,
+Farbchips mit zugänglichem Namen/aria-pressed plus native Selects, Zufaellig,
+Zuruecksetzen und lokale Speicherung. Kein Serverkonto erforderlich.
+Gespeicherte Daten werden begrenzt/validiert; bei nicht verfuegbarem
+localStorage bleibt die Auswahl fuer die Sitzung nutzbar.
+Auswahl wird ueber bestehenden Join in beide Clients, Spiegel und Replay-
+Spielerdaten uebertragen. Server begrenzt hair_style auf0..2, fehlendes Feld0.
+Kampf-/Physikdaten, Koerperproportionen, Gesicht und Charakterquelle bleiben.
+
+Frisuren: Strähnen und Kopfkappe sind im GLB als HairCap zusammengefuegt.
+Kurzhaar entsteht aus der groessten verbundenen Flaeche dieses Meshes;
+Skinninggewichte/UVs/Normalen werden beibehalten, Mesh einmal geteilt gecacht.
+Glatze blendet die Kappe aus; Augenbrauen bleiben. Kamerawechsel beachten
+Frisur und die ausgeblendeten Kopfteile in der Ich-Perspektive.
+Kein Hoehen-/Koerperformeditor oder zusaetzliche Gesichtsmodelle in diesem Pass.
+
+Lobbyvorschau nutzt dieselbe Spielfigur und blendet Tisch/Helfer/Ich-Koerper
+nur waehrend der Auswahl aus. Beim Beitritt kehren Arenaobjekte zurueck.
+Godot-Diagnosebruecke berichtet Frisur/Ansicht; Vorschauwerte nur bei Aenderung.
+UI nach Sichtung korrigiert: Farbchips nicht abgeschnitten, Gesichtszoom weiter,
+Spielfunktionen in Lobby verborgen, bei schmalen Fenstern scrollbarer Editor.
+Die Arena behaelt ihre feste16:9-Komposition, daher Balken in Hochkantfenstern.
+
+QA: 165PythonUnittests PASS, nativer ARENA_MATCH_PASS. Strenger Webbuild PASS.
+CHARACTER_APPEARANCE_PASS: drei Mesh-/Sichtbarkeitsvarianten und Ich-/Seiten-
+Kamerawechsel, Kurzhaar mit erhaltener Knochenbindung.
+Zwei echte Browserclients: Livevorschau/Farben/Frisuren, lokale Speicherung
+nach Reload, Drehen/Zoom, erreichbare Controls in1600x900/1280x720/900x1200/
+600x900, gegenseitige Uebertragung/gerenderte Styles, Rueckkehr zur Lobby,
+Reset/Zufall, errors[]. Finaler realer Produktionskontakt-/Replaycheck PASS,
+errors[]: Probe ohne Schaden, Gelenke/gerenderte Pose, neun Kamerabilder,
+Marker/Mausrad/Ruecklauf/Spiegel, gekoppelte raeumliche Kopfreaktion.
+Solve2144.8ms. Inspektionsdeadline in diesem Lauf nicht eigens geprueft.
+Eigene temporaere Testhosts8879 beendet. Vorschaubilder Arena-Design/25-*.png.
+Menschlicher Zwei-PC-/Spieltest bleibt offen. V14-Download bleibt alter Stand;
+Quellstand/Webbuild enthalten den Editor, kein neues Paket in diesem Pass.

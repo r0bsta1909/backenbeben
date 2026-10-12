@@ -47,7 +47,8 @@ def record(event):
 def fighter(client=None, bot=False):
     return dict(id=client['id'] if client else 'bot', name=client['name'] if client else 'BRUNO BOT',
                 skin=client['skin'] if client else 1, hair=client['hair'] if client else 0,
-                shirt=client['shirt'] if client else 0, damage=0., stun=0., side='L', zones={'L':0.,'R':0.}, fouls=0, points=0, bot=bot)
+                shirt=client['shirt'] if client else 0, hair_style=client.get('hair_style',0) if client else 0,
+                damage=0., stun=0., side='L', zones={'L':0.,'R':0.}, fouls=0, points=0, bot=bot)
 
 
 def new_room(client, training):
@@ -115,7 +116,7 @@ async def command(c, d):
     if action=='join':
         await leave(c)
         c['name']=str(d.get('name','CHALLENGER')).strip()[:18] or 'CHALLENGER'
-        for key, maximum in [('skin',3),('hair',2),('shirt',3)]:
+        for key, maximum in [('skin',3),('hair',2),('shirt',3),('hair_style',2)]:
             value=d.get(key,0)
             c[key]=max(0,min(maximum,int(value))) if isinstance(value,(int,float)) and math.isfinite(value) else 0
         training=d.get('mode')=='training'

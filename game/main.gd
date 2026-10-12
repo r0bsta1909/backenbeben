@@ -36,6 +36,10 @@ var js_timer := 0.0
 var profile_cpu := false
 var cpu_samples := {}
 var appearance_timer := 0.0
+var creator_options: Dictionary = {}
+var creator_active := false
+var creator_stats_hash := 0
+var table_preview_parts: Array[Node3D] = []
 var particles: Array = []
 var mirror_mount: Node3D
 var recorded_side_texture: ImageTexture
@@ -252,6 +256,7 @@ func head_offset_state(actor: Node3D, parameter := "head_offset") -> Array:
 	return [value.x,value.y,value.z]
 
 func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
+	root.set_hair_style(int(data.get("hair_style",0)))
 	var damage := float(data.get("damage",0))
 	var ratio := clampf(damage/100.,0,1)
 	var fractured := clampf((damage-50)/40,0,1)
@@ -358,7 +363,7 @@ func _process(delta: float) -> void:
 			JavaScriptBridge.eval("window.contactSound=false")
 		mirror_focus=bool(JavaScriptBridge.eval("window.mirrorFocus || false",true))
 		AudioServer.set_bus_mute(0,bool(JavaScriptBridge.eval("window.muted || false",true)))
-		JavaScriptBridge.eval("window.godotStats="+JSON.stringify({"face_eye_closure":fighter.face_mesh.get_blend_shape_value(fighter.blink_index),"msaa_3d":get_viewport().msaa_3d,"fps":Engine.get_frames_per_second(),"face_head_offset":head_offset_state(fighter),"face_head_rotation":head_offset_state(fighter,"head_rotation"),"face_injury":injury_material_state(fighter),"mirror_injury":injury_material_state(reflection),"arm_data":hand_pose.has("arm"),"rendered_arm":hand.arm_world_joints(),"hand_wrist":str(hand.skeleton.get_bone_global_pose(hand.skeleton.find_bone("hand.R")).origin),"dragging":dragging,"samples":gesture.size(),"physics_time":physics_frame.get("time",-1),"physics_active":physics_frame.has("id"),"crowd_active":arena_stage.crowd_was_active,"arena_backdrop":true,"arena_sponsors":arena_stage.sponsor_surfaces.size(),"arena_audience_3d":arena_stage.crowd_poses.size(),"camera_position":[camera.position.x,camera.position.y,camera.position.z],"mirror_draw_requests":mirror_draw_requests,"physics_material_updates":physics_material_updates,"muted":AudioServer.is_bus_mute(0)}))
+		JavaScriptBridge.eval("window.godotStats="+JSON.stringify({"creator_active":creator_active,"fighter_hair_style":fighter.hair_style,"own_hair_style":hand.hair_style,"face_eye_closure":fighter.face_mesh.get_blend_shape_value(fighter.blink_index),"msaa_3d":get_viewport().msaa_3d,"fps":Engine.get_frames_per_second(),"face_head_offset":head_offset_state(fighter),"face_head_rotation":head_offset_state(fighter,"head_rotation"),"face_injury":injury_material_state(fighter),"mirror_injury":injury_material_state(reflection),"arm_data":hand_pose.has("arm"),"rendered_arm":hand.arm_world_joints(),"hand_wrist":str(hand.skeleton.get_bone_global_pose(hand.skeleton.find_bone("hand.R")).origin),"dragging":dragging,"samples":gesture.size(),"physics_time":physics_frame.get("time",-1),"physics_active":physics_frame.has("id"),"crowd_active":arena_stage.crowd_was_active,"arena_backdrop":true,"arena_sponsors":arena_stage.sponsor_surfaces.size(),"arena_audience_3d":arena_stage.crowd_poses.size(),"camera_position":[camera.position.x,camera.position.y,camera.position.z],"mirror_draw_requests":mirror_draw_requests,"physics_material_updates":physics_material_updates,"muted":AudioServer.is_bus_mute(0)}))
 		if profile_cpu:
 			record_cpu("bridge",bridge_started)
 			if bool(JavaScriptBridge.eval("window.profileCPURead === true",true)):
@@ -378,11 +383,13 @@ func _process(delta: float) -> void:
 			if OS.has_feature("web"):
 				var data=JSON.parse_string(str(JavaScriptBridge.eval("JSON.stringify(window.previewFighter || {})",true)))
 				if data is Dictionary:preview=data
+			creator_options=preview
 			apply_fighter(fighter,preview,true)
 			apply_fighter(reflection,preview,false)
 		if profile_cpu:record_cpu("appearance",appearance_started)
 	var drive_started: int=Time.get_ticks_usec() if profile_cpu else 0
 	drive_recorded_physics()
+	update_character_preview()
 	if profile_cpu:record_cpu("recorded_motion",drive_started)
 	if mirror_mount.visible and mirror_dirty:
 		mirror_viewport.render_target_update_mode=SubViewport.UPDATE_ONCE
@@ -432,6 +439,7 @@ func play_sound(player: AudioStreamPlayer, sound_name: String) -> void:
 		player.play()
 
 func color_hand(root: Node3D, data: Dictionary) -> void:
+	if root.has_method("set_hair_style"):root.set_hair_style(int(data.get("hair_style",0)))
 	for node in root.find_children("*", "MeshInstance3D", true, false):
 		for i in range(node.mesh.get_surface_count()):
 			var m = node.get_surface_override_material(i)
@@ -439,6 +447,32 @@ func color_hand(root: Node3D, data: Dictionary) -> void:
 			if m is ShaderMaterial:
 				if base_name in ["Skin","FaceSkin"]:m.set_shader_parameter("base_color",skins[int(data.get("skin",0))%4])
 				if base_name=="Shirt":m.set_shader_parameter("base_color",shirts[int(data.get("shirt",0))%4])
+				if base_name=="Hair":m.set_shader_parameter("base_color",hairs[int(data.get("hair",0))%3])
+
+func update_character_preview() -> void:
+	var enabled: bool=OS.has_feature("web") and state.is_empty()
+	if enabled!=creator_active:
+		creator_active=enabled
+		if table_preview_parts.is_empty():
+			for node in arena_stage.get_children():
+				if node is MeshInstance3D and node.position.y> -5.13 and absf(node.position.x)<1.2 and absf(node.position.z-.65)<.55:
+					table_preview_parts.append(node)
+		for node in table_preview_parts:node.visible=not enabled
+		for actor in officials:actor.visible=not enabled
+		fighter.reset_all()
+	if not enabled:return
+	hand.hide();mirror_mount.hide()
+	fighter.position=Vector3.ZERO
+	fighter.rotation=Vector3(0,deg_to_rad(float(creator_options.get("yaw",0))),0)
+	var close: bool=creator_options.get("view","body")=="face"
+	camera.position=Vector3(-1.2,.3,5.0) if close else Vector3(-1.9,-1.6,9)
+	camera.fov=45 if close else 48
+	camera.look_at(Vector3(-1.2,-.2,0) if close else Vector3(-1.9,-2.1,0))
+	arena_presentation.sync_camera(camera,true,false)
+	var preview_hash: int=creator_options.hash()
+	if preview_hash!=creator_stats_hash:
+		creator_stats_hash=preview_hash
+		JavaScriptBridge.eval("window.characterPreviewStats="+JSON.stringify({"options":creator_options,"hair_style":fighter.hair_style,"table_visible":false,"camera": "face" if close else "body"}))
 
 func drive_recorded_physics() -> void:
 	var frame_hash: int=physics_frame.hash()

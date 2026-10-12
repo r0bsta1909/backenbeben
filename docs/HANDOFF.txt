@@ -2323,3 +2323,17 @@ Export-/Aufbau-/Reopen-Pruefskripte committed; keine automatische Ruecksynchroni
 Bake/Arena/Match nativ/Webbuild/Blender-Reopen PASS. Bilder Arena-Design/24-*.png.
 Nachweis validation/TABLE_FINAL_2026-10-12.txt. Nutzeransicht bereit, allgemeine
 Spielabnahme weiterhin offen. V14-Paket bleibt aeltere Fassung.
+
+CHARAKTERAUSWAHL — 12.10.2026
+Nutzer entschied fuer Charakterauswahl. Vorhandenes Grundmodell mit Kampfname,
+4Haut-/3Haar-/4Trikotfarben, 3Frisuren: strukturiert, kurze Kopfkappe, Glatze.
+3D-Vorschau mit Ganzkoerper/Gesicht/Drehen, Farbchips, Zufall/Reset, lokale
+Speicherung, serverbegrenzte LAN-Uebertragung hair_style0..2. Spieler/Spiegel/
+Replay verwenden Auswahl. Kurzhaar isoliert groesste verbundene Flaeche des
+zusammengefuegten HairCap samt Skinning; Kameras erhalten Frisurkorrektheit.
+Vorschau blendet Tisch/Helfer nur in der Lobby aus, Match stellt sie wieder her.
+165PythonTests, nativerArenaMatch/Frisurenkameraaudit, strengerWebbuild PASS.
+Zwei echte Browserclients: Editor/Persistenz/Sync/Rueckkehr/Layouts PASS,errors[].
+Produktionskontakt-/Replaycheck PASS,errors[]. Keine neuen Gesichtsmodelle oder
+Koerperproportionen in diesem Pass. Beleg validation/CHARACTER_CREATOR_2026-10-12.txt.
+Bilder Arena-Design/25-*.png. Eigene Testhosts8879 beendet; V14-Paket bleibtalt.
