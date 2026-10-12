@@ -1,7 +1,7 @@
 extends "res://arena_final.gd"
 ## Only the actual competition platform and padded table are volumetric.
 ## Architecture and spectators belong to the painted background, not this tree.
-func bevel_box(size: Vector3, bevel: float, corner: float, flat_panels: bool=false) -> ArrayMesh:
+func bevel_box(size: Vector3, bevel: float, corner: float, flat_panels: bool=false, bottom_factor: Vector2=Vector2.ONE) -> ArrayMesh:
 	var surface:=SurfaceTool.new();surface.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var rings: Array[PackedVector3Array]=[]
 	for profile in [Vector2(-size.y/2,bevel),Vector2(-size.y/2+bevel,0),Vector2(size.y/2-bevel,0),Vector2(size.y/2,bevel)]:
@@ -12,7 +12,9 @@ func bevel_box(size: Vector3, bevel: float, corner: float, flat_panels: bool=fal
 			var cz: float=(size.z/2-profile.y-radius)*(1 if quadrant<2 else -1)
 			for segment in range(5):
 				var angle: float=quadrant*PI/2+segment*PI/8
-				points.append(Vector3(cx+cos(angle)*radius,profile.x,cz+sin(angle)*radius))
+				var taper:=bottom_factor.lerp(Vector2.ONE,(profile.x+size.y/2)/size.y)
+				# Keep the front plane flush for printed signage; recede the back and sides.
+				points.append(Vector3((cx+cos(angle)*radius)*taper.x,profile.x,(cz+sin(angle)*radius)*taper.y+size.z/2*(1.0-taper.y)))
 		rings.append(points)
 	for row in range(3):
 		for n in range(20):
@@ -22,7 +24,7 @@ func bevel_box(size: Vector3, bevel: float, corner: float, flat_panels: bool=fal
 	surface.set_smooth_group(-1)
 	for n in range(20):
 		var next: int=(n+1)%20
-		for p in [Vector3(0,size.y/2,0),rings[3][n],rings[3][next],Vector3(0,-size.y/2,0),rings[0][next],rings[0][n]]:surface.add_vertex(p)
+		for p in [Vector3(0,size.y/2,0),rings[3][n],rings[3][next],Vector3(0,-size.y/2,size.z/2*(1.0-bottom_factor.y)),rings[0][next],rings[0][n]]:surface.add_vertex(p)
 	surface.generate_normals();surface.index()
 	return surface.commit()
 
@@ -65,13 +67,13 @@ func podium() -> void:
 	var padding: MeshInstance3D=find_child("PodiumPadding",true,false)
 	padding.position.y-=.24
 	padding.scale=Vector3.ONE
-	padding.mesh=ring_mesh([Vector2(.48,-.12),Vector2(.495,-.072),Vector2(.5,0),Vector2(.485,.086),Vector2(.47,.12)],Vector2(2.15,.76))
+	padding.mesh=ring_mesh([Vector2(.465,-.12),Vector2(.482,-.106),Vector2(.495,-.078),Vector2(.5,-.035),Vector2(.499,.018),Vector2(.490,.070),Vector2(.477,.104),Vector2(.47,.12)],Vector2(2.15,.76))
 	for node in get_children():
 		if node is MeshInstance3D and node.mesh is CylinderMesh and is_equal_approx(node.mesh.top_radius,.007) and absf(node.position.y+1.13)<.005:
 			var angle:=atan2((node.position.z-.65)/.373,node.position.x/1.055)
 			node.position=Vector3(cos(angle)*1.073,-1.395,.65+sin(angle)*.380)
 			node.mesh.height=.026;node.mesh.top_radius=.004;node.mesh.bottom_radius=.004
-			node.material_override=mat(Color("777669"))
+			node.material_override=mat(Color("8c8877"))
 	# A closed oval piping seam gives the upholstery a soft, finished silhouette.
 	for n in range(64):
 		var a: float=TAU*n/64.0;var b: float=TAU*(n+1)/64.0
@@ -102,7 +104,7 @@ func refine_table() -> void:
 	var body: MeshInstance3D=find_child("PodiumBody",true,false)
 	body.scale=Vector3.ONE
 	body.position.y=-3.27
-	body.mesh=bevel_box(Vector3(.92,3.66,.66),.045,.13,true)
+	body.mesh=bevel_box(Vector3(.92,3.66,.66),.045,.13,true,Vector2(.82,.82))
 	worn_material(body,Color("303839"),6,.08)
 	body.material_override.set_shader_parameter("light_softness",.35)
 	var foot: MeshInstance3D=find_child("PodiumFoot",true,false)
@@ -120,17 +122,20 @@ func refine_table() -> void:
 		part("BodyPanelJoin",Vector3(0,y,.988),Vector3(.62,.012,.008),"1d2527")
 	for side in [-1.0,1.0]:
 		for y in [-3.95,-4.12,-4.29]:
-			part("SidePanelJoin",Vector3(side*.464,y,.65),Vector3(.008,.022,.20),"1d2527")
-	var plaque:=part("INEOSInsetFrame",Vector3(0,-2.87,.979),Vector3(.84,.56,.028),"6b7167")
-	plaque.mesh=bevel_box(Vector3(.84,.56,.028),.005,.03)
-	plaque.material_override=finished_material(Color("6b7167"),6,false,false)
+			var taper: float=lerpf(.82,1.0,(y+5.10)/3.66)
+			part("SidePanelJoin",Vector3(side*(.46*taper+.004),y,.65+.33*(1.0-taper)),Vector3(.008,.022,.20),"1d2527")
+	var plaque:=part("INEOSInsetFrame",Vector3(0,-2.87,.986),Vector3(.82,.54,.014),"41494a")
+	plaque.mesh=bevel_box(Vector3(.82,.54,.014),.003,.025)
+	plaque.material_override=finished_material(Color("41494a"),6,false,false)
 	var inset:=part("INEOSInsetPanel",Vector3(0,-2.87,.995),Vector3(.79,.51,.006),"20292a")
 	inset.mesh=bevel_box(Vector3(.79,.51,.006),.002,.02)
 	inset.material_override=finished_material(Color("20292a"),0,false,false)
 	var logo: MeshInstance3D=find_child("PodiumINEOS",true,false)
 	logo.position=Vector3(0,-2.87,.9996);logo.mesh.size=Vector2(.78,.468)
 	logo.material_override.set_shader_parameter("substrate_color",Color("20292a"))
-	logo.material_override.set_shader_parameter("substrate_mix",.12)
+	logo.material_override.set_shader_parameter("substrate_mix",.04)
+	logo.material_override.set_shader_parameter("ink_gain",1.22)
+	logo.material_override.set_shader_parameter("ink_aging",0.0)
 	var light_edge:=MeshInstance3D.new();light_edge.name="PodiumWarmLightEdge"
 	light_edge.position=Vector3(0,-1.59,.65)
 	light_edge.mesh=ring_mesh([Vector2(.486,-.008),Vector2(.5,-.006),Vector2(.5,.006),Vector2(.486,.008),Vector2(.486,-.008)],Vector2(2.10,.72))

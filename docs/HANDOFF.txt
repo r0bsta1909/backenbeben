@@ -2303,3 +2303,12 @@ verankert, Hoenhorst unveraendert. Unterarm-/Handgelenkproxy ebenso abgesenkt.
 PASS. Echter Produktionskontakt-/Replaybrowsercheck errors[], PASS.
 Eigener Testhost8879 beendet. Bilder Arena-Design/22-*.png und Nachweis
 validation/TABLE_COMPACT_2026-10-11.txt. V14-Paket bleibt vorherige Tischfassung.
+
+POLSTER/SOCKEL/INEOS VERFEINERT — 12.10.2026
+Weicheres achtteiliges Polsterprofil, etwas sichtbarere Naehte; Sockel an Seiten
+und Rueckseite zur Basis um18Prozent verjuengt. Front bleibt eben, Seitendetails
+folgen der Neigung. INEOS kontrastreicher mit schmalerem dunklerem Rahmen.
+Hoehe ca.98cm und Kollisionsdaten unveraendert, Hoenhorst unveraendert.
+Bake/Arena/Match headless+nativ/strengerWebbuild PASS. Detail-, Figuren- und
+Spielkamerabilder gesichtet: Arena-Design/23-*.png. Nachweis
+validation/TABLE_FINISH_2026-10-12.txt. V14-Download bleibt aeltere Fassung.

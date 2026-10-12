@@ -1,0 +1,20 @@
+BACKENBEBEN — POLSTER, SOCKEL UND INEOS / 12.10.2026
+
+Nutzer hat die drei vorgeschlagenen Designverfeinerungen beauftragt.
+Polster: acht Profilringe statt fuenf, weichere obere/untere Rundung;
+maximale Breite, obere Abschlusskante und Hoehe bleiben erhalten.
+Nahtstiche leicht aufgehellt, bestehende Paspel bleibt dezent.
+Sockel: Seiten und Rueckseite verjuengen sich um 18 Prozent zur Basis;
+Frontflaeche bleibt eben fuer buendige Werbung. Geschlossene Endflaechen,
+Seitenfugen der Neigung nachgefuehrt. Fuss/Anschluss/Hoehe bleiben erhalten.
+INEOS: dunklerer, schmalerer Rahmen; weniger Substratmischung und hoehere
+Inkstaerke fuer mehr Kontrast. Originalgrafik und Seitenverhaeltnis erhalten.
+Hoenhorst und Halle unveraendert. Keine Physik-/Kollisionsaenderung.
+
+Bake PASS. ARENA_HYBRID_PASS, ARENA_MATCH_PASS headless und nativ PASS.
+Strenger Webbuild PASS. Vier Tischdetails, Ansicht mit beiden Figuren und
+Spielkameras gerendert/gesichtet. Workspace-Bilder Arena-Design/23-*.png.
+Keine erneute Browser-/Solverpruefung fuer diese rein visuelle Aenderung;
+die Kontaktpruefung der unveraenderten abgesenkten Tischhoehe ist vom 11.10.
+Menschliche Spielabnahme bleibt offen. V14-Download enthaelt den alten Tisch;
+aktueller Quellstand und lokaler Webbuild enthalten die neue Fassung.
