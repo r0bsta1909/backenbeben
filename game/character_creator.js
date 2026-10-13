@@ -1,9 +1,9 @@
 // Cosmetic choices share the live character model used by the match and replay.
 (() => {
     const fields = ['skin', 'hair', 'shirt', 'hair_style', 'face_style', 'beard_style', 'beard_color'];
-    const limits = {skin: 3, hair: 2, shirt: 3, hair_style: 5, face_style: 5, beard_style: 5, beard_color: 2};
+    const limits = {skin: 6, hair: 2, shirt: 3, hair_style: 5, face_style: 5, beard_style: 5, beard_color: 2};
     const defaults = {name: 'CHALLENGER', skin: 0, hair: 0, shirt: 0, hair_style: 0, face_style: 0, beard_style: 1, beard_color: 0};
-    const palette = {skin: ['#b48968','#8c654e','#634737','#d2aa8c'], hair: ['#241b16','#6b3624','#b8afa0'], shirt: ['#6e242b','#26354b','#deb64c','#534979'], beard_color: ['#241b16','#6b3624','#b8afa0']};
+    const palette = {skin: ['#b48968','#8c654e','#634737','#d2aa8c','#f0d7c4','#38271f','#dec19a'], hair: ['#241b16','#6b3624','#b8afa0'], shirt: ['#6e242b','#26354b','#deb64c','#534979'], beard_color: ['#241b16','#6b3624','#b8afa0']};
     const storageKey = 'backenbeben-character-v1';
     let view = 'body', yaw = 0, persisted = true;
     const get = id => document.getElementById(id);

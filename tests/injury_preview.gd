@@ -5,7 +5,7 @@ func verify() -> void:
  root.size=Vector2i(1280,960)
  scene.hand.visible=false
  scene.camera.position=Vector3(0,.28,2.0);scene.camera.look_at(Vector3(0,.15,0))
- for skin in range(4):
+ for skin in range(scene.skins.size()):
   for side in ["L","R"]:
    var previous: PackedByteArray
    var healthy: PackedByteArray
@@ -26,4 +26,4 @@ func verify() -> void:
      elif pixels!=healthy:push_error("Healthy state was not restored");quit(1);return
     previous=pixels
     image.save_png("res://../logs/injury-%s-%d-%d.png"%[side,skin,severity])
- print("INJURY_BOTH_SIDES_FOUR_SKIN_VARIANTS_RENDERED");quit(0)
+ print("INJURY_BOTH_SIDES_SEVEN_SKIN_VARIANTS_RENDERED");quit(0)

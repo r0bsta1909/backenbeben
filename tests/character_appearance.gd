@@ -38,5 +38,20 @@ func verify() -> void:
 				actor.first_person(false)
 				if hair!=2 and not actor.model.find_child(actor.HAIR_NODES[hair],true,false).visible:
 					push_error("Camera switch loses hairstyle");quit(1);return
+	for skin in range(scene.skins.size()):
+		var data: Dictionary={"skin":skin,"hair_style":0,"beard_style":0}
+		for target in [actor,scene.reflection]:
+			scene.apply_fighter(target,data,true)
+		scene.color_hand(scene.hand,data)
+		for target in [actor,scene.reflection,scene.hand]:
+			for mesh in target.model.find_children("*","MeshInstance3D",true,false):
+				for surface in range(mesh.mesh.get_surface_count()):
+					var key: String=str(mesh.get_instance_id())+":"+str(surface)
+					var base: String=scene.mat_cache.get(key,"")
+					if base in ["Skin","FaceSkin","SkinShadow"]:
+						var expected: Color=scene.skins[skin].darkened(.18) if base=="SkinShadow" else scene.skins[skin]
+						if mesh.get_surface_override_material(surface).get_shader_parameter("base_color")!=expected:
+							push_error("Skin mismatch between head, hands or mirror");quit(1);return
+	print("SEVEN_SKIN_TONES_PASS: face, body, own hands and reflection")
 	print("CHARACTER_APPEARANCE_PASS: all 216 combinations; identity morphs; first-person visibility")
 	quit(0)

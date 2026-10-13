@@ -54,7 +54,7 @@ var physics_material_updates := 0
 var emote_player := -1
 var emote_kind := 0
 var emote_remaining := 0.0
-var skins := [Color("b48968"), Color("8c654e"), Color("634737"), Color("d2aa8c")]
+var skins := [Color("b48968"), Color("8c654e"), Color("634737"), Color("d2aa8c"), Color("f0d7c4"), Color("38271f"), Color("dec19a")]
 var shirts := [Color("6e242b"), Color("26354b"), Color("deb64c"), Color("534979")]
 var hairs := [Color("241b16"), Color("6b3624"), Color("b8afa0")]
 
@@ -282,8 +282,8 @@ func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 				if m.next_pass is ShaderMaterial:
 					for parameter in ["injury_left","injury_right","injury_jaw"]:
 						m.next_pass.set_shader_parameter(parameter,m.get_shader_parameter(parameter))
-				if base_name in ["Skin","FaceSkin"]: m.set_shader_parameter("base_color",skins[int(data.get("skin",0))%4])
-				if base_name=="SkinShadow": m.set_shader_parameter("base_color",skins[int(data.get("skin",0))%4].darkened(.18))
+				if base_name in ["Skin","FaceSkin"]: m.set_shader_parameter("base_color",skins[clampi(int(data.get("skin",0)),0,skins.size()-1)])
+				if base_name=="SkinShadow": m.set_shader_parameter("base_color",skins[clampi(int(data.get("skin",0)),0,skins.size()-1)].darkened(.18))
 				if base_name=="Shirt": m.set_shader_parameter("base_color",shirts[int(data.get("shirt",0))%4])
 				if base_name=="Hair": m.set_shader_parameter("base_color",hairs[int(data.get("hair",0))%3])
 				if base_name=="Beard":m.set_shader_parameter("base_color",hairs[int(data.get("beard_color",data.get("hair",0)))%3])
@@ -451,8 +451,8 @@ func color_hand(root: Node3D, data: Dictionary) -> void:
 			var m = node.get_surface_override_material(i)
 			var base_name: String = mat_cache.get(str(node.get_instance_id())+":"+str(i),"")
 			if m is ShaderMaterial:
-				if base_name in ["Skin","FaceSkin"]:m.set_shader_parameter("base_color",skins[int(data.get("skin",0))%4])
-				if base_name=="SkinShadow":m.set_shader_parameter("base_color",skins[int(data.get("skin",0))%4].darkened(.18))
+				if base_name in ["Skin","FaceSkin"]:m.set_shader_parameter("base_color",skins[clampi(int(data.get("skin",0)),0,skins.size()-1)])
+				if base_name=="SkinShadow":m.set_shader_parameter("base_color",skins[clampi(int(data.get("skin",0)),0,skins.size()-1)].darkened(.18))
 				if base_name=="FaceSkin":
 					m.set_shader_parameter("beard_style",int(data.get("beard_style",1)))
 					m.set_shader_parameter("face_style",int(data.get("face_style",0)))

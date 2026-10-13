@@ -19,7 +19,7 @@ async def main():
             await page.wait_for_function('window.gameReady && window.characterPreviewStats', timeout=60000)
         a, b = pages
         await a.locator('#nickname').fill('SVEN')
-        for key, value in [('skin','3'),('hair','1'),('shirt','2'),('hair_style','5'),('face_style','5'),('beard_style','5'),('beard_color','2')]:
+        for key, value in [('skin','6'),('hair','1'),('shirt','2'),('hair_style','5'),('face_style','5'),('beard_style','5'),('beard_color','2')]:
             await a.locator('#'+key).select_option(value)
         await a.wait_for_function('characterPreviewStats.hair_style===5 && characterPreviewStats.face_style===5 && characterPreviewStats.beard_style===5 && characterPreviewStats.options.beard_color===2')
         await a.screenshot(path='logs/character-body.png')
@@ -30,7 +30,7 @@ async def main():
         await a.reload()
         await a.wait_for_function('window.gameReady && characterPreviewStats?.hair_style===5 && characterPreviewStats.face_style===5 && characterPreviewStats.beard_style===5', timeout=60000)
         assert await a.locator('#nickname').input_value() == 'SVEN'
-        assert await a.locator('#skin').input_value() == '3'
+        assert await a.locator('#skin').input_value() == '6'
         # All controls remain reachable at smaller window sizes.
         for width, height in [(1280,720),(900,1200),(600,900)]:
             await a.set_viewport_size({'width':width,'height':height})
@@ -40,6 +40,7 @@ async def main():
             await a.screenshot(path=f'logs/character-{width}x{height}.png')
         await a.set_viewport_size({'width':1600,'height':900})
         await b.locator('#nickname').fill('ROBERT')
+        await b.locator('#skin').select_option('5')
         await b.locator('#hair_style').select_option('1')
         await b.locator('#face_style').select_option('4')
         await b.locator('#beard_style').select_option('2')
@@ -53,7 +54,8 @@ async def main():
             players = await page.evaluate('state.players')
             sven = next(player for player in players if player['name'] == 'SVEN')
             robert = next(player for player in players if player['name'] == 'ROBERT')
-            assert (sven['skin'],sven['shirt'],sven['hair'],sven['hair_style'],sven['face_style'],sven['beard_style'],sven['beard_color']) == (3,2,1,5,5,5,2)
+            assert (sven['skin'],sven['shirt'],sven['hair'],sven['hair_style'],sven['face_style'],sven['beard_style'],sven['beard_color']) == (6,2,1,5,5,5,2)
+            assert robert['skin'] == 5
             assert (robert['shirt'],robert['hair_style'],robert['face_style'],robert['beard_style']) == (1,1,4,2)
             await page.wait_for_function('godotStats?.creator_active===false')
         await a.wait_for_function('godotStats.fighter_hair_style===1 && godotStats.own_hair_style===5 && godotStats.fighter_face_style===4 && godotStats.fighter_beard_style===2')
@@ -90,7 +92,7 @@ async def main():
         assert await a.locator('#nickname').input_value() == 'CHALLENGER'
         await a.locator('#characterRandom').click()
         values = await a.evaluate('window.previewFighter')
-        assert all(0 <= values[key] <= limit for key, limit in [('skin',3),('shirt',3),('hair',2),('hair_style',5),('face_style',5),('beard_style',5),('beard_color',2)])
+        assert all(0 <= values[key] <= limit for key, limit in [('skin',6),('shirt',3),('hair',2),('hair_style',5),('face_style',5),('beard_style',5),('beard_color',2)])
         assert not errors, errors
         print(json.dumps({'live_preview':True,'persistence':True,'rotate_and_zoom':True,'two_client_sync':True,'variant_replays':'--with-replay' in sys.argv,'reset_random':True,'responsive_controls':True,'errors':errors}))
         await browser.close()

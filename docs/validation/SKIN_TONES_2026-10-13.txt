@@ -1,0 +1,21 @@
+BACKENBEBEN — DREI ZUSAETZLICHE HAUTTOENE — 13.10.2026
+Auftrag: weiss, schwarz und asiatisch als zusaetzliche Hautauswahl.
+Umsetzung als unabhaengige Farbtoene: Porzellan/sehr hell #f0d7c4,
+Ebenholz/tiefdunkel #38271f, Beige/warm #dec19a. Keine ethnische Kopplung
+an Gesicht oder andere Kategorien. Bisherige4 Farben/gespeicherte Indizes erhalten.
+Neue Indizes4..6 in Editorpalette, Speicherung, Zufall und Serverjoin akzeptiert.
+Gegner, eigene Hand/Körper und Spiegel verwenden Palette mit dynamischer Grenze.
+
+Godot strenger Import/Webexport PASS.
+CHARACTER_APPEARANCE_PASS: alle216 Gesicht/Haar/Bartkombinationen unveraendert.
+SEVEN_SKIN_TONES_PASS: separat alle7 Farben auf FaceSkin/Skin/SkinShadow,
+Gegner, Spiegel und eigenem Modell korrekt.
+INJURY_BOTH_SIDES_SEVEN_SKIN_VARIANTS_RENDERED: beide Seiten, Schwere0/35/75/0,
+sichtbare Veraenderung und exakte gesunde Ruecksetzung PASS.
+Nativer Vergleich der drei neuen Farben gesichtet; Verletzung75 auf sehr
+heller/tiefdunkler Haut gesichtet. Vorschau Arena-Design/27-hauttoene.png.
+Zwei Browserkontexte mit neuen Haut5/6: Editor/Persistenz/LAN-Sync/Layouts/
+Reset/Zufall PASS errors[]. Erster Versuch begann vor Hostbereitschaft;
+nach bestaetigtem Health-Endpunkt bestanden. Testhost beendet.
+Keine neuen Physik-/Rig-Aenderungen. Kein erneuter Kontaktgauntlet notwendig.
+Kein menschlicher Zwei-PC-Test, kein neues Releasepaket; V14 bleibt alt.

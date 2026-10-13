@@ -118,7 +118,7 @@ async def command(c, d):
     if action=='join':
         await leave(c)
         c['name']=str(d.get('name','CHALLENGER')).strip()[:18] or 'CHALLENGER'
-        for key, maximum in [('skin',3),('hair',2),('shirt',3),('hair_style',5),('face_style',5),('beard_style',5),('beard_color',2)]:
+        for key, maximum in [('skin',6),('hair',2),('shirt',3),('hair_style',5),('face_style',5),('beard_style',5),('beard_color',2)]:
             value=d.get(key,1 if key=='beard_style' else 0)
             c[key]=max(0,min(maximum,int(value))) if isinstance(value,(int,float)) and math.isfinite(value) else 0
         training=d.get('mode')=='training'

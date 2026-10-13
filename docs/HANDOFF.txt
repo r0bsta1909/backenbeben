@@ -2355,3 +2355,17 @@ gesichtet, PASS errors[]. Zwei-Tab-Maustreiber in diesem Zusatztest war instabil
 kein Zwei-PC-Human-Test. Beleg validation/CHARACTER_OPTIONS_2026-10-13.txt.
 Alle18 Optionen nativ gerendert/gesichtet, Bilder Arena-Design/26-*.png.
 Testhosts beendet. V14-Download bleibt aelterer Stand; kein neues Releasepaket.
+
+DREI WEITERE HAUTTOENE — 13.10.2026
+Bestehende Indizes0..3 erhalten; neue4 Porzellan/sehr hell #f0d7c4,
+5 Ebenholz/tiefdunkel #38271f,6 Beige/warm #dec19a. Insgesamt7 Hautfarben.
+UI verwendet Farbtonnamen; warmer heller Beigeton fuer gewuenschte dritte
+Auswahl. Alle Gesichter/Frisuren/Baerte unabhaengig davon kombinierbar.
+Editorpalette/Speicherung/Zufall/Serverlimit/Gegner/eigene Hand/Spiegel angepasst.
+Strenger Godot-Import/Webbuild PASS. Nativer Erscheinungstest: alle216 Formen
+weiterhin PASS; separat alle7 Hauttoene an Kopf/Körper/Hand/Spiegel PASS.
+Zwei Browserclients mit Haut6/5: Persistenz/LAN/Layout/Reset/Zufall PASS errors[].
+Verletzungen beidseitig auf allen7 Farben nativ gerendert und Ruecksetzung PASS;
+neue sehr helle/tiefdunkle Verletzungsdarstellung und Vergleich gesichtet.
+Vorschau Arena-Design/27-hauttoene.png; capture_character_options.gd -- --skin-tones.
+Kein neuer menschlicher Spieltest oder Releasebuild. V14 bleibt aelterer Stand.
