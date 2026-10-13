@@ -1,0 +1,42 @@
+{
+  "faces": [
+    "Klassisch",
+    "Markant",
+    "Weich",
+    "Schmal",
+    "Veteran",
+    "Knollennase"
+  ],
+  "hair": [
+    "Texturierter Kurzschnitt",
+    "Buzz Cut",
+    "Glatze",
+    "Seitenscheitel",
+    "Locken",
+    "Doppel-Iro"
+  ],
+  "beards": [
+    "Glattrasiert",
+    "Dreitagebart",
+    "Kurzer Vollbart",
+    "Schnurrbart",
+    "Goatee",
+    "Zirkusbart"
+  ],
+  "hair_nodes": [
+    "HairCap",
+    "HairShort",
+    "",
+    "HairSidePart",
+    "HairCurls",
+    "HairDoubleMohawk"
+  ],
+  "beard_nodes": [
+    "",
+    "",
+    "BeardFull",
+    "BeardMoustache",
+    "BeardGoatee",
+    "BeardTwirl"
+  ]
+}

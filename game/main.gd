@@ -165,8 +165,8 @@ func prepare_materials(root: Node) -> void:
 		for i in range(node.mesh.get_surface_count()):
 			var m = node.mesh.surface_get_material(i)
 			if m:
-				var tissue_part: bool = str(node.name) in ["Face","FaceInk","MouthLine","LidsL","LidsR"]
-				var head_part: bool = str(node.name) in ["Face","FaceInk","MouthLine","MouthInterior","Teeth","LidsL","LidsR","EyeL","EyeR","IrisL","IrisR","PupilL","PupilR","BrowL","BrowR","HairCap","EarL","EarR","EarFoldL","EarFoldR","NostrilL","NostrilR"]
+				var tissue_part: bool = str(node.name) in ["Face","FaceInk","MouthLine","LidsL","LidsR"] or str(node.name).begins_with("Beard")
+				var head_part: bool = str(node.name).begins_with("Hair") or str(node.name).begins_with("Beard") or str(node.name) in ["Face","FaceInk","MouthLine","MouthInterior","Teeth","LidsL","LidsR","EyeL","EyeR","IrisL","IrisR","PupilL","PupilR","BrowL","BrowR","HairCap","EarL","EarR","EarFoldL","EarFoldR","NostrilL","NostrilR"]
 				var material_key: String = m.resource_name+str(tissue_part)+str(head_part)+str(node.name=="Face")+str(node.position)
 				if shared_materials.has(material_key):
 					node.set_surface_override_material(i,shared_materials[material_key])
@@ -179,13 +179,13 @@ func prepare_materials(root: Node) -> void:
 				copy.set_shader_parameter("part_origin",node.position)
 				copy.set_shader_parameter("geometry_scale",4.0)
 				copy.set_shader_parameter("face_skin",str(node.name)=="Face")
-				copy.set_shader_parameter("hair_surface",m.resource_name=="Hair")
+				copy.set_shader_parameter("hair_surface",m.resource_name in ["Hair","Beard"])
 				copy.set_shader_parameter("eye_surface",m.resource_name in ["EyeWhite","Iris"])
 				if str(node.name)=="Face":copy.set_shader_parameter("face_ink",load("res://assets/face_ink_v2.png"))
-				copy.set_shader_parameter("tissue",str(node.name) in ["Face","FaceInk","MouthLine","LidsL","LidsR"])
-				copy.set_shader_parameter("head_part",str(node.name) in ["Face","FaceInk","MouthLine","MouthInterior","Teeth","LidsL","LidsR","EyeL","EyeR","IrisL","IrisR","PupilL","PupilR","BrowL","BrowR","HairCap","EarL","EarR","EarFoldL","EarFoldR","NostrilL","NostrilR"])
+				copy.set_shader_parameter("tissue",tissue_part)
+				copy.set_shader_parameter("head_part",head_part)
 				physics_materials[root.get_instance_id()].append(copy)
-				if m.resource_name in ["Skin","FaceSkin","Hair","Trousers","Shoe"] and not str(node.name).begins_with("ArmSkin"):
+				if m.resource_name in ["Skin","FaceSkin","Hair","Beard","Trousers","Shoe"] and not str(node.name).begins_with("ArmSkin"):
 					var outline := ShaderMaterial.new()
 					outline.shader=load("res://toon_outline.gdshader")
 					for parameter in ["part_origin","geometry_scale","face_skin","tissue","head_part"]:
@@ -256,7 +256,7 @@ func head_offset_state(actor: Node3D, parameter := "head_offset") -> Array:
 	return [value.x,value.y,value.z]
 
 func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
-	root.set_hair_style(int(data.get("hair_style",0)))
+	root.set_character_options(data)
 	var damage := float(data.get("damage",0))
 	var ratio := clampf(damage/100.,0,1)
 	var fractured := clampf((damage-50)/40,0,1)
@@ -286,10 +286,16 @@ func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 				if base_name=="SkinShadow": m.set_shader_parameter("base_color",skins[int(data.get("skin",0))%4].darkened(.18))
 				if base_name=="Shirt": m.set_shader_parameter("base_color",shirts[int(data.get("shirt",0))%4])
 				if base_name=="Hair": m.set_shader_parameter("base_color",hairs[int(data.get("hair",0))%3])
+				if base_name=="Beard":m.set_shader_parameter("base_color",hairs[int(data.get("beard_color",data.get("hair",0)))%3])
+				if base_name=="FaceSkin":
+					m.set_shader_parameter("beard_style",int(data.get("beard_style",1)))
+					m.set_shader_parameter("face_style",int(data.get("face_style",0)))
+					m.set_shader_parameter("beard_color",hairs[int(data.get("beard_color",data.get("hair",0)))%3])
 		if node.mesh is ArrayMesh:
 			for i in range(node.mesh.get_blend_shape_count()):
 				var shape := str(node.mesh.get_blend_shape_name(i))
 				var amount := 0.0
+				if shape.begins_with("identity_"):continue
 				if shape=="grin" and emote_active:amount=.8
 				# The contact driver owns lids, including paused replay frames.
 				if shape=="blink":continue
@@ -363,7 +369,7 @@ func _process(delta: float) -> void:
 			JavaScriptBridge.eval("window.contactSound=false")
 		mirror_focus=bool(JavaScriptBridge.eval("window.mirrorFocus || false",true))
 		AudioServer.set_bus_mute(0,bool(JavaScriptBridge.eval("window.muted || false",true)))
-		JavaScriptBridge.eval("window.godotStats="+JSON.stringify({"creator_active":creator_active,"fighter_hair_style":fighter.hair_style,"own_hair_style":hand.hair_style,"face_eye_closure":fighter.face_mesh.get_blend_shape_value(fighter.blink_index),"msaa_3d":get_viewport().msaa_3d,"fps":Engine.get_frames_per_second(),"face_head_offset":head_offset_state(fighter),"face_head_rotation":head_offset_state(fighter,"head_rotation"),"face_injury":injury_material_state(fighter),"mirror_injury":injury_material_state(reflection),"arm_data":hand_pose.has("arm"),"rendered_arm":hand.arm_world_joints(),"hand_wrist":str(hand.skeleton.get_bone_global_pose(hand.skeleton.find_bone("hand.R")).origin),"dragging":dragging,"samples":gesture.size(),"physics_time":physics_frame.get("time",-1),"physics_active":physics_frame.has("id"),"crowd_active":arena_stage.crowd_was_active,"arena_backdrop":true,"arena_sponsors":arena_stage.sponsor_surfaces.size(),"arena_audience_3d":arena_stage.crowd_poses.size(),"camera_position":[camera.position.x,camera.position.y,camera.position.z],"mirror_draw_requests":mirror_draw_requests,"physics_material_updates":physics_material_updates,"muted":AudioServer.is_bus_mute(0)}))
+		JavaScriptBridge.eval("window.godotStats="+JSON.stringify({"creator_active":creator_active,"fighter_hair_style":fighter.hair_style,"fighter_face_style":fighter.face_style,"fighter_beard_style":fighter.beard_style,"own_hair_style":hand.hair_style,"face_eye_closure":fighter.face_mesh.get_blend_shape_value(fighter.blink_index),"msaa_3d":get_viewport().msaa_3d,"fps":Engine.get_frames_per_second(),"face_head_offset":head_offset_state(fighter),"face_head_rotation":head_offset_state(fighter,"head_rotation"),"face_injury":injury_material_state(fighter),"mirror_injury":injury_material_state(reflection),"arm_data":hand_pose.has("arm"),"rendered_arm":hand.arm_world_joints(),"hand_wrist":str(hand.skeleton.get_bone_global_pose(hand.skeleton.find_bone("hand.R")).origin),"dragging":dragging,"samples":gesture.size(),"physics_time":physics_frame.get("time",-1),"physics_active":physics_frame.has("id"),"crowd_active":arena_stage.crowd_was_active,"arena_backdrop":true,"arena_sponsors":arena_stage.sponsor_surfaces.size(),"arena_audience_3d":arena_stage.crowd_poses.size(),"camera_position":[camera.position.x,camera.position.y,camera.position.z],"mirror_draw_requests":mirror_draw_requests,"physics_material_updates":physics_material_updates,"muted":AudioServer.is_bus_mute(0)}))
 		if profile_cpu:
 			record_cpu("bridge",bridge_started)
 			if bool(JavaScriptBridge.eval("window.profileCPURead === true",true)):
@@ -439,15 +445,21 @@ func play_sound(player: AudioStreamPlayer, sound_name: String) -> void:
 		player.play()
 
 func color_hand(root: Node3D, data: Dictionary) -> void:
-	if root.has_method("set_hair_style"):root.set_hair_style(int(data.get("hair_style",0)))
+	if root.has_method("set_character_options"):root.set_character_options(data)
 	for node in root.find_children("*", "MeshInstance3D", true, false):
 		for i in range(node.mesh.get_surface_count()):
 			var m = node.get_surface_override_material(i)
 			var base_name: String = mat_cache.get(str(node.get_instance_id())+":"+str(i),"")
 			if m is ShaderMaterial:
 				if base_name in ["Skin","FaceSkin"]:m.set_shader_parameter("base_color",skins[int(data.get("skin",0))%4])
+				if base_name=="SkinShadow":m.set_shader_parameter("base_color",skins[int(data.get("skin",0))%4].darkened(.18))
+				if base_name=="FaceSkin":
+					m.set_shader_parameter("beard_style",int(data.get("beard_style",1)))
+					m.set_shader_parameter("face_style",int(data.get("face_style",0)))
+					m.set_shader_parameter("beard_color",hairs[int(data.get("beard_color",data.get("hair",0)))%3])
 				if base_name=="Shirt":m.set_shader_parameter("base_color",shirts[int(data.get("shirt",0))%4])
 				if base_name=="Hair":m.set_shader_parameter("base_color",hairs[int(data.get("hair",0))%3])
+				if base_name=="Beard":m.set_shader_parameter("base_color",hairs[int(data.get("beard_color",data.get("hair",0)))%3])
 
 func update_character_preview() -> void:
 	var enabled: bool=OS.has_feature("web") and state.is_empty()
@@ -472,7 +484,7 @@ func update_character_preview() -> void:
 	var preview_hash: int=creator_options.hash()
 	if preview_hash!=creator_stats_hash:
 		creator_stats_hash=preview_hash
-		JavaScriptBridge.eval("window.characterPreviewStats="+JSON.stringify({"options":creator_options,"hair_style":fighter.hair_style,"table_visible":false,"camera": "face" if close else "body"}))
+		JavaScriptBridge.eval("window.characterPreviewStats="+JSON.stringify({"options":creator_options,"hair_style":fighter.hair_style,"face_style":fighter.face_style,"beard_style":fighter.beard_style,"table_visible":false,"camera": "face" if close else "body"}))
 
 func drive_recorded_physics() -> void:
 	var frame_hash: int=physics_frame.hash()

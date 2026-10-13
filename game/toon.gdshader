@@ -6,6 +6,9 @@ uniform float geometry_scale = 1.0;
 uniform bool face_skin = false;
 uniform bool hair_surface = false;
 uniform bool eye_surface = false;
+uniform int beard_style = 1;
+uniform int face_style = 0;
+uniform vec4 beard_color : source_color = vec4(.04,.025,.018,1.0);
 uniform sampler2D face_ink : source_color,filter_linear_mipmap,repeat_disable;
 varying vec3 skin_position;
 varying float front_paint_weight;
@@ -44,7 +47,11 @@ void fragment() {
         vec3 paint=texture(face_ink,paint_uv).rgb;
         float paint_mask=front_paint_weight;
         float ink=clamp(paint.r/.55,.055,1.2);
-        color*=mix(1.0,ink,paint_mask*.65);
+        // The old frontal ink contains faint stubble; clean and styled beards
+        // get their own layer rather than inheriting that baked shadow.
+        float lower_face=1.0-smoothstep(-.005,.025,local.y);
+        float paint_strength=beard_style==1 ? .65 : .65*(1.0-.85*lower_face);
+        color*=mix(1.0,ink,paint_mask*paint_strength);
         float injury=skin_position.x<0.0?injury_left:injury_right;
         vec2 q=vec2(abs(skin_position.x),skin_position.y);
         // Rest-space beard silhouette and short ink stubble, following the head.
@@ -61,7 +68,14 @@ void fragment() {
         float mark_pixel=max(fwidth(mark_distance),.05);
         float stubble=1.0-smoothstep(1.0-mark_pixel,1.0+mark_pixel,mark_distance);
         stubble*=1.0-smoothstep(.65,1.4,max(fwidth(local.x),fwidth(local.y))/.0024);
-        color*=1.0-beard*(.075+.28*stubble);
+        if(beard_style==1)color=mix(color,beard_color.rgb,beard*(.11+.38*stubble));
+        if(face_style==4) {
+            float front=smoothstep(.025,.065,local.z);
+            float brow_lines=exp(-pow(abs((local.y-.142)/.032),4.0))*(1.0-smoothstep(.030,.065,abs(local.x)));
+            float creases=pow(.5+.5*sin(local.y*620.0),18.0);
+            float eye_lines=exp(-pow(abs((abs(local.x)-.052)/.024),4.0)-pow(abs((local.y-.087)/.018),4.0));
+            color*=1.0-front*(brow_lines*creases*.25+eye_lines*.12);
+        }
         vec2 bruise_distance=(q-vec2(.27,.15))/.13;
         float patch=exp(-dot(bruise_distance,bruise_distance))*smoothstep(.12,.27,skin_position.z);
         color=mix(color,vec3(.22,.085,.19),patch*smoothstep(.12,.85,injury)*.8);

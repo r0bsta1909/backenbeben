@@ -23,3 +23,4 @@ server/balance.json
 
 # Godot extracts this embedded GLB image during import. Source lives in face_ink_v1.png.
 game/assets/character_v3_face_ink_v1.png*
+game/assets/character_customizable_face_ink_v2.png*

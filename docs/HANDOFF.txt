@@ -2337,3 +2337,21 @@ Zwei echte Browserclients: Editor/Persistenz/Sync/Rueckkehr/Layouts PASS,errors[
 Produktionskontakt-/Replaycheck PASS,errors[]. Keine neuen Gesichtsmodelle oder
 Koerperproportionen in diesem Pass. Beleg validation/CHARACTER_CREATOR_2026-10-12.txt.
 Bilder Arena-Design/25-*.png. Eigene Testhosts8879 beendet; V14-Paket bleibtalt.
+
+6 GESICHTER / 6 FRISUREN / 6 BAERTE — 13.10.2026
+216 frei kombinierbare Grundvarianten, separate Haar-/Bartfarben. Jeweils eine
+ungewoehnliche Variante: Knollennase, Doppel-Iro, Zirkusbart. Vollstaendige Liste
+in game/assets/character_options.json. Quelle character-customizable.blend,
+Spielasset character_customizable.glb; Aufbau-/Validierungs-/Katalogskripte.
+Gesichtsidentitaet ueber Morphs, neue Frisuren/Baerte mit bestehendem Kopf-Rig.
+Seitliche Wangen bleiben exakt unveraendert: kosmetische Varianten, keine neue
+Kontaktphysik oder Schutzvorteile. Bisherige Ausdrucks-/Verletzungsmorphs bleiben.
+Editor/Persistenz/Zufall/Reset/LAN/Spiegel/Replay nutzen alle neuen Auswahlfelder.
+Blenderquelle/18 Optionen/Gewichte/UVs/Morphs/216 Kombinationen/Kameras PASS.
+Nativer ArenaMatch, strenger Webbuild, 165PythonTests, Zwei-Client-Editor PASS.
+Standardmaus-Kontakt-/Replaycheck PASS. Zusaetzlicher Variantenkampf mit fester
+realer Protokolltrajektorie: Veteran und komischer Charakter getroffen, Replay
+gesichtet, PASS errors[]. Zwei-Tab-Maustreiber in diesem Zusatztest war instabil;
+kein Zwei-PC-Human-Test. Beleg validation/CHARACTER_OPTIONS_2026-10-13.txt.
+Alle18 Optionen nativ gerendert/gesichtet, Bilder Arena-Design/26-*.png.
+Testhosts beendet. V14-Download bleibt aelterer Stand; kein neues Releasepaket.

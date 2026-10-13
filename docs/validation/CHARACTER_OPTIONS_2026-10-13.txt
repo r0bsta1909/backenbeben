@@ -1,0 +1,54 @@
+BACKENBEBEN — 6 GESICHTER / 6 FRISUREN / 6 BAERTE / 13.10.2026
+
+Auftrag: alle Kategorien frei kombinierbar, jeweils fuenf vertraute Varianten
+und eine bewusst komische/ungewoehnliche. 216 Grundkombinationen, dazu
+unabhaengige Haar-/Bartfarbe sowie Haut-/Trikotfarben.
+Gesichter: Klassisch, Markant, Weich, Schmal, Veteran, Knollennase.
+Frisuren: Texturierter Kurzschnitt, Buzz Cut, Glatze, Seitenscheitel, Locken,
+Doppel-Iro. Baerte: Glattrasiert, Dreitagebart, Kurzer Vollbart, Schnurrbart,
+Goatee, Zirkusbart. Glattrasiert/Glatze sind reguläre Auswahloptionen.
+Referenzen fuer gaengige Stilfamilien, keine Rangfolge/Marktanteilsbehauptung:
+https://www.gq.com/story/best-short-haircuts-for-men
+https://secure-us.braun.com/en-us/the-most-popular-beard-styles-for-men-braun-us
+Keine fremden Fotos/Modelle heruntergeladen oder ins Projekt eingebaut.
+
+Blenderquelle assets-source/character-customizable.blend auf bestehendem Rig;
+Spielasset game/assets/character_customizable.glb. Urspruengliche character-v3
+Quellen und kanonische Kollisions-/Handdaten bleiben erhalten.
+Gesichter sind fuenf neue Identitaetsmorphs plus Basis: Nasen-/Kinn-/Lippen- und
+Brauenpartie. Veteran erhaelt zusaetzliche restfeste Shaderfalten. Seitliche
+Wangenvertices |X|>=.045m bleiben fuer alle Morphs exakt unveraendert.
+Frontalformen sind kosmetische Identitaetsvarianten, keine neue Kollisionsphysik;
+Haare/Baerte sind kosmetisch und erzeugen keinen Treffer-/Schutzvorteil.
+Bestehende Blink-/Grins-/Verletzungs-/Kopfbewegung bleiben nutzbar.
+Neue Haar- und Bartmeshes sind am vorhandenen Kopf gebunden; Bartmorphs folgen
+den frontal veraenderten Gesichtspartien. Godot bewegt sie im Kopf-/Tissuepfad.
+Haar-/Bartfarbe voneinander getrennt, auch beim eigenen Modell und Spiegel.
+Erweiterte Serverfelder: face_style0..5, hair_style0..5, beard_style0..5,
+beard_color0..2. Fehlende Felder: Face0/Haar0/Bart1/Farbe0.
+Lokale gespeicherte Profile bleiben kompatibel und ergaenzen neue Defaults.
+Editor/Drehung/Zoom/Zufall/Reset/Reload/LAN-/Replay-Packet nutzen alle Felder.
+
+Reproduktion: Blender --background --python scripts/build_character_options.py;
+Godot-Import/Webbuild; Blender -b assets-source/character-customizable.blend
+--python scripts/validate_character_options.py. Manuelle Blender-Aenderungen
+vor erneuter Generierung sichern. Gesichtstextur im .blend gepackt.
+GLB-extrahierte Textur ist generiert/ignoriert, Ursprung bleibt face_ink_v2.png.
+
+QA: Blenderquelle erneut geoeffnet, 18 Optionen/UVs/Knochengewichte/finite
+Vertices/5 verschiedene Morphs/unveraenderte Seitenwangen/Face-Ink gepackt PASS.
+CHARACTER_APPEARANCE_PASS: alle216 Kombinationen, Morphwerte, getrennte
+Bartfarben, eigene Materialparameter, Kopfmeshsichtbarkeit/Kamerawechsel.
+ARENA_MATCH_PASS, strenger Import/Webbuild und165PythonUnittests PASS.
+Alle18 Varianten nativ als Vergleich gerendert/gesichtet; Veteran-NaN in
+Shader-Potenzen korrigiert, Locken verdichtet, Bart-/Scheitelformen nachbearbeitet.
+Zwei Browserclients: neue Feldwerte, Reload/Persistenz, LAN-Sync, gerenderte
+Auswahl, Reset/Zufall, vier Fenstergroessen, errors[], PASS.
+Standardmaus-Kontakt-/Replaycheck mit Produktionssolver PASS, errors[],
+Solve3342.4ms, neun Kontakt-/Kamerabilder, Gelenke/Marker/Ruecklauf/Spiegel.
+Zusaetzlicher Variantenkampf: feste reale Protokolltrajektorie PASS, errors[].
+Veteran und Knollennase/Doppel-Iro/Zirkusbart jeweils als Trefferziel mit
+korrekten Auswahlfeldern im aufgezeichneten Replay und gesichteter Darstellung.
+Die ersten Mausversuche in diesem Zwei-Tab-Zusatztest liefen nicht stabil
+durch Probe/Schlag; Standardmauscheck bleibt separat. Kein Zwei-PC-Human-Test.
+Kein neues Releasepaket: V14-Download bleibt frueherer Stand.

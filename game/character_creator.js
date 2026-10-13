@@ -1,9 +1,9 @@
 // Cosmetic choices share the live character model used by the match and replay.
 (() => {
-    const fields = ['skin', 'hair', 'shirt', 'hair_style'];
-    const limits = {skin: 3, hair: 2, shirt: 3, hair_style: 2};
-    const defaults = {name: 'CHALLENGER', skin: 0, hair: 0, shirt: 0, hair_style: 0};
-    const palette = {skin: ['#b48968','#8c654e','#634737','#d2aa8c'], hair: ['#241b16','#6b3624','#b8afa0'], shirt: ['#6e242b','#26354b','#deb64c','#534979']};
+    const fields = ['skin', 'hair', 'shirt', 'hair_style', 'face_style', 'beard_style', 'beard_color'];
+    const limits = {skin: 3, hair: 2, shirt: 3, hair_style: 5, face_style: 5, beard_style: 5, beard_color: 2};
+    const defaults = {name: 'CHALLENGER', skin: 0, hair: 0, shirt: 0, hair_style: 0, face_style: 0, beard_style: 1, beard_color: 0};
+    const palette = {skin: ['#b48968','#8c654e','#634737','#d2aa8c'], hair: ['#241b16','#6b3624','#b8afa0'], shirt: ['#6e242b','#26354b','#deb64c','#534979'], beard_color: ['#241b16','#6b3624','#b8afa0']};
     const storageKey = 'backenbeben-character-v1';
     let view = 'body', yaw = 0, persisted = true;
     const get = id => document.getElementById(id);
@@ -11,7 +11,7 @@
         const data = {...defaults};
         if (!raw || typeof raw !== 'object') return data;
         data.name = typeof raw.name === 'string' ? raw.name.slice(0,18) : defaults.name;
-        for (const field of fields) data[field] = Number.isInteger(raw[field]) && raw[field] >= 0 && raw[field] <= limits[field] ? raw[field] : 0;
+        for (const field of fields) data[field] = Number.isInteger(raw[field]) && raw[field] >= 0 && raw[field] <= limits[field] ? raw[field] : defaults[field];
         return data;
     }
     function read() {
@@ -21,7 +21,7 @@
         const data = read();
         window.previewFighter = {...data, view, yaw};
         get('characterName').textContent = data.name.trim() || 'CHALLENGER';
-        get('characterSummary').textContent = `${get('hair_style').selectedOptions[0].text} · ${get('shirt').selectedOptions[0].text}`;
+        get('characterSummary').textContent = `${get('face_style').selectedOptions[0].text} · ${get('hair_style').selectedOptions[0].text} · ${get('beard_style').selectedOptions[0].text}`;
         document.querySelectorAll('[data-character-field]').forEach(button => {
             button.setAttribute('aria-pressed', String(data[button.dataset.characterField] === +button.dataset.value));
         });

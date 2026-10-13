@@ -14,67 +14,47 @@ var finger_rest_rotations: Dictionary = {}
 var face_mesh: MeshInstance3D
 var blink_index := -1
 var hair_style := -1
-var full_hair_mesh: ArrayMesh
-static var cropped_hair_mesh: ArrayMesh
+var face_style := -1
+var beard_style := -1
+const HAIR_NODES := ["HairCap","HairShort","","HairSidePart","HairCurls","HairDoubleMohawk"]
+const BEARD_NODES := ["","","BeardFull","BeardMoustache","BeardGoatee","BeardTwirl"]
 
-func build_cropped_hair(mesh: ArrayMesh) -> ArrayMesh:
-	# The export joins scalp and locks into one mesh, but their vertices remain
-	# disconnected. Keep the largest connected surface, including its skin weights.
-	var arrays: Array=mesh.surface_get_arrays(0)
-	var vertices: PackedVector3Array=arrays[Mesh.ARRAY_VERTEX]
-	var indices: PackedInt32Array=arrays[Mesh.ARRAY_INDEX]
-	var links: Array=[];links.resize(vertices.size())
-	for i in range(vertices.size()):links[i]=[]
-	for i in range(0,indices.size(),3):
-		var a: int=indices[i];var b: int=indices[i+1];var c: int=indices[i+2]
-		links[a].append(b);links[a].append(c);links[b].append(a);links[b].append(c);links[c].append(a);links[c].append(b)
-	var visited: Dictionary={};var largest: Array=[]
-	for start in range(vertices.size()):
-		if visited.has(start):continue
-		var pending: Array=[start];var component: Array=[];visited[start]=true
-		while not pending.is_empty():
-			var current: int=pending.pop_back();component.append(current)
-			for next in links[current]:
-				if not visited.has(next):visited[next]=true;pending.append(next)
-		if component.size()>largest.size():largest=component
-	largest.sort()
-	var mapping: Dictionary={}
-	for i in range(largest.size()):mapping[largest[i]]=i
-	var result: Array=[];result.resize(Mesh.ARRAY_MAX)
-	for slot in [Mesh.ARRAY_VERTEX,Mesh.ARRAY_NORMAL,Mesh.ARRAY_TANGENT,Mesh.ARRAY_COLOR,Mesh.ARRAY_TEX_UV,Mesh.ARRAY_TEX_UV2,Mesh.ARRAY_BONES,Mesh.ARRAY_WEIGHTS]:
-		if arrays[slot]==null or arrays[slot].is_empty():continue
-		var stride: int=arrays[slot].size()/vertices.size()
-		var values=arrays[slot].slice(0,0)
-		for old in largest:
-			for offset in range(stride):values.append(arrays[slot][old*stride+offset])
-		result[slot]=values
-	var cropped_indices:=PackedInt32Array()
-	for i in range(0,indices.size(),3):
-		if mapping.has(indices[i]):
-			for offset in range(3):cropped_indices.append(mapping[indices[i+offset]])
-	result[Mesh.ARRAY_INDEX]=cropped_indices
-	var crop:=ArrayMesh.new();crop.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,result)
-	crop.surface_set_material(0,mesh.surface_get_material(0))
-	return crop
+func set_character_options(data: Dictionary) -> void:
+	set_hair_style(int(data.get("hair_style",0)))
+	set_face_style(int(data.get("face_style",0)))
+	set_beard_style(int(data.get("beard_style",1)))
 
 func set_hair_style(value: int) -> void:
-	value=clampi(value,0,2)
+	value=clampi(value,0,5)
 	if value==hair_style:return
 	hair_style=value
 	refresh_hair_visibility()
 
+func set_face_style(value: int) -> void:
+	value=clampi(value,0,5)
+	if value==face_style:return
+	face_style=value
+	for mesh in model.find_children("*","MeshInstance3D",true,false):
+		for index in range(mesh.mesh.get_blend_shape_count()):
+			var name: String=mesh.mesh.get_blend_shape_name(index)
+			if name.begins_with("identity_"):
+				mesh.set_blend_shape_value(index,1.0 if name=="identity_%d"%value else 0.0)
+
+func set_beard_style(value: int) -> void:
+	value=clampi(value,0,5)
+	if value==beard_style:return
+	beard_style=value
+	refresh_hair_visibility()
+
 func refresh_hair_visibility() -> void:
 	for mesh in model.find_children("*","MeshInstance3D",true,false):
-		if str(mesh.name).begins_with("HairLock"):mesh.visible=not is_first_person and hair_style<=0
-		elif str(mesh.name)=="HairCap":
-			if full_hair_mesh==null:full_hair_mesh=mesh.mesh
-			if cropped_hair_mesh==null:cropped_hair_mesh=build_cropped_hair(full_hair_mesh)
-			mesh.mesh=cropped_hair_mesh if hair_style==1 else full_hair_mesh
-			mesh.visible=not is_first_person and hair_style!=2
+		var name: String=str(mesh.name)
+		if name in HAIR_NODES:mesh.visible=not is_first_person and name==HAIR_NODES[maxi(0,hair_style)]
+		elif name in BEARD_NODES:mesh.visible=not is_first_person and name==BEARD_NODES[maxi(0,beard_style)]
 
 func _ready() -> void:
 	metadata = JSON.parse_string(FileAccess.get_file_as_string("res://assets/character_v3.json"))
-	model = load("res://assets/character_v3.glb").instantiate()
+	model = load("res://assets/character_customizable.glb").instantiate()
 	add_child(model)
 	skeleton = model.find_children("*", "Skeleton3D", true, false)[0]
 	face_mesh=model.find_child("Face",true,false)
@@ -86,6 +66,7 @@ func _ready() -> void:
 	# starts outside the camera but can reach into it; include the whole rig reach.
 	for part in model.find_children("*","MeshInstance3D",true,false):
 		part.extra_cull_margin=.8
+	set_character_options({})
 
 func orient_bone(bone_name: String, start: Vector3, finish: Vector3, twist := 0.0) -> void:
 	var index := skeleton.find_bone(bone_name)
