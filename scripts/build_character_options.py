@@ -202,19 +202,43 @@ def sculpt(point,index,name):
     n=gauss(x,y,0,.025 if index==5 else .035,.026,.021 if index==5 else .038)*front_weight
     p.z+=nose*n
     p.x+=x*width*n
+    bridge=gauss(x,y,0,.073,.014,.032)*front_weight
+    forehead=gauss(x,y,0,.142,.036,.042)*front_weight
+    if index==1:
+        p.z+=.004*bridge+.003*forehead
+    elif index==2:
+        p.z-=.003*bridge+.002*forehead
+    elif index==3:
+        p.x-=x*.18*bridge;p.z+=.004*bridge
+    elif index==4:
+        p.x+=.0035*n;p.z+=.002*bridge
+    elif index==5:
+        p.z-=.003*bridge
     c=gauss(x,y,0,-.070,.033,.024)*front_weight
     p.z+=chin*c;p.y+=chin_y*c
     if name.startswith('Brow'):
         p.y+=brow*(1-smooth(.028,.067,abs(x)))
         p.z+=.0015 if index in (1,4) else 0
+    elif name=='Face':
+        ridge=gauss(abs(x),y,.028,.104,.020,.009)*front_weight
+        p.y+=brow*.25*ridge
+        p.z+=(.002 if index in (1,4) else -.001 if index==2 else 0)*ridge
     mouth=gauss(x,y,0,-.030,.037,.016)*front_weight
-    if index==1:p.x+=x*.12*mouth
-    elif index==2:p.y+=(y+.03)*.20*mouth;p.x+=x*.16*mouth
-    elif index==3:p.x-=x*.18*mouth
+    if index==1:
+        p.x+=x*.16*mouth;p.y-=(y+.03)*.12*mouth
+    elif index==2:
+        p.y+=(y+.03)*.30*mouth;p.x+=x*.16*mouth;p.z+=.0018*mouth
+    elif index==3:
+        p.x-=x*.24*mouth;p.y-=(y+.03)*.14*mouth
+    elif index==4:
+        p.y+=.0025*mouth*(x/.035);p.z-=.001*mouth
+    elif index==5:
+        p.y+=.002*mouth*(x/.035)
     if index==5:p.y-=.004*n
     return p
 
 head_names={'Face','MouthLine','MouthInterior','Teeth','LidsL','LidsR','BrowL','BrowR','NostrilL','NostrilR'}
+identity_surfaces={i:BVHTree.FromPolygons([sculpt(p,i,'Face') for p in fv],ff) for i in range(1,6)}
 for obj in list(bpy.context.scene.objects):
     if obj.type!='MESH' or not (obj.name in head_names or obj.name.startswith('Beard')):continue
     if obj.data.shape_keys is None:obj.shape_key_add(name='Basis')
@@ -224,7 +248,14 @@ for obj in list(bpy.context.scene.objects):
         key=obj.shape_key_add(name=f'identity_{index}')
         for original,vertex in zip(basis.data,key.data):
             point=G(obj.matrix_world @ original.co)
-            vertex.co=inverse @ B(sculpt(point,index,obj.name))
+            changed=sculpt(point,index,obj.name)
+            if obj.name.startswith('Brow'):
+                # Moving the brow vertically without projecting it back onto
+                # the changed forehead creates a second floating silhouette.
+                offset=max(.0002,min(.001,point.z-front(point.x,point.y,0).z))
+                hit=identity_surfaces[index].ray_cast(Vector((changed.x,changed.y,1)),Vector((0,0,-1)))[0]
+                if hit is not None:changed.z=hit.z+offset
+            vertex.co=inverse @ B(changed)
 
 # Check the collision-relevant cheek geometry before publishing the new asset.
 for key in face.data.shape_keys.key_blocks:

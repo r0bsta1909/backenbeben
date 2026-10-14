@@ -1,5 +1,6 @@
 """Blender -b assets-source/character-customizable.blend --python this_file."""
 import bpy, json, math
+from mathutils.bvhtree import BVHTree
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 catalog=json.loads((ROOT/'game/assets/character_options.json').read_text(encoding='utf-8'))
@@ -23,6 +24,14 @@ for index in range(1,6):
     for a,b in zip(basis.data,key.data):
         if abs(a.co.x)>=.045:assert (a.co-b.co).length<1e-8
 assert len(signatures)==5
+for index in range(1,6):
+    surface=BVHTree.FromPolygons([v.co for v in face.data.shape_keys.key_blocks[f'identity_{index}'].data],
+                                 [tuple(p.vertices) for p in face.data.polygons])
+    for name in ['BrowL','BrowR']:
+        brow=bpy.data.objects[name]
+        for v in brow.data.shape_keys.key_blocks[f'identity_{index}'].data:
+            nearest=surface.find_nearest(brow.matrix_world @ v.co)
+            assert nearest[3] is not None and nearest[3]<.0011, ('floating brow',index,name)
 assert all(name in face.data.shape_keys.key_blocks for name in ['blink','grin'])
 images=[n.image for m in face.data.materials if m.use_nodes for n in m.node_tree.nodes if n.type=='TEX_IMAGE']
 assert images and all(i.packed_file for i in images)

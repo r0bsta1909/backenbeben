@@ -2383,3 +2383,16 @@ Browser-Treffer-/Replaycheck Produktionssolver PASS errors[], Kontakt gesichtet,
 Solve1933.5ms. Testhost beendet. V14-Download weiterhin aelterer Stand.
 Beleg validation/FACE_QUALITY_2026-10-14.txt. Bisherige frontal projizierte
 Konzepttextur bleibt Vereinfachung; kein neuer menschlicher Abnahmetest.
+
+GESICHTER WEITER DIFFERENZIERT — 14.10.2026
+Nasenruecken/Stirn/Lippenformen pro Identitaet deutlicher: markanter, weicher,
+schmaler; Veteran mit kleiner Nasen-/Mundasymmetrie. Augenpartie weniger dunkel
+uebermalt; doppelte gezeichnete Brauen reduziert. Modellierte Brauen auf jeweilige
+Stirnmorphs zurueckprojiziert, alle fuenf Varianten <1.1mm Oberflaechenabstand.
+Veteranfalten drei fein gekruemmte/tapernde Linien statt regelmaessiger Streifen.
+Blender/GLB, Autoren-/Pruefskripte und nativer Sechs-Gesichter-Vergleich aktualisiert.
+Quelle/216 Kombinationen/7 Farben/Webbuild/Verletzungsruecksetzung PASS.
+Zwei Browserclients samt realen Protokolltreffern auf Veteran und Knollennase
+und Replay PASS errors[]. Blickwinkel/Ausdrucks-/Kontaktbilder gesichtet.
+Vorschau Arena-Design/29-gesichter-verfeinert.png. Beleg
+validation/FACE_REFINEMENT_2026-10-14.txt. Testhost beendet; V14 bleibt alt.

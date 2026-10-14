@@ -1,0 +1,26 @@
+BACKENBEBEN — GESICHTER WEITER VERFEINERT — 14.10.2026
+Auftrag: Gesichter nochmals besser machen.
+Zentrale Identitaetsmorphs: Nasenruecken und Stirnvolumen, differenziertere Lippen,
+Veteran mit subtiler Nasen-/Mundasymmetrie. Alle seitlichen Wangen weiterhin exakt
+identisch zur Originalquelle; Haare/Baerte und Farben unabhaengig kombinierbar.
+Brauen entlang morphed BVH-Stirnoberflaeche projiziert statt vertikal schwebend.
+Quantitativer Quellencheck aller5 Morphs/BrowL+BrowR: <1.1mm Abstand PASS.
+Gezeichnete Doppelbrauen in bestehender Fronttextur lokal ausgeblendet, dunkle
+Augenuebermalung reduziert. Kein neues Bildasset; Originaltextur erhalten.
+Veteranfalten drei gekruemmte, verjuengte, pixelgefilterte Linien statt Sinusstreifen.
+
+Validierung: Blender-Reopen/UVs/Gewichte/5 Morphs/18 Optionen/kanaonische Wangen/
+Brauenoberflaechenabstand PASS. Native216 Kombinationen/FirstPerson sowie7 Farben
+an Gegner/Hand/Spiegel PASS. Strenger Godot-Import/Webexport PASS.
+Native Front/Profil/Dreiviertel/helle+tiefe Haut/Blink/Grin/Veteran mit Bart sowie
+Sechs-Gesichter-Tafel gesichtet. Verbliebene Doppelbraue nach dieser Sichtung
+weiter ausgeblendet, finaler Webbuild und Sechs-Gesichter-Render bestanden.
+Verletzungsdarstellung beidseitig auf7 Hautfarben0/35/75/0 PASS.
+Zwei Browserkontexte: Editor/Persistenz/LAN-Sync/Layouts/Reset/Zufall und echte
+Protokolltreffer/Replay auf Veteran und Knollennase mit Iro/Zirkusbart PASS errors[].
+Replay-Knollennase gesichtet; Protokolltrajektorie, kein erneuter Mausgauntlet.
+Keine neuen Physik-, Rig- oder Eingabeaenderungen. Testhost beendet.
+Vorschau Arena-Design/29-gesichter-verfeinert.png; reproduzierbar:
+Godot --path game --script ../scripts/capture_face_quality.gd -- --identities.
+Originale feste Frontprojektion bleibt Vereinfachung; keine neue menschliche
+Stil-/Spielabnahme, keine neue Leistungsmessung, kein neues Releasepaket.

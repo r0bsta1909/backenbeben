@@ -70,7 +70,12 @@ void fragment() {
         float lower_face=1.0-smoothstep(-.005,.025,local.y);
         float paint_strength=beard_style==1 ? .58 : .58*(1.0-.70*lower_face);
         float socket=exp(-pow(abs((abs(local.x)-.0381)/.025),4.0)-pow(abs((local.y-.088)/.019),4.0));
-        paint_strength*=1.0-.24*socket;
+        // The projected guide contains drawn lids/brows already. Reduce that
+        // copy around the real eye opening so it doesn't look double outlined.
+        paint_strength*=1.0-.43*socket;
+        float brow_guide=exp(-pow(abs((local.y-.117)/.028),4.0))
+            *smoothstep(.012,.022,abs(local.x))*(1.0-smoothstep(.061,.075,abs(local.x)));
+        paint_strength*=1.0-brow_guide;
         color*=mix(1.0,ink,paint_mask*paint_strength);
         // Restrained lip pigment follows authored rest coordinates and all
         // skin tones; volume and shadows still come from the anatomical mesh.
@@ -96,10 +101,14 @@ void fragment() {
         if(beard_style==1)color=mix(color,beard_color.rgb,beard*(.11+.38*stubble));
         if(face_style==4) {
             float front=smoothstep(.025,.065,local.z);
-            float brow_lines=exp(-pow(abs((local.y-.142)/.032),4.0))*(1.0-smoothstep(.030,.065,abs(local.x)));
-            float creases=pow(.5+.5*sin(local.y*620.0),18.0);
+            float taper=1.0-smoothstep(.023,.058,abs(local.x));
+            float arc=local.y+local.x*local.x*1.6;
+            float width=max(fwidth(arc),.00045);
+            float creases=1.0-smoothstep(.0005,.0005+width,abs(arc-.137));
+            creases+=.72*(1.0-smoothstep(.00045,.00045+width,abs(arc-.154)));
+            creases+=.45*(1.0-smoothstep(.0004,.0004+width,abs(arc-.169)));
             float eye_lines=exp(-pow(abs((abs(local.x)-.052)/.024),4.0)-pow(abs((local.y-.087)/.018),4.0));
-            color*=1.0-front*(brow_lines*creases*.25+eye_lines*.12);
+            color*=1.0-front*(taper*creases*.19+eye_lines*.10);
         }
         vec2 bruise_distance=(q-vec2(.27,.15))/.13;
         float patch=exp(-dot(bruise_distance,bruise_distance))*smoothstep(.12,.27,skin_position.z);

@@ -16,8 +16,14 @@ func capture() -> void:
 		["Front",0,0,0,0,0],["Dreiviertel",0,0,35,0,0],["Profil",0,0,80,0,0],
 		["Sehr helle Haut",4,0,0,0,0],["Tiefe Haut",5,0,25,0,0],
 		["Geschlossene Lider",0,0,0,1,0],["Grinsen",0,0,20,0,1],["Veteran / Bart",1,4,25,0,0]]
+	var identities: bool="--identities" in OS.get_cmdline_user_args()
+	if identities:
+		views=[]
+		var names: Array=["Klassisch","Markant","Weich","Schmal","Veteran","Knollennase"]
+		for i in range(6):views.append([names[i],0,i,15,0,0])
+	var columns: int=3 if identities else 4
 	var directory:=ProjectSettings.globalize_path("res://../logs/face-quality");DirAccess.make_dir_recursive_absolute(directory)
-	var sheet:=Image.create(1920,1200,false,Image.FORMAT_RGBA8)
+	var sheet:=Image.create(columns*480,1200,false,Image.FORMAT_RGBA8)
 	for i in range(views.size()):
 		var v: Array=views[i];label.text=v[0]
 		scene.apply_fighter(scene.fighter,{"skin":v[1],"face_style":v[2],"hair_style":0,"beard_style":2 if i==7 else 0},true)
@@ -27,5 +33,5 @@ func capture() -> void:
 		scene.camera.position=Vector3(sin(angle)*1.85,.25,cos(angle)*1.85);scene.camera.look_at(Vector3(0,.25,0))
 		await process_frame;RenderingServer.force_draw(false)
 		var picture:=root.get_texture().get_image();picture.convert(Image.FORMAT_RGBA8);picture.save_png(directory+"/%d.png"%i)
-		sheet.blit_rect(picture,Rect2i(0,0,480,600),Vector2i(i%4*480,i/4*600))
-	sheet.save_png(directory+"/comparison.png");print("FACE_QUALITY_CAPTURE_PASS: front, profile, three-quarter, skin extremes, blink and grin");quit(0)
+		sheet.blit_rect(picture,Rect2i(0,0,480,600),Vector2i(i%columns*480,i/columns*600))
+	sheet.save_png(directory+("/identities.png" if identities else "/comparison.png"));print("FACE_QUALITY_CAPTURE_PASS");quit(0)
