@@ -1,0 +1,78 @@
+BACKENBEBEN — AUGEN, LIPPENBOGEN UND PLASTISCHER COMIC — 14.10.2026
+
+AUFTRAG
+Nutzer findet auch Fassung32 optisch noch unzureichend. Comicstil weiter Pflicht;
+die Kopfqualitaet ist nicht durch technische Tests abgenommen. Aktuell liegt
+ein konkreter A/B-Vergleich am echten Spielkopf vor. Praeferenzfrage gestellt;
+B (mehr plastische Tiefe) vorlaeufig als Standard, keine Nutzerzustimmung behaupten.
+
+AENDERUNGEN
+Augenoeffnung horizontal verbreitert (lokaler Canthus-Faktor16%). Sklera an die
+Breite angepasst, Iris-/Pupillenzentrum und Hoehe beibehalten; keine grossen
+Animeaugen. Blaue/graue Iris mit feiner radialer Struktur, dunklerem Aussenring,
+staerkerem Hauptreflex und kleinerem Sekundaerreflex. Sklera heller/neutraler.
+Sechs Abstandsvarianten und ihre Iriszentren weiterhin passend gekoppelt.
+Lidschluss an sechs Varianten gesichtet; keine weissen Ecken offen geblieben.
+
+Mundsaum mit echtem Cupidbogen und mittlerer Einziehung statt gerader Linie.
+Verstaerkter geometrischer Vermilion-Rollanteil (2.8 statt1.2mm in Autorenquelle).
+Orale Normalenglaettung von88 auf35% reduziert, damit die Lippenform sichtbar
+bleibt. Verformungsbogen fuer die neue Saumkontur in Host und Shader identisch.
+Controller/Kiefer/16 einzelne Zaehne und acht regionale Verletzungszustaende
+erhalten; die echte Mundoeffnung und der durchgehende Rand bestehen weiter.
+
+Ueberbetonte Wangen-/Orbital-/Unterlid-/Masseter-Gaussformen reduziert, um harte
+Schatteninseln und eingedrueckte Flanken zurueckzunehmen. Illustrations-Key mehr
+frontal, Schattenfarbe heller/neutraler. Neue interne illustration_depth-Variable:
+A=0 klare Flaechen, B=1 weichere Uebergaenge plus30% kontinuierliche Volumentinte.
+Drei Grund-Toonstufen und reale Kontaktabschattung bleiben erhalten. Kein
+neuer Auswahlpunkt im Produkt. Haarlichter kuehler, damit Schwarz nicht nur
+braun aufgehellt wird; Formen und Farboptionen der Haare unveraendert.
+Keine neue Rastertextur generiert; die lokale v3-Zeichnung wird weiter genutzt.
+
+VERTRAG
+Charakter-/Kontaktversion7 Host+Webshell zusammen verwenden; alte6 wird beim
+Join abgewiesen. Gestenprotokoll3, Schadenszustand1 weiterhin unveraendert.
+Sechs exakte Profile aus der neuen Blenderquelle exportiert. Originalquelle,
+Arm-/Hand-/Tisch-/Arena-/Sponsor-Assets unveraendert. Hoenhorst nicht angefasst.
+Alle6/6/6 Formoptionen und7 unabhaengigen Hautfarben verfuegbar.
+
+VALIDIERUNG
+Blender Quelle PASS: Gewichte, Brauen, Controller,16Zaehne, gepackte Zeichnung,
+ein geschlossener Mundrand und sechs echte Kontaktprofile. Import/Webexport PASS.
+172Servertests PASS33.959s, keine Toleranz- oder Fixtureaenderung ausser Versionsschutz.
+Native216 Kombinationen/7 Hautfarben/FirstPerson/Identitaets-/Irisparameter PASS.
+Zahn-/Chip-/Fehlend-/Reset-/Kieferpruefung, GPU-Normalen und ArenaMatch PASS.
+Front/Profil/Dreiviertel/Grinsen/Hautextreme/Bart,6Identitaeten/6Blinks und sechs
+regionale Extremfixtures gesichtet. A/B auf720x800px jePortraet mit gleicher
+Geometrie/Kamera/Licht/Appearance gerendert; nur illustration_depth unterschiedlich.
+Zwei Browserclients: Vorschau/Persistenz/LAN/Layouts/Reset/Zufall und reale
+Varianten-Treffer/regionale Replays PASS errors[]. Echter Maustreffer mit Kontakt-
+kameras/Spiegel/Marker/Ruecklauf separat PASS errors[]. Testhost8896 nach Pruefung
+beendet. Leistungs-/Onset-Ergebnis siehe abschliessenden Eintrag unten.
+
+GRENZEN / ABNAHME
+Die gewuenschte optische Qualitaet hat weiterhin keine menschliche Abnahme.
+Gemeinsamer Schaedel/Rig, vorhandene modulare Haare und die v3-Frontprojektion
+bleiben. Extreme Mundinnenraeume und Knochenverformungen sind vereinfacht;
+Schadensfixtures sind gezielte Extremtests unabhaengig vom normalen Match-KO.
+Keine medizinische Bruchsimulation oder frei abgetrennte Schaedel-/Zahnfragmente.
+Alte Solver-Konvergenzgrenzen gelten weiter. Keine pauschale60FPS-Freigabe.
+Kein neues Releasepaket; V14-Download bleibt alt.
+
+VORSCHAU / REPRODUKTION
+Arena-Design/33-comic-vergleich.png,33-grundkopf-ingame.png,33-comic-gesichter.png,
+33-kopf-nahansichten.png und33-regionales-schadensmodell.png.
+Blender --background --python scripts/build_character_options.py
+Blender -b assets-source/character-customizable.blend --python scripts/validate_character_options.py
+scripts/build.ps1
+Godot --path game --script ../scripts/capture_face_style.gd
+Godot --path game --script ../scripts/capture_face_quality.gd -- --hero
+Godot --path game --script ../scripts/capture_face_quality.gd -- --identities --blinks
+Godot --path game --script ../scripts/capture_face_damage.gd
+
+LEISTUNG / SCHADENSBEGINN
+1920x1080 Chromium ANGLE RTX3090 D3D11,90RAF-Samples jeAnsicht:
+idle median16.7/p9533.4/max33.5ms; pausierterKontakt16.7/16.8/16.8ms;
+verletzt16.7/16.8/16.9ms. Onset/Ruecklauf PASS errors[]. Einzelhardwaremessung,
+kein allgemeiner60FPS-Pass; einzelne idleFrames brauchen zwei Bildschirmzyklen.

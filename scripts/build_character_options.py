@@ -39,7 +39,7 @@ def face_finish(point):
     jaw=gauss(abs(x),y,.069,-.037,.024,.018)*front
     temple=gauss(abs(x),y,.087,.112,.019,.032)*front*eye_clear
     p.x+=(1 if x>=0 else -1)*(.0030*cheek+.0020*jaw-.0025*temple)
-    p.z+=.0038*cheek-.0022*gauss(abs(x),y,.070,-.002,.025,.022)*front
+    p.z+=.0016*cheek-.0022*gauss(abs(x),y,.070,-.002,.025,.022)*front
     guard=(1-smooth(.029,.045,abs(x)))*smooth(.035,.072,z)
     p.z+=guard*(.0028*gauss(x,y,0,.018,.017,.018)
                 -.0010*gauss(x,y,0,.014,.006,.010)
@@ -58,15 +58,20 @@ def face_finish(point):
     p.z+=.0020*gauss(x,y,0,.022,.012,.010)*front
     p.z-=.0018*gauss(abs(x),y,.018,.018,.006,.012)*front
     # Orbital shelf, restrained lower lid and cheekbone-to-masseter transition.
-    p.z+=.0030*gauss(abs(x),y,.035,.107,.028,.011)*front
-    p.z-=.0020*gauss(abs(x),y,.038,.079,.021,.006)*front
-    p.z+=.0022*gauss(abs(x),y,.057,.054,.022,.014)*front*eye_clear
-    p.z-=.0020*gauss(abs(x),y,.057,.022,.020,.024)*front
+    p.z+=.0015*gauss(abs(x),y,.035,.107,.028,.011)*front
+    p.z-=.0008*gauss(abs(x),y,.038,.079,.021,.006)*front
+    p.z+=.0008*gauss(abs(x),y,.057,.054,.022,.014)*front*eye_clear
+    p.z-=.0009*gauss(abs(x),y,.057,.022,.020,.024)*front
     p.z+=.0020*gauss(x,y,0,-.043,.027,.017)*front
     # Lift the upper lid locally, rather than enlarging the eyeball. A modest
     # aperture gives a more alert expression while keeping human proportions.
     lid=gauss(abs(x),y,.0381,.096,.017,.008)*smooth(.065,.084,z)
     p.y+=.0022*lid
+    # The prototype's narrow eye opening made the iris dominate the whole
+    # aperture. Widen the canthi, preserving the globe/iris centre and height.
+    eye_frame=gauss(abs(x),y,.0381,.09,.024,.020)*smooth(.064,.080,z)
+    eye_dx=x-(.03810625 if x>=0 else -.03810625)
+    p.x+=eye_dx*.16*eye_frame
     # Two continuous lip volumes, with a restrained cupid bow and chin fold.
     lip_guard=(1-smooth(.024,.033,abs(x)))*smooth(.088,.101,z)
     p.z+=lip_guard*(.0018*gauss(x,y,0,.003,.027,.0038)
@@ -83,6 +88,11 @@ for obj in [face]+[o for o in bpy.context.scene.objects if o.type=='MESH' and o.
             for v,delta in zip(key.data,deltas):v.co+=delta
     for v,delta in zip(obj.data.vertices,deltas):v.co+=delta
 face['quality_finish']='alert lids, continuous cupid bow/lower lip, cheek and mandibular planes'
+for name in ['EyeL','EyeR']:
+    obj=bpy.data.objects[name]
+    centre=(-.03810625 if name.endswith('L') else .03810625)
+    for vertex in obj.data.vertices:
+        p=G(vertex.co);p.x=centre+(p.x-centre)*1.16;vertex.co=B(p)
 # Rebuild closure from the new rest lids so widening does not leave a blink gap.
 blink=face.data.shape_keys.key_blocks['blink']
 for base,vertex in zip(face.data.shape_keys.key_blocks[0].data,blink.data):
@@ -146,7 +156,8 @@ for ring,t in enumerate([.15,.30,.45,.60,.73,.85,.94,1.]):
     current=[]
     for vertex,angle in zip(ordered,ring_angles):
         p=G(vertex.co)
-        x=.033*math.cos(angle);arc=-.0004-.0012*(x/.032)**2
+        x=.033*math.cos(angle)
+        arc=-.0006-.0012*(x/.033)**2+.0006*gauss(abs(x),0,.008,0,.006,1)-.0007*gauss(x,0,0,0,.005,1)
         inner=Vector((x,arc+(.0007 if math.sin(angle)>0 else .0013)*math.sin(angle),.111-.013*(x/.035)**2))
         q=p.lerp(inner,t)
         # Follow the original outer skin in depth; a linear cone from cheek to
@@ -155,7 +166,8 @@ for ring,t in enumerate([.15,.30,.45,.60,.73,.85,.94,1.]):
         # pocket. Those folds caused thin grooves even when rays hit anterior
         # geometry. The outer ring stays welded to the resculpted cheek skin.
         q.z=p.z+(inner.z-p.z)*smooth(0.,1.,t)
-        q.z+=.0012*math.exp(-((t-.80)/.16)**2)*abs(math.sin(angle))
+        q.z+=.0028*math.exp(-((t-.80)/.16)**2)*abs(math.sin(angle))
+        if math.sin(angle)>0:q.y+=.0011*gauss(abs(q.x),0,.009,0,.007,1)*math.sin(t*math.pi)
         new=bm.verts.new(B(q));new[weights][head_index]=1.
         for name,layer in shape_layers:
             delta=vertex[layer]-vertex.co
@@ -550,7 +562,7 @@ for obj in list(bpy.context.scene.objects):
 # Each option now exports its actual triangle surface for host contact queries.
 # Structural base sculpt is shared; frontal identities remain separate profiles.
 face.data.calc_loop_triangles()
-collision={'version':6,'units':'game coordinates, original metres multiplied by 4',
+collision={'version':7,'units':'game coordinates, original metres multiplied by 4',
            'vertices':[list(G(v.co)*4) for v in face.data.shape_keys.key_blocks[0].data],
            'triangles':[list(t.vertices) for t in face.data.loop_triangles],
            'faces':[[list(G(v.co)*4) for v in face.data.shape_keys.key_blocks[0 if i==0 else f'identity_{i}'].data] for i in range(6)]}

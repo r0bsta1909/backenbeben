@@ -2474,3 +2474,23 @@ Beleg/Erzeugungsprompt validation/FACE_ART_REWORK_2026-10-14.txt.
 Neue Textur bleibt frontalprojiziert, extreme Mundinnenraeume vereinfacht.
 Gemeinsamer Schaedel/Rig und vorhandene Haare erhalten; keine finale Kunstabnahme.
 Arena/Tisch/Hoenhorst unveraendert. V14weiteralt; keine neue Release-ZIP.
+
+PLASTISCHER COMIC / AUGEN UND LIPPENBOGEN — 14.10.2026
+Auch32vomNutzerweiteroptischunzufrieden bewertet; keine Kunstabnahme behaupten.
+Canthi/Sklera horizontal16%breiter bei gleichen Iriszentren, Iris blau/grau mit
+radialer Zeichnung/Aussenring/zwei Reflexen. Saum mit echtem Cupidbogen, staerkere
+Lippenrolle, nur35%statt88%oralerNormalentransfer fuer sichtbare Volumina.
+Wangen/Orbital-/Unterlid-/Masseter-Ueberzeichnung reduziert. Mehr frontaler Toon-
+Key, heller Schatten, kuehlere Haarlichter. Interner illustration_depth=0/1 zeigt
+klare Comic-Flaechen oder weichere plastische Comic-Volumina. B=1vorlaeufigdefault.
+Konkrete A/B-Praeferenzfrage gestellt, Antwort offen; nicht als Nutzerwahl ausgeben.
+Neuercapture_face_style.gd rendert denselben Kopf/Kamera/Licht in720x800jeStil.
+Alle6/6/6Formoptionen/7Hautfarben erhalten. Profile neu, CPU/GPU-Kieferbogen
+identisch; CHARAKTER-/KONTAKTVERSION7 Host+Webshell, alte6abweisen. Gesten3bleiben.
+Quelle/172TestsPASS33.959s/216Formen/7Farben/Blinks/Zahnreset/GPU-Normalen/
+ArenaMatch/Import/Webexport PASS. ZweiClient-Variantenkampf/Replay und realer
+Mauskontakt-/Spiegelcheck PASS errors[]. Onset/RuecklaufPASS. RTX3090median16.7ms,
+idle p9533.4ms: keine allgemeine60FPS-Freigabe. Testhost8896beendet.
+Beleg validation/FACE_DEPTH_EYES_2026-10-14.txt. Vorschauen33-*.png samtA/B.
+GemeinsamerSchaedel/Rig undvereinfachteExtremmundraeumeweiterhin. KeineneueTextur.
+Arena/Tisch/Hoenhorstunveraendert. V14bleibtalt, keineReleaseZIP/Kunstabnahme.

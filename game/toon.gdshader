@@ -9,6 +9,7 @@ uniform bool eye_surface = false;
 uniform bool iris_surface = false;
 uniform bool pupil_surface = false;
 uniform bool skin_surface = false;
+uniform float illustration_depth : hint_range(0.0,1.0) = 1.0;
 uniform float tooth_health = 1.0;
 uniform int beard_style = 1;
 uniform int face_style = 0;
@@ -32,7 +33,7 @@ void vertex() {
         float lip_roll=-.21*exp(-pow((p.y-.012)/.014,2.0))
             +.15*exp(-pow((p.y+.020)/.014,2.0));
         vec3 oral_normal=normalize(vec3(p.x*.5,(p.y+.04)*.65+lip_roll,.5));
-        NORMAL=normalize(mix(NORMAL,oral_normal,oral_mask*.88));
+        NORMAL=normalize(mix(NORMAL,oral_normal,oral_mask*.35));
     }
     NORMAL=deform_face_normal(p,NORMAL);
     p=deform_face(p);
@@ -41,11 +42,12 @@ void vertex() {
 void fragment() {
     vec3 n = normalize(NORMAL);
     vec3 world_normal=normalize(mat3(INV_VIEW_MATRIX)*n);
-    float d = dot(world_normal, normalize(vec3(-0.5,0.7,0.8)));
+    float d = dot(world_normal, normalize(vec3(-0.32,0.42,0.85)));
     float edge = smoothstep(face_skin?-.04:.06,face_skin?.055:.20,dot(n,normalize(VIEW)));
     vec3 color=base_color.rgb;
     color=mix(color,color*vec3(.64,.57,.46),clamp(1.0-tooth_health,0.0,1.0)*.35);
     if(eye_surface) {
+        if(!iris_surface)color=vec3(.78,.77,.71);
         // Painted socket shadow follows authored UV2, never the camera/world axes.
         color*=1.0-.30*smoothstep(.58,.94,UV2.x);
     }
@@ -57,16 +59,17 @@ void fragment() {
         float phase=atan(q.y,q.x)*38.0+radius*12.0;
         float detail=(.5+.5*sin(phase))*(1.0-smoothstep(.65,2.0,fwidth(phase)));
         if(iris_surface) {
-            color=mix(vec3(.19,.22,.13),vec3(.34,.37,.23),smoothstep(.30,.65,radius));
-            color*=.82+.18*detail;
-            color=mix(color,vec3(.065,.08,.055),smoothstep(.85,1.05,radius));
+            color=mix(vec3(.11,.17,.20),vec3(.24,.31,.33),smoothstep(.30,.65,radius));
+            color*=.74+.26*detail;
+            color=mix(color,vec3(.028,.045,.052),smoothstep(.85,1.05,radius));
             color*=1.0-.40*smoothstep(.45,.88,UV2.x);
         }
-        float glint=1.0-smoothstep(.12,.25,length(q-vec2(-.23,.20)));
-        color=mix(color,vec3(.82,.88,.80),glint*.85);
+        float glint=1.0-smoothstep(.13,.24,length(q-vec2(-.27,.28)));
+        float bounce=1.0-smoothstep(.035,.085,length(q-vec2(.30,-.25)));
+        color=mix(color,vec3(.96,.98,1.0),glint*.96+bounce*.45);
     }
     if(hair_surface) {
-        color+=vec3(.045,.026,.012)*smoothstep(.15,.75,d);
+        color+=vec3(.025,.030,.038)*smoothstep(.15,.75,d);
         vec3 h=skin_position/geometry_scale;
         float strand_phase=atan(h.x,h.z)*160.0+sin(h.y*130.0)*.8+h.y*70.0;
         float strand=sin(strand_phase);
@@ -177,12 +180,14 @@ void fragment() {
     if(face_skin) {
         // One coherent illustration key defines the facial planes. Summing
         // stepped responses from every stage light produced mottled islands.
-        float w=clamp(fwidth(d),.018,.045);
+        float w=max(clamp(fwidth(d),.018,.045),illustration_depth*.14);
         float middle=smoothstep(.12-w,.12+w,d);
         float highlight=smoothstep(.68-w,.68+w,d);
-        vec3 shadow_tint=vec3(.64,.62,.61);
+        vec3 shadow_tint=vec3(.73,.70,.67);
         vec3 plane_tint=mix(shadow_tint,vec3(.91,.89,.85),middle);
         plane_tint=mix(plane_tint,vec3(1.06,1.03,.97),highlight);
+        vec3 drawn_volume=mix(shadow_tint,vec3(1.06,1.03,.97),smoothstep(-.2,1.0,d));
+        plane_tint=mix(plane_tint,drawn_volume,illustration_depth*.30);
         color*=plane_tint;
     }
     ALBEDO = mix(vec3(0.035,0.032,0.045), color, edge);
