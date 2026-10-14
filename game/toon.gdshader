@@ -36,7 +36,7 @@ void fragment() {
     color=mix(color,color*vec3(.64,.57,.46),clamp(1.0-tooth_health,0.0,1.0)*.35);
     if(eye_surface) {
         // Painted socket shadow follows authored UV2, never the camera/world axes.
-        color*=1.0-.60*smoothstep(.45,.88,UV2.x);
+        color*=1.0-.30*smoothstep(.58,.94,UV2.x);
     }
     if(iris_surface || pupil_surface) {
         vec3 local=skin_position/geometry_scale;
@@ -50,7 +50,7 @@ void fragment() {
             color=mix(color,vec3(.065,.08,.055),smoothstep(.85,1.05,radius));
             color*=1.0-.40*smoothstep(.45,.88,UV2.x);
         }
-        float glint=1.0-smoothstep(.10,.22,length(q-vec2(-.23,-.08)));
+        float glint=1.0-smoothstep(.12,.25,length(q-vec2(-.23,.20)));
         color=mix(color,vec3(.82,.88,.80),glint*.85);
     }
     if(hair_surface) {
@@ -132,13 +132,20 @@ void fragment() {
                 vec3 delta=skin_position-region_centers[i];
                 vec3 distance=delta/max(region_radii[i],vec3(.001));
                 float local_patch=exp(-dot(distance,distance)*1.4)*smoothstep(.05,.20,skin_position.z);
-                color=mix(color,vec3(.20,.07,.14),local_patch*region_injuries[i].x*.70);
-                float cut_line=abs(delta.y-delta.x*.28);
+                float mottling=.86+.14*sin(delta.x*93.+float(i)*2.3)*sin(delta.y*71.+float(i));
+                color=mix(color,vec3(.35,.075,.095),local_patch*region_injuries[i].x*.24);
+                color=mix(color,vec3(.20,.07,.14),local_patch*mottling*region_injuries[i].x*.58);
+                // Short tapered lacerations with irregular edges, anchored to
+                // the injured region rather than crossing the entire cheek.
+                float along=delta.x/max(region_radii[i].x,.001);
+                float taper=1.0-smoothstep(.35,.78,abs(along));
+                float cut_line=abs(delta.y-delta.x*.20-.004*sin(along*7.+float(i)*1.7));
                 float line_width=max(fwidth(cut_line),.001);
-                float wound=(1.0-smoothstep(.002,.002+line_width,cut_line))*local_patch;
+                float wound=(1.0-smoothstep(.003*taper,.003*taper+line_width,cut_line))*local_patch*taper;
                 color=mix(color,vec3(.30,.012,.021),wound*region_injuries[i].z);
-                float flow=abs(delta.x-.013*sin(delta.y*52.0));
-                float blood=(1.0-smoothstep(.003,.003+line_width,flow))
+                float flow=abs(delta.x-.010-.012*delta.y-.003*sin(delta.y*21.+float(i)*1.7));
+                float flow_width=.002+.003*smoothstep(-.13,-.02,delta.y);
+                float blood=(1.0-smoothstep(flow_width,flow_width+line_width,flow))
                     *smoothstep(-.20,-.15,delta.y)*(1.0-smoothstep(-.025,0.,delta.y))*local_patch;
                 color=mix(color,vec3(.34,.014,.022),blood*region_injuries[i].w);
             }
@@ -149,20 +156,21 @@ void fragment() {
         color*=mix(1.12,.78,smoothstep(.02,.35,tone));
     }
     ALBEDO = mix(vec3(0.035,0.032,0.045), color, edge);
-    EMISSION = ALBEDO * (skin_surface ? vec3(.29,.30,.32) : vec3(.20,.22,.26));
+    EMISSION = ALBEDO * (skin_surface ? vec3(.34,.35,.37) : vec3(.20,.22,.26));
 }
 
 void light() {
     float facing=dot(normalize(NORMAL),normalize(LIGHT));
     // Keep three flat ink bands, but cover their boundaries across a pixel.
     // A hard comparison creates crawling stair-steps during head/hand motion.
-    float pixel_width=clamp(fwidth(facing)*.75,.001,.06);
-    float band=skin_surface ? .20+.43*smoothstep(.12-pixel_width,.12+pixel_width,facing)
-        +.25*smoothstep(.65-pixel_width,.65+pixel_width,facing)
+    float pixel_width=clamp(fwidth(facing)*.75,skin_surface?.025:.001,.06);
+    float band=skin_surface ? .30+.34*smoothstep(.12-pixel_width,.12+pixel_width,facing)
+        +.22*smoothstep(.65-pixel_width,.65+pixel_width,facing)
         : .10+.52*smoothstep(.12-pixel_width,.12+pixel_width,facing)
         +.38*smoothstep(.65-pixel_width,.65+pixel_width,facing);
     // Real shadow attenuation keeps the hand, nose and face in one space.
-    DIFFUSE_LIGHT += band * ATTENUATION * LIGHT_COLOR / PI;
+    float attenuation=skin_surface ? mix(.28,ATTENUATION,.72) : ATTENUATION;
+    DIFFUSE_LIGHT += band * attenuation * LIGHT_COLOR / PI;
     // Several stage lights used to accumulate into clipped white skin.
     // Cap only the skin response, retaining actual hand/nose shadow attenuation.
     if(skin_surface)DIFFUSE_LIGHT=min(DIFFUSE_LIGHT,vec3(.72));

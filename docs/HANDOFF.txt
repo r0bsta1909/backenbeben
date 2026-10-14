@@ -2427,3 +2427,25 @@ Boundrig, Zahnkronen statt Kugeln, naeherer Editor und finale Konturschale gesic
 Host-/Renderer-Version4 erforderlich; keine alte V14-Renderer/Host-Mischung.
 Physikgesture_version3 bleibt. Rohlogs ausgeschlossen; Testhosts beendet.
 V14 bleibt alt, kein neuer menschlicher Abnahmetest oder neues Releasepaket.
+
+COMIC-KOPF / VERBUNDENE LIPPEN — 14.10.2026
+Nach kritischer Sichtung: Mundflaeche lokal mit vier verbundenen Lippenringen
+ersetzt, innere isolierte Tasche entfernt. Aeusseren Hautrand statt inneren
+Mundrand verbinden; monotone Ringpunkte und abgesicherte Tiefenprojektion.
+Neue Regression belegt einen einzigen kontinuierlichen geschlossenen Rand.
+Kieferform am Lippenbogen ausgerichtet, Host/Shader identisch. Zahnsitz ohne
+helle Punkte am neutralen Mund; untere Zaehne weiterhin real mandibular gebunden.
+Offenere Lider/kleine Varianten; Blink nicht in die Brauenregion ziehen.
+Sechs untere Kiefersilhouetten deutlicher, Schmal enger. Kopfhaut/Haarpassung
+erhalten. Toon-Baender ruhiger/heller, Figur-Aufhellung auf Ebene4; keine
+Aenderung an Tisch-/Arena-/Sponsor-Assets. Wunden kuerzer/unregelmaessiger,
+Bluterguesse farblich abgestuft. Alle6/6/6 Optionen und7 Farben erhalten.
+CHARAKTER-/KONTAKTVERSION5: Host+Webshell zusammen aktualisieren; alte4abweisen.
+Gestenversion3 und Schadenszustandversion1 unveraendert.
+172Servertests final PASS38.595s; Quelle/Randregression/216Formen/7Farben/
+Zahnreset/Normalen/ArenaMatch/Import/Webexport PASS. ZweiClient-LAN/Replay
+und eigener Browser-Maustreffer-/Kontakt-/Spiegelcheck PASS errors[].
+Nahansichten/Profil/Grinsen/6Blinks/Schadensextreme gesichtet.
+Beleg validation/FACE_MOUTH_POLISH_2026-10-14.txt; Vorschauen31-*.png.
+Keine finale menschliche Designabnahme. Extreme Mundinnenraeume noch vereinfacht.
+V14 weiterhin alt. Keine neue Release-ZIP. Eigene Testhosts nach Pruefung beenden.

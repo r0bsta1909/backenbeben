@@ -153,6 +153,12 @@ func build_arena() -> void:
 	support_light.rotation_degrees=Vector3(-55,-25,0)
 	support_light.light_color=Color("b8c5d8");support_light.light_energy=.32
 	support_light.light_cull_mask=2;add_child(support_light)
+	# Actor-only frontal bounce keeps faces readable against the bright painted
+	# arena without changing the approved platform/table illumination.
+	var face_fill:=DirectionalLight3D.new();face_fill.name="FaceBounce"
+	face_fill.rotation_degrees=Vector3(-25,15,0)
+	face_fill.light_color=Color("dce5ef");face_fill.light_energy=.30
+	face_fill.light_cull_mask=4;add_child(face_fill)
 	arena_stage=arena_presentation.stage
 	camera=Camera3D.new();camera.position=Vector3(.30,.70,3.3);camera.fov=62
 	add_child(camera);camera.look_at(Vector3(.22,-.55,0));camera.current=true
@@ -162,6 +168,7 @@ func prepare_materials(root: Node) -> void:
 	physics_materials[root.get_instance_id()] = []
 	var shared_materials: Dictionary = {}
 	for node in root.find_children("*", "MeshInstance3D", true, false):
+		node.layers=node.layers|4
 		node.set_meta("base_position", node.position)
 		for i in range(node.mesh.get_surface_count()):
 			var m = node.mesh.surface_get_material(i)

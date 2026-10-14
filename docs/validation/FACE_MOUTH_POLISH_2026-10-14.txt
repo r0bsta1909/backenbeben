@@ -1,0 +1,83 @@
+BACKENBEBEN — COMIC-KOPF / VERBUNDENE LIPPEN — 14.10.2026
+
+AUFTRAG
+Nach visueller Kritik am letzten Entwurf: zuerst den gemeinsamen Kopf verbessern,
+dann sechs Varianten und Verletzungen pruefen. Comicstil und freie Kombinationen
+bleiben erhalten. Technische Pruefungen sind keine menschliche Designabnahme.
+
+AENDERUNGEN
+Lokale Mundflaeche neu aufgebaut: vier zusammenhaengende konzentrische Ringe,
+an den aeusseren Hautrand angeschlossen, mit echten Lippenvolumen und Mundspalt.
+Die ausgeschnittene innere Mundtasche wird als isolierte Flaeche entfernt.
+Rim-Punkte werden monoton entlang des Randes angeordnet; Tiefenprojektionen durch
+die alte Mundnaht auf die Kopfinnenseite werden verworfen. Der innere Lippenrand
+hat eine explizite kontinuierliche Tiefe. Neue Vertices besitzen UVs, Ausdrucks-
+formen und Hautgewichte; neun anatomische Controller und 16 Zahnzustaende erhalten.
+Zahnsitz unter den Lippen korrigiert, damit im Ruhezustand keine weissen Punkte
+durchscheinen. Untere Kronen bleiben an den realen Kiefer gebunden.
+
+Kieferverformung folgt einem gekruemmten Lippenbogen statt einer pauschalen
+horizontalen Y-Grenze. Oberlippe wird weniger mit nach unten gezogen, Mundwinkel
+laufen seitlich aus. Host und Renderer verwenden dieselbe permanente Formregel.
+Gemeinsame Oberlider etwas offener; Blinkform auf der neuen Basis aufgebaut und
+gegen die Brauenpartie begrenzt. Kleine individuelle Lidvariationen. Untere
+Kieferkontur breiter/enger/weicher je Identitaet; Schmal hat eine schmalere
+Silhouette. Kopfhaut oberhalb .17 m bleibt innerhalb .1 mm kompatibel mit Haaren.
+Sechs reale Kontaktprofile erneut aus der Blenderquelle exportiert.
+
+Hautschatten heller, weichere Uebergaenge an Toon-Bandgrenzen und geringere
+Augenabschattung. Figuren erhalten eine eigene frontale Aufhellung auf Ebene4;
+genehmigte Plattform-/Tischbeleuchtung unveraendert. Nasenschatten bleiben als
+Formmerkmal sichtbar. Irisreflex etwas klarer. Regionale Bluterguesse mit
+Rot-/Violettabstufung, kuerzere unregelmaessige und auslaufende Schnitte,
+Blutfluss weniger sinusfoermig. Weiterhin prozedurale stilisierte Verletzungen.
+
+VERTRAG
+Charakter-/Kontaktmodell Version5 erforderlich (Host und Webshell).
+Alte Version4 wird beim Join mit einer Neuladeaufforderung abgewiesen.
+Gestenprotokoll unveraendert Version3, regionaler Schadenszustand Version1.
+Original character-v3.blend unveraendert. Nur die abgeleitete Quelle/GLB ersetzt.
+216 Formkombinationen und sieben unabhaengige Hauttoene erhalten.
+
+VALIDIERUNG
+Finale Blenderquelle: Optionen, Gewichtssummen, sechs exakte Hostprofile,
+gebundene Controller, Zahnkronen/Chipmorphs, gepackte Textur PASS.
+Neue Regression: ein durchgehender geschlossener Lippenrand, keine mehreren
+abgetrennten Mundraender. Der Test entdeckte die nach innen projizierten Punkte;
+die Geometrie wurde korrigiert, die Pruefung unveraendert bestanden.
+172 Servertests mit finaler Kontaktflaeche PASS, 38.595 s.
+Native216 Kombinationen, sieben Hauttoene, Zahnmaterial-/Chip-/Fehlend-/Reset-
+Pruefung, echte Kieferbewegung, FirstPerson PASS. ArenaMatch/KO/Spiegel PASS.
+GPU-Normalenpruefung PASS. Strenger Import und Webexport PASS.
+Zwei Browserclients: Auswahl, Persistenz, Drehung/Nahansicht, LAN, vier Layouts,
+Reset/Zufall und reale Protokolltreffer mit regionalen Replays PASS errors[].
+Separater echter Maus-/Kontaktansichten-/Spiegel-/Replaytest PASS errors[].
+Native Front/Profil/Dreiviertel/Grinsen/Hautextreme/Bart sowie sechs neutralen
+Identitaeten, sechs Lidschluesse und sechs regionalen Extremfixtures gesichtet.
+Diagnostischer Clay-/Zahnausblendvergleich zur Trennung von Geometrie und Shader.
+
+Timing/Onset vor der letzten rein lokalen Lippen-Tiefenkorrektur:
+1920x1080, Chromium ANGLE RTX3090 D3D11,90 RAF-Samples je Ansicht:
+idle median17.6/p9534.4/max35.9ms, Kontakt17.4/18.1/18.4ms,
+verletzt17.5/18.1/18.1ms; Onset/Ruecklauf PASS errors[]. Kein allgemeiner60FPS-Pass.
+
+GRENZEN / VISUELLE ABNAHME
+Dies ist eine ueberarbeitete gemeinsame Kopfgrundlage, keine finale Kunstabnahme.
+Extreme Mundoeffnungen zeigen weiterhin einen vereinfachten dunklen Innenraum;
+Kiefer-/Lippenvolumen und die sechs Persoenlichkeiten koennen weiter verfeinert
+werden. Schadensfixtures nutzen gezielte wiederholte Treffer unabhaengig vom
+Match-KO. Regionales Arcade-Knochenmodell, keine medizinische Bruchsimulation,
+keine frei geloesten Schaedel- oder Zahnfragmente. Physik-Konvergenzgrenzen des
+vorherigen Milestones gelten weiter; Tests belegen keine universelle Physikfreigabe.
+Keine Aenderung an Hoenhorst, Arena-Grafiken oder Tischgeometrie.
+V14-Download bleibt aelterer Stand; kein neues Releasepaket erzeugt.
+
+REPRODUKTION
+Blender --background --python scripts/build_character_options.py
+Blender -b assets-source/character-customizable.blend --python scripts/validate_character_options.py
+scripts/build.ps1
+Godot --path game --script ../scripts/capture_face_quality.gd -- --identities
+Godot --path game --script ../scripts/capture_face_quality.gd -- --identities --blinks
+Godot --path game --script ../scripts/capture_face_quality.gd -- --clay
+Godot --path game --script ../scripts/capture_face_damage.gd
+Neue Vorschauen: Arena-Design/31-comic-gesichter.png und31-mund-und-schaeden.png.

@@ -1,5 +1,5 @@
 """Blender -b assets-source/character-customizable.blend --python this_file."""
-import bpy, json, math
+import bpy, bmesh, json, math
 from mathutils.bvhtree import BVHTree
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
@@ -21,9 +21,26 @@ for index in range(1,6):
     distance=sum((a.co-b.co).length for a,b in zip(basis.data,key.data))
     assert distance>.001, ('empty identity',index)
     signatures.add(round(distance,7))
+    # Lower-jaw identity changes are intentional; scalp stays shared for hair.
     for a,b in zip(basis.data,key.data):
-        if abs(a.co.x)>=.045:assert (a.co-b.co).length<1e-8
+        if a.co.z>.17:assert (a.co-b.co).length<.0001
 assert len(signatures)==5
+# Regression: the oral rim must be one continuous closed loop, rather than the
+# former several depth-dependent holes and loose inner-skin strips.
+bm=bmesh.new();bm.from_mesh(face.data)
+oral_edges=[e for e in bm.edges if len(e.link_faces)==1 and all(abs(v.co.x)<.035 and -.02<v.co.z<.02 and -v.co.y>.085 for v in e.verts)]
+assert len(oral_edges)>16
+adjacency={}
+for edge in oral_edges:
+    a,b=edge.verts;adjacency.setdefault(a,set()).add(b);adjacency.setdefault(b,set()).add(a)
+assert all(len(neighbors)==2 for neighbors in adjacency.values()), 'Broken oral rim'
+seen=set();pending=[next(iter(adjacency))]
+while pending:
+    vertex=pending.pop()
+    if vertex in seen:continue
+    seen.add(vertex);pending.extend(adjacency[vertex]-seen)
+assert len(seen)==len(adjacency), 'Multiple detached oral rims'
+bm.free()
 for index in range(1,6):
     surface=BVHTree.FromPolygons([v.co for v in face.data.shape_keys.key_blocks[f'identity_{index}'].data],
                                  [tuple(p.vertices) for p in face.data.polygons])
@@ -39,7 +56,7 @@ assert images and all(i.packed_file for i in images)
 with bpy.data.libraries.load(str(ROOT/'assets-source/character-v3.blend')) as (source,target):
     target.objects=['Face']
 original=target.objects[0]
-assert len(original.data.vertices)==len(face.data.vertices)
+assert len(face.data.vertices)>len(original.data.vertices)  # connected lip rings appended
 for a,b in zip(original.data.shape_keys.key_blocks[0].data,basis.data):
     assert all(math.isfinite(value) for value in b.co)
 # The structural base changed deliberately. Every variant must now match its
