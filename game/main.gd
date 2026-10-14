@@ -175,7 +175,7 @@ func prepare_materials(root: Node) -> void:
 			if m:
 				var tissue_part: bool = str(node.name) in ["Face","FaceInk","MouthLine","MouthInterior","LidsL","LidsR"] or str(node.name).begins_with("Beard")
 				var head_part: bool = str(node.name).begins_with("Hair") or str(node.name).begins_with("Beard") or str(node.name).begins_with("Teeth") or str(node.name) in ["Face","FaceInk","MouthLine","MouthInterior","Teeth","LidsL","LidsR","EyeL","EyeR","IrisL","IrisR","PupilL","PupilR","BrowL","BrowR","HairCap","EarL","EarR","EarFoldL","EarFoldR","NostrilL","NostrilR"]
-				var material_key: String = m.resource_name+str(tissue_part)+str(head_part)+str(node.name=="Face")+str(str(node.name).begins_with("Pupil"))+str(node.position)
+				var material_key: String = m.resource_name+str(tissue_part)+str(head_part)+str(node.name=="Face")+str(node.name=="HairCap")+str(str(node.name).begins_with("Pupil"))+str(node.position)
 				if str(node.name).begins_with("Teeth"):material_key+=str(node.name)
 				if shared_materials.has(material_key):
 					node.set_surface_override_material(i,shared_materials[material_key])
@@ -189,11 +189,12 @@ func prepare_materials(root: Node) -> void:
 				copy.set_shader_parameter("geometry_scale",4.0)
 				copy.set_shader_parameter("face_skin",str(node.name)=="Face")
 				copy.set_shader_parameter("hair_surface",m.resource_name in ["Hair","Beard"])
+				copy.set_shader_parameter("groom_surface",str(node.name)=="HairCap")
 				copy.set_shader_parameter("eye_surface",m.resource_name in ["EyeWhite","Iris"])
 				copy.set_shader_parameter("iris_surface",str(node.name).begins_with("Iris"))
 				copy.set_shader_parameter("pupil_surface",str(node.name).begins_with("Pupil"))
 				copy.set_shader_parameter("skin_surface",m.resource_name in ["Skin","FaceSkin","SkinShadow"])
-				if str(node.name)=="Face":copy.set_shader_parameter("face_ink",load("res://assets/face_ink_v3.png"))
+				if str(node.name)=="Face":copy.set_shader_parameter("face_ink",load("res://assets/face_ink_v4.png"))
 				copy.set_shader_parameter("tissue",tissue_part)
 				copy.set_shader_parameter("head_part",head_part)
 				physics_materials[root.get_instance_id()].append(copy)

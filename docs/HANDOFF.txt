@@ -2494,3 +2494,25 @@ idle p9533.4ms: keine allgemeine60FPS-Freigabe. Testhost8896beendet.
 Beleg validation/FACE_DEPTH_EYES_2026-10-14.txt. Vorschauen33-*.png samtA/B.
 GemeinsamerSchaedel/Rig undvereinfachteExtremmundraeumeweiterhin. KeineneueTextur.
 Arena/Tisch/Hoenhorstunveraendert. V14bleibtalt, keineReleaseZIP/Kunstabnahme.
+
+NUTZERREFERENZ / GEZEICHNETER COMICLOOK — 14.10.2026
+Nutzer lehnt BEIDE33Varianten ab. Neue XIII-Desktopillustration ist Stilziel;
+Referenz nicht insRepo kopieren. Noch keine menschliche Kunstabnahme.
+Lider weniger starr/geoeffnet, innereBrauen tiefer, Lippenringe plastischer.
+Hero-HairCap durch gekruemmte geschlossene tapernde Bueschel mitGroomUV ersetzt;
+Stirninseln korrigiert. Andere modulare Haare/Baerte weiterhin einfacher.
+Neue Built-in-Imagegen-Zeichnung face_ink_v4.png gepackt undruntimegeladen;
+Miplevel aktiviert, Brushbereiche gegen doppelteBrauen/Lippen/Stirnfalten maskiert.
+Warme Licht-/kuehle Schattenflaechen nachReferenz. Mundpatch-Konturhuelle korrigiert;
+radiale Lippenabschattung und extreme Mundhoehle weiterhin vereinfachteQualitaet.
+Materialcache trennt Groomparam vonanderenHairnodes,216Kombinationstestbelegt.
+CHARACTER_VERSION8 Host+Webshell; alte7abweisen, Gesten3/Schadenszustand1erhalten.
+6exakte neueKontaktprofile,Quelle/172TestsPASS53.531s/216Formen/7Farben/Zahnreset/
+GPU-Normalen/ArenaMatch/ImportWeb PASS. 2Client-Auswahl/LAN/VariantenReplay PASS.
+Zusatz-Maus-/Performancechecks fehlgeschlagen: Debug14Punkte aber6212msGeste
+und6FPS. RTX3090Browser spaeter2FPS auchmitGlatze, GPU87%bei parallelemSpiel.
+KeinePerformancefreigabe, Maus-/Timingchecks bei freierGPU erneutpruefen;
+keineToleranzenlockern und Fehler nichtalsPassausgeben. Testhost8897beendet.
+FinaleVorschauen34-*.png gesichtet; BelegmitPrompt/Grenzen:
+validation/FACE_REFERENCE_LOOK_2026-10-14.txt. KeinReleasezip, V14weiteralt.
+Arena/Tisch/Hoenhorst unangetastet; Quelle character-v3.blend erhalten.

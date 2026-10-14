@@ -1,0 +1,92 @@
+BACKENBEBEN — COMICREFERENZ / ERSTE UEBERTRAGUNG — 14.10.2026
+
+AUFTRAG UND ART DIRECTION
+Nutzer hat BEIDE Varianten33 abgelehnt und danach die XIII-Illustration auf
+seinem Desktop als Ziel gezeigt. B ist damit keine akzeptierte Stilentscheidung.
+Ziel sind sorgfaeltige gezeichnete Anatomie, ausdrucksstarke Augen, geformte
+Lippen, gebuendelte Haare, warme Lichtflaechen und kuehle Schatten.
+Die Referenz ist eine fertige 2D-Illustration. Dieser Stand ist ein echter
+beweglicher Spielkopf, keine behauptete gleichwertige Illustration oder Abnahme.
+
+AENDERUNGEN
+Oberlid in der gemeinsamen Basis weniger aufgerissen; innere Brauen gesenkt
+und weiterhin auf Haut projiziert. Acht verbundene Lippenringe mit staerkerem
+Vermilion-Roll, ausgepraegterem oberem Lippenbogen, kontrollierter Pigmentierung.
+Orale Normalen geglaettet; Konturhuelle an der unteren Mundpatchregion maskiert,
+damit keine schwarzen Stirn-/Kinnschlitze als vermeintliche Zeichnung entstehen.
+Selektive gekruemmte Nasolabial-/Kinnakzente. Keine zweite gemalte Mundnaht.
+
+Hero-Kurzschnitt: alte fuenfseitige flache Keile durch gekruemmte, geschlossene
+tapernde Haarbueschel ersetzt (14 Laengsstationen, 10 Querschnittssamples).
+Eigene GroomUV als zweite UV-Ebene jeStrang; Tinte/Highlights folgen der Kurve.
+Tipps bleiben in der Haarmasse statt als isolierte Ovale auf der Stirn.
+Gemeinsame scalp-kompatible Kappe und Gewichtung erhalten. Materialcache
+unterscheidet HairCap von anderen Haaren, damit Groomparameter nicht auslaufen.
+Andere Frisuren bleiben im bestehenden Modellstil; kein kompletter Hair-Rebuild.
+
+Warm-/Kuehl-Farbwirkung aus der Nutzerreferenz am echten deformierbaren Kopf.
+Schattierung hellt die blaugruenen Seiten auf statt dunkler Olivflaechen.
+Alle Hautfarboptionen behalten ihre separaten Basiswerte; Stillicht faerbt die
+schattierten Stellen. Arena/Table/Sponsorassets (insbesondere Hoenhorst) unberuehrt.
+
+TEXTUR UND PROVENIENZ
+Built-in image_gen.imagegen, kein CLI/API-Fallback. Versioniert lokal:
+E:/Chattie/Projekt BackenBeben/backenbeben/game/assets/face_ink_v4.png.
+Edit-Target: face_ink_v3.png. Stilreferenz: vom Nutzer beigefuegte Desktop-WEBP;
+Referenz NICHT ins Repository kopiert oder veroeffentlicht. Atlaslayout erhalten.
+Neue Gouache-/Tuscheoberflaeche in Blender gepackt und von main.gd geladen.
+Generiertes Bild bleibt eine Textur; Vorschau34 stammt ausschliesslich aus Godot.
+Trotz Clean-Shaven-Anweisung bleiben im Atlas kleine Punkte/Unterlippenlinien;
+untere gemalte Tinte wird fuer glattrasierte/stilisierte Baerte weiterhin maskiert.
+Feine Brushschwankungen begrenzt; gemalte grosse Schatten nicht als Hautton benutzt.
+
+FINALER ERZEUGUNGSPROMPT
+Edit target Image 1: production frontal face texture atlas for a deformable 3D male head. Image 2 is style reference only, use its beautiful drawn anatomy, rich ink and watercolor/gouache brush quality. Preserve Image 1 EXACT framing, square layout, bald scalp, head and neck silhouette, eye centers and nose/mouth coordinates. Repaint with sophisticated mature European action graphic-novel ink-and-gouache art: carefully defined human lids, anatomical nose and lips, delicate varied tapered ink lines and sparse purposeful hatching, subtle skin texture. Clean-shaven adult athletic man, no hair, no beard or stubble at all, no scars. Even flat warm beige base with very restrained soft shading: NO baked teal/orange lighting, NO deep broad shadows, runtime controls lighting. Ink-only small anatomical marks, not blanket hatching. Beautiful precise anatomy, confident artistry like reference, avoid geometric vector-poster fill patches. Keep EXACT face landmark position and neutral expression, do not redesign proportions. Same dark gray background, no text, weapons, clothing, logos. This is a projection texture, NOT a portrait composition. Draw mouth with upper and lower lips at existing positions, no teeth in neutral face.
+
+VERTRAG UND GRENZEN
+CHARACTER_VERSION8 / Host- und Webshell zusammen aktualisiert; alte7abweisen.
+Sechs exakte Kontaktprofile aus der neuen Quelle; Gesten3/Schadenszustand1 erhalten.
+Alle6/6/6 Formen und7 unabhaengige Hautfarben bleiben kombinierbar.
+Quelle character-v3.blend unveraendert; editierbarer character-customizable.blend
+und character_customizable.glb aktualisiert. Kein Releasezip erstellt, V14 bleibtalt.
+Gemeinsamer Schaedel, frontale Texturprojektion, vereinfachte extreme Mundhoehle,
+bestehende anatomische/physikalische Modellgrenzen bleiben. Noch sichtbare radiale
+Schattierung am unteren Lippenpatch sowie einfache andere Haar-/Bartmeshes.
+Nicht als fertige, hochwertige menschlich abgenommene Gesichter deklarieren.
+
+VALIDIERUNG
+Quelle: geschlossener Mundrand, Gewichte,9Controller,16Zaehne,6Kontaktprofile PASS.
+172Python-Tests PASS53.531s. Keine physikalischen Toleranzen/Fixtures geaendert.
+Native216 Kombinationen/7Farben/FirstPerson/Irisparameter PASS; Groommaterial
+aufHairCapbeschraenkt. Zaehne/Chip/Fehlend/Reset/regionaleRuecklaeufe/Kiefer PASS.
+GPU-Normalen und ArenaMatch PASS. Webimport/Export PASS.
+Finale Browser-/Timingresultate und Sichtpruefungen siehe Abschlusseintrag unten.
+
+ABSCHLUSSPRUEFUNG UND OFFENE LEISTUNG
+Zwei Chromium-Clients: Auswahl/Persistenz/RotateZoom/LAN/Layouts/ResetRandom und
+echte Varianten-Treffer/regionale Replays PASS errors[]. Danach reine Material-
+Feinheiten: erweiterte Konturmaskierung, Texturmipmaps aktiviert (textureLod
+brauchte echte Miplevel), Brushmasken gegen doppelte Brauen/Mund-/Stirnfalten.
+Quelle/GPU-Normalen/216Kombinationen getestet; alle finalen Nativebilder gesichtet.
+Skin-/Scalp-/Hairgroom-Parameter bleiben kategorienweise korrekt getrennt.
+
+Zusatzlaeufe mit realer Maus und90RAF-Frames NICHT bestanden: erster Maustest
+wartete vergeblich aufpractice_done; Debuglauf zeigte einen korrekt gesendeten
+practice mit14Punkten, aber6212msDauer statt der kurzen geplanten Testgeste.
+GodotStats meldete6FPS. Erster Performancecheck Timeout beimSeek .8, Wiederholung
+scheiterte spaeter am Vor-Treffer-Schadenssnapshot (Replay war nicht verlaesslich
+innerhalb seiner begrenzten Inspektionszeit pruefbar). Keine FPSzahlen freigeben.
+Separater Lobbyvergleich: RTX3090 ANGLE D3D11, 5FPS, spaeter2FPS sowohl mit dem
+neuen HairCap als auch mitGlatze. Lokale GPU-Abfrage:87%Auslastung bei parallel
+laufendem anderem Spiel. Dieser Zeitpunkt eignet sich nicht als isolierter
+Regressionstest. Das beweist weder einen Haar-/Shaderbug noch allgemeine60FPS.
+Maus-/Timingchecks auf freier GPU erneut ausfuehren, ohne Toleranzen zu lockern.
+Vorherige technische Passes sind kein Gegenbeweis zu diesen fehlgeschlagenen
+Zusatzlaeufen. Menschliche Kunstabnahme fehlt weiterhin.
+
+VORSCHAU / REPRODUKTION
+scripts/capture_face_reference.gd: selber Kopf ohneBart und mitDreitagebart.
+scripts/capture_face_quality.gd -- --hero / --identities / --identities --blinks.
+scripts/capture_face_damage.gd: regionaleExtremfixtures, keine normaleMatchfolge.
+Arena-Design/34-referenz-look.png,34-grundkopf-ingame.png,34-comic-gesichter.png,
+34-kopf-nahansichten.png,34-regionales-schadensmodell.png.

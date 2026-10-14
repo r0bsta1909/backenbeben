@@ -23,6 +23,9 @@ func verify() -> void:
 						var mesh: MeshInstance3D=actor.model.find_child(actor.BEARD_NODES[index],true,false)
 						if mesh==null or mesh.visible!=(index==beard):push_error("Wrong beard visibility");quit(1);return
 				for mesh in actor.model.find_children("*","MeshInstance3D",true,false):
+					if str(mesh.name).begins_with("Hair"):
+						if mesh.get_surface_override_material(0).get_shader_parameter("groom_surface")!=(str(mesh.name)=="HairCap"):
+							push_error("Groom coordinates leaked into another modular hairstyle");quit(1);return
 					if str(mesh.name).begins_with("Iris") or str(mesh.name).begins_with("Pupil"):
 						if mesh.get_surface_override_material(0).get_shader_parameter("face_style")!=face:
 							push_error("Iris detail is not aligned with the selected orbital morph");quit(1);return

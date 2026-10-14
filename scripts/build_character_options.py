@@ -17,7 +17,7 @@ for material in face.data.materials:
     if material.use_nodes:
         for node in material.node_tree.nodes:
             if node.type=='TEX_IMAGE':
-                node.image=bpy.data.images.load(str(ROOT/'game/assets/face_ink_v3.png'));node.image.pack()
+                node.image=bpy.data.images.load(str(ROOT/'game/assets/face_ink_v4.png'));node.image.pack()
 hair_mat = bpy.data.materials['Hair']
 beard_mat = hair_mat.copy(); beard_mat.name = 'Beard'
 def B(p): return Vector((p[0], -p[2], p[1]))
@@ -66,7 +66,10 @@ def face_finish(point):
     # Lift the upper lid locally, rather than enlarging the eyeball. A modest
     # aperture gives a more alert expression while keeping human proportions.
     lid=gauss(abs(x),y,.0381,.096,.017,.008)*smooth(.065,.084,z)
-    p.y+=.0022*lid
+    p.y+=.0003*lid
+    # A shaped upper lid covers more iris than the staring prototype. Keep
+    # the eye centres fixed; expressions and all identities share this rest.
+    p.z+=.0010*gauss(abs(x),y,.039,.095,.022,.006)*front
     # The prototype's narrow eye opening made the iris dominate the whole
     # aperture. Widen the canthi, preserving the globe/iris centre and height.
     eye_frame=gauss(abs(x),y,.0381,.09,.024,.020)*smooth(.064,.080,z)
@@ -166,8 +169,8 @@ for ring,t in enumerate([.15,.30,.45,.60,.73,.85,.94,1.]):
         # pocket. Those folds caused thin grooves even when rays hit anterior
         # geometry. The outer ring stays welded to the resculpted cheek skin.
         q.z=p.z+(inner.z-p.z)*smooth(0.,1.,t)
-        q.z+=.0028*math.exp(-((t-.80)/.16)**2)*abs(math.sin(angle))
-        if math.sin(angle)>0:q.y+=.0011*gauss(abs(q.x),0,.009,0,.007,1)*math.sin(t*math.pi)
+        q.z+=.0048*math.exp(-((t-.80)/.16)**2)*abs(math.sin(angle))
+        if math.sin(angle)>0:q.y+=.0020*gauss(abs(q.x),0,.009,0,.007,1)*math.sin(t*math.pi)
         new=bm.verts.new(B(q));new[weights][head_index]=1.
         for name,layer in shape_layers:
             delta=vertex[layer]-vertex.co
@@ -220,7 +223,8 @@ for name in ['BrowL','BrowR']:
         points=[G(obj.matrix_world @ v.co) for v in old[i:i+4]]
         x=sum(v.x for v in points)/len(points);y=sum(v.y for v in points)/len(points)
         width=(max(v.y for v in points)-min(v.y for v in points))*.5
-        y+=.0012*(1-smooth(.018,.062,abs(x)))
+        # Lower the inner brow into an intentional, focused neutral expression.
+        y-=.0016*(1-smooth(.018,.052,abs(x)))
         stations.append((x,y,width))
     vertices=[];polygons=[];n=len(stations);cross=5
     for surface in range(2):
@@ -405,6 +409,58 @@ bm=bmesh.new();bm.from_mesh(short.data);bm.verts.ensure_lookup_table()
 bmesh.ops.delete(bm,geom=[v for v in bm.verts if v.index not in keep],context='VERTS')
 bm.to_mesh(short.data);bm.free()
 short['cosmetic_geometry']=True
+# Curved overlapping locks replace the hero haircut's flat five-sided wedges.
+# Keep the close scalp cap and shared hairline for every facial identity.
+bm=bmesh.new();bm.from_mesh(cap.data);bm.verts.ensure_lookup_table()
+bmesh.ops.delete(bm,geom=[v for v in bm.verts if v.index not in keep],context='VERTS')
+bm.to_mesh(cap.data);bm.free()
+if not cap.data.uv_layers:cap.data.uv_layers.new(name='UVMap')
+groom=cap.data.uv_layers.new(name='GroomUV')
+for loop in groom.data:loop.uv=(-1,-1)
+groom_parts=[cap]
+import random
+groom_rng=random.Random(341909)
+scalp_center=Vector((0,.115,-.005))
+for index in range(58):
+    theta=index*2.3999632297+.13*math.sin(index*2.1)
+    elevation=math.asin(.28+.69*(index+.5)/58)
+    direction=Vector((math.sin(theta)*math.cos(elevation),math.sin(elevation),math.cos(theta)*math.cos(elevation)))
+    base=scalp(direction,0);normal=(base-scalp_center).normalized()
+    if base.y<.146 or base.z<-.055:continue
+    front_lock=base.z>.006 and base.y>.175
+    comb=Vector((-.85,-.12,.60)) if front_lock else Vector((-.7,-.08,-.65))
+    tangent=(comb-normal*comb.dot(normal)).normalized()
+    length=groom_rng.uniform(.055,.085) if front_lock else groom_rng.uniform(.035,.052)
+    width=groom_rng.uniform(.008,.013) if front_lock else groom_rng.uniform(.005,.008)
+    lift=groom_rng.uniform(.008,.013) if front_lock else .005
+    vs=[];fs=[];groom_coords=[];rows=14;cross=10
+    for row in range(rows):
+        t=row/(rows-1)
+        flow=base+tangent*length*t+Vector((-.007*math.sin(t*math.pi),0,0))
+        n=(flow-scalp_center).normalized();center=scalp(n,0)
+        center+=n*(-.0018+lift*math.sin(t*math.pi*.85))
+        # Tips remain within the continuous hair mass, rather than emerging
+        # as isolated, eyebrow-like ovals on the forehead.
+        hair_floor=.100+.063*smooth(-.005,.08,center.z)-.005*smooth(.055,.10,abs(center.x))
+        if center.z>.035:center.y=max(center.y,hair_floor+.008)
+        across=n.cross(tangent).normalized()
+        breadth=width*(.80+.20*math.sin(t*math.pi))*(1-t)**.65+.00013
+        height=(.0010+.0027*math.sin(t*math.pi))*(1-t)+.00015
+        for col in range(cross):
+            a=math.tau*col/cross
+            vs.append(center+across*(breadth*math.cos(a))+n*(height*math.sin(a)))
+            groom_coords.append((t,col/cross))
+        if row:
+            for col in range(cross):fs.append(((row-1)*cross+col,(row-1)*cross+(col+1)%cross,row*cross+(col+1)%cross,row*cross+col))
+    fs.extend([tuple(reversed(range(cross))),tuple(range((rows-1)*cross,rows*cross))])
+    lock=mesh('GroomLock',vs,fs,hair_mat)
+    lock.data.uv_layers.new(name='UVMap');uv=lock.data.uv_layers.new(name='GroomUV')
+    for loop in lock.data.loops:uv.data[loop.index].uv=groom_coords[loop.vertex_index]
+    bm=bmesh.new();bm.from_mesh(lock.data);bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces));bm.to_mesh(lock.data);bm.free()
+    groom_parts.append(lock)
+cap=join('HairCap',groom_parts);bind(cap)
+cap['groom']='curved tapered locks; UV2 follows each strand; scalp compatible'
+
 def base_cap(name):
     obj=short.copy();obj.data=short.data.copy();obj.name=name;bpy.context.scene.collection.objects.link(obj);return obj
 
@@ -562,7 +618,7 @@ for obj in list(bpy.context.scene.objects):
 # Each option now exports its actual triangle surface for host contact queries.
 # Structural base sculpt is shared; frontal identities remain separate profiles.
 face.data.calc_loop_triangles()
-collision={'version':7,'units':'game coordinates, original metres multiplied by 4',
+collision={'version':8,'units':'game coordinates, original metres multiplied by 4',
            'vertices':[list(G(v.co)*4) for v in face.data.shape_keys.key_blocks[0].data],
            'triangles':[list(t.vertices) for t in face.data.loop_triangles],
            'faces':[[list(G(v.co)*4) for v in face.data.shape_keys.key_blocks[0 if i==0 else f'identity_{i}'].data] for i in range(6)]}

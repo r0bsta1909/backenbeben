@@ -7,9 +7,9 @@ from contact_v3 import projected
 
 class RegionalDamageTests(unittest.TestCase):
     def test_old_character_builds_cannot_use_new_collision_surfaces(self):
-        for version in [None,1,3,4,5,6,8]:
+        for version in [None,1,3,4,5,6,7,9]:
             with self.assertRaises(ValueError):check_character_version({'character_version':version})
-        check_character_version({'character_version':7})
+        check_character_version({'character_version':8})
     def player(self):return {'damage':0.,'stun':0.,'face_damage':healthy_face()}
     def scored(self,position,**extra):
         return dict(hit=True,quality=1.,side='L' if position[0]<0 else 'R',position=position,**extra)

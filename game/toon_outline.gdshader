@@ -16,6 +16,6 @@ void vertex() {
 void fragment() {
     // The real oral opening has its own cavity/rim. An inverted hull over
     // that narrow boundary creates self-intersecting black slivers when open.
-    if(face_skin && abs(skin_position.x)<.18 && abs(skin_position.y)<.10 && skin_position.z>.28)discard;
+    if(face_skin && abs(skin_position.x)<.18 && skin_position.y>-.18 && skin_position.y<.10 && skin_position.z>.28)discard;
     ALBEDO=vec3(.012,.010,.017);
 }
