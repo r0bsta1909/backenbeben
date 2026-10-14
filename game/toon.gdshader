@@ -9,6 +9,7 @@ uniform bool eye_surface = false;
 uniform bool iris_surface = false;
 uniform bool pupil_surface = false;
 uniform bool skin_surface = false;
+uniform float tooth_health = 1.0;
 uniform int beard_style = 1;
 uniform int face_style = 0;
 uniform vec4 beard_color : source_color = vec4(.04,.025,.018,1.0);
@@ -18,7 +19,7 @@ varying float front_paint_weight;
 #include "res://face_deform.gdshaderinc"
 void vertex() {
     vec3 p = (VERTEX + part_origin)*geometry_scale;
-    skin_position=face_skin?vec3(UV.x*.38-.19,.245-UV.y*.38,UV2.y)*geometry_scale:p;
+    skin_position=p;
     // Frontal concept paint must not stretch across temple/ear side planes.
     // Use the rest surface orientation, not camera facing, so marks stay put.
     front_paint_weight=UV2.x;
@@ -30,8 +31,9 @@ void fragment() {
     vec3 n = normalize(NORMAL);
     vec3 world_normal=normalize(mat3(INV_VIEW_MATRIX)*n);
     float d = dot(world_normal, normalize(vec3(-0.5,0.7,0.8)));
-    float edge = smoothstep(0.06, 0.20, dot(n, normalize(VIEW)));
+    float edge = smoothstep(face_skin?-.04:.06,face_skin?.055:.20,dot(n,normalize(VIEW)));
     vec3 color=base_color.rgb;
+    color=mix(color,color*vec3(.64,.57,.46),clamp(1.0-tooth_health,0.0,1.0)*.35);
     if(eye_surface) {
         // Painted socket shadow follows authored UV2, never the camera/world axes.
         color*=1.0-.60*smoothstep(.45,.88,UV2.x);
@@ -64,7 +66,9 @@ void fragment() {
         vec2 paint_uv=UV;
         vec3 paint=texture(face_ink,paint_uv).rgb;
         float paint_mask=front_paint_weight;
-        float ink=clamp(paint.r/.55,.055,1.2);
+        // Extract fine ink only. The guide's painted lighting used to stack
+        // on real 3D shadows and create muddy patches and orange chin spots.
+        float ink=mix(1.0,.30,1.0-smoothstep(.035,.10,paint.r));
         // The old frontal ink contains faint stubble; clean and styled beards
         // get their own layer rather than inheriting that baked shadow.
         float lower_face=1.0-smoothstep(-.005,.025,local.y);
@@ -76,10 +80,12 @@ void fragment() {
         float brow_guide=exp(-pow(abs((local.y-.117)/.028),4.0))
             *smoothstep(.012,.022,abs(local.x))*(1.0-smoothstep(.061,.075,abs(local.x)));
         paint_strength*=1.0-brow_guide;
+        float mouth_guide=exp(-pow(abs(local.x)/.040,4.0)-pow(abs((local.y+.002)/.020),4.0));
+        paint_strength*=1.0-mouth_guide;
         color*=mix(1.0,ink,paint_mask*paint_strength);
         // Restrained lip pigment follows authored rest coordinates and all
         // skin tones; volume and shadows still come from the anatomical mesh.
-        float lips=exp(-pow(abs(local.x)/.032,6.0)-pow(abs((local.y+.027)/.012),4.0));
+        float lips=exp(-pow(abs(local.x)/.032,6.0)-pow(abs((local.y+.002)/.010),4.0));
         lips*=paint_mask*smoothstep(.045,.085,local.z);
         color*=mix(vec3(1.0),vec3(.98,.80,.76),lips*.55);
         float injury=skin_position.x<0.0?injury_left:injury_right;
@@ -88,7 +94,7 @@ void fragment() {
         float beard_top=.025-.52*abs(local.x);
         float beard=(1.0-smoothstep(beard_top-.008,beard_top+.006,local.y))
             *smoothstep(.018,.055,local.z)*smoothstep(-.10,-.078,local.y);
-        float lip_clear=1.0-exp(-pow(abs(local.x)/.036,4.0)-pow(abs(local.y+.025)/.013,4.0));
+        float lip_clear=1.0-exp(-pow(abs(local.x)/.036,4.0)-pow(abs(local.y+.002)/.013,4.0));
         beard*=lip_clear;
         vec2 cell=floor(local.xy/.0024);
         vec2 seed=fract(sin(vec2(dot(cell,vec2(127.1,311.7)),dot(cell,vec2(269.5,183.3))))*43758.5453);
@@ -112,14 +118,31 @@ void fragment() {
         }
         vec2 bruise_distance=(q-vec2(.27,.15))/.13;
         float patch=exp(-dot(bruise_distance,bruise_distance))*smoothstep(.12,.27,skin_position.z);
-        color=mix(color,vec3(.22,.085,.19),patch*smoothstep(.12,.85,injury)*.8);
+        color=mix(color,vec3(.22,.085,.19),patch*smoothstep(.12,.85,injury)*.8*(regional_damage?0.0:1.0));
         vec2 eye_distance=(q-vec2(.1524,.335))/vec2(.105,.075);
         float eye_bruise=exp(-dot(eye_distance,eye_distance))*smoothstep(.18,.28,skin_position.z);
-        color=mix(color,vec3(.16,.075,.15),eye_bruise*smoothstep(.25,.9,injury)*.72);
+        color=mix(color,vec3(.16,.075,.15),eye_bruise*smoothstep(.25,.9,injury)*.72*(regional_damage?0.0:1.0));
         float cut=(1.0-smoothstep(.004,.012,abs(q.y-(.20-.4*(q.x-.25)))))*smoothstep(.15,.19,q.x)*(1.0-smoothstep(.34,.37,q.x));
-        color=mix(color,vec3(.40,.015,.022),cut*smoothstep(.35,.5,injury));
+        color=mix(color,vec3(.40,.015,.022),cut*smoothstep(.35,.5,injury)*(regional_damage?0.0:1.0));
         float drip=(1.0-smoothstep(.005,.014,abs(skin_position.x-.11-.012*sin(q.y*45.0))))*smoothstep(-.32,-.26,q.y)*(1.0-smoothstep(-.07,-.03,q.y));
-        color=mix(color,vec3(.38,.012,.022),drip*injury_jaw);
+        color=mix(color,vec3(.38,.012,.022),drip*injury_jaw*(regional_damage?0.0:1.0));
+        if(regional_damage) {
+            for(int i=0;i<8;i++) {
+                if(region_injuries[i].x<.0001 && region_injuries[i].z<.0001)continue;
+                vec3 delta=skin_position-region_centers[i];
+                vec3 distance=delta/max(region_radii[i],vec3(.001));
+                float local_patch=exp(-dot(distance,distance)*1.4)*smoothstep(.05,.20,skin_position.z);
+                color=mix(color,vec3(.20,.07,.14),local_patch*region_injuries[i].x*.70);
+                float cut_line=abs(delta.y-delta.x*.28);
+                float line_width=max(fwidth(cut_line),.001);
+                float wound=(1.0-smoothstep(.002,.002+line_width,cut_line))*local_patch;
+                color=mix(color,vec3(.30,.012,.021),wound*region_injuries[i].z);
+                float flow=abs(delta.x-.013*sin(delta.y*52.0));
+                float blood=(1.0-smoothstep(.003,.003+line_width,flow))
+                    *smoothstep(-.20,-.15,delta.y)*(1.0-smoothstep(-.025,0.,delta.y))*local_patch;
+                color=mix(color,vec3(.34,.014,.022),blood*region_injuries[i].w);
+            }
+        }
     }
     if(skin_surface) {
         float tone=dot(base_color.rgb,vec3(.2126,.7152,.0722));

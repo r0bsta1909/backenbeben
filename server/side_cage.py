@@ -3,7 +3,7 @@ import numpy as np
 from contact_v3 import side_surface
 from contact_embedding import front_triangles
 
-def build_side_cage(nx=17,ny=17,skin_state=(0.,0.,0.)):
+def build_side_cage(nx=25,ny=25,skin_state=(0.,0.,0.)):
     if nx<2 or ny<2:raise ValueError('Cage needs at least two rows/columns')
     zs=np.linspace(-.025,.100,nx);ys=np.linspace(-.110,.140,ny)
     front=[];valid=[]
@@ -37,7 +37,7 @@ class SideTissue(ReferenceTissue):
     nodes and the outer grid boundary are fixed; unused mesh samples have no
     mass and cannot receive contact. No legacy frontal depth clamp is used.
     """
-    def __init__(self,nx=17,ny=17,skin_state=(0.,0.,0.),density=1000.):
+    def __init__(self,nx=25,ny=25,skin_state=(0.,0.,0.),density=1000.):
         if not np.isfinite(density) or density<=0:raise ValueError('Positive finite density required')
         self.geometry=build_side_cage(nx,ny,skin_state)
         self.rest=self.geometry['nodes'].copy()

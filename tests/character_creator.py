@@ -82,6 +82,8 @@ async def main():
                 await striker.wait_for_function('(v)=>godotStats.fighter_face_style===v[0] && godotStats.fighter_hair_style===v[1] && godotStats.fighter_beard_style===v[2] && JSON.parse(physicsFrame).camera==="contact"', arg=[face,hair,beard])
                 await striker.screenshot(path=f'logs/character-replay-{face}.png')
                 assert await striker.evaluate('JSON.parse(physicsFrame).players[JSON.parse(physicsFrame).target].face_style') == face
+                damage_state=await striker.evaluate('JSON.parse(physicsFrame).players[JSON.parse(physicsFrame).target].face_damage')
+                assert damage_state['hits']>0 and sum(r['load'] for r in damage_state['regions'].values())>0
                 for page in [striker,defender]:
                     await page.bring_to_front()
                     await page.locator('#replaySkip').click()

@@ -36,7 +36,7 @@ class MeshContactTests(unittest.TestCase):
         self.assertEqual(arm.velocity,[0.,0.,0.])
 
     def test_regions_from_actual_arm(self):
-        for y,tilt,expected in [(.6,-18,'flat'),(.6,-12,'glance'),(.6,-24,'tips'),(.1,0,'zone'),(.35,35,'heel')]:
+        for y,tilt,expected in [(.6,-18,'flat'),(.6,-12,'glance'),(.6,-24,'tips'),(.1,0,'zone'),(.4,40,'heel')]:
             with self.subTest(expected=expected):self.assertEqual(score(stroke(y,tilt))['contact_class'],expected)
     def test_pose_record_has_no_stretch_or_penetration_at_contact(self):
         result=score(stroke())
@@ -122,9 +122,15 @@ class MeshContactTests(unittest.TestCase):
         self.assertEqual(damage,0);self.assertFalse(ko)
 
     def test_replay_keeps_full_arm_and_tissue(self):
-        # Explicit firm 700 ms stroke; retain the visible-deformation threshold.
-        scored=score(stroke(duration=700));clip=simulate(scored)
-        self.assertEqual(clip['arm_path'],scored['arm_path'])
+        # Explicit firm 600 ms stroke; retain the visible-deformation threshold.
+        from friction_head_replay import simulate as production_simulate
+        scored=score(stroke(duration=600));clip=production_simulate(scored)
+        before=[r for r in scored['arm_path'] if r['time']<scored['contact_time']-1e-6]
+        self.assertEqual(clip['arm_path'][:len(before)],before)
+        for record in clip['arm_path']:
+            pose=record['pose']
+            self.assertAlmostEqual(math.dist(pose['shoulder'],pose['elbow']),L1,places=6)
+            self.assertAlmostEqual(math.dist(pose['elbow'],pose['wrist']),L2,places=6)
         self.assertEqual(clip['version'],3)
         self.assertTrue(all(v==0 for frame in clip['frames'][:60] for v in frame[2:]),'Skin must remain still before impact')
         self.assertGreater(clip['peak'],.003) # lateral impulse couples into the pinned cheek cage

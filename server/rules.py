@@ -1,5 +1,6 @@
 """Authoritative, deterministic slap scoring. No renderer dependencies."""
 import math
+from face_damage import accumulate_face
 DEFAULTS = {'base_damage': 35.0, 'brace_window_ms': 450.0, 'brace_reduction': .35,
             'recovery': 6.0, 'ko_threshold': 100.0, 'turn_seconds': 25.0, 'max_pairs': 5.0}
 RANGES = {'base_damage': (5, 45), 'brace_window_ms': (80, 500), 'brace_reduction': (0, .65),
@@ -43,4 +44,5 @@ def apply_hit(player, scored, settings, braced=False):
     player['side'] = scored['side']
     zones = player.setdefault('zones', {'L': 0., 'R': 0.})
     zones[scored['side']] = round(zones[scored['side']] + damage, 3)
+    accumulate_face(player,scored,damage)
     return round(damage, 2), player['damage'] + player['stun'] >= settings['ko_threshold']

@@ -2396,3 +2396,34 @@ Zwei Browserclients samt realen Protokolltreffern auf Veteran und Knollennase
 und Replay PASS errors[]. Blickwinkel/Ausdrucks-/Kontaktbilder gesichtet.
 Vorschau Arena-Design/29-gesichter-verfeinert.png. Beleg
 validation/FACE_REFINEMENT_2026-10-14.txt. Testhost beendet; V14 bleibt alt.
+
+ANATOMISCHER KOPF UND REGIONALES SCHADENSMODELL — 14.10.2026
+Nutzer verlangte deutlich hoeheres Niveau/definiertere Gesichter, Knochen/Rig,
+detaillierte Schaeden und praezise Skins. Bestaetigt: Comicstil, Schwellungen,
+Platzwunden/Blut/Kieferfehlstellung/beschaedigte Zaehne; alle Funktionen integrieren.
+Strukturelle Jochbein-/Schlaefen-/Kieferformen, echte Mundoeffnung und Lippenrand.
+Geometrie vermessen: fruehere Lippen-/Zahnpositionen waren gegenueber Malguide
+verschoben. Neu16 individuelle Zahnkronen/Chipmorphs, native mandibulare Bindung;
+Restrotation/Restposition des importierten Kiefers erhalten. Neun an Haut gebundene
+Gesichtscontroller; Augenteile an Orbit. Laufende Gewebereaktion weiterhin Shader.
+Sechs tatsächliche Kollisionsprofile aus Blender, gemeinsame Anatomiedatei mit8
+Regionen. Regionaler Server-Akkumulator: getrennte Haut-/Knochen-/Zahnzustaende,
+Snapshot-/Replay-/Spiegel-/Eigenmodell-/Rematch-Integration. 25x25-Gewebegitter.
+Neue Restflaeche vor transientem Offset abfragen; Darstellung .18s nach Kontakt
+aus Snapshots ueberblenden, beim Ruecklauf wieder gesund. Versionsschutz4 im Join.
+Schaeden/Bruchgrade sind Arcade-Parameter mit Form-/Kontaktfolgen, keine frei
+abgeloesten Schaedel-/Zahnfragmente oder kalibrierte medizinische Bruchsimulation.
+Alle6/6/6 Optionen und7 Farben erhalten, Mund-/Bartfreiraeume neu abgeglichen.
+Gesichtsvorschau naeher, alte Malbeleuchtung zugunsten realer Formen reduziert.
+Quelle/216 Kombinationen/7 Farben/Zahn-Reset/Kiefer/6 Hostprofile/Webexport PASS;
+172Servertests PASS. Native Kopf-/Schadenstafeln gesichtet, Arena-Design/30-*.png.
+Beleg validation/FACE_ANATOMY_DAMAGE_2026-10-14.txt; finale Browserbelege dort.
+Finaler Browser-Mauskontakt-/Spiegel-/Replaycheck PASS errors[], Solve3570ms;
+27 nicht voll konvergierte Produktionsschritte/max Materialresidual.0007147m.
+Zwei-Client-Variantenkampf inkl. regionaler Replaylast PASS errors[].
+Verletzungs-Onset/Ruecklauf PASS;1920x1080 RTX3090:90 RAF-Samples jeAnsicht,
+median16.7/p9516.8ms, einzelner idleMax33.5ms. Kein Mehrhardware-/60FPS-Gesamtpass.
+Boundrig, Zahnkronen statt Kugeln, naeherer Editor und finale Konturschale gesichtet.
+Host-/Renderer-Version4 erforderlich; keine alte V14-Renderer/Host-Mischung.
+Physikgesture_version3 bleibt. Rohlogs ausgeschlossen; Testhosts beendet.
+V14 bleibt alt, kein neuer menschlicher Abnahmetest oder neues Releasepaket.

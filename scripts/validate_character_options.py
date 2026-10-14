@@ -41,5 +41,20 @@ with bpy.data.libraries.load(str(ROOT/'assets-source/character-v3.blend')) as (s
 original=target.objects[0]
 assert len(original.data.vertices)==len(face.data.vertices)
 for a,b in zip(original.data.shape_keys.key_blocks[0].data,basis.data):
-    if abs(a.co.x)>=.045:assert (a.co-b.co).length<1e-8, 'changed canonical side cheek'
-print('CHARACTER_OPTIONS_SOURCE_PASS: 18 options; skin weights; distinct morphs; unchanged lateral cheeks; packed paint')
+    assert all(math.isfinite(value) for value in b.co)
+# The structural base changed deliberately. Every variant must now match its
+# exported host triangle profile rather than the historical v3 silhouette.
+collision=json.loads((ROOT/'game/assets/face_customizable_collision.json').read_text())
+for index in range(6):
+    key=basis if index==0 else face.data.shape_keys.key_blocks[f'identity_{index}']
+    for vertex,point in zip(key.data,collision['faces'][index]):
+        expected=(vertex.co.x*4,vertex.co.z*4,-vertex.co.y*4)
+        assert max(abs(a-b) for a,b in zip(expected,point))<1e-6
+assert all(name in bpy.data.objects['CharacterRig'].data.bones for name in ['jaw','orbit.L','orbit.R','nasal','zygoma.L','zygoma.R','lip.upper','lip.lower'])
+assert all(abs(sum(g.weight for g in vertex.groups)-1)<1e-5 for vertex in face.data.vertices)
+assert all(face.vertex_groups.get(name) for name in ['orbit.L','orbit.R','nasal','zygoma.L','zygoma.R','lip.upper','lip.lower'])
+for index in range(16):
+    tooth=bpy.data.objects['Teeth%02d'%index]
+    assert tooth.data.shape_keys.key_blocks.get('tooth_chip')
+    assert tooth.vertex_groups.get('jaw' if index>=8 else 'head')
+print('CHARACTER_OPTIONS_SOURCE_PASS: 18 options; anatomical rig; 16 teeth; packed paint; six exact host collision profiles')

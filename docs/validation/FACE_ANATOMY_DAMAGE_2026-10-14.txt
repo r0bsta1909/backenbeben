@@ -1,0 +1,99 @@
+BACKENBEBEN — ANATOMISCHER KOPF / REGIONALES SCHADENSMODELL — 14.10.2026
+
+Nutzerziel: deutlicher Schritt ueber die bisherigen kosmetischen Tweaks hinaus;
+Gesichter sind ein Kernpunkt. Comicstil behalten, lokale Schwellungen, Platzwunden,
+Blut, Kieferfehlstellung und beschaedigte Zaehne integrieren. Nutzer bestaetigte
+diese sichtbare Schadensstufe ausdruecklich.
+
+GEOMETRIE UND RIG
+Jochbein-, Schlaefen- und Kieferwinkel-Ebenen neu modelliert. Zentrale Formen
+weiterhin sechs Identitaeten. Lippen/Kinn direkt gegen die tatsaechliche Geometrie
+vermessen: die alte Malprojektion und die frueheren Zahnpositionen waren versetzt.
+Echte Mundoeffnung mit kontinuierlicher Randkurve, zurueckgesetztem Innenraum;
+Mundkonturschale lokal ausgespart, um schwarze Selbstueberschneidungen zu entfernen.
+16 einzelne Frontzaehne mit modellierten Kronen, Schneidekanten/Eckzahnspitzen,
+eigenen Chipmorphs und Materialzustand. Oberkiefer am Kopf, Unterkiefer am realen
+Kiefergelenk. Godot-Bindepose bei Rotation/Translation explizit erhalten.
+Neun neue Gesichtscontroller fuer Orbit/Jochbein/Nase/Lippen/Mundwinkel. Tatsaechlich
+an die Haut gebunden; Augenteile an Orbitcontroller. Kopf-/Halsanteile erhalten.
+Unterkieferzaehne benutzen jaw; Lippencontroller sind unabhaengige Authoringpins
+am Kopf. Laufende Gewebereaktion bleibt aufgezeichneter regionaler Shaderpfad.
+Grinmorph an der echten Lippenposition neu aufgebaut. Frontaler Konzeptguide nur
+noch sparsame Ink-Basis, keine zusaetzliche grosse aufgemalte Beleuchtung.
+Alle6 Gesichter/6 Haare/6 Baerte/7 Hautfarben bleiben kombinierbar. Bart-/Lippen-
+Freiraeume an echte Mundposition angepasst. Gesichtsvorschau naeher positioniert.
+
+GEMEINSAME ANATOMIE UND SCHADEN
+game/assets/face_anatomy.json: acht Regionen, Zentrum/Radius/Knochenbezug:
+WangeL/R, AugenregionL/R, KieferL/R, Mund, Nase. Ein identischer Vertrag am Host
+und in den Renderuniforms. server/face_damage.py ist deterministische Autoritaet.
+Regionale Dosen aus echten Kontaktflaechen/deren Flaechenanteilen; unabhaengige
+Last, Bluterguss, Schwellung, Platzwunde und Blutung. Acht regionale Knochenlast- /
+Frakturzustände sowie16 individuelle Zahnintegritaeten. Miss/Foul und Probe
+veraendern keine dauerhaften Verletzungen; Brace reduziert eingehende Dosis.
+Beide Clients, eigene Figur, Gegner, Spiegel und Replay benutzen dieselben Felder.
+Rematch erzeugt kompletten gesunden Zustand. Vor-/Nach-Snapshots tief kopiert.
+Die Bruchgrade sind authored Arcade-Parameter, keine kalibrierte Materialbruch-
+mechanik oder frei simulierte abgeloeste Schaedel-/Zahnfragmente. Regionale
+Knochenreaktionen beeinflussen bleibende Form und nachfolgende Kontaktflaeche.
+Einzelzaehne koennen abbrechen/fehlen; Verlust ueber Zustand/Sichtbarkeit.
+
+PRAEZISION UND KONTAKT
+Neue Struktur veraendert bewusst die bisherige kanonische Kopfoberflaeche.
+face_customizable_collision.json exportiert die tatsaechlichen Dreiecke aller6
+Identitaeten aus derselben Blenderquelle. Host waehlt passendes Profil; regionale
+Schwellungs-/Knochen-/Kieferverformung in Python/Godot mit gleichem Vertrag.
+Skin-state enthaelt Regionwerte und face_style; Rig-Armlaengen bleiben erhalten.
+Gewebegitter25x25 statt17x17 (zwei Schichten); reale Kollision/Kopfreaktion/Friction
+im vorhandenen Produktionssolver. Frontalform ist nun im Hostprofil enthalten.
+Permanent verletzte Restflaeche vor aufgezeichnetem Gewebeoffset abfragen.
+Bleibende Darstellung entwickelt sich .18s nach Kontakt aus Host-Snapshots;
+display_players getrennt von unveraenderten autoritativen players. Ruecklauf vor
+Kontakt setzt Darstellung zurueck. Diese kurze Darstellungsueberblendung ist kein
+zusätzlicher integrierter plastischer Bruchprozess im laufenden FEM-Kontaktintervall.
+character_version4 im Join verhindert alte Renderer auf neuer Kollisionsgeometrie.
+Gestenprotokoll bleibt version3. Host-only Profil-JSON vom Webexport ausgeschlossen.
+
+PRUEFUNGEN
+Quelle erneut in Blender geoeffnet: Gewichtssummen, gebundene Gesichtscontroller,
+Kiefer/16 Zaehne, Chipmorphs, UVs, 18 Optionen,5 Identitaeten,6 exakte Profile PASS.
+Nativer216-Kombinationen-/FirstPerson-Audit,7 Farben an Kopf/Hand/Spiegel PASS.
+NativeFACE_DAMAGE: unabhängige Zahnmaterialien, Chip/fehlend/gesunder Reset,
+Regionruecklauf, echte Kieferbewegung/Basispose, FirstPerson-Ausblendung PASS.
+ArenaMatch und strenger Godot-Import/Webexport PASS.
+172PythonTests PASS37.762s. Neue Regionaltests: Lokalitaet, Seitenunabhaengigkeit,
+Miss/Foul, Brace, Struktur-/Zahnschaeden, Snapshots,6 Profile und Versionsschutz.
+Alte Physikfixtures mussten an bewusst geaenderte Geometrie angepasst werden:
+heel(.4,40), wheel(-15), Lab(-21). Replay-Armtest nun am Produktionssolver;
+unveraenderter Pfad vor Kontakt, konstante Knochenlaengen, sichtbare Hautbewegung.
+Keine Toleranzabschwaechung: erster Labor-Kontaktschritt weiterhin1e-8-Konvergenz.
+Native Sechs-Kopf-Tafel und sechs regionale Schadenfixtures aus echtem Akkumulator
+gesichtet. Fixture-Schwere unabhaengig von Match-KO fuer Extremansichten aufgebaut.
+Erste Mundtopologie/Bindepose/Konturfehler in dieser Schleife behoben.
+Browserkontakt/Maus-Probe/echter Schlag/Kontaktkameras/Spiegel/Ruecklauf PASS errors[].
+Finaler Produktionssolve3570.0ms, peak.022174, max. Penetration1.87e-5m,
+Wristabstand1.16e-5m.27 Schritte ohne volle Konvergenz, max. Materialresidual
+.0007147m: Prototyptuning, keine Zusage strenger1e-8-Konvergenz im Matchsolver.
+Zwei Browserclients: Auswahl/Persistenz/LAN/Layout/Reset/Zufall und reale
+Protokolltreffer/Replay auf Veteran+Knollennase PASS errors[]. Regionlast/Hits in
+beiden aufgezeichneten Darstellungen bestaetigt. Replay-/Mund-/Editorbilder gesichtet.
+Separate Timing-/Onsetpruefung: erster Kontakt zeigt before, autoritatives after
+unveraendert; t.8 zeigt vollstaendige Schaeden, Ruecklauf t.3 wieder before, PASS.
+1920x1080, Chromium/ANGLE RTX3090 D3D11, je90 RAF-Samples nach30 Warmupframes:
+idle median16.7/p9516.8/max33.5ms; pausierterKontakt median16.7/p9516.8/max18.2ms;
+verletzteAnsicht median16.7/p9516.8/max16.8ms. Frueherer Durchlauf idle p9533.3ms;
+kleine Einzelhardwaremessung, keine allgemeine60FPS-/weitere-Hardwarefreigabe.
+Erster Benchmark wartete auf exakte .8/.3 trotz Range-Schrittquantisierung;
+mit1e-4 Zeitvergleich bestanden. Kontaktcheck hatte alte fixe Gitterannahme17;
+auf25 angepasst. Diese Testtreiberprobleme betrafen keine Host-Ergebniswerte.
+Native ArenaMatch/Zahn-/Skinpruefungen final PASS. Testhosts beendet.
+
+REPRODUKTION
+Blender --background --python scripts/build_character_options.py;
+scripts/build.ps1; Blender -b assets-source/character-customizable.blend
+--python scripts/validate_character_options.py; scripts/create_face_damage_fixtures.py.
+Godot --path game --script ../scripts/capture_face_quality.gd -- --identities;
+Godot --path game --script ../scripts/capture_face_damage.gd.
+Quellen/Modelle/Vertrag/Hostprofile versioniert, Rohlogs und Debugbilder nicht.
+Vorschauen Arena-Design/30-anatomische-gesichter.png und30-regionales-schadensmodell.png.
+Keine neue menschliche Stil-/Spielabnahme. V14-Download weiterhin vorheriger Stand.

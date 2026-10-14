@@ -4,6 +4,7 @@ from pathlib import Path
 from aiohttp import web, WSMsgType
 from rules import DEFAULTS, RANGES, apply_hit
 from body import collapse_track
+from face_damage import healthy_face,check_character_version
 from contact_v3 import score as v3_score, input_target, collision as arm_collision, decorate as decorate_arm
 from arm import Arm, DT, lab_collision
 
@@ -11,7 +12,12 @@ def bot_stroke():
     return {'version':3,'points':[[.19+.34*i/60,.60,800*i/60,0,-18,0] for i in range(61)]}
 
 def skin_state(player):
-    return (min(1,player.get('zones',{}).get('L',0)/75),min(1,player.get('zones',{}).get('R',0)/75),max(0,min(1,(player.get('damage',0)-50)/40)))
+    legacy=(min(1,player.get('zones',{}).get('L',0)/75),min(1,player.get('zones',{}).get('R',0)/75),max(0,min(1,(player.get('damage',0)-50)/40)))
+    if 'face_damage' not in player:return legacy
+    from face_damage import REGIONS
+    face=player['face_damage']
+    jaw=max(face.get('bones',{}).get(name,{}).get('fracture',0.) for name in ('mandible_L','mandible_R','mandible_center'))
+    return (*legacy[:2],jaw,*(face.get('regions',{}).get(r['name'],{}).get('swelling',0.) for r in REGIONS),int(player.get('face_style',0)),*(face.get('bones',{}).get(r['bone'],{}).get('fracture',0.) for r in REGIONS))
 
 def score_contact(data,defender=None):
     if data.get("version")!=3:raise ValueError("Veraltete Spielversion. Seite neu laden.")
@@ -50,7 +56,7 @@ def fighter(client=None, bot=False):
                 shirt=client['shirt'] if client else 0, hair_style=client.get('hair_style',0) if client else 0,
                 face_style=client.get('face_style',0) if client else 0, beard_style=client.get('beard_style',1) if client else 1,
                 beard_color=client.get('beard_color',0) if client else 0,
-                damage=0., stun=0., side='L', zones={'L':0.,'R':0.}, fouls=0, points=0, bot=bot)
+                damage=0., stun=0., side='L', zones={'L':0.,'R':0.}, face_damage=healthy_face(), fouls=0, points=0, bot=bot)
 
 
 def new_room(client, training):
@@ -116,6 +122,7 @@ def start_braced_solve(room):
 async def command(c, d):
     action=d.get('action')
     if action=='join':
+        check_character_version(d)
         await leave(c)
         c['name']=str(d.get('name','CHALLENGER')).strip()[:18] or 'CHALLENGER'
         for key, maximum in [('skin',6),('hair',2),('shirt',3),('hair_style',5),('face_style',5),('beard_style',5),('beard_color',2)]:
@@ -219,7 +226,7 @@ async def command(c, d):
         if room['training'] or len(ready)==2:
             global MATCHES
             MATCHES+=1; room['match_id']=MATCHES; room['settings']=dict(SETTINGS);room['revision']=REVISION
-            for p in room['players']: p['damage']=0.;p['stun']=0.;p['zones']={'L':0.,'R':0.};p['fouls']=0;p['points']=0
+            for p in room['players']: p['damage']=0.;p['stun']=0.;p['zones']={'L':0.,'R':0.};p['face_damage']=healthy_face();p['fouls']=0;p['points']=0
             room['practice_done']=False;room['replay_id']=None;room['diagnosis']=''
             room['first']=1-room['first'];room['turn']=room['first'];room['turn_id']+=1
             room['hits']=0;room['winner']=-1;room['phase']='aim';room['ready']=[]

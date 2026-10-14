@@ -1,6 +1,15 @@
 // Input, recorded host physics and replay transport. Never evaluates damage locally.
 (() => {
 const canvas=document.getElementById('canvas');
+function displayPlayersAt(clip,t){
+ // Keep recorded snapshots authoritative. Display permanent injury settling
+ // only after contact, so the first touch still uses the solved pre-hit skin.
+ const progress=clamp((t-clip.contact)/.18,0,1);
+ if(progress===0)return clip.before;
+ if(progress===1)return clip.after;
+ const blend=(a,b)=>typeof b==='number'?a+(b-a)*progress:Array.isArray(b)?b.map((v,i)=>blend(a?.[i]??v,v)):b&&typeof b==='object'?Object.fromEntries(Object.entries(b).map(([k,v])=>[k,blend(a?.[k]??v,v)])):b;
+ return blend(clip.before,clip.after);
+}
 const panel=document.createElement('aside');panel.id='posePanel';panel.className='panel';
 panel.innerHTML='<div id="poseSteps"><span id="practiceStep">1 · PROBE</span><span id="strikeStep">2 · SCHLAG</span></div><h3 id="poseTitle">PROBESCHWUNG</h3><p id="gestureCue"><b>LINKE MAUSTASTE HALTEN</b><br>Dann nach links ziehen und loslassen.</p><p id="poseInputHint">↑ ↓ Maus: Treffhöhe<br>↕ Mausrad: Handfläche kippen</p><div id="poseReadout"></div><p id="contactVerdict">Nach links ziehen: Die rechte Hand schwingt seitlich zur Wange.</p><button id="originalPractice" hidden>URSPRÜNGLICHE HANDHALTUNG</button><button id="poseCamera" aria-pressed="false">HAND VON DER SEITE ANSEHEN</button><p id="poseCameraHint" hidden>Auch hier: nach links ziehen. Die Ansicht ändert nur die Kamera.</p><button id="inspectPractice" hidden>PROBE AM KONTAKT ANSEHEN</button><p id="practiceStillHint" hidden>Die neue Neigung gilt für deinen nächsten Schwung.</p><button id="repeatPractice" hidden>NOCH EINMAL OHNE SCHADEN ÜBEN</button><button id="resetPose">HALTUNG ZURÜCKSETZEN</button>';
 document.body.append(panel);
@@ -177,7 +186,7 @@ function frame(now){
    const values=clip.frames[i].map((v,k)=>v+(clip.frames[j][k]-v)*f);
    const headOffset=clip.head_positions?clip.head_positions[i].map((v,k)=>v+(clip.head_positions[j][k]-v)*f):[0,0,0];
    const headRotation=clip.head_rotations?clip.head_rotations[i].map((v,k)=>v+(clip.head_rotations[j][k]-v)*f):[0,values[0],0];
-   window.physicsFrame=JSON.stringify({head_rotation:headRotation,head_offset:headOffset,id:clip.id,time:t,contact:clip.contact,crowd_hit:clip.contact_class!=='miss'&&(clip.impact_speed_m_s||0)>.05,side_cage:clip.side_cage||{},head:values[0],jaw:values[1],offsets:values.slice(2).map(v=>v*clip.scale),ko:!!clip.ko,braced:!!clip.braced,body:clip.body_frames?.[Math.min(clip.body_frames.length-1,Math.floor(t*clip.fps))]||[0,0,0,0,0],target:clip.target,players:t<clip.contact?clip.before:clip.after,hand:handAt(t),arm:armAt(t),replay:state.phase==='replay',camera,contact_focus:clip.position||[.25,.1,.25],footprint:showContact&&state.phase==='replay'&&Math.abs(t-clip.contact)<.025?clip.footprint:[]});
+   window.physicsFrame=JSON.stringify({head_rotation:headRotation,head_offset:headOffset,id:clip.id,time:t,contact:clip.contact,crowd_hit:clip.contact_class!=='miss'&&(clip.impact_speed_m_s||0)>.05,side_cage:clip.side_cage||{},head:values[0],jaw:values[1],offsets:values.slice(2).map(v=>v*clip.scale),ko:!!clip.ko,braced:!!clip.braced,body:clip.body_frames?.[Math.min(clip.body_frames.length-1,Math.floor(t*clip.fps))]||[0,0,0,0,0],target:clip.target,players:t<clip.contact?clip.before:clip.after,display_players:displayPlayersAt(clip,t),hand:handAt(t),arm:armAt(t),replay:state.phase==='replay',camera,contact_focus:clip.position||[.25,.1,.25],footprint:showContact&&state.phase==='replay'&&Math.abs(t-clip.contact)<.025?clip.footprint:[]});
    window.combatDiagnostics.time=t;window.combatDiagnostics.frame=i;window.combatDiagnostics.deformation=Math.max(...values.slice(2).map(Math.abs))*clip.scale;
    if(state.phase==='impact'&&t>=clip.contact&&!hitSound&&clip.contact_class!=='miss'){hitSound=true;window.contactSound=true;}
  }else window.physicsFrame='{}';

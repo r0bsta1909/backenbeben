@@ -54,6 +54,7 @@ var physics_material_updates := 0
 var emote_player := -1
 var emote_kind := 0
 var emote_remaining := 0.0
+var face_anatomy: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/face_anatomy.json"))
 var skins := [Color("b48968"), Color("8c654e"), Color("634737"), Color("d2aa8c"), Color("f0d7c4"), Color("38271f"), Color("dec19a")]
 var shirts := [Color("6e242b"), Color("26354b"), Color("deb64c"), Color("534979")]
 var hairs := [Color("241b16"), Color("6b3624"), Color("b8afa0")]
@@ -165,9 +166,10 @@ func prepare_materials(root: Node) -> void:
 		for i in range(node.mesh.get_surface_count()):
 			var m = node.mesh.surface_get_material(i)
 			if m:
-				var tissue_part: bool = str(node.name) in ["Face","FaceInk","MouthLine","LidsL","LidsR"] or str(node.name).begins_with("Beard")
-				var head_part: bool = str(node.name).begins_with("Hair") or str(node.name).begins_with("Beard") or str(node.name) in ["Face","FaceInk","MouthLine","MouthInterior","Teeth","LidsL","LidsR","EyeL","EyeR","IrisL","IrisR","PupilL","PupilR","BrowL","BrowR","HairCap","EarL","EarR","EarFoldL","EarFoldR","NostrilL","NostrilR"]
+				var tissue_part: bool = str(node.name) in ["Face","FaceInk","MouthLine","MouthInterior","LidsL","LidsR"] or str(node.name).begins_with("Beard")
+				var head_part: bool = str(node.name).begins_with("Hair") or str(node.name).begins_with("Beard") or str(node.name).begins_with("Teeth") or str(node.name) in ["Face","FaceInk","MouthLine","MouthInterior","Teeth","LidsL","LidsR","EyeL","EyeR","IrisL","IrisR","PupilL","PupilR","BrowL","BrowR","HairCap","EarL","EarR","EarFoldL","EarFoldR","NostrilL","NostrilR"]
 				var material_key: String = m.resource_name+str(tissue_part)+str(head_part)+str(node.name=="Face")+str(str(node.name).begins_with("Pupil"))+str(node.position)
+				if str(node.name).begins_with("Teeth"):material_key+=str(node.name)
 				if shared_materials.has(material_key):
 					node.set_surface_override_material(i,shared_materials[material_key])
 					mat_cache[str(node.get_instance_id())+":"+str(i)] = m.resource_name
@@ -260,9 +262,30 @@ func head_offset_state(actor: Node3D, parameter := "head_offset") -> Array:
 
 func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 	root.set_character_options(data)
+	var detailed: bool=data.has("face_damage")
+	var regional_hash: int=data.get("face_damage",{}).hash()
+	var regional_changed: bool=regional_hash!=int(root.get_meta("regional_hash",-1))
+	var regional_active: bool=false
+	var anatomy: Dictionary=face_anatomy
+	var region_bones:=PackedFloat32Array()
+	var injuries:=PackedVector4Array();var centers:=PackedVector3Array();var radii:=PackedVector3Array()
+	for region in anatomy.regions:
+		region_bones.append(float(data.get("face_damage",{}).get("bones",{}).get(region.bone,{}).get("fracture",0)))
+		var state: Dictionary=data.get("face_damage",{}).get("regions",{}).get(region.name,{})
+		injuries.append(Vector4(state.get("bruise",0),state.get("swelling",0),state.get("cut",0),state.get("bleeding",0)))
+		regional_active=regional_active or float(state.get("load",0))>0.0001
+		centers.append(Vector3(region.center[0],region.center[1],region.center[2]))
+		radii.append(Vector3(region.radius[0],region.radius[1],region.radius[2]))
 	var damage := float(data.get("damage",0))
 	var ratio := clampf(damage/100.,0,1)
 	var fractured := clampf((damage-50)/40,0,1)
+	if detailed:
+		fractured=0
+		for bone in ["mandible_L","mandible_R","mandible_center"]:
+			fractured=maxf(fractured,float(data.face_damage.get("bones",{}).get(bone,{}).get("fracture",0)))
+	root.set_meta("jaw_damage",fractured*.12 if detailed else 0.0)
+	root.set_meta("jaw_fracture",fractured)
+	root.set_jaw_open(root.get_meta("jaw_damage"))
 	var emote_active := emote_remaining>0 and ((is_enemy and emote_player!=you) or (not is_enemy and emote_player==you))
 	if root==reflection:
 		var appearance_hash: int=[data,emote_active,emote_kind if emote_active else -1].hash()
@@ -270,6 +293,12 @@ func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 		mirror_appearance_hash=appearance_hash
 	for node in root.find_children("*", "MeshInstance3D", true, false):
 		var n := str(node.name)
+		var tooth_health: float=1.0
+		if n.begins_with("Teeth") and n.substr(5).is_valid_int():
+			var teeth: Array=data.get("face_damage",{}).get("teeth",[])
+			var index: int=n.substr(5).to_int()
+			tooth_health=float(teeth[index]) if index<teeth.size() else 1.0
+			node.visible=not root.is_first_person and tooth_health>.04
 		var side: String = "L" if n.ends_with("L") else "R"
 		var zone_damage: float = float(data.get("zones",{}).get(side,damage*.5))
 		if n.begins_with("Bruise"): node.visible=zone_damage>12
@@ -279,6 +308,14 @@ func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 			var m = node.get_surface_override_material(i)
 			var base_name: String = mat_cache.get(str(node.get_instance_id())+":"+str(i), "")
 			if m is ShaderMaterial:
+				for target in [m,m.next_pass]:
+					if target is ShaderMaterial and regional_changed:
+						target.set_shader_parameter("regional_damage",detailed and regional_active)
+						target.set_shader_parameter("region_injuries",injuries)
+						target.set_shader_parameter("region_bones",region_bones)
+						target.set_shader_parameter("region_centers",centers)
+						target.set_shader_parameter("region_radii",radii)
+				if n.begins_with("Teeth"):m.set_shader_parameter("tooth_health",tooth_health)
 				m.set_shader_parameter("injury_jaw",fractured)
 				m.set_shader_parameter("injury_left",clampf(float(data.get("zones",{}).get("L",0))/75.,0,1))
 				m.set_shader_parameter("injury_right",clampf(float(data.get("zones",{}).get("R",0))/75.,0,1))
@@ -299,6 +336,7 @@ func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 				var shape := str(node.mesh.get_blend_shape_name(i))
 				var amount := 0.0
 				if shape.begins_with("identity_"):continue
+				if shape=="tooth_chip":amount=1.0-tooth_health
 				if shape=="grin" and emote_active:amount=.8
 				# The contact driver owns lids, including paused replay frames.
 				if shape=="blink":continue
@@ -324,6 +362,7 @@ func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 		if n.begins_with("Brow"):
 			node.position=node.get_meta("base_position")+Vector3(0,.04 if emote_active and emote_kind==1 else 0,0)
 	root.rotation=Vector3.ZERO
+	root.set_meta("regional_hash",regional_hash)
 
 
 func record_cpu(section: String, started: int) -> void:
@@ -381,11 +420,11 @@ func _process(delta: float) -> void:
 		var appearance_started: int=Time.get_ticks_usec() if profile_cpu else 0
 		appearance_timer=0
 		if state.has("players") and state.players.size()>1:
-			var shown_players: Array = physics_frame.get("players",state.players)
+			var shown_players: Array = physics_frame.get("display_players",physics_frame.get("players",state.players))
 			var shown_enemy: int = int(physics_frame.get("target",1-you)) if physics_frame.get("replay",false) else 1-you
 			apply_fighter(fighter,shown_players[shown_enemy],true)
 			if not physics_frame.get("replay",false):apply_fighter(reflection,shown_players[you],false)
-			color_hand(hand,state.players[you])
+			color_hand(hand,shown_players[1-shown_enemy] if physics_frame.get("replay",false) else shown_players[you])
 			color_hand(opponent_hand,state.players[1-you])
 		else:
 			var preview: Dictionary = {}
@@ -448,21 +487,7 @@ func play_sound(player: AudioStreamPlayer, sound_name: String) -> void:
 		player.play()
 
 func color_hand(root: Node3D, data: Dictionary) -> void:
-	if root.has_method("set_character_options"):root.set_character_options(data)
-	for node in root.find_children("*", "MeshInstance3D", true, false):
-		for i in range(node.mesh.get_surface_count()):
-			var m = node.get_surface_override_material(i)
-			var base_name: String = mat_cache.get(str(node.get_instance_id())+":"+str(i),"")
-			if m is ShaderMaterial:
-				if base_name in ["Skin","FaceSkin"]:m.set_shader_parameter("base_color",skins[clampi(int(data.get("skin",0)),0,skins.size()-1)])
-				if base_name=="SkinShadow":m.set_shader_parameter("base_color",skins[clampi(int(data.get("skin",0)),0,skins.size()-1)].darkened(.18))
-				if base_name=="FaceSkin":
-					m.set_shader_parameter("beard_style",int(data.get("beard_style",1)))
-					m.set_shader_parameter("face_style",int(data.get("face_style",0)))
-					m.set_shader_parameter("beard_color",hairs[int(data.get("beard_color",data.get("hair",0)))%3])
-				if base_name=="Shirt":m.set_shader_parameter("base_color",shirts[int(data.get("shirt",0))%4])
-				if base_name=="Hair":m.set_shader_parameter("base_color",hairs[int(data.get("hair",0))%3])
-				if base_name=="Beard":m.set_shader_parameter("base_color",hairs[int(data.get("beard_color",data.get("hair",0)))%3])
+	if root.has_method("set_character_options"):apply_fighter(root,data,false)
 
 func update_character_preview() -> void:
 	var enabled: bool=OS.has_feature("web") and state.is_empty()
@@ -480,9 +505,9 @@ func update_character_preview() -> void:
 	fighter.position=Vector3.ZERO
 	fighter.rotation=Vector3(0,deg_to_rad(float(creator_options.get("yaw",0))),0)
 	var close: bool=creator_options.get("view","body")=="face"
-	camera.position=Vector3(-1.2,.3,5.0) if close else Vector3(-1.9,-1.6,9)
+	camera.position=Vector3(-.96,.45,4.1) if close else Vector3(-1.9,-1.6,9)
 	camera.fov=45 if close else 48
-	camera.look_at(Vector3(-1.2,-.2,0) if close else Vector3(-1.9,-2.1,0))
+	camera.look_at(Vector3(-.96,.18,0) if close else Vector3(-1.9,-2.1,0))
 	arena_presentation.sync_camera(camera,true,false)
 	var preview_hash: int=creator_options.hash()
 	if preview_hash!=creator_stats_hash:
@@ -513,9 +538,10 @@ func drive_recorded_physics() -> void:
 	var own_physics: bool=active and not replaying and int(physics_frame.get("target",-1))==you
 	if physics_changed and (own_physics or mirror_physics_active):mirror_dirty=true
 	mirror_physics_active=own_physics
-	for root in [fighter,reflection]:
+	for root in [fighter,reflection,hand]:
 		var affected: bool = active and (replaying if root==fighter else false)
 		if not replaying:affected=active and ((root==fighter and int(physics_frame.target)!=you) or (root==reflection and int(physics_frame.target)==you))
+		if root==hand:affected=active and not replaying and int(physics_frame.get("target",-1))==you
 		var eye_closure := 0.0 if active else clampf((sin(clock_time*1.1)-.99)*100,0,1)
 		var defending: bool = (root==fighter and int(state.get("turn",you))==you) or (root==reflection and int(state.get("turn",you))!=you)
 		if not active and defending and state.get("phase","") in ["windup","resolving"] and state.get("brace_result","")=="ready":
@@ -527,6 +553,7 @@ func drive_recorded_physics() -> void:
 		if root==reflection and eye_closure!=mirror_eye_closure:
 			mirror_dirty=true;mirror_eye_closure=eye_closure
 		root.set_eye_closure(eye_closure)
+		root.set_jaw_open((float(physics_frame.get("jaw",0)) if affected else 0.0)+float(root.get_meta("jaw_damage",0.0)))
 		if active:root.rotation=Vector3.ZERO;root.position.y=0
 		for m in (physics_materials.get(root.get_instance_id(),[]) if physics_changed else []):
 			m.set_shader_parameter("side_cage_enabled",affected and side_texture!=null)
@@ -578,6 +605,9 @@ func drive_recorded_physics() -> void:
 			camera.position+=fighter.global_basis*fighter.collapsed_point(Vector3.ZERO)*.8
 	var guard_body: Array=physics_frame.get("body",[0,0,0,0,0])
 	defending_view.pose_defender(1.0-smoothstep(.02,.25,float(guard_body[0])))
+	for actor in [fighter,reflection,hand]:
+		var jaw_affected: bool=active and ((actor==fighter and (replaying or int(physics_frame.target)!=you)) or ((actor==reflection or actor==hand) and not replaying and int(physics_frame.target)==you))
+		actor.set_jaw_open((float(physics_frame.get("jaw",0)) if jaw_affected else 0.0)+float(actor.get_meta("jaw_damage",0.0)))
 	if replaying and physics_frame.get("camera","")=="contact":
 		var focus: Array=physics_frame.get("contact_focus",[.25,.1,.25])
 		var center:=Vector3(float(focus[0]),float(focus[1]),float(focus[2]))

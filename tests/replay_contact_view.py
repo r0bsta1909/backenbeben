@@ -57,7 +57,7 @@ async def main():
    await browser.close();raise
   coupled_evidence=None
   if '--expect-coupled' in sys.argv or '--expect-moving' in sys.argv:
-   await page.wait_for_function('JSON.parse(physicsFrame).side_cage.nx===17')
+   await page.wait_for_function('JSON.parse(physicsFrame).side_cage?.nx===25')
    replay_id=await page.evaluate('state.replay_id')
    recorded=await (await page.request.get(TEST_URL+'/api/replay/'+replay_id)).json()
    assert recorded['physics_backend']==('coupled-moving' if '--expect-moving' in sys.argv else 'coupled')

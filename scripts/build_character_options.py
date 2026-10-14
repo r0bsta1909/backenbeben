@@ -25,13 +25,22 @@ def gauss(x,y,cx,cy,sx,sy): return math.exp(-((x-cx)/sx)**2-((y-cy)/sy)**2)
 # relative displacement and the existing blink/contact deformation contract.
 def face_finish(point):
     p=Vector(point);x,y,z=p
+    # Sculpt the structural planes, not merely the central nose. Orbital rims,
+    # cheekbones, temples and mandibular corners now carry the silhouette.
+    front=smooth(.005,.060,z)
+    eye_clear=1-gauss(abs(x),y,.0381,.090,.023,.018)
+    cheek=gauss(abs(x),y,.067,.054,.029,.023)*front*eye_clear
+    jaw=gauss(abs(x),y,.069,-.037,.024,.018)*front
+    temple=gauss(abs(x),y,.087,.112,.019,.032)*front*eye_clear
+    p.x+=(1 if x>=0 else -1)*(.0048*cheek+.0045*jaw-.0025*temple)
+    p.z+=.0038*cheek-.0022*gauss(abs(x),y,.070,-.002,.025,.022)*front
     guard=(1-smooth(.029,.045,abs(x)))*smooth(.035,.072,z)
     p.z+=guard*(.0028*gauss(x,y,0,.018,.017,.018)
-                -.0010*gauss(x,y,0,-.005,.006,.014)
-                +.0024*gauss(x,y,0,-.036,.027,.007)
-                +.0014*gauss(x,y,0,-.020,.026,.005))
+                -.0010*gauss(x,y,0,.014,.006,.010)
+                +.0024*gauss(x,y,0,-.009,.027,.005)
+                +.0014*gauss(x,y,0,.005,.026,.004))
     p.x+=guard*(.0009 if x>=0 else -.0009)*gauss(abs(x),y,.017,.014,.007,.012)
-    p.y-=guard*.0007*gauss(x,y,0,-.020,.007,.006)
+    p.y-=guard*.0007*gauss(x,y,0,.005,.007,.005)
     return p
 
 for obj in [face]+[o for o in bpy.context.scene.objects if o.type=='MESH' and o.name in {'MouthLine','MouthInterior','Teeth','NostrilL','NostrilR'}]:
@@ -43,6 +52,34 @@ for obj in [face]+[o for o in bpy.context.scene.objects if o.type=='MESH' and o.
             for v,delta in zip(key.data,deltas):v.co+=delta
     for v,delta in zip(obj.data.vertices,deltas):v.co+=delta
 face['quality_finish']='central nose tip, philtrum, cupid bow, lip volume; fixed side cheeks'
+
+# A real oral aperture replaces the sealed painted mouth seam. Remove only
+# the narrow central bridge, retaining vertices, UVs, weights and all keys.
+bm=bmesh.new();bm.from_mesh(face.data)
+oral=[]
+for polygon in bm.faces:
+    p=G(polygon.calc_center_median())
+    if abs(p.x)<.027 and -.003<p.y<.002 and p.z>.100:oral.append(polygon)
+assert oral, 'No central mouth bridge found'
+bmesh.ops.delete(bm,geom=oral,context='FACES_ONLY');bm.to_mesh(face.data);bm.free()
+# Align the new boundary to a continuous lip arc. The removed polygon strip
+# alone has stair-stepped edges that become conspicuous when the jaw opens.
+bm=bmesh.new();bm.from_mesh(face.data);bm.verts.ensure_lookup_table()
+rim={v.index for edge in bm.edges if len(edge.link_faces)==1 for v in edge.verts
+     if abs(G(v.co).x)<.034 and -.013<G(v.co).y<.014 and G(v.co).z>.09}
+bm.free()
+for index in rim:
+    original=G(face.data.shape_keys.key_blocks[0].data[index].co)
+    x=original.x;arc=-.0004-.0015*(x/.030)**2
+    shape=math.sqrt(max(.02,1-(x/.030)**2))
+    p=original.copy();p.y=arc+(.0014 if original.y>arc else -.0014)*shape
+    delta=B(p)-face.data.shape_keys.key_blocks[0].data[index].co
+    for key in face.data.shape_keys.key_blocks:key.data[index].co+=delta
+    face.data.vertices[index].co+=delta
+interior=bpy.data.objects.get('MouthInterior')
+if interior:
+    for v in interior.data.vertices:
+        p=G(v.co);p.y=-.012+(p.y+.025)*3.4;p.z-=.005;v.co=B(p)
 
 fv=[G(face.matrix_world @ v.co) for v in face.data.vertices]
 ff=[tuple(p.vertices) for p in face.data.polygons]
@@ -95,6 +132,94 @@ def ball(name,center,radii,mat,n=12,k=8):
     for row in range(k):
         for col in range(n):fs.append((row*n+col,row*n+(col+1)%n,(row+1)*n+(col+1)%n,(row+1)*n+col))
     return mesh(name,vs,fs,mat)
+
+# Sixteen authored front teeth replace the single undifferentiated white oval.
+# Lower teeth follow the existing mandibular hinge bone; each crown has its own
+# chip shape and persistent server health index.
+old_teeth=bpy.data.objects.get('Teeth')
+if old_teeth:bpy.data.objects.remove(old_teeth,do_unlink=True)
+enamel=bpy.data.materials.new('Enamel');enamel.diffuse_color=(.63,.59,.48,1)
+enamel.use_nodes=True;enamel.node_tree.nodes['Principled BSDF'].inputs['Base Color'].default_value=enamel.diffuse_color
+for row in range(2):
+    for i in range(8):
+        x=(i-3.5)*.006
+        center=Vector((x,.0025 if row==0 else -.008,.099-.003*(abs(x)/.023)**2))
+        # Rounded enamel crowns: incisors have a flat cutting edge, canines a
+        # restrained cusp, with a narrower neck toward the gingiva.
+        vs=[];fs=[];height=.004 if row==0 else .0034;n=12
+        levels=[(-1,.90),(-.8,1.0),(-.3,1.0),(.35,.94),(.8,.72),(1,.55)]
+        for level,width in levels:
+            y=height*level*(1 if row==0 else -1)
+            for j in range(n):
+                a=j*math.tau/n;c=math.cos(a);s=math.sin(a)
+                dx=.0028*width*math.copysign(abs(c)**.55,c)
+                dz=.0024*width*math.copysign(abs(s)**.55,s)
+                cusp=(.0012*abs(dx/.0028) if i in (1,6) and level<-.8 else 0)
+                vs.append(center+Vector((dx,y+cusp*(1 if row==0 else -1),dz)))
+        for k in range(len(levels)-1):
+            for j in range(n):fs.append((k*n+j,k*n+(j+1)%n,(k+1)*n+(j+1)%n,(k+1)*n+j))
+        fs.extend([tuple(reversed(range(n))),tuple(range((len(levels)-1)*n,len(levels)*n))])
+        obj=mesh('Teeth%02d'%(row*8+i),vs,fs,enamel)
+        bm=bmesh.new();bm.from_mesh(obj.data);bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces));bm.to_mesh(obj.data);bm.free()
+        if row==1:
+            obj.vertex_groups['head'].remove(list(range(len(obj.data.vertices))))
+            obj.vertex_groups.new(name='jaw').add(list(range(len(obj.data.vertices))),1,'REPLACE')
+        obj.shape_key_add(name='Basis');chip=obj.shape_key_add(name='tooth_chip')
+        for v in chip.data:
+            p=G(v.co);tip=(center.y-p.y if row==0 else p.y-center.y)
+            if tip>0:
+                p.y+=(1 if row==0 else -1)*tip*.75*(.75+.25*math.sin(p.x*2100))
+            v.co=B(p)
+        obj['tooth_health_index']=row*8+i
+
+# Explicit anatomical authoring rig. The rigid skull carries orbital, nasal,
+# zygomatic and lip controllers; mandibular teeth use the existing real hinge.
+# Body/arm rest bones and metadata are unchanged.
+bpy.ops.object.select_all(action='DESELECT');rig.select_set(True);bpy.context.view_layer.objects.active=rig
+bpy.ops.object.mode_set(mode='EDIT')
+controllers={
+ 'orbit.L':(-.0381,.09,.079),'orbit.R':(.0381,.09,.079),
+ 'zygoma.L':(-.067,.054,.067),'zygoma.R':(.067,.054,.067),
+ 'nasal':(0,.035,.102),'lip.upper':(0,.005,.105),'lip.lower':(0,-.009,.105),
+ 'mouth.L':(-.027,-.002,.10),'mouth.R':(.027,-.002,.10)}
+for name,point in controllers.items():
+    bone=rig.data.edit_bones.new(name);bone.head=B(point);bone.tail=B(Vector(point)+Vector((0,.012,0)))
+    bone.parent=rig.data.edit_bones['head']
+    bone.use_deform=True
+bpy.ops.object.mode_set(mode='OBJECT')
+# Bind the facial controls to actual skin; preserve original neck/head shares.
+# Runtime contact tissue remains the shared recorded shader field, while these
+# bones make the Blender source usable for anatomical expression authoring.
+for name in controllers:
+    if not face.vertex_groups.get(name):face.vertex_groups.new(name=name)
+head_group=face.vertex_groups.get('head')
+for vertex in face.data.vertices:
+    p=G(vertex.co)
+    if p.z<.02 or p.y<-.05:continue
+    head_weight=next((g.weight for g in vertex.groups if g.group==head_group.index),0.)
+    if head_weight<=0:continue
+    candidates=[]
+    for name,point in controllers.items():
+        sx,sy=(.025,.010) if name.startswith('lip') else (.019,.027) if name=='nasal' else (.026,.020)
+        influence=gauss(p.x,p.y,point[0],point[1],sx,sy)*smooth(.025,.070,p.z)
+        candidates.append((influence,name))
+    influence,name=max(candidates)
+    weight=head_weight*min(.78,influence*.78)
+    if weight>.002:
+        head_group.add([vertex.index],head_weight-weight,'REPLACE')
+        face.vertex_groups[name].add([vertex.index],weight,'REPLACE')
+grin=face.data.shape_keys.key_blocks.get('grin')
+if grin:
+    for base,vertex in zip(face.data.shape_keys.key_blocks[0].data,grin.data):
+        p=G(base.co);p.y+=.0045*gauss(p.x,p.y,.024,-.002,.015,.013)*smooth(.065,.095,p.z)
+        vertex.co=B(p)
+for suffix,side in [('L','L'),('R','R')]:
+    for prefix in ['Eye','Iris','Pupil']:
+        obj=bpy.data.objects.get(prefix+suffix)
+        if obj:
+            for group in obj.vertex_groups:group.remove(list(range(len(obj.data.vertices))))
+            obj.vertex_groups.new(name='orbit.'+side).add(list(range(len(obj.data.vertices))),1,'REPLACE')
+rig['face_rig_contract']='rigid head, orbital/zygomatic/nasal/lip controllers, hinged mandibular teeth, independent identity and expression keys'
 
 # Retain the existing component separation and all original scalp weights.
 cap=bpy.data.objects['HairCap']
@@ -158,7 +283,7 @@ selected=[]
 for polygon in face.data.polygons:
     center=sum((fv[i] for i in polygon.vertices),Vector())/len(polygon.vertices)
     x,y,z=center
-    lip=((x/.042)**2+((y+.025)/.022)**2)<1
+    lip=((x/.042)**2+((y+.002)/.020)**2)<1
     if z>.019 and -.092<y<.008-.50*abs(x) and not lip:selected.append(tuple(polygon.vertices))
 used=sorted({i for f in selected for i in f});lookup={old:i for i,old in enumerate(used)}
 vs=[]
@@ -171,9 +296,9 @@ full=mesh('BeardFull',vs,[tuple(lookup[i] for i in f) for f in selected],beard_m
 def moustache(name,twirl=False):
     pieces=[]
     for sign in [-1,1]:
-        points=[front(sign*x,y,.003) for x,y in [(0.0,-.014),(.012,-.013),(.023,-.015),(.034,-.019)]]
+        points=[front(sign*x,y,.003) for x,y in [(0.0,.014),(.012,.013),(.023,.011),(.034,.007)]]
         if twirl:
-            points += [front(sign*x,y,.005) for x,y in [(.043,-.018),(.053,-.011),(.056,.001),(.049,.009),(.041,.006)]]
+            points += [front(sign*x,y,.005) for x,y in [(.043,.009),(.053,.016),(.056,.028),(.049,.036),(.041,.033)]]
         radii=([.004,.005,.005,.0035]+[.0035,.003,.0025,.002,.001]) if twirl else [.003,.0045,.004,.001]
         pieces.append(tube(name,points,radii,beard_mat))
     return join(name,pieces)
@@ -182,17 +307,17 @@ moustache_obj=moustache('BeardMoustache')
 goatee_faces=[]
 for polygon in face.data.polygons:
     p=sum((fv[i] for i in polygon.vertices),Vector())/len(polygon.vertices)
-    chin=abs(p.x)<.020 and -.090<p.y<-.041
-    corners=.021<abs(p.x)<.033 and -.053<p.y<-.014
+    chin=abs(p.x)<.020 and -.048<p.y<-.016
+    corners=.021<abs(p.x)<.033 and -.020<p.y<.007
     if p.z>.035 and (chin or corners):goatee_faces.append(tuple(polygon.vertices))
 goatee_used=sorted({i for f in goatee_faces for i in f});goatee_map={old:i for i,old in enumerate(goatee_used)}
 goatee_patch=mesh('ChinPatch',[fv[i]+G(face.data.vertices[i].normal)*.0025 for i in goatee_used],[tuple(goatee_map[i] for i in f) for f in goatee_faces],beard_mat)
 goatee=join('BeardGoatee',[moustache('GoateeMoustache'),goatee_patch])
-twirl=join('BeardTwirl',[moustache('TwirlMoustache',True),tube('PointedTuft',[front(0,-.060,.005),front(0,-.078,.009),front(0,-.10,.01)],[.007,.008,.0005],beard_mat,n=10)])
+twirl=join('BeardTwirl',[moustache('TwirlMoustache',True),tube('PointedTuft',[front(0,-.025,.005),front(0,-.040,.009),front(0,-.063,.018)],[.007,.008,.0005],beard_mat,n=10)])
 
 # Frontal identity keys leave all lateral cheek vertices exactly unchanged.
 # Choices vary nose/chin/lips/brows, rather than moving the physical slap target.
-parameters=[(0,0,0,0,0),( .007,.32,.018,-.006,-.008),(-.015,.22,-.012,.009,.007),(.018,-.28,.010,-.006,.004),(.012,.10,.012,-.006,-.010),(.026,.85,-.004,.002,.013)]
+parameters=[(0,0,0,0,0),( .007,.32,.008,-.006,-.008),(-.015,.22,-.012,.009,.007),(.018,-.28,.007,-.006,.004),(.012,.10,.006,-.006,-.010),(.026,.85,-.004,.002,.013)]
 def sculpt(point,index,name):
     p=Vector(point);x,y,z=p
     if index==0:return p
@@ -214,7 +339,7 @@ def sculpt(point,index,name):
         p.x+=.0035*n;p.z+=.002*bridge
     elif index==5:
         p.z-=.003*bridge
-    c=gauss(x,y,0,-.070,.033,.024)*front_weight
+    c=gauss(x,y,0,-.037,.033,.020)*front_weight
     p.z+=chin*c;p.y+=chin_y*c
     if name.startswith('Brow'):
         p.y+=brow*(1-smooth(.028,.067,abs(x)))
@@ -223,13 +348,13 @@ def sculpt(point,index,name):
         ridge=gauss(abs(x),y,.028,.104,.020,.009)*front_weight
         p.y+=brow*.25*ridge
         p.z+=(.002 if index in (1,4) else -.001 if index==2 else 0)*ridge
-    mouth=gauss(x,y,0,-.030,.037,.016)*front_weight
+    mouth=gauss(x,y,0,-.002,.037,.011)*front_weight
     if index==1:
-        p.x+=x*.16*mouth;p.y-=(y+.03)*.12*mouth
+        p.x+=x*.16*mouth;p.y-=(y+.002)*.12*mouth
     elif index==2:
-        p.y+=(y+.03)*.30*mouth;p.x+=x*.16*mouth;p.z+=.0018*mouth
+        p.y+=(y+.002)*.30*mouth;p.x+=x*.16*mouth;p.z+=.0018*mouth
     elif index==3:
-        p.x-=x*.24*mouth;p.y-=(y+.03)*.14*mouth
+        p.x-=x*.24*mouth;p.y-=(y+.002)*.14*mouth
     elif index==4:
         p.y+=.0025*mouth*(x/.035);p.z-=.001*mouth
     elif index==5:
@@ -240,7 +365,7 @@ def sculpt(point,index,name):
 head_names={'Face','MouthLine','MouthInterior','Teeth','LidsL','LidsR','BrowL','BrowR','NostrilL','NostrilR'}
 identity_surfaces={i:BVHTree.FromPolygons([sculpt(p,i,'Face') for p in fv],ff) for i in range(1,6)}
 for obj in list(bpy.context.scene.objects):
-    if obj.type!='MESH' or not (obj.name in head_names or obj.name.startswith('Beard')):continue
+    if obj.type!='MESH' or not (obj.name in head_names or obj.name.startswith(('Beard','Teeth'))):continue
     if obj.data.shape_keys is None:obj.shape_key_add(name='Basis')
     basis=obj.data.shape_keys.key_blocks[0]
     inverse=obj.matrix_world.inverted()
@@ -257,7 +382,16 @@ for obj in list(bpy.context.scene.objects):
                 if hit is not None:changed.z=hit.z+offset
             vertex.co=inverse @ B(changed)
 
-# Check the collision-relevant cheek geometry before publishing the new asset.
+# Each option now exports its actual triangle surface for host contact queries.
+# Structural base sculpt is shared; frontal identities remain separate profiles.
+face.data.calc_loop_triangles()
+collision={'version':4,'units':'game coordinates, original metres multiplied by 4',
+           'vertices':[list(G(v.co)*4) for v in face.data.shape_keys.key_blocks[0].data],
+           'triangles':[list(t.vertices) for t in face.data.loop_triangles],
+           'faces':[[list(G(v.co)*4) for v in face.data.shape_keys.key_blocks[0 if i==0 else f'identity_{i}'].data] for i in range(6)]}
+(ROOT/'game/assets/face_customizable_collision.json').write_text(json.dumps(collision,separators=(',',':')),encoding='utf-8')
+# Frontal identities share the structural side planes, while host collision
+# profiles also include each option's distinct nose, lips and chin.
 for key in face.data.shape_keys.key_blocks:
     if not key.name.startswith('identity_'):continue
     for original,vertex in zip(face.data.shape_keys.key_blocks[0].data,key.data):
@@ -283,4 +417,4 @@ bpy.ops.export_scene.gltf(filepath=str(ROOT/'game/assets/character_customizable.
 for obj in [short,side,curls,iro,full,moustache_obj,goatee,twirl]:obj.hide_set(True);obj.hide_render=True
 bpy.context.scene['options_catalog']=json.dumps(catalog,ensure_ascii=False)
 bpy.ops.wm.save_as_mainfile(filepath=str(ROOT/'assets-source/character-customizable.blend'))
-print('CHARACTER_OPTIONS_BLENDER_PASS: 6 faces, 6 hairstyles, 6 beards; lateral cheeks unchanged')
+print('CHARACTER_OPTIONS_BLENDER_PASS: 6 faces/hair/beards; anatomical rig; 16 teeth; six exact host collision profiles')

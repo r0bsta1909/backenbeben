@@ -160,12 +160,21 @@ func apply_finger_relax(amount: float, side: String) -> void:
 func set_eye_closure(amount: float) -> void:
 	if blink_index>=0:face_mesh.set_blend_shape_value(blink_index,clampf(amount,0.0,1.0))
 
+func set_jaw_open(angle: float) -> void:
+	var index: int=skeleton.find_bone("jaw")
+	if index<0:return
+	var rest: Transform3D=skeleton.get_bone_rest(index)
+	var axis: Vector3=(skeleton.get_bone_global_rest(index).basis.inverse()*Vector3.RIGHT).normalized()
+	skeleton.set_bone_pose_rotation(index,rest.basis.get_rotation_quaternion()*Quaternion(axis,clampf(angle,-.35,.65)))
+	var fracture: float=float(get_meta("jaw_fracture",0.0))
+	skeleton.set_bone_pose_position(index,rest.origin+skeleton.get_bone_global_rest(index).basis.inverse()*Vector3(.00875*fracture,-.003*fracture,0))
+
 func first_person(enabled: bool) -> void:
 	if enabled==is_first_person:return
 	is_first_person=enabled
 	for node in model.find_children("*","MeshInstance3D",true,false):
 		var n := str(node.name)
-		if n in ["Face","FaceInk","Neck","HairCap","MouthLine","MouthInterior","Teeth"] or n.begins_with("Eye") or n.begins_with("Iris") or n.begins_with("Pupil") or n.begins_with("Ear") or n.begins_with("Lids") or n.begins_with("Brow") or n.begins_with("Nostril"):
+		if n in ["Face","FaceInk","Neck","HairCap","MouthLine","MouthInterior","Teeth"] or n.begins_with("Teeth") or n.begins_with("Eye") or n.begins_with("Iris") or n.begins_with("Pupil") or n.begins_with("Ear") or n.begins_with("Lids") or n.begins_with("Brow") or n.begins_with("Nostril"):
 			node.visible=not enabled
 	refresh_hair_visibility()
 

@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "units": "game coordinates, original metres multiplied by 4",
+  "regions": [
+    {"name":"cheek_L","center":[-0.28,0.14,0.25],"radius":[0.14,0.17,0.18],"bone":"zygoma_L"},
+    {"name":"cheek_R","center":[0.28,0.14,0.25],"radius":[0.14,0.17,0.18],"bone":"zygoma_R"},
+    {"name":"eye_L","center":[-0.1524,0.36,0.32],"radius":[0.09,0.09,0.14],"bone":"orbit_L"},
+    {"name":"eye_R","center":[0.1524,0.36,0.32],"radius":[0.09,0.09,0.14],"bone":"orbit_R"},
+    {"name":"jaw_L","center":[-0.20,-0.20,0.22],"radius":[0.16,0.12,0.18],"bone":"mandible_L"},
+    {"name":"jaw_R","center":[0.20,-0.20,0.22],"radius":[0.16,0.12,0.18],"bone":"mandible_R"},
+    {"name":"mouth","center":[0,-0.008,0.42],"radius":[0.14,0.08,0.14],"bone":"mandible_center"},
+    {"name":"nose","center":[0,0.16,0.42],"radius":[0.09,0.14,0.16],"bone":"nasal"}
+  ],
+  "jaw_hinge":[0,-0.056,-0.096],
+  "channels":["bruise","swelling","cut","bleeding"],
+  "notes":"Authored comic gameplay anatomy, not a medical fracture simulation. Permanent appearance and transient contact tissue are separate."
+}

@@ -6,21 +6,39 @@ from functools import lru_cache
 from pathlib import Path
 import numpy as np
 from arm import Arm,DT,add,mul,sub,dot,unit
-DATA=json.loads((Path(__file__).resolve().parents[1]/'game/assets/face_v3_collision.json').read_text())
+DATA=json.loads((Path(__file__).resolve().parents[1]/'game/assets/face_customizable_collision.json').read_text())
 VERTICES=np.array(DATA['vertices']);INDICES=np.array(DATA['triangles'])
+FACE_VERTICES=[np.array(face) for face in DATA['faces']]
 CELL=.015
 from hand_surface import DATA as HAND_SURFACE,world_samples,world_positions
 PALM_AREA=sum(s['area_m2'] for s in HAND_SURFACE['samples'] if s['region']=='palm')
 
 @lru_cache(maxsize=8)
-def projected(angle,injury_left=0.,injury_right=0.,injury_jaw=0.,axis=2):
+def projected(angle,injury_left=0.,injury_right=0.,injury_jaw=0.,axis=2,regional=()):
     def smooth(a,b,x):
         t=np.clip((x-a)/(b-a),0,1);return t*t*(3-2*t)
-    v=VERTICES.copy();front=smooth(.02,.22,v[:,2])
+    face_index=max(0,min(5,int(regional[8]))) if len(regional)>8 else 0
+    v=FACE_VERTICES[face_index].copy();front=smooth(.02,.22,v[:,2])
     swelling=np.where(v[:,0]<0,injury_left,injury_right)*np.exp(-((np.abs(v[:,0])-.28)/.17)**2-((v[:,1]-.17)/.2)**2)*front
-    v[:,2]+=swelling*.035
-    jaw=(1-smooth(-.30,.03,v[:,1]))*smooth(-.52,-.3,v[:,1])*front
-    v[:,0]+=jaw*injury_jaw*.09;v[:,1]-=jaw*injury_jaw*.05
+    if not regional:v[:,2]+=swelling*.035
+    else:
+        from face_damage import REGIONS
+        for i,region in enumerate(REGIONS):
+            q=(v-np.array(region['center']))/np.array(region['radius'])
+            mask=np.exp(-np.sum(q*q,axis=1)*1.5)*front
+            normal=np.array([region['center'][0]*.7,0.,.30]);normal/=np.linalg.norm(normal)
+            v+=normal[None,:]*(mask*regional[i]*.045)[:,None]
+            if i in (2,3):v[:,1]+=(region['center'][1]-v[:,1])*mask*regional[i]*.72
+            if len(regional)>16 and i not in (4,5,6):
+                v-=normal[None,:]*(mask*regional[9+i]*.014)[:,None]
+                if i==7:v[:,0]+=mask*regional[9+i]*.024
+    oral=1-smooth(.11,.17,np.abs(v[:,0]))
+    jaw=((1-smooth(-.23,-.025,v[:,1]))*(1-oral)+(1-smooth(-.008,.008,v[:,1]))*oral)*smooth(-.52,-.3,v[:,1])*front
+    opening=jaw*injury_jaw*.12
+    dy=v[:,1]+.056;dz=v[:,2]+.096
+    v[:,1]=-.056+np.cos(opening)*dy-np.sin(opening)*dz
+    v[:,2]=-.096+np.sin(opening)*dy+np.cos(opening)*dz
+    v[:,0]+=jaw*injury_jaw*.035;v[:,1]-=jaw*injury_jaw*.012
     c,s=math.cos(angle),math.sin(angle);v=v@np.array([[c,0,-s],[0,1,0],[s,0,c]])
     v=v[:,[2,1,0]] if axis==0 else v
     tri=v[INDICES];bins={}
@@ -31,7 +49,8 @@ def projected(angle,injury_left=0.,injury_right=0.,injury_jaw=0.,axis=2):
     return tri,{k:np.array(ids) for k,ids in bins.items()}
 
 def surface(x,y,head_angle=0.,skin_state=(0.,0.,0.),axis=2):
-    tri,bins=projected(round(head_angle,5),*[round(v,5) for v in skin_state],axis);ids=bins.get((math.floor(x/CELL),math.floor(y/CELL)))
+    state=tuple(round(v,5) for v in skin_state)
+    tri,bins=projected(round(head_angle,5),*state[:3],axis,state[3:]);ids=bins.get((math.floor(x/CELL),math.floor(y/CELL)))
     if ids is None:return None
     t=tri[ids];a,b,c=t[:,0],t[:,1],t[:,2]
     den=(b[:,1]-c[:,1])*(a[:,0]-c[:,0])+(c[:,0]-b[:,0])*(a[:,1]-c[:,1])
@@ -52,7 +71,7 @@ def side_surface(y,z,skin_state=(0.,0.,0.)):
 
 @lru_cache(maxsize=8)
 def side_query_table(skin_state):
-    tri,bins=projected(0.,*skin_state,0)
+    tri,bins=projected(0.,*skin_state[:3],0,skin_state[3:])
     cells=np.array(list(bins));lower=cells.min(axis=0);upper=cells.max(axis=0)
     width=int(max(len(ids) for ids in bins.values()))
     table=np.full((*tuple(upper-lower+1),width),len(tri),dtype=np.int32)
