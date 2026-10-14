@@ -26,4 +26,11 @@ assert len(signatures)==5
 assert all(name in face.data.shape_keys.key_blocks for name in ['blink','grin'])
 images=[n.image for m in face.data.materials if m.use_nodes for n in m.node_tree.nodes if n.type=='TEX_IMAGE']
 assert images and all(i.packed_file for i in images)
+# Compare against the unchanged source, not just against other identity keys.
+with bpy.data.libraries.load(str(ROOT/'assets-source/character-v3.blend')) as (source,target):
+    target.objects=['Face']
+original=target.objects[0]
+assert len(original.data.vertices)==len(face.data.vertices)
+for a,b in zip(original.data.shape_keys.key_blocks[0].data,basis.data):
+    if abs(a.co.x)>=.045:assert (a.co-b.co).length<1e-8, 'changed canonical side cheek'
 print('CHARACTER_OPTIONS_SOURCE_PASS: 18 options; skin weights; distinct morphs; unchanged lateral cheeks; packed paint')

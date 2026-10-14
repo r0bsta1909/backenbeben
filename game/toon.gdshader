@@ -6,6 +6,9 @@ uniform float geometry_scale = 1.0;
 uniform bool face_skin = false;
 uniform bool hair_surface = false;
 uniform bool eye_surface = false;
+uniform bool iris_surface = false;
+uniform bool pupil_surface = false;
+uniform bool skin_surface = false;
 uniform int beard_style = 1;
 uniform int face_style = 0;
 uniform vec4 beard_color : source_color = vec4(.04,.025,.018,1.0);
@@ -33,6 +36,21 @@ void fragment() {
         // Painted socket shadow follows authored UV2, never the camera/world axes.
         color*=1.0-.60*smoothstep(.45,.88,UV2.x);
     }
+    if(iris_surface || pupil_surface) {
+        vec3 local=skin_position/geometry_scale;
+        vec2 q=(local.xy-vec2(sign(local.x)*.03810625,.09))/.0056;
+        float radius=length(q);
+        float phase=atan(q.y,q.x)*38.0+radius*12.0;
+        float detail=(.5+.5*sin(phase))*(1.0-smoothstep(.65,2.0,fwidth(phase)));
+        if(iris_surface) {
+            color=mix(vec3(.19,.22,.13),vec3(.34,.37,.23),smoothstep(.30,.65,radius));
+            color*=.82+.18*detail;
+            color=mix(color,vec3(.065,.08,.055),smoothstep(.85,1.05,radius));
+            color*=1.0-.40*smoothstep(.45,.88,UV2.x);
+        }
+        float glint=1.0-smoothstep(.10,.22,length(q-vec2(-.23,-.08)));
+        color=mix(color,vec3(.82,.88,.80),glint*.85);
+    }
     if(hair_surface) {
         color+=vec3(.045,.026,.012)*smoothstep(.15,.75,d);
         vec3 h=skin_position/geometry_scale;
@@ -50,8 +68,15 @@ void fragment() {
         // The old frontal ink contains faint stubble; clean and styled beards
         // get their own layer rather than inheriting that baked shadow.
         float lower_face=1.0-smoothstep(-.005,.025,local.y);
-        float paint_strength=beard_style==1 ? .65 : .65*(1.0-.85*lower_face);
+        float paint_strength=beard_style==1 ? .58 : .58*(1.0-.70*lower_face);
+        float socket=exp(-pow(abs((abs(local.x)-.0381)/.025),4.0)-pow(abs((local.y-.088)/.019),4.0));
+        paint_strength*=1.0-.24*socket;
         color*=mix(1.0,ink,paint_mask*paint_strength);
+        // Restrained lip pigment follows authored rest coordinates and all
+        // skin tones; volume and shadows still come from the anatomical mesh.
+        float lips=exp(-pow(abs(local.x)/.032,6.0)-pow(abs((local.y+.027)/.012),4.0));
+        lips*=paint_mask*smoothstep(.045,.085,local.z);
+        color*=mix(vec3(1.0),vec3(.98,.80,.76),lips*.55);
         float injury=skin_position.x<0.0?injury_left:injury_right;
         vec2 q=vec2(abs(skin_position.x),skin_position.y);
         // Rest-space beard silhouette and short ink stubble, following the head.
@@ -87,8 +112,12 @@ void fragment() {
         float drip=(1.0-smoothstep(.005,.014,abs(skin_position.x-.11-.012*sin(q.y*45.0))))*smoothstep(-.32,-.26,q.y)*(1.0-smoothstep(-.07,-.03,q.y));
         color=mix(color,vec3(.38,.012,.022),drip*injury_jaw);
     }
+    if(skin_surface) {
+        float tone=dot(base_color.rgb,vec3(.2126,.7152,.0722));
+        color*=mix(1.12,.78,smoothstep(.02,.35,tone));
+    }
     ALBEDO = mix(vec3(0.035,0.032,0.045), color, edge);
-    EMISSION = ALBEDO * vec3(.20,.22,.26);
+    EMISSION = ALBEDO * (skin_surface ? vec3(.29,.30,.32) : vec3(.20,.22,.26));
 }
 
 void light() {
@@ -96,8 +125,13 @@ void light() {
     // Keep three flat ink bands, but cover their boundaries across a pixel.
     // A hard comparison creates crawling stair-steps during head/hand motion.
     float pixel_width=clamp(fwidth(facing)*.75,.001,.06);
-    float band=.10+.52*smoothstep(.12-pixel_width,.12+pixel_width,facing)
+    float band=skin_surface ? .20+.43*smoothstep(.12-pixel_width,.12+pixel_width,facing)
+        +.25*smoothstep(.65-pixel_width,.65+pixel_width,facing)
+        : .10+.52*smoothstep(.12-pixel_width,.12+pixel_width,facing)
         +.38*smoothstep(.65-pixel_width,.65+pixel_width,facing);
     // Real shadow attenuation keeps the hand, nose and face in one space.
     DIFFUSE_LIGHT += band * ATTENUATION * LIGHT_COLOR / PI;
+    // Several stage lights used to accumulate into clipped white skin.
+    // Cap only the skin response, retaining actual hand/nose shadow attenuation.
+    if(skin_surface)DIFFUSE_LIGHT=min(DIFFUSE_LIGHT,vec3(.72));
 }

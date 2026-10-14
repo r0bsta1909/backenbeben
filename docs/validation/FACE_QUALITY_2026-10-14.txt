@@ -1,0 +1,34 @@
+BACKENBEBEN — GEMEINSAMER GESICHTSSCHLIFF — 14.10.2026
+Auftrag: Gesicht als Kernpunkt des Spiels qualitativ verbessern.
+Referenz: docs/art-direction-v3/01-character-face.png; XIII/Actioncomic bleibt.
+
+Geometrie: Nase/Fluegel, Philtrum, Amorbogen und Lippenvolumen im gemeinsamen
+Basiskopf verfeinert. Gleiche Restdeltas fuer vorhandene Ausdrucksmorphs;
+alle sechs Identitaetsvarianten daraus abgeleitet. Arme/Rig/Seitenwangen behalten.
+Blenderquelle und GLB neu erzeugt. Autorenskript reproduziert diesen Stand.
+Material: weniger dunkle Augenuebermalung, dezent warmer Lippenbereich;
+Iris mit radialer Struktur und Limbusring, kleiner Reflex auf Iris/Pupille.
+Pupillenmaterial im Cache von anderem Kopf-Ink getrennt. Keine neuen Drawpasses.
+Haut reagiert mit gedeckelter Lichtsumme und nach Grundton abgestufter Helligkeit:
+sehr helle Haut verliert den zuvor ausgebrannten Weissbereich; tiefe Toene
+erhalten mehr Zeichnung. Reale Schattendämpfung bleibt im vorhandenen Lichtpfad.
+Keine fremden Texturen oder neuen Plugins benoetigt; feste Frontprojektion der
+bisherigen Konzepttextur bleibt eine Vereinfachung, keine neue handgemalte UV-Map.
+
+Pruefungen:
+Blender-Reopen/UVs/Gewichte/Morphs/18 Optionen PASS. Seitenwangen explizit gegen
+character-v3.blend verglichen, identisch; kanonische Kontaktgeometrie erhalten.
+216 Formen/First-Person-Kameras sowie alle7 Hauttoene an Kopf/Körper/Hand/
+Spiegel PASS. Nativer ArenaMatch PASS. Strenger Godot-Import/Webexport PASS.
+Verletzungen beidseitig auf allen7 Farben gerendert:0/35/75/0, exakte gesunde
+Ruecksetzung PASS. Sehr helle Verletzungsdarstellung gesichtet.
+Native Nahansichten: Front/Profil/Dreiviertel, helle/tiefe Haut, volle Lidclosure,
+Grinsen, Veteran mit Vollbart; vor/nach bei gleichen Kameras gesichtet.
+Arena-Design/28-gesicht-vorher.png und28-gesicht-verbessert.png.
+Reproduktion: Godot --path game --script ../scripts/capture_face_quality.gd.
+Browser-Treffer-/Replaycheck mit Produktionssolver PASS errors[], Solve1933.5ms,
+Kontaktkameras/Marker/Gelenkdarstellung/Ruecklauf/Spiegel. Kontaktansicht gesichtet.
+Erster Aufruf verwendete den alten Defaultport8877; mit explizitem Testport8879
+bestanden. Inspect-Timeout-Untertest nicht angefordert. Testhost beendet.
+Keine neue menschliche Stil-/Spielabnahme oder Web-Leistungsmessung.
+V14-Download bleibt aelterer Stand; kein neues Releasepaket.

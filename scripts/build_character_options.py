@@ -20,6 +20,30 @@ def smooth(a,b,v):
     t=max(0,min(1,(v-a)/(b-a)));return t*t*(3-2*t)
 def gauss(x,y,cx,cy,sx,sy): return math.exp(-((x-cx)/sx)**2-((y-cy)/sy)**2)
 
+# Refine the shared central anatomy without moving the physical side cheeks.
+# Apply the same rest delta to every existing expression key, preserving its
+# relative displacement and the existing blink/contact deformation contract.
+def face_finish(point):
+    p=Vector(point);x,y,z=p
+    guard=(1-smooth(.029,.045,abs(x)))*smooth(.035,.072,z)
+    p.z+=guard*(.0028*gauss(x,y,0,.018,.017,.018)
+                -.0010*gauss(x,y,0,-.005,.006,.014)
+                +.0024*gauss(x,y,0,-.036,.027,.007)
+                +.0014*gauss(x,y,0,-.020,.026,.005))
+    p.x+=guard*(.0009 if x>=0 else -.0009)*gauss(abs(x),y,.017,.014,.007,.012)
+    p.y-=guard*.0007*gauss(x,y,0,-.020,.007,.006)
+    return p
+
+for obj in [face]+[o for o in bpy.context.scene.objects if o.type=='MESH' and o.name in {'MouthLine','MouthInterior','Teeth','NostrilL','NostrilR'}]:
+    inverse=obj.matrix_world.inverted()
+    base=obj.data.shape_keys.key_blocks[0].data if obj.data.shape_keys else obj.data.vertices
+    deltas=[inverse @ B(face_finish(G(obj.matrix_world @ v.co)))-v.co for v in base]
+    if obj.data.shape_keys:
+        for key in obj.data.shape_keys.key_blocks:
+            for v,delta in zip(key.data,deltas):v.co+=delta
+    for v,delta in zip(obj.data.vertices,deltas):v.co+=delta
+face['quality_finish']='central nose tip, philtrum, cupid bow, lip volume; fixed side cheeks'
+
 fv=[G(face.matrix_world @ v.co) for v in face.data.vertices]
 ff=[tuple(p.vertices) for p in face.data.polygons]
 bvh=BVHTree.FromPolygons(fv,ff)

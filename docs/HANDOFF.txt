@@ -2369,3 +2369,17 @@ Verletzungen beidseitig auf allen7 Farben nativ gerendert und Ruecksetzung PASS;
 neue sehr helle/tiefdunkle Verletzungsdarstellung und Vergleich gesichtet.
 Vorschau Arena-Design/27-hauttoene.png; capture_character_options.gd -- --skin-tones.
 Kein neuer menschlicher Spieltest oder Releasebuild. V14 bleibt aelterer Stand.
+
+GEMEINSAMER GESICHTSSCHLIFF — 14.10.2026
+Zentrale Nasen-/Lippenanatomie und Philtrum im Basiskopf verbessert; Ausdrucks-
+und Identitaetsmorphs kompatibel. Seitenwangen gegen Originalquelle exakt gleich.
+Hautmaterial: helle Toene ohne ausgebranntes Weiss, abgestufte Tonkompensation,
+zurueckgenommene Augenuebermalung, dezente Lippenpigmentierung. Iris/Ring/Reflex,
+separater Pupillen-Cache. Keine neue Geometrie im seitlichen Kontaktbereich.
+Blenderquelle/GLB aktualisiert; Autoren-/Vergleichs-/Validierungsskripte vorhanden.
+Native Front/Profil/Dreiviertel/Blink/Grin/Hautextreme/Bart gesichtet, 28-*.png.
+Quelle/216 Formen/7 Farben/ArenaMatch/Verletzungsruecksetzung/Webbuild PASS.
+Browser-Treffer-/Replaycheck Produktionssolver PASS errors[], Kontakt gesichtet,
+Solve1933.5ms. Testhost beendet. V14-Download weiterhin aelterer Stand.
+Beleg validation/FACE_QUALITY_2026-10-14.txt. Bisherige frontal projizierte
+Konzepttextur bleibt Vereinfachung; kein neuer menschlicher Abnahmetest.
