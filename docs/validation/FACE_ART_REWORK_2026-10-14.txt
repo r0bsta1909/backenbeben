@@ -1,0 +1,92 @@
+BACKENBEBEN — COMIC-GESICHTER: FORM UND ZEICHNUNG — 14.10.2026
+
+AUFTRAG / EINORDNUNG
+Nutzer lehnt die bisherige optische Qualitaet weiterhin ab: Comicgrafik bleibt,
+Gesichter muessen viel besser aussehen. Zielreferenz bleibt die urspruengliche
+europaeische Actioncomic-Vorlage. Technische Tests sind keine Designabnahme.
+Neue Spielansichten zeigen das echte Modell, nicht den generierten Texturentwurf.
+
+FORM
+Unteres Gesicht gestrafft und etwas verkuerzt, Nasenprojektion reduziert, Spitze
+und Nasenfluegel abgegrenzt. Orbitalleisten, untere Lider, Jochbein und Masseter-
+Uebergang neu gewichtet. Schaedel-, Orbital-, Lippen- und Kiefercontroller erhalten.
+Lippenpatch von4 auf8 zusammenhaengende Ringe erweitert; regelmaessiger radialer
+Tiefenverlauf statt Projektion auf gefaltete innere Lippenflaechen. Flache Rippen
+ueber verbundene Nachbarschaften geglaettet; Mundrand dabei festgehalten.
+Mundbreite von58 auf66mm in der Autorenquelle; getrennte Ober-/Unterlippentinte.
+Brauen neu als geschlossene, hautkonforme Baender mit fuenf Samples quer zur
+Breite aufgebaut. Die alte Zwei-Kantenflaeche zeigte helle Hautdurchbrueche.
+Sechs Identitaeten mit abgestuften Nasen und unterschiedlichen Augenabstaenden.
+Augen, Iris und Pupille erhalten dieselben Identitaetsmorphs wie die Augenhoehle.
+Iriszentrum im Shader folgt dem Abstand; face_style wird nun auch an die Augen-
+materialien uebergeben. Neue native Regression ueber alle216 Kombinationen.
+Haare/Beard-Auswahl und7 unabhaengige Hautfarben bleiben verfuegbar.
+
+ILLUSTRATION / MATERIAL
+Eine gemeinsame Welt-Lichtrichtung definiert zusammenhaengende Gesichts-Toon-
+flaechen; echte Szenenlichter behalten Kontaktabschattung und sanfte Aufhellung.
+Lokales weiches Normalenfeld am Lippenpatch mit separatem Lippenrollanteil,
+damit duenne radiale Quads keine einzelnen Schatteninseln erzeugen.
+Neue native eingebaute Imagegen-Textur: game/assets/face_ink_v3.png.
+Original face_ink_v2.png unveraendert. Neue Textur in Blender gepackt und im
+Spielmaterial referenziert. Grossflaechige gemalte Beleuchtung bleibt ausgefiltert;
+feine Tinte und ein begrenzter Hochfrequenz-Brushanteil werden verwendet.
+Gemalte Augen/Brauen/Mund werden maskiert, damit sie sich nicht mit echten
+Augen- und Lippenformen doppeln. Bartmuster bleiben ueber die Auswahl steuerbar.
+Eine Frontprojektion bleibt eine Vereinfachung; dies ist kein voll bemalter
+360-Grad-UV-Atlas. Feine Zeichnung muss aus mehreren Richtungen beurteilt werden.
+
+VERTRAG
+Charakter-/Kontaktversion6 erforderlich; alte5 wird beim Join abgewiesen.
+Gestenprotokoll3 / regionaler Schadenszustand1 bleiben erhalten. Sechs exakte
+Kontaktprofile neu aus der Quelle exportiert; Host und Renderer gemeinsam nutzen.
+Original character-v3.blend und Arm-/Hand-/Tisch-/Arena-/Sponsor-Assets unveraendert.
+Hoenhorst nicht angefasst. Kein neues V14-Releasepaket; Webbuild aktualisiert.
+
+PRUEFUNGEN
+Blender Quelle PASS: Optionen/Gewichtssummen/Brauenabstand/Controller/Zahnkronen/
+gepackte Zeichnung, ein durchgehender geschlossener Mundrand,6 exakte Profile.
+172 Servertests final PASS35.346s. Eine geometrieabhaengige Richtungsfixture
+angepasst: auf der neuen Flaeche sind -18/-15 flach; -21 verbessert sich nach
+unten, -12 nach oben. Mit dem echten Scorer vermessen, Kriterien nicht gelockert.
+Native216 Kombinationen/7 Farben/FirstPerson/Identitaetsmorphs PASS; Irisdetail-
+Uniform an allen Varianten geprueft. Zahn-/Chip-/Fehlend-/Reset-/Kiefer PASS.
+GPU-Normalenpruefung und ArenaMatch/KO/Spiegel PASS. Strenger Import/Webexport PASS.
+Browser2Clients: Vorschau/Persistenz/LAN/Layouts/Reset/Zufall, Variantenkampf und
+regionale Replays PASS errors[]. Separater realer Maus-/Kontakt-/Spiegel-/Replay-
+Check PASS errors[]. Eigener Testhost8895 nach Pruefung beendet.
+Front/Dreiviertel/Profil/Hautextreme/Blink/Grinsen/Bart,6 Identitaeten,6 Lidschluesse
+und regionale Extremfixtures gesichtet. Hero-Modus zeigt Klassisch+Dreitagebart
+in3Ansichten. Keine neue Leistungs-/Mehrhardwarefreigabe.
+Erster Browserstart war vor Hostbereitschaft (connection refused); nach HTTP-
+Bereitschaft wiederholt. Erste Brauendaten-Ersetzung loeschte Bindungsgruppen;
+Headgruppe neu angelegt, finale Quelle und Runtime bestanden.
+
+KUNST / GRENZEN
+Diese Fassung ersetzt den zuvor abgelehnten Stand; sie hat keine menschliche
+Designabnahme. Gesichter teilen weiterhin einen gemeinsamen Schaedel und Rig.
+Haare bleiben die vorhandenen modularen Modelle. Extreme Mundinnenraeume und
+regionale Arcade-Bruchverformungen sind weiterhin vereinfacht; kein medizinisches
+Bruchmodell, keine frei abgetrennten Knochen-/Zahnfragmente. Verletzungstafeln
+nutzen gezielte wiederholte Treffer unabhaengig vom Match-KO. Alte Solver-
+Konvergenzgrenzen weiter beachten. Der Prompt-Atlas ist keine Ingame-Vorschau.
+
+VORSCHAU / REPRODUKTION
+Arena-Design/32-grundkopf-ingame.png,32-comic-gesichter.png,
+32-kopf-nahansichten.png und32-regionales-schadensmodell.png.
+Blender --background --python scripts/build_character_options.py
+Blender -b assets-source/character-customizable.blend --python scripts/validate_character_options.py
+scripts/build.ps1
+Godot --path game --script ../scripts/capture_face_quality.gd -- --hero
+Godot --path game --script ../scripts/capture_face_quality.gd -- --identities
+Godot --path game --script ../scripts/capture_face_quality.gd -- --identities --blinks
+Godot --path game --script ../scripts/capture_face_damage.gd
+
+TEXTURPROVENIENZ UND FINALER ERZEUGUNGSPROMPT
+Built-in image_gen.imagegen, kein CLI/API-Fallback. Ergebnis lokal ins Projekt
+kopiert: E:/Chattie/Projekt BackenBeben/backenbeben/game/assets/face_ink_v3.png.
+Edit-Target war face_ink_v2.png; Stilreferenz docs/art-direction-v3/01-character-face.png.
+Der generierte Atlas enthielt trotz clean-shaven-Anweisung leichte Bartpunkte;
+die unteren Tintenbereiche werden fuer glattrasierte/stilisierte Baerte maskiert.
+
+Use case: style-transfer. Asset type: production frontal projection face skin texture for a deformable 3D comic game head. Image 1 is the EDIT TARGET texture and its exact square layout, head silhouette, facial landmark positions, ears, bald scalp and cropped neck MUST stay locked. Image 2 is the art-direction reference only. Repaint Image 1 to a substantially higher quality mature European action-comic graphic novel style matching Image 2: confident fine hand-inked tapered lines, carefully defined lids, clean nostrils and lips, subtle anatomical facial planes and restrained fine hatching. Beautiful well-drawn human anatomy; no crude polygon or vector-poster look. Same neutral adult male identity, bald and clean-shaven, no hair, no beard/stubble (these are separate modular game assets). Keep eyes and mouth at EXACT same target coordinates and sizes; do not invent scars or injuries. Gentle evenly lit warm ochre skin suitable to recolor, only restrained lighting so 3D runtime can shade it. No harsh large directional shadow, no glossy photorealism, no background scenery, no text. This is a square UV projection texture, not a new portrait composition: preserve framing and the dark neutral background exactly.

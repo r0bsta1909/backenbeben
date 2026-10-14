@@ -17,18 +17,20 @@ func capture() -> void:
 		["Sehr helle Haut",4,0,0,0,0],["Tiefe Haut",5,0,25,0,0],
 		["Geschlossene Lider",0,0,0,1,0],["Grinsen",0,0,20,0,1],["Veteran / Bart",1,4,25,0,0]]
 	var identities: bool="--identities" in OS.get_cmdline_user_args()
+	var hero: bool="--hero" in OS.get_cmdline_user_args()
+	if hero:views=views.slice(0,3)
 	if identities:
 		views=[]
 		var names: Array=["Klassisch","Markant","Weich","Schmal","Veteran","Knollennase"]
 		for i in range(6):views.append([names[i],0,i,15,0,0])
 	if "--blinks" in OS.get_cmdline_user_args():
 		for v in views:v[4]=1
-	var columns: int=3 if identities else 4
+	var columns: int=3 if identities or hero else 4
 	var directory:=ProjectSettings.globalize_path("res://../logs/face-quality");DirAccess.make_dir_recursive_absolute(directory)
-	var sheet:=Image.create(columns*480,1200,false,Image.FORMAT_RGBA8)
+	var sheet:=Image.create(columns*480,600 if hero else 1200,false,Image.FORMAT_RGBA8)
 	for i in range(views.size()):
 		var v: Array=views[i];label.text=v[0]
-		scene.apply_fighter(scene.fighter,{"skin":v[1],"face_style":v[2],"hair_style":0,"beard_style":2 if i==7 else 0},true)
+		scene.apply_fighter(scene.fighter,{"skin":v[1],"face_style":v[2],"hair_style":0,"beard_style":1 if hero else 2 if i==7 else 0},true)
 		scene.fighter.pose_defender(.85);scene.fighter.set_eye_closure(v[4])
 		if "--no-teeth" in OS.get_cmdline_user_args():
 			for mesh in scene.fighter.model.find_children("Teeth*","MeshInstance3D",true,false):mesh.hide()
@@ -43,6 +45,7 @@ func capture() -> void:
 		var picture:=root.get_texture().get_image();picture.convert(Image.FORMAT_RGBA8);picture.save_png(directory+"/%d.png"%i)
 		sheet.blit_rect(picture,Rect2i(0,0,480,600),Vector2i(i%columns*480,i/columns*600))
 	var filename: String="/identities.png" if identities else "/comparison.png"
+	if hero:filename="/hero.png"
 	if "--blinks" in OS.get_cmdline_user_args():filename="/blinks.png"
 	if "--no-teeth" in OS.get_cmdline_user_args():filename="/occlusion-check.png"
 	if "--clay" in OS.get_cmdline_user_args():filename=filename.replace("/","/clay-")

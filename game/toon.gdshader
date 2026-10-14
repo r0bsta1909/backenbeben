@@ -23,6 +23,17 @@ void vertex() {
     // Frontal concept paint must not stretch across temple/ear side planes.
     // Use the rest surface orientation, not camera facing, so marks stay put.
     front_paint_weight=UV2.x;
+    if(face_skin) {
+        // Transfer a smooth oral normal field across the reconstructed patch.
+        // Its silhouette remains geometric; this prevents thin radial quads
+        // from creating isolated ink bands on the cheeks and chin.
+        float oral_mask=exp(-pow(abs(p.x)/.18,4.0)-pow(abs((p.y+.025)/.16),4.0))
+            *smoothstep(.26,.36,p.z);
+        float lip_roll=-.21*exp(-pow((p.y-.012)/.014,2.0))
+            +.15*exp(-pow((p.y+.020)/.014,2.0));
+        vec3 oral_normal=normalize(vec3(p.x*.5,(p.y+.04)*.65+lip_roll,.5));
+        NORMAL=normalize(mix(NORMAL,oral_normal,oral_mask*.88));
+    }
     NORMAL=deform_face_normal(p,NORMAL);
     p=deform_face(p);
     VERTEX=p/geometry_scale-part_origin;
@@ -40,7 +51,8 @@ void fragment() {
     }
     if(iris_surface || pupil_surface) {
         vec3 local=skin_position/geometry_scale;
-        vec2 q=(local.xy-vec2(sign(local.x)*.03810625,.09))/.0056;
+        float spacing=face_style==1?-.0022:face_style==2?.0012:face_style==3?-.0010:face_style==4?-.0015:face_style==5?.0020:0.;
+        vec2 q=(local.xy-vec2(sign(local.x)*(.03810625+spacing),.09))/.0056;
         float radius=length(q);
         float phase=atan(q.y,q.x)*38.0+radius*12.0;
         float detail=(.5+.5*sin(phase))*(1.0-smoothstep(.65,2.0,fwidth(phase)));
@@ -65,14 +77,15 @@ void fragment() {
         vec3 local=skin_position/geometry_scale;
         vec2 paint_uv=UV;
         vec3 paint=texture(face_ink,paint_uv).rgb;
+        vec3 soft_paint=textureLod(face_ink,paint_uv,3.0).rgb;
         float paint_mask=front_paint_weight;
         // Extract fine ink only. The guide's painted lighting used to stack
         // on real 3D shadows and create muddy patches and orange chin spots.
-        float ink=mix(1.0,.30,1.0-smoothstep(.035,.10,paint.r));
+        float ink=mix(1.0,.30,1.0-smoothstep(.05,.28,paint.r));
         // The old frontal ink contains faint stubble; clean and styled beards
         // get their own layer rather than inheriting that baked shadow.
         float lower_face=1.0-smoothstep(-.005,.025,local.y);
-        float paint_strength=beard_style==1 ? .58 : .58*(1.0-.70*lower_face);
+        float paint_strength=beard_style==1 ? .38 : .38*(1.0-lower_face);
         float socket=exp(-pow(abs((abs(local.x)-.0381)/.025),4.0)-pow(abs((local.y-.088)/.019),4.0));
         // The projected guide contains drawn lids/brows already. Reduce that
         // copy around the real eye opening so it doesn't look double outlined.
@@ -83,11 +96,17 @@ void fragment() {
         float mouth_guide=exp(-pow(abs(local.x)/.040,4.0)-pow(abs((local.y+.002)/.020),4.0));
         paint_strength*=1.0-mouth_guide;
         color*=mix(1.0,ink,paint_mask*paint_strength);
+        // Retain the illustration's fine brush/ink texture, without baking its
+        // large light/shadow areas into the live 3D lighting or skin colour.
+        float brush=clamp(paint.r/max(soft_paint.r,.025),.92,1.06);
+        color*=mix(1.0,brush,paint_mask*.65);
         // Restrained lip pigment follows authored rest coordinates and all
         // skin tones; volume and shadows still come from the anatomical mesh.
-        float lips=exp(-pow(abs(local.x)/.032,6.0)-pow(abs((local.y+.002)/.010),4.0));
-        lips*=paint_mask*smoothstep(.045,.085,local.z);
-        color*=mix(vec3(1.0),vec3(.98,.80,.76),lips*.55);
+        float lip_front=paint_mask*smoothstep(.045,.085,local.z);
+        float upper_lip=exp(-pow(abs(local.x)/.034,6.0)-pow(abs((local.y-.003)/.0035),4.0))*lip_front;
+        float lower_lip=exp(-pow(abs(local.x)/.032,6.0)-pow(abs((local.y+.006)/.0045),4.0))*lip_front;
+        color*=mix(vec3(1.0),vec3(.82,.65,.63),upper_lip*.75);
+        color*=mix(vec3(1.0),vec3(1.04,.86,.82),lower_lip*.65);
         float injury=skin_position.x<0.0?injury_left:injury_right;
         vec2 q=vec2(abs(skin_position.x),skin_position.y);
         // Rest-space beard silhouette and short ink stubble, following the head.
@@ -155,6 +174,17 @@ void fragment() {
         float tone=dot(base_color.rgb,vec3(.2126,.7152,.0722));
         color*=mix(1.12,.78,smoothstep(.02,.35,tone));
     }
+    if(face_skin) {
+        // One coherent illustration key defines the facial planes. Summing
+        // stepped responses from every stage light produced mottled islands.
+        float w=clamp(fwidth(d),.018,.045);
+        float middle=smoothstep(.12-w,.12+w,d);
+        float highlight=smoothstep(.68-w,.68+w,d);
+        vec3 shadow_tint=vec3(.64,.62,.61);
+        vec3 plane_tint=mix(shadow_tint,vec3(.91,.89,.85),middle);
+        plane_tint=mix(plane_tint,vec3(1.06,1.03,.97),highlight);
+        color*=plane_tint;
+    }
     ALBEDO = mix(vec3(0.035,0.032,0.045), color, edge);
     EMISSION = ALBEDO * (skin_surface ? vec3(.34,.35,.37) : vec3(.20,.22,.26));
 }
@@ -168,6 +198,7 @@ void light() {
         +.22*smoothstep(.65-pixel_width,.65+pixel_width,facing)
         : .10+.52*smoothstep(.12-pixel_width,.12+pixel_width,facing)
         +.38*smoothstep(.65-pixel_width,.65+pixel_width,facing);
+    if(face_skin)band=.58+.16*max(facing,0.0);
     // Real shadow attenuation keeps the hand, nose and face in one space.
     float attenuation=skin_surface ? mix(.28,ATTENUATION,.72) : ATTENUATION;
     DIFFUSE_LIGHT += band * attenuation * LIGHT_COLOR / PI;

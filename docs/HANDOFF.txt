@@ -2449,3 +2449,28 @@ Nahansichten/Profil/Grinsen/6Blinks/Schadensextreme gesichtet.
 Beleg validation/FACE_MOUTH_POLISH_2026-10-14.txt; Vorschauen31-*.png.
 Keine finale menschliche Designabnahme. Extreme Mundinnenraeume noch vereinfacht.
 V14 weiterhin alt. Keine neue Release-ZIP. Eigene Testhosts nach Pruefung beenden.
+
+GESICHTSFORM UND COMICZEICHNUNG WEITER UEBERARBEITET — 14.10.2026
+Nutzer findet31optisch weiter unzureichend; keine Kunstabnahme unterstellen.
+Unteres Gesicht gestrafft/verkuerzt; Nasenprojektion und Variationen reduziert,
+Orbitalleisten/Lider/Jochbein/Masseter/Kinn ueberarbeitet. Augenabstaende je
+Variante; Eye/Iris/Pupil folgen passenden Identitaetsmorphs. Iriszentrumshader
+folgt Abstand, face_style jetzt auch auf Augenmaterialien. Native Regression.
+8verbundene Lippenringe mit weicher radialer Tiefe und Nachbarschaftsglaettung,
+66mmMundbreite, getrennte Ober-/Unterlippentinte. Glattes Mundnormalenfeld mit
+Lippenrollanteil; Silhouette und Schadensverformungen weiter echte Geometrie.
+Brauen als hautkonforme geschlossene Baender mit5Breitensamples neu aufgebaut.
+Neue Built-in-Imagegen-Textur face_ink_v3.png lokal gespeichert/Blendergepackt;
+feine Tinte/Brushanteil nutzen, gemalte grosse Lichtflaechen maskieren.
+Ein gemeinsamer Toon-Key fuer ruhigere zusammenhaengende Schattenflaechen.
+CHARAKTER-/KONTAKTVERSION6 Host+Webshell; alte5abweisen. Gestenversion3 bleibt.
+172Servertests PASS35.346s. Richtungsfixture anhandneuerFlaeche -21/-12;
+keine Kriterien gelockert. Quelle/Rand/Brauen/6Profile/216Kombinationen/7Farben/
+Irisparameter/Zahnreset/Normalen/ArenaMatch/Import/Webexport PASS.
+Final2Client-LAN/Varianten-Replays und eigener Browser-Maustreffercheck PASS
+errors[]. Testhost8895beendet. Keine neue FPS-/Mehrhardwarefreigabe.
+Vorschauen32-*.png, --hero zeigt echten Grundkopf+Dreitagebart in3Ansichten.
+Beleg/Erzeugungsprompt validation/FACE_ART_REWORK_2026-10-14.txt.
+Neue Textur bleibt frontalprojiziert, extreme Mundinnenraeume vereinfacht.
+Gemeinsamer Schaedel/Rig und vorhandene Haare erhalten; keine finale Kunstabnahme.
+Arena/Tisch/Hoenhorst unveraendert. V14weiteralt; keine neue Release-ZIP.

@@ -5,7 +5,9 @@ from contact_v3 import score
 from practice_guidance import wheel_hint
 class PracticeGuidanceTests(unittest.TestCase):
  def test_directions_come_from_better_contact_and_do_not_mutate(self):
-  for tilt,expected in [(-24,'nach unten'),(-15,'nach oben')]:
+  # Measured on character surface v6: -18/-15 are flat now; these two
+  # neighboring non-flat probes still improve in opposite wheel directions.
+  for tilt,expected in [(-21,'nach unten'),(-12,'nach oben')]:
    data={'version':3,'points':[[.19+.34*i/40,.6,800*i/40,0,tilt,0] for i in range(41)]}
    original=copy.deepcopy(data);preview=score(data)
    self.assertIn(expected,wheel_hint(data,preview,score));self.assertEqual(data,original)

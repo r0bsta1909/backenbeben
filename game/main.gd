@@ -193,7 +193,7 @@ func prepare_materials(root: Node) -> void:
 				copy.set_shader_parameter("iris_surface",str(node.name).begins_with("Iris"))
 				copy.set_shader_parameter("pupil_surface",str(node.name).begins_with("Pupil"))
 				copy.set_shader_parameter("skin_surface",m.resource_name in ["Skin","FaceSkin","SkinShadow"])
-				if str(node.name)=="Face":copy.set_shader_parameter("face_ink",load("res://assets/face_ink_v2.png"))
+				if str(node.name)=="Face":copy.set_shader_parameter("face_ink",load("res://assets/face_ink_v3.png"))
 				copy.set_shader_parameter("tissue",tissue_part)
 				copy.set_shader_parameter("head_part",head_part)
 				physics_materials[root.get_instance_id()].append(copy)
@@ -315,6 +315,7 @@ func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 			var m = node.get_surface_override_material(i)
 			var base_name: String = mat_cache.get(str(node.get_instance_id())+":"+str(i), "")
 			if m is ShaderMaterial:
+				m.set_shader_parameter("face_style",int(data.get("face_style",0)))
 				for target in [m,m.next_pass]:
 					if target is ShaderMaterial and regional_changed:
 						target.set_shader_parameter("regional_damage",detailed and regional_active)
@@ -336,7 +337,6 @@ func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 				if base_name=="Beard":m.set_shader_parameter("base_color",hairs[int(data.get("beard_color",data.get("hair",0)))%3])
 				if base_name=="FaceSkin":
 					m.set_shader_parameter("beard_style",int(data.get("beard_style",1)))
-					m.set_shader_parameter("face_style",int(data.get("face_style",0)))
 					m.set_shader_parameter("beard_color",hairs[int(data.get("beard_color",data.get("hair",0)))%3])
 		if node.mesh is ArrayMesh:
 			for i in range(node.mesh.get_blend_shape_count()):
