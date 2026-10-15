@@ -34,7 +34,7 @@ void vertex() {
         float lip_roll=-.21*exp(-pow((p.y-.012)/.014,2.0))
             +.15*exp(-pow((p.y+.020)/.014,2.0));
         vec3 oral_normal=normalize(vec3(p.x*.5,(p.y+.04)*.65+lip_roll,.5));
-        NORMAL=normalize(mix(NORMAL,oral_normal,oral_mask*.78));
+        NORMAL=normalize(mix(NORMAL,oral_normal,oral_mask*.18));
     }
     NORMAL=deform_face_normal(p,NORMAL);
     p=deform_face(p);
@@ -44,7 +44,7 @@ void fragment() {
     vec3 n = normalize(NORMAL);
     vec3 world_normal=normalize(mat3(INV_VIEW_MATRIX)*n);
     float d = dot(world_normal, normalize(vec3(-0.46,0.44,0.80)));
-    float edge = smoothstep(face_skin?-.04:.06,face_skin?.055:.20,dot(n,normalize(VIEW)));
+    float edge = smoothstep(face_skin?-.04:hair_surface?.015:.06,face_skin?.055:hair_surface?.09:.20,dot(n,normalize(VIEW)));
     vec3 color=base_color.rgb;
     color=mix(color,color*vec3(.64,.57,.46),clamp(1.0-tooth_health,0.0,1.0)*.35);
     if(eye_surface) {
@@ -83,8 +83,8 @@ void fragment() {
             float stroke=smoothstep(.72,.97,sin(phase))*visible;
             float lock_ridge=pow(max(sin(UV2.y*6.283185),0.0),2.0);
             float taper=smoothstep(.05,.20,UV2.x)*(1.0-smoothstep(.80,1.0,UV2.x));
-            color*=1.0-.28*stroke*taper;
-            color+=vec3(.055,.085,.085)*lock_ridge*taper*(.30+.70*max(d,0.0));
+            color*=1.0-.16*stroke*taper;
+            color+=vec3(.075,.080,.073)*lock_ridge*taper*(.30+.70*max(d,0.0));
         }
     }
     if(face_skin) {
@@ -99,7 +99,7 @@ void fragment() {
         // The old frontal ink contains faint stubble; clean and styled beards
         // get their own layer rather than inheriting that baked shadow.
         float lower_face=1.0-smoothstep(-.005,.025,local.y);
-        float paint_strength=beard_style==1 ? .55 : .55*(1.0-lower_face);
+        float paint_strength=.22*(1.0-lower_face);
         float socket=exp(-pow(abs((abs(local.x)-.0381)/.025),4.0)-pow(abs((local.y-.088)/.019),4.0));
         // The projected guide contains drawn lids/brows already. Reduce that
         // copy around the real eye opening so it doesn't look double outlined.
@@ -113,7 +113,7 @@ void fragment() {
         // Retain the illustration's fine brush/ink texture, without baking its
         // large light/shadow areas into the live 3D lighting or skin colour.
         float brush=clamp(paint.r/max(soft_paint.r,.025),.94,1.05);
-        float brush_strength=paint_mask*.65*(1.0-brow_guide*.85)*(1.0-mouth_guide*.90);
+        float brush_strength=paint_mask*.25*(1.0-brow_guide*.85)*(1.0-mouth_guide*.90);
         // Keep atlas creases from ageing every identity or duplicating the
         // real brows and lips. Veteran carries its own authored wrinkles.
         if(face_style!=4)brush_strength*=.15+.85*(1.0-smoothstep(.115,.14,local.y));
@@ -158,7 +158,11 @@ void fragment() {
         float mark_pixel=max(fwidth(mark_distance),.05);
         float stubble=1.0-smoothstep(1.0-mark_pixel,1.0+mark_pixel,mark_distance);
         stubble*=1.0-smoothstep(.65,1.4,max(fwidth(local.x),fwidth(local.y))/.0024);
-        if(beard_style==1)color=mix(color,beard_color.rgb,beard*(.11+.38*stubble));
+        float beard_density=.50+.22*sin(local.x*79.0+local.y*37.0)
+            +.18*sin(local.y*131.0-local.x*53.0);
+        float cheek_fade=1.0-smoothstep(beard_top-.014,beard_top+.003,local.y);
+        stubble*=smoothstep(.12,.45,seed.x+beard_density*.32);
+        if(beard_style==1)color=mix(color,beard_color.rgb,beard*cheek_fade*(.045+.32*stubble));
         if(face_style==4) {
             float front=smoothstep(.025,.065,local.z);
             float taper=1.0-smoothstep(.023,.058,abs(local.x));
@@ -212,10 +216,10 @@ void fragment() {
     if(face_skin) {
         // One coherent illustration key defines the facial planes. Summing
         // stepped responses from every stage light produced mottled islands.
-        float w=max(clamp(fwidth(d),.018,.045),illustration_depth*.10);
+        float w=max(clamp(fwidth(d),.018,.045),illustration_depth*.15);
         float middle=smoothstep(.12-w,.12+w,d);
         float highlight=smoothstep(.68-w,.68+w,d);
-        vec3 shadow_tint=vec3(.40,.78,1.10);
+        vec3 shadow_tint=vec3(.55,.68,.77);
         vec3 plane_tint=mix(shadow_tint,vec3(.96,.83,.70),middle);
         plane_tint=mix(plane_tint,vec3(1.13,1.07,.97),highlight);
         vec3 drawn_volume=mix(shadow_tint,vec3(1.13,1.07,.97),smoothstep(-.2,1.0,d));

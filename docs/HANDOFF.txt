@@ -2546,3 +2546,35 @@ Belegvalidation/HEAD_SCULPT_2026-10-15.txt. GemeinsamerSchaedel undextreme
 Mundinnenraeume weiterhinvereinfacht; keinefinaleKunstabnahme.
 Arena/Tisch/Hoenhorstunveraendert. KeinReleasezip, V14weiteralt.
 Eigener Pruefhost auf Port 8898 nach Abschluss beendet.
+
+FIVE-POINT FACE QUALITY PASS — 15.10.2026 / character version 10
+Native model work on mouth/chin, eyes/expression, proportions, comic shading,
+and hair/beards. Continuous lower-muzzle field replaces the v35 horseshoe ridge;
+oral normal override .78 -> .18. Upper rest lids lifted, brows thinner/closer,
+focus and asymmetric grin coordinate lids/cheeks/corners. Narrower jaw and a
+shared shorter-vault mapping applied to all cosmetics and all shape keys.
+Hero hair roots/tips embedded; lower crease/brush noise; muted shadow color.
+Stubble varied and faded. Full beard/goatee now closely sampled from skin,
+with clipped cheek/lip/neck contours; no neck apron. Moustaches use smooth
+cubic centerlines and flatter, smaller clumps. All options still modular.
+Version10 across host/join/six exact contact profiles; reject old9. Restart
+existing game hosts and reload browsers to use the matching local Web build.
+Changed cheek changes contact: measured flat at -15deg, glance at -18deg.
+Updated explicit class/guidance poses only; scoring thresholds unchanged.
+173 Python tests PASS 56.540s. Final cosmetic-only contour export has exactly
+the same six vertex profiles and canonical triangles as the tested copy.
+Final source validator/native216 combinations/7skins/focus-blink-reset/teeth/
+regional rewind/GPU normals/ArenaMatch PASS. Enamel render pixels [8,0,0] PASS.
+Final import/Web export PASS. Initial two-client run had shader compiler
+errors while exports were changing; cause not proven. Single-client all-beard
+diagnostic clean, final full two-client creator+variant replay rerun PASS
+errors=[] against unchanged final export. No unreported compiler pass claim.
+Single-browser injury onset/rewind PASS errors=[]; RTX3090 ANGLE D3D11 timing
+idle median33.4/p9550.1/max52ms, contact16.7/66.8/66.9ms,
+injured16.8/100.1/351ms. Performance remains open, no general60FPS approval.
+Local native36-*.png and 4s/96frame WebM reviewed. Video is authored motion,
+not live host physics/FPS proof. Source/script changes and limits documented
+in validation/FACE_QUALITY_FIVE_POINTS_2026-10-15.txt. Human art acceptance open;
+some variants/hair and extreme mouth interiors remain simplified.
+Arena/table/Hoenhorst unchanged. No new release ZIP; V14 download remains old.
+Own validation host on port 8899 stopped after verification.

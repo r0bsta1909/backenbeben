@@ -36,7 +36,10 @@ class MeshContactTests(unittest.TestCase):
         self.assertEqual(arm.velocity,[0.,0.,0.])
 
     def test_regions_from_actual_arm(self):
-        for y,tilt,expected in [(.6,-18,'flat'),(.6,-12,'glance'),(.6,-24,'tips'),(.1,0,'zone'),(.4,40,'heel')]:
+        # v10 has a narrower lower jaw and a faired cheek: measured palm
+        # alignment is -15 degrees, with the adjacent -18-degree glance.
+        # Classification/coverage thresholds remain unchanged.
+        for y,tilt,expected in [(.6,-15,'flat'),(.6,-18,'glance'),(.6,-24,'tips'),(.1,0,'zone'),(.4,40,'heel')]:
             with self.subTest(expected=expected):self.assertEqual(score(stroke(y,tilt))['contact_class'],expected)
     def test_pose_record_has_no_stretch_or_penetration_at_contact(self):
         result=score(stroke())

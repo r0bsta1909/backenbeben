@@ -17,20 +17,27 @@ func capture() -> void:
 		["Sehr helle Haut",4,0,0,0,0],["Tiefe Haut",5,0,25,0,0],
 		["Geschlossene Lider",0,0,0,1,0],["Grinsen",0,0,20,0,1],["Veteran / Bart",1,4,25,0,0]]
 	var identities: bool="--identities" in OS.get_cmdline_user_args()
+	var hairstyles: bool="--hair" in OS.get_cmdline_user_args()
+	var beards: bool="--beards" in OS.get_cmdline_user_args()
 	var hero: bool="--hero" in OS.get_cmdline_user_args()
 	if hero:views=views.slice(0,3)
 	if identities:
 		views=[]
 		var names: Array=["Klassisch","Markant","Weich","Schmal","Veteran","Knollennase"]
 		for i in range(6):views.append([names[i],0,i,15,0,0])
+	if hairstyles or beards:
+		views=[]
+		var catalog: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/character_options.json"))
+		var names: Array=catalog.hair if hairstyles else catalog.beards
+		for name in names:views.append([name,0,0,25,0,0])
 	if "--blinks" in OS.get_cmdline_user_args():
 		for v in views:v[4]=1
-	var columns: int=3 if identities or hero else 4
+	var columns: int=3 if identities or hairstyles or beards or hero else 4
 	var directory:=ProjectSettings.globalize_path("res://../logs/face-quality");DirAccess.make_dir_recursive_absolute(directory)
 	var sheet:=Image.create(columns*480,600 if hero else 1200,false,Image.FORMAT_RGBA8)
 	for i in range(views.size()):
 		var v: Array=views[i];label.text=v[0]
-		scene.apply_fighter(scene.fighter,{"skin":v[1],"face_style":v[2],"hair_style":0,"beard_style":1 if hero else 2 if i==7 else 0},true)
+		scene.apply_fighter(scene.fighter,{"skin":v[1],"face_style":v[2],"hair_style":i if hairstyles else 0,"beard_style":i if beards else 1 if hero else 2 if i==7 else 0},true)
 		scene.fighter.pose_defender(.85);scene.fighter.set_eye_closure(v[4])
 		if "--no-teeth" in OS.get_cmdline_user_args():
 			for mesh in scene.fighter.model.find_children("Teeth*","MeshInstance3D",true,false):mesh.hide()
@@ -40,12 +47,15 @@ func capture() -> void:
 				mesh.material_override=clay
 		scene.fighter.face_mesh.set_blend_shape_value(scene.fighter.face_mesh.find_blend_shape_by_name("grin"),v[5])
 		var angle: float=deg_to_rad(float(v[3]))
-		scene.camera.position=Vector3(sin(angle)*1.85,.25,cos(angle)*1.85);scene.camera.look_at(Vector3(0,.25,0))
+		var distance: float=2.25 if hairstyles else 1.85
+		scene.camera.position=Vector3(sin(angle)*distance,.25,cos(angle)*distance);scene.camera.look_at(Vector3(0,.25,0))
 		await process_frame;RenderingServer.force_draw(false)
 		var picture:=root.get_texture().get_image();picture.convert(Image.FORMAT_RGBA8);picture.save_png(directory+"/%d.png"%i)
 		sheet.blit_rect(picture,Rect2i(0,0,480,600),Vector2i(i%columns*480,i/columns*600))
 	var filename: String="/identities.png" if identities else "/comparison.png"
 	if hero:filename="/hero.png"
+	if hairstyles:filename="/hairstyles.png"
+	if beards:filename="/beards.png"
 	if "--blinks" in OS.get_cmdline_user_args():filename="/blinks.png"
 	if "--no-teeth" in OS.get_cmdline_user_args():filename="/occlusion-check.png"
 	if "--clay" in OS.get_cmdline_user_args():filename=filename.replace("/","/clay-")

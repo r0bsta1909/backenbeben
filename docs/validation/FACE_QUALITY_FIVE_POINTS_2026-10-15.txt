@@ -1,0 +1,128 @@
+BACKENBEBEN — FIVE-POINT FACE ART PASS — 2026-10-15
+
+Request
+Improve the five identified visual weaknesses in the actual game model:
+mouth/chin, eyes/expression, proportions, comic shading, hair/beards.
+The user's supplied XIII illustration remains the style target. This pass
+uses native model/material work, not a generated or retouched beauty render.
+Human art acceptance remains open.
+
+1. Mouth and chin
+The v35 oral patch was connected but left a horseshoe-shaped shoulder in
+neutral gray material. A continuous muzzle depth field now extends across
+the welded patch into the surrounding face. Upper/lower lip rolls, philtrum,
+sub-labial transition and chin use separate restrained volumes in this field.
+The oral rim rest depth and shared CPU/GPU jaw binding are retained.
+The lower-jaw corners are narrower and the central chin transition shorter.
+A later attempt to fair the mouth and cheeks together recreated a corner
+groove. It was rejected; cheek fairing now excludes the entire oral area.
+The shader's oral normal replacement strength falls from .78 to .18: the
+gray-model form, rather than a large normal override, carries most volume.
+
+2. Eyes and expression
+Upper rest lids are lifted locally without moving globe/iris anchors.
+Brows are thinner and sit closer to skin; the neutral inner brow is relaxed.
+Focus now coordinates stronger upper-lid tension, lower-lid lift and inner
+brow descent. Full blink still suppresses additive focus on the face.
+Grin now lifts both mouth corners with restrained asymmetry and adds cheek
+projection and lower-lid movement. The earlier expression mainly moved one
+corner. These are authoring/local expressions; automatic combat focus and
+a persisted expression selector are not claimed by this change.
+
+3. Proportions
+Reduced lower-jaw breadth and rounded the mandibular/chin transition.
+The upper vault is shortened with one smooth coordinate map. All meshes
+and all identity/expression shapes receive that map, including each hair
+option; the eye anchors below the forehead remain in place.
+All six identities still derive from a common skull/rig.
+
+4. Comic rendering
+Reduced the frontal ink guide's fine creases and brush contrast, especially
+the lower face, where they conflicted with modeled features and stubble.
+Muted the previously saturated blue facial shadow and broadened the light
+transition; actual hand/nose shadow attenuation and the damage layers remain.
+Finer hair contours and less repetitive internal strokes reduce the drawn
+outline around every individual lock. No new bitmap/AI image was generated.
+The existing face_ink_v4.png is retained. The result is still a simplified
+3D comic interpretation, not a reproduction of the supplied illustration.
+
+5. Hair and beard
+The hero haircut uses broader, flatter locks, with roots AND tips embedded
+in the scalp mass; a previous nonzero lift at tips made detached-looking ends.
+Stubble density is spatially varied, fades at the cheek line and has less
+uniform overall darkness. Beard color remains independent of hair color.
+The full beard and goatee were rebuilt as densely sampled face-conforming
+patches. The former full beard included neck faces and created an apron.
+New cheek/lip/neck boundaries are clipped against the actual contours, rather
+than accepting whole grid cells and leaving a visible staircase.
+Moustaches use cubic centerlines and flatter cross sections, with smaller
+volumes. The unusual curled moustache and pointed tuft remain selectable.
+The other hair silhouettes remain their established designs; this pass
+does not claim six newly sculpted production-quality haircuts.
+
+Contact contract and fixture changes
+Character version is now 10 in the host, join message and six exact exported
+contact profiles. Old version 9 is rejected, not silently used with new skin.
+The sculpt changes actual palm contact. The old v6/v9 fixed pose at -18deg
+is now a glance. Measurements on v10 found -15/-12/-9deg flat, -18/-6deg
+glancing, -24deg fingertips. Contact classification/coverage thresholds and
+the physics implementation were NOT relaxed to pass the suite.
+The class fixture now uses -15deg for flat and -18deg for glance. Practice
+guidance fixtures use -18/-6deg to preserve actual opposite wheel directions.
+Gesture protocol 3 and damage schema 1 remain unchanged.
+
+Validation
+Final face surface: 173 Python tests PASS in 56.540s.
+After the final cosmetic-only contour cut, exact six vertex profiles and
+canonical triangle sets equal the tested copy (not merely a visual match).
+Blender validator PASS: closed oral rim, no reversed projected oral triangles
+in six profiles, normalized weights, close brows, controllers and 16 teeth.
+Native final GLB PASS: 216 face/hair/beard combinations, seven skin colors,
+first-person visibility, focus/blink/reset, teeth/chip/missing/reset,
+regional damage rewind and hinged jaw. GPU normal tests PASS.
+Native enamel image check PASS: intact/missing/closed pixels [8,0,0], with
+the existing >=8 visibility difference threshold unchanged.
+ArenaMatch PASS including framing, officials, mirror and KO support.
+Import and final Web export PASS.
+
+Web observations
+A first two-client run completed its functional assertions but failed its
+console-error gate with GLES3 vertex shader compilation errors. A later
+single-browser diagnostic exercised all six beards with no console errors.
+Exports were still being updated during the first long browser run; this is
+a possible source of interference, not a proven diagnosis of the shader error.
+The final two-client rerun against an unchanged export is recorded below.
+Final rerun PASS errors=[]: live preview, persistence, rotate/zoom, two-client
+LAN synchronization, real variant-4/5 hit replays, responsive controls and
+reset/random selection. No shader-compiler errors in this final full run.
+An individual 1920x1080 browser test passed actual injury onset and rewind
+with errors=[] on RTX3090 / ANGLE D3D11. Frame timing still fluctuated:
+idle median33.4/p95 50.1/max52ms; contact16.7/66.8/66.9ms;
+injured16.8/100.1/351ms. No general 60FPS/performance acceptance.
+
+Review artifacts
+Local Arena-Design/36-grundkopf.png: actual clean/stubble close-up.
+36-formvergleich.png: v35 above, v36 below, same gray-material views.
+36-ausdrucksstudie.png: neutral/focus/blink/grin/injury/profile.
+36-frisuren.png, 36-baerte.png, 36-gesichtsvarianten.png, 36-schadensmodell.png.
+36-blickstudie.webm: 96 native frames, 4s at 24fps. This is an authored
+animation study using regional damage, not a live host-hit recording or
+a real-time frame-rate measurement.
+
+Reproduction
+Blender --background --python scripts/build_character_options.py
+Blender -b assets-source/character-customizable.blend --python scripts/validate_character_options.py
+Python -m unittest discover -s tests -p test_*.py
+scripts/build.ps1
+Godot --path game --script ../scripts/capture_face_quality.gd -- --hero --clay
+Godot --path game --script ../scripts/capture_face_quality.gd -- --hair
+Godot --path game --script ../scripts/capture_face_quality.gd -- --beards
+Godot --path game --script ../scripts/capture_head_study.gd -- --motion
+BACKENBEBEN_TEST_PORT selects the temporary browser test host.
+
+Limits
+Remaining art limitations include the blocky side planes of some identities,
+simplified ears and extreme mouth cavities, some coarse hair variants and
+residual atlas/geometry lines near the eyes. No final human style approval.
+Arena/table/Hoenhorst and character-v3.blend are unchanged. No new release ZIP;
+the earlier V14 download is not updated by a source push.

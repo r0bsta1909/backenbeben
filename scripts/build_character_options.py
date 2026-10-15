@@ -53,8 +53,9 @@ def face_finish(point):
     # Rebalance the long, broad prototype lower face into an athletic comic
     # head. Keep scalp, eye anchors and the neck transition in their positions.
     lower=gauss(x,y,0,-.029,.13,.052)*front
-    p.x-=x*.095*lower
-    p.y+=.007*gauss(x,y,0,-.055,.11,.030)*front
+    p.x-=x*.135*lower
+    p.y+=.010*gauss(x,y,0,-.055,.11,.030)*front
+    p.x-=(1 if x>=0 else -1)*.0045*gauss(abs(x),y,.061,-.047,.027,.021)*front
     # Shorter nose projection and a defined tip/alar transition, instead of
     # one oversized wedge from the bridge down to the mouth.
     p.z-=.0075*gauss(x,y,0,.043,.018,.034)*front
@@ -69,7 +70,7 @@ def face_finish(point):
     # Lift the upper lid locally, rather than enlarging the eyeball. A modest
     # aperture gives a more alert expression while keeping human proportions.
     lid=gauss(abs(x),y,.0381,.096,.017,.008)*smooth(.065,.084,z)
-    p.y+=.0003*lid
+    p.y+=.0018*lid
     # A shaped upper lid covers more iris than the staring prototype. Keep
     # the eye centres fixed; expressions and all identities share this rest.
     p.z-=.0040*gauss(abs(x),y,.039,.096,.022,.005)*front
@@ -260,6 +261,52 @@ bm.verts.index_update()
 face['mouth_patch_vertices']=[v.index for ring in [ordered]+rings for v in ring]
 bm.to_mesh(face.data);bm.free()
 face['mouth_topology']='twelve regular lip rings; constrained bridge; shared curved seam; nasal base preserved'
+# Sculpt the entire lower muzzle in one coordinate field, across the welded
+# patch boundary. Smoothing only the annulus left a horseshoe-shaped shoulder.
+# Hold the oral rim depth and nasal base, and preserve expression deltas.
+for vertex in face.data.vertices:
+    p=G(vertex.co)
+    weight=(1-smooth(.047,.078,abs(p.x)))*smooth(-.065,-.038,p.y)*(1-smooth(.012,.026,p.y))*smooth(.055,.082,p.z)
+    if weight<1e-5:continue
+    seam=-.0006-.0012*(p.x/.033)**2+.0006*gauss(abs(p.x),0,.008,0,.006,1)-.0007*gauss(p.x,0,0,0,.005,1)
+    lip=1-smooth(.024,.038,abs(p.x))
+    depth=.1055-.016*(p.x/.058)**2
+    depth+=.0022*gauss(p.x,p.y,0,.012,.022,.012)
+    depth+=lip*(.0021*math.exp(-((p.y-seam-.003)/.0028)**2)+.0030*math.exp(-((p.y-seam+.0045)/.0035)**2))
+    depth-=.0012*gauss(p.x,p.y,0,-.014,.028,.0055)
+    depth+=.0020*gauss(p.x,p.y,0,-.034,.030,.014)
+    # Same rest depth at the open boundary protects the dental/jaw contract.
+    rim=math.exp(-((p.y-seam)/.001)**2)*lip
+    depth=depth*(1-rim)+(.108-.012*(p.x/.035)**2)*rim
+    delta=B((0,0,(depth-p.z)*weight))
+    vertex.co+=delta
+    for key in face.data.shape_keys.key_blocks:key.data[vertex.index].co+=delta
+# Shorten only the upper vault; all cosmetics are transformed by the same
+# function below, so shared eyes, scalp and six hair options keep their fit.
+face['quality_finish']='continuous muzzle field, seated lids, relaxed conforming brows'
+# Fair cheek/muzzle depths across the old/new topology, not their XY outline.
+# Exclude the nasal ridge, orbital aperture and open lip rim. This removes
+# little stair-step shadow islands without changing the registered face loops.
+bm=bmesh.new();bm.from_mesh(face.data)
+layers=list(bm.verts.layers.shape.values())
+for iteration in range(10):
+    changes=[]
+    for vertex in bm.verts:
+        p=G(vertex.co)
+        if any(e.is_boundary for e in vertex.link_edges) or not vertex.link_edges:continue
+        amount=.42*smooth(.045,.078,p.z)*(1-smooth(.075,.102,abs(p.x)))
+        amount*=smooth(.042,.060,abs(p.x))
+        amount*=smooth(-.070,-.040,p.y)*(1-smooth(.045,.072,p.y))
+        nasal=gauss(p.x,p.y,0,.026,.030,.027)
+        oral=gauss(p.x,p.y,0,-.001,.040,.010)
+        amount*=1-max(nasal,oral)
+        neighbors=[edge.other_vert(vertex) for edge in vertex.link_edges]
+        delta=Vector((0,(sum(v.co.y for v in neighbors)/len(neighbors)-vertex.co.y)*amount,0))
+        changes.append((vertex,delta))
+    for vertex,delta in changes:
+        vertex.co+=delta
+        for layer in layers:vertex[layer]+=delta
+bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces));bm.to_mesh(face.data);bm.free()
 interior=bpy.data.objects.get('MouthInterior')
 if interior:
     for v in interior.data.vertices:
@@ -279,9 +326,9 @@ for name in ['BrowL','BrowR']:
     for i in range(0,len(old),4):
         points=[G(obj.matrix_world @ v.co) for v in old[i:i+4]]
         x=sum(v.x for v in points)/len(points);y=sum(v.y for v in points)/len(points)
-        width=(max(v.y for v in points)-min(v.y for v in points))*.5
+        width=(max(v.y for v in points)-min(v.y for v in points))*.40
         # Lower the inner brow into an intentional, focused neutral expression.
-        y-=.0016*(1-smooth(.018,.052,abs(x)))
+        y+=.0008*(1-smooth(.018,.052,abs(x)))
         stations.append((x,y,width))
     vertices=[];polygons=[];n=len(stations);cross=5
     for surface in range(2):
@@ -289,7 +336,7 @@ for name in ['BrowL','BrowR']:
             for j in range(cross):
                 q=Vector((x,y+width*(2*j/(cross-1)-1),0))
                 hit=bvh.ray_cast(Vector((q.x,q.y,1)),Vector((0,0,-1)))[0]
-                q.z=(hit.z if hit is not None else .08)+(.00085 if surface==0 else .00012)
+                q.z=(hit.z if hit is not None else .08)+(.00045 if surface==0 else .00010)
                 vertices.append(obj.matrix_world.inverted() @ B(q))
     for surface in range(2):
         offset=surface*n*cross
@@ -335,13 +382,25 @@ def join(name,parts):
     for o in parts:o.select_set(True)
     bpy.context.view_layer.objects.active=parts[0];bpy.ops.object.join()
     parts[0].name=name;return parts[0]
-def tube(name,points,radii,mat,n=8):
+def tube(name,points,radii,mat,n=12):
+    # Cubic centreline with a flattened cross section: moustaches are soft
+    # clumps of hair, not four straight cylindrical segments.
+    controls=[Vector(p) for p in points];resampled=[];sizes=[]
+    for i in range(len(controls)-1):
+        a,b,c,d=controls[max(i-1,0)],controls[i],controls[i+1],controls[min(i+2,len(controls)-1)]
+        for step in range(6):
+            t=step/6
+            resampled.append(.5*((2*b)+(-a+c)*t+(2*a-5*b+4*c-d)*t*t+(-a+3*b-3*c+d)*t*t*t))
+            sizes.append(radii[i]+(radii[i+1]-radii[i])*smooth(0,1,t))
+    points=resampled+[controls[-1]];radii=sizes+[radii[-1]]
     vs=[];fs=[]
     for i,p in enumerate(points):
         tangent=(Vector(points[min(i+1,len(points)-1)])-Vector(points[max(i-1,0)])).normalized()
         helper=Vector((0,0,1)) if abs(tangent.z)<.8 else Vector((0,1,0))
         u=tangent.cross(helper).normalized();v=tangent.cross(u)
-        for j in range(n):vs.append(Vector(p)+radii[i]*(u*math.cos(j*math.tau/n)+v*math.sin(j*math.tau/n)))
+        for j in range(n):
+            offset=radii[i]*(u*math.cos(j*math.tau/n)+v*math.sin(j*math.tau/n));offset.z*=.48
+            vs.append(Vector(p)+offset)
         if i:
             for j in range(n):fs.append(((i-1)*n+j,(i-1)*n+(j+1)%n,i*n+(j+1)%n,i*n+j))
     fs.extend([tuple(reversed(range(n))),tuple(range((len(points)-1)*n,len(points)*n))])
@@ -437,7 +496,12 @@ for vertex in face.data.vertices:
 grin=face.data.shape_keys.key_blocks.get('grin')
 if grin:
     for base,vertex in zip(face.data.shape_keys.key_blocks[0].data,grin.data):
-        p=G(base.co);p.y+=.0045*gauss(p.x,p.y,.024,-.002,.015,.013)*smooth(.065,.095,p.z)
+        p=G(base.co);front_weight=smooth(.065,.095,p.z)
+        corner=gauss(abs(p.x),p.y,.029,-.002,.014,.017)*front_weight
+        p.y+=.0075*corner*(1.0 if p.x>0 else .65)
+        p.x+=(1 if p.x>0 else -1)*.0018*corner
+        p.z+=.0020*gauss(abs(p.x),p.y,.052,.045,.025,.025)*front_weight
+        p.y+=.0012*gauss(abs(p.x),p.y,.038,.080,.022,.009)*front_weight
         vertex.co=B(p)
 # Independent focused expression: paired lid tension and skin-conforming brows.
 # A small artist-controlled expression is distinct from permanent damage.
@@ -446,15 +510,15 @@ for base,vertex in zip(face.data.shape_keys.key_blocks[0].data,focus.data):
     p=G(base.co);focus_front=smooth(.065,.084,p.z)
     upper=gauss(abs(p.x),p.y,.0381,.095,.018,.005)*focus_front
     lower=gauss(abs(p.x),p.y,.0381,.083,.018,.004)*focus_front
-    p.y-=.0015*upper;p.y+=.0005*lower;p.z+=.0004*upper
-    p.y-=.0012*gauss(abs(p.x),p.y,.024,.106,.016,.008)*focus_front
+    p.y-=.0030*upper;p.y+=.0010*lower;p.z+=.0004*upper
+    p.y-=.0020*gauss(abs(p.x),p.y,.024,.106,.016,.008)*focus_front
     vertex.co=B(p)
 focused_surface=BVHTree.FromPolygons([G(v.co) for v in focus.data],ff)
 for name in ['BrowL','BrowR']:
     obj=bpy.data.objects[name]
     obj.shape_key_add(name='Basis');key=obj.shape_key_add(name='focus')
     for base,vertex in zip(obj.data.shape_keys.key_blocks[0].data,key.data):
-        p=G(base.co);p.y-=.0025*(1-smooth(.018,.060,abs(p.x)))
+        p=G(base.co);p.y-=.0040*(1-smooth(.018,.060,abs(p.x)))
         hit=focused_surface.ray_cast(Vector((p.x,p.y,1)),Vector((0,0,-1)))[0]
         old=G(base.co);old_surface=bvh.ray_cast(Vector((old.x,old.y,1)),Vector((0,0,-1)))[0]
         offset=max(.00012,old.z-old_surface.z) if old_surface is not None else .00085
@@ -510,21 +574,21 @@ for index in range(58):
     comb=Vector((-.85,-.12,.60)) if front_lock else Vector((-.7,-.08,-.65))
     tangent=(comb-normal*comb.dot(normal)).normalized()
     length=groom_rng.uniform(.055,.085) if front_lock else groom_rng.uniform(.035,.052)
-    width=groom_rng.uniform(.008,.013) if front_lock else groom_rng.uniform(.005,.008)
-    lift=groom_rng.uniform(.008,.013) if front_lock else .005
+    width=groom_rng.uniform(.011,.017) if front_lock else groom_rng.uniform(.007,.010)
+    lift=groom_rng.uniform(.004,.007) if front_lock else .003
     vs=[];fs=[];groom_coords=[];rows=14;cross=10
     for row in range(rows):
         t=row/(rows-1)
         flow=base+tangent*length*t+Vector((-.007*math.sin(t*math.pi),0,0))
         n=(flow-scalp_center).normalized();center=scalp(n,0)
-        center+=n*(-.0018+lift*math.sin(t*math.pi*.85))
+        center+=n*(-.0024+lift*math.sin(t*math.pi)**1.25)
         # Tips remain within the continuous hair mass, rather than emerging
         # as isolated, eyebrow-like ovals on the forehead.
         hair_floor=.100+.063*smooth(-.005,.08,center.z)-.005*smooth(.055,.10,abs(center.x))
         if center.z>.035:center.y=max(center.y,hair_floor+.008)
         across=n.cross(tangent).normalized()
         breadth=width*(.80+.20*math.sin(t*math.pi))*(1-t)**.65+.00013
-        height=(.0010+.0027*math.sin(t*math.pi))*(1-t)+.00015
+        height=.00015+.0018*math.sin(t*math.pi)**1.3
         for col in range(cross):
             a=math.tau*col/cross
             vs.append(center+across*(breadth*math.cos(a))+n*(height*math.sin(a)))
@@ -578,40 +642,69 @@ for side_sign in [-1,1]:
     parts.append(mesh('Fin',vs,fs,hair_mat))
 iro=join('HairDoubleMohawk',parts)
 
-# Face-conforming full beard patch: keep lips and the neck clear.
-selected=[]
-for polygon in face.data.polygons:
-    center=sum((fv[i] for i in polygon.vertices),Vector())/len(polygon.vertices)
-    x,y,z=center
-    lip=((x/.042)**2+((y+.002)/.020)**2)<1
-    if z>.019 and -.092<y<.008-.50*abs(x) and not lip:selected.append(tuple(polygon.vertices))
-used=sorted({i for f in selected for i in f});lookup={old:i for i,old in enumerate(used)}
-vs=[]
-for i in used:
-    p=fv[i].copy();normal=G(face.data.vertices[i].normal)
-    p+=normal*(.0015+.003*(1-smooth(-.085,.015,p.y)))
-    vs.append(p)
-full=mesh('BeardFull',vs,[tuple(lookup[i] for i in f) for f in selected],beard_mat)
+# Sample a fine, skin-conforming front patch. The former coarse polygon
+# selection included neck faces and made an apron with a jagged cheek border.
+def beard_patch(name,inside):
+    vertices=[];valid=[];columns=113;rows=71
+    for row in range(rows):
+        y=-.060+.106*row/(rows-1)
+        for col in range(columns):
+            x=-.084+.168*col/(columns-1)
+            hit=bvh.ray_cast(Vector((x,y,1)),Vector((0,0,-1)))
+            p=hit[0];valid.append(p is not None and p.z>.045)
+            vertices.append(p+Vector((0,0,.0012)) if p is not None else Vector((x,y,0)))
+    faces=[];crossings={}
+    def crossing(a,b):
+        edge=tuple(sorted((a,b)))
+        if edge in crossings:return crossings[edge]
+        low,high=vertices[a].copy(),vertices[b].copy();state=inside(low)
+        for _ in range(24):
+            middle=low.lerp(high,.5)
+            if inside(middle)==state:low=middle
+            else:high=middle
+        point=low.lerp(high,.5)
+        point=front(point.x,point.y,.0012)
+        crossings[edge]=len(vertices);vertices.append(point)
+        return crossings[edge]
+    for row in range(rows-1):
+        for col in range(columns-1):
+            ids=(row*columns+col,row*columns+col+1,(row+1)*columns+col+1,(row+1)*columns+col)
+            if not all(valid[i] for i in ids):continue
+            # Clip each grid triangle at the actual cheek/lip/neck contour.
+            # Keeping whole cells produced a visible pixel staircase.
+            for triangle in [(ids[0],ids[1],ids[2]),(ids[0],ids[2],ids[3])]:
+                clipped=[]
+                for a,b in zip(triangle,triangle[1:]+triangle[:1]):
+                    a_inside,b_inside=inside(vertices[a]),inside(vertices[b])
+                    if a_inside:clipped.append(a)
+                    if a_inside!=b_inside:clipped.append(crossing(a,b))
+                if len(clipped)>=3:faces.append(tuple(clipped))
+    used=sorted({i for poly in faces for i in poly});mapping={old:i for i,old in enumerate(used)}
+    return mesh(name,[vertices[i] for i in used],[tuple(mapping[i] for i in poly) for poly in faces],beard_mat)
+
+def full_beard_region(p):
+    top=-.008+.045*smooth(.025,.070,abs(p.x))
+    bottom=-.055+.018*(abs(p.x)/.084)**3
+    lip=(p.x/.037)**2+((p.y+.002)/.015)**2<1
+    return bottom<p.y<top and not lip
+full=beard_patch('BeardFull',full_beard_region)
 
 def moustache(name,twirl=False):
     pieces=[]
     for sign in [-1,1]:
-        points=[front(sign*x,y,.003) for x,y in [(0.0,.014),(.012,.013),(.023,.011),(.034,.007)]]
+        points=[front(sign*x,y,.0015) for x,y in [(0.0,.012),(.012,.011),(.023,.008),(.034,.004)]]
         if twirl:
             points += [front(sign*x,y,.005) for x,y in [(.043,.009),(.053,.016),(.056,.028),(.049,.036),(.041,.033)]]
-        radii=([.004,.005,.005,.0035]+[.0035,.003,.0025,.002,.001]) if twirl else [.003,.0045,.004,.001]
+        radii=([.0020,.0032,.0030,.0025]+[.0025,.0022,.0018,.0014,.0004]) if twirl else [.0017,.0030,.0028,.0003]
         pieces.append(tube(name,points,radii,beard_mat))
     return join(name,pieces)
 full=join('BeardFull',[full,moustache('FullMoustache')])
 moustache_obj=moustache('BeardMoustache')
-goatee_faces=[]
-for polygon in face.data.polygons:
-    p=sum((fv[i] for i in polygon.vertices),Vector())/len(polygon.vertices)
-    chin=abs(p.x)<.020 and -.048<p.y<-.016
-    corners=.021<abs(p.x)<.033 and -.020<p.y<.007
-    if p.z>.035 and (chin or corners):goatee_faces.append(tuple(polygon.vertices))
-goatee_used=sorted({i for f in goatee_faces for i in f});goatee_map={old:i for i,old in enumerate(goatee_used)}
-goatee_patch=mesh('ChinPatch',[fv[i]+G(face.data.vertices[i].normal)*.0025 for i in goatee_used],[tuple(goatee_map[i] for i in f) for f in goatee_faces],beard_mat)
+def goatee_region(p):
+    chin=abs(p.x)<.019*(1-.15*smooth(-.04,-.015,p.y)) and -.049<p.y<-.016
+    corners=abs(abs(p.x)-.026)<.0045 and -.026<p.y<.004
+    return chin or corners
+goatee_patch=beard_patch('ChinPatch',goatee_region)
 goatee=join('BeardGoatee',[moustache('GoateeMoustache'),goatee_patch])
 twirl=join('BeardTwirl',[moustache('TwirlMoustache',True),tube('PointedTuft',[front(0,-.025,.005),front(0,-.040,.009),front(0,-.063,.018)],[.007,.008,.0005],beard_mat,n=10)])
 
@@ -694,10 +787,23 @@ for obj in list(bpy.context.scene.objects):
                 if hit is not None:changed.z=hit.z+offset
             vertex.co=inverse @ B(changed)
 
+# Rebalance the tall vault on every skin/cosmetic and every identity/expression.
+# Eyes and facial anchors below the forehead are unchanged. Transforming all
+# shapes in the same coordinates also preserves the close brow/scalp fit.
+for obj in bpy.context.scene.objects:
+    if obj.type!='MESH':continue
+    inverse=obj.matrix_world.inverted()
+    arrays=[obj.data.vertices]
+    if obj.data.shape_keys:arrays += [key.data for key in obj.data.shape_keys.key_blocks]
+    for vertices in arrays:
+        for vertex in vertices:
+            p=G(obj.matrix_world @ vertex.co)
+            p.y-=.020*smooth(.115,.205,p.y)
+            vertex.co=inverse @ B(p)
 # Each option now exports its actual triangle surface for host contact queries.
 # Structural base sculpt is shared; frontal identities remain separate profiles.
 face.data.calc_loop_triangles()
-collision={'version':9,'units':'game coordinates, original metres multiplied by 4',
+collision={'version':10,'units':'game coordinates, original metres multiplied by 4',
            'vertices':[list(G(v.co)*4) for v in face.data.shape_keys.key_blocks[0].data],
            'triangles':[list(t.vertices) for t in face.data.loop_triangles],
            'faces':[[list(G(v.co)*4) for v in face.data.shape_keys.key_blocks[0 if i==0 else f'identity_{i}'].data] for i in range(6)]}
