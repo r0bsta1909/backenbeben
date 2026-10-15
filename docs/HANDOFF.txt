@@ -2613,3 +2613,34 @@ regional damage, not a new host-hit/FPS recording. Current Web build ready.
 Human art acceptance open; stylized interiors/hair remain simplified.
 Arena/table/Hoenhorst untouched, no release ZIP; V14 download remains old.
 Own validation host on port 8900 stopped after verification.
+
+15.10.2026 / v38 FACE IDENTITIES AND MATCH REVIEW
+User approved inspecting the real match camera and differentiating identities.
+Reference Klassisch retained. Wider/squared Markant, fuller/shorter Weich,
+narrower/tapered Schmal, asymmetric Veteran and compact Knollennase lower face.
+Attached beards/interiors share continuous sculpt fields; scalp and authored
+jaw_weights/UV2 contract retained. Source/GLB/six actual host surfaces together.
+Character version12 in host/Web/collision; reject11; gestures3/damage1 unchanged.
+Restart older hosts and reload browsers together. Source validator PASS.
+Deep-skin cyan shadow floor warmed; small pigment-relative bounce across skin
+keeps cheek/jaw planes more readable in contact side view, without altering
+arena/table/Hoenhorst. Native before/after and actual browser renders reviewed.
+175 Python tests PASS42.283s, including2 new silhouette landmark regressions.
+Final native216 combinations/7skins/emote+reset/damage+teeth+hinge+rewind/
+GPU normals/ArenaMatch PASS; six-identity tooth rows and closed-mouth <=2pixel
+test unchanged. Final Web import/export PASS. Three real2client combinations
+(Markant/sidepart/moustache/skin0; Weich/curls/clean/skin5;
+Veteran/buzz/fullbeard/skin2) PASS actual hit/replay/recovery emote, errors[].
+New tests/face_match_review.py saves genuine healthy/contact/front/grin frames.
+Camera wait fixed from exact3.3 float equality toabs(z-3.3)<.0001; first final
+run timeout was test synchronization. Corrected final rerun PASS.
+Creator2client+variant4/5 full browser test PASS on same geometry before final
+shader bounce. Final onset/rewind PASS errors[] at1080p RTX3090 ANGLE D3D11:
+idle median16.7/p9533.4/max33.5;contact16.7/16.8/33.3;
+injured16.7/16.8/33.4ms. No universal60FPS claim.
+Local Arena-Design/38-*.png: native identities/mimic/accumulated jaw fixture
+and actual browser match/replay images. Native strong injury remains an
+authored accumulator scenario; browser trajectory uses one live severity.
+Human art/gameplay acceptance and second physical LAN PC remain open.
+See validation/FACE_IDENTITY_MATCH_REVIEW_2026-10-15.txt for evidence/limits.
+Own validation host8901 stopped; other hosts untouched. No new release ZIP.

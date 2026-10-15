@@ -844,9 +844,39 @@ def sculpt(point,index,name):
     # Change the lower facial silhouette below the ears. The scalp and eye
     # anchors stay shared, allowing every hairstyle to keep fitting.
     lower=gauss(x,y,0,-.025,.13,.052)*smooth(.005,.045,z)
-    jaw_width=[0,.075,-.065,-.17,.025,.055][index]
+    jaw_width=[0,.145,-.025,-.225,.055,.085][index]
     p.x+=x*jaw_width*lower
     p.y+=[0,-.001,.002,-.005,-.002,.001][index]*lower
+    # Broad anatomical masses establish an identity at match-camera distance.
+    # These continuous fields are applied to attached beards/interiors too;
+    # no isolated cheek balls, eye enlargement or skin-colour-dependent shape.
+    front=smooth(.005,.045,z)
+    cheek=gauss(abs(x),y,.058,.034,.027,.031)*front
+    corner=gauss(abs(x),y,.063,-.034,.030,.028)*front
+    chin_tip=gauss(x,y,0,-.045,.033,.025)*front
+    below_lip=smooth(-.013,-.035,y)
+    sign=1 if x>=0 else -1
+    if index==1:  # Broad gonial corners, high cheek ridge, squared chin.
+        p.x+=sign*(.0040*corner+.0018*cheek)
+        p.z+=.0035*cheek+.0020*corner
+        p.x+=x*.10*chin_tip
+    elif index==2:  # Full cheeks and a shorter, rounded lower face.
+        p.x+=sign*(.0055*cheek+.0015*corner)
+        p.z+=.0030*cheek
+        p.y+=.0080*chin_tip*below_lip
+        p.z-=.0025*chin_tip*below_lip
+    elif index==3:  # Narrow mandible, visible cheek plane, tapered chin.
+        p.x-=sign*.0035*corner
+        p.z+=.0020*cheek-.0020*corner
+        p.x-=x*.10*chin_tip
+        p.y-=.0030*chin_tip*below_lip
+    elif index==4:  # Uneven cheek planes and a slightly displaced chin.
+        p.z+=(.0030 if x<0 else -.0010)*cheek
+        p.x+=.0020*chin_tip*below_lip
+        p.y+=(.0015 if x<0 else -.0010)*corner
+    elif index==5:  # Compact lower face supporting the unusual bulbous nose.
+        p.x+=sign*.0025*cheek
+        p.y+=.0040*chin_tip*below_lip
     guard=1-smooth(.028,.045,abs(x))
     front_weight=smooth(.015,.055,z)*guard
     n=gauss(x,y,0,.025 if index==5 else .035,.026,.021 if index==5 else .038)*front_weight
@@ -927,7 +957,7 @@ for obj in bpy.context.scene.objects:
 # Each option now exports its actual triangle surface for host contact queries.
 # Structural base sculpt is shared; frontal identities remain separate profiles.
 face.data.calc_loop_triangles()
-collision={'version':11,'units':'game coordinates, original metres multiplied by 4',
+collision={'version':12,'units':'game coordinates, original metres multiplied by 4',
            'jaw_weights':jaw_weights,
            'vertices':[list(G(v.co)*4) for v in face.data.shape_keys.key_blocks[0].data],
            'triangles':[list(t.vertices) for t in face.data.loop_triangles],

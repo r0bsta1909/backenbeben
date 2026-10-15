@@ -1,0 +1,103 @@
+BACKENBEBEN / FACE IDENTITIES AND MATCH CAMERA / 15.10.2026
+
+Scope
+User approved checking faces in the actual match camera and strengthening
+the six identities while keeping the comic style, combinations and damage.
+Klassisch remains the reference head. Markant now has a wider mandibular
+silhouette, stronger cheek ridge and squared chin. Weich has fuller cheeks
+and a shorter rounded lower face. Schmal has a narrower mandible and tapered
+longer chin. Veteran has unequal cheek planes and a small chin displacement.
+Knollennase retains its unusual nose with a more compact lower face.
+Continuous sculpt fields also transform attached beard and interior meshes;
+the shared scalp, authored jaw ownership and six exact host surfaces remain.
+
+Match review revealed lost cheek definition on deep skin in the side camera.
+The shader now warms the darkest skin's cool shadow floor and adds a small
+pigment-relative bounce to face, neck and hands. It follows rest material
+colour, not camera direction. Arena, platform, table and Hoenhorst untouched.
+This is a restrained readability adjustment, not proof that every light,
+injury and custom combination is artistically finished.
+
+Contract
+Character version12 in host, Web join and collision file; reject11/13.
+Update host and browser together; restart older hosts and reload clients.
+Gesture version3 and damage schema1 unchanged. Blender source, GLB and all
+six collision surfaces rebuilt together; jaw_weights/UV2 binding retained.
+
+Technical evidence
+Source validator PASS: packed paint, anatomical rig, 16 separate teeth,
+six exact host profiles, jaw weights, continuous oral rim and winding.
+Final Python suite: 175 tests PASS in42.283s. Two new landmark regressions
+require meaningfully distinct broad/narrow jaw silhouettes and full cheeks /
+shorter chin for Weich. They do not claim subjective facial attractiveness.
+Final native tests PASS:216 face/hair/beard combinations,7 skin tones,
+actual match emote/reset including geometric beards, regional damage rewind,
+separate chip/missing teeth, mandibular hinge, first-person visibility,
+GPU normals and ArenaMatch contact/KO camera tracking/mirror/officials.
+Both tooth rows independently visible in all6 identities; closed-mouth
+healthy vs all-missing comparison still changes no more than2 mouth pixels.
+Enamel counts [both,upper-missing,lower-missing,closed,closed-all-missing]:
+0 [917,567,350,0,0]
+1 [1156,745,411,1,0]
+2 [1121,557,564,0,0]
+3 [550,364,186,0,0]
+4 [982,590,392,0,0]
+5 [756,712,44,0,0]
+
+Browser review method
+tests/face_match_review.py opens two real clients for each combination:
+Markant / Seitenscheitel / Schnurrbart / skin0;
+Weich / Locken / Glattrasiert / skin5;
+Veteran / Buzz Cut / Vollbart / skin2.
+It uses real practice/slap actions and the authoritative host replay, saves
+healthy/front/contact injury views, then sends a real recovery emote.
+Assertions require a hit and nonzero regional injury, identity propagation
+and no browser errors. Native strong-jaw/cheek fixture studies are separate
+authored accumulator scenarios, not recordings of additional live strikes.
+The real replay trajectory has one severity; extreme accumulated damage is
+checked with those fixtures rather than presented as a second browser hit.
+
+Local review artifacts
+Arena-Design/38-gesichtsvarianten.png: native neutral six-identity sheet.
+38-gesichtsmimik.png: native six-identity grin sheet.
+38-kieferstudie.png: native side camera with accumulated jaw injury fixture.
+38-spielkamera-markant.png and38-spielkamera-weich.png: actual browser match.
+38-spielkamera-veteran-mimik.png: actual browser recovery emote.
+38-trefferkamera.png: actual authoritative browser replay after a hit.
+Screenshots are actual renders, not AI retouched images. Human acceptance of
+the art and gameplay, and a physical second LAN computer test, remain open.
+
+Reproduce
+Blender --background --python scripts/build_character_options.py
+Blender -b assets-source/character-customizable.blend --python scripts/validate_character_options.py
+Python -m unittest discover -s tests -p test_*.py
+scripts/build.ps1
+Python server/host.py --port 8901 --no-browser --no-console
+Wait for /health200 before browser tests. Set BACKENBEBEN_TEST_PORT=8901.
+Python tests/face_match_review.py
+Python tests/character_creator.py --with-replay
+Python tests/face_performance.py
+Do not export or modify the Web package while browser tests run.
+
+Validation corrections
+First local host invocation used module syntax and failed because the existing
+host uses sibling imports; the documented script invocation starts correctly.
+An initial dark-skin mask range did not affect the actual material values;
+the final range was checked in native before/after side-camera captures.
+The stricter browser camera wait initially compared float32 z to exact3.3
+and timed out. It now uses abs(z-3.3)<.0001 and waits for both JS camera choice
+and Godot camera position. This changes test synchronization, not gameplay.
+
+Final Web results
+Import/export PASS. Final three-combination match review after the shader
+change PASS: each received a real hit, regional damage and real emote;
+errors[]. No exports were performed during these browser tests.
+Creator/persistence/rotateZoom/responsive/resetRandom/two-client sync and
+variant4+5 replay test also PASS errors[] on the same geometry before the
+final shader-only bounce adjustment. Final match tests cover the shader.
+Final single-browser1080p/RTX3090 ANGLE D3D11 onset-and-rewind PASS errors[].
+Timing [median,p95,max]ms: idle[16.7,33.4,33.5];
+contact[16.7,16.8,33.3]; injured[16.7,16.8,33.4].
+This is one hardware/run measurement, not a general60FPS guarantee.
+All final native error logs checked; no SCRIPT ERROR or ERROR entries.
+Validation host8901 stopped after the run; other hosts left untouched.

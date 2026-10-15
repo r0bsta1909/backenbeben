@@ -239,6 +239,11 @@ void fragment() {
         float middle=smoothstep(.12-w,.12+w,d);
         float highlight=smoothstep(.68-w,.68+w,d);
         vec3 shadow_tint=vec3(.43,.76,1.02);
+        // Deep skin needs a warmer reflected-light floor: the old cyan
+        // shadow suppressed the red channel until cheek planes disappeared
+        // in the side contact camera. Keep the chosen pigment and ink bands.
+        float deep_skin=1.0-smoothstep(.19,.40,dot(base_color.rgb,vec3(.2126,.7152,.0722)));
+        shadow_tint=mix(shadow_tint,vec3(.72,.86,1.04),deep_skin*.75);
         vec3 plane_tint=mix(shadow_tint,vec3(.96,.83,.70),middle);
         plane_tint=mix(plane_tint,vec3(1.13,1.07,.97),highlight);
         vec3 drawn_volume=mix(shadow_tint,vec3(1.13,1.07,.97),smoothstep(-.2,1.0,d));
@@ -246,7 +251,14 @@ void fragment() {
         color*=plane_tint;
     }
     ALBEDO = mix(vec3(0.035,0.032,0.045), color, edge);
-    EMISSION = ALBEDO * (skin_surface ? vec3(.34,.35,.37) : vec3(.20,.22,.26));
+    vec3 bounce=skin_surface ? vec3(.34,.35,.37) : vec3(.20,.22,.26);
+    if(skin_surface) {
+        float deep_skin=1.0-smoothstep(.19,.40,dot(base_color.rgb,vec3(.2126,.7152,.0722)));
+        // Apply the same small bounce to face, neck and hands, avoiding a
+        // bright face pasted onto a darker body. No camera-dependent repaint.
+        bounce+=deep_skin*vec3(.10,.085,.07);
+    }
+    EMISSION = ALBEDO * bounce;
 }
 
 void light() {
