@@ -34,7 +34,7 @@ def projected(angle,injury_left=0.,injury_right=0.,injury_jaw=0.,axis=2,regional
                 if i==7:v[:,0]+=mask*regional[9+i]*.024
     oral=1-smooth(.09,.135,np.abs(v[:,0]))
     lip_arc=-.0024-.0048*(v[:,0]/.132)**2+.0024*np.exp(-((np.abs(v[:,0])-.032)/.024)**2)-.0028*np.exp(-(v[:,0]/.020)**2)
-    jaw=((1-smooth(-.23,-.025,v[:,1]))*(1-oral)+(1-smooth(lip_arc-.002,lip_arc+.001,v[:,1]))*oral)*smooth(-.52,-.3,v[:,1])*front
+    jaw=((1-smooth(-.23,-.025,v[:,1]))*(1-oral)+(1-smooth(lip_arc-.0006,lip_arc+.00035,v[:,1]))*oral)*smooth(-.52,-.3,v[:,1])*front
     opening=jaw*injury_jaw*.12
     dy=v[:,1]+.056;dz=v[:,2]+.096
     v[:,1]=-.056+np.cos(opening)*dy-np.sin(opening)*dz

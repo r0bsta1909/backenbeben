@@ -39,7 +39,10 @@ def face_finish(point):
     jaw=gauss(abs(x),y,.069,-.037,.024,.018)*front
     temple=gauss(abs(x),y,.087,.112,.019,.032)*front*eye_clear
     p.x+=(1 if x>=0 else -1)*(.0030*cheek+.0020*jaw-.0025*temple)
-    p.z+=.0016*cheek-.0022*gauss(abs(x),y,.070,-.002,.025,.022)*front
+    p.z+=.0008*cheek-.0008*gauss(abs(x),y,.070,-.002,.025,.022)*front
+    # Support the orbicularis/commissure transition instead of attaching a
+    # regular lip surface to the prototype's deeply hollow lower cheek.
+    p.z+=.0060*gauss(abs(x),y,.040,-.012,.014,.023)*front
     guard=(1-smooth(.029,.045,abs(x)))*smooth(.035,.072,z)
     p.z+=guard*(.0028*gauss(x,y,0,.018,.017,.018)
                 -.0010*gauss(x,y,0,.014,.006,.010)
@@ -59,7 +62,7 @@ def face_finish(point):
     p.z-=.0018*gauss(abs(x),y,.018,.018,.006,.012)*front
     # Orbital shelf, restrained lower lid and cheekbone-to-masseter transition.
     p.z+=.0015*gauss(abs(x),y,.035,.107,.028,.011)*front
-    p.z-=.0008*gauss(abs(x),y,.038,.079,.021,.006)*front
+    p.z-=.0035*gauss(abs(x),y,.038,.080,.021,.005)*front
     p.z+=.0008*gauss(abs(x),y,.057,.054,.022,.014)*front*eye_clear
     p.z-=.0009*gauss(abs(x),y,.057,.022,.020,.024)*front
     p.z+=.0020*gauss(x,y,0,-.043,.027,.017)*front
@@ -69,7 +72,7 @@ def face_finish(point):
     p.y+=.0003*lid
     # A shaped upper lid covers more iris than the staring prototype. Keep
     # the eye centres fixed; expressions and all identities share this rest.
-    p.z+=.0010*gauss(abs(x),y,.039,.095,.022,.006)*front
+    p.z-=.0040*gauss(abs(x),y,.039,.096,.022,.005)*front
     # The prototype's narrow eye opening made the iris dominate the whole
     # aperture. Widen the canthi, preserving the globe/iris centre and height.
     eye_frame=gauss(abs(x),y,.0381,.09,.024,.020)*smooth(.064,.080,z)
@@ -101,16 +104,25 @@ blink=face.data.shape_keys.key_blocks['blink']
 for base,vertex in zip(face.data.shape_keys.key_blocks[0].data,blink.data):
     p=G(base.co);w=math.exp(-((abs(p.x)-.0381)/.018)**4-((p.y-.09)/.016)**4)*smooth(.04,.07,p.z)
     w*=1-smooth(.096,.102,p.y)  # the brow ridge must not collapse with the lid
-    q=p.copy();q.y+=(.09-p.y)*w*.96;vertex.co=B(q)
+    inner=(1-smooth(.012,.021,abs(abs(p.x)-.03810625)))*smooth(.075,.083,p.y)*(1-smooth(.098,.104,p.y))*smooth(.065,.078,p.z)
+    w=max(w,inner)
+    q=p.copy();q.y+=(.09-p.y)*w*.98
+    eye_dx=(p.x-(-.03810625 if p.x<0 else .03810625))/.01392
+    globe=.07895675+.012*math.sqrt(max(0,1-eye_dx*eye_dx))+.0012
+    q.z+=max(0,globe-q.z)*w
+    vertex.co=B(q)
 
 # Replace the folded, sealed source seam with a connected annular mouth patch.
-# Eight concentric surface rings give the lip rim genuine deformation topology;
+# Twelve regular surface rings give the lip rim genuine deformation topology;
 # all expression layers, UVs and skin weights remain attached to the head.
 bm=bmesh.new();bm.from_mesh(face.data)
 patch=[]
 for polygon in bm.faces:
     p=G(polygon.calc_center_median())
-    if (p.x/.043)**2+((p.y+.004)/.026)**2<1 and p.z>.060:patch.append(polygon)
+    # Protect the nasal base, but replace all folded commissures and the old
+    # chin crease below the lips. The asymmetric patch follows facial anatomy.
+    height=.017 if p.y>-.005 else .032
+    if (p.x/.049)**2+((p.y+.005)/height)**2<1 and p.z>.060:patch.append(polygon)
 assert patch, 'No mouth surface patch found'
 bmesh.ops.delete(bm,geom=patch,context='FACES_ONLY')
 edges=[e for e in bm.edges if len(e.link_faces)==1 and all(abs(G(v.co).x)<.060 and -.042<G(v.co).y<.030 and G(v.co).z>.058 for v in e.verts)]
@@ -146,53 +158,96 @@ while True:
     prev=ordered[-1];ordered.append(nxt)
     assert len(ordered)<=len(outer)
 assert len(ordered)==len(outer)
-angles=[math.atan2((G(v.co).y+.004)/.026,G(v.co).x/.043) for v in ordered]
-steps=[math.atan2(math.sin(b-a),math.cos(b-a)) for a,b in zip(angles,angles[1:]+angles[:1])]
-direction=1 if sum(steps)>0 else -1
-perimeter=sum(abs(s) for s in steps);progress=0.;ring_angles=[]
-for step in steps:
-    ring_angles.append(angles[0]+direction*math.tau*progress/perimeter);progress+=abs(step)
+# Bridge the irregular cut with a constrained triangulation. Its exact welded
+# border stays in place; a regular inner loop gives the lips even topology.
+from mathutils.geometry import delaunay_2d_cdt
 shape_layers=list(bm.verts.layers.shape.items())
 weights=bm.verts.layers.deform.verify();head_index=face.vertex_groups['head'].index
-rings=[ordered]
-for ring,t in enumerate([.15,.30,.45,.60,.73,.85,.94,1.]):
+border=[G(v.co) for v in ordered]
+
+def inside_polygon(point,polygon):
+    inside=False;x,y=point
+    for a,b in zip(polygon,polygon[1:]+polygon[:1]):
+        if (a.y>y)!=(b.y>y) and x<(b.x-a.x)*(y-a.y)/(b.y-a.y)+a.x:inside=not inside
+    return inside
+
+def border_sample(point):
+    best=None
+    for i,(a,b) in enumerate(zip(border,border[1:]+border[:1])):
+        delta=b.xy-a.xy;fraction=max(0,min(1,(point.xy-a.xy).dot(delta)/max(delta.length_squared,1e-12)))
+        distance=(point.xy-a.xy-delta*fraction).length_squared
+        if best is None or distance<best[0]:best=(distance,i,fraction,a.z+(b.z-a.z)*fraction)
+    return best
+
+rings=[];samples=96
+for t in [0.,.10,.20,.31,.43,.55,.66,.76,.85,.92,.97,1.]:
     current=[]
-    for vertex,angle in zip(ordered,ring_angles):
-        p=G(vertex.co)
+    for i in range(samples):
+        angle=i*math.tau/samples
+        anchor=Vector((.049*.80*math.cos(angle),0,0))
+        au=anchor.x/.033
+        anchor.y=-.0006-.0012*au*au+.0006*gauss(abs(anchor.x),0,.008,0,.006,1)-.0007*gauss(anchor.x,0,0,0,.005,1)
+        anchor.y+=(.013 if math.sin(angle)>0 else .036)*.80*math.sin(angle)
+        assert inside_polygon(anchor.xy,border), 'Lip anchor lies outside the cut'
+        distance,j,fraction,depth=border_sample(anchor)
         x=.033*math.cos(angle)
         arc=-.0006-.0012*(x/.033)**2+.0006*gauss(abs(x),0,.008,0,.006,1)-.0007*gauss(x,0,0,0,.005,1)
-        inner=Vector((x,arc+(.0007 if math.sin(angle)>0 else .0013)*math.sin(angle),.111-.013*(x/.035)**2))
-        q=p.lerp(inner,t)
-        # Follow the original outer skin in depth; a linear cone from cheek to
-        # rim creates a conspicuous puckered patch and abrupt shading seams.
-        # A smooth radial depth profile avoids sampling the old folded oral
-        # pocket. Those folds caused thin grooves even when rays hit anterior
-        # geometry. The outer ring stays welded to the resculpted cheek skin.
-        q.z=p.z+(inner.z-p.z)*smooth(0.,1.,t)
-        q.z+=.0048*math.exp(-((t-.80)/.16)**2)*abs(math.sin(angle))
-        if math.sin(angle)>0:q.y+=.0020*gauss(abs(q.x),0,.009,0,.007,1)*math.sin(t*math.pi)
+        inner=Vector((x,arc+(.00012 if math.sin(angle)>0 else .00020)*math.sin(angle),.108-.012*(x/.035)**2))
+        q=anchor.lerp(inner,t);u=q.x/.033
+        seam=-.0006-.0012*u*u+.0006*gauss(abs(q.x),0,.008,0,.006,1)-.0007*gauss(q.x,0,0,0,.005,1)
+        radius=(.013*.80*(1-t)+.00012*t) if math.sin(angle)>0 else (.036*.80*(1-t)+.00020*t)
+        q.y=seam+radius*math.sin(angle)
+        lip_fade=1-smooth(.023,.036,abs(q.x))
+        surface=.1075-.016*(q.x/.047)**2-.005*(1-smooth(-.035,-.008,q.y))
+        surface+=.004*gauss(q.x,q.y,0,.012,.020,.012)
+        surface+=lip_fade*(.0025*math.exp(-((q.y-seam-.003)/.003)**2)+.0032*math.exp(-((q.y-seam+.005)/.004)**2))
+        surface-=.0008*gauss(q.x,q.y,0,.010,.004,.008)
+        surface+=.0006*gauss(abs(q.x),q.y,.004,.010,.002,.007)
+        surface-=.0010*gauss(q.x,q.y,0,-.017,.023,.004)
+        surface+=.0015*gauss(q.x,q.y,0,-.028,.024,.011)
+        q.z=surface
+        q.z+=(inner.z-q.z)*smooth(.87,1.,t)
         new=bm.verts.new(B(q));new[weights][head_index]=1.
+        a,b=ordered[j],ordered[(j+1)%len(ordered)]
         for name,layer in shape_layers:
-            delta=vertex[layer]-vertex.co
+            delta=(a[layer]-a.co).lerp(b[layer]-b.co,fraction)
             new[layer]=new.co+delta*(1-t)
         current.append(new)
     rings.append(current)
+
+vertices=ordered+rings[0];outer_count=len(ordered)
+coords=[G(v.co).xy for v in vertices]
+edges=[(i,(i+1)%outer_count) for i in range(outer_count)]
+edges.extend((outer_count+i,outer_count+(i+1)%samples) for i in range(samples))
+outline=list(range(outer_count))
+if sum(a.x*b.y-b.x*a.y for a,b in zip(border,border[1:]+border[:1]))<0:outline.reverse()
+cdt=delaunay_2d_cdt(coords,edges,[outline],1,1e-9,True)
+assert all(len(ids)==1 for ids in cdt[3]), 'Intersecting cut boundary needs explicit repair'
+anchor_polygon=[G(v.co) for v in rings[0]]
+new_faces=[]
+for indices in cdt[2]:
+    center=sum((cdt[0][i] for i in indices),Vector((0,0)))/len(indices)
+    if inside_polygon(center,anchor_polygon):continue
+    verts=[vertices[cdt[3][i][0]] for i in indices]
+    points=[G(v.co) for v in verts]
+    area=sum(a.x*b.y-b.x*a.y for a,b in zip(points,points[1:]+points[:1]))
+    if area<0:verts.reverse()
+    new_faces.append(bm.faces.new(verts))
 for outer_ring,inner_ring in zip(rings,rings[1:]):
-    for i in range(len(ordered)):
-        poly=bm.faces.new((outer_ring[i],outer_ring[(i+1)%len(ordered)],inner_ring[(i+1)%len(ordered)],inner_ring[i]))
-        poly.smooth=True
-        for loop in poly.loops:
-            p=G(loop.vert.co)
-            for layer in bm.loops.layers.uv:
-                loop[layer].uv=((p.x+.19)/.38,(p.y+.135)/.38) if layer.name=='UVMap' else (1.,1-p.z)
-# Fair shallow depth ripples across the connected oral patch. Keep the aperture
-# boundary fixed and preserve every expression's relative displacement.
-for iteration in range(6):
+    for i in range(samples):new_faces.append(bm.faces.new((outer_ring[i],outer_ring[(i+1)%samples],inner_ring[(i+1)%samples],inner_ring[i])))
+for poly in new_faces:
+    poly.smooth=True
+    for loop in poly.loops:
+        point=G(loop.vert.co)
+        for layer in bm.loops.layers.uv:loop[layer].uv=((point.x+.19)/.38,(point.y+.135)/.38) if layer.name=='UVMap' else (1.,1-point.z)
+# Fair both sides of the welded oral patch. Keep the aperture boundary fixed
+# and preserve every expression's relative displacement.
+for iteration in range(24):
     changes=[]
     for vertex in bm.verts:
         p=G(vertex.co)
         if not vertex.link_edges or any(e.is_boundary for e in vertex.link_edges) or p.z<.07:continue
-        strength=.35*gauss(p.x,p.y,0,-.002,.044,.030)
+        strength=.50*gauss(p.x,p.y,0,-.005,.055,.040)*(1-smooth(.012,.024,p.y))
         if strength<.01:continue
         neighbors=[e.other_vert(vertex) for e in vertex.link_edges]
         depth=sum(v.co.y for v in neighbors)/len(neighbors)
@@ -201,8 +256,10 @@ for iteration in range(6):
         vertex.co+=delta
         for name,layer in shape_layers:vertex[layer]+=delta
 bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces))
+bm.verts.index_update()
+face['mouth_patch_vertices']=[v.index for ring in [ordered]+rings for v in ring]
 bm.to_mesh(face.data);bm.free()
-face['mouth_topology']='eight connected anatomical lip rings; original folded seam removed'
+face['mouth_topology']='twelve regular lip rings; constrained bridge; shared curved seam; nasal base preserved'
 interior=bpy.data.objects.get('MouthInterior')
 if interior:
     for v in interior.data.vertices:
@@ -382,6 +439,28 @@ if grin:
     for base,vertex in zip(face.data.shape_keys.key_blocks[0].data,grin.data):
         p=G(base.co);p.y+=.0045*gauss(p.x,p.y,.024,-.002,.015,.013)*smooth(.065,.095,p.z)
         vertex.co=B(p)
+# Independent focused expression: paired lid tension and skin-conforming brows.
+# A small artist-controlled expression is distinct from permanent damage.
+focus=face.shape_key_add(name='focus')
+for base,vertex in zip(face.data.shape_keys.key_blocks[0].data,focus.data):
+    p=G(base.co);focus_front=smooth(.065,.084,p.z)
+    upper=gauss(abs(p.x),p.y,.0381,.095,.018,.005)*focus_front
+    lower=gauss(abs(p.x),p.y,.0381,.083,.018,.004)*focus_front
+    p.y-=.0015*upper;p.y+=.0005*lower;p.z+=.0004*upper
+    p.y-=.0012*gauss(abs(p.x),p.y,.024,.106,.016,.008)*focus_front
+    vertex.co=B(p)
+focused_surface=BVHTree.FromPolygons([G(v.co) for v in focus.data],ff)
+for name in ['BrowL','BrowR']:
+    obj=bpy.data.objects[name]
+    obj.shape_key_add(name='Basis');key=obj.shape_key_add(name='focus')
+    for base,vertex in zip(obj.data.shape_keys.key_blocks[0].data,key.data):
+        p=G(base.co);p.y-=.0025*(1-smooth(.018,.060,abs(p.x)))
+        hit=focused_surface.ray_cast(Vector((p.x,p.y,1)),Vector((0,0,-1)))[0]
+        old=G(base.co);old_surface=bvh.ray_cast(Vector((old.x,old.y,1)),Vector((0,0,-1)))[0]
+        offset=max(.00012,old.z-old_surface.z) if old_surface is not None else .00085
+        if hit is not None:p.z=hit.z+offset
+        vertex.co=B(p)
+
 for suffix,side in [('L','L'),('R','R')]:
     for prefix in ['Eye','Iris','Pupil']:
         obj=bpy.data.objects.get(prefix+suffix)
@@ -618,7 +697,7 @@ for obj in list(bpy.context.scene.objects):
 # Each option now exports its actual triangle surface for host contact queries.
 # Structural base sculpt is shared; frontal identities remain separate profiles.
 face.data.calc_loop_triangles()
-collision={'version':8,'units':'game coordinates, original metres multiplied by 4',
+collision={'version':9,'units':'game coordinates, original metres multiplied by 4',
            'vertices':[list(G(v.co)*4) for v in face.data.shape_keys.key_blocks[0].data],
            'triangles':[list(t.vertices) for t in face.data.loop_triangles],
            'faces':[[list(G(v.co)*4) for v in face.data.shape_keys.key_blocks[0 if i==0 else f'identity_{i}'].data] for i in range(6)]}

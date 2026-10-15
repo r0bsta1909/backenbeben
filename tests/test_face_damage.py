@@ -7,9 +7,9 @@ from contact_v3 import projected
 
 class RegionalDamageTests(unittest.TestCase):
     def test_old_character_builds_cannot_use_new_collision_surfaces(self):
-        for version in [None,1,3,4,5,6,7,9]:
+        for version in [None,1,3,4,5,6,7,8,10]:
             with self.assertRaises(ValueError):check_character_version({'character_version':version})
-        check_character_version({'character_version':8})
+        check_character_version({'character_version':9})
     def player(self):return {'damage':0.,'stun':0.,'face_damage':healthy_face()}
     def scored(self,position,**extra):
         return dict(hit=True,quality=1.,side='L' if position[0]<0 else 'R',position=position,**extra)
@@ -44,5 +44,22 @@ class RegionalDamageTests(unittest.TestCase):
         for i in range(6):
             tri,_=projected(0.,0.,0.,0.,2,tuple([0.]*8+[i]))
             np.testing.assert_allclose(tri,FACE_VERTICES[i][DATA['triangles']],atol=1e-12)
+
+    def test_closed_lip_rim_keeps_upper_lip_on_skull_and_lower_on_jaw(self):
+        import numpy as np
+        from collections import Counter
+        from contact_v3 import DATA,FACE_VERTICES,INDICES
+        points=FACE_VERTICES[0]
+        edges=Counter(tuple(sorted((a,b))) for a,b,c in DATA['triangles'] for a,b in [(a,b),(b,c),(c,a)])
+        rim={i for edge,count in edges.items() if count==1 for i in edge
+             if abs(points[i,0])<.001 and abs(points[i,1])<.08 and points[i,2]>.34}
+        self.assertGreaterEqual(len(rim),2)
+        upper=max(rim,key=lambda i:points[i,1]);lower=min(rim,key=lambda i:points[i,1])
+        moved,_=projected(0.,0.,0.,.75)
+        def posed(index):
+            triangle,corner=np.argwhere(INDICES==index)[0]
+            return moved[triangle,corner]
+        np.testing.assert_allclose(posed(upper),points[upper],atol=1e-12)
+        self.assertLess(posed(lower)[1],points[lower,1]-.03)
 
 if __name__=='__main__':unittest.main()

@@ -158,7 +158,11 @@ func apply_finger_relax(amount: float, side: String) -> void:
 			skeleton.set_bone_pose_rotation(index,finger_rest_rotations[index]*Quaternion(axis,angle))
 
 func set_eye_closure(amount: float) -> void:
-	if blink_index>=0:face_mesh.set_blend_shape_value(blink_index,clampf(amount,0.0,1.0))
+	var closure: float=clampf(amount,0.0,1.0)
+	if blink_index>=0:face_mesh.set_blend_shape_value(blink_index,closure)
+	if is_instance_valid(face_mesh):
+		var focus_index: int=face_mesh.find_blend_shape_by_name("focus")
+		if focus_index>=0:face_mesh.set_blend_shape_value(focus_index,float(get_meta("face_focus",0.0))*(1.0-closure))
 
 func set_jaw_open(angle: float) -> void:
 	var index: int=skeleton.find_bone("jaw")

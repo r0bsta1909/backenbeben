@@ -121,10 +121,17 @@ void fragment() {
         // Restrained lip pigment follows authored rest coordinates and all
         // skin tones; volume and shadows still come from the anatomical mesh.
         float lip_front=paint_mask*smoothstep(.045,.085,local.z);
-        float upper_lip=exp(-pow(abs(local.x)/.034,6.0)-pow(abs((local.y-.003)/.0035),4.0))*lip_front;
-        float lower_lip=exp(-pow(abs(local.x)/.032,6.0)-pow(abs((local.y+.006)/.0045),4.0))*lip_front;
-        color*=mix(vec3(1.0),vec3(.65,.43,.40),upper_lip*.85);
-        color*=mix(vec3(1.0),vec3(1.08,.91,.86),lower_lip*.80);
+        // Bind pigment to the authored lip UVs, so it follows identity, grin
+        // and damage rather than remaining a straight stripe in model space.
+        vec2 lip_xy=vec2(UV.x*.38-.19,.245-UV.y*.38);
+        float lip_u=lip_xy.x/.033;
+        float lip_arc=-.0006-.0012*lip_u*lip_u
+            +.0006*exp(-pow((abs(lip_xy.x)-.008)/.006,2.0))
+            -.0007*exp(-pow(lip_xy.x/.005,2.0));
+        float upper_lip=exp(-pow(abs(lip_xy.x)/.032,8.0)-pow(abs((lip_xy.y-lip_arc-.0024)/.0022),4.0))*lip_front;
+        float lower_lip=exp(-pow(abs(lip_xy.x)/.030,8.0)-pow(abs((lip_xy.y-lip_arc+.0044)/.0028),4.0))*lip_front;
+        color*=mix(vec3(1.0),vec3(.74,.49,.44),upper_lip*.62);
+        color*=mix(vec3(1.0),vec3(1.04,.88,.81),lower_lip*.50);
         // Selective tapered anatomy accents; the actual oral seam is geometric.
         float fold_x=.026+.007*(1.0-smoothstep(-.008,.015,local.y));
         float fold_distance=abs(abs(local.x)-fold_x);

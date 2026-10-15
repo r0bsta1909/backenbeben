@@ -2516,3 +2516,33 @@ keineToleranzenlockern und Fehler nichtalsPassausgeben. Testhost8897beendet.
 FinaleVorschauen34-*.png gesichtet; BelegmitPrompt/Grenzen:
 validation/FACE_REFERENCE_LOOK_2026-10-14.txt. KeinReleasezip, V14weiteralt.
 Arena/Tisch/Hoenhorst unangetastet; Quelle character-v3.blend erhalten.
+
+GRUNDKOPF / LIDER UND LIPPENTOPOLOGIE — 15.10.2026
+Nach Nutzerfreigabe die5Punkte amGrundkopf bearbeitet. Kein neues Stilziel:
+XIII-Referenz weiterverbindlich, Kunstabnahme weiterhin offen.
+Lider naeher anEllipsoidaugen, Blink vorKugel, Fokus+Blink ohne additiveUeberlappung.
+Regelmaessige12x96Lippenringe mitgemeinsamergekruemmterMittellinie; begrenzte
+Delaunay-Triangulation schliesst an unveraendertenverschweisstenHautrand an.
+NeueQuelleprueftnebenMundrandauchvorwaertsgerichteteDreiecke aller6Kontaktprofile.
+VorherigeRingverdrehungen/ueberlappendeStreifen wurden tatsaechlich korrigiert.
+Mundwinkelunterstuetzt, Geometrie/Normalschatten nachwievor stilisiert vereinfacht.
+Lippenpigment ueberUVs gebunden, folgtIdentitaet/Grinsen/Schaden. Texturev4erhalten.
+NeuerlokalerFocus-Shape fuerFace+Brauen; Datenparameterfocus(0..1) anRenderer
+gebunden, aberkeineneuepersistierteAuswahl/automatischeMatchInszenierung.
+ZahnregressionbeiExtremkiefergefunden/korrigiert: engereSaumbindung inCPU/GPU
+identisch; obereLippeamSchaedel, untereanderMandibula. Zahnpositionennichtverschoben.
+NeueGPU-Bildpruefunggesunde/fehlende/geschlosseneZaehne10/0/0Pixel PASS.
+CHARACTER_VERSION9inHost/Webshell/6Profilen; alte8abweisen, Gesten3/Schaden1erhalten.
+Quelle/Kontaktgeometrie-RerunIdentitaet/173TestsPASS69.178s/216Kombinationen/7Farben/
+Fokus-BlinkReset/Zahnreset/GPU-Normalen/ArenaMatch/ImportWeb PASS.
+2Client-Auswahl/LAN/VariantenReplay undrealerMaustest PASS errors[].
+ErsteFPSmessung16.7..16.8msMedian/p95~33.4ms. NachKieferrandkorrektur Zusatzlauf
+Timeout, unveraenderterTestmitStatusloggingdanachOnset/RuecklaufPASS errors[],
+aberidleMedian50.1/p9571ms, Kontakt16.8/66.8, verletzt16.8/83.5. Leistungweiteroffen.
+Native35-*.png/webm: Grundkopf, Formvergleich34/35,6Posen,4sBewegungsstudie,
+6Varianten undSchadensextremegesichtet. VideoistgestalteteKunststudie, kein
+neuaufgezeichneterHosttreffer/FPSnachweis.
+Belegvalidation/HEAD_SCULPT_2026-10-15.txt. GemeinsamerSchaedel undextreme
+Mundinnenraeume weiterhinvereinfacht; keinefinaleKunstabnahme.
+Arena/Tisch/Hoenhorstunveraendert. KeinReleasezip, V14weiteralt.
+Eigener Pruefhost auf Port 8898 nach Abschluss beendet.

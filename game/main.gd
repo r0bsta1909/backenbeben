@@ -270,6 +270,7 @@ func head_offset_state(actor: Node3D, parameter := "head_offset") -> Array:
 
 func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 	root.set_character_options(data)
+	root.set_meta("face_focus",clampf(float(data.get("focus",0.0)),0.0,1.0))
 	var detailed: bool=data.has("face_damage")
 	var regional_hash: int=data.get("face_damage",{}).hash()
 	var regional_changed: bool=regional_hash!=int(root.get_meta("regional_hash",-1))
@@ -346,6 +347,9 @@ func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 				if shape.begins_with("identity_"):continue
 				if shape=="tooth_chip":amount=1.0-tooth_health
 				if shape=="grin" and emote_active:amount=.8
+				if shape=="focus":
+					amount=float(root.get_meta("face_focus"))
+					if node==root.face_mesh:amount*=1.0-node.get_blend_shape_value(root.blink_index)
 				# The contact driver owns lids, including paused replay frames.
 				if shape=="blink":continue
 				if shape=="swelling": amount=ratio

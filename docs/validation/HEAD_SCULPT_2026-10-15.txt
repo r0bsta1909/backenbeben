@@ -1,0 +1,113 @@
+BACKENBEBEN — GRUNDKOPF / AUGEN UND MUND — 15.10.2026
+
+AUFTRAG
+Einen gemeinsamen Grundkopf nach der XIII-Referenz verbessern: anatomische
+Formen, definierte Lider/Lippen, Ausdruck und Kontrolle in Nahansicht/Bewegung.
+Vorherige Fassungen einschliesslich34 besitzen keine menschliche Kunstabnahme.
+Der Schwerpunkt liegt auf dem Basiskopf; sechs bestehende Identitaeten bleiben
+benutzbar, sind aber nicht jeweils neu als fertige Einzelcharaktere gestaltet.
+
+GEOMETRIE
+Obere/untere Lidkanten naeher am vorhandenen ellipsoiden Augapfel. Beim Blink
+schliesst die Haut davor statt durch die Kugel. Augenanker und Irisabstaende
+erhalten. Bestehende Expressions-/Identitaetsdeltas bleiben an der Quelle.
+Weniger hohle untere Wangen; zusaetzliche Unterstuetzung an den Mundwinkeln.
+
+Mundflaeche neu: unregelmaessige verschweisste Aussengrenze bleibt erhalten,
+Blenders begrenzte Delaunay-Triangulation verbindet sie mit regelmaessigen
+inneren Lippenringen. Die bisherige abs(Winkelschritt)-Verteilung verdrehte
+die Verbindungen und erzeugte Falten. Versuchte Grenzprojektionen wurden wegen
+gefalteter Dreiecke verworfen. Zwoelf regelmaessige Ringe mit96Samples nutzen
+eine gemeinsame gekruemmte Mittellinie fuer Ober-/Unterlippe. Keine voneinander
+abweichenden Bogeninterpolationen an den fast geschlossenen Mundwinkeln.
+Neutrale zentrale Oeffnung ca0.32mm in der Autorenquelle; exportierter Spielraum
+wie bisher Faktor4. Keine grosse dunkle Spalte im neutralen Mund.
+Kontinuierliche Lippen-/Philtrum-/Kinnwoelbung, an der verschweissten Flaeche
+geglaettet. Die vorhandene Mundinnenflaeche und16 einzelne Zaehne bleiben.
+Die Extremsichtung fand eine weitere Regression: beim schmaleren neutralen
+Lippenspalt folgte der untere Saum dem Kiefer zu wenig und verdeckte die Zaehne.
+Host/Shader nutzen nun dieselbe engere Bindungszone am Saum (gamecoords
+lip_arc-.0006 bis+.00035). Oberlippe bleibt am Schaedel, Unterlippe folgt der
+Mandibula. Zahnrestpositionen oder Healthwerte wurden dafuer nicht verschoben.
+
+NEUE PRUEFUNG
+Ein geschlossener Mundrand allein fand die frueheren Faltungen nicht.
+mouth_patch_vertices im editierbaren Blend markiert den betroffenen Bereich.
+Validator prueft zusaetzlich die projizierte Dreieckorientierung aller sechs
+exakten Kontaktprofile. Die Grenzen wurden nicht fuer ein gruenes Ergebnis
+gelockert: erste Neubauten fielen an dieser Pruefung durch und wurden korrigiert.
+Diese Pruefung belegt keine beliebige3D-Selbstschnittfreiheit bei Extremverletzungen.
+
+AUSDRUCK UND MATERIAL
+Neuer focus-Shape fuer Gesicht/Brauen, Brauen auf den zugehoerigen Hautzustand
+projiziert. apply_fighter akzeptiert den lokalen Darstellungswert focus=0..1.
+Bei vollem Blink wird die Lidspannung unterdrueckt und beim Oeffnen wiederhergestellt;
+die Brauen koennen konzentriert bleiben. Alle sechs Identitaeten/Reset getestet.
+Focus ist ein lokaler Darstellungs-/Authoringparameter, keine neue persistierte
+Charakteroption und noch keine automatische Match-Inszenierung.
+Lippenpigment folgt dem Autoren-UV und Cupidbogen statt einem geraden Streifen
+in Modellkoordinaten. Damit folgt es auch Identitaet, Grinsen und Verformung.
+Keine neue Rastertextur erzeugt; face_ink_v4.png und die vorhandenen Haare bleiben.
+Arena/Tisch/Hoenhorst sowie die urspruengliche character-v3.blend unveraendert.
+
+BEWEGUNGSSTUDIE
+capture_head_study.gd zeigt neutral/fokus/blink/grinsen/regionale Verletzung/profil.
+--motion rendert96 native JPG-Frames mit Kopfrotation, Blink-/Fokusuebergang und
+einem gestalteten Trefferimpuls. Der Verletzungszustand stammt vom echten
+regionalen Akkumulator. Der Impuls dieser Kunststudie ist gestaltet, KEIN neu
+aufgezeichneter Host-Physiktreffer und KEINE Messung von Echtzeit-FPS.
+Vorhandenes Playwright-FFmpeg fuegt die nativen Frames als4s/24FPS-WebM zusammen.
+
+VERTRAG
+CHARACTER_VERSION9 in Host, Webshell und sechs exportierten Kontaktprofilen.
+Alte8 wird abgewiesen. Gesten3 und Schadenszustand1 bleiben erhalten.
+Quelle/GLB/Kontaktdatei zusammen verwenden. Alle6/6/6Formoptionen und7Hautfarben
+bleiben unabhaengig. Keine Erweiterung von Turnieren/ElevenLabs/Werbung.
+
+PRUEFUNGEN
+Quelle/geschlossener Mundrand/keine umgedrehten Munddreiecke in6Profilen PASS.
+173Servertests final PASS69.178s, keine Kontaktfixtures/Toleranzen geaendert.
+Neue Regression prueft die tatsaechlichen zentralen Rimvertices: obere Lippe
+bleibt fest, untere bewegt sich mit Kieferschaden. Ein GPU-Bildtest vergleicht
+gesunde/fehlende Unterkieferzaehne und geschlossenen Mund:10/0/0Zahnpixel PASS.
+Native216Kombinationen/7Farben/FirstPerson/Irisabstand sowie Focus-Blink-Reset PASS.
+16Zahnmaterialien/Chip/Fehlend/Reset/regionaleRuecklaeufe/Kiefergelenk PASS.
+GPU-Normalen und ArenaMatch mit Spiegel/Offiziellen PASS. Import/Webexport PASS.
+Browserinitialprobe1920x1080: RTX3090 ANGLE D3D11,60FPS, errors[].
+ZweiClients: Vorschau/Persistenz/RotateZoom/LAN/4Layouts/ResetRandom und echte
+Varianten-Treffer mit regionalen Replays PASS errors[]. Reale Maus: Probe,
+Wiederholung ohneSchaden, Posekamera/Mausrad, Trefferkontakt, Spiegel, Marker,
+Kamerawechsel undRuecklauf PASS errors[]. Der optionaleTest auf das Verstreichen
+der urspruenglichen Inspektionsdeadline wurde nicht aktiviert.
+Finale90RAF-Samples auf RTX3090 ANGLE D3D11 bei1920x1080:
+idle median16.8/p9533.4/max33.5ms; pausierterKontakt16.7/33.4/33.5ms;
+verletzt16.7/33.3/33.4ms. Verletzungsbeginn undRuecklauf PASS errors[].
+Damit sind die unter der damaligen niedrigenBildrate fehlgeschlagenen Zusatzchecks
+aus34 fuer diesen Stand erfolgreich nachgeprueft. Einzelne Frames brauchen zwei
+Bildschirmzyklen; keine allgemeine60FPS-/Mehrhardwarefreigabe.
+Nach der Kieferrandkorrektur wurden173Tests, Zahn-Bildtest, Kiefer- undGPU-Normalen-
+Pruefung wiederholt. Der neue Host lud beide neuen Bindungsformeln. Ein zusaetzlicher
+Weblauf lief erst in einen60sTimeout beim Warten auf Probe/Replay. Derselbe Test
+mit unveraenderten Assertions und zusaetzlichen Statusausgaben bestand danach:
+Verletzungsbeginn/Ruecklauf PASS errors[], aber stark schwankende Bildrate.
+LetzteMessung: idle50.1/p9571/max100.2ms; Kontakt16.8/66.8/83.4ms;
+verletzt16.8/83.5/100.4ms. Zu Beginn wurden16FPS angezeigt. Diese langsamere
+Messung ist ebenfalls Teil des Ergebnisses; Leistung bleibt ein offenes Gate.
+
+REPRODUKTION / GRENZEN
+Blender --background --python scripts/build_character_options.py
+Blender -b assets-source/character-customizable.blend --python scripts/validate_character_options.py
+Python scripts/create_face_damage_fixtures.py
+scripts/build.ps1
+Godot --path game --script ../scripts/capture_head_study.gd -- --motion
+Godot --path game --script ../scripts/capture_face_quality.gd -- --hero --clay
+Godot --path game --script ../scripts/capture_face_quality.gd -- --identities --blinks
+Godot --path game --script ../scripts/capture_face_damage.gd
+Vorschauen35-*.png/webm im lokalen Arena-Design-Verzeichnis.
+
+Gemeinsamer Schaedel/Rig und frontale Texturprojektion bleiben. Die graue
+Formansicht zeigt noch eine breit vereinfachte Mund-/Kinnwoelbung; Augen-, Haar-
+und Bartvarianten benoetigen weiterhin kuenstlerische Feinabstimmung. Extreme
+Mundhoehle/Bruchformen bleiben vereinfacht. Keine medizinische Bruchsimulation,
+keine finale menschliche Kunstabnahme und keine allgemeine60FPS-Freigabe.
+Kein neues Releasezip; V14-Download weiterhin alt.

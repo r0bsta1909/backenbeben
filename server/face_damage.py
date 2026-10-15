@@ -7,7 +7,7 @@ import json, math
 from pathlib import Path
 ANATOMY=json.loads((Path(__file__).resolve().parents[1]/'game/assets/face_anatomy.json').read_text())
 REGIONS=ANATOMY['regions']
-CHARACTER_VERSION=8
+CHARACTER_VERSION=9
 
 def check_character_version(data):
     if data.get('character_version')!=CHARACTER_VERSION:

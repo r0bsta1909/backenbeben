@@ -44,6 +44,21 @@ func verify() -> void:
 				actor.first_person(false)
 				if hair!=2 and not actor.model.find_child(actor.HAIR_NODES[hair],true,false).visible:
 					push_error("Camera switch loses hairstyle");quit(1);return
+	for face in range(6):
+		scene.apply_fighter(actor,{"face_style":face,"focus":1.0},true)
+		for name in ["Face","BrowL","BrowR"]:
+			var part: MeshInstance3D=actor.model.find_child(name,true,false)
+			if part.get_blend_shape_value(part.find_blend_shape_by_name("focus"))!=1.0:
+				push_error("Focused lids and brows are not linked");quit(1);return
+		actor.set_eye_closure(1.0)
+		if actor.face_mesh.get_blend_shape_value(actor.face_mesh.find_blend_shape_by_name("focus"))!=0.0:
+			push_error("Focused lid tension overlaps full blink");quit(1);return
+		actor.set_eye_closure(0.0)
+		if actor.face_mesh.get_blend_shape_value(actor.face_mesh.find_blend_shape_by_name("focus"))!=1.0:
+			push_error("Focus lost after reopening eyes");quit(1);return
+		scene.apply_fighter(actor,{"face_style":face,"focus":0.0},true)
+		if actor.face_mesh.get_blend_shape_value(actor.face_mesh.find_blend_shape_by_name("focus"))!=0.0:
+			push_error("Focus reset failed");quit(1);return
 	for skin in range(scene.skins.size()):
 		var data: Dictionary={"skin":skin,"hair_style":0,"beard_style":0}
 		for target in [actor,scene.reflection]:

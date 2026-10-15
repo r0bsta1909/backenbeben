@@ -48,7 +48,7 @@ vec3 deform_face(vec3 p) {
         float oral=1.0-smoothstep(.09,.135,abs(p.x));
         float lip_arc=-.0024-.0048*pow(p.x/.132,2.0)
             +.0024*exp(-pow((abs(p.x)-.032)/.024,2.0))-.0028*exp(-pow(p.x/.020,2.0));
-        float jaw=mix(1.0-smoothstep(-.23,-.025,p.y),1.0-smoothstep(lip_arc-.002,lip_arc+.001,p.y),oral)
+        float jaw=mix(1.0-smoothstep(-.23,-.025,p.y),1.0-smoothstep(lip_arc-.0006,lip_arc+.00035,p.y),oral)
             *smoothstep(-.52,-.3,p.y)*front;
         vec2 hinge=p.yz-vec2(-0.056,-0.096);
         float opening=jaw*(jaw_angle+injury_jaw*.12);
