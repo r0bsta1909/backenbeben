@@ -1,0 +1,135 @@
+BACKENBEBEN — FACE AUDIT CORRECTIONS — 2026-10-15
+
+Scope
+User requested all corrections from the v36 audit: beard mimic, upper teeth,
+oral cavity, beard roots/material, cheek/ear refinement and weaker hairstyles.
+These changes are in the editable Blender source and native game assets.
+No AI image generation, beauty retouch, or third-party reference publication.
+Arena/table/Hoenhorst and the original character-v3.blend remain unchanged.
+
+Anatomical lip ownership
+The audit exposed a limitation beyond the two original missing features:
+reclassifying moved lips with one fixed Y equation was unstable across the
+six identities, especially after making the neutral seam nearly closed.
+The source now authors per-vertex jaw weights. Upper and lower oral rims
+retain separate ownership, with restrained rounding at the commissures.
+The same array is exported in face_customizable_collision.json:jaw_weights
+and Face UV2.V. The glTF V-axis inversion is explicitly reversed by both
+toon and outline shaders. Beard weights interpolate the same face triangles.
+CPU contact deformation uses that exact exported array, not a second heuristic.
+The source validator checks UV weights against the server array at every loop.
+The deformation functions accept the per-vertex weight as an explicit argument;
+there is no mutable shader global. Normal handling uses the same bound call.
+
+Mouth topology and teeth
+The neutral slit is reduced to an approximately 1.3-micrometre authoring gap
+(source scale is multiplied by four in game). This avoids visible enamel
+through a nominally closed mouth. Distinct jaw weights allow it to open
+without depending on the tiny rest-space gap as a classification threshold.
+Oral strip quads are split on the diagonal with the best forward projected
+winding. All six final identity profiles pass the existing winding tolerance.
+An intermediate micro-gap build failed this gate; tolerance was not relaxed.
+Upper crowns are lowered into the aperture when the jaw opens. The lower
+incisor row is raised to fit a modest overlapping bite behind the upper row.
+Sixteen separate health/chip/missing indices and the real lower jaw hinge remain.
+
+Interior
+The old dark cylinder is replaced by a curved bowl, posterior closure,
+upper/lower gum ridges, palate and a tongue form with distinct muted materials.
+The surfaces deform with the existing jaw and permanent regional damage.
+Commissure rounding avoids moving the central incisor span with an arbitrary
+taper. This is a stylized interior, not a medical reconstruction or a complete
+set of molars, throat anatomy and soft-tissue collision constraints.
+
+Beard mimic and rendering
+All four geometric beards now carry a nonempty grin shape transferred by
+nearest-triangle barycentric interpolation of the actual face expression.
+Original offsets are preserved rather than snapping moustache tips onto skin.
+main.gd already drives grin during emotes on all matching mesh shapes.
+CharacterView.set_grin drives the same parts for study captures and tests.
+The updated captures no longer set only the Face morph.
+UV2.U stores distance from each patch boundary. A rest-space coverage pattern
+creates a sparse fringe without alpha sorting or camera-anchored noise.
+Inverted-hull outlines are removed from beards; their own silhouette remains.
+Shorter, finer fiber shading adds restrained variation instead of broad stripes.
+
+Other sculpt and groom changes
+Cheek fairing stays outside the oral loops and includes restrained tangential
+relaxation to reduce uneven side-plane shading. Ear concha/antihelix relief
+is modeled in the attached skin surface rather than added as detached pieces.
+The shadow tint returns to a restrained cooler comic hue.
+Side-part locks are sampled from the actual side-part scalp and receive a
+dedicated direction of drawn strokes. Curls use smaller embedded, irregular,
+flattened clumps with outward-facing surfaces, rather than large raised beads.
+An intermediate high-density spiral experiment was rejected; the final curls
+use compact meshes. Correct sphere winding also applies to the tongue.
+These remain stylized options; matching the supplied XIII illustration is
+subject to the user's visual acceptance, not established by automated tests.
+
+Contract
+Character version 11 in host, Web join and six exported contact profiles.
+Old 10 is rejected. Source, GLB, collision profiles and host must be updated
+together. Gesture protocol 3 and damage schema 1 are unchanged.
+Restart existing hosts and reload browsers to use the matching local build.
+No new downloadable release ZIP; the previous V14 download remains old.
+
+Validation completed before Web testing
+Blender source validator PASS, including nonempty beard morphs, normalized
+weights, sixteen teeth, all six exact profiles, projected oral winding and
+CPU/GPU authored-weight consistency. Existing tolerances retained.
+173 Python tests PASS in 36.933s on the final model/weight array.
+Native 216 appearance combinations and seven skin colors PASS.
+New all-six-identity beard match-emote/reset assertions PASS through main.gd,
+not only through the capture helper.
+Existing teeth chip/missing/reset, regional rewind, actual jaw hinge, GPU
+normal transform and ArenaMatch/officials/mirror/KO-support tests PASS.
+Import and Web export PASS.
+
+New dental image regression
+For each of six identities, render five otherwise identical states:
+open healthy / open upper-eight missing / open lower-eight missing /
+closed healthy / closed all missing.
+Require at least the existing eight-enamel-pixel difference for EACH row.
+Require at most two visibly changed mouth pixels between the closed images
+(RGB difference > .03). Comparing the closed pair avoids treating neutral
+skin highlights as enamel. This gate found real earlier penetrations and
+was not relaxed to accept them.
+Final enamel counts, in the five-state order:
+0: [917,567,350,0,0]
+1: [1092,701,391,0,0]
+2: [1075,524,551,0,0]
+3: [590,386,204,0,0]
+4: [964,582,382,1,0]
+5: [733,692,41,0,0]
+All six image checks PASS. The single bright pixel in identity 4 is within
+the explicit two-pixel closed-image limit; this is not a universal proof of
+zero leakage at arbitrary camera angles and extreme injury combinations.
+
+Browser validation
+Final fixed-export two-client run PASS errors=[]: live appearance preview,
+saved choices, rotation/zoom, responsive controls, reset/random, LAN appearance
+synchronization and actual variant-4/5 hit replays.
+1920x1080 individual-browser injury onset/rewind PASS errors=[] on RTX3090
+ANGLE D3D11. Latest 90-frame samples after warmup:
+idle median16.7/p95 33.4/max33.5ms; contact16.7/16.8/16.8ms;
+injured16.7/16.8/33.3ms. This run is smoother than prior observations, but
+does not establish an isolated cause or a universal 60FPS hardware guarantee.
+The first attempt started before host physics initialization had completed
+and got ERR_CONNECTION_REFUSED. A /health response was confirmed before retry.
+No model or Web export changes are made during the retry.
+
+Artifacts
+Local Arena-Design/37-grundkopf.png, 37-baerte.png, 37-bartmimik.png,
+37-frisuren.png, 37-ausdrucksstudie.png, 37-gesichtsvarianten.png,
+37-schadensmodell.png and 37-formvergleich.png are native renders.
+37-blickstudie.webm is 96 native frames at 24fps: an authored motion study
+using actual regional damage data, not a new recorded host strike or FPS proof.
+
+Reproduction
+Blender --background --python scripts/build_character_options.py
+Blender -b assets-source/character-customizable.blend --python scripts/validate_character_options.py
+Python -m unittest discover -s tests -p test_*.py
+Godot --path game --script ../tests/face_mouth_render.gd
+Godot --path game --script ../tests/character_appearance.gd
+Godot --path game --script ../scripts/capture_face_quality.gd -- --beards --grin
+scripts/build.ps1

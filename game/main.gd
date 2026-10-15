@@ -177,6 +177,7 @@ func prepare_materials(root: Node) -> void:
 				var head_part: bool = str(node.name).begins_with("Hair") or str(node.name).begins_with("Beard") or str(node.name).begins_with("Teeth") or str(node.name) in ["Face","FaceInk","MouthLine","MouthInterior","Teeth","LidsL","LidsR","EyeL","EyeR","IrisL","IrisR","PupilL","PupilR","BrowL","BrowR","HairCap","EarL","EarR","EarFoldL","EarFoldR","NostrilL","NostrilR"]
 				var material_key: String = m.resource_name+str(tissue_part)+str(head_part)+str(node.name=="Face")+str(node.name=="HairCap")+str(str(node.name).begins_with("Pupil"))+str(node.position)
 				if str(node.name).begins_with("Teeth"):material_key+=str(node.name)
+				material_key+=str(node.name=="HairSidePart")
 				if shared_materials.has(material_key):
 					node.set_surface_override_material(i,shared_materials[material_key])
 					mat_cache[str(node.get_instance_id())+":"+str(i)] = m.resource_name
@@ -190,6 +191,9 @@ func prepare_materials(root: Node) -> void:
 				copy.set_shader_parameter("face_skin",str(node.name)=="Face")
 				copy.set_shader_parameter("hair_surface",m.resource_name in ["Hair","Beard"])
 				copy.set_shader_parameter("groom_surface",str(node.name)=="HairCap")
+				copy.set_shader_parameter("beard_surface",m.resource_name=="Beard")
+				copy.set_shader_parameter("jaw_authored",str(node.name)=="Face" or m.resource_name=="Beard")
+				copy.set_shader_parameter("parted_surface",str(node.name)=="HairSidePart")
 				copy.set_shader_parameter("eye_surface",m.resource_name in ["EyeWhite","Iris"])
 				copy.set_shader_parameter("iris_surface",str(node.name).begins_with("Iris"))
 				copy.set_shader_parameter("pupil_surface",str(node.name).begins_with("Pupil"))
@@ -198,10 +202,10 @@ func prepare_materials(root: Node) -> void:
 				copy.set_shader_parameter("tissue",tissue_part)
 				copy.set_shader_parameter("head_part",head_part)
 				physics_materials[root.get_instance_id()].append(copy)
-				if m.resource_name in ["Skin","FaceSkin","Hair","Beard","Trousers","Shoe"] and not str(node.name).begins_with("ArmSkin"):
+				if m.resource_name in ["Skin","FaceSkin","Hair","Trousers","Shoe"] and not str(node.name).begins_with("ArmSkin"):
 					var outline := ShaderMaterial.new()
 					outline.shader=load("res://toon_outline.gdshader")
-					for parameter in ["part_origin","geometry_scale","face_skin","tissue","head_part"]:
+					for parameter in ["part_origin","geometry_scale","face_skin","tissue","head_part","jaw_authored"]:
 						outline.set_shader_parameter(parameter,copy.get_shader_parameter(parameter))
 					copy.next_pass=outline
 					physics_materials[root.get_instance_id()].append(outline)

@@ -32,6 +32,8 @@ func capture() -> void:
 		for name in names:views.append([name,0,0,25,0,0])
 	if "--blinks" in OS.get_cmdline_user_args():
 		for v in views:v[4]=1
+	if "--grin" in OS.get_cmdline_user_args():
+		for v in views:v[5]=1
 	var columns: int=3 if identities or hairstyles or beards or hero else 4
 	var directory:=ProjectSettings.globalize_path("res://../logs/face-quality");DirAccess.make_dir_recursive_absolute(directory)
 	var sheet:=Image.create(columns*480,600 if hero else 1200,false,Image.FORMAT_RGBA8)
@@ -45,7 +47,7 @@ func capture() -> void:
 			for mesh in scene.fighter.model.find_children("*","MeshInstance3D",true,false):
 				var clay:=StandardMaterial3D.new();clay.albedo_color=Color(.55,.55,.55);clay.roughness=.9
 				mesh.material_override=clay
-		scene.fighter.face_mesh.set_blend_shape_value(scene.fighter.face_mesh.find_blend_shape_by_name("grin"),v[5])
+		scene.fighter.set_grin(v[5])
 		var angle: float=deg_to_rad(float(v[3]))
 		var distance: float=2.25 if hairstyles else 1.85
 		scene.camera.position=Vector3(sin(angle)*distance,.25,cos(angle)*distance);scene.camera.look_at(Vector3(0,.25,0))
@@ -56,6 +58,7 @@ func capture() -> void:
 	if hero:filename="/hero.png"
 	if hairstyles:filename="/hairstyles.png"
 	if beards:filename="/beards.png"
+	if "--grin" in OS.get_cmdline_user_args():filename=filename.replace(".png","-grin.png")
 	if "--blinks" in OS.get_cmdline_user_args():filename="/blinks.png"
 	if "--no-teeth" in OS.get_cmdline_user_args():filename="/occlusion-check.png"
 	if "--clay" in OS.get_cmdline_user_args():filename=filename.replace("/","/clay-")

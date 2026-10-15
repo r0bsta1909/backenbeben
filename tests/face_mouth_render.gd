@@ -15,17 +15,31 @@ func verify() -> void:
 	for actor in scene.officials:actor.hide()
 	scene.camera.fov=45;scene.camera.position=Vector3(.50,.25,1.85);scene.camera.look_at(Vector3(0,.25,0))
 	var fixtures: Array=JSON.parse_string(FileAccess.get_file_as_string("res://../logs/face-damage-fixtures.json"))
-	var counts: Array[int]=[]
-	for i in range(3):
-		var data: Dictionary=fixtures[0].player.duplicate(true)
-		if i==1:
-			for tooth in range(8,16):data.face_damage.teeth[tooth]=0.0
-		scene.apply_fighter(scene.fighter,data,true);scene.fighter.pose_defender(.85)
-		var opening: float=.24 if i<2 else 0.0
-		scene.fighter.set_jaw_open(opening)
-		for material in scene.physics_materials[scene.fighter.get_instance_id()]:material.set_shader_parameter("jaw_angle",opening)
-		await process_frame;RenderingServer.force_draw(false)
-		var picture:=root.get_texture().get_image();counts.append(tooth_pixels(picture));picture.save_png(ProjectSettings.globalize_path("res://../logs/mouth-render-%d.png"%i))
-	if counts[0]<counts[1]+8 or counts[0]<counts[2]+8:
-		push_error("Visible teeth are hidden by opened lips, or leak through closed mouth: "+str(counts));quit(1);return
-	print("MOUTH_TEETH_RENDER_PASS healthy/missing/closed pixels: ",counts);quit()
+	for face in range(6):
+		var counts: Array[int]=[]
+		var closed: Image
+		for state in range(5):
+			var data: Dictionary=fixtures[0].player.duplicate(true);data.face_style=face
+			if state==1 or state==2:
+				for tooth in range(0 if state==1 else 8,8 if state==1 else 16):data.face_damage.teeth[tooth]=0.0
+			if state==4:
+				for tooth in range(16):data.face_damage.teeth[tooth]=0.0
+			scene.apply_fighter(scene.fighter,data,true);scene.fighter.pose_defender(.85)
+			var opening: float=.24 if state<3 else 0.0
+			scene.fighter.set_jaw_open(opening)
+			for material in scene.physics_materials[scene.fighter.get_instance_id()]:material.set_shader_parameter("jaw_angle",opening)
+			await process_frame;RenderingServer.force_draw(false)
+			var picture:=root.get_texture().get_image();counts.append(tooth_pixels(picture));picture.save_png(ProjectSettings.globalize_path("res://../logs/mouth-render-%d-%d.png"%[face,state]))
+			if state==3:closed=picture
+			if state==4:
+				var exposed:=0
+				for y in range(360,560):
+					for x in range(120,350):
+						var a:=closed.get_pixel(x,y);var b:=picture.get_pixel(x,y)
+						if maxf(absf(a.r-b.r),maxf(absf(a.g-b.g),absf(a.b-b.b)))>.03:exposed+=1
+				if exposed>2:
+					push_error("Closed-mouth teeth change the visible image, face %d: %d pixels"%[face,exposed]);quit(1);return
+		if counts[0]<counts[1]+8 or counts[0]<counts[2]+8:
+			push_error("Upper/lower teeth hidden, or closed-mouth enamel leak, face %d: "%face+str(counts));quit(1);return
+		print("MOUTH_TEETH_RENDER_PASS face ",face," both/upper-missing/lower-missing/closed: ",counts)
+	quit()

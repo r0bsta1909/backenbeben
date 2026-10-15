@@ -157,6 +157,11 @@ func apply_finger_relax(amount: float, side: String) -> void:
 			var angle: float=[.25,.38,.20][segment]*(.85+digit*.10)*clampf(amount,0,1)
 			skeleton.set_bone_pose_rotation(index,finger_rest_rotations[index]*Quaternion(axis,angle))
 
+func set_grin(amount: float) -> void:
+	for part in model.find_children("*","MeshInstance3D",true,false):
+		var index: int=part.find_blend_shape_by_name("grin")
+		if index>=0:part.set_blend_shape_value(index,clampf(amount,0.0,1.0))
+
 func set_eye_closure(amount: float) -> void:
 	var closure: float=clampf(amount,0.0,1.0)
 	if blink_index>=0:face_mesh.set_blend_shape_value(blink_index,closure)

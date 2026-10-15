@@ -50,6 +50,11 @@ for index in range(1,6):
             nearest=surface.find_nearest(brow.matrix_world @ v.co)
             assert nearest[3] is not None and nearest[3]<.0011, ('floating brow',index,name)
 assert all(name in face.data.shape_keys.key_blocks for name in ['blink','grin','focus'])
+for name in ['BeardFull','BeardMoustache','BeardGoatee','BeardTwirl']:
+    obj=bpy.data.objects[name]
+    assert 'grin' in obj.data.shape_keys.key_blocks, ('Static beard during emote',name)
+    rest=obj.data.shape_keys.key_blocks['Basis'];grin=obj.data.shape_keys.key_blocks['grin']
+    assert max((a.co-b.co).length for a,b in zip(rest.data,grin.data))>.0015, ('Empty beard expression',name)
 images=[n.image for m in face.data.materials if m.use_nodes for n in m.node_tree.nodes if n.type=='TEX_IMAGE']
 assert images and all(i.packed_file for i in images)
 # Compare against the unchanged source, not just against other identity keys.
@@ -62,6 +67,10 @@ for a,b in zip(original.data.shape_keys.key_blocks[0].data,basis.data):
 # The structural base changed deliberately. Every variant must now match its
 # exported host triangle profile rather than the historical v3 silhouette.
 collision=json.loads((ROOT/'game/assets/face_customizable_collision.json').read_text())
+assert len(collision['jaw_weights'])==len(basis.data)
+assert all(0<=weight<=1 for weight in collision['jaw_weights'])
+for loop in face.data.loops:
+    assert abs(face.data.uv_layers[1].data[loop.index].uv.y-collision['jaw_weights'][loop.vertex_index])<1e-6, 'CPU/GPU jaw ownership differs'
 patch=set(face['mouth_patch_vertices'])
 face.data.calc_loop_triangles()
 patch_triangles=[t.vertices[:] for t in face.data.loop_triangles if all(i in patch for i in t.vertices)]

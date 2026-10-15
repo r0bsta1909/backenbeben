@@ -18,7 +18,7 @@ func capture() -> void:
 		var data: Dictionary=fixtures[1 if i==4 else 0].player.duplicate(true)
 		data.face_style=0;data.hair_style=0;data.beard_style=0;data.focus=1.0 if i==1 else 0.0
 		scene.apply_fighter(scene.fighter,data,true);scene.fighter.pose_defender(.85);scene.fighter.set_eye_closure(1.0 if i==2 else 0.0)
-		scene.fighter.face_mesh.set_blend_shape_value(scene.fighter.face_mesh.find_blend_shape_by_name("grin"),1.0 if i==3 else 0.0)
+		scene.fighter.set_grin(1.0 if i==3 else 0.0)
 		scene.camera.position=Vector3(1.82,.25,.32) if i==5 else Vector3(.48,.25,1.85);scene.camera.look_at(Vector3(0,.25,0));label.text=names[i]
 		await process_frame;RenderingServer.force_draw(false)
 		var picture:=root.get_texture().get_image();picture.convert(Image.FORMAT_RGBA8);picture.save_png(directory+"/study-%d.png"%i)

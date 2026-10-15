@@ -9,6 +9,7 @@ from arm import Arm,DT,add,mul,sub,dot,unit
 DATA=json.loads((Path(__file__).resolve().parents[1]/'game/assets/face_customizable_collision.json').read_text())
 VERTICES=np.array(DATA['vertices']);INDICES=np.array(DATA['triangles'])
 FACE_VERTICES=[np.array(face) for face in DATA['faces']]
+JAW_WEIGHTS=np.array(DATA['jaw_weights'])
 CELL=.015
 from hand_surface import DATA as HAND_SURFACE,world_samples,world_positions
 PALM_AREA=sum(s['area_m2'] for s in HAND_SURFACE['samples'] if s['region']=='palm')
@@ -32,9 +33,7 @@ def projected(angle,injury_left=0.,injury_right=0.,injury_jaw=0.,axis=2,regional
             if len(regional)>16 and i not in (4,5,6):
                 v-=normal[None,:]*(mask*regional[9+i]*.014)[:,None]
                 if i==7:v[:,0]+=mask*regional[9+i]*.024
-    oral=1-smooth(.09,.135,np.abs(v[:,0]))
-    lip_arc=-.0024-.0048*(v[:,0]/.132)**2+.0024*np.exp(-((np.abs(v[:,0])-.032)/.024)**2)-.0028*np.exp(-(v[:,0]/.020)**2)
-    jaw=((1-smooth(-.23,-.025,v[:,1]))*(1-oral)+(1-smooth(lip_arc-.0006,lip_arc+.00035,v[:,1]))*oral)*smooth(-.52,-.3,v[:,1])*front
+    jaw=JAW_WEIGHTS*front
     opening=jaw*injury_jaw*.12
     dy=v[:,1]+.056;dz=v[:,2]+.096
     v[:,1]=-.056+np.cos(opening)*dy-np.sin(opening)*dz

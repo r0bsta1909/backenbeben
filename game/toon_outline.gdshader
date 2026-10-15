@@ -9,8 +9,9 @@ varying vec3 skin_position;
 void vertex() {
     vec3 p = (VERTEX + part_origin)*geometry_scale;
     skin_position=p;
-    NORMAL=deform_face_normal(p,NORMAL);
-    p=deform_face(p);
+    float authored_jaw_weight=jaw_authored?1.0-UV2.y:-1.0;
+    NORMAL=deform_face_normal_bound(p,NORMAL,authored_jaw_weight);
+    p=deform_face_bound(p,authored_jaw_weight);
     VERTEX=p/geometry_scale-part_origin+normalize(NORMAL)*.0010;
 }
 void fragment() {

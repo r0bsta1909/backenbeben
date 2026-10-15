@@ -2578,3 +2578,38 @@ in validation/FACE_QUALITY_FIVE_POINTS_2026-10-15.txt. Human art acceptance open
 some variants/hair and extreme mouth interiors remain simplified.
 Arena/table/Hoenhorst unchanged. No new release ZIP; V14 download remains old.
 Own validation host on port 8899 stopped after verification.
+
+FACE AUDIT CORRECTIONS — 15.10.2026 / character version 11
+Completed the requested corrections to v36. All four geometric beards now
+carry actual face-derived grin shapes; real match emote/reset tested for
+all six identities. Boundary-distance coverage/finer fibers replace hard
+beard hull outlines. Side-part scalp locks and curl geometry refined;
+attached ear relief and cheek fairing improved, cooler comic shadow restored.
+Curved oral bowl, gum ridges, palate and tongue replace the old cylinder.
+Both separate tooth rows positioned with overlapping bite; 16 health/chip
+indices and mandibular hinge preserved. Neutral oral slit nearly closed.
+The old fixed-Y lip classifier failed changed identities. Per-vertex jaw
+ownership is now authored once and exported as collision jaw_weights plus
+Face/Beard UV2.V, with glTF V inversion reversed in both shaders. Host and
+visible skin use the same weights. No mutable shader global or heuristic
+reclassification of a moved identity. Oral strips use checked diagonals.
+CHARACTER_VERSION11 in host/Web/profile file, reject10; gestures3/damage1
+unchanged. Restart existing hosts/reload browsers after updating together.
+Final source validator PASS including 6-profile winding/weight consistency;
+173 Python tests PASS36.933s. Native216 combinations/7skins/match emote reset/
+regional damage rewind/teeth chip+missing/GPU normals/ArenaMatch PASS.
+New dental image regression: both rows separately visible in all6 identities;
+closed healthy versus closed all-missing differ by <=2 mouth pixels. Enamel
+counts are recorded in validation/FACE_AUDIT_FIXES_2026-10-15.txt. Do not
+substitute the historical lower-row-only test as evidence for the upper row.
+Final import/Web export PASS. Browser retry after confirmed /health PASS:
+2client creator/persistence/rotateZoom/responsive/resetRandom/LAN/actual
+variant4+5 replays, errors[]. First premature startup got connection refused.
+Single-browser onset/rewind PASS errors[], RTX3090 ANGLE D3D11 at1920x1080:
+idle median16.7/p9533.4/max33.5ms; contact16.7/16.8/16.8;
+injured16.7/16.8/33.3ms. One smoother run, no universal60FPS guarantee.
+Native local37-*.png and96frame/4s WebM reviewed. Motion is authored with
+regional damage, not a new host-hit/FPS recording. Current Web build ready.
+Human art acceptance open; stylized interiors/hair remain simplified.
+Arena/table/Hoenhorst untouched, no release ZIP; V14 download remains old.
+Own validation host on port 8900 stopped after verification.

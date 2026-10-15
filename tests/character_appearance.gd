@@ -45,6 +45,15 @@ func verify() -> void:
 				if hair!=2 and not actor.model.find_child(actor.HAIR_NODES[hair],true,false).visible:
 					push_error("Camera switch loses hairstyle");quit(1);return
 	for face in range(6):
+		scene.you=0;scene.emote_player=1
+		for amount in [0.8,0.0]:
+			scene.emote_remaining=1.0 if amount>0.0 else 0.0
+			scene.apply_fighter(actor,{"face_style":face,"beard_style":2},true)
+			for name in ["Face","BeardFull","BeardMoustache","BeardGoatee","BeardTwirl"]:
+				var part: MeshInstance3D=actor.model.find_child(name,true,false)
+				var index: int=part.find_blend_shape_by_name("grin")
+				if index<0 or absf(part.get_blend_shape_value(index)-amount)>.00001:
+					push_error("Match emote/reset not linked to face and beard: "+name);quit(1);return
 		scene.apply_fighter(actor,{"face_style":face,"focus":1.0},true)
 		for name in ["Face","BrowL","BrowR"]:
 			var part: MeshInstance3D=actor.model.find_child(name,true,false)

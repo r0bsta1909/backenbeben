@@ -7,6 +7,7 @@ uniform float head_angle = 0.0;
 uniform vec3 head_rotation=vec3(0.0);
 uniform vec3 head_offset = vec3(0.0);
 uniform float jaw_angle = 0.0;
+uniform bool jaw_authored = false;
 uniform float injury_left = 0.0;
 uniform float injury_right = 0.0;
 uniform float injury_jaw = 0.0;
@@ -20,7 +21,7 @@ vec3 displacement(vec3 p) {
     ivec2 cell = ivec2(floor(grid));vec2 f=fract(grid);int i=cell.y*9+cell.x;
     return mix(mix(cage[i],cage[i+1],f.x),mix(cage[i+9],cage[i+10],f.x),f.y);
 }
-vec3 deform_face(vec3 p) {
+vec3 deform_face_bound(vec3 p, float authored_jaw_weight) {
     if (tissue) {
         float front = smoothstep(0.02,0.22,p.z);
         vec2 cheek_distance=vec2((abs(p.x)-.28)/.17,(p.y-.17)/.2);
@@ -50,6 +51,10 @@ vec3 deform_face(vec3 p) {
             +.0024*exp(-pow((abs(p.x)-.032)/.024,2.0))-.0028*exp(-pow(p.x/.020,2.0));
         float jaw=mix(1.0-smoothstep(-.23,-.025,p.y),1.0-smoothstep(lip_arc-.0006,lip_arc+.00035,p.y),oral)
             *smoothstep(-.52,-.3,p.y)*front;
+        float corner_band=exp(-pow(abs((p.y-lip_arc)/.075),4.0))*(1.0-smoothstep(.12,.18,abs(p.x)));
+        float rounded_rim=1.0-.75*smoothstep(.09,.14,abs(p.x));
+        jaw*=mix(1.0,rounded_rim,corner_band);
+        if(authored_jaw_weight>=0.0)jaw=authored_jaw_weight*front;
         vec2 hinge=p.yz-vec2(-0.056,-0.096);
         float opening=jaw*(jaw_angle+injury_jaw*.12);
         p.yz=vec2(-0.056,-0.096)+mat2(vec2(cos(opening),sin(opening)),vec2(-sin(opening),cos(opening)))*hinge;
@@ -70,7 +75,8 @@ vec3 deform_face(vec3 p) {
     }
     return p;
 }
-vec3 deform_face_normal(vec3 p, vec3 normal) {
+vec3 deform_face(vec3 p) { return deform_face_bound(p,-1.0); }
+vec3 deform_face_normal_bound(vec3 p, vec3 normal, float authored_jaw_weight) {
     vec3 n=normalize(normal);
     bool skin_changes=tissue && (regional_damage || cage_deformed || jaw_angle!=0.0 || injury_left!=0.0 || injury_right!=0.0 || injury_jaw!=0.0);
     if (!skin_changes && (!head_part || (head_angle==0.0 && length(head_rotation)==0.0 && length(head_offset)==0.0))) { return n; }
@@ -79,8 +85,9 @@ vec3 deform_face_normal(vec3 p, vec3 normal) {
     vec3 bitangent=cross(n,tangent);
     // Symmetric tangent samples: 0.25 mm each side at game scale 4.
     float epsilon=.001;
-    vec3 dt=deform_face(p+epsilon*tangent)-deform_face(p-epsilon*tangent);
-    vec3 db=deform_face(p+epsilon*bitangent)-deform_face(p-epsilon*bitangent);
+    vec3 dt=deform_face_bound(p+epsilon*tangent,authored_jaw_weight)-deform_face_bound(p-epsilon*tangent,authored_jaw_weight);
+    vec3 db=deform_face_bound(p+epsilon*bitangent,authored_jaw_weight)-deform_face_bound(p-epsilon*bitangent,authored_jaw_weight);
     vec3 result=cross(dt,db);
     return dot(result,result)>1e-16 ? normalize(result) : n;
 }
+vec3 deform_face_normal(vec3 p, vec3 normal) { return deform_face_normal_bound(p,normal,-1.0); }

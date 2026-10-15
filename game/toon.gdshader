@@ -6,6 +6,8 @@ uniform float geometry_scale = 1.0;
 uniform bool face_skin = false;
 uniform bool hair_surface = false;
 uniform bool groom_surface = false;
+uniform bool beard_surface = false;
+uniform bool parted_surface = false;
 uniform bool eye_surface = false;
 uniform bool iris_surface = false;
 uniform bool pupil_surface = false;
@@ -22,6 +24,8 @@ varying float front_paint_weight;
 void vertex() {
     vec3 p = (VERTEX + part_origin)*geometry_scale;
     skin_position=p;
+    // glTF texture coordinates invert the authoring V axis on import.
+    float authored_jaw_weight=jaw_authored?1.0-UV2.y:-1.0;
     // Frontal concept paint must not stretch across temple/ear side planes.
     // Use the rest surface orientation, not camera facing, so marks stay put.
     front_paint_weight=UV2.x;
@@ -36,8 +40,8 @@ void vertex() {
         vec3 oral_normal=normalize(vec3(p.x*.5,(p.y+.04)*.65+lip_roll,.5));
         NORMAL=normalize(mix(NORMAL,oral_normal,oral_mask*.18));
     }
-    NORMAL=deform_face_normal(p,NORMAL);
-    p=deform_face(p);
+    NORMAL=deform_face_normal_bound(p,NORMAL,authored_jaw_weight);
+    p=deform_face_bound(p,authored_jaw_weight);
     VERTEX=p/geometry_scale-part_origin;
 }
 void fragment() {
@@ -76,6 +80,21 @@ void fragment() {
         float strand=sin(strand_phase);
         float strand_visibility=1.0-smoothstep(.7,2.2,fwidth(strand_phase));
         color*=1.0-.07*smoothstep(.80,.98,strand)*strand_visibility;
+        if(beard_surface) {
+            float fringe=clamp(UV2.x,0.0,1.0);
+            vec2 hair_cell=floor(h.xy/.00065);
+            float coverage=fract(sin(dot(hair_cell,vec2(127.1,311.7)))*43758.5453);
+            if(coverage>.20+.80*smoothstep(.0,.85,fringe))discard;
+            float flow=h.x*1900.0+sin(h.y*360.0)*.55;
+            float fiber=smoothstep(.82,.99,sin(flow))*(1.0-smoothstep(.7,2.0,fwidth(flow)));
+            color+=vec3(.045,.032,.023)*(.45+.55*fiber);
+        }
+        if(parted_surface) {
+            float sweep=(h.x*.7+h.z)*210.0+sin(h.x*12.0)*3.0;
+            float visible=1.0-smoothstep(.7,2.0,fwidth(sweep));
+            color*=1.0-.20*smoothstep(.80,.99,sin(sweep))*visible;
+            color+=vec3(.035,.028,.020)*smoothstep(.15,.85,d);
+        }
         if(groom_surface && UV2.x>=0.0) {
             // UV2 follows each curved lock, keeping ink attached to the groom.
             float phase=UV2.y*36.0+sin(UV2.x*5.0)*.50;
@@ -219,7 +238,7 @@ void fragment() {
         float w=max(clamp(fwidth(d),.018,.045),illustration_depth*.15);
         float middle=smoothstep(.12-w,.12+w,d);
         float highlight=smoothstep(.68-w,.68+w,d);
-        vec3 shadow_tint=vec3(.55,.68,.77);
+        vec3 shadow_tint=vec3(.43,.76,1.02);
         vec3 plane_tint=mix(shadow_tint,vec3(.96,.83,.70),middle);
         plane_tint=mix(plane_tint,vec3(1.13,1.07,.97),highlight);
         vec3 drawn_volume=mix(shadow_tint,vec3(1.13,1.07,.97),smoothstep(-.2,1.0,d));
