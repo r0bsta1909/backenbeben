@@ -109,13 +109,17 @@ for name in ['EyeL','EyeR']:
 # Rebuild closure from the new rest lids so widening does not leave a blink gap.
 blink=face.data.shape_keys.key_blocks['blink']
 for base,vertex in zip(face.data.shape_keys.key_blocks[0].data,blink.data):
-    p=G(base.co);w=math.exp(-((abs(p.x)-.0381)/.018)**4-((p.y-.09)/.016)**4)*smooth(.04,.07,p.z)
-    w*=1-smooth(.096,.102,p.y)  # the brow ridge must not collapse with the lid
-    inner=(1-smooth(.012,.021,abs(abs(p.x)-.03810625)))*smooth(.075,.083,p.y)*(1-smooth(.098,.104,p.y))*smooth(.065,.078,p.z)
-    w=max(w,inner)
-    q=p.copy();q.y+=(.09-p.y)*w*.98
+    p=G(base.co)
+    # A continuous lid field avoids the kink where two old masks met at max().
+    # Roll over the actual globe in XY, instead of inflating a flat Z strip.
+    dx=abs(p.x)-.03810625
+    horizontal=1-smooth(.012,.023,abs(dx))
+    vertical=smooth(.075,.082,p.y)*(1-smooth(.098,.105,p.y))
+    w=horizontal*vertical*smooth(.055,.078,p.z)
+    seam=.0858+.0008*max(0,1-(dx/.018)**2)
+    q=p.copy();q.y+=(seam-p.y)*w
     eye_dx=(p.x-(-.03810625 if p.x<0 else .03810625))/.01392
-    globe=.07895675+.012*math.sqrt(max(0,1-eye_dx*eye_dx))+.0012
+    globe=.07895675+.012*math.sqrt(max(0,1-eye_dx*eye_dx-((q.y-.09)/.012)**2))+.0008
     q.z+=max(0,globe-q.z)*w
     vertex.co=B(q)
 
@@ -345,6 +349,10 @@ for index,point in enumerate(fv):
     weight=((1-smooth(-.23,-.025,y))*(1-oral)+lip*oral)*smooth(-.52,-.3,y)
     band=math.exp(-abs((y-arc)/.075)**4)*(1-smooth(.12,.18,abs(x)))
     weight*=1-.75*smooth(.09,.14,abs(x))*band
+    # A graded commissure opens into an oval rather than two vertical walls.
+    # This exact field is shared by exported host and GPU jaw ownership.
+    oval=max(0,1-(x/.138)**2)**.65
+    weight*=1-band*(1-(.18+.82*oval))
     jaw_weights.append(weight)
 assert len(face.data.uv_layers)>=2
 for loop in face.data.loops:face.data.uv_layers[1].data[loop.index].uv.y=jaw_weights[loop.vertex_index]
@@ -482,6 +490,14 @@ for sign in [-1,1]:
 parts.append(ball('Tongue',Vector((0,-.017,.078)),(.023,.0035,.014),tongue_mat,n=24,k=12))
 oral=join('MouthInterior',parts)
 bm=bmesh.new();bm.from_mesh(oral.data);bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces));bm.to_mesh(oral.data);bm.free()
+# Smooth upper-palate/lower-floor ownership prevents the former binary lip
+# classifier from stretching the cavity into a row of dark vertical ribs.
+if not oral.data.uv_layers:oral.data.uv_layers.new(name='UVMap')
+oral_jaw=oral.data.uv_layers[1] if len(oral.data.uv_layers)>1 else oral.data.uv_layers.new(name='OralJawUV')
+oral_jaw.name='OralJawUV'
+for loop in oral.data.loops:
+    p=G(oral.data.vertices[loop.vertex_index].co)
+    oral_jaw.data[loop.index].uv=(0.,1-smooth(-.017,.006,p.y))
 
 # Sixteen authored front teeth replace the single undifferentiated white oval.
 # Lower teeth follow the existing mandibular hinge bone; each crown has its own
@@ -498,16 +514,20 @@ for row in range(2):
         center=Vector((x,.0008 if row==0 else -.0055,(.101 if row==0 else .099)-.004*(abs(x)/.023)**2))
         # Rounded enamel crowns: incisors have a flat cutting edge, canines a
         # restrained cusp, with a narrower neck toward the gingiva.
-        vs=[];fs=[];height=.0055 if row==0 else .0038;n=12
+        vs=[];fs=[];n=12
+        height=([.0050,.0057,.0052,.0058,.0058,.0052,.0057,.0050][i] if row==0
+                else .0038*[.95,1.05,.98,1.,1.,.98,1.05,.95][i])
+        crown_width=([.0025,.00255,.00265,.0029,.0029,.00265,.00255,.0025][i] if row==0 else .0026)
         levels=[(-1,.90),(-.8,1.0),(-.3,1.0),(.35,.94),(.8,.72),(1,.55)]
         for level,width in levels:
             y=height*level*(1 if row==0 else -1)
             for j in range(n):
                 a=j*math.tau/n;c=math.cos(a);s=math.sin(a)
-                dx=.0028*width*math.copysign(abs(c)**.55,c)
+                dx=crown_width*width*math.copysign(abs(c)**.55,c)
                 dz=.0024*width*math.copysign(abs(s)**.55,s)
-                cusp=(.0012*abs(dx/.0028) if i in (1,6) and level<-.8 else 0)
-                vs.append(center+Vector((dx,y+cusp*(1 if row==0 else -1),dz)))
+                cusp=(.0012*abs(dx/crown_width) if i in (1,6) and level<-.8 else 0)
+                turn=x/.023*.22
+                vs.append(center+Vector((dx*math.cos(turn)+dz*math.sin(turn),y+cusp*(1 if row==0 else -1),dz*math.cos(turn)-dx*math.sin(turn))))
         for k in range(len(levels)-1):
             for j in range(n):fs.append((k*n+j,k*n+(j+1)%n,(k+1)*n+(j+1)%n,(k+1)*n+j))
         fs.extend([tuple(reversed(range(n))),tuple(range((len(levels)-1)*n,len(levels)*n))])
@@ -570,6 +590,17 @@ if grin:
         p.z+=.0020*gauss(abs(p.x),p.y,.052,.045,.025,.025)*front_weight
         p.y+=.0012*gauss(abs(p.x),p.y,.038,.080,.022,.009)*front_weight
         vertex.co=B(p)
+# Separate lip pursing, including a little cheek tension. Keep the seam closed
+# and transfer this deformation to every attached beard below.
+kiss=face.shape_key_add(name='kiss')
+for base,vertex in zip(face.data.shape_keys.key_blocks[0].data,kiss.data):
+    p=G(base.co);front_weight=smooth(.065,.095,p.z)
+    mouth=gauss(p.x,p.y,0,-.002,.042,.018)*front_weight
+    p.x-=p.x*.38*mouth
+    p.z+=.0065*gauss(p.x,p.y,0,-.002,.025,.013)*front_weight
+    p.y+=.0010*mouth
+    p.z-=.0012*gauss(abs(p.x),p.y,.045,.012,.016,.024)*front_weight
+    vertex.co=B(p)
 # Independent focused expression: paired lid tension and skin-conforming brows.
 # A small artist-controlled expression is distinct from permanent damage.
 focus=face.shape_key_add(name='focus')
@@ -581,6 +612,12 @@ for base,vertex in zip(face.data.shape_keys.key_blocks[0].data,focus.data):
     p.y-=.0020*gauss(abs(p.x),p.y,.024,.106,.016,.008)*focus_front
     vertex.co=B(p)
 focused_surface=BVHTree.FromPolygons([G(v.co) for v in focus.data],ff)
+from mathutils.geometry import barycentric_transform
+face.data.calc_loop_triangles()
+lid_triangles=[tuple(t.vertices) for t in face.data.loop_triangles]
+lid_points=[G(v.co) for v in face.data.shape_keys.key_blocks['blink'].data]
+closed_lid_surface=BVHTree.FromPolygons(lid_points,lid_triangles,all_triangles=True)
+half_lid_surface=BVHTree.FromPolygons([a.lerp(b,.5) for a,b in zip(fv,lid_points)],lid_triangles,all_triangles=True)
 for name in ['BrowL','BrowR']:
     obj=bpy.data.objects[name]
     obj.shape_key_add(name='Basis');key=obj.shape_key_add(name='focus')
@@ -591,6 +628,27 @@ for name in ['BrowL','BrowR']:
         offset=max(.00012,old.z-old_surface.z) if old_surface is not None else .00085
         if hit is not None:p.z=hit.z+offset
         vertex.co=B(p)
+    # Brows must travel with the skin beneath them during closure. Otherwise
+    # the inflated upper lid can occlude the lowered identity-specific brow.
+    blink_key=obj.shape_key_add(name='blink')
+    for base,vertex in zip(obj.data.shape_keys.key_blocks[0].data,blink_key.data):
+        p=G(base.co)
+        old=bvh.ray_cast(Vector((p.x,p.y,1)),Vector((0,0,-1)))[0]
+        hit=closed_lid_surface.ray_cast(Vector((p.x,p.y,1)),Vector((0,0,-1)))[0]
+        if hit is not None:
+            offset=max(.0001,min(.00065,p.z-old.z)) if old is not None else .00045
+            p.z=hit.z+offset+.0001
+        vertex.co=B(p)
+    mid_key=obj.shape_key_add(name='blink_mid')
+    for i,vertex in enumerate(mid_key.data):
+        original=obj.data.shape_keys.key_blocks[0].data[i].co
+        p=G(original)
+        old=bvh.ray_cast(Vector((p.x,p.y,1)),Vector((0,0,-1)))[0]
+        hit=half_lid_surface.ray_cast(Vector((p.x,p.y,1)),Vector((0,0,-1)))[0]
+        if hit is not None:
+            offset=max(.0001,min(.00065,p.z-old.z)) if old is not None else .00045
+            p.z=hit.z+offset+.0002
+        vertex.co=original+B(p)-original.lerp(blink_key.data[i].co,.5)
 
 for suffix,side in [('L','L'),('R','R')]:
     for prefix in ['Eye','Iris','Pupil']:
@@ -742,7 +800,7 @@ def beard_patch(name,inside):
             x=-.084+.168*col/(columns-1)
             hit=bvh.ray_cast(Vector((x,y,1)),Vector((0,0,-1)))
             p=hit[0];valid.append(p is not None and p.z>.045)
-            vertices.append(p+Vector((0,0,.0012)) if p is not None else Vector((x,y,0)))
+            vertices.append(p+Vector((0,0,.00055)) if p is not None else Vector((x,y,0)))
     faces=[];crossings={}
     def crossing(a,b):
         edge=tuple(sorted((a,b)))
@@ -753,7 +811,7 @@ def beard_patch(name,inside):
             if inside(middle)==state:low=middle
             else:high=middle
         point=low.lerp(high,.5)
-        point=front(point.x,point.y,.0012)
+        point=front(point.x,point.y,.00055)
         crossings[edge]=len(vertices);vertices.append(point)
         return crossings[edge]
     for row in range(rows-1):
@@ -782,7 +840,7 @@ def beard_patch(name,inside):
     obj.data.uv_layers.new(name='UVMap');density=obj.data.uv_layers.new(name='BeardUV')
     for loop in obj.data.loops:
         distance=tree.find(obj.data.vertices[loop.vertex_index].co)[2]
-        density.data[loop.index].uv=(smooth(0,.0035,distance),1.)
+        density.data[loop.index].uv=(min(1,distance/.006),1.)
     return obj
 
 def full_beard_region(p):
@@ -814,20 +872,22 @@ twirl=join('BeardTwirl',[moustache('TwirlMoustache',True),tube('PointedTuft',[fr
 # Carry the actual triangle-interpolated facial expression into every beard.
 # Projecting the nearest triangle's deformation preserves the original groom
 # offset, including moustache tips; it does not snap hair onto the bare skin.
-from mathutils.geometry import barycentric_transform
 face.data.calc_loop_triangles();mimic_triangles=[tuple(t.vertices) for t in face.data.loop_triangles]
 mimic_surface=BVHTree.FromPolygons(fv,mimic_triangles,all_triangles=True)
 grin_points=[G(face.matrix_world@v.co) for v in face.data.shape_keys.key_blocks['grin'].data]
+kiss_points=[G(face.matrix_world@v.co) for v in face.data.shape_keys.key_blocks['kiss'].data]
 for obj in [full,moustache_obj,goatee,twirl]:
     if obj.data.shape_keys is None:obj.shape_key_add(name='Basis')
-    basis=obj.data.shape_keys.key_blocks[0];key=obj.shape_key_add(name='grin')
+    basis=obj.data.shape_keys.key_blocks[0];key=obj.shape_key_add(name='grin');kiss_key=obj.shape_key_add(name='kiss')
     inverse=obj.matrix_world.inverted()
     skin_weights=[]
-    for original,vertex in zip(basis.data,key.data):
+    for vertex_index,(original,vertex) in enumerate(zip(basis.data,key.data)):
         p=G(obj.matrix_world@original.co);hit,normal,index,distance=mimic_surface.find_nearest(p)
         a,b,c=mimic_triangles[index]
         delta=barycentric_transform(hit,fv[a],fv[b],fv[c],grin_points[a]-fv[a],grin_points[b]-fv[b],grin_points[c]-fv[c])
         vertex.co=inverse@B(p+delta)
+        kiss_delta=barycentric_transform(hit,fv[a],fv[b],fv[c],kiss_points[a]-fv[a],kiss_points[b]-fv[b],kiss_points[c]-fv[c])
+        kiss_key.data[vertex_index].co=inverse@B(p+kiss_delta)
         weight=barycentric_transform(hit,fv[a],fv[b],fv[c],Vector((jaw_weights[a],0,0)),Vector((jaw_weights[b],0,0)),Vector((jaw_weights[c],0,0))).x
         skin_weights.append(max(0,min(1,weight)))
     for loop in obj.data.loops:obj.data.uv_layers[1].data[loop.index].uv.y=skin_weights[loop.vertex_index]
@@ -941,6 +1001,39 @@ for obj in list(bpy.context.scene.objects):
                 if hit is not None:changed.z=hit.z+offset
             vertex.co=inverse @ B(changed)
 
+# Lowered/high identity brows need their own closure correction. Additive
+# identity + common blink alone could still bury the Markant/Veteran brows.
+for index in range(1,6):
+    identity=face.data.shape_keys.key_blocks[f'identity_{index}']
+    closed=[G(v.co)+lid_points[i]-fv[i] for i,v in enumerate(identity.data)]
+    closed_surface=BVHTree.FromPolygons(closed,lid_triangles,all_triangles=True)
+    half_surface=BVHTree.FromPolygons([G(v.co)+(lid_points[i]-fv[i])*.5 for i,v in enumerate(identity.data)],lid_triangles,all_triangles=True)
+    for name in ['BrowL','BrowR']:
+        obj=bpy.data.objects[name];basis=obj.data.shape_keys.key_blocks['Basis']
+        rest=obj.data.shape_keys.key_blocks[f'identity_{index}']
+        common=obj.data.shape_keys.key_blocks['blink']
+        correction=obj.shape_key_add(name=f'blink_identity_{index}')
+        closed_brow=[]
+        for i,vertex in enumerate(correction.data):
+            p=G(rest.data[i].co)
+            old=identity_surfaces[index].ray_cast(Vector((p.x,p.y,1)),Vector((0,0,-1)))[0]
+            hit=closed_surface.ray_cast(Vector((p.x,p.y,1)),Vector((0,0,-1)))[0]
+            if hit is not None:
+                offset=max(.0001,min(.00065,p.z-old.z)) if old is not None else .00045
+                p.z=hit.z+offset+.0001
+            closed_brow.append(B(p))
+            vertex.co=basis.data[i].co+B(p)-rest.data[i].co-(common.data[i].co-basis.data[i].co)
+        common_mid=obj.data.shape_keys.key_blocks['blink_mid']
+        mid_correction=obj.shape_key_add(name=f'blink_mid_identity_{index}')
+        for i,vertex in enumerate(mid_correction.data):
+            p=G(rest.data[i].co)
+            old=identity_surfaces[index].ray_cast(Vector((p.x,p.y,1)),Vector((0,0,-1)))[0]
+            hit=half_surface.ray_cast(Vector((p.x,p.y,1)),Vector((0,0,-1)))[0]
+            if hit is not None:
+                offset=max(.0001,min(.00065,p.z-old.z)) if old is not None else .00045
+                p.z=hit.z+offset+.0002
+            vertex.co=basis.data[i].co+B(p)-rest.data[i].co.lerp(closed_brow[i],.5)-(common_mid.data[i].co-basis.data[i].co)
+
 # Rebalance the tall vault on every skin/cosmetic and every identity/expression.
 # Eyes and facial anchors below the forehead are unchanged. Transforming all
 # shapes in the same coordinates also preserves the close brow/scalp fit.
@@ -957,7 +1050,7 @@ for obj in bpy.context.scene.objects:
 # Each option now exports its actual triangle surface for host contact queries.
 # Structural base sculpt is shared; frontal identities remain separate profiles.
 face.data.calc_loop_triangles()
-collision={'version':12,'units':'game coordinates, original metres multiplied by 4',
+collision={'version':13,'units':'game coordinates, original metres multiplied by 4',
            'jaw_weights':jaw_weights,
            'vertices':[list(G(v.co)*4) for v in face.data.shape_keys.key_blocks[0].data],
            'triangles':[list(t.vertices) for t in face.data.loop_triangles],

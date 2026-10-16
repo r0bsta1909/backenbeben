@@ -11,7 +11,7 @@ async def main():
   page.on('pageerror',lambda e:errors.append(str(e)))
   page.on('console',lambda m:errors.append(m.text) if m.type=='error' else None)
   await page.goto(URL);await page.wait_for_function('window.gameReady',timeout=60000)
-  await page.locator('#training').click();await page.wait_for_function('state.phase==="aim"')
+  await page.locator('#training').click();await page.wait_for_function('state?.phase==="aim"')
   async def measure():
    return await page.evaluate('''()=>new Promise(resolve=>{let previous=0;const values=[];let warmup=30;
     function tick(t){if(previous&&warmup<=0)values.push(t-previous);previous=t;warmup--;

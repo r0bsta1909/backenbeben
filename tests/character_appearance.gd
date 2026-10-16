@@ -46,20 +46,28 @@ func verify() -> void:
 					push_error("Camera switch loses hairstyle");quit(1);return
 	for face in range(6):
 		scene.you=0;scene.emote_player=1
-		for amount in [0.8,0.0]:
-			scene.emote_remaining=1.0 if amount>0.0 else 0.0
-			scene.apply_fighter(actor,{"face_style":face,"beard_style":2},true)
-			for name in ["Face","BeardFull","BeardMoustache","BeardGoatee","BeardTwirl"]:
-				var part: MeshInstance3D=actor.model.find_child(name,true,false)
-				var index: int=part.find_blend_shape_by_name("grin")
-				if index<0 or absf(part.get_blend_shape_value(index)-amount)>.00001:
-					push_error("Match emote/reset not linked to face and beard: "+name);quit(1);return
+		for kind in range(3):
+			scene.emote_kind=kind
+			for active in [true,false]:
+				scene.emote_remaining=1.0 if active else 0.0
+				scene.apply_fighter(actor,{"face_style":face,"beard_style":2},true)
+				for name in ["Face","BeardFull","BeardMoustache","BeardGoatee","BeardTwirl"]:
+					var part: MeshInstance3D=actor.model.find_child(name,true,false)
+					for expression in ["grin","kiss"]:
+						var index: int=part.find_blend_shape_by_name(expression)
+						var amount: float=(.85 if kind==2 else .8) if active and expression==("kiss" if kind==2 else "grin") else 0.0
+						if index<0 or absf(part.get_blend_shape_value(index)-amount)>.00001:
+							push_error("Match emote/reset not linked to face and beard: "+name+expression);quit(1);return
 		scene.apply_fighter(actor,{"face_style":face,"focus":1.0},true)
 		for name in ["Face","BrowL","BrowR"]:
 			var part: MeshInstance3D=actor.model.find_child(name,true,false)
 			if part.get_blend_shape_value(part.find_blend_shape_by_name("focus"))!=1.0:
 				push_error("Focused lids and brows are not linked");quit(1);return
 		actor.set_eye_closure(1.0)
+		for name in ["BrowL","BrowR"]:
+			var brow: MeshInstance3D=actor.model.find_child(name,true,false)
+			if brow.find_blend_shape_by_name("blink")<0 or brow.get_blend_shape_value(brow.find_blend_shape_by_name("blink"))!=1.0:
+				push_error("Brow does not follow lid closure");quit(1);return
 		if actor.face_mesh.get_blend_shape_value(actor.face_mesh.find_blend_shape_by_name("focus"))!=0.0:
 			push_error("Focused lid tension overlaps full blink");quit(1);return
 		actor.set_eye_closure(0.0)

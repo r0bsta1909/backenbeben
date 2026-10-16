@@ -13,6 +13,9 @@ var last_body: Array = []
 var finger_rest_rotations: Dictionary = {}
 var face_mesh: MeshInstance3D
 var blink_index := -1
+var blink_parts: Array[MeshInstance3D]=[]
+var blink_indices:=PackedInt32Array()
+var blink_correctives: Array=[]
 var hair_style := -1
 var face_style := -1
 var beard_style := -1
@@ -39,6 +42,7 @@ func set_face_style(value: int) -> void:
 			var name: String=mesh.mesh.get_blend_shape_name(index)
 			if name.begins_with("identity_"):
 				mesh.set_blend_shape_value(index,1.0 if name=="identity_%d"%value else 0.0)
+	set_eye_closure(face_mesh.get_blend_shape_value(blink_index) if blink_index>=0 else 0.0)
 
 func set_beard_style(value: int) -> void:
 	value=clampi(value,0,5)
@@ -66,6 +70,16 @@ func _ready() -> void:
 	# starts outside the camera but can reach into it; include the whole rig reach.
 	for part in model.find_children("*","MeshInstance3D",true,false):
 		part.extra_cull_margin=.8
+		var index: int=part.find_blend_shape_by_name("blink")
+		if index>=0:
+			blink_parts.append(part);blink_indices.append(index)
+		var midpoint: int=part.find_blend_shape_by_name("blink_mid")
+		if midpoint>=0:blink_correctives.append([part,midpoint,0,true])
+		for identity in range(1,6):
+			var corrective: int=part.find_blend_shape_by_name("blink_identity_%d"%identity)
+			if corrective>=0:blink_correctives.append([part,corrective,identity,false])
+			var mid_corrective: int=part.find_blend_shape_by_name("blink_mid_identity_%d"%identity)
+			if mid_corrective>=0:blink_correctives.append([part,mid_corrective,identity,true])
 	set_character_options({})
 
 func orient_bone(bone_name: String, start: Vector3, finish: Vector3, twist := 0.0) -> void:
@@ -164,7 +178,10 @@ func set_grin(amount: float) -> void:
 
 func set_eye_closure(amount: float) -> void:
 	var closure: float=clampf(amount,0.0,1.0)
-	if blink_index>=0:face_mesh.set_blend_shape_value(blink_index,closure)
+	for index in range(blink_parts.size()):blink_parts[index].set_blend_shape_value(blink_indices[index],closure)
+	for binding in blink_correctives:
+		var weight: float=4.0*closure*(1.0-closure) if binding[3] else closure
+		binding[0].set_blend_shape_value(binding[1],weight if binding[2]==0 or face_style==binding[2] else 0.0)
 	if is_instance_valid(face_mesh):
 		var focus_index: int=face_mesh.find_blend_shape_by_name("focus")
 		if focus_index>=0:face_mesh.set_blend_shape_value(focus_index,float(get_meta("face_focus",0.0))*(1.0-closure))

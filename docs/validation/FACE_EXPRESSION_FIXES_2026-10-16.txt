@@ -1,0 +1,110 @@
+BACKENBEBEN / EXPRESSIONS, LIDS, BEARDS AND MOUTH / 16.10.2026
+
+User scope
+Correct the duplicated kiss/grin, angular closing lids, hard beard boundaries
+and rectangular open mouth identified in the v38 review. Retain the comic
+style, six independent identities/cosmetics, skin tones and regional damage.
+
+Implemented
+1. A separate kiss shape purses/protrudes the lips with cheek tension. The
+   actual emote2 drives kiss.85 and grin0; emotes0/1 drive grin.8 and kiss0.
+   Every geometric beard carries triangle-transferred kiss and grin shapes.
+   All six identities and emote reset are checked on the real match routine.
+2. Continuous eyelid closure follows the globe in XY instead of a flat depth
+   strip and an abrupt max-mask join. Upper/lower lid travel is rebalanced.
+   Brows are projected onto the closed skin. Identity and midpoint corrective
+   shapes prevent the lowered Markant/Veteran brows being buried mid-blink.
+   Cached bindings apply closure and 4*t*(1-t) midpoint weights; identity
+   changes preserve current closure. Match appearance updates leave the
+   complete blink family under the contact driver's control.
+3. Beard patches sit0.55mm above the source skin instead of1.2mm. Boundary
+   coverage fades across6mm with no20percent opaque floor. UV2.U is the beard
+   fringe, UV2.V retains exact authored jaw ownership; no transparent sorting.
+4. Shared host/GPU jaw ownership tapers the commissures into an oval opening.
+   Separate incisors/canines now vary in crown size and follow the dental arc.
+   All16 chip/missing indices and lower-teeth bone bindings remain. Interior
+   palate/floor use smooth authored jaw ownership in the SECOND UV channel;
+   internal walls do not receive silhouette ink. This removes the ribbed dark
+   cavity artifacts seen in the first study while retaining gums and tongue.
+
+Contract
+Character version13 in host/Web/collision; reject12/14. Gesture3/damage1 kept.
+Source, GLB and six actual collision profiles exported together. Face jaw
+ownership stays in UV2.V/JSON with glTF V reversal corrected in the shader.
+Restart older hosts and reload browser clients together. No arena, platform,
+table, Hoenhorst or third-party references changed. No release ZIP created.
+
+Validation design and corrections
+The old216-combination test covered selection, visibility and morph values;
+it did not establish visual quality of all combinations. Added native raster
+regression tests check all six heads at0/25/50/75/100percent closure. Actual
+white-eye pixels must disappear at closure, with brows retaining>=80percent
+of their visible marker area. This exposed a half-blink occlusion even after
+the first endpoint correction. Midpoint correctives fix that failure; the
+threshold was not relaxed. A misplaced midpoint-construction block first
+failed a Blender build and was corrected. One overlapping import locked the
+GLB export; the final build waited for Blender success before importing.
+An early oral-weight layer was third rather than second after joining gum
+meshes. It was corrected and the source validator now checks the second UV
+layer name and its full upper/lower ownership range.
+
+Final technical evidence
+Source validator: all six exact host profiles, UV ownership, oral winding,
+packed paint,16 teeth, kiss/grin beard shapes and brow correctives.
+Python175 tests PASS36.605s on the final v13 contact/jaw data; subsequent
+changes are cosmetic brow/interior/renderer changes covered by native/Web.
+Native:216 combinations/7skins, all3 emotes/reset on all6 heads, separate teeth
+chip/missing/rewind, hinge, first-person visibility, GPU normals and ArenaMatch.
+Raster mouth gate unchanged: both rows separately visible in all6 identities;
+closed healthy vs all-missing changes<=2 mouth pixels.
+Raster eye/brow/emote gate: tests/face_expression_render.gd.
+Native studies include36 face/beard combinations with grin, half blink and
+an accumulated jaw-injury fixture. This is not36 new live host strikes.
+These tests and visual studies do not constitute human art/gameplay acceptance.
+
+Artifacts and reproduction
+Arena-Design/40-ausdrucksstudie.png: actual native neutral/grin/kiss/lid/jaw
+study; severe jaw state is an authored accumulated-damage fixture.
+40-augenlider.png: actual native six-head closure study.
+40-mimik-schaden-baerte.png: actual native36-combination stress study.
+scripts/capture_face_expression_study.gd reproduces the six-panel study;
+first generate fixtures with scripts/create_face_damage_fixtures.py.
+Use Blender scripts/build_character_options.py, validate_character_options.py,
+then scripts/build.ps1. Run native tests with Godot --path game --script
+../tests/face_expression_render.gd (and character_appearance, face_damage,
+face_normal_render, face_mouth_render, arena_match).
+For Web: Python server/host.py --port 8902 --no-browser --no-console;
+wait for /health200, set BACKENBEBEN_TEST_PORT=8902, run face_match_review.py,
+character_creator.py --with-replay and face_performance.py. Never export the
+Web package while those browser tests run. Final results appended below.
+
+Final native results
+Source validator and Web import/export PASS. All six native suites PASS on
+the final oral material/UV changes, with no engine/script errors in those runs.
+Open/quarter/half/three-quarter/closed sclera counts:
+0 [624,406,197,20,0];1 [598,377,172,7,0];2 [677,455,254,75,0];
+3 [670,437,227,41,0];4 [583,360,159,3,0];5 [688,462,267,82,0].
+Brow marker area remains>=92percent at the sampled stages in all six heads;
+the regression minimum remains80percent. Mouth-only grin/kiss differences
+are8887/10384/7845/7811/9571/8829 pixels at RGB delta>.03.
+Final tooth counts [both,upper-missing,lower-missing,closed,closed-all-missing]:
+0 [598,280,318,0,0];1 [759,377,382,1,0];2 [783,250,533,0,0];
+3 [343,178,165,0,0];4 [657,293,364,0,0];5 [428,402,26,0,0].
+
+Final browser match result
+Three actual two-client matches/replays PASS errors[], testing emotes0/1/2
+across Markant/Weich/Veteran with different hair/beards/skin. Assertions inspect
+actual Godot grin/kiss values as well as the server event. The Veteran really
+uses kiss.85/grin0 in the final Web package. Local40-kuesschen-im-spiel.png
+is the resulting browser screenshot. The creator/persistence/responsive/
+two-client variant4/5 replay test also PASS errors[] before the final cosmetic
+brow-midpoint/interior refinement. Final three-match review covers that
+final package; no Web exports ran during these browser checks.
+The performance harness first read state.phase while the join acknowledgement
+was still null. It now waits for state?.phase, preserving the same phase gate;
+this fixes test synchronization, not match behavior. Final rerun PASS errors[]:
+onset/rewind true,1920x1080,RTX3090 ANGLE D3D11. Timing [median,p95,max]ms:
+idle[16.7,33.4,33.4]; contact[16.7,16.8,16.8]; injured[16.7,16.8,16.8].
+This is one measured run, not a universal60FPS guarantee. Human art/gameplay
+acceptance and a second physical LAN PC remain open. Own host8902 stopped
+after verification; other hosts untouched.

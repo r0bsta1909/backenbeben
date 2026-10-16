@@ -2644,3 +2644,40 @@ authored accumulator scenario; browser trajectory uses one live severity.
 Human art/gameplay acceptance and second physical LAN PC remain open.
 See validation/FACE_IDENTITY_MATCH_REVIEW_2026-10-15.txt for evidence/limits.
 Own validation host8901 stopped; other hosts untouched. No new release ZIP.
+
+16.10.2026 / v40 EXPRESSION AND FACE REVIEW FIXES
+User approved fixing four v38 review findings and explicitly asked to continue.
+Separate kiss shape now drives actual emote2: kiss.85/grin0; other emotes keep
+grin.8/kiss0. All geometric beards carry transferred kiss and grin deformations.
+Continuous globe-following lid closure; projected brows with identity+midpoint
+correctives. A half-blink raster test caught buried Markant/Veteran brows after
+endpoint-only corrections; final0/25/50/75/100percent tests PASS on all6 heads.
+No closed sclera pixels; brow marker area>=92percent at sampled stages, with
+unchanged80percent minimum. Cached bindings, contact driver owns blink family.
+Beard stand-off reduced1.2->.55mm and sparse fringe widened6mm with no20percent
+opaque floor. Face/Beard jaw ownership UV2.V retained; beard fringe uses UV2.U.
+Shared host/GPU commissure weights open into an oval. Sixteen individual teeth
+vary in crown size/arc; damage indices and mandibular binding retained. Oral
+palate/floor have smooth authored weights in SECOND UV; internal silhouette ink
+removed, eliminating ribbed cavity artifacts. UV layer mix-up and transient
+GLB import/export file lock fixed; final Blender success awaited before import.
+CHARACTER_VERSION13 in host/Web/collision, reject12; gestures3/damage1 unchanged.
+Restart old hosts/reload clients together. Source/GLB/6contact profiles together.
+Final source validator/import/export and six native suites PASS:216combinations,
+7skins, all3 emotes+reset/all6heads, teeth/hinge/rewind, GPU normals, ArenaMatch.
+175 Python tests PASS36.605s on same v13 contact/jaw data; later cosmetic-only
+changes have final native/Web coverage. Tooth visibility/closed<=2pixel gate
+unchanged. New tests/face_expression_render.gd checks actual closure/brow
+occlusion and grin/kiss rendered differences across all6 identities.
+Final3 actual two-client match/replays PASS emotes0/1/2, correct Godot values,
+errors[]. Creator2client/variant4+5 replay/responsive/persistence PASS before
+last cosmetic refinement. Final onset/rewind PASS errors[] at1080p RTX3090:
+idle median16.7/p9533.4/max33.4;contact and injured16.7/16.8/16.8ms.
+Performance harness state.phase null-ack race fixed tostate?.phase; rerun PASS.
+No general60FPS claim or human art/gameplay acceptance; second LAN PC untested.
+Local Arena-Design/40-ausdrucksstudie.png,40-augenlider.png,
+40-mimik-schaden-baerte.png are actual native studies, severe jaw is a fixture;
+40-kuesschen-im-spiel.png is a real browser match emote screenshot.
+scripts/capture_face_expression_study.gd reproduces six-panel study.
+Details: validation/FACE_EXPRESSION_FIXES_2026-10-16.txt. Arena/table/Hoenhorst
+untouched; no release ZIP. Own validation host8902 stopped, other hosts untouched.

@@ -63,12 +63,13 @@ async def main():
                     for page in pages:
                         await page.locator('#replaySkip').click()
                     await defender.wait_for_function('state.phase==="recover"', timeout=10000)
-                    await defender.evaluate('sendAction({action:"emote",emote:0})')
-                    await attacker.wait_for_function('state.event.kind==="emote"', timeout=2000)
+                    await defender.evaluate('(kind)=>sendAction({action:"emote",emote:kind})', number)
+                    await attacker.wait_for_function('(kind)=>state.event.kind==="emote" && state.event.emote===kind', arg=number, timeout=2000)
+                    await attacker.wait_for_function('(kind)=>kind===2 ? godotStats.face_kiss>.8 && godotStats.face_grin===0 : godotStats.face_grin>.75 && godotStats.face_kiss===0', arg=number, timeout=2000)
                     await attacker.evaluate('()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)))')
-                    await attacker.screenshot(path=str(OUTPUT / f'{number}-grin.png'))
+                    await attacker.screenshot(path=str(OUTPUT / f'{number}-emote.png'))
                     report.append(dict(face=face, hair=hair, beard=beard, skin=skin,
-                                       damage_hits=damage['hits'], real_match_emote=True))
+                                       damage_hits=damage['hits'], real_match_emote=True, emote_kind=number))
                 finally:
                     for context in contexts:
                         await context.close()

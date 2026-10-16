@@ -12,6 +12,7 @@ uniform bool eye_surface = false;
 uniform bool iris_surface = false;
 uniform bool pupil_surface = false;
 uniform bool skin_surface = false;
+uniform bool oral_surface = false;
 uniform float illustration_depth : hint_range(0.0,1.0) = 1.0;
 uniform float tooth_health = 1.0;
 uniform int beard_style = 1;
@@ -49,6 +50,7 @@ void fragment() {
     vec3 world_normal=normalize(mat3(INV_VIEW_MATRIX)*n);
     float d = dot(world_normal, normalize(vec3(-0.46,0.44,0.80)));
     float edge = smoothstep(face_skin?-.04:hair_surface?.015:.06,face_skin?.055:hair_surface?.09:.20,dot(n,normalize(VIEW)));
+    if(oral_surface)edge=1.0;
     vec3 color=base_color.rgb;
     color=mix(color,color*vec3(.64,.57,.46),clamp(1.0-tooth_health,0.0,1.0)*.35);
     if(eye_surface) {
@@ -84,7 +86,7 @@ void fragment() {
             float fringe=clamp(UV2.x,0.0,1.0);
             vec2 hair_cell=floor(h.xy/.00065);
             float coverage=fract(sin(dot(hair_cell,vec2(127.1,311.7)))*43758.5453);
-            if(coverage>.20+.80*smoothstep(.0,.85,fringe))discard;
+            if(coverage>smoothstep(.0,.90,fringe))discard;
             float flow=h.x*1900.0+sin(h.y*360.0)*.55;
             float fiber=smoothstep(.82,.99,sin(flow))*(1.0-smoothstep(.7,2.0,fwidth(flow)));
             color+=vec3(.045,.032,.023)*(.45+.55*fiber);

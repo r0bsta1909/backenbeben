@@ -25,6 +25,10 @@ for index in range(1,6):
     for a,b in zip(basis.data,key.data):
         if a.co.z>.17:assert (a.co-b.co).length<.0001
 assert len(signatures)==5
+oral=bpy.data.objects['MouthInterior']
+assert len(oral.data.uv_layers)>=2 and oral.data.uv_layers[1].name=='OralJawUV'
+assert min(loop.uv.y for loop in oral.data.uv_layers[1].data)<.01
+assert max(loop.uv.y for loop in oral.data.uv_layers[1].data)>.99
 # Regression: the oral rim must be one continuous closed loop, rather than the
 # former several depth-dependent holes and loose inner-skin strips.
 bm=bmesh.new();bm.from_mesh(face.data)
@@ -49,12 +53,17 @@ for index in range(1,6):
         for v in brow.data.shape_keys.key_blocks[f'identity_{index}'].data:
             nearest=surface.find_nearest(brow.matrix_world @ v.co)
             assert nearest[3] is not None and nearest[3]<.0011, ('floating brow',index,name)
-assert all(name in face.data.shape_keys.key_blocks for name in ['blink','grin','focus'])
+assert all(name in face.data.shape_keys.key_blocks for name in ['blink','grin','kiss','focus'])
+for name in ['BrowL','BrowR']:
+    keys=bpy.data.objects[name].data.shape_keys.key_blocks
+    assert all(key in keys for key in ['blink','blink_mid']+[f'blink_identity_{i}' for i in range(1,6)]+[f'blink_mid_identity_{i}' for i in range(1,6)]), ('Missing lid/brow corrective',name)
 for name in ['BeardFull','BeardMoustache','BeardGoatee','BeardTwirl']:
     obj=bpy.data.objects[name]
     assert 'grin' in obj.data.shape_keys.key_blocks, ('Static beard during emote',name)
     rest=obj.data.shape_keys.key_blocks['Basis'];grin=obj.data.shape_keys.key_blocks['grin']
     assert max((a.co-b.co).length for a,b in zip(rest.data,grin.data))>.0015, ('Empty beard expression',name)
+    kiss=obj.data.shape_keys.key_blocks.get('kiss')
+    assert kiss is not None and max((a.co-b.co).length for a,b in zip(rest.data,kiss.data))>.002, ('Missing beard kiss',name)
 images=[n.image for m in face.data.materials if m.use_nodes for n in m.node_tree.nodes if n.type=='TEX_IMAGE']
 assert images and all(i.packed_file for i in images)
 # Compare against the unchanged source, not just against other identity keys.

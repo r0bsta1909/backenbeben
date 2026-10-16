@@ -192,7 +192,8 @@ func prepare_materials(root: Node) -> void:
 				copy.set_shader_parameter("hair_surface",m.resource_name in ["Hair","Beard"])
 				copy.set_shader_parameter("groom_surface",str(node.name)=="HairCap")
 				copy.set_shader_parameter("beard_surface",m.resource_name=="Beard")
-				copy.set_shader_parameter("jaw_authored",str(node.name)=="Face" or m.resource_name=="Beard")
+				copy.set_shader_parameter("jaw_authored",str(node.name) in ["Face","MouthInterior"] or m.resource_name=="Beard")
+				copy.set_shader_parameter("oral_surface",str(node.name)=="MouthInterior")
 				copy.set_shader_parameter("parted_surface",str(node.name)=="HairSidePart")
 				copy.set_shader_parameter("eye_surface",m.resource_name in ["EyeWhite","Iris"])
 				copy.set_shader_parameter("iris_surface",str(node.name).begins_with("Iris"))
@@ -350,12 +351,13 @@ func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 				var amount := 0.0
 				if shape.begins_with("identity_"):continue
 				if shape=="tooth_chip":amount=1.0-tooth_health
-				if shape=="grin" and emote_active:amount=.8
+				if shape=="grin" and emote_active and emote_kind!=2:amount=.8
+				if shape=="kiss" and emote_active and emote_kind==2:amount=.85
 				if shape=="focus":
 					amount=float(root.get_meta("face_focus"))
 					if node==root.face_mesh:amount*=1.0-node.get_blend_shape_value(root.blink_index)
 				# The contact driver owns lids, including paused replay frames.
-				if shape=="blink":continue
+				if shape.begins_with("blink"):continue
 				if shape=="swelling": amount=ratio
 				if shape=="jaw_broken": amount=clampf((damage-50)/40,0,1)
 				if shape=="cheek_hit_L" and data.get("side","L")=="L": amount=impact if is_enemy else 0
@@ -427,7 +429,7 @@ func _process(delta: float) -> void:
 			JavaScriptBridge.eval("window.contactSound=false")
 		mirror_focus=bool(JavaScriptBridge.eval("window.mirrorFocus || false",true))
 		AudioServer.set_bus_mute(0,bool(JavaScriptBridge.eval("window.muted || false",true)))
-		JavaScriptBridge.eval("window.godotStats="+JSON.stringify({"creator_active":creator_active,"fighter_hair_style":fighter.hair_style,"fighter_face_style":fighter.face_style,"fighter_beard_style":fighter.beard_style,"own_hair_style":hand.hair_style,"face_eye_closure":fighter.face_mesh.get_blend_shape_value(fighter.blink_index),"msaa_3d":get_viewport().msaa_3d,"fps":Engine.get_frames_per_second(),"face_head_offset":head_offset_state(fighter),"face_head_rotation":head_offset_state(fighter,"head_rotation"),"face_injury":injury_material_state(fighter),"mirror_injury":injury_material_state(reflection),"arm_data":hand_pose.has("arm"),"rendered_arm":hand.arm_world_joints(),"hand_wrist":str(hand.skeleton.get_bone_global_pose(hand.skeleton.find_bone("hand.R")).origin),"dragging":dragging,"samples":gesture.size(),"physics_time":physics_frame.get("time",-1),"physics_active":physics_frame.has("id"),"crowd_active":arena_stage.crowd_was_active,"arena_backdrop":true,"arena_sponsors":arena_stage.sponsor_surfaces.size(),"arena_audience_3d":arena_stage.crowd_poses.size(),"camera_position":[camera.position.x,camera.position.y,camera.position.z],"mirror_draw_requests":mirror_draw_requests,"physics_material_updates":physics_material_updates,"muted":AudioServer.is_bus_mute(0)}))
+		JavaScriptBridge.eval("window.godotStats="+JSON.stringify({"creator_active":creator_active,"fighter_hair_style":fighter.hair_style,"fighter_face_style":fighter.face_style,"fighter_beard_style":fighter.beard_style,"own_hair_style":hand.hair_style,"face_eye_closure":fighter.face_mesh.get_blend_shape_value(fighter.blink_index),"face_grin":fighter.face_mesh.get_blend_shape_value(fighter.face_mesh.find_blend_shape_by_name("grin")),"face_kiss":fighter.face_mesh.get_blend_shape_value(fighter.face_mesh.find_blend_shape_by_name("kiss")),"msaa_3d":get_viewport().msaa_3d,"fps":Engine.get_frames_per_second(),"face_head_offset":head_offset_state(fighter),"face_head_rotation":head_offset_state(fighter,"head_rotation"),"face_injury":injury_material_state(fighter),"mirror_injury":injury_material_state(reflection),"arm_data":hand_pose.has("arm"),"rendered_arm":hand.arm_world_joints(),"hand_wrist":str(hand.skeleton.get_bone_global_pose(hand.skeleton.find_bone("hand.R")).origin),"dragging":dragging,"samples":gesture.size(),"physics_time":physics_frame.get("time",-1),"physics_active":physics_frame.has("id"),"crowd_active":arena_stage.crowd_was_active,"arena_backdrop":true,"arena_sponsors":arena_stage.sponsor_surfaces.size(),"arena_audience_3d":arena_stage.crowd_poses.size(),"camera_position":[camera.position.x,camera.position.y,camera.position.z],"mirror_draw_requests":mirror_draw_requests,"physics_material_updates":physics_material_updates,"muted":AudioServer.is_bus_mute(0)}))
 		if profile_cpu:
 			record_cpu("bridge",bridge_started)
 			if bool(JavaScriptBridge.eval("window.profileCPURead === true",true)):
