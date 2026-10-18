@@ -1,5 +1,6 @@
 """Blender -b assets-source/character-customizable.blend --python this_file."""
 import bpy, bmesh, json, math
+from mathutils import Vector
 from mathutils.bvhtree import BVHTree
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
@@ -53,10 +54,10 @@ for index in range(1,6):
         for v in brow.data.shape_keys.key_blocks[f'identity_{index}'].data:
             nearest=surface.find_nearest(brow.matrix_world @ v.co)
             assert nearest[3] is not None and nearest[3]<.0011, ('floating brow',index,name)
-assert all(name in face.data.shape_keys.key_blocks for name in ['blink','grin','kiss','focus'])
+assert all(name in face.data.shape_keys.key_blocks for name in ['blink','grin','kiss','focus','alert'])
 for name in ['BrowL','BrowR']:
     keys=bpy.data.objects[name].data.shape_keys.key_blocks
-    assert all(key in keys for key in ['blink','blink_mid']+[f'blink_identity_{i}' for i in range(1,6)]+[f'blink_mid_identity_{i}' for i in range(1,6)]), ('Missing lid/brow corrective',name)
+    assert all(f'brow_pose_{i}_{f}_{a}_{b}' in keys for i in range(6) for f,a,b in [(0,0,0),(0,0,2),(0,0,4),(1,0,0),(1,0,2),(1,0,4),(0,1,0),(1,1,0)]), ('Missing skin-fitted brow pose',name)
 for name in ['BeardFull','BeardMoustache','BeardGoatee','BeardTwirl']:
     obj=bpy.data.objects[name]
     assert 'grin' in obj.data.shape_keys.key_blocks, ('Static beard during emote',name)
@@ -98,8 +99,16 @@ for index in range(6):
 assert all(name in bpy.data.objects['CharacterRig'].data.bones for name in ['jaw','orbit.L','orbit.R','nasal','zygoma.L','zygoma.R','lip.upper','lip.lower'])
 assert all(abs(sum(g.weight for g in vertex.groups)-1)<1e-5 for vertex in face.data.vertices)
 assert all(face.vertex_groups.get(name) for name in ['orbit.L','orbit.R','nasal','zygoma.L','zygoma.R','lip.upper','lip.lower'])
+dental=json.loads((ROOT/'game/assets/character_dental.json').read_text())
+assert dental['version']==collision['version'] and len(dental['faces'])==6
+assert all(len(points)==16 for points in dental['faces'])
 for index in range(16):
     tooth=bpy.data.objects['Teeth%02d'%index]
     assert tooth.data.shape_keys.key_blocks.get('tooth_chip')
     assert tooth.vertex_groups.get('jaw' if index>=8 else 'head')
+    for identity in range(6):
+        key=tooth.data.shape_keys.key_blocks['Basis' if identity==0 else f'identity_{identity}']
+        center=sum((tooth.matrix_world @ vertex.co for vertex in key.data),Vector())/len(key.data)
+        expected=(center.x*4,center.z*4,-center.y*4)
+        assert max(abs(a-b) for a,b in zip(expected,dental['faces'][identity][index]))<1e-6, ('Dental host/mesh mismatch',identity,index)
 print('CHARACTER_OPTIONS_SOURCE_PASS: 18 options; anatomical rig; 16 teeth; packed paint; six exact host collision profiles')

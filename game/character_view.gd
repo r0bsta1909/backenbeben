@@ -15,7 +15,9 @@ var face_mesh: MeshInstance3D
 var blink_index := -1
 var blink_parts: Array[MeshInstance3D]=[]
 var blink_indices:=PackedInt32Array()
-var blink_correctives: Array=[]
+var brow_pose_bindings: Dictionary={}
+var brow_active_poses: Dictionary={}
+var brow_pose_state:=Vector4(-1,-1,-1,-1)
 var hair_style := -1
 var face_style := -1
 var beard_style := -1
@@ -73,13 +75,13 @@ func _ready() -> void:
 		var index: int=part.find_blend_shape_by_name("blink")
 		if index>=0:
 			blink_parts.append(part);blink_indices.append(index)
-		var midpoint: int=part.find_blend_shape_by_name("blink_mid")
-		if midpoint>=0:blink_correctives.append([part,midpoint,0,true])
-		for identity in range(1,6):
-			var corrective: int=part.find_blend_shape_by_name("blink_identity_%d"%identity)
-			if corrective>=0:blink_correctives.append([part,corrective,identity,false])
-			var mid_corrective: int=part.find_blend_shape_by_name("blink_mid_identity_%d"%identity)
-			if mid_corrective>=0:blink_correctives.append([part,mid_corrective,identity,true])
+		for shape in range(part.mesh.get_blend_shape_count()):
+			var name: String=part.mesh.get_blend_shape_name(shape)
+			if not name.begins_with("brow_pose_"):continue
+			var fields:=name.split("_")
+			var key:=Vector4i(int(fields[2]),int(fields[3]),int(fields[4]),int(fields[5]))
+			if not brow_pose_bindings.has(key):brow_pose_bindings[key]=[]
+			brow_pose_bindings[key].append([part,shape]);part.set_meta("brow_pose_driver",true)
 	set_character_options({})
 
 func orient_bone(bone_name: String, start: Vector3, finish: Vector3, twist := 0.0) -> void:
@@ -179,12 +181,29 @@ func set_grin(amount: float) -> void:
 func set_eye_closure(amount: float) -> void:
 	var closure: float=clampf(amount,0.0,1.0)
 	for index in range(blink_parts.size()):blink_parts[index].set_blend_shape_value(blink_indices[index],closure)
-	for binding in blink_correctives:
-		var weight: float=4.0*closure*(1.0-closure) if binding[3] else closure
-		binding[0].set_blend_shape_value(binding[1],weight if binding[2]==0 or face_style==binding[2] else 0.0)
+	update_brow_pose(closure)
 	if is_instance_valid(face_mesh):
 		var focus_index: int=face_mesh.find_blend_shape_by_name("focus")
 		if focus_index>=0:face_mesh.set_blend_shape_value(focus_index,float(get_meta("face_focus",0.0))*(1.0-closure))
+
+func update_brow_pose(closure: float) -> void:
+	var focus: float=clampf(float(get_meta("face_focus",0.0)),0,1)*(1.0-closure)
+	var alert: float=clampf(float(get_meta("face_alert",0.0)),0,1)
+	var state:=Vector4(float(face_style),focus,alert,closure)
+	if state==brow_pose_state:return
+	brow_pose_state=state
+	var next: Dictionary={}
+	var curve: Array=[(1.0-closure)*(1.0-2.0*closure),4.0*closure*(1.0-closure),closure*(2.0*closure-1.0)]
+	var weights: Array=[curve[0],curve[1],curve[2],focus*curve[0],focus*curve[1],focus*curve[2],alert,focus*alert]
+	var keys: Array=[Vector4i(face_style,0,0,0),Vector4i(face_style,0,0,2),Vector4i(face_style,0,0,4),Vector4i(face_style,1,0,0),Vector4i(face_style,1,0,2),Vector4i(face_style,1,0,4),Vector4i(face_style,0,1,0),Vector4i(face_style,1,1,0)]
+	for i in range(keys.size()):
+		if absf(weights[i])>=.000001:next[keys[i]]=weights[i]
+	for key in brow_active_poses:
+		if next.has(key):continue
+		for binding in brow_pose_bindings.get(key,[]):binding[0].set_blend_shape_value(binding[1],0.0)
+	for key in next:
+		for binding in brow_pose_bindings.get(key,[]):binding[0].set_blend_shape_value(binding[1],next[key])
+	brow_active_poses=next
 
 func set_jaw_open(angle: float) -> void:
 	var index: int=skeleton.find_bone("jaw")

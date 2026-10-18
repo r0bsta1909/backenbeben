@@ -2681,3 +2681,33 @@ Local Arena-Design/40-ausdrucksstudie.png,40-augenlider.png,
 scripts/capture_face_expression_study.gd reproduces six-panel study.
 Details: validation/FACE_EXPRESSION_FIXES_2026-10-16.txt. Arena/table/Hoenhorst
 untouched; no release ZIP. Own validation host8902 stopped, other hosts untouched.
+
+2026-10-18 / FOUR CONFIRMED FACE REVIEW FINDINGS FIXED
+User requested all errors from the face review be corrected. Both fixed tooth
+index lists replaced by actual per-identity dental centroids and local footprint
+loads. All16 teeth reachable on all6 heads; separate rows/sides, older snapshots
+retain prior health. New game/assets/character_dental.json generated with source.
+Brows now share tissue swelling with skin; skin-projected expression poses and
+authored Face.alert replace emote1's floating Brow translation. Immediate pose
+refresh in apply_fighter covers creator/mirror updates as well as live frames.
+The initial full120-pose bank passed native tests but repeatedly timed out in
+two-client Web startup. Final bank factors samples into48 correction poses
+(quadratic blink/focus, alert, interaction), max8 active. Coarser intermediate
+factorings failed the unchanged80percent visibility gate and were discarded.
+Final native brow test240 cases PASS, minimum91.4percent neutral marker area,
+including focus+swollen eye and focus+alert. Production vertex deformation is
+retained in the diagnostic; regional fixture asserts swelling actually enabled.
+Old rest-UV test repaired: UV2.V owns jaw weight, glTF inversion1-V; all6 actual
+imported profiles match host. Max jaw error4.45e-8/profile error1.87e-9.
+Blender source validation, import/export and8 final Godot suites PASS. Python178
+tests PASS51.745s on unchanged v14 contact/dental geometry. All3 actual two-client
+matches, emotes0/1/2 and injury replays PASS errors[] on final Web build.
+Character version14 in host/Web/collision/dental; gesture3/damage1 unchanged.
+Restart older hosts and reload clients together. Local native previews:
+Arena-Design/42-mimik-korrekturen.png and42-ausdrucksstudie.png. Detail record:
+validation/FACE_REVIEW_FIXES_2026-10-18.txt. Human art/gameplay acceptance and
+second-LAN-PC testing remain open; no claim that all game defects are eliminated.
+Final creator2client/variant4+5 replay/responsive/persistence PASS errors[].
+Onset/rewind PASS errors[];1920x1080 RTX3090 idle16.7/33.4/33.4ms median/p95/max,
+contact16.7/16.8/33.5; injured16.7/16.8/33.4. Own testhost8904 stopped; unrelated
+hosts untouched.42-noch-wach-im-spiel.png is a real final browser emote1 capture.

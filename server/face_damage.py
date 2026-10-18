@@ -7,7 +7,8 @@ import json, math
 from pathlib import Path
 ANATOMY=json.loads((Path(__file__).resolve().parents[1]/'game/assets/face_anatomy.json').read_text())
 REGIONS=ANATOMY['regions']
-CHARACTER_VERSION=13
+CHARACTER_VERSION=14
+DENTAL=json.loads((Path(__file__).resolve().parents[1]/'game/assets/character_dental.json').read_text())['faces']
 
 def check_character_version(data):
     if data.get('character_version')!=CHARACTER_VERSION:
@@ -15,7 +16,7 @@ def check_character_version(data):
 
 def healthy_face():
     return {'version':1,'regions':{r['name']:{'load':0.,'bruise':0.,'swelling':0.,'cut':0.,'bleeding':0.} for r in REGIONS},
-            'bones':{r['bone']:{'load':0.,'fracture':0.} for r in REGIONS},'teeth':[1.]*16,'hits':0}
+            'bones':{r['bone']:{'load':0.,'fracture':0.} for r in REGIONS},'teeth':[1.]*16,'tooth_loads':[0.]*16,'hits':0}
 
 def accumulate_face(player, scored, damage):
     if damage<=0 or not scored.get('hit') or scored.get('foul'):return
@@ -44,11 +45,23 @@ def accumulate_face(player, scored, damage):
         bone=face['bones'][region['bone']]
         bone['load']=round(min(160.,bone['load']+dose),5)
         if dose>8:bone['fracture']=round(max(bone['fracture'],min(1.,max(0.,bone['load']-48)/55)),5)
-    mouth=face['regions']['mouth']['load']
-    # Keep tooth identity stable: repeated lip/jaw impacts chip the same teeth.
-    jaw=max(face['regions']['jaw_L']['load'],face['regions']['jaw_R']['load'])
-    tooth_load=mouth+.25*jaw
-    if tooth_load>20:
-        point=scored.get('position',[0,0,0]);side=0 if point[0]<0 else 1
-        for index in ([3,11,2,10] if side==0 else [4,12,5,13]):
-            face['teeth'][index]=round(min(face['teeth'][index],max(0.,1-(tooth_load-20)/65)),5)
+    # Project each authoritative footprint onto the actual selected dental arc.
+    # Stable per-tooth loads replace two fixed four-tooth index lists. Both rows
+    # and all16 crowns are reachable, with local falloff and no random damage.
+    dental_dose=damage*(weights[6]+.25*(weights[4]+weights[5]))/total
+    centers=DENTAL[max(0,min(5,int(player.get('face_style',0))))]
+    loads=face.setdefault('tooth_loads',[0. if h>=1. else 20.+65.*(1.-h) for h in face['teeth']])
+    distribution=[0.]*16;sample_area=0.
+    min_x=min(c[0] for c in centers);max_x=max(c[0] for c in centers)
+    min_y=min(c[1] for c in centers);max_y=max(c[1] for c in centers)
+    for point,area in samples:
+        if area<=0 or not math.isfinite(area) or not all(isinstance(v,(int,float)) and math.isfinite(v) for v in point):continue
+        x=max(min_x,min(max_x,point[0]));y=max(min_y,min(max_y,point[1]))
+        local=[math.exp(-((x-c[0])/.035)**2-((y-c[1])/.025)**2) for c in centers]
+        peak=max(local)
+        for i,w in enumerate(local):distribution[i]+=area*w/peak
+        sample_area+=area
+    if sample_area>0:
+        for i,w in enumerate(distribution):
+            loads[i]=round(min(160.,loads[i]+dental_dose*w/sample_area),5)
+            face['teeth'][i]=round(min(face['teeth'][i],max(0.,1.-max(0.,loads[i]-20.)/65.)),5)

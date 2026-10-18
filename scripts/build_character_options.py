@@ -611,6 +611,12 @@ for base,vertex in zip(face.data.shape_keys.key_blocks[0].data,focus.data):
     p.y-=.0030*upper;p.y+=.0010*lower;p.z+=.0004*upper
     p.y-=.0020*gauss(abs(p.x),p.y,.024,.106,.016,.008)*focus_front
     vertex.co=B(p)
+alert=face.shape_key_add(name='alert')
+for base,vertex in zip(face.data.shape_keys.key_blocks[0].data,alert.data):
+    p=G(base.co)
+    lift=gauss(abs(p.x),p.y,.033,.111,.032,.021)*smooth(.055,.080,p.z)
+    p.y+=.0045*lift;p.z+=.0004*lift
+    vertex.co=B(p)
 focused_surface=BVHTree.FromPolygons([G(v.co) for v in focus.data],ff)
 from mathutils.geometry import barycentric_transform
 face.data.calc_loop_triangles()
@@ -1034,6 +1040,57 @@ for index in range(1,6):
                 p.z=hit.z+offset+.0002
             vertex.co=basis.data[i].co+B(p)-rest.data[i].co.lerp(closed_brow[i],.5)-(common_mid.data[i].co-basis.data[i].co)
 
+# Bake skin-seated brow poses across identity, tension, alertness and closure.
+# Each target is a delta from its identity rest, so ordinary identity keys stay
+# independent. The sampled bank is factored into compact corrections below.
+focus_delta=[G(v.co)-fv[i] for i,v in enumerate(face.data.shape_keys.key_blocks['focus'].data)]
+alert_delta=[G(v.co)-fv[i] for i,v in enumerate(face.data.shape_keys.key_blocks['alert'].data)]
+blink_delta=[lid_points[i]-fv[i] for i in range(len(fv))]
+for identity in range(6):
+    face_rest=[G(v.co) for v in face.data.shape_keys.key_blocks['Basis' if identity==0 else f'identity_{identity}'].data]
+    rest_surface=BVHTree.FromPolygons(face_rest,lid_triangles,all_triangles=True)
+    for tension in range(2):
+        for raised in range(2):
+            for step in range(5):
+                closure=step/4
+                posed=[p+focus_delta[i]*tension+alert_delta[i]*raised+blink_delta[i]*closure for i,p in enumerate(face_rest)]
+                surface=BVHTree.FromPolygons(posed,lid_triangles,all_triangles=True)
+                for name in ['BrowL','BrowR']:
+                    obj=bpy.data.objects[name];keys=obj.data.shape_keys.key_blocks
+                    basis=keys['Basis'];rest=keys['Basis' if identity==0 else f'identity_{identity}']
+                    target=obj.shape_key_add(name=f'brow_pose_{identity}_{tension}_{raised}_{step}')
+                    for i,vertex in enumerate(target.data):
+                        original=G(rest.data[i].co);p=original.copy()
+                        p+=G(keys['focus'].data[i].co-basis.data[i].co)*tension
+                        p.y+=.006*raised*(1-smooth(.018,.067,abs(p.x)))
+                        old=rest_surface.ray_cast(Vector((original.x,original.y,1)),Vector((0,0,-1)))[0]
+                        hit=surface.ray_cast(Vector((p.x,p.y,1)),Vector((0,0,-1)))[0]
+                        assert hit is not None, ('Brow pose lost skin',identity,tension,raised,step,name,i)
+                        offset=max(.00015,min(.00065,original.z-old.z)) if old is not None else .00045
+                        p.z=hit.z+offset+.0002
+                        vertex.co=basis.data[i].co+B(p)-rest.data[i].co
+for name in ['BrowL','BrowR']:
+    obj=bpy.data.objects[name]
+    keys=obj.data.shape_keys.key_blocks
+    # Factor the sampled surface into a quadratic closure curve and small
+    # focus/alert corrections. Export48 poses instead of120: WebGL startup must
+    # not pay for a full Cartesian shape bank on every character instance.
+    retained=set()
+    for identity in range(6):
+        for step in [0,2,4]:retained.add(f'brow_pose_{identity}_0_0_{step}')
+        for step in [0,2,4]:
+            name_f=f'brow_pose_{identity}_1_0_{step}';retained.add(name_f)
+            for vertex,neutral,base in zip(keys[name_f].data,keys[f'brow_pose_{identity}_0_0_{step}'].data,keys['Basis'].data):
+                vertex.co=base.co+vertex.co-neutral.co
+        name_a=f'brow_pose_{identity}_0_1_0';retained.add(name_a)
+        for vertex,neutral,base in zip(keys[name_a].data,keys[f'brow_pose_{identity}_0_0_0'].data,keys['Basis'].data):
+            vertex.co=base.co+vertex.co-neutral.co
+        name_cross=f'brow_pose_{identity}_1_1_0';retained.add(name_cross)
+        for vertex,neutral,focused,raised,base in zip(keys[name_cross].data,keys[f'brow_pose_{identity}_0_0_0'].data,keys[f'brow_pose_{identity}_1_0_0'].data,keys[name_a].data,keys['Basis'].data):
+            vertex.co=base.co*3+vertex.co-neutral.co-focused.co-raised.co
+    for key in list(obj.data.shape_keys.key_blocks)[1:]:
+        if not key.name.startswith('identity_') and key.name not in retained:obj.shape_key_remove(key)
+
 # Rebalance the tall vault on every skin/cosmetic and every identity/expression.
 # Eyes and facial anchors below the forehead are unchanged. Transforming all
 # shapes in the same coordinates also preserves the close brow/scalp fit.
@@ -1050,12 +1107,22 @@ for obj in bpy.context.scene.objects:
 # Each option now exports its actual triangle surface for host contact queries.
 # Structural base sculpt is shared; frontal identities remain separate profiles.
 face.data.calc_loop_triangles()
-collision={'version':13,'units':'game coordinates, original metres multiplied by 4',
+collision={'version':14,'units':'game coordinates, original metres multiplied by 4',
            'jaw_weights':jaw_weights,
            'vertices':[list(G(v.co)*4) for v in face.data.shape_keys.key_blocks[0].data],
            'triangles':[list(t.vertices) for t in face.data.loop_triangles],
            'faces':[[list(G(v.co)*4) for v in face.data.shape_keys.key_blocks[0 if i==0 else f'identity_{i}'].data] for i in range(6)]}
 (ROOT/'game/assets/face_customizable_collision.json').write_text(json.dumps(collision,separators=(',',':')),encoding='utf-8')
+dental={'version':14,'units':'game coordinates','faces':[]}
+for identity in range(6):
+    centers=[]
+    for tooth in range(16):
+        obj=bpy.data.objects[f'Teeth{tooth:02d}']
+        key=obj.data.shape_keys.key_blocks['Basis' if identity==0 else f'identity_{identity}']
+        center=sum((G(obj.matrix_world@v.co)*4 for v in key.data),Vector())/len(key.data)
+        centers.append(list(center))
+    dental['faces'].append(centers)
+(ROOT/'game/assets/character_dental.json').write_text(json.dumps(dental,separators=(',',':')),encoding='utf-8')
 # Frontal identities share the structural side planes, while host collision
 # Profiles include the deliberately distinct lower jaw silhouettes as well.
 assert all(math.isfinite(v) for o in bpy.context.scene.objects if o.type=='MESH' for p in o.data.vertices for v in p.co)

@@ -7,9 +7,9 @@ from contact_v3 import projected
 
 class RegionalDamageTests(unittest.TestCase):
     def test_old_character_builds_cannot_use_new_collision_surfaces(self):
-        for version in [None,1,3,4,5,6,7,8,9,10,11,12,14]:
+        for version in [None,1,3,4,5,6,7,8,9,10,11,12,13,15]:
             with self.assertRaises(ValueError):check_character_version({'character_version':version})
-        check_character_version({'character_version':13})
+        check_character_version({'character_version':14})
     def player(self):return {'damage':0.,'stun':0.,'face_damage':healthy_face()}
     def scored(self,position,**extra):
         return dict(hit=True,quality=1.,side='L' if position[0]<0 else 'R',position=position,**extra)
@@ -38,6 +38,33 @@ class RegionalDamageTests(unittest.TestCase):
         p=self.player();before=copy.deepcopy(p);accumulate_face(p,self.scored(REGIONS[0]['center']),35)
         self.assertEqual(before['face_damage'],healthy_face())
         self.assertNotEqual(before,p)
+    def test_all_sixteen_teeth_are_reachable_in_every_identity(self):
+        from face_damage import DENTAL
+        for face,centers in enumerate(DENTAL):
+            for tooth,center in enumerate(centers):
+                p=self.player();p['face_style']=face
+                for _ in range(8):accumulate_face(p,self.scored(center),35)
+                self.assertLess(p['face_damage']['teeth'][tooth],1.,(face,tooth))
+    def test_dental_impacts_follow_position_row_and_locality(self):
+        from face_damage import DENTAL
+        p=self.player()
+        for _ in range(4):accumulate_face(p,self.scored(DENTAL[0][0]),35)
+        state=p['face_damage']
+        self.assertLess(state['teeth'][0],1.)
+        self.assertEqual(state['teeth'][7],1.)
+        self.assertGreater(state['tooth_loads'][0],state['tooth_loads'][8])
+        a,b=self.player(),self.player()
+        for _ in range(4):
+            accumulate_face(a,self.scored(DENTAL[0][0],footprint=[DENTAL[0][7]+[0,1.]]),35)
+            accumulate_face(b,self.scored(DENTAL[0][7],footprint=[DENTAL[0][7]+[0,1.]]),35)
+        self.assertEqual(a,b)  # footprint takes precedence over a summary point
+        self.assertLess(a['face_damage']['teeth'][7],1.)
+        self.assertEqual(a['face_damage']['teeth'][0],1.)
+    def test_older_damage_snapshots_keep_existing_tooth_health(self):
+        from face_damage import DENTAL
+        p=self.player();p['face_damage'].pop('tooth_loads');p['face_damage']['teeth'][0]=.3
+        accumulate_face(p,self.scored(DENTAL[0][7]),35)
+        self.assertEqual(p['face_damage']['teeth'][0],.3)
     def test_all_six_collision_profiles_match_export(self):
         import numpy as np
         from contact_v3 import DATA,FACE_VERTICES

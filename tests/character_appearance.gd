@@ -51,6 +51,13 @@ func verify() -> void:
 			for active in [true,false]:
 				scene.emote_remaining=1.0 if active else 0.0
 				scene.apply_fighter(actor,{"face_style":face,"beard_style":2},true)
+				var alert: float=.8 if active and kind==1 else 0.0
+				if absf(actor.face_mesh.get_blend_shape_value(actor.face_mesh.find_blend_shape_by_name("alert"))-alert)>.00001 or absf(actor.brow_pose_state.z-alert)>.00001:
+					push_error("Alert emote/reset loses skin-fitted brow pose");quit(1);return
+				for brow_name in ["BrowL","BrowR"]:
+					var brow: MeshInstance3D=actor.model.find_child(brow_name,true,false)
+					if brow.position!=brow.get_meta("base_position"):
+						push_error("Emote translates brow away from forehead");quit(1);return
 				for name in ["Face","BeardFull","BeardMoustache","BeardGoatee","BeardTwirl"]:
 					var part: MeshInstance3D=actor.model.find_child(name,true,false)
 					for expression in ["grin","kiss"]:
@@ -59,15 +66,16 @@ func verify() -> void:
 						if index<0 or absf(part.get_blend_shape_value(index)-amount)>.00001:
 							push_error("Match emote/reset not linked to face and beard: "+name+expression);quit(1);return
 		scene.apply_fighter(actor,{"face_style":face,"focus":1.0},true)
-		for name in ["Face","BrowL","BrowR"]:
+		for name in ["Face"]:
 			var part: MeshInstance3D=actor.model.find_child(name,true,false)
 			if part.get_blend_shape_value(part.find_blend_shape_by_name("focus"))!=1.0:
 				push_error("Focused lids and brows are not linked");quit(1);return
 		actor.set_eye_closure(1.0)
-		for name in ["BrowL","BrowR"]:
-			var brow: MeshInstance3D=actor.model.find_child(name,true,false)
-			if brow.find_blend_shape_by_name("blink")<0 or brow.get_blend_shape_value(brow.find_blend_shape_by_name("blink"))!=1.0:
-				push_error("Brow does not follow lid closure");quit(1);return
+		if actor.brow_pose_state.w!=1.0 or actor.brow_active_poses.is_empty():
+			push_error("Brow does not follow lid closure");quit(1);return
+		for key in actor.brow_active_poses:
+			if key.x!=face or key.w!=4 or key.y!=0:
+				push_error("Closed brow uses wrong identity, focus or lid pose");quit(1);return
 		if actor.face_mesh.get_blend_shape_value(actor.face_mesh.find_blend_shape_by_name("focus"))!=0.0:
 			push_error("Focused lid tension overlaps full blink");quit(1);return
 		actor.set_eye_closure(0.0)

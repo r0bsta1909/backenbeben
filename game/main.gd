@@ -173,7 +173,7 @@ func prepare_materials(root: Node) -> void:
 		for i in range(node.mesh.get_surface_count()):
 			var m = node.mesh.surface_get_material(i)
 			if m:
-				var tissue_part: bool = str(node.name) in ["Face","FaceInk","MouthLine","MouthInterior","LidsL","LidsR"] or str(node.name).begins_with("Beard")
+				var tissue_part: bool = str(node.name) in ["Face","FaceInk","MouthLine","MouthInterior","LidsL","LidsR"] or str(node.name).begins_with("Beard") or str(node.name).begins_with("Brow")
 				var head_part: bool = str(node.name).begins_with("Hair") or str(node.name).begins_with("Beard") or str(node.name).begins_with("Teeth") or str(node.name) in ["Face","FaceInk","MouthLine","MouthInterior","Teeth","LidsL","LidsR","EyeL","EyeR","IrisL","IrisR","PupilL","PupilR","BrowL","BrowR","HairCap","EarL","EarR","EarFoldL","EarFoldR","NostrilL","NostrilR"]
 				var material_key: String = m.resource_name+str(tissue_part)+str(head_part)+str(node.name=="Face")+str(node.name=="HairCap")+str(str(node.name).begins_with("Pupil"))+str(node.position)
 				if str(node.name).begins_with("Teeth"):material_key+=str(node.name)
@@ -301,6 +301,7 @@ func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 	root.set_meta("jaw_fracture",fractured)
 	root.set_jaw_open(root.get_meta("jaw_damage"))
 	var emote_active := emote_remaining>0 and ((is_enemy and emote_player!=you) or (not is_enemy and emote_player==you))
+	root.set_meta("face_alert",.8 if emote_active and emote_kind==1 else 0.0)
 	if root==reflection:
 		var appearance_hash: int=[data,emote_active,emote_kind if emote_active else -1].hash()
 		if appearance_hash!=mirror_appearance_hash:mirror_dirty=true
@@ -345,7 +346,7 @@ func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 				if base_name=="FaceSkin":
 					m.set_shader_parameter("beard_style",int(data.get("beard_style",1)))
 					m.set_shader_parameter("beard_color",hairs[int(data.get("beard_color",data.get("hair",0)))%3])
-		if node.mesh is ArrayMesh:
+		if node.mesh is ArrayMesh and not bool(node.get_meta("brow_pose_driver",false)):
 			for i in range(node.mesh.get_blend_shape_count()):
 				var shape := str(node.mesh.get_blend_shape_name(i))
 				var amount := 0.0
@@ -353,6 +354,7 @@ func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 				if shape=="tooth_chip":amount=1.0-tooth_health
 				if shape=="grin" and emote_active and emote_kind!=2:amount=.8
 				if shape=="kiss" and emote_active and emote_kind==2:amount=.85
+				if shape=="alert" and emote_active and emote_kind==1:amount=.8
 				if shape=="focus":
 					amount=float(root.get_meta("face_focus"))
 					if node==root.face_mesh:amount*=1.0-node.get_blend_shape_value(root.blink_index)
@@ -378,9 +380,10 @@ func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 				elif emote_kind==0:node.rotation.z=.14*(1-fractured*.5);node.scale.x=1.12
 			else:node.rotation.z=0
 		if n.begins_with("Brow"):
-			node.position=node.get_meta("base_position")+Vector3(0,.04 if emote_active and emote_kind==1 else 0,0)
+			node.position=node.get_meta("base_position")
 	root.rotation=Vector3.ZERO
 	root.set_meta("regional_hash",regional_hash)
+	root.set_eye_closure(root.face_mesh.get_blend_shape_value(root.blink_index))
 
 
 func record_cpu(section: String, started: int) -> void:

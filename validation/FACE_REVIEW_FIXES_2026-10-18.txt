@@ -1,0 +1,78 @@
+FACE REVIEW FIXES / 2026-10-18
+
+Scope: four confirmed findings from the face review, not a claim that the whole
+game is free of defects. Comic style, arena, table and Hoenhorst unchanged.
+
+AUTHORITATIVE DENTAL DAMAGE
+The previous two fixed index lists could damage only eight of sixteen teeth.
+The builder now exports the actual sixteen crown centroids for all six heads in
+game/assets/character_dental.json. The host projects authoritative footprint
+samples onto the selected dental arc and accumulates deterministic per-tooth
+loads with local falloff. Upper/lower rows and opposite sides remain distinct.
+Existing snapshots without tooth_loads preserve their previous tooth health.
+Damage schema1 remains additive; character asset/protocol version is now14.
+
+BROW ATTACHMENT
+Replace expression-independent blink correctives with skin-projected poses for
+six identities, two focus endpoints, two alert endpoints and five blink stages.
+The authoring samples are factored into48 exported poses: quadratic closure,
+three focus corrections, alert and focus/alert interaction per identity. Runtime
+combines at most eight poses; cached bindings avoid scanning the full bank every frame.
+Ordinary identity keys stay separate.
+Brows now use the same tissue shader deformation as facial skin, including
+regional swelling. apply_fighter refreshes expression pose immediately, including
+creator/mirror updates before the next contact frame.
+
+ALERT EMOTE
+Remove the raw upward Brow node translation from emote1 (Noch wach). An authored
+skin alert shape and matching brow poses raise the expression along the forehead.
+Grin/kiss behavior remains emote0/1 grin.8, emote2 kiss.85; alert.8 only emote1.
+The appearance test verifies alert activation/reset and unchanged brow origins.
+
+UV CONTRACT
+The old test incorrectly decoded UV2.V as rest-Z. It now verifies glTF inverted
+jaw ownership (1-UV2.V), finite paint coordinates, front/side paint masks, and all
+six imported identity surfaces against actual host contact profiles. Coincident
+seam vertices are matched without relying on imported vertex ordering.
+
+COMPLETED VALIDATION
+Blender build and saved-source validator PASS, including dental centroid parity,
+all48 brow poses, 16 teeth, anatomical bindings, packed paint and host profiles.
+Godot import and release Web export PASS.
+178 Python unit tests PASS (51.745s), including all16 teeth on all6 identities,
+local/row falloff, footprint precedence and older damage snapshots.
+Native suites PASS: character_appearance (216 combinations, seven skins, three
+emotes/reset), face_damage, face_normal_render, face_mouth_render,
+face_expression_render, face_rest_uv and arena_match.
+New face_brow_attachment PASS: 6 heads x8 states x5 closure stages, including
+focus+left/right swelling and focus+alert. Diagnostic fragment output retains
+the production vertex shader; fixture asserts regional deformation is active.
+Minimum visible brow marker area >=91.4percent of healthy neutral baseline;
+unchanged acceptance threshold80percent. All fully closed eyes show zero sclera
+pixels in the separate expression raster test; closed-mouth tooth gates retained.
+Imported15,162 vertices: maximum jaw-weight error4.45e-8; six profile error1.87e-9.
+
+Final Web: three real two-client matches PASS with emotes0/1/2, correct Godot
+grin/kiss values, injuries and replay cameras; errors[]. Character creator PASS:
+two-client sync, variants4/5 actual hit replays, persistence, rotate/zoom,
+responsive controls, reset/random; errors[]. Injury onset and rewind PASS;
+errors[].1920x1080 on RTX3090/ANGLE D3D11: idle median16.7/p9533.4/max33.4ms;
+contact16.7/16.8/33.5ms; injured16.7/16.8/33.4ms. Single hardware run only.
+The initial full120-pose bank passed native tests but timed out repeatedly in
+two-client Web startup. Coarser compact variants failed the unchanged brow
+visibility gate and were discarded. Final48-pose bank passes both native and
+Web gates; no timeout or visibility threshold was relaxed.
+
+VISUAL EVIDENCE / LOCAL ONLY
+Arena-Design/42-mimik-korrekturen.png: actual native neutral, alert front/profile,
+focus half/full blink and kiss+focus half blink. No detached alert brows in the
+reviewed profile. Arena-Design/42-ausdrucksstudie.png: actual native expressions,
+full beard and a deliberately severe jaw fixture. These are rendered game
+assets, not generated illustrations. Severe fixtures are not real match hits.
+Arena-Design/42-noch-wach-im-spiel.png is the actual final browser match emote1.
+Own validation host8904 stopped after completion; unrelated hosts untouched.
+
+LIMITS
+Technical tests and reviewed screenshots do not establish human art/gameplay
+acceptance, full combinatorial injury coverage, another LAN PC, or general60FPS.
+Restart older hosts and reload clients together for character_version14.
