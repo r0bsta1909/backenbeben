@@ -1,0 +1,86 @@
+COMIC FACE DEBRIS AND BLOOD / 2026-10-18
+
+User requested freely breaking bone fragments, knocked-out flying teeth and
+blood simulation. Implemented as bounded, replayable comic particle/debris
+physics, integrated with the existing authoritative injury model.
+
+HOST / server/face_effects.py
+build_face_effects compares the real before/after damage snapshots. Cosmetic
+events never cause damage. Misses, fouls and unchanged hit counts emit nothing.
+Crossing tooth health.75 sheds an enamel chip; crossing.04 detaches the crown.
+All16 crowns on all6 identities use their exported dental positions. Detached
+crowns retain the selected identity and the damage they had before loss.
+Crossing bone fracture.65 with cut>.2 emits three small angular bone fragments
+at that region's projected skin surface. Severe wounds show a jagged exposed
+fracture patch; this does not replace the anatomical rig with fractured meshes.
+Fresh bleeding produces a short staggered spray. An existing open wound can
+also shed droplets when struck after its bleeding value saturates; distant
+wounds cannot emit from an unrelated hit. Fresh bleeding deltas are recorded
+separately for skin streak growth, preserving older wound appearance.
+Events store birth times, positions, velocities, sizes and angular velocities.
+Head contact rotation/offset and pre-existing lower-jaw fracture are included.
+Hard limit96 events per hit. The same clip owns the same events for both clients.
+The host adds face_effects.version1 to its replay; character14/gesture3/damage1
+contracts remain unchanged. Older clips without effects render safely.
+
+RENDERING / game/face_effects.gd
+No wall-clock random emitters. Fixed120Hz tracks, gravity39.24 game units/s^2
+(4 units/metre), drag, solid bounce/friction, spin and settling are sampled at
+the recorded replay time. Sphere/crown proxies collide with an elliptical
+tabletop and the actual mat bounds; the lower surrounding floor is a plane.
+Collider bounds come from the approved stage meshes without changing them.
+Blood droplets stretch along velocity, land, and expand into irregular dark-red
+surface splashes. Skin streaks grow downwards after contact. Permanent injury
+values and new bleeding are combined without erasing older blood or tinting
+healthy reset skin with a stale transient channel.
+Flying teeth use the actual imported crown mesh with identity/chip deformations,
+recentered and detached from the rig. The original tooth hides at emission.
+Reverse seeking restores its visibility, prior chip shape and material health.
+First-person-to-replay actor changes rebuild current trajectories in the new
+model's coordinates without archiving/spawning a second copy of the same burst.
+At the next hit, settled deposits persist: at most48 blood stains and32 solid
+fragments. Oldest deposits are removed at the limit. Lobby/rematch reset frees
+effect nodes and cached crown meshes. The former nine random red cubes removed.
+
+VALIDATION
+186 Python tests PASS49.032s, including8 event tests for thresholds, locality,
+all16 crowns/all6 identities, saturation, deterministic immutable finite JSON,
+head pose, no miss/foul effects, no repeated loss and the event budget.
+Nine native Godot suites PASS: face_effects, character_appearance, face_damage,
+face_expression_render, face_brow_attachment, face_mouth_render,
+face_normal_render, face_rest_uv and arena_match. Existing mouth/lid/brow gates
+retained. Latest targeted face_effects test also verifies exact prior crown
+shape on reverse and actor migration, tabletop/mat collision, deposits and reset.
+Godot import/release Web export PASS.
+Final release Web fixture and onset/rewind/render timing PASS errors[].
+1920x1080 RTX3090/ANGLE D3D11: idle median16.7/p9533.4/max33.5ms;
+contact and injured16.7/16.8/16.8ms. This is a real light-hit render check,
+not a worst-case96-particle performance guarantee. Own validation host8905
+stopped after testing; other hosts untouched.
+Three actual two-client matches PASS, emotes0/1/2, injuries/replay cameras,
+errors[]. Unmodified real host replay in the new browser test supplies version1
+effects and bleeding deltas matching the actual before/after snapshots.
+
+VISUAL / STRESS FIXTURE
+scripts/create_face_effects_fixture.py applies three actual35-damage mouth hits
+independently of a match KO cutoff. scripts/capture_face_effects.gd renders the
+before, breakup, flight, surface impacts, deposits and reverse frames. Local
+Arena-Design/43-knochen-zaehne-blut.png is the actual native six-panel study.
+It is a severe fixture, not evidence of a played three-hit match.
+tests/face_effects_browser.py first records the real host effect metadata, then
+substitutes that explicitly marked fixture into the replay response to test the
+production replay bridge/rendering. It does not claim that the original contact
+solve describes the injected injury. Browser fixture:2 crowns,3 bone fragments,
+11 droplets,11 landed stains; reverse clears them; errors[]. Replay slider tests
+read its actual quantized value instead of assuming arbitrary times are valid.
+Reproduce the fixture first with scripts/create_face_effects_fixture.py; native
+tests/face_effects.gd and scripts/capture_face_effects.gd consume its local JSON.
+
+LIMITS
+This is comic debris and particle blood, not a volumetric fluid solver, dynamic
+whole-skeleton fracture, or medically validated injury simulation. Bone pieces
+are authored procedural shards; skin fracture exposure is a shader patch.
+Collision proxies cover stage surfaces, not other moving characters/clothing.
+Single-hardware render checks do not establish general60FPS, human art/gameplay
+acceptance or second-PC LAN acceptance. Arena/table/Hoenhorst assets untouched.
+Restart the host and reload clients to use the new replay/render code together.

@@ -40,7 +40,7 @@ var creator_options: Dictionary = {}
 var creator_active := false
 var creator_stats_hash := 0
 var table_preview_parts: Array[Node3D] = []
-var particles: Array = []
+var face_effects: Node3D
 var mirror_mount: Node3D
 var recorded_side_texture: ImageTexture
 var mirror_appearance_hash := 0
@@ -76,6 +76,7 @@ func _ready() -> void:
 	add_child(opponent_hand)
 	build_mirror()
 	build_officials()
+	face_effects=Node3D.new();face_effects.set_script(load("res://face_effects.gd"));add_child(face_effects)
 	slap_audio = AudioStreamPlayer.new()
 	slap_audio.stream = load("res://assets/slap.wav")
 	slap_audio.volume_db = -7
@@ -417,6 +418,7 @@ func _process(delta: float) -> void:
 			if int(state.match_id)!=last_match:
 				last_match=int(state.match_id);last_event=-1;mirror_dirty=true
 				for view in [fighter,hand,reflection]:view.reset_all()
+				face_effects.reset_all()
 				play_sound(bell_audio,"bell")
 			if int(state.event_id)!=last_event:
 				last_event=int(state.event_id)
@@ -432,7 +434,7 @@ func _process(delta: float) -> void:
 			JavaScriptBridge.eval("window.contactSound=false")
 		mirror_focus=bool(JavaScriptBridge.eval("window.mirrorFocus || false",true))
 		AudioServer.set_bus_mute(0,bool(JavaScriptBridge.eval("window.muted || false",true)))
-		JavaScriptBridge.eval("window.godotStats="+JSON.stringify({"creator_active":creator_active,"fighter_hair_style":fighter.hair_style,"fighter_face_style":fighter.face_style,"fighter_beard_style":fighter.beard_style,"own_hair_style":hand.hair_style,"face_eye_closure":fighter.face_mesh.get_blend_shape_value(fighter.blink_index),"face_grin":fighter.face_mesh.get_blend_shape_value(fighter.face_mesh.find_blend_shape_by_name("grin")),"face_kiss":fighter.face_mesh.get_blend_shape_value(fighter.face_mesh.find_blend_shape_by_name("kiss")),"msaa_3d":get_viewport().msaa_3d,"fps":Engine.get_frames_per_second(),"face_head_offset":head_offset_state(fighter),"face_head_rotation":head_offset_state(fighter,"head_rotation"),"face_injury":injury_material_state(fighter),"mirror_injury":injury_material_state(reflection),"arm_data":hand_pose.has("arm"),"rendered_arm":hand.arm_world_joints(),"hand_wrist":str(hand.skeleton.get_bone_global_pose(hand.skeleton.find_bone("hand.R")).origin),"dragging":dragging,"samples":gesture.size(),"physics_time":physics_frame.get("time",-1),"physics_active":physics_frame.has("id"),"crowd_active":arena_stage.crowd_was_active,"arena_backdrop":true,"arena_sponsors":arena_stage.sponsor_surfaces.size(),"arena_audience_3d":arena_stage.crowd_poses.size(),"camera_position":[camera.position.x,camera.position.y,camera.position.z],"mirror_draw_requests":mirror_draw_requests,"physics_material_updates":physics_material_updates,"muted":AudioServer.is_bus_mute(0)}))
+		JavaScriptBridge.eval("window.godotStats="+JSON.stringify({"creator_active":creator_active,"fighter_hair_style":fighter.hair_style,"fighter_face_style":fighter.face_style,"fighter_beard_style":fighter.beard_style,"own_hair_style":hand.hair_style,"face_eye_closure":fighter.face_mesh.get_blend_shape_value(fighter.blink_index),"face_grin":fighter.face_mesh.get_blend_shape_value(fighter.face_mesh.find_blend_shape_by_name("grin")),"face_kiss":fighter.face_mesh.get_blend_shape_value(fighter.face_mesh.find_blend_shape_by_name("kiss")),"face_effects":face_effects.metrics,"msaa_3d":get_viewport().msaa_3d,"fps":Engine.get_frames_per_second(),"face_head_offset":head_offset_state(fighter),"face_head_rotation":head_offset_state(fighter,"head_rotation"),"face_injury":injury_material_state(fighter),"mirror_injury":injury_material_state(reflection),"arm_data":hand_pose.has("arm"),"rendered_arm":hand.arm_world_joints(),"hand_wrist":str(hand.skeleton.get_bone_global_pose(hand.skeleton.find_bone("hand.R")).origin),"dragging":dragging,"samples":gesture.size(),"physics_time":physics_frame.get("time",-1),"physics_active":physics_frame.has("id"),"crowd_active":arena_stage.crowd_was_active,"arena_backdrop":true,"arena_sponsors":arena_stage.sponsor_surfaces.size(),"arena_audience_3d":arena_stage.crowd_poses.size(),"camera_position":[camera.position.x,camera.position.y,camera.position.z],"mirror_draw_requests":mirror_draw_requests,"physics_material_updates":physics_material_updates,"muted":AudioServer.is_bus_mute(0)}))
 		if profile_cpu:
 			record_cpu("bridge",bridge_started)
 			if bool(JavaScriptBridge.eval("window.profileCPURead === true",true)):
@@ -459,6 +461,11 @@ func _process(delta: float) -> void:
 	var drive_started: int=Time.get_ticks_usec() if profile_cpu else 0
 	drive_recorded_physics()
 	update_character_preview()
+	if creator_active:
+		if face_effects.clip_id!="":face_effects.reset_all()
+	else:
+		var effect_actor: Node3D=fighter if physics_frame.get("replay",false) or int(physics_frame.get("target",1-you))!=you else hand
+		face_effects.sync(physics_frame,effect_actor,arena_stage)
 	if profile_cpu:record_cpu("recorded_motion",drive_started)
 	if mirror_mount.visible and mirror_dirty:
 		mirror_viewport.render_target_update_mode=SubViewport.UPDATE_ONCE
@@ -468,12 +475,6 @@ func _process(delta: float) -> void:
 	burst.visible=impact>.35
 	mirror_mount.position=mirror_mount.position.lerp(Vector3(-.52,-.05,1.0) if mirror_focus else Vector3(-.76,-.28,.70),minf(1,delta*8))
 	mirror_mount.scale=mirror_mount.scale.lerp(Vector3.ONE*.9 if mirror_focus else Vector3.ONE*.65,minf(1,delta*8))
-	for p in particles.duplicate():
-		p.life-=delta
-		p.node.position+=p.velocity*delta
-		p.velocity.y-=delta*5
-		if p.life<=0:
-			p.node.queue_free();particles.erase(p)
 
 func show_impact(e: Dictionary) -> void:
 	if float(e.get("damage",0))>0:
@@ -482,9 +483,6 @@ func show_impact(e: Dictionary) -> void:
 		if e.get("target",0)==you: flash.color.a=.32
 		else:
 			swing=1
-			for i in range(9):
-				var p=box(Vector3(-.3 if e.get("side","L")=="L" else .3,.2,.5),Vector3(.025,.035,.018),Color("a91e2c"))
-				particles.append({"node":p,"velocity":Vector3(randf_range(-1,1),randf_range(.2,1.3),randf_range(.1,1)),"life":.6})
 	if e.get("ko",false): play_sound(bell_audio,"bell")
 
 func process_event(e: Dictionary) -> void:

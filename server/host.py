@@ -5,6 +5,7 @@ from aiohttp import web, WSMsgType
 from rules import DEFAULTS, RANGES, apply_hit
 from body import collapse_track
 from face_damage import healthy_face,check_character_version
+from face_effects import build_face_effects
 from contact_v3 import score as v3_score, input_target, collision as arm_collision, decorate as decorate_arm
 from arm import Arm, DT, lab_collision
 
@@ -328,6 +329,7 @@ async def tick(app):
                 rid=secrets.token_hex(10);r['replay_id']=rid;r['replay_skip']=[]
                 clip.update(id=rid,target=target,attacker=r['turn'],before=before,after=copy.deepcopy(r['players']),
                             turn=r['turn_id'],braced=braced,ko=ko,body_frames=collapse_track(ko),contact_class=r['pending']['contact_class'])
+                clip['face_effects']=build_face_effects(before[target],r['players'][target],r['pending'],clip)
                 REPLAYS[rid]=clip
                 while len(REPLAYS)>32:REPLAYS.pop(next(iter(REPLAYS)))
                 event(r,'hit',target=target,damage=damage,quality=r['pending']['quality'],braced=braced,

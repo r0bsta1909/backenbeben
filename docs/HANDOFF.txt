@@ -2711,3 +2711,32 @@ Final creator2client/variant4+5 replay/responsive/persistence PASS errors[].
 Onset/rewind PASS errors[];1920x1080 RTX3090 idle16.7/33.4/33.4ms median/p95/max,
 contact16.7/16.8/33.5; injured16.7/16.8/33.4. Own testhost8904 stopped; unrelated
 hosts untouched.42-noch-wach-im-spiel.png is a real final browser emote1 capture.
+
+2026-10-18 / COMIC BONE FRAGMENTS, FLYING TEETH AND BLOOD
+User explicitly requested all three features. server/face_effects.py derives
+version1 cosmetic replay events from authoritative before/after injuries.
+Tooth chip at health.75; loss at.04; all16 crown meshes/all6 identities. New
+severe fracture.65+cut>.2 yields small angular bone fragments; shader fracture
+exposure. Fresh blood spray plus emissions from struck already bleeding wounds
+even at saturation; no distant-wound emission. No client-authoritative damage.
+Fixed120Hz gravity/drag/bounce/spin tracks in game/face_effects.gd, sampled by
+replay time. Actual tabletop/mat bounds used; irregular expanding blood stains.
+Skin drips grow without erasing old blood. Exact original tooth visibility,
+chip shape and health restored before emission on reverse. Actor migration
+(own first-person -> replay defender) rebuilds flight without duplicate bursts.
+96-event cap;48 persistent blood stains/32 solids; lobby/rematch clears caches.
+Old random red cubes removed. Approved arena/table/Hoenhorst assets untouched.
+186 Python tests PASS49.032s;9 native suites PASS incl.new effect regression.
+Final Web fixture/rewind/onset PASS errors[];3 actual2client matches/emotes PASS
+errors[]. Severe browser fixture is an injected visual stress replay, not a
+played severe match; raw host effects verified before substitution. Native
+fixture from3 authoritative35-damage mouth hits independently of KO cutoff.
+Local Arena-Design/43-knochen-zaehne-blut.png actual native study. Reproduce with
+scripts/create_face_effects_fixture.py + scripts/capture_face_effects.gd.
+Final1080p RTX3090 median/p95/max idle16.7/33.4/33.5ms; contact/injured
+16.7/16.8/16.8. Single hardware/light-hit check, no general60FPS/96-particle claim.
+Comic shards/particle blood, not whole-skeleton fracture or volumetric fluid.
+Stage collision proxies, no moving-character/clothing collision. Human visual/
+gameplay and second-PC LAN acceptance remain open. Character14/gesture3/damage1
+unchanged; restart host/reload clients for updated replay code. Own testhost8905
+stopped. Details validation/FACE_DEBRIS_BLOOD_2026-10-18.txt.

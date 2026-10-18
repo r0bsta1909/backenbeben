@@ -15,6 +15,8 @@ uniform bool skin_surface = false;
 uniform bool oral_surface = false;
 uniform float illustration_depth : hint_range(0.0,1.0) = 1.0;
 uniform float tooth_health = 1.0;
+uniform float new_bleeding[8];
+uniform float wound_age = 10.0;
 uniform int beard_style = 1;
 uniform int face_style = 0;
 uniform vec4 beard_color : source_color = vec4(.04,.025,.018,1.0);
@@ -226,7 +228,16 @@ void fragment() {
                 float flow_width=.002+.003*smoothstep(-.13,-.02,delta.y);
                 float blood=(1.0-smoothstep(flow_width,flow_width+line_width,flow))
                     *smoothstep(-.20,-.15,delta.y)*(1.0-smoothstep(-.025,0.,delta.y))*local_patch;
-                color=mix(color,vec3(.34,.014,.022),blood*region_injuries[i].w);
+                float fresh=min(region_injuries[i].w,max(0.0,new_bleeding[i])*clamp(wound_age/.18,0.,1.));
+                float drip_end=-.025-.16*clamp(wound_age/.85,0.,1.);
+                float growing=blood*smoothstep(drip_end-.015,drip_end,delta.y)*smoothstep(.02,.10,wound_age);
+                color=mix(color,vec3(.34,.014,.022),clamp(blood*max(0.0,region_injuries[i].w-fresh)+growing*fresh,0.,1.));
+                // Small jagged exposed fracture face, paired with recorded chips.
+                float fracture=smoothstep(.58,.90,region_bones[i])*smoothstep(.2,.55,region_injuries[i].z);
+                vec2 chip=delta.xy/vec2(.035,.018);
+                float boundary=1.0+.13*sin(chip.x*16.+float(i));
+                float exposed=(1.0-smoothstep(boundary-.12,boundary,length(chip)))*fracture*local_patch;
+                color=mix(color,vec3(.78,.69,.53),exposed);
             }
         }
     }
