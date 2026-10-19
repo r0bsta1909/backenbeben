@@ -2,6 +2,7 @@ extends Node3D
 ## Recorded initial conditions + fixed-step trajectories, independent of frame rate.
 const STEP:=1.0/120.0
 const LIMIT:=96
+const TABLE_CELL:=.08
 var clip_id: String=""
 var bound_actor_id:=0
 var entries: Array=[]
@@ -10,6 +11,10 @@ var settled: Array[Node3D]=[]
 var tooth_cache: Dictionary={}
 var table_bounds:=AABB(Vector3(-1,-1.26,.29),Vector3(2,.02,.72))
 var floor_bounds:=AABB(Vector3(-7,-5.2,-4.95),Vector3(14,.04,12))
+var table_triangles: Array=[]
+var table_cells: Dictionary={}
+var table_collision_bounds:=AABB()
+var collision_stage_id:=0
 var metrics: Dictionary={"blood":0,"bone":0,"tooth":0,"tooth_chip":0,"stains":0}
 var last_time:=0.0
 var blood_material: StandardMaterial3D
@@ -31,6 +36,61 @@ func reset_all() -> void:
 	entries.clear();stains.clear();settled.clear();clip_id="";bound_actor_id=0;last_time=0.0
 	tooth_cache.clear()
 	metrics={"blood":0,"bone":0,"tooth":0,"tooth_chip":0,"stains":0}
+
+func cache_table_collision(stage: Node3D) -> void:
+	if collision_stage_id==stage.get_instance_id():return
+	collision_stage_id=stage.get_instance_id();table_triangles.clear();table_cells.clear()
+	var first:=true
+	for name in ["PodiumTop","PodiumPadding"]:
+		var part: MeshInstance3D=stage.find_child(name,true,false)
+		if part==null:continue
+		var bounds: AABB=part.global_transform*part.get_aabb()
+		table_collision_bounds=bounds if first else table_collision_bounds.merge(bounds);first=false
+		for surface in range(part.mesh.get_surface_count()):
+			var arrays: Array=part.mesh.surface_get_arrays(surface)
+			var vertices: PackedVector3Array=arrays[Mesh.ARRAY_VERTEX]
+			var normals: PackedVector3Array=arrays[Mesh.ARRAY_NORMAL]
+			var indices:=PackedInt32Array()
+			if arrays[Mesh.ARRAY_INDEX]!=null:indices=arrays[Mesh.ARRAY_INDEX]
+			for i in range(0,indices.size() if not indices.is_empty() else vertices.size(),3):
+				var triangle: Array[Vector3]=[];var average:=Vector3.ZERO
+				for j in range(3):
+					var index: int=indices[i+j] if not indices.is_empty() else i+j
+					triangle.append(part.to_global(vertices[index]))
+					average+=part.global_basis.inverse().transposed()*normals[index]
+				var normal: Vector3=(triangle[1]-triangle[0]).cross(triangle[2]-triangle[0])
+				if normal.length_squared()<.000000000001:continue
+				normal=normal.normalized()
+				if normal.dot(average)<0:normal=-normal
+				if normal.y<=.01:continue
+				var id:=table_triangles.size();table_triangles.append({"a":triangle[0],"b":triangle[1],"c":triangle[2],"normal":normal})
+				var low:=triangle[0].min(triangle[1]).min(triangle[2]);var high:=triangle[0].max(triangle[1]).max(triangle[2])
+				for x in range(floori(low.x/TABLE_CELL),floori(high.x/TABLE_CELL)+1):
+					for z in range(floori(low.z/TABLE_CELL),floori(high.z/TABLE_CELL)+1):
+						var cell:=Vector2i(x,z)
+						if not table_cells.has(cell):table_cells[cell]=[]
+						table_cells[cell].append(id)
+
+func table_intersection(from: Vector3, to: Vector3) -> Dictionary:
+	var result: Dictionary={};var nearest:=2.0
+	var low:=from.min(to);var high:=from.max(to)
+	if high.y<table_collision_bounds.position.y or low.y>table_collision_bounds.end.y:return result
+	var direction:=to-from
+	if direction.length_squared()<.000000000001:return result
+	var visited: Dictionary={}
+	for x in range(floori(low.x/TABLE_CELL),floori(high.x/TABLE_CELL)+1):
+		for z in range(floori(low.z/TABLE_CELL),floori(high.z/TABLE_CELL)+1):
+			for id in table_cells.get(Vector2i(x,z),[]):
+				if visited.has(id):continue
+				visited[id]=true
+				var triangle: Dictionary=table_triangles[id]
+				if triangle.normal.dot(direction)>=0:continue
+				var point: Variant=Geometry3D.segment_intersects_triangle(from,to,triangle.a,triangle.b,triangle.c)
+				if point is Vector3:
+					var fraction: float=(point-from).dot(direction)/direction.length_squared()
+					if fraction<nearest:
+						nearest=fraction;result={"fraction":fraction,"point":point,"normal":triangle.normal}
+	return result
 
 func fragment_mesh() -> ArrayMesh:
 	var points: Array[Vector3]=[Vector3(-.55,-.30,-.27),Vector3(.65,-.22,-.10),Vector3(.18,.63,.0),Vector3(-.12,-.08,.48)]
@@ -84,32 +144,33 @@ func create_entry(event: Dictionary, actor: Node3D) -> Dictionary:
 
 func trajectory(origin: Vector3, velocity: Vector3, kind: String, size: float) -> Dictionary:
 	var points:=PackedVector3Array([origin]);var velocities:=PackedVector3Array([velocity])
-	var p:=origin;var v:=velocity;var resting:=false;var land:=INF;var rest_time:=3.0;var hit_point:=Vector3.ZERO
+	var p:=origin;var v:=velocity;var resting:=false;var land:=INF;var rest_time:=3.0;var hit_point:=Vector3.ZERO;var hit_normal:=Vector3.UP
 	var radius: float=.025 if kind=="tooth" else size*.4
 	for step in range(1,361):
 		if not resting:
 			v.y-=39.24*STEP;v*=1.0-.10*STEP
 			var q:=p+v*STEP
-			var fraction:=2.0;var height:=0.0
-			for plane in [table_bounds.end.y,floor_bounds.end.y,-6.20]:
+			var hit: Dictionary=table_intersection(p-Vector3.UP*radius,q-Vector3.UP*radius)
+			var fraction: float=hit.get("fraction",2.0)
+			var point: Vector3=hit.get("point",Vector3.ZERO)
+			var normal: Vector3=hit.get("normal",Vector3.UP)
+			for plane in [floor_bounds.end.y,-6.20]:
 				if v.y>=0 or p.y-radius<plane-.00001 or q.y-radius>plane:continue
 				var f: float=(p.y-radius-plane)/maxf(p.y-q.y,.000001)
 				var at: Vector3=p.lerp(q,f)
-				if plane==table_bounds.end.y:
-					var center:=table_bounds.get_center();var half:=table_bounds.size*.5
-					if pow((at.x-center.x)/half.x,2)+pow((at.z-center.z)/half.z,2)>1.0:continue
-				elif plane==floor_bounds.end.y and (at.x<floor_bounds.position.x or at.x>floor_bounds.end.x or at.z<floor_bounds.position.z or at.z>floor_bounds.end.z):continue
-				if f<fraction:fraction=f;height=plane
+				if plane==floor_bounds.end.y and (at.x<floor_bounds.position.x or at.x>floor_bounds.end.x or at.z<floor_bounds.position.z or at.z>floor_bounds.end.z):continue
+				if f<fraction:fraction=f;point=Vector3(at.x,plane,at.z);normal=Vector3.UP
 			if fraction<=1.0:
-				p=p.lerp(q,fraction);p.y=height+radius+.001
+				p=point+Vector3.UP*radius+normal*.001
 				if kind=="blood":
-					land=(step-1+fraction)*STEP;hit_point=Vector3(p.x,height+.004,p.z);resting=true;v=Vector3.ZERO
+					land=(step-1+fraction)*STEP;hit_point=point+normal*.004;hit_normal=normal;resting=true;v=Vector3.ZERO
 				else:
-					v=Vector3(v.x*.55,-v.y*.30,v.z*.55)
+					var speed: float=v.dot(normal)
+					v=(v-normal*speed)*.55-normal*speed*.30
 					if v.length()<.38:resting=true;rest_time=(step-1+fraction)*STEP;v=Vector3.ZERO
 			else:p=q
 		points.append(p);velocities.append(v)
-	return {"points":points,"velocities":velocities,"land":land,"rest":rest_time,"hit":hit_point}
+	return {"points":points,"velocities":velocities,"land":land,"rest":rest_time,"hit":hit_point,"normal":hit_normal}
 
 func update_at(time: float, actor: Node3D) -> void:
 	last_time=time
@@ -121,6 +182,7 @@ func update_at(time: float, actor: Node3D) -> void:
 		entry.node.visible=born and not landed;entry.stain.visible=landed
 		if landed:
 			entry.stain.position=entry.track.hit
+			entry.stain.quaternion=Quaternion(Vector3.BACK,entry.track.normal)
 			var spread: float=float(event.size)*lerpf(3.0,7.0,clampf((age-entry.track.land)/.18,0,1))
 			entry.stain.scale=Vector3(spread*1.4,spread,1.0)
 			metrics.stains+=1
@@ -157,6 +219,7 @@ func sync(frame: Dictionary, actor: Node3D, stage: Node3D) -> void:
 			entry.actor.face_mesh.get_surface_override_material(0).set_shader_parameter("new_bleeding",PackedFloat32Array([0.,0.,0.,0.,0.,0.,0.,0.]))
 			if new_clip and entry.event.kind=="blood" and is_finite(entry.track.land):
 				entry.stain.position=entry.track.hit;entry.stain.scale=Vector3(entry.event.size*9.8,entry.event.size*7,1)
+				entry.stain.quaternion=Quaternion(Vector3.BACK,entry.track.normal)
 				entry.stain.show();stains.append(entry.stain)
 			else:entry.stain.queue_free()
 			if new_clip and entry.event.kind!="blood":
@@ -171,6 +234,7 @@ func sync(frame: Dictionary, actor: Node3D, stage: Node3D) -> void:
 		var floor_mesh: MeshInstance3D=stage.find_child("RubberMat",true,false)
 		if top!=null:table_bounds=top.global_transform*top.get_aabb()
 		if floor_mesh!=null:floor_bounds=floor_mesh.global_transform*floor_mesh.get_aabb()
+		cache_table_collision(stage)
 		var effects: Dictionary=frame.get("face_effects",{})
 		for event in effects.get("events",[]).slice(0,LIMIT):entries.append(create_entry(event,actor))
 	var effects: Dictionary=frame.get("face_effects",{})

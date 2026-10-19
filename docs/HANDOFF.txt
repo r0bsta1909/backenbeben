@@ -2740,3 +2740,26 @@ Stage collision proxies, no moving-character/clothing collision. Human visual/
 gameplay and second-PC LAN acceptance remain open. Character14/gesture3/damage1
 unchanged; restart host/reload clients for updated replay code. Own testhost8905
 stopped. Details validation/FACE_DEBRIS_BLOOD_2026-10-18.txt.
+
+2026-10-19 / ALL THREE CONFIRMED EFFECT REVIEW FINDINGS CORRECTED
+User requested fixes. Particle collision now reads actual PodiumTop+PodiumPadding
+world triangles, cached in an X/Z grid. Finite-segment contact includes curved
+rim; bounce and blood-decal orientation follow the hit normal. No visual stage
+assets changed. Six independent ray-vs-flight rim regressions PASS; atx1.04
+the drop now hits the padding near y-1.2936, instead of the mat near y-5.166.
+Event origins interpolate recorded head pose at each birth, including delayed
+drops; airborne particles remain independent. Replay yaw precedence retained.
+New translation/yaw regressions PASS. Tooth and bone events are reserved before
+blood; remaining slots shared round-robin. Extreme96-event regression retains
+all16 tooth losses,24 bone fragments and7 drops per each of8 wounds.
+189 Python tests PASS37.497s;22 targeted tests PASS2.317s;9 native suites PASS.
+Web import/export, severe visual fixture/reverse, actual3two-client matches/
+emotes/injury replay cameras PASS errors[]. Earlier fixture limitations retained:
+the severe visual replay is injected after checking real host effect metadata.
+Updated native study Arena-Design/45-korrigierte-effekte.png. Character14,
+gesture3,damage1/effect schema1 unchanged; restart host/reload clients together.
+Details validation/FACE_EFFECTS_REVIEW_FIXES_2026-10-19.txt.
+Final onset/rewind/render check PASS errors[]:1080p RTX3090 median/p95/max
+idle17.6/18.1/36.0ms; contact17.5/18.1/18.1; injured17.5/18.1/24.5.
+Single run, no controlled comparison/general60FPS claim. Own testhost8906
+stopped; unrelated hosts untouched. Human visual/gameplay acceptance remains open.

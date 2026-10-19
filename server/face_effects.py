@@ -18,13 +18,19 @@ def build_face_effects(before, after, scored, clip):
         return result
     face = max(0, min(5, int(after.get('face_style', 0))))
     contact = float(clip.get('contact', .5))
-    frame = round(contact * clip.get('fps', 120))
     rotations = clip.get('head_rotations', [])
     offsets = clip.get('head_positions', [])
-    rotation = list(rotations[min(frame, len(rotations)-1)]) if rotations else [0., 0., 0.]
-    if clip.get('frames'):rotation[1]=clip['frames'][min(frame,len(clip['frames'])-1)][0]
-    offset = offsets[min(frame, len(offsets)-1)] if offsets else [0., 0., 0.]
-    def posed(point):
+    def sample(track, when, default):
+        if not track:return list(default)
+        frame=max(0.,min(len(track)-1,when*clip.get('fps',120)))
+        low=int(frame);high=min(low+1,len(track)-1);fraction=frame-low
+        return [track[low][i]+(track[high][i]-track[low][i])*fraction for i in range(len(default))]
+    def posed(point, when):
+        # Later drops originate from the wound at their own birth. Already
+        # detached particles retain their independent recorded trajectories.
+        rotation=sample(rotations,when,[0.,0.,0.])
+        if clip.get('frames'):rotation[1]=sample(clip['frames'],when,[0.])[0]
+        offset=sample(offsets,when,[0.,0.,0.])
         x,y,z = point
         blend=max(0.,min(1.,(y+.55)/.43));blend=blend*blend*(3.-2.*blend)
         a = rotation[0]*blend;y,z = y*math.cos(a)-z*math.sin(a), y*math.sin(a)+z*math.cos(a)
@@ -39,8 +45,9 @@ def build_face_effects(before, after, scored, clip):
         side = -1. if scored.get('side')=='L' else 1.
         velocity = [side*(.7+.55*math.sin(phase)), .7+.65*abs(math.cos(phase*1.3)), 1.1+.75*math.cos(phase)]
         if kind=='blood':velocity=[v*1.6 for v in velocity]
-        result['events'].append(dict(id=i,kind=kind,source=source,birth=round(contact+.025+delay,6),
-            position=posed(point),velocity=velocity,size=size,
+        birth=round(contact+.025+delay,6)
+        result['events'].append(dict(id=i,kind=kind,source=source,birth=birth,
+            position=posed(point,birth),velocity=velocity,size=size,
             spin=[math.sin(phase)*8,math.cos(phase)*12,math.sin(phase*.7)*10],**extra))
     old_teeth, new_teeth = old.get('teeth',[1.]*16),new.get('teeth',[1.]*16)
     jaw = max((old.get('bones',{}).get(k,{}).get('fracture',0.) for k in ['mandible_L','mandible_R','mandible_center']),default=0.)
@@ -62,6 +69,7 @@ def build_face_effects(before, after, scored, clip):
     samples=[(p[:3],max(0.,float(p[4]))) for p in scored.get('footprint',[]) if len(p)>=5]
     if not samples:samples=[(scored.get('position',[-.28 if scored.get('side')=='L' else .28,.14,.25]),1.)]
     sample_area=sum(area for _,area in samples) or 1.
+    blood_sources=[]
     for i,region in enumerate(REGIONS):
         a=old.get('regions',{}).get(region['name'],{})
         b=new.get('regions',{}).get(region['name'],{})
@@ -81,6 +89,10 @@ def build_face_effects(before, after, scored, clip):
         if broken:
             for n in range(3):emit('bone',point,i,.025+.012*n,delay=.008*n)
         if emission>.002:
-            for n in range(min(10,3+math.ceil(emission*28))):
-                emit('blood',point,i,.010+.003*(n%4),delay=n*.012)
+            blood_sources.append((point,i,min(10,3+math.ceil(emission*28))))
+    # Reserve tooth/bone events before spending the remaining budget on blood.
+    # Round-robin allocation keeps every wound represented under heavy load.
+    for n in range(max((count for _,_,count in blood_sources),default=0)):
+        for point,i,count in blood_sources:
+            if n<count:emit('blood',point,i,.010+.003*(n%4),delay=n*.012)
     return result

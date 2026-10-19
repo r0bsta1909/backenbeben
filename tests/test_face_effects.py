@@ -65,3 +65,33 @@ class FaceEffectsTests(unittest.TestCase):
         e=build_face_effects(a,b,dict(hit=True),clip)['events'][0]
         p=DENTAL[0][0]
         for actual,expected in zip(e['position'],[-p[2]+1,p[1]+2,p[0]+3]):self.assertAlmostEqual(actual,expected,6)
+    def test_each_drop_follows_interpolated_head_position_at_its_birth(self):
+        a,b=self.pair();b['face_damage']['regions']['mouth']['bleeding']=.8
+        still={'contact':.5,'fps':4}
+        moving=dict(still,head_positions=[[0,0,0],[1,.25,0],[2,.5,0],[3,.75,0]])
+        score=dict(hit=True,position=REGIONS[6]['center'])
+        base=build_face_effects(a,b,score,still)['events'];events=build_face_effects(a,b,score,moving)['events']
+        self.assertGreater(len(events),1)
+        for original,event in zip(base,events):
+            self.assertAlmostEqual(event['position'][0]-original['position'][0],event['birth']*4,6)
+            self.assertAlmostEqual(event['position'][1]-original['position'][1],event['birth'],6)
+        self.assertNotEqual(events[0]['position'],events[-1]['position'])
+    def test_yaw_is_interpolated_from_replay_frames_at_tooth_birth(self):
+        a,b=self.pair();b['face_damage']['teeth'][0]=0.
+        clip={'contact':.5,'fps':4,'frames':[[0],[.1],[.2],[.3]],'head_rotations':[[0,2.,0]]*4}
+        event=build_face_effects(a,b,dict(hit=True),clip)['events'][0]
+        angle=event['birth']*.4;x,y,z=DENTAL[0][0]
+        expected=[math.cos(angle)*x-math.sin(angle)*z,y,math.sin(angle)*x+math.cos(angle)*z]
+        for actual,target in zip(event['position'],expected):self.assertAlmostEqual(actual,target,6)
+    def test_budget_reserves_all_solids_and_shares_remaining_drops_between_wounds(self):
+        a,b=self.pair();b['face_damage']['teeth']=[0.]*16
+        for region in REGIONS:
+            b['face_damage']['regions'][region['name']].update(bleeding=.85,cut=1.)
+            b['face_damage']['bones'][region['bone']]['fracture']=1.
+        events=self.effects(a,b)['events']
+        self.assertEqual(len(events),MAX_EVENTS)
+        self.assertEqual(sum(e['kind']=='tooth' for e in events),16)
+        for i in range(8):
+            self.assertEqual(sum(e['kind']=='bone' and e['source']==i for e in events),3,i)
+            self.assertEqual(sum(e['kind']=='blood' and e['source']==i for e in events),7,i)
+        self.assertTrue(all(e['kind']!='blood' for e in events[:40]))

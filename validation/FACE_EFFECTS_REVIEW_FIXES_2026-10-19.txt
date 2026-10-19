@@ -1,0 +1,73 @@
+FACE EFFECTS REVIEW FIXES / 2026-10-19
+
+User requested all three confirmed findings from the previous review be fixed.
+Supersedes the original insert-only ellipse, contact-only emission pose and
+region-ordered particle allocation described in FACE_DEBRIS_BLOOD_2026-10-18.
+Arena/table/Hoenhorst source assets and damage rules remain unchanged.
+
+1 / PADDED TABLE RIM
+The old collider used only the inner insert ellipse. At x1.02/1.04/1.06,z.65,
+falling drops missed the visible cushion and landed on the mat at y-5.166.
+The renderer now caches world triangles from both PodiumTop and PodiumPadding.
+An X/Z grid (cell.08 game units) and bounds reject irrelevant triangles. Finite
+segments test the actual upward-facing surfaces, including curved padding.
+Earliest table/floor contact wins. Solid bounce uses the surface normal; blood
+splashes align to that normal, including deposits archived for later hits.
+Approved visual meshes are read without modification; no new physics server
+bodies or frame-order-dependent physics-world queries are needed.
+New native regression independently ray-tests the actual padding mesh at six
+rim locations. At x1.04,z.65: mesh y-1.293578, decal y-1.291044 (normal offset),
+instead of a drop passing through to y-5.166. Opposite sides and both Z ends
+also PASS. A dedicated sloped-rim splash checks decal orientation.
+
+2 / BLOOD EMISSION FOLLOWS RECORDED HEAD MOTION
+Previously every event used head pose at clip.contact, even if born later.
+The host now linearly samples recorded pitch/yaw/roll and head position at each
+event's exact birth, including fractional frames and endpoint clamping. Replay
+frames' yaw retains precedence over the auxiliary rotation track, matching the
+renderer. The existing spatial head blend remains applied at the source point.
+Once detached, particles keep their independent trajectories; the correction
+does not drag airborne drops along with subsequent head movement.
+New tests verify every delayed drop against analytic interpolated translation,
+and verify an ejected crown against interpolated replay yaw at its birth. The
+constant-pose/legacy-track test and deterministic immutable metadata gates PASS.
+
+3 / PRIORITY AND FAIR PARTICLE BUDGET
+Previously blood from early regions could consume the96-event budget before
+later bone fragments were emitted. The reviewed extreme case retained only two
+mouth bone fragments and no nasal fragments.
+All tooth/chip and bone events now precede decorative blood allocation. There
+can be at most16 tooth/chip plus24 bone events, leaving56 slots even at maximum
+structural damage. Blood sources share remaining slots round-robin, honoring
+each source's requested count instead of starving regions at the end.
+New regression:16 tooth losses +3 bone fragments in each of8 regions +7 blood
+drops from each region =96 events. All important events are retained; budget,
+unique IDs, finite JSON, no misses/fouls, no repeated tooth loss and local
+bleeding/saturation behavior continue to PASS.
+
+VALIDATION
+189 Python tests PASS37.497s. Targeted face-effects/damage tests22 PASS2.317s.
+Nine native suites PASS: face_effects, character_appearance, face_damage,
+face_expression_render, face_brow_attachment, face_mouth_render,
+face_normal_render, face_rest_uv, arena_match. Existing gates were not weakened.
+Godot import and release Web export PASS.
+Browser fixture PASS: real unmodified host event metadata checked first, then
+explicitly injected severe replay fixture exercises all effect types, landing
+and reverse seeking; errors[]. Fixture is not a played severe match.
+Three actual two-client matches PASS with emotes0/1/2, injury replay cameras,
+errors[]. Actor migration, exact pre-loss crown restoration, bounded deposits
+and reset remain covered by the native effect regression.
+Local Arena-Design/45-korrigierte-effekte.png is the updated native study.
+Final Web onset/rewind/render check PASS errors[] on1920x1080 RTX3090/ANGLE:
+idle median17.6/p9518.1/max36.0ms; contact17.5/18.1/18.1ms;
+injured17.5/18.1/24.5ms. Single run, not a controlled before/after benchmark.
+Own validation host8906 stopped after completion; unrelated hosts untouched.
+Character14/gesture3/damage1 and cosmetic event schema1 remain compatible.
+Restart host and reload clients for the corrected event/render code.
+
+LIMITS
+Bone shards and blood remain comic debris/particle effects. Triangle table
+surfaces and plane floor contacts use small particle collision proxies; this is
+not a whole-scene rigid-body solver or a volumetric fluid simulation. Moving
+characters/clothing are not particle colliders. Single-machine tests do not
+establish human art/gameplay acceptance, second-PC LAN acceptance or general60FPS.
