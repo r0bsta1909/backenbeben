@@ -16,5 +16,5 @@ function Invoke-CheckedGodot([string]$Step, [string[]]$GodotArguments) {
 Invoke-CheckedGodot 'import' @('--headless','--path','game','--editor','--import')
 Invoke-CheckedGodot 'export' @('--headless','--path','game','--export-release','Web','../build/web/index.html')
 Copy-Item game/assets/slap.wav,game/assets/bell.wav build/web/ -Force
-Copy-Item game/browser_support.js,game/combat.js,game/character_creator.js,game/character_creator.css build/web/ -Force
+Copy-Item game/browser_support.js,game/combat.js,game/character_creator.js,game/character_creator.css,game/tournament.js,game/tournament.css build/web/ -Force
 Write-Host 'Web build ready: build/web/index.html'

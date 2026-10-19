@@ -64,7 +64,10 @@ Punkte hängen nicht von D, Gesamtverletzungen oder Effektzahl ab. Die zusätzli
 brace_reduction wird nicht noch einmal auf Punkte angewendet; eine tatsächlich
 veränderte Kontaktqualität durch Abwehr kann die Wertung verändern.
 Ohne KO gewinnt nach5 vollständigen Schlagpaaren die höhere Gesamtwertung.
-Gleichstand ist Remis. Kein Verletzungs-Tiebreak und kein Zufallsentscheid.
+Im normalen Duell ist Gleichstand Remis: kein Verletzungs-Tiebreak und kein
+Zufallsentscheid. Im Turnier folgen bis zu drei vollständige Zusatzpaare,
+danach ein ausdrücklich angezeigtes faires Los; siehe TOURNAMENT.txt.
+Turnierkämpfe haben keine Revanche und beginnen in jeder Runde unverletzt.
 Zweites Foul bleibt Disqualifikation. Ergebnisgrund ist separat ko/points/draw/
 disqualification. Revanche setzt alle Kampfzustände und Punkte zurück, wechselt
 das Erstschlagrecht und behält nur die frei gewählte kosmetische Erscheinung.

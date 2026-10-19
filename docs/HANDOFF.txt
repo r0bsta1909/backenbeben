@@ -2850,3 +2850,33 @@ restart host and reload both clients after update. Human balance/controls/art
 acceptance and a second physical LAN machine remain open.
 Specification docs/COMBAT_MODEL.txt; validation/COMBAT_MODEL_2026-10-19.txt.
 Final two-client1080p idle/contact/injured median16.7ms,p9516.8ms; paused bridge and severe effects Web fixture PASS errors[]. Own testhost8914 stopped after validation.
+
+2026-10-19 / USER-AUTHORIZED 2-20 PLAYER LAN TOURNAMENT
+Earlier tournament deferral superseded by explicit user request. Implemented
+single elimination for any count 2..20, random seeds and first-round byes,
+parallel round matches, automatic advancement, stable seats and one champion.
+Code lobby, owner start/transfer, no late entry; losers can follow full bracket.
+Fresh fighters each fight; settings frozen at tournament start, first striker
+random per fight. Ties get up to3 full extra pairs, then an explicit fair lot.
+Normal duels keep their draws and rematches. 6-second result display, 30-second
+reconnect grace, explicit leave/expiry causes forfeit. Admin reset cancels.
+No persistence across host restart. Public IDs no longer authorize resume:
+hello.resume contains a private256-bit token, sessionStorage updated accordingly.
+Reload frontend and restart host together. Source/local Web build include this;
+existing V14 release package is older. No visual assets or Hoenhorst changed.
+212 Python tests PASS, including570 randomly drawn complete brackets and new
+host scheduling fixtures. Actual20-WebSocket event PASS19 walkovers/12byes/
+5rounds/one champion; no20-client physics or render performance claim.
+Real30sec disconnect/active resume/automatic final PASS. Three rendered clients
+PASS one bye + KO semifinal + points final + same champion, errors[]. Fixed
+inactive practice-state access which previously killed the JS animation loop
+on return to bracket. Two rendered clients PASS10real misses through3extra
+pairs to explicit lot/champion, errors[]. 390px bracket checked; Web exportPASS.
+Rules docs/TOURNAMENT.txt; detailed validation/TOURNAMENT_2026-10-19.txt.
+Human balance/controls/art and second physical LAN-PC remain open.
+Final standard5-pair real-mouse LAN duel PASS10hits, draw10:10, brace/replay/
+private-token resume/audio/rematch/mirror reset/leave, errors[]. Mixed-frame
+p95~33.4ms, one183.3ms replay-playing interval; no blanket60FPS claim.
+Final UI PASS20-person lobby (1rendered+19WebSocket peers), narrow390px
+result bounds, header/name overlap corrected, actual forfeit/champion/return
+to lobby, errors[]. Final Web export checked. Own testhost8916 stopped.

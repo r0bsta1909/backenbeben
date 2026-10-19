@@ -75,7 +75,8 @@ Leistung: validation/single-browser-performance.json; Ryzen53600/RTX2080,
 1920x1080, ein Headless-Browser plus Host: Median13.9ms, Impact-p95 34.8ms.
 Zweicliententest erzeugt hoehere Last; keine allgemeine60FPS-Garantie.
 Ein als abgeschlossen abgenommener Endstand fehlt weiterhin.
-Turniere und ElevenLabs bleiben zurueckgestellt. Arenawerbung auf ausdruecklichen
+LAN-Turniere mit 2-20 Spielern auf Nutzerauftrag umgesetzt (2026-10-19);
+Regeln/Pruefgrenzen: TOURNAMENT.txt. ElevenLabs bleibt zurueckgestellt. Arenawerbung auf ausdruecklichen
 Nutzerauftrag umgesetzt; Hoenhorst in vorliegender Form akzeptiert.
 
 HISTORISCHE DURCHLAUFNOTIZEN

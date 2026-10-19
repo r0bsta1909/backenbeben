@@ -21,6 +21,26 @@ Firewallregel ab: TCP 8765, privates Netz, lokales Subnetz, Spiel-Pythonprogramm
 Spielserver und Browser laufen anschließend normal ohne Windows-Elevation.
 Nicht für öffentliche Internet-Server gedacht. Keine Portweiterleitung erforderlich.
 
+TURNIER (2–20 SPIELER)
+Ein Spieler wählt TURNIER ERSTELLEN und teilt den sechsstelligen Code mit den
+anderen. Alle öffnen dieselbe LAN-Adresse, gestalten ihren Charakter und treten
+mit dem Code bei. Der Veranstalter startet, sobald 2 bis 20 Spieler dabei sind.
+Es ist keine feste Teilnehmerzahl und keine Zweierpotenz erforderlich.
+Die Auslosung ist zufällig, Freilose werden automatisch vergeben. Eine Niederlage
+bedeutet Ausscheiden. Ausgeschiedene können den Turnierbaum weiter verfolgen.
+Kämpfe einer Runde laufen parallel; die nächste Runde wird nach deren Abschluss
+automatisch besetzt. Nach einem Kampf bleibt das Ergebnis sechs Sekunden sichtbar.
+Neue Kämpfe beginnen unverletzt und mit null Punkten. Die Balance wird beim
+Turnierstart für alle Runden festgehalten. Das Erstschlagrecht wird ausgelost.
+Bei Punktgleichstand folgen bis zu drei vollständige Zusatz-Schlagpaare; bei
+weiterem Gleichstand entscheidet ein ausdrücklich angezeigtes faires Los.
+Kein Rückkampf im Turnier. Verlassen bedeutet Aufgabe. Bei Verbindungsabbruch
+bleibt der Platz 30 Sekunden reserviert; der laufende Kampf wird pausiert.
+Danach scheidet der fehlende Spieler aus. Verlässt der Veranstalter die offene
+Lobby, übernimmt der nächste Teilnehmer. Nach Turnierstart sind keine neuen
+Teilnehmer möglich. Host-Neustart verwirft Turniere; es gibt keine Speicherung.
+Host und Browser nach dem Update neu starten / neu laden.
+
 STEUERUNG
 Angriff: linke Maustaste halten und die Maus NACH LINKS ziehen. Die sichtbare
 rechte Hand schwingt seitlich zur Wange. Die Maushöhe bestimmt die Treffhöhe.

@@ -1,0 +1,61 @@
+BACKENBEBEN / LAN-TURNIER / 2026-10-19
+
+EINSTIEG
+Charakter erstellen. Ein Spieler erstellt ein Turnier und teilt dessen
+sechsstelligen Code. Die anderen öffnen dieselbe LAN-Hostadresse und treten
+mit dem Code bei. Der Veranstalter startet mit 2 bis maximal 20 Teilnehmern.
+Die tatsächliche Zahl wird automatisch verwendet; kein manuelles Setzen der
+Paarungen nötig. Ein Teilnehmer kann nur einem Turnier/Match zugleich angehören.
+Eine neue Browser-Sitzung ist ein neuer Teilnehmer; normales Neuladen stellt
+über einen privaten Schlüssel aus sessionStorage denselben Platz wieder her.
+Öffentliche Spieler-IDs aus dem Turnierbaum sind keine Wiederverbindungsschlüssel.
+
+TURNIERBAUM
+Single Elimination: eine Niederlage bedeutet Ausscheiden. Zufällige Auslosung
+beim Start, keine laufende Neuauslosung. Die Größe wird auf die nächste
+Zweierpotenz ergänzt; Freilose werden ausschließlich in der ersten Runde
+verteilt, ohne Paarungen aus zwei leeren Startplätzen. Jeder Teilnehmer hat
+dieselbe Chance auf ein Freilos. Beispiel 20: 12 Freilose + 4 Vorrundenkämpfe,
+dann 16 -> 8 -> 4 -> 2 -> 1. Insgesamt 19 entschiedene Kämpfe.
+Bei regulärem Verlauf sind es für N Teilnehmer genau N-1 Kämpfe.
+Alle Kämpfe einer Runde können parallel stattfinden. Die Folgerunde wird
+gebildet, sobald alle Ergebnisse der Vorrunde feststehen. Die Kämpfe starten
+automatisch, sobald beide Teilnehmer verbunden und aus ihrem vorherigen
+Ergebnisbildschirm zurück sind. Ergebnisse bleiben sechs Sekunden sichtbar.
+Ausgeschiedene sehen den weiteren Turnierbaum und den endgültigen Sieger.
+Noch nicht besetzte Runden erscheinen als Vorschau bis zum Finale.
+
+KAMPFREGELN
+Bestehendes Kampfmodell: KO, zwei Fouls = Disqualifikation, sonst Punkte nach
+standardmäßig fünf vollständigen Schlagpaaren. Punkte und Verletzungen werden
+vor jedem neuen Kampf zurückgesetzt; keine Verletzungen aus der Vorrunde.
+Der Host friert die Balance beim Turnierstart für das gesamte Turnier ein.
+Das Erstschlagrecht wird je Kampf unabhängig ausgelost.
+Bei Punktgleichstand: zusätzliche vollständige Schlagpaare, jeweils beide
+Spieler einmal am Schlag. Erst nach einem vollständigen Paar entscheiden die
+Punkte; KO und Disqualifikation gelten weiterhin sofort. Maximal drei Zusatzpaare.
+Bei weiterem Gleichstand entscheidet ein vor Kampfbeginn unabhängig gezogenes
+50:50-Los. Ergebnisgrund ausdrücklich 'lot' / 'Los nach 3 Zusatzpaaren'.
+Normale LAN-Duelle dürfen weiterhin remis enden. Keine Revanche im Turnier.
+
+VERLASSEN UND VERBINDUNG
+Explizites Verlassen während eines offenen Kampfes ist Aufgabe; der Gegner
+kommt weiter. Ein bereits beendetes Kampfergebnis wird dadurch nicht umgedreht.
+Beim Verbindungsabbruch pausiert der Kampf; 30 Sekunden bleibt der Platz
+reserviert. Wiederverbindung stellt Phase, Restzeit und Sitzplatz wieder her.
+Nach Ablauf der Frist scheidet der fehlende Teilnehmer aus; der Gegner kommt
+automatisch weiter. Ein noch nicht gestarteter Kampf wartet auf beide Clients.
+Verlässt der Veranstalter die offene Lobby, übernimmt der nächste Teilnehmer.
+Nach Turnierstart gibt es weder neue Teilnehmer noch Wiedereintritt nach Aufgabe.
+Host-'reset' bricht das Turnier ausdrücklich ohne Sieger ab.
+Turniere liegen im Hostspeicher; Host-Neustart verwirft ihren Stand.
+
+IMPLEMENTIERUNG / PRÜFUNG
+server/tournament.py: auslosungsunabhängiger Turnierbaum, Weiterkommen,
+Freilose, Aufgaben, Zusatzpaarentscheidung. server/host.py: autoritative
+Kampfzuweisung, feste Sitzplätze, Fristen, Reconnect, private Sitzungsschlüssel.
+game/tournament.js/.css und web_shell.html: Einstieg, Lobby, Baum, Ergebnis.
+Build kopiert Turnier-JS/CSS zusammen mit dem Spiel.
+Prüfkommandos und Abgrenzungen: validation/TOURNAMENT_2026-10-19.txt.
+Technische Tests ersetzen weder menschliche Balance-/Bedienungsabnahme noch
+einen Test mit 20 physischen Rechnern im echten LAN.

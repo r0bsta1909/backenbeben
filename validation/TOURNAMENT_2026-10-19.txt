@@ -1,0 +1,99 @@
+LAN TOURNAMENT / 2026-10-19
+
+SCOPE
+User authorized 2-20 player automatic single-elimination tournaments, replacing
+the earlier deferral. No ElevenLabs, new advertisements or visual asset changes.
+Six-character lobby code, owner start, all participant counts, random bracket,
+first-round byes, parallel round matches, automatic next rounds, one champion.
+Fresh wounds/stun/load/points every fight; settings frozen for the tournament.
+Ties: up to three extra complete pairs, then a clearly labelled fair predrawn lot.
+Normal duels retain draws and rematches. Exiting means withdrawal; reconnect
+grace is 30 seconds. Results remain visible for six seconds. No disk persistence.
+Public player IDs are separated from private 256-bit resume credentials.
+Private credentials are only returned to their client in hello.resume.
+
+RULES AND HOST TESTS: PASS
+.venv/Scripts/python.exe -m unittest discover -s tests -p test_*.py
+212 tests, 49.771 seconds, PASS.
+10 new tournament cases include 30 independent draws at each count 2..20
+(570 brackets), exactly N-1 fights, unique entrants, exactly one champion,
+correct byes, capacity 21 rejection, minimum 2, owner permission/transfer,
+no late joins, stable snapshots, invalid winners, idempotent advancement,
+complete-pair overtime, regulation draw preservation and bounded final lot.
+Host fixtures exercise 20-player scheduling (19 results), fresh fighter state,
+frozen settings, stable seats on withdrawal, no tournament rematch,
+post-result exit preserving the winner and administrative cancellation.
+Fixtures completing room results are scheduler tests, not physics tests.
+Final focused run: 10/10 PASS, 0.193 seconds, after the console notification fix.
+
+REAL NETWORK: PASS
+BACKENBEBEN_TEST_PORT=8916 .venv/Scripts/python.exe tests/tournament_network.py
+20 genuine aiohttp WebSockets, 21st participant rejected. Owner-only start,
+private-token resume restoring the same participant, public-ID takeover rejected.
+Full bracket: 12 first-round byes, 19 walkovers, 5 rounds, one champion.
+No injected host state or time. These are deliberate forfeits, not a claim
+that 20 simultaneous physics/render clients were performance-tested.
+
+REAL CONNECTION LOSS: PASS
+.venv/Scripts/python.exe tests/tournament_disconnect.py
+3 genuine clients. Active match pauses, resumes the same room/turn/seat,
+then another disconnect actually waits the full 30-second grace period.
+Automatic walkover, next final with fresh fighters, final champion verified.
+No accelerated server clock or injected result.
+
+THREE RENDERED BROWSER CLIENTS: PASS
+.venv/Scripts/python.exe tests/tournament_browser.py
+Chromium/ANGLE, 3 separate browser contexts, 1280x800. Actual create/join/start
+buttons, 3-player odd bracket with one bye, bye-holder WebSocket reconnect,
+two fights solved by production coupled-friction physics from recorded gesture
+inputs. First fight KO after 5 strokes (qualities .6386/.6386/.7258/.7258/.8005);
+final points after 4 strokes (.5122/.6386/.6091/.7258). max_pairs=2 intentionally
+used to shorten regulation; original host settings restored in finally.
+All three clients show the same champion (TURNIER 1). Rematch hidden.
+390x844 bracket has no outer-page overflow; scrolling stays in bracket/panel.
+Console/page errors: []. Desktop and mobile captures visually inspected.
+Found and fixed a stale inspectPractice access to state.practice_pose after
+returning to the bracket. The first run failed on this; full repeat passed.
+Combat frame loop now clears inactive input/inspection and guards absent state.
+
+TWO RENDERED BROWSER CLIENTS / TOTAL TIE: PASS
+.venv/Scripts/python.exe tests/tournament_overtime_browser.py
+Two clients, real UI entry, start disabled at one entrant. Ten actual production
+miss trajectories: 2 regulation pairs + 3 extra pairs. Zero points and injury,
+no premature result; displayed extra pairs [1,1,2,2,3,3]. Final reason 'lot',
+winner seat 0 in this run, explicit Losentscheid text, bracket champion.
+No injected outcomes. Console/page errors: []. Checks final source with
+connection buttons, private hello.resume handling and numbered extra-pair HUD.
+
+NORMAL LAN DUEL REGRESSION: PASS
+.venv/Scripts/python.exe tests/v3_browser_gauntlet.py --standard-balance --expect-friction --inspect-ko-views
+Two rendered 1920x1080 clients on actual LAN IP URL, production friction physics,
+real mouse trajectories. All 10 regulation strokes score2, normal duel draws
+10:10 (winner=-1). Valid brace, replay rewind, injury-material rewind, audio,
+private-token reconnect, rematch/material reset, mirror reset and leave PASS.
+Errors: []. This run did not reach KO; KO verified in three-client tournament.
+Replay paused p95=16.8ms; mixed phases mostly median16.7/p9533.4ms. One183.3ms
+replay-playing interval persists; no blanket60FPS/no-hitch claim.
+
+FINAL UI: PASS
+.venv/Scripts/python.exe tests/tournament_ui_browser.py
+One rendered browser plus19 genuine WebSocket peers: 20-person lobby visible,
+390px lobby/result bounds verified, real withdrawal yields champion, return to
+character lobby works. Duplicate name overlay hidden; narrow result title/body/
+button stay inside390px and tools no longer cover the brand. Errors: [].
+Final layout repeat PASS after the mobile-header correction.
+
+BUILD
+Checked Godot import + release Web export PASS, script/error scan clean.
+Turnier JS/CSS copied into Web build; normal release packaging glob includes
+server/tournament.py and exported frontend files. Raw session logs/captures
+remain ignored; no runtimes, local config or reference files staged.
+
+LIMITS
+All automated clients ran on one Windows PC with the local host. No test on
+20 physical LAN PCs, no 20-client physics/render performance claim, no human
+controls, fairness/balance or art acceptance. Record-driven browser inputs do
+not establish good human controls. Refreshing a cold 3D client can take longer
+than a warm socket reconnect; grace remains a fixed 30 seconds.
+Host reset deliberately cancels without a champion; host restart loses brackets.
+Existing release v0.14 predates this feature; source and local Web build updated.

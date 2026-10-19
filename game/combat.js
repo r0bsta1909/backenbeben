@@ -125,6 +125,7 @@ async function fetchClip(id){
 function frame(now){
  const dt=Math.min(.1,(now-lastFrame)/1000);lastFrame=now;
  const active=!!state&&document.body.classList.contains('playing');
+ if(!active){drag=false;rotate=false;inspectPractice=false;inspectPose=false;window.netArm=null;}
  panel.hidden=!active||!ownTurn();replayPanel.hidden=!active||state.phase!=='replay';
  document.body.classList.toggle('replaying',active&&state.phase==='replay');
  if(active){
@@ -186,7 +187,7 @@ function frame(now){
  }
  const progress=drag?Math.min(1,length/.23):0;
  if(ownTurn()&&!inspectPractice&&now-(window.lastPoseSent||0)>80){window.lastPoseSent=now;sendAction({action:'pose',x:mouse[0],y:mouse[1],progress,tilt:pitch});}
- window.handPose=JSON.stringify({active:ownTurn(),arm:inspectPractice&&state.practice_pose?(inspectTilt!==state.practice_pose.tilt&&practicePreview?.practice_id===state.practice_id?practicePreview.arm:state.practice_pose):window.netArm||null,dragging:drag,camera:inspectPose?'side':'front'});
+ window.handPose=JSON.stringify({active:ownTurn(),arm:inspectPractice&&state?.practice_pose?(inspectTilt!==state.practice_pose.tilt&&practicePreview?.practice_id===state.practice_id?practicePreview.arm:state.practice_pose):window.netArm||null,dragging:drag,camera:inspectPose?'side':'front'});
  if(active&&clip?.id===state.replay_id&&(['impact','replay'].includes(state.phase)||(state.phase==='over'&&clip.ko))){
    const t=state.phase==='over'?2.8:state.phase==='replay'?replayT:clamp((now-phaseStart)/1000,0,2.8);
    const publishKey=[t,state.phase,camera,showContact].join(':');

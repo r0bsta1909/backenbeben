@@ -1,6 +1,6 @@
 # BACKENBEBEN
 
-Ein experimentelles 3D-Slap-Fighting-Spiel für private LAN-Duelle im Browser.
+Ein experimentelles 3D-Slap-Fighting-Spiel für private LAN-Duelle und Turniere im Browser.
 Godot rendert die Arena; ein lokaler Python-Host verwaltet Regeln, Physik und Matches.
 Der Look orientiert sich an kantiger Comicgrafik und dem ursprünglichen XIII.
 
@@ -34,6 +34,14 @@ Das [Kampfmodell](docs/COMBAT_MODEL.txt) trennt bleibende Gesichtsverletzungen,
 Benommenheit und Gesamtbelastung. Gültige Schläge erhalten 0–10 Punkte; der erste
 Treffer kann einen frischen Spieler nicht ausschalten. Benommenheit erholt sich
 nach vollständigen Schlagpaaren. Ohne KO entscheiden die Punkte, Gleichstand ist Remis.
+
+Der [Turniermodus](docs/TOURNAMENT.txt) unterstützt 2–20 Spieler mit zufälliger
+Auslosung, automatischen Freilosen und genau einem Sieger. Über „Turnier erstellen“
+einen Code teilen, beitreten lassen und starten. Weitere Runden entstehen automatisch.
+Im Turnier gibt es bei Gleichstand bis zu drei zusätzliche Schlagpaare, danach einen
+ausgewiesenen Losentscheid. Jeder neue Kampf beginnt unverletzt.
+Der Turniermodus gehört zum aktuellen Quellstand; das verlinkte V14-Releasepaket
+ist älter. Im lokalen Projekt wurde der Webbuild neu erstellt.
 
 Standardkampf, KO, Replay-Rücklauf, Wiedereinstieg und Revanche sind mit zwei
 Browserclients geprüft. Das Hostpaket wurde außerhalb des Projekts mit frischer

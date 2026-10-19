@@ -8,4 +8,4 @@ or the third-party visual references in the workspace root.
 Use the user's XIII-inspired concept sheets as the visual target. A successful
 export or automated test does not prove understandable controls or good art.
 Keep human gameplay acceptance separate from technical validation.
-Do not implement deferred tournaments, ElevenLabs, or advertising yet.
+Tournaments authorized by the user on 2026-10-19. ElevenLabs and advertising remain deferred.

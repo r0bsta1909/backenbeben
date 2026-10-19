@@ -8,6 +8,7 @@ from face_damage import healthy_face,check_character_version
 from face_effects import build_face_effects
 from contact_v3 import score as v3_score, input_target, collision as arm_collision, decorate as decorate_arm
 from arm import Arm, DT, lab_collision
+from tournament import Tournament, decision as match_decision
 
 def bot_stroke():
     return {'version':3,'points':[[.19+.34*i/60,.60,800*i/60,0,-18,0] for i in range(61)]}
@@ -27,6 +28,7 @@ from tissue import simulate
 from concurrent.futures import ProcessPoolExecutor
 ROOT = Path(__file__).resolve().parents[1]
 ROOMS, CLIENTS, REPLAYS = {}, {}, {}
+TOURNAMENTS = {}
 POOL = None
 PHYSICS_BACKEND = 'legacy'
 SETTINGS = dict(DEFAULTS)
@@ -84,10 +86,12 @@ def public(room):
 
 async def broadcast(room):
     state=public(room)
+    state['tournament']=room.get('tournament')
+    state['tournament_match']=room.get('tournament_match')
     for uid in list(room['members']):
         c=CLIENTS.get(uid)
-        if c and not c['ws'].closed:
-            try: await c['ws'].send_json({'type':'state', 'you':room['members'].index(uid), 'state':state})
+        if c and c.get('room')==room['id'] and not c['ws'].closed:
+            try: await c['ws'].send_json({'type':'state', 'you':next(i for i,p in enumerate(room['players']) if p['id']==uid), 'state':state})
             except ConnectionError: pass
 
 
@@ -97,6 +101,30 @@ def event(room, kind, **kwargs):
 
 
 async def leave(c):
+    tid=c.pop('tournament',None)
+    if tid in TOURNAMENTS:
+        tournament=TOURNAMENTS[tid]
+        room=ROOMS.get(c.get('room'))
+        if room and room['phase']=='over' and room['winner']>=0:
+            tournament.finish(room['tournament_match'],room['players'][room['winner']]['id'],room['result_reason'])
+        tournament.withdraw(c['id'])
+        room=ROOMS.get(c.get('room'))
+        if room and room.get('tournament'):
+            # Keep seat order stable for the opponent and turn completed walkovers
+            # into ordinary result screens; no pending solve may apply damage.
+            if room['phase']!='over':
+                winner=tournament.match(room['tournament_match'])['winner']
+                room['winner']=next((i for i,p in enumerate(room['players']) if p['id']==winner),-1)
+                room['result_reason']='forfeit';room['phase']='over';room['deadline']=0
+                room['release_at']=time.monotonic()+6
+                if 'solve' in room:room['solve'].cancel()
+                await broadcast(room)
+            c['room']=None
+            await broadcast_tournament(tournament)
+            if not any(x.get('tournament')==tid for x in CLIENTS.values()):TOURNAMENTS.pop(tid,None)
+            return
+        await broadcast_tournament(tournament)
+        if not any(x.get('tournament')==tid for x in CLIENTS.values()):TOURNAMENTS.pop(tid,None)
     room=ROOMS.get(c.get('room'))
     c['room']=None
     if not room: return
@@ -107,6 +135,60 @@ async def leave(c):
         event(room,'disconnect',text='Gegner hat das Duell verlassen. Zur Lobby für ein neues Duell.')
         await broadcast(room)
     else: ROOMS.pop(room['id'],None)
+
+
+async def broadcast_tournament(t):
+    snapshot=t.public()
+    for entry in snapshot['entries']:
+        c=CLIENTS.get(entry['id'])
+        entry['connected']=bool(c and not c['ws'].closed)
+    for c in list(CLIENTS.values()):
+        if c.get('tournament')==t.id and not c['ws'].closed:
+            try:await c['ws'].send_json(dict(type='tournament',you=c['id'],tournament=snapshot,in_match=c.get('room') in ROOMS))
+            except ConnectionError:pass
+
+
+async def schedule_tournaments(now):
+    for room in list(ROOMS.values()):
+        if room.get('tournament') and room['phase']=='over':
+            t=TOURNAMENTS.get(room['tournament'])
+            if 'release_at' not in room:
+                room['release_at']=now+6
+                if t and room['winner']>=0:
+                    t.finish(room['tournament_match'],room['players'][room['winner']]['id'],room['result_reason'])
+                    await broadcast_tournament(t)
+            if now>=room['release_at']:
+                for uid in room['members']:
+                    c=CLIENTS.get(uid)
+                    if c and c.get('room')==room['id']:c['room']=None
+                ROOMS.pop(room['id'],None)
+                if t:await broadcast_tournament(t)
+    for t in list(TOURNAMENTS.values()):
+        if t.status!='running':continue
+        changed=False
+        for m in t.rounds[-1]:
+            if m['status']!='ready':continue
+            clients=[CLIENTS.get(uid) for uid in m['players']]
+            if any(not c or c['ws'].closed or c.get('room') in ROOMS for c in clients):continue
+            a,b=clients
+            r=new_room(a,False)
+            r.update(tournament=t.id,tournament_match=m['id'],tie_lot=secrets.randbelow(2))
+            # All rounds share the settings frozen when the tournament started.
+            r['settings']=dict(t.settings);r['revision']=t.revision
+            r['players'].append(fighter(b));r['members'].append(b['id']);b['room']=r['id']
+            r['first']=secrets.randbelow(2);r['turn']=r['first'];r['turn_id']=1
+            r['phase']='aim';r['deadline']=now+r['settings']['turn_seconds']
+            m.update(status='playing',room=r['id']);changed=True
+            await broadcast(r)
+        if changed:await broadcast_tournament(t)
+
+
+def character(c,d):
+    check_character_version(d)
+    c['name']=str(d.get('name','CHALLENGER')).strip()[:18] or 'CHALLENGER'
+    for key,maximum in [('skin',6),('hair',2),('shirt',3),('hair_style',5),('face_style',5),('beard_style',5),('beard_color',2)]:
+        value=d.get(key,1 if key=='beard_style' else 0)
+        c[key]=max(0,min(maximum,int(value))) if isinstance(value,(int,float)) and math.isfinite(value) else 0
 
 
 def start_braced_solve(room):
@@ -122,13 +204,30 @@ def start_braced_solve(room):
 
 async def command(c, d):
     action=d.get('action')
+    if action in ('tournament_create','tournament_join'):
+        if c.get('tournament') or c.get('room') in ROOMS:raise ValueError('Zuerst das aktuelle Spiel oder Turnier verlassen.')
+        character(c,d)
+        if action=='tournament_create':
+            code=secrets.token_hex(3).upper()
+            while code in TOURNAMENTS:code=secrets.token_hex(3).upper()
+            t=Tournament(code,c['id'],c['name']);TOURNAMENTS[code]=t
+        else:
+            code=str(d.get('code','')).strip().upper()
+            t=TOURNAMENTS.get(code)
+            if not t:raise ValueError('Turniercode nicht gefunden.')
+            t.add(c['id'],c['name'])
+        c['tournament']=t.id
+        await broadcast_tournament(t);return
+    if action=='tournament_start':
+        t=TOURNAMENTS.get(c.get('tournament'))
+        if not t:raise ValueError('Kein Turnier ausgewählt.')
+        if any(CLIENTS[uid]['ws'].closed for uid in t.entries):raise ValueError('Ein Teilnehmer verbindet sich noch. Bitte warten.')
+        t.start(c['id']);t.settings=dict(SETTINGS);t.revision=REVISION
+        await broadcast_tournament(t);await schedule_tournaments(time.monotonic());return
     if action=='join':
         check_character_version(d)
         await leave(c)
-        c['name']=str(d.get('name','CHALLENGER')).strip()[:18] or 'CHALLENGER'
-        for key, maximum in [('skin',6),('hair',2),('shirt',3),('hair_style',5),('face_style',5),('beard_style',5),('beard_color',2)]:
-            value=d.get(key,1 if key=='beard_style' else 0)
-            c[key]=max(0,min(maximum,int(value))) if isinstance(value,(int,float)) and math.isfinite(value) else 0
+        character(c,d)
         training=d.get('mode')=='training'
         room=next((r for r in ROOMS.values() if r['phase']=='waiting' and not r['training']),None) if not training else None
         if room:
@@ -221,7 +320,7 @@ async def command(c, d):
             text=['War das alles?','Noch wach.','Küsschen!'][idx]
             if room['players'][me]['damage']>55: text=['Wa… da… alles?','Mmpf.','Kü… au.'][idx]
             event(room,'emote',player=me,emote=idx,text=text); await broadcast(room)
-    elif action=='rematch' and room['phase']=='over':
+    elif action=='rematch' and room['phase']=='over' and not room.get('tournament'):
         ready=room.setdefault('ready',[])
         if me not in ready: ready.append(me)
         if room['training'] or len(ready)==2:
@@ -242,20 +341,23 @@ async def socket_handler(request):
     ws=web.WebSocketResponse(max_msg_size=24576, heartbeat=20)
     await ws.prepare(request)
     token=request.query.get('resume','')
-    old=CLIENTS.get(token)
+    if len(token)!=64 or any(ch not in '0123456789abcdef' for ch in token):token=''
+    # Public bracket/player IDs must never serve as reconnection credentials.
+    old=next((c for c in CLIENTS.values() if token and secrets.compare_digest(c.get('resume_token',''),token)),None)
     if old and old.get('expires',time.monotonic()+1)>time.monotonic():
         previous_ws=old['ws'];c=old;uid=c['id'];c['ws']=ws;c.pop('expires',None)
         if not previous_ws.closed:await previous_ws.close()
     else:
-        uid=secrets.token_hex(16);c=dict(id=uid,ws=ws,room=None,name='CHALLENGER',skin=0,hair=0,shirt=0)
+        uid=secrets.token_hex(16);c=dict(id=uid,resume_token=secrets.token_hex(32),ws=ws,room=None,name='CHALLENGER',skin=0,hair=0,shirt=0)
         CLIENTS[uid]=c
-    await ws.send_json({'type':'hello','id':uid})
+    await ws.send_json({'type':'hello','id':uid,'resume':c['resume_token']})
     room=ROOMS.get(c.get('room'))
     if room:
         if room.get('suspended') and all(not CLIENTS[m]['ws'].closed for m in room['members'] if m in CLIENTS):
             phase,remaining=room.pop('suspended');room['phase']=phase;room['deadline']=time.monotonic()+remaining
             if room.get('brace') is not None:room['brace']=room['deadline']-room.pop('_brace_offset',0)
         await broadcast(room)
+    if c.get('tournament') in TOURNAMENTS:await broadcast_tournament(TOURNAMENTS[c['tournament']])
     recent=[]
     try:
         async for msg in ws:
@@ -274,11 +376,12 @@ async def socket_handler(request):
             c['expires']=time.monotonic()+30
             room=ROOMS.get(c.get('room'))
             if room:
-                if room['phase']!='disconnected':
+                if room['phase'] not in ('disconnected','over'):
                     room['suspended']=(room['phase'],max(0,room['deadline']-time.monotonic()))
                     if room.get('brace') is not None:room['_brace_offset']=room['deadline']-room['brace']
-                room['phase']='disconnected'
+                    room['phase']='disconnected'
                 await broadcast(room)
+            if c.get('tournament') in TOURNAMENTS:await broadcast_tournament(TOURNAMENTS[c['tournament']])
     return ws
 
 
@@ -290,6 +393,7 @@ async def tick(app):
         for uid,c in list(CLIENTS.items()):
             if c.get('expires',now+1)<now:
                 await leave(c);CLIENTS.pop(uid,None)
+        await schedule_tournaments(now)
         for r in list(ROOMS.values()):
             phase=r['phase']
             if phase=='aim' and r['players'][r['turn']]['bot'] and r['deadline']-now < r['settings']['turn_seconds']-2.0:
@@ -351,9 +455,9 @@ async def tick(app):
                 await broadcast(r)
             elif phase=='recover' and now>=r['deadline']:
                 recover_after_turn(r['players'],r['hits'],r['settings'])
-                if r['hits']>=int(r['settings']['max_pairs'])*2:
-                    a,b=r['players'];r['winner']=0 if a['points']>b['points'] else 1 if b['points']>a['points'] else -1
-                    r['result_reason']='draw' if r['winner']<0 else 'points'
+                decision=match_decision(r)
+                if decision is not None:
+                    r['winner'],r['result_reason']=decision
                     r['phase']='over';r['deadline']=0;event(r,'decision',text='Unentschieden' if r['winner']<0 else 'Punkteentscheidung')
                     record(dict(kind='result',match=r['match_id'],winner=r['winner'],first=r['first'],reason=r['result_reason']))
                 else:
@@ -396,7 +500,11 @@ def admin_command(text):
             if k not in RANGES or not isinstance(v,(int,float)) or not math.isfinite(v) or not RANGES[k][0]<=v<=RANGES[k][1]:raise ValueError('Ungültiges Preset')
         SETTINGS.update(saved);REVISION+=1;return 'Preset geladen. Gilt ab dem nächsten Match.'
     if args[0]=='reset':
-        for r in ROOMS.values():r['phase']='disconnected';r['deadline']=0;event(r,'disconnect',text='Host hat die Runde beendet. Bitte zurück zur Lobby.')
+        for t in TOURNAMENTS.values():
+            if t.status in ('waiting','running'):t.status='cancelled'
+        for r in ROOMS.values():
+            r['phase']='disconnected';r['deadline']=0;event(r,'disconnect',text='Host hat die Runde beendet. Bitte zurück zur Lobby.')
+            if r.get('tournament'):r.update(phase='over',winner=-1,result_reason='cancelled',release_at=time.monotonic())
         return 'Laufende Matches beendet.'
     raise ValueError('Unbekannter Befehl. help zeigt die Befehle.')
 
@@ -408,6 +516,7 @@ async def admin(request):
         d=await request.json();reply=admin_command(str(d.get('command','')))
         if str(d.get('command','')).strip()=='reset':
             for r in ROOMS.values():await broadcast(r)
+            for t in TOURNAMENTS.values():await broadcast_tournament(t)
         return web.json_response({'reply':reply})
     except (ValueError,TypeError,OSError) as e:return web.json_response({'reply':str(e)},status=400)
 
@@ -495,6 +604,7 @@ def main():
                 try:print(admin_command(text),flush=True)
                 except Exception as e:print(str(e),flush=True)
                 for r in ROOMS.values():await broadcast(r)
+                for t in TOURNAMENTS.values():await broadcast_tournament(t)
             def reader():
                 while True:
                     try:text=input('balance> ')

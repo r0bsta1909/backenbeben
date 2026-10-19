@@ -42,7 +42,9 @@ Lobby → Charakter wählen → Platz am Pult → kurzer Münzwurf → abwechsel
 → Treffer lesen → gegebenenfalls provozieren → KO oder Punkteentscheidung → Revanche.
 Erster Prototyp: 3 Schlagpaare. Bei Gleichstand ein zusätzliches Paar.
 Die Eröffnung wechselt zwischen Revanchen; Erstschlagvorteil wird gemessen.
-Später: 4–8 Personen im Turnier, jeweils zwei aktiv, andere als Zuschauer.
+Stand 2026-10-19: 2–20 Personen im LAN-K.-o.-Turnier, zufällige Auslosung und
+automatische Freilose. Kämpfe pro Runde parallel, genau ein Sieger; Details
+in TOURNAMENT.txt. Ausgeschiedene verfolgen den Baum; Live-Zuschauen bleibt offen.
 Weltmeisterschaft entsteht zunächst durch Inszenierung und LAN-Turnierbaum.
 Länderwahl rein kosmetisch; keine nationalen Attributboni.
 
@@ -147,7 +149,8 @@ Startspieler, Ergebnis, Parameterrevision und Netzwerkzeiten.
 MVP UND SPÄTER
 MVP: ein Pult, ein Kopf mit Varianten, ein Arm, ein Duell, drei Emotes,
 vier Schadensstufen plus KO, Spiegel, LAN-Join und Adminparameter.
-Später: Turnier, Zuschauer, Replays, weitere Köpfe, Arenawechsel, Kommentatoren.
+Später: Live-Zuschauer, weitere Köpfe, Arenawechsel, Kommentatoren.
+Turnier auf ausdrücklichen Nutzerauftrag 2026-10-19 umgesetzt.
 Keine Karriere, Accounts oder Matchmaking für den ersten spielbaren Stand.
 
 GAUNTLET-LOOP — UMSETZUNGSPLAN, NOCH KEIN IMPLEMENTIERUNGSAUFTRAG
