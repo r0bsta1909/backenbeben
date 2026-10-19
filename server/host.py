@@ -2,7 +2,7 @@
 import argparse, asyncio, copy, json, math, secrets, socket, time, webbrowser, ipaddress
 from pathlib import Path
 from aiohttp import web, WSMsgType
-from rules import DEFAULTS, RANGES, apply_hit
+from rules import DEFAULTS, RANGES, apply_hit, fresh_combat, strike_points, head_motion, recover_after_turn
 from body import collapse_track
 from face_damage import healthy_face,check_character_version
 from face_effects import build_face_effects
@@ -57,7 +57,7 @@ def fighter(client=None, bot=False):
                 shirt=client['shirt'] if client else 0, hair_style=client.get('hair_style',0) if client else 0,
                 face_style=client.get('face_style',0) if client else 0, beard_style=client.get('beard_style',1) if client else 1,
                 beard_color=client.get('beard_color',0) if client else 0,
-                damage=0., stun=0., side='L', zones={'L':0.,'R':0.}, face_damage=healthy_face(), fouls=0, points=0, bot=bot)
+                **fresh_combat(), side='L', zones={'L':0.,'R':0.}, face_damage=healthy_face(), fouls=0, points=0, bot=bot)
 
 
 def new_room(client, training):
@@ -67,7 +67,7 @@ def new_room(client, training):
     room=dict(id=rid, players=[fighter(client)], members=[client['id']], phase='waiting',
               turn=0, turn_id=0, hits=0, event={}, event_id=0, match_id=MATCHES,
               settings=dict(SETTINGS), revision=REVISION, deadline=0., brace=None,
-              emote_used=False, training=training, winner=-1, first=0, practice_done=False, replay_id=None)
+              emote_used=False, training=training, winner=-1, result_reason='', first=0, practice_done=False, replay_id=None)
     if training:
         room['players'].append(fighter(bot=True))
         room['phase']='aim'; room['turn_id']=1
@@ -79,7 +79,7 @@ def new_room(client, training):
 
 def public(room):
     now=time.monotonic()
-    return {k: room[k] for k in ('id','players','phase','turn','turn_id','hits','event','event_id','match_id','winner','training','revision')} | {'remaining':max(0.,room['deadline']-now),'max_pairs':room['settings']['max_pairs'], 'windup_seconds':WINDUP_SECONDS, 'brace_window_ms':room['settings']['brace_window_ms'], 'brace_used':room['brace'] is not None, 'brace_result':room.get('brace_result',''), 'practice_done':room.get('practice_done',False), 'replay_id':room.get('replay_id'), 'replay_skip':room.get('replay_skip',[]), 'diagnosis':room.get('diagnosis',''), 'practice_pose':room.get('practice_pose') if room.get('practice_done') else None, 'practice_id':room.get('practice_id') if room.get('practice_done') else None}
+    return {k: room[k] for k in ('id','players','phase','turn','turn_id','hits','event','event_id','match_id','winner','result_reason','training','revision')} | {'remaining':max(0.,room['deadline']-now),'max_pairs':room['settings']['max_pairs'], 'windup_seconds':WINDUP_SECONDS, 'brace_window_ms':room['settings']['brace_window_ms'], 'brace_used':room['brace'] is not None, 'brace_result':room.get('brace_result',''), 'practice_done':room.get('practice_done',False), 'replay_id':room.get('replay_id'), 'replay_skip':room.get('replay_skip',[]), 'diagnosis':room.get('diagnosis',''), 'practice_pose':room.get('practice_pose') if room.get('practice_done') else None, 'practice_id':room.get('practice_id') if room.get('practice_done') else None}
 
 
 async def broadcast(room):
@@ -227,10 +227,10 @@ async def command(c, d):
         if room['training'] or len(ready)==2:
             global MATCHES
             MATCHES+=1; room['match_id']=MATCHES; room['settings']=dict(SETTINGS);room['revision']=REVISION
-            for p in room['players']: p['damage']=0.;p['stun']=0.;p['zones']={'L':0.,'R':0.};p['face_damage']=healthy_face();p['fouls']=0;p['points']=0
+            for p in room['players']: p.update(fresh_combat());p['zones']={'L':0.,'R':0.};p['face_damage']=healthy_face();p['fouls']=0;p['points']=0
             room['practice_done']=False;room['replay_id']=None;room['diagnosis']=''
             room['first']=1-room['first'];room['turn']=room['first'];room['turn_id']+=1
-            room['hits']=0;room['winner']=-1;room['phase']='aim';room['ready']=[]
+            room['hits']=0;room['winner']=-1;room['result_reason']='';room['phase']='aim';room['ready']=[]
             room['deadline']=now+room['settings']['turn_seconds'];event(room,'start')
             await broadcast(room)
         else: await c['ws'].send_json({'type':'notice','text':'Revanche angefragt – warte auf den Gegner.'})
@@ -308,15 +308,6 @@ async def tick(app):
                     r['solve']=asyncio.get_running_loop().run_in_executor(POOL,simulate,r['pending'],True)
                     r['phase']='resolving';await broadcast(r);continue
                 r['pending'].update(clip.get('score_update',{}))
-                before=copy.deepcopy(r['players'])
-                damage,ko=apply_hit(p,r['pending'],r['settings'],braced)
-                attacker=r['players'][r['turn']]
-                if r['pending'].get('foul'):
-                    attacker['fouls']+=1
-                    if attacker['fouls']>=2:r['winner']=target
-                elif r['pending']['hit']:attacker['points']+=round(damage,2)
-                if ko:r['winner']=r['turn']
-                r['hits']+=1;r['emote_used']=False;r['diagnosis']=r['pending']['diagnosis']
                 if braced:
                     if clip.get('head_response',{}).get('model')=='passive-yaw-after-anchored-contact':
                         from head_response import yaw_state
@@ -326,13 +317,24 @@ async def tick(app):
                         response['braced']=True
                     elif clip.get('head_response',{}).get('model')!='coupled-yaw-through-contact-and-tail':
                         for frame in clip['frames']:frame[0]=round(frame[0]*.65,5)
+                before=copy.deepcopy(r['players'])
+                motion,yaw=head_motion(clip)
+                damage,ko=apply_hit(p,r['pending'],r['settings'],braced,motion)
+                awarded=strike_points(r['pending'])
+                attacker=r['players'][r['turn']]
+                if r['pending'].get('foul'):
+                    attacker['fouls']+=1
+                    if attacker['fouls']>=2:r['winner']=target;r['result_reason']='disqualification'
+                else:attacker['points']+=awarded
+                if ko:r['winner']=r['turn'];r['result_reason']='ko'
+                r['hits']+=1;r['emote_used']=False;r['diagnosis']=r['pending']['diagnosis']
                 rid=secrets.token_hex(10);r['replay_id']=rid;r['replay_skip']=[]
                 clip.update(id=rid,target=target,attacker=r['turn'],before=before,after=copy.deepcopy(r['players']),
-                            turn=r['turn_id'],braced=braced,ko=ko,body_frames=collapse_track(ko),contact_class=r['pending']['contact_class'])
+                            turn=r['turn_id'],braced=braced,ko=ko,body_frames=collapse_track(ko,direction=(1 if yaw>0 else -1) if abs(yaw)>1e-9 else (1 if r['pending']['side']=='L' else -1),lean=.30+.08*motion),head_motion=motion,awarded_points=awarded,contact_class=r['pending']['contact_class'])
                 clip['face_effects']=build_face_effects(before[target],r['players'][target],r['pending'],clip)
                 REPLAYS[rid]=clip
                 while len(REPLAYS)>32:REPLAYS.pop(next(iter(REPLAYS)))
-                event(r,'hit',target=target,damage=damage,quality=r['pending']['quality'],braced=braced,
+                event(r,'hit',target=target,damage=damage,points=awarded,ko_value=p['ko_value'],head_motion=motion,quality=r['pending']['quality'],braced=braced,
                       side=r['pending']['side'],ko=ko,foul=r['pending'].get('foul',False),diagnosis=r['diagnosis'],replay_id=rid)
                 record(dict(kind='hit',room=r['id'],match=r['match_id'],turn=r['turn_id'],revision=r['revision'],
                             attacker=r['turn'],scored={k:v for k,v in r['pending'].items() if k not in ('path','arm_path')},damage=damage,braced=braced,solve_ms=clip['solve_ms']))
@@ -344,16 +346,17 @@ async def tick(app):
             elif phase=='replay' and now>=r['deadline']:
                 if r['winner']>=0:
                     r['phase']='over';r['deadline']=0
-                    record(dict(kind='result',match=r['match_id'],winner=r['winner'],first=r['first'],reason='ko_or_foul'))
+                    record(dict(kind='result',match=r['match_id'],winner=r['winner'],first=r['first'],reason=r['result_reason']))
                 else:r['phase']='recover';r['deadline']=now+2.3
                 await broadcast(r)
             elif phase=='recover' and now>=r['deadline']:
+                recover_after_turn(r['players'],r['hits'],r['settings'])
                 if r['hits']>=int(r['settings']['max_pairs'])*2:
                     a,b=r['players'];r['winner']=0 if a['points']>b['points'] else 1 if b['points']>a['points'] else -1
-                    r['phase']='over';r['deadline']=0;event(r,'decision',text='Punkteentscheidung')
-                    record(dict(kind='result',match=r['match_id'],winner=r['winner'],first=r['first'],reason='points'))
+                    r['result_reason']='draw' if r['winner']<0 else 'points'
+                    r['phase']='over';r['deadline']=0;event(r,'decision',text='Unentschieden' if r['winner']<0 else 'Punkteentscheidung')
+                    record(dict(kind='result',match=r['match_id'],winner=r['winner'],first=r['first'],reason=r['result_reason']))
                 else:
-                    for p in r['players']:p['stun']=max(0,p['stun']-r['settings']['recovery'])
                     r['turn']=1-r['turn'];r['turn_id']+=1;r['phase']='aim';r['practice_done']=False;r['diagnosis']='';r['deadline']=now+r['settings']['turn_seconds']
                     event(r,'turn')
                 await broadcast(r)

@@ -30,6 +30,11 @@ Das Paket enthält die freigegebene Arena: gemalte Halle und
 Publikum, ein 3D-Podest mit gepolstertem Tisch und verteilten Werbemotiven.
 Spiel und Replay nutzen dieselbe Kulisse wie die Designvorschau. Treffer-Nahaufnahme, KO-Begleitkamera und kompakte Replay-Anzeigen sind enthalten.
 
+Das [Kampfmodell](docs/COMBAT_MODEL.txt) trennt bleibende Gesichtsverletzungen,
+Benommenheit und Gesamtbelastung. Gültige Schläge erhalten 0–10 Punkte; der erste
+Treffer kann einen frischen Spieler nicht ausschalten. Benommenheit erholt sich
+nach vollständigen Schlagpaaren. Ohne KO entscheiden die Punkte, Gleichstand ist Remis.
+
 Standardkampf, KO, Replay-Rücklauf, Wiedereinstieg und Revanche sind mit zwei
 Browserclients geprüft. Das Hostpaket wurde außerhalb des Projekts mit frischer
 Python-Umgebung getestet und der GitHub-Download per SHA256 abgeglichen.

@@ -66,18 +66,24 @@ Keine freie Ausweichbewegung im MVP: Gesicht und Trefferbereich bleiben lesbar.
 Beide Mechaniken werden als Spielregeln entworfen, nicht als Sport-Simulation.
 
 DAS GESICHT ALS HEALTH-ANZEIGE
-Intern zwei getrennte Zustände: bleibende Beschädigung und kurzzeitige Benommenheit.
-Beschädigung verändert Wangen, Augenlider, Lippen und Kiefer; Benommenheit zeigt
-sich durch Blickverlust, verzögertes Blinzeln, Kopfhaltung und Atmung.
-KO tritt bei klarer Benommenheitsschwelle ein. Bleibende Verletzungen senken
-die Reserve begrenzt. Sichtbare Eskalation muss vor dem KO warnen.
-Keine Zahlen oder Health-Balken im normalen Match; Diagnosewerte im Adminmodus.
+Stand19.10.2026: Drei getrennte Zustände gemäß freigegebenem Kampfmodell:
+regionale, bleibende Gesichtsverletzungen; teilweise erholbare Benommenheit;
+anhaltende Gesamtbelastung durch empfangene Treffer. Gesichtsverletzungen allein
+entscheiden keinen KO. Die gelöste Kontaktwirkung und gespeicherte Kopfbewegung
+bestimmen Benommenheit; Gesamtbelastung erhöht die KO-Anfälligkeit begrenzt.
+Erholung nur nach vollständigen Schlagpaaren, nie durch langes Replay-Warten.
+Ersttrefferschutz für frische Spieler; keine zufällige KO-Wahrscheinlichkeit.
+Qualitative Anzeige STABIL / ANGESCHLAGEN / KRITISCH / KO. Keine numerische
+Gesundheitsanzeige und kein Health-Balken im normalen Match. Öffentliche
+Schlagwertung separat0–10; sichtbare Verletzungseffekte geben keine Bonuspunkte.
+Details und abgestimmte Formeln: docs/COMBAT_MODEL.txt.
 
 Stufe 0: klare Augen, symmetrischer Mund, selbstsichere Haltung.
 Stufe 1: Rötung, kleine Schramme, leichtes Zucken.
 Stufe 2: dunkler Bluterguss, dicke Lippe, asymmetrische Wange.
 Stufe 3: zugeschwollenes Augenlid, aufgerissene Braue, lockerer Kiefer.
-Stufe 4: deutliche Kieferfehlstellung, instabiler Blick, kurz vor dem KO.
+Stufe 4: deutliche Kieferfehlstellung und schwere lokale Verletzungen.
+Diese Verletzungsstufen sind nicht mit dem separaten KO-Zustand gleichzusetzen.
 Kieferbruch als spätes stilisiertes Schadensereignis: Pose, Sprache und Emotes
 verändern sich. Keine zusätzliche anatomische Simulation erforderlich.
 Verletzungen nicht nur über Farbe codieren: Form, Animation und Ton helfen bei

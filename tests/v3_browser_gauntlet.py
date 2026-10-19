@@ -155,7 +155,8 @@ async def main():
                 health_clip=await (await a.request.get(url+'/api/replay/'+sa['replay_id'])).json()
                 for moment,key in [(0.9,'after'),(0.2,'before')]:
                     player=health_clip[key][health_clip['target']]
-                    expected=[min(1,player['zones'].get(side,0)/75) for side in ['L','R']]+[max(0,min(1,(player['damage']-50)/40))]
+                    jaw=max(player.get('face_damage',{}).get('bones',{}).get(name,{}).get('fracture',0.) for name in ('mandible_L','mandible_R','mandible_center')) if 'face_damage' in player else max(0,min(1,(player['damage']-50)/40))
+                    expected=[min(1,player['zones'].get(side,0)/75) for side in ['L','R']]+[jaw]
                     await a.locator('#replaySeek').evaluate('(e,t)=>{e.value=t;e.dispatchEvent(new Event("input",{bubbles:true}))}',moment)
                     try:
                         await a.wait_for_function('(wanted)=>godotStats.face_injury?.every((v,i)=>Math.abs(v-wanted[i])<1e-5)',arg=expected,timeout=3000)

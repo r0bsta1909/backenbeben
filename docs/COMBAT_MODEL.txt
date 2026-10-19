@@ -1,0 +1,85 @@
+BACKENBEBEN — SCHADEN, SCHLAGWERTUNG UND KO / 19.10.2026
+
+Freigegebener Entwurf: drei getrennte Wirkungsebenen; deterministischer KO;
+0–10 Punkte je Schlag; Ersttrefferschutz; fünf vollständige Schlagpaare.
+Maßgeblicher Code: server/rules.py, server/host.py, server/body.py.
+
+ZUSTÄNDE
+face_damage: regionale Wunden, Schwellung, Knochen und16 einzelne Zähne.
+Bleibt bestehen. Blutmenge, Zahnverlust oder ein Bruch lösen keinen KO-Bonus aus.
+damage: bisherige kumulierte Verletzungsmenge für Darstellung/Kompatibilität,
+begrenzt auf120. Kein direkter KO- oder Punktewert mehr.
+stun: akute Benommenheit, maximal120; erholt sich teilweise.
+load: Gesamtbelastung durch gültige Treffer, maximal100; erholt sich im Match nicht.
+received_hits: nur gültige Treffer mit positiver Wirkung; keine Proben/Fouls/Misses.
+knocked_out: endgültige KO-Entscheidung bis zur Revanche.
+
+TREFFERBERECHNUNG
+q = auf0..1 begrenzte, autoritativ gelöste Kontaktqualität. Das bestehende
+Kontaktmodell berücksichtigt übertragenen Normalimpuls, Kontaktfläche und
+Kontaktklasse. Es gibt weiterhin keine vom Client behaupteten Treffer/Verletzungen.
+Eine erfolgreiche Abwehr wird bereits in der Kontakt-/Kopfantwort berücksichtigt.
+Zusätzlich gilt der bisherige einstellbare Schutzfaktor für Verletzungswirkung.
+
+D = base_damage * q * (1 - brace_reduction bei erfolgreicher Abwehr)
+Standard: base_damage35, brace_reduction0,35. Miss/Foul/q0 ergibt D0.
+Neue Gesamtbelastung = min(100, alte Gesamtbelastung +0,75*D).
+Neue Benommenheit = min(120, alte Benommenheit + D*(1,2+0,4*H)).
+H = begrenzte räumliche Winkelauslenkung des Kopfes in den ersten300ms nach
+Kontakt, relativ zum Anfang des gespeicherten Clips;0,20rad entsprechen H1.
+Alle drei gespeicherten Eulerachsen zählen. Ältere Clips verwenden ihre Yawspur.
+H liegt0..1; die stärkste Auslenkung liefert zugleich die Fallrichtung.
+Diese Parameter sind Spielkalibrierung. Keine Bewertung aus Replay-Kamera,
+Bildrate, Maushardware, zufälligem Würfeln oder Verletzungseffekt-Anzahl.
+Gespeicherte Benommenheit/Belastung und KO-Wert werden auf0,001 gerundet.
+
+KO
+KO-Wert = Benommenheit +0,4*Gesamtbelastung; Standardgrenze100.
+Ein weiterer gültiger Treffer löst KO aus, sobald die Grenze erreicht ist UND
+der Spieler zuvor mindestens einen gültigen Treffer empfangen hatte.
+Der erste gültige Treffer eines frischen Spielers darf somit nie KO auslösen,
+auch bei administrativ abgesenkter Grenze. Er kann trotzdem kritisch machen.
+Fouls und Misses können diesen Schutz nicht verbrauchen oder einen KO auslösen.
+Die Entscheidung fällt beim Kontakt. Fallanimation/Replay folgen danach;
+ein ausgeschalteter Spieler bekommt keinen weiteren Angriff.
+Fallspur bleibt gespeichert und rückwärts exakt abspielbar. Zwei seitliche
+Varianten folgen dem Vorzeichen der gelösten Kopfdrehung (sonst Trefferseite),
+die Vorneigung variiert begrenzt mit H. Füße/Knie und Auffänger bleiben angebunden.
+
+ERHOLUNG UND WARNUNG
+Nach jedem abgeschlossenen Schlagpaar verlieren beide Spieler standardmäßig12
+Benommenheit, mindestens0. Keine Erholung durch langes Warten oder Pausieren.
+Gesamtbelastung und sämtliche Gesichtsverletzungen bleiben unverändert.
+KO-Wert/KO-Grenze ergibt den Warnzustand:
+<45% STABIL,45–<75% ANGESCHLAGEN, ab75% KRITISCH; endgültiger KO separat.
+Im normalen Spiel qualitative Warntexte, schwerere Lider und ein leichter
+instabiler Stand während der Erholung. Keine numerische Gesundheitsleiste.
+Die Erholungspose wird vor der nächsten gelösten Armbewegung entfernt.
+Exakte Werte bleiben im Hostzustand für Diagnose und Replay erhalten.
+
+WERTUNG UND SPIELENDE
+Gültig: round-half-up(10*q), mindestens1/maximal10; q0 bleibt0.
+Streifer maximal4, Fingerspitzen maximal3. Miss und Foul0.
+Punkte hängen nicht von D, Gesamtverletzungen oder Effektzahl ab. Die zusätzliche
+brace_reduction wird nicht noch einmal auf Punkte angewendet; eine tatsächlich
+veränderte Kontaktqualität durch Abwehr kann die Wertung verändern.
+Ohne KO gewinnt nach5 vollständigen Schlagpaaren die höhere Gesamtwertung.
+Gleichstand ist Remis. Kein Verletzungs-Tiebreak und kein Zufallsentscheid.
+Zweites Foul bleibt Disqualifikation. Ergebnisgrund ist separat ko/points/draw/
+disqualification. Revanche setzt alle Kampfzustände und Punkte zurück, wechselt
+das Erstschlagrecht und behält nur die frei gewählte kosmetische Erscheinung.
+Replay zeigt die damals gespeicherten Zustände; Punkte wechseln am Kontakt,
+Gesichtsverletzungen setzen sich wie bisher kurz danach sichtbar. Zurückspulen
+setzt HUD und Darstellung zurück, ohne die echte Matchwertung zu verändern.
+
+PARAMETER UND BEISPIELPROFILE
+recovery bedeutet jetzt Erholung PRO PAAR, Standard12 statt früher6 pro Zug.
+Bestehende Presets behalten ihre Zahlen: ein geladenes recovery6 gibt nun6 pro
+Paar. Für den Standard set recovery12 verwenden. Laufende Matches behalten
+wie bisher den beim Start kopierten Parametersatz.
+Synthetische, immer gleiche Regelprofile ohne Abwehr, jeweils mit Paar-Erholung:
+q/H0,2: kein KO in5 empfangenen Treffern; q/H0,55: KO beim5.; q/H1: KO beim2.
+Das sind Grenz-/Kalibrierungsbeispiele, keine Behauptung über beliebige Mauszüge.
+Echte wiederholte Schläge müssen ihre Kontaktgeometrie jedes Mal neu lösen.
+Menschliche Balance-/Steuerungsabnahme und Test auf zwei physischen PCs bleiben
+separat. Nach Aktualisierung Host neu starten und beide Browser neu laden.

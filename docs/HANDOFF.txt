@@ -2816,3 +2816,37 @@ Raw logs/captures ignored. No host rules, schema, approved arena/table/face art 
 Hoenhorst changed. Human controls/art acceptance and second physical LAN-PC open.
 Details validation/RENDER_PREPARATION_REPLAY_POOLING_2026-10-19.txt.
 Three final real two-client character/emote combinations PASS errors[].
+
+2026-10-19 / APPROVED THREE-LAYER COMBAT MODEL IMPLEMENTED
+User approved separate permanent regional wounds, recoverable stun and persistent
+load; deterministic KO/first-hit protection;0-10 quality points; five full pairs.
+rules.py keeps aggregate damage only for legacy/visual consumers. Dose D retains
+existing brace reduction; load+=.75D cap100; stun+=D*(1.2+.4H) cap120. H is bounded
+first300ms recorded 3-axis head-angle excursion, .20rad=>1 (legacy yaw fallback).
+KO value=stun+.4load, default100; requires a prior positive valid received hit.
+No automatic KO/points from broken teeth, blood, bone state or cumulative damage.
+Recovery is now12 once per complete pair; load/wounds remain. Existing recovery6
+presets now mean6 per pair, not per turn. Documented migration; no local config edit.
+Quality score half-up10q, positive hit min1; glance cap4/tips3; foul/miss0. Points
+are not damage or gore. Same solved quality gives same score across appearances.
+Host result_reason separates ko/disqualification/points/draw; rematch resets all
+new combat fields and flips first striker. No post-KO counterattack permitted.
+Recorded fall uses head-yaw sign/lean; both catcher supports verified in native
+arena_match. Qualitative warning/points HUD; no health meter. Idle recovery sway
+clears before the next solved arm. Heavy lids persist in replay and while paused.
+HUD uses before/after score snapshots at contact, survives server broadcasts on
+reverse seek; unchanged label/attribute writes skipped.390px HUD overflow fixed.
+202 Python tests PASS (13 new boundary/recovery/score/motion/identity regressions).
+Actual mouse standard duel PASS10hits, points1/2/2/2/2/2/2/2/2/2, winner1,
+brace/resume/reverse/audio/rematch/mirror/errors[]. New standard-settings real
+protocol KO test with faces1/4 PASS:5total hits, awarded6/5/7/6/8points; losing
+fighter's third received hit raises KO value111.878. Same fixed path on face0 is
+weak2/10, so do not assume any fixed mouse path is equally strong for all faces.
+New browser test checks pair recovery, replay stun/load/HUD, KO reset, fresh
+short all-miss2-pair draw0:0 and390px HUD bounds; no injected outcomes.11 final
+native suites PASS, including critical replay lids/paused stability/exact arm reset.
+Host/contact, character14, gesture3 and face/effect schemas1 retain compatibility;
+restart host and reload both clients after update. Human balance/controls/art
+acceptance and a second physical LAN machine remain open.
+Specification docs/COMBAT_MODEL.txt; validation/COMBAT_MODEL_2026-10-19.txt.
+Final two-client1080p idle/contact/injured median16.7ms,p9516.8ms; paused bridge and severe effects Web fixture PASS errors[]. Own testhost8914 stopped after validation.

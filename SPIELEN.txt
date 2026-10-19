@@ -62,9 +62,15 @@ REGELN
 Abwechselnde Schläge, fünf Schlagpaare oder vorheriger KO.
 Eigenes vereinfachtes Regelprofil: Handballen zuerst oder verbotene Trefferzone
 sind Fouls. Erstes Foul: Schlag ohne Spielschaden; zweites Foul: Disqualifikation.
-Fingerspitzen und Streifer haben weniger Wirkung. Gültige Trefferwirkung zählt
-für die Punkteentscheidung. Blutmenge gibt keine Punkte.
-Das Gesicht bleibt die Gesundheitsanzeige. Der neue Gewebesolver erzeugt lokale
+Fingerspitzen und Streifer haben weniger Wirkung. Jeder gültige Schlag erhält
+0–10 Punkte für seine Kontaktqualität; Blut und Zahnverlust geben keinen Bonus.
+Ohne KO entscheidet nach fünf vollständigen Schlagpaaren die höhere Wertung.
+Gleichstand ist Remis. Benommenheit erholt sich nach jedem vollständigen Paar;
+Gesamtbelastung und lokale Verletzungen bleiben. Der erste gültige Treffer kann
+einen frischen Spieler nicht ausschalten. Später entscheidet die Kombination
+aus Benommenheit und Gesamtbelastung. STABIL / ANGESCHLAGEN / KRITISCH warnen
+qualitativ vor dem KO; keine numerische Gesundheitsleiste im normalen Match.
+Das Gesicht zeigt die bleibenden Verletzungen. Der neue Gewebesolver erzeugt lokale
 Eindellung und abklingende Bewegung. Dauerhafte Wunden/Schwellung bleiben separat.
 Replay und Live-Treffer verwenden dieselben vom Host berechneten Zustände.
 Das ist ein vereinfachtes physikbasiertes Modell, keine medizinische Simulation.

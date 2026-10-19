@@ -1,0 +1,96 @@
+BACKENBEBEN — DAMAGE / POINTS / KO MODEL VALIDATION
+2026-10-19
+
+REQUEST AND SCOPE
+Implement the approved three-layer model, deterministic KO/first-hit protection,
+0-10 quality score, pair recovery, visible warning stages and varied recorded fall.
+No TKO, random KO, extra reward for gore or new medical injury simulation.
+Regional face/bone/tooth state and contact solver remain intact. Existing damage
+field retained for visual/legacy compatibility; it is no longer the KO/score sum.
+
+IMPLEMENTATION
+rules.py: fresh_combat, strike_points, head_motion, update_combat_status,
+recover_after_turn and revised apply_hit. Effective dose D remains base_damage*q
+with brace protection. Load+=.75D (cap100), stun+=D*(1.2+.4H) (cap120).
+KO value=stun+.4load; default100, previous valid received hit required.
+H=normalized first300ms recorded head-angle excursion; .20rad saturates at1.
+Zero-damage contacts, fouls and misses cannot consume first-hit protection. Face injuries alone do not
+knock out. Recovery12 only after complete pairs, never by waiting in replays.
+Host snapshots and hit event include authoritative values/awarded points; separate
+result_reason supports ko, disqualification, points and draw. Rematch fully resets.
+Half-up quality points0-10; glances cap4/tips3. No bonus for wound effects and no
+additional score multiplication by brace_reduction. Actual brace contact can still
+change solved quality. No post-KO attack: winner committed at contact; animation/
+replay then result. Fall yaw sign/lean use recorded response; both catcher sides
+are checked geometrically. No whole-body ragdoll added.
+HUD shows points and qualitative stable/dazed/critical/KO status; no health bar.
+Replay rewinds HUD snapshots without changing actual match totals. Integer score
+jumps at contact while injury display settles. Identical HUD values avoid repeated
+DOM writes. Critical idle lids/recover sway are cosmetic, removed before next arm
+solve. Native regression verifies exact restored shoulder/elbow/wrist positions.
+390px result HUD required a wider centre field; final layout gate checks actual
+scroll/client dimensions of all three fields. Other phone UI is not a redesign.
+
+AUTOMATED RULES / SOURCE VALIDATION
+Full Python discovery:202 tests PASS in36.028s, including13 new model regressions.
+New tests: all allowed KO thresholds and first hit; exact equality boundary;
+weak/medium/strong synthetic profiles; brace in all channels; head response vs
+local injury independence; pair recovery preserving wounds/load; misses/fouls;
+0-10 score limits and cosmetic independence for identical solved input; heavy
+face damage without automatic KO; highest threshold150 reachable; warning/reset;
+recorded motion window/sign/legacy yaw; deterministic mirrored KO tracks.
+Synthetic q/H profiles .2/.55/1: no KO in5, KO on5th, KO on2nd received hit.
+These are rule-level calibrations, not guarantees for arbitrary gestures.
+Web import/export PASS. New native composure test PASS; catcher support gaps for
+both roll directions <0.000001 world units in the targeted headless check.
+
+REAL POINTER STANDARD MATCH
+Two independent1920x1080 real browser contexts, production coupled-friction host.
+Ten actual mouse strikes:points[1,2,2,2,2,2,2,2,2,2], winner1, errors[].
+Timed brace, identical replay, receiver reload/resume, injury rewind, audio,
+rematch/mirror reset and lobby leave PASS. Existing jaw rewind test was corrected
+to use authored mandible fracture when face_damage exists, rather than the obsolete
+aggregate-damage fallback. No game assertion was weakened to hide a mismatch.
+
+STANDARD KO / REPLAY / DRAW SCENARIOS
+Two actual rendered contexts, recorded valid production input trajectories; no
+injected damage, points, KO or outcome. Standard settings. Known strong path
+x.19->.53,y.64,350ms,tilt-15, face variants1/4 produces qualities
+.6386/.5122/.7258/.6091/.8005, points6/5/7/6/8.
+KO on5th overall strike (third received by loser), KO value111.878 >=100.
+First received hit on each fighter protected; actual pair-recovery and persistent
+regional wounds checked between turns. Metadata H recomputed from returned clip.
+Before/after seek checks full injury, stun/load and HUD score; waiting through
+server state broadcasts must preserve rewound HUD. Revanche resets match totals,
+first striker swaps, and an all-miss short2-pair scenario must end draw0:0.
+This short draw uses max_pairs2 only; KO scenario keeps every standard setting.
+An earlier same path on face0 resolved as weak2/10 contacts and reached points,
+so it was not relabelled a strong-hit KO test. Geometry affects where to aim;
+there is no claim one fixed mouse path is equally strong for all six identities.
+
+FINAL BUILD REGRESSIONS
+Final standard KO/reset/replay/recovery/draw browser scenario PASS errors[].
+390px HUD measured fields143x78/80x82/143x82; scroll sizes match client sizes.
+Eleven final native suites PASS: ink batch image/rig/draw, character appearance,
+face damage, expression, brow attachment, mouth, normals, rest UV, effects,
+arena match both fall directions and new combat composure/replay/paused lids.
+Final replay-heavy eyelid fix verified natively; full strong match already
+validated the unchanged host decision and wire/HUD model before that display fix.
+Performance and severe-effect browser results appended below.
+Raw reports/screenshots remain ignored under logs/. Source and test commands are
+versioned. No third-party reference media, local config, runtime or raw logs added.
+All tests use one physical PC. Human balance/controls/art acceptance and a second
+physical LAN machine remain separate requirements.
+
+FINAL SEQUENTIAL GATES: COMBAT52_FINAL_ALL_PASS
+idle: client1 median/p95/max 16.7/16.8/16.8ms; client2 median/p95/max 16.7/16.8/33.4ms
+contact: client1 median/p95/max 16.7/16.8/16.8ms; client2 median/p95/max 16.7/16.8/16.8ms
+injured: client1 median/p95/max 16.7/16.8/16.8ms; client2 median/p95/max 16.7/16.8/16.8ms
+Two1920x1080 contexts, RTX3090/ANGLE D3D11, no concurrent own GPU test.
+Paused replay publication/camera/contact invalidation gates PASS; errors[].
+One run and one physical machine, not a universal FPS guarantee.
+Severe visual effect fixture PASS: real host metadata checked, then injected
+11 blood/3 bone/2 crowns;11 landed stains; reverse returns zero effects. This is
+render/replay validation, not an actually played severe match/contact solve.
+Final replay-heavy eyelid regression and both catcher directions PASS. All own
+browser processes close after tests; the isolated testhost is stopped after work.

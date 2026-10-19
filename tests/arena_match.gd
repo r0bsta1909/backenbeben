@@ -40,17 +40,20 @@ func verify() -> void:
 			root.get_texture().get_image().save_png(directory+"/contact-"+str(focus[1])+".png")
 	scene.physics_frame={"id":4,"replay":true,"camera":"ko","ko":true,"body":[.25,.12,.3,.1,1]}
 	scene.drive_recorded_physics()
-	for i in range(2):
-		var actor: Node3D=scene.officials[i]
-		var side: String="L" if i==0 else "R"
-		var index: int=actor.skeleton.find_bone("hand."+side)
-		var rest: Transform3D=actor.skeleton.get_bone_global_rest(index)
-		var pose: Transform3D=actor.skeleton.get_bone_global_pose_override(index)
-		var palm: Vector3=actor.to_global(pose*(rest.affine_inverse()*actor.vector(actor.metadata.arms[side].palm_center)))
-		var gap:=palm-Vector3(actor.get_meta("support_target"))
-		print("KO_SUPPORT_GAP ",i,": ",gap.length())
-		if gap.length()>.01:
-			push_error("KO helper hand lost shoulder support");quit(1);return
+	for roll in [-.07,.07]:
+		scene.physics_frame.body[3]=roll
+		scene.drive_recorded_physics()
+		for i in range(2):
+			var actor: Node3D=scene.officials[i]
+			var side: String="L" if i==0 else "R"
+			var index: int=actor.skeleton.find_bone("hand."+side)
+			var rest: Transform3D=actor.skeleton.get_bone_global_rest(index)
+			var pose: Transform3D=actor.skeleton.get_bone_global_pose_override(index)
+			var palm: Vector3=actor.to_global(pose*(rest.affine_inverse()*actor.vector(actor.metadata.arms[side].palm_center)))
+			var gap:=palm-Vector3(actor.get_meta("support_target"))
+			print("KO_SUPPORT_GAP ",i,": ",gap.length())
+			if gap.length()>.01:
+				push_error("KO helper hand lost shoulder support");quit(1);return
 	await process_frame
 	if not DisplayServer.get_name()=="headless":
 		RenderingServer.force_draw(false)

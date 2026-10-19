@@ -305,6 +305,7 @@ func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 	if root.has_meta("appearance_key") and root.get_meta("appearance_key")==appearance_key:return
 	root.set_character_options(data)
 	root.set_meta("face_focus",clampf(float(data.get("focus",0.0)),0.0,1.0))
+	root.set_meta("combat_pressure",float(data.get("ko_ratio",0.0)))
 	var detailed: bool=data.has("face_damage")
 	var regional_hash: int=data.get("face_damage",{}).hash()
 	var regional_changed: bool=regional_hash!=int(root.get_meta("regional_hash",-1))
@@ -611,11 +612,13 @@ func drive_recorded_physics() -> void:
 		if not replaying:affected=active and ((root==fighter and int(physics_frame.target)!=you) or (root==reflection and int(physics_frame.target)==you))
 		if root==hand:affected=active and not replaying and int(physics_frame.get("target",-1))==you
 		var eye_closure := 0.0 if active else clampf((sin(clock_time*1.1)-.99)*100,0,1)
+		var pressure: float=float(root.get_meta("combat_pressure",0.0))
+		eye_closure=maxf(eye_closure,.24*smoothstep(.35,.95,pressure))
 		var defending: bool = (root==fighter and int(state.get("turn",you))==you) or (root==reflection and int(state.get("turn",you))!=you)
 		if not active and defending and state.get("phase","") in ["windup","resolving"] and state.get("brace_result","")=="ready":
 			eye_closure=.35
 		if affected and bool(physics_frame.get("braced",false)):
-			eye_closure=.35*(1.0-smoothstep(.5,.85,float(physics_frame.get("time",0.0))))
+			eye_closure=maxf(eye_closure,.35*(1.0-smoothstep(.5,.85,float(physics_frame.get("time",0.0)))))
 		if affected and bool(physics_frame.get("ko",false)):
 			eye_closure=maxf(eye_closure,smoothstep(.62,.82,float(physics_frame.get("time",0.0))))
 		if root==reflection and eye_closure!=mirror_eye_closure:
@@ -646,6 +649,9 @@ func drive_recorded_physics() -> void:
 	arena_presentation.sync_camera(camera,not wide_view,wide_view)
 	hand.visible=true
 	hand.first_person(not side_view)
+	for actor in [fighter,hand,reflection]:
+		if actor.has_meta("recover_sway") and (active or state.get("phase","")!="recover"):
+			actor.reset_pose();actor.remove_meta("recover_sway")
 	var defending_view: Node3D=fighter
 	var arm_data: Variant = physics_frame.get("arm") if active else hand_pose.get("arm")
 	if arm_data is Dictionary and arm_data.get("pose") is Dictionary:
@@ -662,6 +668,14 @@ func drive_recorded_physics() -> void:
 			for key in ["finger_direction","palm_normal"]:
 				if pose.has(key):pose[key]=[-float(pose[key][0]),float(pose[key][1]),-float(pose[key][2])]
 			fighter.apply_arm(pose,0.0,float(arm_data.get("tilt",-5)))
+	if not active and state.get("phase","")=="recover":
+		for actor in [fighter,hand,reflection]:
+			var pressure: float=float(actor.get_meta("combat_pressure",0.0))
+			var sway: float=smoothstep(.35,.95,pressure)
+			if sway<=0:continue
+			actor.set_meta("recover_sway",true);actor.has_pose=true
+			actor.apply_collapse([0,0,sway*.035,sin(clock_time*2.2)*sway*.025,0])
+			if actor==reflection and sway>0:mirror_dirty=true
 	update_officials(physics_frame.get("body",[0,0,0,0,0]) if active else [0,0,0,0,0])
 	if active:
 		var body_frame: Array=physics_frame.get("body",[0,0,0,0,0])

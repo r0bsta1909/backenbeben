@@ -2,9 +2,9 @@
 import math
 from face_damage import accumulate_face
 DEFAULTS = {'base_damage': 35.0, 'brace_window_ms': 450.0, 'brace_reduction': .35,
-            'recovery': 6.0, 'ko_threshold': 100.0, 'turn_seconds': 25.0, 'max_pairs': 5.0}
+            'recovery': 12.0, 'ko_threshold': 100.0, 'turn_seconds': 25.0, 'max_pairs': 5.0}
 RANGES = {'base_damage': (5, 45), 'brace_window_ms': (80, 500), 'brace_reduction': (0, .65),
-          'recovery': (0, 15), 'ko_threshold': (60, 150), 'turn_seconds': (5, 60), 'max_pairs': (2, 12)}
+          'recovery': (0, 30), 'ko_threshold': (60, 150), 'turn_seconds': (5, 60), 'max_pairs': (2, 12)}
 
 def score_gesture(data):
     points = data.get('points')
@@ -36,13 +36,78 @@ def score_gesture(data):
     return {'quality': round(quality, 4), 'precision': round(precision, 4),
             'side': 'L' if x < .5 else 'R', 'duration': duration, 'hit': precision > .05}
 
-def apply_hit(player, scored, settings, braced=False):
-    damage = settings['base_damage'] * max(0.,min(1.,scored['quality'])) if scored['hit'] else 0.
-    damage *= 1.-settings['brace_reduction'] if braced else 1.
-    player['damage'] = round(min(120., player['damage'] + damage), 3)
-    player['stun'] = round(min(80., player['stun'] + damage*.55), 3)
-    player['side'] = scored['side']
-    zones = player.setdefault('zones', {'L': 0., 'R': 0.})
-    zones[scored['side']] = round(zones[scored['side']] + damage, 3)
+def fresh_combat():
+    """Independent match-wide state; regional face damage lives elsewhere."""
+    return dict(damage=0., stun=0., load=0., received_hits=0, knocked_out=False,
+                ko_value=0., ko_ratio=0., combat_stage='stable')
+
+
+def strike_points(scored):
+    """0-10 quality points, independent of wound amount and effect generation."""
+    if not scored.get('hit') or scored.get('foul'):return 0
+    quality=max(0.,min(1.,float(scored.get('quality',0.))))
+    if quality<=0:return 0
+    cap={'glance':4,'tips':3}.get(scored.get('contact_class'),10)
+    return min(cap,max(1,math.floor(quality*10.+.5)))
+
+
+def head_motion(clip):
+    """Bounded gameplay signal from the first 300ms of the recorded response.
+
+    No dependence on replay camera, frame delivery speed or cosmetic identity.
+    Returns normalized excursion and the signed dominant yaw for fall direction.
+    """
+    frames=clip.get('head_rotations')
+    if not frames:frames=[[0.,float(f[0]),0.] for f in clip.get('frames',[])]
+    if not frames:return 0.,0.
+    fps=float(clip.get('fps',120));contact=float(clip.get('contact',.5))
+    start=max(0,int(contact*fps));end=min(len(frames),int((contact+.3)*fps)+1)
+    rest=frames[0];peak=0.;yaw=0.
+    for row in frames[start:end]:
+        delta=[float(v)-float(r) for v,r in zip(row,rest)]
+        if len(delta)!=3 or not all(math.isfinite(v) for v in delta):raise ValueError('Invalid head response')
+        excursion=math.sqrt(sum(v*v for v in delta))
+        if excursion>peak:peak=excursion;yaw=delta[1]
+    return min(1.,peak/.20),yaw
+
+
+def update_combat_status(player,settings):
+    value=round(float(player.get('stun',0.))+.4*float(player.get('load',0.)),3)
+    ratio=max(0.,min(1.,value/settings['ko_threshold']))
+    player.update(ko_value=value,ko_ratio=round(ratio,5),combat_stage=(
+        'ko' if player.get('knocked_out',False) else
+        'critical' if ratio>=.75 else 'dazed' if ratio>=.45 else 'stable'))
+
+
+def recover_after_turn(players,completed_strikes,settings):
+    """Once per complete pair, never per wall-clock second or replay frame."""
+    if completed_strikes<=0 or completed_strikes%2:return
+    for player in players:
+        if player.get('knocked_out',False):continue
+        player['stun']=round(max(0.,player.get('stun',0.)-settings['recovery']),3)
+        update_combat_status(player,settings)
+
+
+def apply_hit(player, scored, settings, braced=False, motion=0.):
+    quality=max(0.,min(1.,float(scored.get('quality',0.))))
+    valid=bool(scored.get('hit')) and not scored.get('foul',False) and quality>0
+    damage=settings['base_damage']*quality if valid else 0.
+    damage*=1.-settings['brace_reduction'] if braced else 1.
+    if damage<=0:
+        update_combat_status(player,settings)
+        return 0.,False
+    previous_hits=int(player.get('received_hits',0))
+    player['damage']=round(min(120.,player.get('damage',0.)+damage),3)
+    player['load']=round(min(100.,player.get('load',0.)+damage*.75),3)
+    player['stun']=round(min(120.,player.get('stun',0.)+damage*(1.2+.4*max(0.,min(1.,motion)))),3)
+    player['received_hits']=previous_hits+1
+    player['side']=scored['side']
+    zones=player.setdefault('zones',{'L':0.,'R':0.})
+    zones[scored['side']]=round(zones[scored['side']]+damage,3)
     accumulate_face(player,scored,damage)
-    return round(damage, 2), player['damage'] + player['stun'] >= settings['ko_threshold']
+    update_combat_status(player,settings)
+    # First valid hit can stagger a fresh fighter, but cannot end the duel.
+    ko=previous_hits>=1 and player['ko_value']>=settings['ko_threshold']
+    player['knocked_out']=bool(player.get('knocked_out',False) or ko)
+    update_combat_status(player,settings)
+    return round(damage,2),ko

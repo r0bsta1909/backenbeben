@@ -4,7 +4,7 @@ All samples are host-owned and replayed verbatim in either direction.
 """
 import math
 
-def collapse_track(ko, fps=120, duration=2.8):
+def collapse_track(ko, fps=120, duration=2.8, direction=1., lean=.34):
     frames=[];drop=0.;velocity=0.
     for i in range(round(duration*fps)+1):
         t=i/fps-.5
@@ -14,5 +14,5 @@ def collapse_track(ko, fps=120, duration=2.8):
             velocity+=(1.9-support)/fps
             drop=max(0.,min(.31,drop+velocity/fps))
         progress=min(1.,drop/.25)
-        frames.append([round(drop,6),round(progress*.085,6),round(progress*.34,6),round(progress*.07,6),round(max(0.,min(1.,(t-.22)/.5)) if ko else 0.,6)])
+        frames.append([round(drop,6),round(progress*.085,6),round(progress*max(.26,min(.40,lean)),6),round(progress*.07*(1 if direction>=0 else -1),6),round(max(0.,min(1.,(t-.22)/.5)) if ko else 0.,6)])
     return frames

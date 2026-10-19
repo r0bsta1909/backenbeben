@@ -21,7 +21,7 @@ const style=document.createElement('style');style.textContent=`#posePanel{positi
 const replayLayout=document.createElement('style');
 replayLayout.textContent=`
 body.replaying .bottom,body.replaying .status,body.replaying header .live{display:none}
-body.replaying #scorebug{top:16px;bottom:auto;width:min(540px,44vw);height:48px;grid-template-columns:1fr 90px 1fr}
+body.replaying #scorebug{top:16px;bottom:auto;width:min(540px,44vw);height:78px;grid-template-columns:1fr 90px 1fr}
 body.replaying #scorebug div{font-size:14px;padding:6px 12px;min-width:0;overflow:hidden;text-overflow:ellipsis}
 body.replaying #scorebug small{font-size:8px;letter-spacing:1px}
 body.replaying #replayPanel{bottom:12px;width:min(900px,calc(100vw - 32px));padding:10px 14px;background:#111722f5}
@@ -178,7 +178,7 @@ function frame(now){
       document.getElementById('replaySeek').value=replayT;
       document.getElementById('replayPlay').textContent=playing?'PAUSE':'ABSPIELEN';
       document.getElementById('replayTime').textContent=replayT.toFixed(2)+' s · noch '+Math.ceil(state.remaining)+' s';
-      document.getElementById('replayVerdict').textContent=state.diagnosis;
+      document.getElementById('replayVerdict').textContent='Schlagwertung: '+(clip?.awarded_points??state.event?.points??0)+'/10 · '+state.diagnosis;
       document.getElementById('contactLegend').hidden=!(showContact&&clip&&Math.abs(replayT-clip.contact)<.025&&clip.footprint?.length);
       document.getElementById('replayContact').textContent=showContact?'PUNKTE AN':'PUNKTE AUS';
       document.getElementById('replaySkip').textContent=state.replay_skip.includes(you)?'WARTE AUF GEGNER':'WEITER';
@@ -205,12 +205,13 @@ function frame(now){
    // Only the short settling interval needs an interpolated player snapshot.
    if(t>=clip.contact&&t<clip.contact+.18)motion.display_players=display_players;
    window.physicsMotion=JSON.stringify(motion);window.physicsRevision++;
+   window.combatDisplayPlayers=physicsObject.display_players.map((p,i)=>({...p,points:physicsObject.players[i].points}));window.updateCombatScores?.(window.combatDisplayPlayers);
    diagnosticJSON=null;publishedClip=clip;publishedKey=publishKey;
    window.combatDiagnostics.time=t;window.combatDiagnostics.frame=i;window.combatDiagnostics.deformation=Math.max(...values.slice(2).map(Math.abs))*clip.scale;
    }
    if(state.phase==='impact'&&t>=clip.contact&&!hitSound&&clip.contact_class!=='miss'){hitSound=true;window.contactSound=true;}
  }else if(publishedClip!==null){
-   publishedClip=null;publishedKey='';physicsObject={};diagnosticJSON='{}';
+   publishedClip=null;publishedKey='';physicsObject={};diagnosticJSON='{}';window.combatDisplayPlayers=null;window.updateCombatScores?.(state?.players);
    window.physicsMotion='{}';window.physicsRevision++;
  }
  requestAnimationFrame(frame);
