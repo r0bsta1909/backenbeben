@@ -1,0 +1,82 @@
+CHARACTER RENDER PERFORMANCE / 19.10.2026
+
+PROBLEM AND CHANGE
+Six character instances contain 27 small cloth/hand/collar ink meshes each.
+Their separate draws multiply across lights and shadow passes. The new
+character_ink.gd coalesces only identical material, parent, local transform,
+skin resource, skeleton path, layers, shadow mode and surface format. It copies
+all vertex streams and offsets indices, retaining the actual bone weights.
+Source nodes remain available, hidden and excluded from appearance updates.
+No face, teeth, hair or beard geometry is merged. No LOD, texture reduction,
+shadow removal, arena/table/Hoenhorst change, or character-version change.
+
+Unchanged appearance input no longer resends material and morph values.
+The key includes the full fighter data, first-person visibility, emote state
+and active impact amount. reset_all invalidates it. Blinks/focus and actual
+jaw transforms also avoid identical writes, while recorded motion still owns
+the animated pose. Emote rotation resetting retains its prior schedule.
+
+MEASUREMENTS
+RTX3090, Chromium1243, WebGL2 ANGLE/D3D11, two independent1920x1080 clients.
+Same tests/render_performance.py, fixed production input, same host settings.
+One unchanged baseline, one intermediate and one final optimized run; no ABAB
+study and no portable60FPS guarantee. Frame intervals are not GPU timings.
+
+Median ms, clientA/B                  Before          Final
+Idle                                 33.4/33.5       33.2/16.8
+Paused contact                       33.3/33.3       16.7/16.7
+Paused injured                       33.3/33.3       16.7/16.7
+Idle p95                             50.1/50.1       33.4/33.4
+Paused contact p95                   50.0/33.5       16.8/16.8
+Paused injured p95                   33.4/50.0       16.8/16.8
+Appearance call median, clientA       3.7ms           0.1ms (aim)
+Replay appearance median, clientA     2.3ms           0.1ms
+Appearance measurements cover scheduled updates, not complete frame time.
+
+Same native scene, toggling original/batched lines, no other changes:
+Front draw calls2140->1490; side1683->1230; KO2088->1537.
+Six batches replace162 separate source meshes. Front reduction about30percent.
+Coarser batching can submit a few additional ink triangles at culling edges;
+these measurements do not claim reduced polygon counts or native GPU time.
+
+FINAL VALIDATION
+Web import/export PASS. Ten native suites PASS: character_ink,
+character_appearance, face_damage, face_expression_render,
+face_brow_attachment, face_mouth_render, face_normal_render, face_rest_uv,
+face_effects, arena_match. Includes216 combinations,7skins, damaged teeth,
+first-person/replay perspective switches and cached appearance reset.
+
+Native ink image comparisons use the same posed scene and real shadows.
+Front: no channels differ by more than2/255; side: identical output.
+KO:37 channels differ by more than2/255, max80/255 at a few boundary pixels.
+Batching is not claimed bit-for-bit pixel identical. Gate: fewer than100
+changed channels above2/255 in960x720 RGBA, same vertex counts and rig binding,
+plus strictly fewer actual draw calls in each pose. No geometry simplification.
+
+Three actual two-client character/injury matches and all emotes PASS errors[].
+Full real-mouse standard duel PASS: ten valid hits, same score/winner,
+timed defence, replay injury reverse, recorded replay equality, reload resume,
+audio fallback, rematch and mirror/material reset. Points decision, no KO in
+this particular duel. No claim of a newly played severe fracture match.
+Final severe effect bridge/render fixture PASS errors[]: real host metadata
+checked first, then an explicitly substituted damage fixture. Eleven drops,
+three bone shards, two crowns, landing stains and reverse-to-zero verified.
+
+Full duel frame intervals, primary client, optimized build:
+aim median16.7/p9533.4ms; stroke16.8/33.4; replay playing16.7/33.4;
+striker impact16.7/50.0; receiver impact16.8/50.1ms.
+Receiver impact maximum617.3ms with3 intervals over100ms. Source of those
+isolated stalls not established. They remain an open performance item.
+These natural mouse trajectories differ between runs, so the full duel is
+functional coverage and a current timing sample, not a fixed-input benchmark.
+
+LIMITS AND REPRODUCTION
+Two contexts share one PC; no second physical LAN PC or human art acceptance.
+Host/contact physics and character source geometry are unchanged. No new ZIP.
+Restart older hosts/reload clients after updating the Web build.
+Run the local host, set BACKENBEBEN_TEST_PORT to its port, then:
+  python tests/render_performance.py --clients 2 --output logs/render-check.json
+  Godot --path game --script ../tests/character_ink.gd
+The source requires a fresh Web export before benchmarking.
+Raw timings, screenshots and match records remain ignored under logs/.
+Human visual/gameplay acceptance and universal performance remain open.

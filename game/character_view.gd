@@ -180,11 +180,14 @@ func set_grin(amount: float) -> void:
 
 func set_eye_closure(amount: float) -> void:
 	var closure: float=clampf(amount,0.0,1.0)
-	for index in range(blink_parts.size()):blink_parts[index].set_blend_shape_value(blink_indices[index],closure)
+	for index in range(blink_parts.size()):
+		if blink_parts[index].get_blend_shape_value(blink_indices[index])!=closure:
+			blink_parts[index].set_blend_shape_value(blink_indices[index],closure)
 	update_brow_pose(closure)
 	if is_instance_valid(face_mesh):
 		var focus_index: int=face_mesh.find_blend_shape_by_name("focus")
-		if focus_index>=0:face_mesh.set_blend_shape_value(focus_index,float(get_meta("face_focus",0.0))*(1.0-closure))
+		var focus: float=float(get_meta("face_focus",0.0))*(1.0-closure)
+		if focus_index>=0 and face_mesh.get_blend_shape_value(focus_index)!=focus:face_mesh.set_blend_shape_value(focus_index,focus)
 
 func update_brow_pose(closure: float) -> void:
 	var focus: float=clampf(float(get_meta("face_focus",0.0)),0,1)*(1.0-closure)
@@ -210,9 +213,11 @@ func set_jaw_open(angle: float) -> void:
 	if index<0:return
 	var rest: Transform3D=skeleton.get_bone_rest(index)
 	var axis: Vector3=(skeleton.get_bone_global_rest(index).basis.inverse()*Vector3.RIGHT).normalized()
-	skeleton.set_bone_pose_rotation(index,rest.basis.get_rotation_quaternion()*Quaternion(axis,clampf(angle,-.35,.65)))
+	var rotation: Quaternion=rest.basis.get_rotation_quaternion()*Quaternion(axis,clampf(angle,-.35,.65))
+	if skeleton.get_bone_pose_rotation(index)!=rotation:skeleton.set_bone_pose_rotation(index,rotation)
 	var fracture: float=float(get_meta("jaw_fracture",0.0))
-	skeleton.set_bone_pose_position(index,rest.origin+skeleton.get_bone_global_rest(index).basis.inverse()*Vector3(.00875*fracture,-.003*fracture,0))
+	var position: Vector3=rest.origin+skeleton.get_bone_global_rest(index).basis.inverse()*Vector3(.00875*fracture,-.003*fracture,0)
+	if skeleton.get_bone_pose_position(index)!=position:skeleton.set_bone_pose_position(index,position)
 
 func first_person(enabled: bool) -> void:
 	if enabled==is_first_person:return
@@ -367,6 +372,7 @@ func pose_defender(amount := 1.0) -> void:
 		apply_finger_relax(amount*.45,side)
 
 func reset_all() -> void:
+	if has_meta("appearance_key"):remove_meta("appearance_key")
 	defender_pose_active=false
 	last_defender_pose=[]
 	set_eye_closure(0.0)

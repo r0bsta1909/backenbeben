@@ -28,5 +28,15 @@ func verify() -> void:
 		actor.first_person(true)
 		for i in range(16):
 			if actor.model.find_child("Teeth%02d"%i,true,false).visible:push_error("Own teeth enter first-person camera");quit(1);return
+		# Unchanged appearance data still has to respect a perspective switch,
+		# and reset_all invalidates the cached appearance before restoring a jaw.
+		scene.apply_fighter(actor,damaged,true)
+		actor.first_person(false)
+		scene.apply_fighter(actor,damaged,true)
+		if not actor.model.find_child("Teeth05",true,false).visible:push_error("Appearance cache hides replay tooth");quit(1);return
+		actor.reset_all()
+		if actor.has_meta("appearance_key"):push_error("Reset retained stale appearance cache");quit(1);return
+		scene.apply_fighter(actor,damaged,true)
+		if actor.model.find_child("Teeth03",true,false).visible:push_error("Reset lost cached tooth damage");quit(1);return
 	print("FACE_DAMAGE_PASS: independent teeth; chip/missing/reset; regional rewind; actual jaw hinge; first-person visibility")
 	quit(0)

@@ -2763,3 +2763,24 @@ Final onset/rewind/render check PASS errors[]:1080p RTX3090 median/p95/max
 idle17.6/18.1/36.0ms; contact17.5/18.1/18.1; injured17.5/18.1/24.5.
 Single run, no controlled comparison/general60FPS claim. Own testhost8906
 stopped; unrelated hosts untouched. Human visual/gameplay acceptance remains open.
+
+2026-10-19 / CHARACTER RENDER COST REDUCTION
+User requested profiling/optimization while retaining the look. Runtime batching
+combines27 cloth/hand/collar ink meshes per actor only with identical rig/material/
+transform/render state; all original streams and source nodes retained. Six batches
+replace162 drawsources. Native front drawcalls2140->1490, no polygon simplification.
+Unchanged appearance/morph/jaw writes skipped; perspective/emote/impact included,
+reset invalidates cache. Recorded poses and blinking still update independently.
+Same two-client1080p Web benchmark: paused contact/injury median33.3->16.7ms;
+idle p9550.1->33.4ms. Appearance calls median3.7->.1ms, not whole-frame time.
+Ten native suites, final export, three actual character/emote matches and full
+real-mouse standard duel PASS errors[], including resume/reverse/rematch/mirror.
+Full duel mostly16.7ms median, but impact p95~50ms and isolated617ms stall remain;
+no universal60FPS or second-physical-PC claim. Native KO ink comparison differs
+at37 channels>2/255 (max80), boundary pixels; not bit-identical output.
+Detail/reproduction: validation/CHARACTER_RENDER_PERFORMANCE_2026-10-19.txt.
+Character14/gesture3/damage1 unchanged. No asset rebuild, arena/table/logo change
+or release ZIP. Restart/reload for the new Web code. Raw measurements stay local.
+Final severe effect browser fixture PASS errors[]: real metadata checked before
+substitution,11drops/3shards/2crowns, landing and reverse-to-zero. Own testhost8910
+stopped after completion; no unrelated application or host intentionally stopped.

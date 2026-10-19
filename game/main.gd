@@ -213,6 +213,8 @@ func prepare_materials(root: Node) -> void:
 					physics_materials[root.get_instance_id()].append(outline)
 				node.set_surface_override_material(i, copy)
 				mat_cache[str(node.get_instance_id())+":"+str(i)] = m.resource_name
+	for merged in preload("res://character_ink.gd").batch(root):
+		mat_cache[str(merged.get_instance_id())+":0"]="Ink"
 
 func build_mirror() -> void:
 	var vp := SubViewport.new()
@@ -275,6 +277,10 @@ func head_offset_state(actor: Node3D, parameter := "head_offset") -> Array:
 	return [value.x,value.y,value.z]
 
 func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
+	var emote_active := emote_remaining>0 and ((is_enemy and emote_player!=you) or (not is_enemy and emote_player==you))
+	var appearance_key: int=[data,root.is_first_person,emote_active,emote_kind if emote_active else -1,impact if is_enemy else 0.0].hash()
+	root.rotation=Vector3.ZERO
+	if root.has_meta("appearance_key") and root.get_meta("appearance_key")==appearance_key:return
 	root.set_character_options(data)
 	root.set_meta("face_focus",clampf(float(data.get("focus",0.0)),0.0,1.0))
 	var detailed: bool=data.has("face_damage")
@@ -301,13 +307,13 @@ func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 	root.set_meta("jaw_damage",fractured*.12 if detailed else 0.0)
 	root.set_meta("jaw_fracture",fractured)
 	root.set_jaw_open(root.get_meta("jaw_damage"))
-	var emote_active := emote_remaining>0 and ((is_enemy and emote_player!=you) or (not is_enemy and emote_player==you))
 	root.set_meta("face_alert",.8 if emote_active and emote_kind==1 else 0.0)
 	if root==reflection:
 		var appearance_hash: int=[data,emote_active,emote_kind if emote_active else -1].hash()
 		if appearance_hash!=mirror_appearance_hash:mirror_dirty=true
 		mirror_appearance_hash=appearance_hash
 	for node in root.find_children("*", "MeshInstance3D", true, false):
+		if node.has_meta("ink_batch_source"):continue
 		var n := str(node.name)
 		var tooth_health: float=1.0
 		if n.begins_with("Teeth") and n.substr(5).is_valid_int():
@@ -365,7 +371,7 @@ func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 				if shape=="jaw_broken": amount=clampf((damage-50)/40,0,1)
 				if shape=="cheek_hit_L" and data.get("side","L")=="L": amount=impact if is_enemy else 0
 				if shape=="cheek_hit_R" and data.get("side","L")=="R": amount=impact if is_enemy else 0
-				node.set_blend_shape_value(i,amount)
+				if node.get_blend_shape_value(i)!=amount:node.set_blend_shape_value(i,amount)
 		if n in ["Jaw","Chin","UpperLip","LowerLip","MouthLine","BloodLip","BloodDrip"]:
 			node.position=node.get_meta("base_position")
 		if n.begins_with("Eye") or n.begins_with("Iris") or n.begins_with("Pupil"):
@@ -382,9 +388,9 @@ func apply_fighter(root: Node3D, data: Dictionary, is_enemy: bool) -> void:
 			else:node.rotation.z=0
 		if n.begins_with("Brow"):
 			node.position=node.get_meta("base_position")
-	root.rotation=Vector3.ZERO
 	root.set_meta("regional_hash",regional_hash)
 	root.set_eye_closure(root.face_mesh.get_blend_shape_value(root.blink_index))
+	root.set_meta("appearance_key",appearance_key)
 
 
 func record_cpu(section: String, started: int) -> void:
