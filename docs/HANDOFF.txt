@@ -2784,3 +2784,35 @@ or release ZIP. Restart/reload for the new Web code. Raw measurements stay local
 Final severe effect browser fixture PASS errors[]: real metadata checked before
 substitution,11drops/3shards/2crowns, landing and reverse-to-zero. Own testhost8910
 stopped after completion; no unrelated application or host intentionally stopped.
+
+2026-10-19 / FOUR PERFORMANCE FOLLOW-UPS IMPLEMENTED
+Six first-hit programs mapped to blood-stain shader variants. Actual warmup draws
+now finish behind loading before gameReady/join. New WebGL regression:6 variants
+checked before ready on each of2clients; no new programs after ready during2real
+hits. Cold first complete arena draw23.273s, second context1.156s (includes existing
+scene shaders, not just added work). Do not promise instant cold startup.
+Replay bridge sends clip constants/snapshots once per attachment, motion by
+revision; pause stops republishing/parsing, camera/phase/seek/contact still update.
+Legacy physicsFrame is a lazy full diagnostic snapshot. Exact contact retains
+pre-hit display. Sample45146->27413 JSON characters; paused revisions0; replay
+whole-bridge CPU median .4ms/client. Reload Web clients after installing build.
+Table triangle cache prepared at scene setup; sphere/fragment/quad meshes shared.
+128 debris+144 stain nodes reused; solids have no unused stain. Reset preserves
+pool but clears deposits; actor migration rebuilds world flight.70-clip regression
+keeps272-node bound and verifies mesh sharing/reset reuse/reversible teeth/blood.
+Runtime batching now24 groups from252 sources, adding nails/trousers/shoes to ink.
+All vertex/skin streams preserved. Same-scene front2140->1065draws, side1683->926,
+KO2088->1179. Expanded image test covers ALL groups:3/3/184 channels >2/255 out
+of2073600; KO76 edge/shadow pixels. Not bit-identical; threshold<250 for24batches,
+with unchanged vertex/rig/pose gates (previous ink-only6batch threshold<100).
+Clean-GPU2client1080p run:idle median16.7/p9533.4ms; paused contact/injury median
+16.7/p9516.7-16.8ms. Earlier GPU83-96% Battlefield6 run excluded from clean FPS.
+Full real-pointer standard duel PASS10hits/points, brace/resume/reverse/audio/
+rematch/mirror reset/errors[]. Impact median16.7,p9533.4,max66.9/83.3ms; no impact
+interval>100ms. One116.8ms replay-playing interval remains; not all hitches fixed.
+Web export,10 native suites plus final expanded batch test, new shader regression,
+extended paused bridge benchmark and severe visual effect fixture PASS.
+Raw logs/captures ignored. No host rules, schema, approved arena/table/face art or
+Hoenhorst changed. Human controls/art acceptance and second physical LAN-PC open.
+Details validation/RENDER_PREPARATION_REPLAY_POOLING_2026-10-19.txt.
+Three final real two-client character/emote combinations PASS errors[].

@@ -43,7 +43,14 @@ let inspectTilt=-18,practicePreview=null,previewSent='',previewChanged=0,preview
 window.onPracticePreview=d=>{if(inspectPractice&&d.practice_id===state.practice_id&&d.turn_id===state.turn_id&&d.tilt===inspectTilt)practicePreview=d;};
 let yaw=0,pitch=-18,depth=0,mouse=[.19,.60],points=[],drag=false,rotate=false,start=0,length=0,previous=mouse.slice(),lastSend=0;
 let phaseKey='',phaseStart=0,clip=null,loading='',replayT=0,playing=true,speed=.25,showContact=true,camera='front',lastFrame=performance.now(),hitSound=false;
-window.physicsFrame='{}';window.handPose='{}';window.combatDiagnostics={};
+// Static clip data crosses the engine bridge once; paused frames are immutable.
+let publishedClip=null,publishedKey='',physicsObject={},diagnosticJSON=null;
+window.physicsRevision=0;window.physicsClipRevision=0;
+window.physicsClip='{}';window.physicsMotion='{}';
+Object.defineProperty(window,'physicsFrame',{configurable:true,get(){
+ return diagnosticJSON??(diagnosticJSON=JSON.stringify(physicsObject));
+}});
+window.handPose='{}';window.combatDiagnostics={};
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const ownTurn=()=>state?.phase==='aim'&&state.turn===you;
 function xy(e){const r=canvas.getBoundingClientRect();return [clamp((e.clientX-r.left)/r.width,0,1),clamp((e.clientY-r.top)/r.height,0,1)];}
@@ -182,14 +189,30 @@ function frame(now){
  window.handPose=JSON.stringify({active:ownTurn(),arm:inspectPractice&&state.practice_pose?(inspectTilt!==state.practice_pose.tilt&&practicePreview?.practice_id===state.practice_id?practicePreview.arm:state.practice_pose):window.netArm||null,dragging:drag,camera:inspectPose?'side':'front'});
  if(active&&clip?.id===state.replay_id&&(['impact','replay'].includes(state.phase)||(state.phase==='over'&&clip.ko))){
    const t=state.phase==='over'?2.8:state.phase==='replay'?replayT:clamp((now-phaseStart)/1000,0,2.8);
+   const publishKey=[t,state.phase,camera,showContact].join(':');
+   if(publishedClip!==clip||publishedKey!==publishKey){
+   if(publishedClip!==clip){
+     window.physicsClip=JSON.stringify({id:clip.id,face_effects:clip.face_effects||{},side_cage:clip.side_cage||{},contact:clip.contact,crowd_hit:clip.contact_class!=='miss'&&(clip.impact_speed_m_s||0)>.05,ko:!!clip.ko,braced:!!clip.braced,target:clip.target,contact_focus:clip.position||[.25,.1,.25],before:clip.before,after:clip.after});
+     window.physicsClipRevision++;
+   }
    const fi=Math.min(clip.frames.length-1,t*clip.fps),i=Math.floor(fi),j=Math.min(i+1,clip.frames.length-1),f=fi-i;
    const values=clip.frames[i].map((v,k)=>v+(clip.frames[j][k]-v)*f);
    const headOffset=clip.head_positions?clip.head_positions[i].map((v,k)=>v+(clip.head_positions[j][k]-v)*f):[0,0,0];
    const headRotation=clip.head_rotations?clip.head_rotations[i].map((v,k)=>v+(clip.head_rotations[j][k]-v)*f):[0,values[0],0];
-   window.physicsFrame=JSON.stringify({face_effects:clip.face_effects||{},head_rotation:headRotation,head_offset:headOffset,id:clip.id,time:t,contact:clip.contact,crowd_hit:clip.contact_class!=='miss'&&(clip.impact_speed_m_s||0)>.05,side_cage:clip.side_cage||{},head:values[0],jaw:values[1],offsets:values.slice(2).map(v=>v*clip.scale),ko:!!clip.ko,braced:!!clip.braced,body:clip.body_frames?.[Math.min(clip.body_frames.length-1,Math.floor(t*clip.fps))]||[0,0,0,0,0],target:clip.target,players:t<clip.contact?clip.before:clip.after,display_players:displayPlayersAt(clip,t),hand:handAt(t),arm:armAt(t),replay:state.phase==='replay',camera,contact_focus:clip.position||[.25,.1,.25],footprint:showContact&&state.phase==='replay'&&Math.abs(t-clip.contact)<.025?clip.footprint:[]});
+   physicsObject={face_effects:clip.face_effects||{},head_rotation:headRotation,head_offset:headOffset,id:clip.id,time:t,contact:clip.contact,crowd_hit:clip.contact_class!=='miss'&&(clip.impact_speed_m_s||0)>.05,side_cage:clip.side_cage||{},head:values[0],jaw:values[1],offsets:values.slice(2).map(v=>v*clip.scale),ko:!!clip.ko,braced:!!clip.braced,body:clip.body_frames?.[Math.min(clip.body_frames.length-1,Math.floor(t*clip.fps))]||[0,0,0,0,0],target:clip.target,players:t<clip.contact?clip.before:clip.after,display_players:displayPlayersAt(clip,t),hand:handAt(t),arm:armAt(t),replay:state.phase==='replay',camera,contact_focus:clip.position||[.25,.1,.25],footprint:showContact&&state.phase==='replay'&&Math.abs(t-clip.contact)<.025?clip.footprint:[]};
+   const {face_effects,side_cage,contact,crowd_hit,ko,braced,target,contact_focus,players,display_players,...motion}=physicsObject;
+   motion.after=t>=clip.contact;
+   // Only the short settling interval needs an interpolated player snapshot.
+   if(t>=clip.contact&&t<clip.contact+.18)motion.display_players=display_players;
+   window.physicsMotion=JSON.stringify(motion);window.physicsRevision++;
+   diagnosticJSON=null;publishedClip=clip;publishedKey=publishKey;
    window.combatDiagnostics.time=t;window.combatDiagnostics.frame=i;window.combatDiagnostics.deformation=Math.max(...values.slice(2).map(Math.abs))*clip.scale;
+   }
    if(state.phase==='impact'&&t>=clip.contact&&!hitSound&&clip.contact_class!=='miss'){hitSound=true;window.contactSound=true;}
- }else window.physicsFrame='{}';
+ }else if(publishedClip!==null){
+   publishedClip=null;publishedKey='';physicsObject={};diagnosticJSON='{}';
+   window.physicsMotion='{}';window.physicsRevision++;
+ }
  requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);

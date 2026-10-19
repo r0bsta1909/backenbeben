@@ -63,6 +63,27 @@ async def main():
                         '(e,t)=>{e.value=t;e.dispatchEvent(new Event("input",{bubbles:true}));return +e.value}',time)
                     await page.wait_for_function('(t)=>Math.abs(godotStats.physics_time-t)<.00001',arg=actual)
                 await measure(label)
+            # A paused replay publishes neither dynamic frames nor repeated metadata.
+            report['bridge'] = []
+            for page in pages:
+                before=await page.evaluate('({r:physicsRevision,c:physicsClipRevision,s:physicsClip,m:physicsMotion})')
+                await page.evaluate('()=>new Promise(r=>{let n=0;function tick(){if(++n===30)r();else requestAnimationFrame(tick)}requestAnimationFrame(tick)})')
+                after=await page.evaluate('({r:physicsRevision,c:physicsClipRevision,s:physicsClip,m:physicsMotion})')
+                assert before==after,'Paused bridge kept publishing'
+                data=await page.evaluate('({full:JSON.parse(physicsFrame),motion:JSON.parse(physicsMotion),clip:JSON.parse(physicsClip),fullBytes:physicsFrame.length,motionBytes:physicsMotion.length,warm:renderWarmup})')
+                assert data['warm']['complete']
+                assert data['full']['id']==data['clip']['id']==data['motion']['id']
+                assert 'side_cage' not in data['motion'] and 'face_effects' not in data['motion']
+                assert data['motionBytes']<data['fullBytes']
+                await page.locator('#replayCamera').select_option('side')
+                await page.wait_for_function('(r)=>physicsRevision>r',arg=after['r'])
+                assert await page.evaluate('physicsClipRevision')==after['c'],'Camera resent static clip'
+                await page.wait_for_function('JSON.parse(physicsMotion).camera==="side"')
+                r=await page.evaluate('physicsRevision')
+                await page.locator('#replayContact').click()
+                await page.wait_for_function('(r)=>physicsRevision>r',arg=r)
+                await page.locator('#replayCamera').select_option('front')
+                report['bridge'].append(dict(full_bytes=data['fullBytes'],motion_bytes=data['motionBytes'],paused_revisions=0,warmup=data['warm']))
             report['cpu'] = []
             for page in pages:
                 await page.evaluate('window.profileCPURead=true')

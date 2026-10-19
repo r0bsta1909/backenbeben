@@ -2,6 +2,11 @@ extends Node3D
 
 var pending_hit: Dictionary = {}
 var physics_frame: Dictionary = {}
+var bridge_revision := -1
+var bridge_clip_revision := -1
+var bridge_clip: Dictionary = {}
+var bridge_state_raw := ""
+var bridge_pose_raw := ""
 var hand_pose: Dictionary = {}
 var contact_marks: Array = []
 var physics_materials: Dictionary = {}
@@ -77,6 +82,7 @@ func _ready() -> void:
 	build_mirror()
 	build_officials()
 	face_effects=Node3D.new();face_effects.set_script(load("res://face_effects.gd"));add_child(face_effects)
+	face_effects.prepare(arena_stage)
 	slap_audio = AudioStreamPlayer.new()
 	slap_audio.stream = load("res://assets/slap.wav")
 	slap_audio.volume_db = -7
@@ -104,7 +110,23 @@ func _ready() -> void:
 	layer.add_child(burst)
 	burst.visible = false
 	if OS.has_feature("web"):
+		set_process(false)
+		await warmup_rendering()
+		set_process(true)
 		JavaScriptBridge.eval("window.gameReady=true; window.dispatchEvent(new Event('game-ready'));")
+
+func warmup_rendering() -> void:
+	# Real draws under the arena lights compile stain base/depth/additive variants.
+	# Loading stays visible and joining stays disabled until these draws complete.
+	var began:=Time.get_ticks_msec()
+	var nodes: Array[MeshInstance3D]=face_effects.warmup_nodes()
+	for i in range(3):
+		await get_tree().process_frame
+		await RenderingServer.frame_post_draw
+	for i in range(nodes.size()):face_effects.recycle(nodes[i],i<2)
+	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	JavaScriptBridge.eval("window.renderWarmup="+JSON.stringify({"complete":true,"ms":Time.get_ticks_msec()-began}))
 
 func new_character(parent: Node = self) -> Node3D:
 	var view := Node3D.new()
@@ -214,7 +236,7 @@ func prepare_materials(root: Node) -> void:
 				node.set_surface_override_material(i, copy)
 				mat_cache[str(node.get_instance_id())+":"+str(i)] = m.resource_name
 	for merged in preload("res://character_ink.gd").batch(root):
-		mat_cache[str(merged.get_instance_id())+":0"]="Ink"
+		mat_cache[str(merged.get_instance_id())+":0"]=merged.mesh.surface_get_material(0).resource_name
 
 func build_mirror() -> void:
 	var vp := SubViewport.new()
@@ -418,7 +440,12 @@ func _process(delta: float) -> void:
 		var bridge_started: int=Time.get_ticks_usec() if profile_cpu else 0
 		js_timer=0
 		var raw=JavaScriptBridge.eval("window.renderState || '{}'",true)
-		var parsed=JSON.parse_string(str(raw))
+		var parsed: Variant=null
+		if str(raw)!=bridge_state_raw:
+			bridge_state_raw=str(raw)
+			parsed=JSON.parse_string(bridge_state_raw)
+		else:
+			parsed={"state":state,"you":you} if not state.is_empty() else {}
 		if parsed is Dictionary and parsed.has("state"):
 			state=parsed.state;you=int(parsed.you)
 			if int(state.match_id)!=last_match:
@@ -430,10 +457,26 @@ func _process(delta: float) -> void:
 				last_event=int(state.event_id)
 				process_event(state.event)
 		else:state={}
-		var frame_data=JSON.parse_string(str(JavaScriptBridge.eval("window.physicsFrame || '{}'",true)))
-		physics_frame=frame_data if frame_data is Dictionary else {}
-		var pose_data=JSON.parse_string(str(JavaScriptBridge.eval("window.handPose || '{}'",true)))
-		hand_pose=pose_data if pose_data is Dictionary else {}
+		var revision:=int(JavaScriptBridge.eval("window.physicsRevision || 0",true))
+		if revision!=bridge_revision:
+			bridge_revision=revision
+			var clip_revision:=int(JavaScriptBridge.eval("window.physicsClipRevision || 0",true))
+			if clip_revision!=bridge_clip_revision:
+				bridge_clip_revision=clip_revision
+				bridge_clip=JSON.parse_string(str(JavaScriptBridge.eval("window.physicsClip || '{}'",true)))
+			var frame_data: Dictionary=JSON.parse_string(str(JavaScriptBridge.eval("window.physicsMotion || '{}'",true)))
+			physics_frame={}
+			if frame_data.has("id"):
+				physics_frame=bridge_clip.duplicate()
+				physics_frame.merge(frame_data,true)
+				physics_frame.players=bridge_clip.after if frame_data.after else bridge_clip.before
+				if not frame_data.has("display_players"):physics_frame.display_players=physics_frame.players
+				physics_frame.erase("before");physics_frame.erase("after")
+		var pose_raw:=str(JavaScriptBridge.eval("window.handPose || '{}'",true))
+		if pose_raw!=bridge_pose_raw:
+			bridge_pose_raw=pose_raw
+			var pose_data: Variant=JSON.parse_string(pose_raw)
+			hand_pose=pose_data if pose_data is Dictionary else {}
 		if bool(JavaScriptBridge.eval("window.contactSound || false",true)):
 			play_sound(slap_audio,"slap")
 			show_impact(pending_hit)

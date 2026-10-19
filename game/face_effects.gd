@@ -20,19 +20,62 @@ var last_time:=0.0
 var blood_material: StandardMaterial3D
 var bone_material: StandardMaterial3D
 var stain_material: ShaderMaterial
+var blood_mesh: SphereMesh
+var bone_mesh: ArrayMesh
+var stain_mesh: QuadMesh
+var node_pool: Array[MeshInstance3D]=[]
+var stain_pool: Array[MeshInstance3D]=[]
 
 func _ready() -> void:
 	blood_material=StandardMaterial3D.new();blood_material.albedo_color=Color("a51e32");blood_material.roughness=.48
 	bone_material=StandardMaterial3D.new();bone_material.albedo_color=Color("eee0b9");bone_material.roughness=.78
 	stain_material=ShaderMaterial.new();stain_material.shader=load("res://blood_stain.gdshader")
+	blood_mesh=SphereMesh.new();blood_mesh.radius=1.0;blood_mesh.height=2.0;blood_mesh.radial_segments=8;blood_mesh.rings=4
+	bone_mesh=fragment_mesh();stain_mesh=QuadMesh.new();stain_mesh.size=Vector2.ONE
+
+func pooled_node(stain: bool) -> MeshInstance3D:
+	var pool: Array[MeshInstance3D]=stain_pool if stain else node_pool
+	var node: MeshInstance3D=pool.pop_back() if not pool.is_empty() else MeshInstance3D.new()
+	if node.get_parent()==null:add_child(node)
+	node.transform=Transform3D.IDENTITY;node.hide()
+	node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	if stain:node.mesh=stain_mesh;node.material_override=stain_material
+	return node
+
+func recycle(node: MeshInstance3D, stain: bool=false) -> void:
+	if node==null:return
+	node.hide();node.transform=Transform3D.IDENTITY
+	if not stain:node.mesh=null;node.material_override=null
+	var pool: Array[MeshInstance3D]=stain_pool if stain else node_pool
+	if pool.size()<(LIMIT+48 if stain else LIMIT+32):pool.append(node)
+	else:node.queue_free()
+
+func prepare(stage: Node3D) -> void:
+	cache_table_collision(stage)
+	# Bound capacities: current burst plus persistent deposits from prior hits.
+	while node_pool.size()<LIMIT+32:
+		var node:=MeshInstance3D.new();add_child(node);node.hide();node_pool.append(node)
+	while stain_pool.size()<LIMIT+48:
+		var node:=MeshInstance3D.new();add_child(node);node.hide();stain_pool.append(node)
+
+func warmup_nodes() -> Array[MeshInstance3D]:
+	var nodes: Array[MeshInstance3D]=[]
+	for i in range(2):
+		var node:=pooled_node(true);node.position=Vector3((i-.5)*.4,-.7,.8)
+		node.rotation.x=-PI/2;node.scale=Vector3.ONE*.2;node.show();nodes.append(node)
+	for mesh in [blood_mesh,bone_mesh]:
+		var node:=pooled_node(false);node.mesh=mesh
+		node.material_override=blood_material if mesh==blood_mesh else bone_material
+		node.position=Vector3(0,-.4,.9);node.scale=Vector3.ONE*.06;node.show();nodes.append(node)
+	return nodes
 
 func reset_all() -> void:
 	for entry in entries:
-		entry.node.queue_free();entry.stain.queue_free()
+		recycle(entry.node);recycle(entry.stain,true)
 		if is_instance_valid(entry.actor):
 			entry.actor.face_mesh.get_surface_override_material(0).set_shader_parameter("new_bleeding",PackedFloat32Array([0.,0.,0.,0.,0.,0.,0.,0.]))
-	for node in stains:node.queue_free()
-	for node in settled:node.queue_free()
+	for node in stains:recycle(node,true)
+	for node in settled:recycle(node)
 	entries.clear();stains.clear();settled.clear();clip_id="";bound_actor_id=0;last_time=0.0
 	tooth_cache.clear()
 	metrics={"blood":0,"bone":0,"tooth":0,"tooth_chip":0,"stains":0}
@@ -125,17 +168,14 @@ func tooth_mesh(actor: Node3D, event: Dictionary) -> Mesh:
 	tooth_cache[key]=detached;return detached
 
 func create_entry(event: Dictionary, actor: Node3D) -> Dictionary:
-	var node:=MeshInstance3D.new();add_child(node)
+	var node:=pooled_node(false)
 	var kind: String=event.kind
 	if kind=="tooth":node.mesh=tooth_mesh(actor,event)
-	elif kind=="blood":
-		var sphere:=SphereMesh.new();sphere.radius=1.0;sphere.height=2.0;sphere.radial_segments=8;sphere.rings=4;node.mesh=sphere
-	else:node.mesh=fragment_mesh()
+	elif kind=="blood":node.mesh=blood_mesh
+	else:node.mesh=bone_mesh
 	node.material_override=blood_material if kind=="blood" else bone_material
 	node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	var stain:=MeshInstance3D.new();var quad:=QuadMesh.new();quad.size=Vector2.ONE;stain.mesh=quad
-	stain.material_override=stain_material;stain.rotation.x=-PI/2;stain.hide();add_child(stain)
-	stain.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	var stain: MeshInstance3D=pooled_node(true) if kind=="blood" else null
 	var basis: Basis=actor.global_basis.orthonormalized()
 	var origin: Vector3=actor.to_global(Vector3(event.position[0],event.position[1],event.position[2])/4.0)
 	var velocity: Vector3=basis*Vector3(event.velocity[0],event.velocity[1],event.velocity[2])
@@ -179,7 +219,8 @@ func update_at(time: float, actor: Node3D) -> void:
 		var event: Dictionary=entry.event;var age: float=time-float(event.birth)
 		var born: bool=age>=0.0
 		var landed: bool=born and event.kind=="blood" and age>=entry.track.land
-		entry.node.visible=born and not landed;entry.stain.visible=landed
+		entry.node.visible=born and not landed
+		if entry.stain!=null:entry.stain.visible=landed
 		if landed:
 			entry.stain.position=entry.track.hit
 			entry.stain.quaternion=Quaternion(Vector3.BACK,entry.track.normal)
@@ -221,14 +262,14 @@ func sync(frame: Dictionary, actor: Node3D, stage: Node3D) -> void:
 				entry.stain.position=entry.track.hit;entry.stain.scale=Vector3(entry.event.size*9.8,entry.event.size*7,1)
 				entry.stain.quaternion=Quaternion(Vector3.BACK,entry.track.normal)
 				entry.stain.show();stains.append(entry.stain)
-			else:entry.stain.queue_free()
+			else:recycle(entry.stain,true)
 			if new_clip and entry.event.kind!="blood":
 				entry.node.position=entry.track.points[-1]
 				entry.node.basis=entry.basis*Basis.from_euler(Vector3(entry.event.spin[0],entry.event.spin[1],entry.event.spin[2])*entry.track.rest)
 				entry.node.scale=Vector3.ONE*float(entry.event.size);entry.node.show();settled.append(entry.node)
-			else:entry.node.queue_free()
-		while stains.size()>48:stains.pop_front().queue_free()
-		while settled.size()>32:settled.pop_front().queue_free()
+			else:recycle(entry.node)
+		while stains.size()>48:recycle(stains.pop_front(),true)
+		while settled.size()>32:recycle(settled.pop_front())
 		entries.clear();clip_id=id;bound_actor_id=actor.get_instance_id()
 		var top: MeshInstance3D=stage.find_child("PodiumTop",true,false)
 		var floor_mesh: MeshInstance3D=stage.find_child("RubberMat",true,false)

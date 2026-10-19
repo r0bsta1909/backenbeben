@@ -36,7 +36,7 @@ func verify() -> void:
 		if fx.entries[i].node.position!=positions[i]:push_error("Replay actor migration changes recorded flight");quit(1);return
 	fx.update_at(.49,scene.fighter)
 	for entry in fx.entries:
-		if entry.node.visible or entry.stain.visible:push_error("Reverse leaves visible debris");quit(1);return
+		if entry.node.visible or (entry.stain!=null and entry.stain.visible):push_error("Reverse leaves visible debris");quit(1);return
 		if entry.event.kind=="tooth" and not scene.fighter.model.find_child("Teeth%02d"%int(entry.event.source),true,false).visible:
 			push_error("Reverse fails to restore original tooth");quit(1);return
 		if entry.event.kind=="tooth":
@@ -64,6 +64,21 @@ func verify() -> void:
 	if not rim.stain.visible or rim.stain.global_basis.z.normalized().dot(rim.track.normal)<.9999:
 		push_error("Rim splatter is not aligned with sloped padding");quit(1);return
 	fx.reset_all();await process_frame;await process_frame
-	if fx.get_child_count()!=0 or not fx.entries.is_empty() or not fx.stains.is_empty():push_error("Effects leak after rematch/reset");quit(1);return
+	if fx.get_child_count()>272 or not fx.entries.is_empty() or not fx.stains.is_empty() or not fx.settled.is_empty():push_error("Effects leak after rematch/reset");quit(1);return
+	for node in fx.get_children():
+		if node.visible:push_error("Pooled effect visible after reset");quit(1);return
+	var ids: Array=[]
+	for node in fx.node_pool:ids.append(node.get_instance_id())
+	frame.id="reuse-after-reset";frame.time=.7;fx.sync(frame,scene.fighter,scene.arena_stage)
+	for entry in fx.entries:
+		if not ids.has(entry.node.get_instance_id()):push_error("Reset did not reuse effect pool");quit(1);return
+		if entry.event.kind!="blood" and entry.stain!=null:push_error("Solid debris allocated an unused stain");quit(1);return
+	for hit in range(70):
+		frame.id="pool-stress-%d"%hit;frame.time=1.8;fx.sync(frame,scene.fighter,scene.arena_stage)
+		if fx.get_child_count()>272:push_error("Effect pool grows across repeated clips");quit(1);return
+		for entry in fx.entries:
+			if entry.event.kind=="blood" and entry.node.mesh!=fx.blood_mesh:push_error("Blood mesh was reallocated");quit(1);return
+			if entry.event.kind in ["bone","tooth_chip"] and entry.node.mesh!=fx.bone_mesh:push_error("Fragment mesh was reallocated");quit(1);return
+	fx.reset_all()
 	print("FACE_EFFECTS_PASS: real damage fixture; detached crowns/bones/blood; seek/reverse; tooth restore; table/mat collision; persistent bounded stains; reset")
 	quit(0)

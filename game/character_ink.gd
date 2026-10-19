@@ -1,11 +1,11 @@
 extends RefCounted
-## Draw authored cloth/hand ink together. Keep every vertex, normal, index,
+## Draw compatible ink, nails, trousers and shoes together. Keep every vertex, normal, index,
 ## UV and skin weight; only coalesce identical render state on the same rig.
 static func batch(root: Node3D) -> Array[MeshInstance3D]:
 	var groups: Dictionary={}
 	for part in root.find_children("*","MeshInstance3D",true,false):
 		var name: String=str(part.name)
-		if not (name.begins_with("ClothInk") or name.begins_with("HandCrease") or name=="Collar"):continue
+		if not (name.begins_with("ClothInk") or name.begins_with("HandCrease") or name=="Collar" or name.begins_with("Nail") or name in ["Pelvis","shin_L","shin_R","thigh_L","thigh_R","Shoe_L","Shoe_R"]):continue
 		if part.has_meta("ink_batch_source") or not part.visible or part.mesh==null:continue
 		if part.mesh.get_surface_count()!=1 or part.mesh.get_blend_shape_count()!=0:continue
 		if part.mesh.surface_get_primitive_type(0)!=Mesh.PRIMITIVE_TRIANGLES:continue
@@ -43,7 +43,7 @@ static func batch(root: Node3D) -> Array[MeshInstance3D]:
 		merged.skeleton=first.skeleton;merged.transform=first.transform
 		merged.layers=first.layers;merged.cast_shadow=first.cast_shadow
 		merged.extra_cull_margin=first.extra_cull_margin
-		first.get_parent().add_child(merged)
+		first.get_parent().add_child(merged,true)
 		merged.set_surface_override_material(0,first.get_surface_override_material(0))
 		merged.set_meta("ink_batch_sources",sources)
 		for source in sources:

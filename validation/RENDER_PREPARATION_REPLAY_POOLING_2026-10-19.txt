@@ -1,0 +1,111 @@
+BACKENBEBEN — RENDER PREPARATION, REPLAY BRIDGE AND EFFECT REUSE
+2026-10-19
+
+SCOPE
+User requested all four improvements from the latest performance review.
+No character/source asset, injury rule, arena artwork or host protocol changes.
+Character14 / gesture3 / damage1 / effect1 remain current.
+
+1. TARGETED SHADER PREPARATION
+A WebGL source/attach/program probe identified all six first-hit programs as
+blood-stain variants (base, instancing, depth and additive lighting). This was
+measured, rather than assumed from the visual effect. Original diagnostic trace
+blocked in getProgramParameter for about595/585/158ms during impact.
+Startup now actually draws two shared stain quads and the shared blood/fragment
+meshes under production arena lights, behind the existing loading overlay.
+Joining remains disabled until post-draw completion and removal of warmup nodes.
+Simply loading a Shader resource or hiding the warmup geometry is insufficient.
+
+New tests/render_warmup.py runs two real clients and two host-authoritative
+hits; records shader source identity, first link-status query readiness and slow
+GL calls. Final run PASS errors[]: all six stain variants checked before ready
+on each client; ZERO new programs linked after ready. No long shader-status
+query during impact. Instrumented impact rAF maxima83.4/66.7ms; remaining
+texImage2D calls7.3/6.8ms and7.6/10.5ms. Wrappers add overhead; this is not a clean
+GPU timer or proof that all possible stalls are eliminated.
+Cold first rendering/warmup23.273s; second context1.156s. These include the first
+complete arena draw and its existing shaders, not just the incremental cost of
+stains. Startup is intentionally allowed to finish this work before joining.
+
+2. REPLAY TRANSPORT
+combat.js publishes immutable metadata (side cage, face effects, before/after
+snapshots and clip constants) on clip attachment, and a smaller motion payload
+only when time, phase, camera or contact-overlay selection changes. Intermediate
+player snapshots are sent only while injury settles after contact. The exact
+contact frame still displays the BEFORE snapshot; damage never appears early.
+Godot checks revisions before reading/parsing motion; cached clip data is merged
+locally. Unchanged render-state and hand-pose JSON is not reparsed. The public
+physicsFrame diagnostic remains readable as a lazy cached full JSON snapshot.
+Impact->replay, actor migration, seek, camera/contact toggle and clear/reconnect
+remain explicit invalidation paths; host damage decisions stay authoritative.
+Final benchmark:45146 full JSON characters versus27413 motion characters in the
+sampled injured frame. ZERO published revisions across30 paused animation frames
+on each client; camera/contact changes publish motion without resending metadata.
+Replay bridge CPU median .4ms on each client (whole bridge, not just parsing).
+
+3. EFFECT PREPARATION AND REUSE
+Real table/padded-rim triangle cache is built during scene setup. A bounded pool
+starts with128 debris nodes and144 stain nodes:96 current events plus32 solid/
+48 blood deposits. Blood spheres, bone/chip tetrahedra and stain quads share
+geometry resources. Solids allocate no unused stain node. Detached crowns keep
+their authored, identity/health-specific meshes. Recycle hides nodes, clears solid
+mesh/material bindings and resets transforms. Rematch clears active/archived
+state while retaining reusable nodes. Actor changes rebuild world-space flights,
+without duplicating archived deposits. No saved trajectory or collision shortcut.
+Native test includes70 successive clips, bounded272 nodes, shared mesh checks,
+reset reuse, tooth restoration, reversible deposits and actual padded-rim contact.
+Headless diagnostic: prepare11.108ms, first16-event sync5.005ms, collision cache
+lookup2us. Earlier unprepared first sync8.766ms. Different system load: illustrative
+CPU readings, not a controlled statistical speedup claim. Trajectories still cost
+CPU and actor changes necessarily rebuild them.
+
+4. ADDITIONAL COMPATIBLE MESH BATCHES
+Per actor:27 ink parts,8 nails,5 pelvis/leg parts and2 shoes become4 batches.
+Six actors including mirror/officials:252 original sources ->24 batches.
+Only identical rig, material, transform, layer, primitive and render state merge.
+All original vertex streams and skin weights remain; no polygon simplification.
+Original nodes stay available but hidden; material identities remain in mat_cache.
+Readable unique batch names ensure the image test includes ALL additional groups.
+Native original -> all-batched draws, same scene/camera/poses:
+front2140->1065; side1683->926; KO2088->1179.
+Prior ink-only results1490/1230/1537 give context for the additional reduction.
+Final image comparison:3/3/184 channels differ by >2/255 out of2073600 channels;
+maximum channel deltas54/62/128. KO differences occupy76 edge/shadow pixels.
+Not bit-identical. Expanded24-batch image gate<250 channels (previous6-batch
+ink-only gate<100); vertex counts/rig binding/three pose comparisons mandatory.
+Face anatomy, expression, mouth, brow, normal and rest-UV checks remain separate.
+
+FINAL REAL-WEB MEASUREMENT
+RTX3090 / ANGLE D3D11, two independent1920x1080 contexts on one physical PC.
+Same fixed host practice/slap sequence as tests/render_performance.py; each stage
+20 warmup plus90 measured rAF intervals per client. Dedicated final run after
+competing Battlefield6 GPU load ended; no other own GPU test ran concurrently.
+idle: client1 median/p95/max 16.7/33.4/33.5ms; client2 median/p95/max 16.7/33.4/33.5ms
+contact: client1 median/p95/max 16.7/16.8/17.7ms; client2 median/p95/max 16.7/16.8/17.7ms
+injured: client1 median/p95/max 16.7/16.7/16.8ms; client2 median/p95/max 16.7/16.8/16.8ms
+Earlier contaminated run had GPU83-96% / ~10GB alongside Battlefield6; it is
+excluded from clean FPS claims. One clean final run, no randomized ABAB and no
+universal60FPS guarantee. Browser scheduling and shared GPU matter. Paused-frame
+results do not by themselves establish smooth live striking or human acceptance.
+
+VALIDATION STATUS
+Web import/export PASS; ten native suites PASS before the final readable batch
+name adjustment; final expanded batch image/skin/draw test PASS after adjustment.
+New warmup regression PASS, extended two-client benchmark/revision checks PASS.
+No server physics code changed. Raw captures/traces stay ignored under logs/.
+
+Complete real-pointer standard-balance duel PASS:10 hits, points decision,
+timed brace, identical replay data, receiver reload/resume, injury rewind,
+audio fallback11 plays, rematch/mirror material reset, lobby leave; errors[].
+Live striker/receiver median16.7ms, p9533.4ms, max66.9/83.3ms; zero impact
+intervals>100ms. Historic617ms impact stall was not reproduced. One116.8ms
+replay-playing interval remains; p9533.4ms. Do not claim every hitch is fixed.
+Phase intervals exclude transition-crossing frames and are not GPU durations.
+
+Severe Web visual fixture PASS after checking the real host event metadata:
+11 blood drops +3 bone fragments +2 detached crowns;11 landed stains; rewind
+restores zero active effects/deposits. This injected three-hit visual fixture is
+not an actually played severe match or validation of its contact solve.
+Three actual two-client freely combined appearances/emotes/injury-camera matches
+PASS errors[] after the final build. All final51 sequential gates PASS.
+Human visual/gameplay acceptance remains open; tests share one physical PC.
