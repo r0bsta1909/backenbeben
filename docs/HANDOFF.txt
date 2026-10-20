@@ -2880,3 +2880,24 @@ p95~33.4ms, one183.3ms replay-playing interval; no blanket60FPS claim.
 Final UI PASS20-person lobby (1rendered+19WebSocket peers), narrow390px
 result bounds, header/name overlap corrected, actual forfeit/champion/return
 to lobby, errors[]. Final Web export checked. Own testhost8916 stopped.
+
+2026-10-20 / TOURNAMENT AUDIT CORRECTIONS
+User requested review and continuation. Reproduced four failures before fixes:
+KO/DQ could be reversed by leaving during impact/replay; simultaneous expiry
+could fabricate a champion; parallel matches could evict a needed replay;
+solver failure permanently stalled an event. Fixed all. Also found stale
+suspension could reopen a terminal match on resume: clear terminal suspension
+and restore only genuinely disconnected phases. Bulk expiry is atomic per
+tournament, genuine pre-existing outcomes remain final; no players => cancelled.
+Technical solver error explicitly cancels event without a winner, reason/card
+status visible. Current room replay IDs pinned; oldest unused clips pruned.
+Duplicate-start notice and async collection snapshots hardened.
+Final221 Python tests PASS47.964s, including19 tournament cases. Actual2browser
+production-physics KO on stroke5; winner leaves during impact, correct champion
+retained, second event cancellation reason/cards correct, errors[]. Final-source
+20-WebSocket bracket PASS19walkovers/12byes/5rounds/champion. Real30sec expiry/
+active resume/new final PASS. New terminal-resume test PASS: disconnected player
+wins by opponent withdrawal, resumes over/forfeit (never aim), correct champion.
+Checked Web export PASS; raw logs ignored. Own final testhost8917 stopped.
+No art, Hoenhorst, combat formula or schema changes. Physical second-PC/human
+controls/balance acceptance still open. Details validation/TOURNAMENT_REVIEW_2026-10-20.txt.

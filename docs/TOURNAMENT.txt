@@ -47,7 +47,13 @@ Nach Ablauf der Frist scheidet der fehlende Teilnehmer aus; der Gegner kommt
 automatisch weiter. Ein noch nicht gestarteter Kampf wartet auf beide Clients.
 Verlässt der Veranstalter die offene Lobby, übernimmt der nächste Teilnehmer.
 Nach Turnierstart gibt es weder neue Teilnehmer noch Wiedereintritt nach Aufgabe.
-Host-'reset' bricht das Turnier ausdrücklich ohne Sieger ab.
+Host-'reset' oder ein technischer Fehler in der Schlagberechnung bricht das
+Turnier ausdrücklich ohne Sieger ab; der Grund wird angezeigt.
+Ein bereits feststehender KO-/Disqualifikationssieg bleibt auch bei Verlassen
+während der Trefferanimation oder Wiederholung bestehen. Bei gleichzeitigem
+Ablauf mehrerer Wiederverbindungsfristen scheiden alle Betroffenen gemeinsam
+aus. Fehlen alle verbliebenen Teilnehmer, gibt es keinen erfundenen Sieger.
+Eine Wiederverbindung öffnet keinen bereits entschiedenen Kampf erneut.
 Turniere liegen im Hostspeicher; Host-Neustart verwirft ihren Stand.
 
 IMPLEMENTIERUNG / PRÜFUNG
@@ -57,5 +63,6 @@ Kampfzuweisung, feste Sitzplätze, Fristen, Reconnect, private Sitzungsschlüsse
 game/tournament.js/.css und web_shell.html: Einstieg, Lobby, Baum, Ergebnis.
 Build kopiert Turnier-JS/CSS zusammen mit dem Spiel.
 Prüfkommandos und Abgrenzungen: validation/TOURNAMENT_2026-10-19.txt.
+Nachprüfung/Korrekturen: validation/TOURNAMENT_REVIEW_2026-10-20.txt.
 Technische Tests ersetzen weder menschliche Balance-/Bedienungsabnahme noch
 einen Test mit 20 physischen Rechnern im echten LAN.

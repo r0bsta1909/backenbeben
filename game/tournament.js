@@ -13,7 +13,8 @@
   $('tournamentStart').disabled=t.entries.length<2;
   $('tournamentStatus').textContent=t.status==='waiting'?(owner?'Teile den Code. Starte, sobald alle dabei sind.':'Warte auf den Start durch den Veranstalter.'):
    t.status==='finished'?`TURNIERSIEGER: ${names.get(t.champion)||'–'}`:
-   t.status==='cancelled'?'Turnier beendet.':!me?.active?'Du hast das Turnier verlassen.':
+   t.status==='cancelled'?'Turnier abgebrochen · '+(t.cancel_reason||'Keine verbleibenden Teilnehmer.'):
+   !me?.active?'Du hast das Turnier verlassen.':
    t.rounds.flat().some(m=>m.status==='done'&&m.players.includes(uid)&&m.winner!==uid)?'Ausgeschieden · Verfolge den weiteren Turnierverlauf.':
    t.rounds.flat().some(m=>m.status==='done'&&m.winner===uid&&m.reason==='bye')?'Freilos / weitergekommen · Dein nächster Kampf startet automatisch.':
    'Warte auf die übrigen Kämpfe. Dein nächster Kampf startet automatisch.';
@@ -24,7 +25,7 @@
   }else{
    const rounds=t.rounds.map(r=>r.map(m=>({...m})));
    while(rounds.at(-1)?.length>1){const previous=rounds.at(-1),rnd=[];
-    for(let i=0;i<previous.length;i+=2)rnd.push({id:`r${rounds.length+1}m${i/2+1}`,players:[previous[i].winner,previous[i+1].winner],status:'pending',winner:null});
+    for(let i=0;i<previous.length;i+=2)rnd.push({id:`r${rounds.length+1}m${i/2+1}`,players:[previous[i].winner,previous[i+1].winner],status:t.status==='cancelled'?'cancelled':'pending',reason:t.status==='cancelled'?'cancelled':'',winner:null});
     rounds.push(rnd);
    }
    rounds.forEach((rnd,i)=>{
@@ -32,8 +33,8 @@
     col.append(node('h3',rnd.length===1?'FINALE':rnd.length===2?'HALBFINALE':`RUNDE ${i+1}`));
     rnd.forEach(m=>{
      const card=node('article',undefined,'bracketMatch');card.dataset.match=m.id;
-     m.players.forEach(p=>{const row=node('div',p?(names.get(p)+(p===uid?' · DU':'')):m.status==='pending'?'SIEGER DER VORRUNDE':'FREILOS');if(p&&m.winner===p)row.className='bracketWinner';card.append(row)});
-     const reason={bye:'Freilos',forfeit:'Aufgabe / Verbindungsabbruch',ko:'KO',points:'Punkte',disqualification:'Disqualifikation',lot:'Los nach 3 Zusatzpaaren'};
+     m.players.forEach(p=>{const row=node('div',p?(names.get(p)+(p===uid?' · DU':'')):m.status==='pending'?'SIEGER DER VORRUNDE':m.status==='cancelled'?'NICHT BESETZT':'FREILOS');if(p&&m.winner===p)row.className='bracketWinner';card.append(row)});
+     const reason={bye:'Freilos',forfeit:'Aufgabe / Verbindungsabbruch',ko:'KO',points:'Punkte',disqualification:'Disqualifikation',lot:'Los nach 3 Zusatzpaaren',cancelled:'Abgebrochen'};
      card.append(node('small',m.status==='playing'?'KAMPF LÄUFT':m.status==='ready'?'WARTET AUF KAMPFSTART':m.status==='pending'?'WARTET AUF DIE VORRUNDE':reason[m.reason]||'Beendet'));col.append(card);
     });bracket.append(col);
    });

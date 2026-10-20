@@ -1,0 +1,71 @@
+TOURNAMENT REVIEW / 2026-10-20
+Baseline: a900e2f, automatic LAN tournament for 2..20 players.
+User requested review and continued autonomous corrections.
+
+REPRODUCED AND FIXED
+1. KO/DQ winner was only committed after replay, so leaving during impact,
+   replay or a suspended terminal strike could change it into a forfeit.
+   freeze_tournament_result commits the already authoritative outcome before
+   withdrawal/expiry. An unrelated room's replay is not shortened. A participant
+   leaving after a semifinal still withdraws from their next fight normally.
+2. Two clients expiring in the same tick were withdrawn one after another.
+   The first withdrawal could award a final to another already-expired client.
+   A common expiry batch now marks all affected participants before settlement.
+   No remaining players -> cancellation without an invented champion. A real
+   KO already determined before the disconnect remains a valid result.
+3. Global FIFO replay eviction could remove a paused room's current clip when
+   parallel matches created enough traffic. Current room replay IDs are pinned;
+   oldest unused clips are removed first, normally retaining a 32-entry cache.
+   If >32 rooms genuinely need distinct clips, active clips are retained.
+4. A solver exception left a tournament room permanently disconnected, with
+   nobody eligible for the next round. Technical failures now explicitly cancel
+   the event without awarding a winner; all affected matches end and release
+   clients to the bracket. Clear reason shown; unplayed cards say Abgebrochen.
+5. Terminal paused rooms retained their old suspended phase. A reconnect during
+   the result window could reopen a decided/cancelled match. Terminal transitions
+   discard suspension/brace offset; socket resume only restores disconnected rooms.
+
+Also: duplicate start after departed participants produces a clear notice rather
+than an internal missing-client key. Async admin/console broadcasts use snapshots
+of room/tournament collections to tolerate membership changes during sends.
+No art, arena, table, Hoenhorst, combat formulas or damage schemas changed.
+
+TESTS
+Initial focused reproductions on original code: 4 failures (terminal KO/DQ,
+simultaneous expiry, active replay eviction, solver failure), then PASS after fix.
+Added regressions cover all n=2..20 bulk withdrawals, KO/DQ during impact/replay/
+disconnect, both players expiring after a real result, unaffected parallel KO,
+suspended terminal state, cancellation bookkeeping and duplicate start.
+Test tick tasks are checked still alive rather than silently swallowing failure.
+
+Final complete suite:
+  .venv/Scripts/python.exe -m unittest discover -s tests -p test_*.py
+  221 tests / 47.964 seconds / PASS.
+  19 tournament cases, including existing570 independently drawn full brackets.
+Scheduler/cache/failure boundary tests use declared fixtures, not real physics.
+
+Actual two-client Chromium/ANGLE production-physics browser test:
+  tests/tournament_review_browser.py
+  Qualities .6386/.5122/.7258/.6091/.8005; KO on fifth global stroke.
+  Winner leaves during impact, losing client retains KO result and correct
+  champion. A second real tournament is cancelled via admin reset; both clients
+  show the reason and no card still claims a running match. Errors [].
+  No injected outcomes. This browser run preceded the final suspension guard;
+  the final guard is additionally exercised by real transport below.
+
+Final-source external-host network tests on own port8917:
+  tests/tournament_network.py: PASS20 real WebSockets, 19 intentional walkovers,
+  12 byes, 5 rounds, one champion, capacity21 rejected, resume/owner/ID guards.
+  This is not a 20-client physics-load test.
+  tests/tournament_disconnect.py: PASS actual30-second expiry, active resume,
+  automatic walkover, fresh final and champion. No accelerated server clock.
+  tests/tournament_resume_result.py: PASS disconnected participant wins by
+  opponent's explicit withdrawal, resumes within the six-second result window,
+  receives terminal forfeit result (never aim), then correct bracket champion.
+
+Checked Godot import/release Web export PASS; no engine/script errors.
+Own testhost8917 stopped after checks. Raw reports/captures remain ignored.
+Previous normal-duel/extra-pair/mobile checks: TOURNAMENT_2026-10-19.txt.
+All clients ran on one Windows PC. Human controls/balance and a test on multiple
+physical LAN PCs remain open. A technical cancellation intentionally has no
+champion; healthy completed tournaments still have exactly one winner.

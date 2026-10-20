@@ -88,6 +88,7 @@ async def broadcast(room):
     state=public(room)
     state['tournament']=room.get('tournament')
     state['tournament_match']=room.get('tournament_match')
+    state['cancel_reason']=room.get('cancel_reason','')
     for uid in list(room['members']):
         c=CLIENTS.get(uid)
         if c and c.get('room')==room['id'] and not c['ws'].closed:
@@ -105,8 +106,7 @@ async def leave(c):
     if tid in TOURNAMENTS:
         tournament=TOURNAMENTS[tid]
         room=ROOMS.get(c.get('room'))
-        if room and room['phase']=='over' and room['winner']>=0:
-            tournament.finish(room['tournament_match'],room['players'][room['winner']]['id'],room['result_reason'])
+        freeze_tournament_result(room,tournament)
         tournament.withdraw(c['id'])
         room=ROOMS.get(c.get('room'))
         if room and room.get('tournament'):
@@ -116,6 +116,7 @@ async def leave(c):
                 winner=tournament.match(room['tournament_match'])['winner']
                 room['winner']=next((i for i,p in enumerate(room['players']) if p['id']==winner),-1)
                 room['result_reason']='forfeit';room['phase']='over';room['deadline']=0
+                room.pop('suspended',None);room.pop('_brace_offset',None)
                 room['release_at']=time.monotonic()+6
                 if 'solve' in room:room['solve'].cancel()
                 await broadcast(room)
@@ -135,6 +136,51 @@ async def leave(c):
         event(room,'disconnect',text='Gegner hat das Duell verlassen. Zur Lobby für ein neues Duell.')
         await broadcast(room)
     else: ROOMS.pop(room['id'],None)
+
+
+def freeze_tournament_result(room,t):
+    # KO/DQ are already authoritative during impact/replay, before the result UI.
+    if room and room['winner']>=0 and t.status!='cancelled':
+        t.finish(room['tournament_match'],room['players'][room['winner']]['id'],room['result_reason'])
+        room.update(phase='over',deadline=0)
+        room.pop('suspended',None);room.pop('_brace_offset',None)
+        room.setdefault('release_at',time.monotonic()+6)
+
+
+async def expire_clients(now):
+    expired={uid:c for uid,c in CLIENTS.items() if c.get('expires',now+1)<now}
+    for t in list(TOURNAMENTS.values()):
+        batch=[uid for uid,c in expired.items() if c.get('tournament')==t.id]
+        if not batch:continue
+        for room in list(ROOMS.values()):
+            if room.get('tournament')==t.id and any(uid in batch for uid in room['members']):
+                freeze_tournament_result(room,t)
+        t.withdraw_many(batch)
+    for uid,c in expired.items():
+        await leave(c);CLIENTS.pop(uid,None)
+
+
+def cancel_tournament(t,reason):
+    if t.status not in ('waiting','running'):return
+    t.status='cancelled';t.champion=None;t.cancel_reason=reason
+    for rnd in t.rounds:
+        for m in rnd:
+            if m['status']!='done':m.update(status='cancelled',winner=None,reason='cancelled')
+    for r in list(ROOMS.values()):
+        if r.get('tournament')!=t.id:continue
+        r.update(phase='over',winner=-1,result_reason='cancelled',deadline=0,
+                 release_at=time.monotonic()+6,cancel_reason=reason)
+        r.pop('suspended',None);r.pop('_brace_offset',None)
+        if 'solve' in r:r['solve'].cancel()
+        event(r,'disconnect',text=reason)
+
+
+def prune_replays():
+    # A slow/paused match must survive replay traffic from parallel matches.
+    pinned={r.get('replay_id') for r in ROOMS.values()}
+    for rid in list(REPLAYS):
+        if len(REPLAYS)<=32:break
+        if rid not in pinned:REPLAYS.pop(rid,None)
 
 
 async def broadcast_tournament(t):
@@ -221,6 +267,7 @@ async def command(c, d):
     if action=='tournament_start':
         t=TOURNAMENTS.get(c.get('tournament'))
         if not t:raise ValueError('Kein Turnier ausgewählt.')
+        if t.status!='waiting':raise ValueError('Dieses Turnier wurde bereits gestartet oder beendet.')
         if any(CLIENTS[uid]['ws'].closed for uid in t.entries):raise ValueError('Ein Teilnehmer verbindet sich noch. Bitte warten.')
         t.start(c['id']);t.settings=dict(SETTINGS);t.revision=REVISION
         await broadcast_tournament(t);await schedule_tournaments(time.monotonic());return
@@ -353,7 +400,7 @@ async def socket_handler(request):
     await ws.send_json({'type':'hello','id':uid,'resume':c['resume_token']})
     room=ROOMS.get(c.get('room'))
     if room:
-        if room.get('suspended') and all(not CLIENTS[m]['ws'].closed for m in room['members'] if m in CLIENTS):
+        if room['phase']=='disconnected' and room.get('suspended') and all(not CLIENTS[m]['ws'].closed for m in room['members'] if m in CLIENTS):
             phase,remaining=room.pop('suspended');room['phase']=phase;room['deadline']=time.monotonic()+remaining
             if room.get('brace') is not None:room['brace']=room['deadline']-room.pop('_brace_offset',0)
         await broadcast(room)
@@ -390,9 +437,7 @@ async def tick(app):
     while True:
         await asyncio.sleep(.04)
         now=time.monotonic()
-        for uid,c in list(CLIENTS.items()):
-            if c.get('expires',now+1)<now:
-                await leave(c);CLIENTS.pop(uid,None)
+        await expire_clients(now)
         await schedule_tournaments(now)
         for r in list(ROOMS.values()):
             phase=r['phase']
@@ -405,7 +450,16 @@ async def tick(app):
                     continue
                 try:clip=r['solve'].result()
                 except Exception as exc:
-                    record(dict(kind='physics_error',error=str(exc)));r['phase']='disconnected';event(r,'disconnect',text='Physik konnte nicht berechnet werden. Bitte neues Duell starten.');await broadcast(r);continue
+                    record(dict(kind='physics_error',error=str(exc)))
+                    t=TOURNAMENTS.get(r.get('tournament'))
+                    if t:
+                        cancel_tournament(t,'Technischer Fehler bei der Schlagberechnung. Turnier abgebrochen; bitte neu erstellen.')
+                        for affected in list(ROOMS.values()):
+                            if affected.get('tournament')==t.id:await broadcast(affected)
+                        await broadcast_tournament(t)
+                    else:
+                        r['phase']='disconnected';event(r,'disconnect',text='Physik konnte nicht berechnet werden. Bitte neues Duell starten.');await broadcast(r)
+                    continue
                 target=1-r['turn'];p=r['players'][target]
                 braced=r['brace'] is not None and 0 <= r['deadline']-r['brace'] <= r['settings']['brace_window_ms']/1000
                 if braced and clip.get('head_response',{}).get('model')=='coupled-yaw-through-contact-and-tail' and not clip['head_response'].get('braced'):
@@ -437,7 +491,7 @@ async def tick(app):
                             turn=r['turn_id'],braced=braced,ko=ko,body_frames=collapse_track(ko,direction=(1 if yaw>0 else -1) if abs(yaw)>1e-9 else (1 if r['pending']['side']=='L' else -1),lean=.30+.08*motion),head_motion=motion,awarded_points=awarded,contact_class=r['pending']['contact_class'])
                 clip['face_effects']=build_face_effects(before[target],r['players'][target],r['pending'],clip)
                 REPLAYS[rid]=clip
-                while len(REPLAYS)>32:REPLAYS.pop(next(iter(REPLAYS)))
+                prune_replays()
                 event(r,'hit',target=target,damage=damage,points=awarded,ko_value=p['ko_value'],head_motion=motion,quality=r['pending']['quality'],braced=braced,
                       side=r['pending']['side'],ko=ko,foul=r['pending'].get('foul',False),diagnosis=r['diagnosis'],replay_id=rid)
                 record(dict(kind='hit',room=r['id'],match=r['match_id'],turn=r['turn_id'],revision=r['revision'],
@@ -500,8 +554,7 @@ def admin_command(text):
             if k not in RANGES or not isinstance(v,(int,float)) or not math.isfinite(v) or not RANGES[k][0]<=v<=RANGES[k][1]:raise ValueError('Ungültiges Preset')
         SETTINGS.update(saved);REVISION+=1;return 'Preset geladen. Gilt ab dem nächsten Match.'
     if args[0]=='reset':
-        for t in TOURNAMENTS.values():
-            if t.status in ('waiting','running'):t.status='cancelled'
+        for t in list(TOURNAMENTS.values()):cancel_tournament(t,'Host hat das Turnier beendet.')
         for r in ROOMS.values():
             r['phase']='disconnected';r['deadline']=0;event(r,'disconnect',text='Host hat die Runde beendet. Bitte zurück zur Lobby.')
             if r.get('tournament'):r.update(phase='over',winner=-1,result_reason='cancelled',release_at=time.monotonic())
@@ -515,8 +568,8 @@ async def admin(request):
     try:
         d=await request.json();reply=admin_command(str(d.get('command','')))
         if str(d.get('command','')).strip()=='reset':
-            for r in ROOMS.values():await broadcast(r)
-            for t in TOURNAMENTS.values():await broadcast_tournament(t)
+            for r in list(ROOMS.values()):await broadcast(r)
+            for t in list(TOURNAMENTS.values()):await broadcast_tournament(t)
         return web.json_response({'reply':reply})
     except (ValueError,TypeError,OSError) as e:return web.json_response({'reply':str(e)},status=400)
 
@@ -603,8 +656,8 @@ def main():
             async def run(text):
                 try:print(admin_command(text),flush=True)
                 except Exception as e:print(str(e),flush=True)
-                for r in ROOMS.values():await broadcast(r)
-                for t in TOURNAMENTS.values():await broadcast_tournament(t)
+                for r in list(ROOMS.values()):await broadcast(r)
+                for t in list(TOURNAMENTS.values()):await broadcast_tournament(t)
             def reader():
                 while True:
                     try:text=input('balance> ')

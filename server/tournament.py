@@ -13,6 +13,7 @@ class Tournament:
         self.entries = {}
         self.rounds = []
         self.champion = None
+        self.cancel_reason = ''
         self.add(owner, name)
 
     def add(self, uid, name):
@@ -68,6 +69,7 @@ class Tournament:
             if len(winners) == 1:
                 self.champion = winners[0]
                 self.status = 'finished' if self.champion else 'cancelled'
+                if not self.champion:self.cancel_reason = 'Keine verbleibenden Teilnehmer.'
                 return
             self._round([winners[i:i+2] for i in range(0, len(winners), 2)])
 
@@ -82,22 +84,27 @@ class Tournament:
         return True
 
     def withdraw(self, uid):
-        if uid not in self.entries:
-            return
+        self.withdraw_many([uid])
+
+    def withdraw_many(self, uids):
+        """Apply a common expiry batch before awarding any walkovers."""
+        uids=set(uids)
         if self.status == 'waiting':
-            del self.entries[uid]
+            for uid in uids:self.entries.pop(uid,None)
         elif self.status == 'running':
-            self.entries[uid]['active'] = False
+            for uid in uids:
+                if uid in self.entries:self.entries[uid]['active'] = False
             self.settle()
-        if uid == self.owner:
-            self.owner = next((p for p,e in self.entries.items() if e['active'] and p != uid), None)
+        if self.owner in uids:
+            self.owner = next((p for p,e in self.entries.items() if e['active'] and p not in uids), None)
 
     def public(self):
         # Copy nested mutable structures: snapshots must not change after sending.
         return dict(id=self.id, owner=self.owner, status=self.status,
                     entries=[dict(e) for e in self.entries.values()],
                     rounds=[[dict(m, players=list(m['players'])) for m in rnd] for rnd in self.rounds],
-                    champion=self.champion, capacity=MAX_PLAYERS, extra_pairs=EXTRA_PAIRS)
+                    champion=self.champion, cancel_reason=self.cancel_reason,
+                    capacity=MAX_PLAYERS, extra_pairs=EXTRA_PAIRS)
 
 
 def decision(room):
