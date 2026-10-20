@@ -2901,3 +2901,24 @@ wins by opponent withdrawal, resumes over/forfeit (never aim), correct champion.
 Checked Web export PASS; raw logs ignored. Own final testhost8917 stopped.
 No art, Hoenhorst, combat formula or schema changes. Physical second-PC/human
 controls/balance acceptance still open. Details validation/TOURNAMENT_REVIEW_2026-10-20.txt.
+
+2026-10-20 / TOURNAMENT UI DESIGN
+User requested UI design. Production tournament panel now has broadcast header,
+copyable code, three-stage navigation, connected roster cards, own-player
+marking, status/action sidebar, collapsible rules and total-round information.
+Bracket columns have aligned span-grid slots and connecting lines. Own path
+button, scroll preservation, winner emphasis, distinct champion banner; clear
+cancelled state. Responsive widths and keyboard-native Copy/Rules activation. Start/Leave stay
+fixed outside scrollable sidebar content, including1280x800.
+Global gameplay keys yield to UI/buttons outside active play. No backend/combat
+or art/Hoenhorst changes. Actual Web build exported with the new frontend.
+Interactive example-only preview docs/ui-preview/tournament.html uses production
+renderer/CSS and generated panel; regenerate with scripts/build_ui_preview.py.
+Preview8920 loopback-only kept for visible review; gameplay testhost8921 stopped.
+Fixture UI test PASS8/20entrants,4states,4widths,copy/focus/scroll/errors[].
+Actual20-connection lobby PASS plus390px result/forfeit/return and keyboard Copy/
+Rules. Actual3-rendered-client event PASS bye/resume,5hit KO semifinal,4hit points
+final,same champion/errors[]. Backend221tests already PASS36.959s earlier in the
+interrupted check; no backend changes since. Human art/controls acceptance and
+second physical LAN-PC remain open. Details validation/TOURNAMENT_UI_DESIGN_2026-10-20.txt.
+Workspace captures Arena-Design/54-ui-*-2026-10-20.png, not committed raw logs.

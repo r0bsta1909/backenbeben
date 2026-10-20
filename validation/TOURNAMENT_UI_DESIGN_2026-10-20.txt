@@ -1,0 +1,61 @@
+TOURNAMENT UI DESIGN / 2026-10-20
+
+USER REQUEST
+Create the UI design for the existing LAN tournament. Implemented in the actual
+game, with a separate interactive preview explicitly labelled as fictional data.
+No backend rules, combat values, arena/table/character art or Hoenhorst changed.
+
+DESIGN
+Dark broadcast panel, warm paper/gold palette, Impact headings and system fonts.
+Code block and copy action; three-stage lobby/tournament/champion navigation.
+Connected roster cards with initials, own-player marking and host/offline labels.
+Main roster/bracket plus separate personal status/action sidebar; collapsible
+rules and participant/round information. Closed events do not advertise open entry.
+Bracket rounds align vertically through span-based grid tracks; native CSS lines
+connect paired winners. Own matches and winners stand out. 'Mein Weg' locates the
+current personal path. Scroll positions survive updates; returning from a match
+restores the outer panel to its top. Champion gets a distinct name/medal banner.
+Responsive layout, semantic buttons, current-step ARIA and reduced-motion scroll.
+Global gameplay keyboard shortcuts now yield to UI controls outside gameplay:
+Space can activate Copy/Rules rather than sending an irrelevant brace command.
+Escape still closes Help/Admin before the gameplay shortcut guard.
+
+PREVIEW
+docs/ui-preview/tournament.html uses production CSS/JS and generated production
+panel. scripts/build_ui_preview.py regenerates it from web_shell.html. Separate
+tournament-preview.js supplies fictional snapshots; never loaded by the game.
+Preview controls show8/20 entrants and lobby/running/champion/cancelled states.
+Open file locally or serve the repository using an ordinary local HTTP server.
+Own preview server8920 is loopback-only and kept for the user-visible preview.
+
+VERIFICATION
+tests/tournament_design_browser.py PASS, no console/page errors:
+1600x1000,1280x844,850x844,390x844;8/20 entrants;4 states; visible/current stage,
+champion visibility, actual clipboard confirmation, own-path focus, preserved
+two-axis bracket scroll and no outer document overflow. Rendered fixture tests,
+not gameplay/physics claims. Lobby, bracket, champion and mobile captures viewed.
+
+tests/tournament_ui_browser.py PASS on actual host8921, errors[]:
+1 rendered client +19 genuine WebSocket peers,20-person lobby; reduce to2/start,
+actual opponent withdrawal -> champion,390px result bounds, return to creator.
+Final layout keeps Start/Leave fixed outside the scrollable sidebar body; both
+action bounds are checked above the footer at1280x800. Final repeat verifies
+native Space activation of Copy and Rules on the real
+page, Escape closes Help outside gameplay, no duplicate name overlay and mobile tools/header bounds.
+
+tests/tournament_browser.py PASS,3 actual rendered1280x800 clients, errors[]:
+real create/join/start,3-person odd bracket/bye, bye-holder socket reconnect,
+production physics KO semifinal in5strokes, points final in4strokes. Same final
+champion for all three clients. max_pairs=2 for test; original settings restored.
+No injected outcomes. Actual390px bracket checked at end of test.
+
+221 Python tests PASS36.959s during the preceding interrupted verification;
+backend unchanged for this UI milestone. Checked final Godot import/export PASS.
+Own gameplay testhost8921 stopped; raw captures/reports ignored. Local design
+captures copied into the workspace Arena-Design folder for review.
+
+LIMITS
+Human visual/controls acceptance remains open. Tests used one Windows PC; no
+claim of20 physical LAN computers or20 simultaneously rendered game clients.
+Interactive preview uses example names/results and a static approved backdrop;
+production continues to use Godot's actual arena and authoritative host state.

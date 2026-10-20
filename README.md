@@ -40,6 +40,8 @@ Auslosung, automatischen Freilosen und genau einem Sieger. Über „Turnier erst
 einen Code teilen, beitreten lassen und starten. Weitere Runden entstehen automatisch.
 Im Turnier gibt es bei Gleichstand bis zu drei zusätzliche Schlagpaare, danach einen
 ausgewiesenen Losentscheid. Jeder neue Kampf beginnt unverletzt.
+Die [interaktive UI-Vorschau](docs/ui-preview/tournament.html) zeigt Lobby,
+Turnierbaum und Champion mit ausdrücklich fiktiven Beispieldaten; lokal im Browser öffnen.
 Der Turniermodus gehört zum aktuellen Quellstand; das verlinkte V14-Releasepaket
 ist älter. Im lokalen Projekt wurde der Webbuild neu erstellt.
 
