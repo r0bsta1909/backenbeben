@@ -613,9 +613,11 @@ def admin_command(text):
     if args[0]=='save':
         (ROOT/'server/balance.json').write_text(json.dumps(SETTINGS,indent=2));return 'Preset gespeichert.'
     if args[0]=='load':
-        saved=json.loads((ROOT/'server/balance.json').read_text())
+        saved=json.loads((ROOT/'server/balance.json').read_text(encoding='utf-8'))
+        if not isinstance(saved,dict):raise ValueError('Ungültiges Preset')
         for k,v in saved.items():
-            if k not in RANGES or not isinstance(v,(int,float)) or not math.isfinite(v) or not RANGES[k][0]<=v<=RANGES[k][1]:raise ValueError('Ungültiges Preset')
+            if k not in RANGES or isinstance(v,bool) or not isinstance(v,(int,float)) or not math.isfinite(v) or not RANGES[k][0]<=v<=RANGES[k][1]:raise ValueError('Ungültiges Preset')
+            if k=='max_pairs' and v!=int(v):raise ValueError('max_pairs muss ganzzahlig sein')
         SETTINGS.update(saved);REVISION+=1;return 'Preset geladen. Gilt ab dem nächsten Match.'
     if args[0]=='reset':
         for t in list(TOURNAMENTS.values()):cancel_tournament(t,'Host hat das Turnier beendet.')
@@ -630,7 +632,9 @@ async def admin(request):
     if not local(request):return web.Response(status=403)
     if request.headers.get('Origin') not in ('http://'+request.host,'https://'+request.host):return web.Response(status=403)
     try:
-        d=await request.json();reply=admin_command(str(d.get('command','')))
+        d=await request.json()
+        if not isinstance(d,dict):raise ValueError('Ungültiges Admin-Paket')
+        reply=admin_command(str(d.get('command','')))
         if str(d.get('command','')).strip()=='reset':
             for r in list(ROOMS.values()):await broadcast(r)
             for t in list(TOURNAMENTS.values()):await broadcast_tournament(t)

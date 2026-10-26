@@ -1,0 +1,88 @@
+BROAD TECHNICAL REVIEW — 2026-10-26
+
+Scope
+Rules/scoring/KO/recovery, contact and tissue simulation, regional damage, teeth
+and effects, all modular character selections, creator/persistence/sync, arena,
+mirrors/cameras/expressions, rendered face and comic shaders, LAN/tournament UI,
+admin/start/build/package tools. Art direction and human controls acceptance
+remain separate. Hoenhorst and art assets were not changed.
+
+Corrections
+- Admin JSON must be an object; lists/null/scalars now receive 400 instead of
+  throwing an unhandled AttributeError. Foreign Origin still receives 403.
+- Balance load validates the complete object before mutation, rejecting bools,
+  non-finite values, unknown keys, non-object roots and fractional max_pairs.
+- Package builder is importable/testable and requires the current frontend,
+  collision assets and startup scripts. Missing required files stop packaging
+  before archive creation. Existing local runtime/config/log exclusions remain.
+- Reload could resume the server timer before renderer warmup finished, losing
+  the replay while the loading overlay was still visible. Initial/reload socket
+  now waits for game-ready; duel/training buttons stay disabled until connection.
+- Character creator/browser gauntlet test optional access used an undeclared variable after
+  reload. Window-qualified readiness, bounded traffic diagnostics and guaranteed
+  browser cleanup were added. Test assertions were retained.
+
+Completed checks
+PASS 237 Python tests in 56.933 seconds, including new malformed admin, atomic
+     preset rejection, required package files and private-file exclusions.
+PASS direct HTTP malformed admin requests400 and foreign Origin403; health alive.
+PASS 14 native logic cases: character_appearance (216 combinations), face_damage,
+     face_effects, brace_expression, combat_composure, defender_pose,
+     ko_expression, ko_camera, mirror_dirty, finger_relax, arm_orientation_cache,
+     face_rest_uv, eye_socket_uv, catcher_pose. Damage/effect fixtures regenerated.
+PASS 7 real-renderer cases: arena_finished, character_ink, face_normal_render,
+     face_mouth_render, face_expression_render, face_brow_attachment, toon_shadow.
+PASS current arena_hybrid and arena_match logic: painted hall, 6 platform prints,
+     table height, camera changes, mirror and KO follow. 23 Godot cases total.
+PASS creator browser with both real variant replays: saved choices/reload,
+     rotation/face view, 2-client sync, 3 responsive sizes, reset/random, errors[].
+PASS 20-connection tournament UI: keyboard/code copy/rules,390px forfeit result,
+     no duplicate names and return to creator, errors[].
+PASS held-PCK reload test during an actual recorded replay: no new socket while
+     renderer asset is held, match paused, same player/room/clip after ready,
+     errors[]. Recorded production input, no injected match outcome.
+PASS checked Godot import/release Web export; Python syntax across server/scripts/
+     tests; PowerShell syntax; setup-host CheckOnly Python3.12.
+PASS host package CRC/current source + frontend comparison/config exclusions.
+
+Execution notes and limits
+The arena_finished test waits for rendered frames and timed out in the dummy
+headless renderer; it passed using a real GL renderer. An optional creator replay
+attempt timed out during concurrent browser testing without a server exception;
+its isolated repeat with traffic diagnostics passed. The timeout's exact cause
+was not established. Slow start allowance in the dedicated load test matches the
+other browser tests. No failures were suppressed or changed into forced results.
+All clients ran on one Windows machine. No two-physical-PC, 20-PC physics-load,
+router-isolation, universal FPS, final art or human game-feel approval is claimed.
+The 30-second disconnected-seat reservation and non-persistent host restart
+remain unchanged. The first 12-step mouse attempt exposed the reload-before-render-ready issue.
+After its fix, a separate overly early stats read in the gauntlet was corrected.
+A subsequent 12-step automation stroke took12.8105s, outside the allowed gesture
+window, and that attempt failed. It is not counted as passed. Further full-test attempts timed out around reload/readiness. Active-tab focus
+and safe stats access were made explicit, but the exact causes of those earlier
+timeouts were not individually proven. The precise mouse variant is checked
+separately with consistent background flags. During its 120-frame measurement,
+regular inspect_replay requests now preserve the allowed inspection window
+(with the actual 45s cap); no match results or damage are forced. The successful
+reload checkpoint recorded phase replay and about11s remaining before reload,
+then the same seat/clip afterwards. Focus was visible at that checkpoint.
+Historical GitHub release downloads are older than this build.
+
+Final mouse/end-to-end result: NOT PASSED in this review.
+The precise variant confirmed actual pointer-generated hits, brace, recorded
+friction replay, same-seat reload and injury rewind. One attempt reached8hits,
+then its10s impact wait expired; the host subsequently recorded another hit.
+Physics waits were aligned to the60s allowance used by other suites, without
+relaxing game/result assertions. The final attempt then produced a3.0168s mouse
+stroke (and earlier12.8105s in the12-step variant), outside the3s input limit,
+and timed out expecting windup. Final states/notices are retained in the local
+attempt log. No full ten-hit/end/rematch PASS is claimed for this run. This is
+an open automation/performance finding; it does not negate the independent
+production-protocol, native-renderer, creator/replay and dedicated reload checks.
+The exact source of the variable input delays has not been isolated. A real
+human gameplay/performance check remains required; gesture acceptance was not
+widened to make the test pass.
+Final attempt replay-frame p95 was426.5ms at1920x1080 with two automated
+browser clients, versus much lower values in earlier runs. This is a material
+performance finding for this environment, not a demonstrated universal device
+result or a proved cause attribution. JavaScript errors remained[].

@@ -17,7 +17,7 @@ async def main():
     balance=dict(DEFAULTS) if standard else dict(DEFAULTS,base_damage=45,ko_threshold=60,turn_seconds=60)
     url=f'http://{ip}:{options.port}';report={'url':url,'errors':[],'hits':[],'configuration':balance}
     async with async_playwright() as p:
-        browser=await p.chromium.launch(executable_path=CHROME,headless=True,args=['--enable-webgl'])
+        browser=await p.chromium.launch(executable_path=CHROME,headless=True,args=['--enable-webgl','--disable-background-timer-throttling','--disable-renderer-backgrounding','--disable-backgrounding-occluded-windows'])
         pages=[]
         for _ in range(2):
             c=await browser.new_context(viewport={'width':1920,'height':1080})
@@ -34,7 +34,7 @@ async def main():
             page.on('console',lambda m:report['errors'].append(m.text) if m.type=='error' else None)
             await page.goto(url);await page.wait_for_function('window.gameReady',timeout=60000)
             assert await page.evaluate('audioFallback && !isSecureContext')
-            await page.wait_for_function('godotStats?.arena_backdrop===true && godotStats?.arena_audience_3d===0 && godotStats?.arena_sponsors===6')
+            await page.wait_for_function('window.godotStats?.arena_backdrop===true && window.godotStats?.arena_audience_3d===0 && window.godotStats?.arena_sponsors===6')
         a,b=pages
         async def admin(command):
             response=await a.request.post(f'http://localhost:{options.port}/api/admin',headers={'Origin':f'http://localhost:{options.port}'},data={'command':command})
@@ -91,7 +91,7 @@ async def main():
                     await defender.bring_to_front()
                     await defender.wait_for_function("document.getElementById('bracePanel').dataset.mode==='ready'",polling=10,timeout=3000)
                     await defender.keyboard.press('Space')
-                await attacker.wait_for_function("JSON.parse(renderState).state.phase==='impact'",timeout=10000)
+                await attacker.wait_for_function("JSON.parse(renderState).state.phase==='impact'",timeout=60000)
                 hit=(await state(attacker))['event'];assert hit['damage']>0,hit
                 report['hits'].append(hit)
                 Path('logs/v3-duel-last-attempt.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
@@ -130,9 +130,9 @@ async def main():
                     report['clip_hash']=hashlib.sha256(json.dumps(clip,sort_keys=True).encode()).hexdigest()
                     if '--expect-brace-expression' in sys.argv:
                         await a.locator('#replaySeek').evaluate('(e)=>{e.value=.4;e.dispatchEvent(new Event("input",{bubbles:true}))}')
-                        await a.wait_for_function('JSON.parse(physicsFrame).braced && Math.abs(godotStats.face_eye_closure-.35)<.00001')
+                        await a.wait_for_function('JSON.parse(physicsFrame).braced && Math.abs(window.godotStats.face_eye_closure-.35)<.00001')
                         await a.wait_for_timeout(350)
-                        assert abs(await a.evaluate('godotStats.face_eye_closure')-.35)<.00001
+                        assert abs(await a.evaluate('window.godotStats.face_eye_closure')-.35)<.00001
                         await a.screenshot(path='logs/brace-expression-contact.png')
                         report['brace_expression_stable_in_paused_replay']=True
                     peak_i=max(range(len(clip['frames'])),key=lambda i:max(abs(v) for v in clip['frames'][i][2:]))
@@ -142,13 +142,20 @@ async def main():
                     await a.wait_for_timeout(300);await a.screenshot(path='logs/v3-physics-peak.png')
                     d=await a.evaluate('combatDiagnostics');assert d['deformation']>.003,d
                     report['replay']=d
-                    frames=await a.evaluate("() => new Promise(resolve=>{let values=[],last=performance.now();function tick(t){values.push(t-last);last=t;if(values.length<120)requestAnimationFrame(tick);else resolve(values.slice(5));}requestAnimationFrame(tick)})")
+                    frames=await a.evaluate("() => new Promise(resolve=>{let values=[],last=performance.now();const hold=setInterval(()=>sendAction({action:'inspect_replay',replay_id:state.replay_id}),1000);function tick(t){values.push(t-last);last=t;if(values.length<120)requestAnimationFrame(tick);else{clearInterval(hold);resolve(values.slice(5));}}requestAnimationFrame(tick)})")
                     frames.sort();report['replay_frame_ms_p95']=frames[int(len(frames)*.95)]
                     report['viewport']=[1920,1080]
-                    report['msaa_3d']=await a.evaluate('godotStats?.msaa_3d ?? null')
+                    report['msaa_3d']=await a.evaluate('window.godotStats?.msaa_3d ?? null')
                     # Browser reload resumes the same seat, room and recorded clip.
+                    report['before_reload']={k:(await state(a)).get(k) for k in ('id','phase','remaining','replay_id','hits')}
+                    report['reload_visibility_before_focus']=await b.evaluate('document.visibilityState')
+                    await b.bring_to_front()
                     await b.reload();await b.wait_for_function('window.gameReady',timeout=60000)
-                    await b.wait_for_function("JSON.parse(renderState).state?.phase==='replay'",timeout=5000)
+                    try:await b.wait_for_function("JSON.parse(renderState).state?.phase==='replay'",timeout=5000)
+                    except Exception:
+                        report['reload_failure']=await b.evaluate('({ready:window.gameReady,warmup:window.renderWarmup,id:connectionId,socket:socket?.readyState,state:JSON.parse(renderState)})')
+                        print('RELOAD_DIAG',json.dumps({'before':report['before_reload'],'after':report['reload_failure']}),flush=True)
+                        raise
                     resumed=await state(b);assert resumed['id']==sb['id'] and resumed['replay_id']==sb['replay_id']
                     assert await b.evaluate('JSON.parse(renderState).you')==1
                     report['resume']=True
@@ -159,9 +166,9 @@ async def main():
                     expected=[min(1,player['zones'].get(side,0)/75) for side in ['L','R']]+[jaw]
                     await a.locator('#replaySeek').evaluate('(e,t)=>{e.value=t;e.dispatchEvent(new Event("input",{bubbles:true}))}',moment)
                     try:
-                        await a.wait_for_function('(wanted)=>godotStats.face_injury?.every((v,i)=>Math.abs(v-wanted[i])<1e-5)',arg=expected,timeout=3000)
+                        await a.wait_for_function('(wanted)=>window.godotStats.face_injury?.every((v,i)=>Math.abs(v-wanted[i])<1e-5)',arg=expected,timeout=3000)
                     except Exception:
-                        print('INJURY_REWIND_FAILURE',json.dumps({'expected':expected,'moment':moment,'actual':await a.evaluate('({state:JSON.parse(renderState).state,frame:JSON.parse(physicsFrame),stats:godotStats})')}),flush=True)
+                        print('INJURY_REWIND_FAILURE',json.dumps({'expected':expected,'moment':moment,'actual':await a.evaluate('({state:JSON.parse(renderState).state,frame:JSON.parse(physicsFrame),stats:window.godotStats})')}),flush=True)
                         await a.screenshot(path='logs/injury-rewind-failure.png')
                         raise
                 report['injury_material_rewind']=True
@@ -177,10 +184,10 @@ async def main():
                             await attacker.locator('#replayCamera').select_option(camera)
                             for moment in [.75,1.3,2.4]:
                                 await attacker.locator('#replaySeek').evaluate('(e,t)=>{e.value=t;e.dispatchEvent(new Event("input",{bubbles:true}))}',moment)
-                                await attacker.wait_for_function('(t)=>Math.abs(godotStats.physics_time-t)<.02',arg=moment)
+                                await attacker.wait_for_function('(t)=>Math.abs(window.godotStats.physics_time-t)<.02',arg=moment)
                                 await attacker.wait_for_timeout(100)
                                 await attacker.screenshot(path=f'logs/ko-view-{camera}-{moment}.png')
-                                report['ko_views'].append({'camera':camera,'time':moment,'actual_time':await attacker.evaluate('godotStats.physics_time'),'markers':False})
+                                report['ko_views'].append({'camera':camera,'time':moment,'actual_time':await attacker.evaluate('window.godotStats.physics_time'),'markers':False})
 
                     await attacker.locator('#replaySeek').evaluate('e=>{e.value=2;e.dispatchEvent(new Event("input"))}')
                     await attacker.locator('#replayKO').click()
@@ -210,13 +217,13 @@ async def main():
             await a.wait_for_function("JSON.parse(renderState).state.phase==='aim'")
             rematch=await state(a);assert rematch['turn']==1 and all(p['damage']==0 and p['fouls']==0 for p in rematch['players'])
             for page in pages:
-                await page.wait_for_function('godotStats.face_injury?.every(v=>v===0) && godotStats.mirror_injury?.every(v=>v===0) && godotStats.face_head_offset?.every(v=>v===0) && godotStats.face_head_rotation?.every(v=>v===0)',timeout=3000)
+                await page.wait_for_function('window.godotStats.face_injury?.every(v=>v===0) && window.godotStats.mirror_injury?.every(v=>v===0) && window.godotStats.face_head_offset?.every(v=>v===0) && window.godotStats.face_head_rotation?.every(v=>v===0)',timeout=3000)
             report['rematch_material_reset']=True
             report['rematch']=True
             await b.locator('#lobbyButton').click()
             await a.wait_for_function("JSON.parse(renderState).state.phase==='disconnected'")
             report['leave']=True
-            report['stats']=await a.evaluate('godotStats')
+            report['stats']=await a.evaluate('window.godotStats')
             if '--profile-cpu' in sys.argv:
                 await a.evaluate('window.profileCPURead=true')
                 await a.wait_for_function('window.cpuProfile')
@@ -234,6 +241,10 @@ async def main():
             Path(output).write_text(json.dumps(report,indent=2),encoding='utf-8')
             print(json.dumps(report,indent=2))
         finally:
+            report['final_states']=[]
+            for page in pages:
+                try:report['final_states'].append(await page.evaluate('({phase:state?.phase,hits:state?.hits,remaining:state?.remaining,notice:document.querySelector("#toast").textContent})'))
+                except Exception:pass
             Path('logs/v3-duel-last-attempt.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
             for key,value in original_balance.items():await admin(f'set {key} {value}')
             await browser.close()

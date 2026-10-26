@@ -2958,3 +2958,29 @@ with2points matches/bye-resume/champion/errors[]. No second physical PC claimed.
 Details validation/NETWORK_STABILITY_2026-10-26.txt. Targeted combat browser PASS5hitKO/replay/recovery/reset/draw/mobile,errors[].
 Local dist/backenbeben-stability-20261026-host.zip verified CRC/currentassets.
 Physics/art assets and firewall unchanged.
+
+2026-10-26 / broad technical review
+Expanded beyond LAN: full Python regressions, current arena/main scene, character
+combinations, teeth/face damage/effects, expressions/cameras/mirror, rendered
+mouth/eye/brow/normal/ink/shadow, creator persistence+variants, UI and packaging.
+Found/fixed malformed admin JSON shape handling; preset load now rejects bools,
+non-object data and fractional max_pairs atomically. Package script is importable
+and requires current frontend/collision/startup assets before writing an archive.
+Character browser test had an undeclared optional-chain early-access error;
+window-qualified readiness checks, traffic diagnostics and guaranteed close added.
+Full mouse gauntlet exposed early reload resume while renderer was still loading.
+Initial/reload socket now waits for game-ready; training/duel controls stay disabled
+until socket open. Dedicated held-PCK real-replay regression added.
+
+Broad review completion:237Python tests PASS56.933s;23Godot cases PASS (14logic,
+7real GL,2current arenas). Checked export/syntax/setup-check/package PASS. Creator
+persistence+both variant replays PASS,errors[];20-entry tournament UI PASS,errors[];
+held-PCK real-replay reload regression PASS,errors[]. Full mouse gauntlet NOT
+PASSED: independent checkpoints resume/replay/friction/brace/injury rewind pass,
+but automation input/phase waits remain unstable. One attempt reached8hits,
+then10s impact timeout; final attempt generated3.0168s stroke outside3s limit and
+failed expectingwindup. Earlier12-step stroke12.8105s. Keep this failure explicit;
+no invented final-match/rematch PASS and no widening user gesture bounds.
+Diagnostics/237tests/native case list and limitations:
+validation/FULL_REVIEW_2026-10-26.txt. Local final host ZIP:dist/backenbeben-full-
+review-20261026-host.zip. Human controls/performance/art and2physicalPCs still open.
