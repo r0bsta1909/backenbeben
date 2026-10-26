@@ -24,6 +24,7 @@ class DiscoveryProtocol(asyncio.DatagramProtocol):
     def __init__(self, http_port, summary):
         self.http_port, self.summary = http_port, summary
         self.recent = {}
+        self.host_id = secrets.token_hex(16)
 
     def connection_made(self, transport):
         self.transport = transport
@@ -46,7 +47,7 @@ class DiscoveryProtocol(asyncio.DatagramProtocol):
         self.recent = {ip: at for ip, at in self.recent.items() if now - at < 2}
         self.recent[addr[0]] = now
         response = dict(protocol=PROTOCOL, type='host', nonce=nonce, port=self.http_port,
-                        name=socket.gethostname()[:60], **self.summary())
+                        name=socket.gethostname()[:60], host_id=self.host_id, **self.summary())
         self.transport.sendto(json.dumps(response).encode(), addr)
 
 
@@ -76,17 +77,17 @@ def discover(timeout=2.5, port=PORT, targets=None):
             sock.settimeout(min(.2, max(.001, deadline - now)))
             try: data, addr = sock.recvfrom(2048)
             except (socket.timeout, ConnectionResetError): continue
-            if not local_address(addr[0]): continue
+            if not local_address(addr[0]) or addr[1]!=port: continue
             try:
                 reply = json.loads(data)
                 if reply.get('protocol') != PROTOCOL or reply.get('type') != 'host' or reply.get('nonce') != nonce: continue
                 http_port = reply.get('port')
                 if type(http_port) is not int or not 1 <= http_port <= 65535: continue
                 name = ''.join(c for c in str(reply.get('name', 'HOST')) if c.isprintable())[:60]
-                hosts[(addr[0], http_port)] = dict(address=addr[0], port=http_port, name=name,
+                identity=reply.get('host_id','')
+                if not isinstance(identity,str) or len(identity)!=32 or any(c not in '0123456789abcdef' for c in identity):identity=''
+                if len(hosts)>=64 and (addr[0],http_port) not in hosts:continue
+                hosts[(addr[0], http_port)] = dict(address=addr[0], port=http_port, name=name, host_id=identity,
                     url=f'http://{addr[0]}:{http_port}')
             except (ValueError, AttributeError, UnicodeError): pass
-    # A local host can answer both broadcast and loopback; prefer its LAN address.
-    lan = [h for h in hosts.values() if h['address'] != '127.0.0.1']
-    visible = [h for h in hosts.values() if h['address'] != '127.0.0.1' or not any((other['name'],other['port']) == (h['name'],h['port']) for other in lan)]
-    return sorted(visible, key=lambda h: (h['name'], h['address'], h['port']))
+    return sorted(hosts.values(), key=lambda h: (h['name'], h['address'], h['port']))

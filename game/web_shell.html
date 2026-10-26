@@ -54,7 +54,52 @@ function hideLoading(){if(window.gameReady){$('loading').style.display='none';do
 window.addEventListener('game-ready',hideLoading);
 function toast(text){$('toast').textContent=text;$('toast').style.opacity=1;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').style.opacity=0,2600)}
 window.sendAction=d=>{if(socket?.readyState===1)socket.send(JSON.stringify(d));else toast('Keine Verbindung zum Host.')};
-function connect(){socket=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host+'/ws?resume='+encodeURIComponent(sessionStorage.getItem('backen-session')||''));socket.onopen=()=>{$('connection').textContent='● HOST VERBUNDEN';$('training').disabled=false;$('duel').disabled=false;window.tournamentConnection?.(true);window.lanConnection?.(true)};socket.onmessage=e=>{const d=JSON.parse(e.data);if(d.type==='hello'){if(connectionId&&connectionId!==d.id)showLobby();connectionId=d.id;sessionStorage.setItem('backen-session',d.resume||d.id);window.announceLan?.()}else if(d.type==='state'){state=d.state;you=d.you;window.renderState=JSON.stringify(d);render()}else if(d.type==='lan_lobby'){window.onLanLobby?.(d)}else if(d.type==='tournament'){window.onTournament?.(d)}else if(d.type==='arm_pose'){window.netArm=d}else if(d.type==='practice_preview'){window.onPracticePreview?.(d)}else if(d.type==='notice'){toast(d.text);window.lanNotice?.(d.text)}else if(d.type==='lobby')showLobby()};socket.onclose=()=>{$('connection').textContent='Verbindung unterbrochen. Neuer Versuch …';$('training').disabled=true;$('duel').disabled=true;window.tournamentConnection?.(false);window.lanConnection?.(false);if(state||document.body.classList.contains('tournament')){toast('Verbindung unterbrochen — dein Platz bleibt 30 Sekunden reserviert.')}reconnectTimer=setTimeout(connect,2000)};socket.onerror=()=>{};}
+let resumeToken='';
+try{resumeToken=sessionStorage.getItem('backen-session')||''}catch{}
+function connect(){
+ clearTimeout(reconnectTimer);
+ const connection=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host+'/ws?resume='+encodeURIComponent(resumeToken));
+ socket=connection;let lastReceived=Date.now(),ended=false;
+ const watchdog=setInterval(()=>{
+  if(socket!==connection){clearInterval(watchdog);return}
+  if(Date.now()-lastReceived>12000){connection.close(4000,'Host antwortet nicht');disconnected(4000);return}
+  if(connection.readyState===1)connection.send(JSON.stringify({action:'ping'}));
+ },3000);
+ connection.onopen=()=>{
+  if(socket!==connection||ended)return;
+  lastReceived=Date.now();$('connection').textContent='● HOST VERBUNDEN';$('training').disabled=false;$('duel').disabled=false;
+  window.tournamentConnection?.(true);window.lanConnection?.(true);
+ };
+ connection.onmessage=e=>{
+  if(socket!==connection||ended)return;
+  lastReceived=Date.now();let d;try{d=JSON.parse(e.data)}catch{return}
+  if(d.type==='hello'){
+   if(connectionId&&connectionId!==d.id)showLobby();connectionId=d.id;resumeToken=d.resume||'';
+   try{sessionStorage.setItem('backen-session',resumeToken)}catch{}
+   window.announceLan?.();
+  }else if(d.type==='state'){state=d.state;you=d.you;window.renderState=JSON.stringify(d);render()}
+  else if(d.type==='lan_lobby')window.onLanLobby?.(d);
+  else if(d.type==='tournament')window.onTournament?.(d);
+  else if(d.type==='arm_pose')window.netArm=d;
+  else if(d.type==='practice_preview')window.onPracticePreview?.(d);
+  else if(d.type==='notice'){toast(d.text);window.lanNotice?.(d.text)}
+  else if(d.type==='lobby')showLobby();
+ };
+ function disconnected(code){
+  if(ended)return;ended=true;clearInterval(watchdog);if(socket!==connection)return;
+  $('training').disabled=true;$('duel').disabled=true;window.tournamentConnection?.(false);window.lanConnection?.(false);
+  if(code===4001){
+   showLobby();$('connection').textContent='Spiel in einem anderen Tab geöffnet. Zum Übernehmen diese Seite neu laden.';
+   toast('Dein Spieler ist im anderen Tab aktiv.');return;
+  }
+  $('connection').textContent='Verbindung unterbrochen. Neuer Versuch …';
+  if(state||document.body.classList.contains('tournament'))toast('Verbindung unterbrochen — dein Platz bleibt 30 Sekunden reserviert.');
+  reconnectTimer=setTimeout(connect,2000);
+ }
+ connection.onclose=e=>disconnected(e.code);
+ connection.onerror=()=>{};
+}
+
 function characterPayload(){return {character_version:14,name:$('nickname').value,skin:+$('skin').value,hair:+$('hair').value,shirt:+$('shirt').value,hair_style:+$('hair_style').value,face_style:+$('face_style').value,beard_style:+$('beard_style').value,beard_color:+$('beard_color').value}}
 function join(mode){if(!window.gameReady)return;window.unlockGameAudio();sendAction({...characterPayload(),action:'join',mode});$('canvas').focus()}
 function showLobby(){state=null;document.body.classList.remove('playing','tournament');$('result').style.display='none';window.renderState='{}';window.combatDisplayPlayers=null;window.braceSnapshot=null;window.mirrorFocus=false;lastEvent=-1;lastMatch=-1}

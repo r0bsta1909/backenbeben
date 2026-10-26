@@ -170,3 +170,12 @@ Für Duelle wählen beide Spieler DUELL SUCHEN; der Host ordnet sie automatisch 
 Ein Tab entspricht einem Spieler. Für einen Spieler nicht mehrere Tabs öffnen.
 Gast-WLAN-Isolierung oder getrennte Netze können Discovery und Spiel blockieren.
 Keine automatische Suche über das Internet; kein Router-Portforwarding nötig.
+
+VERBINDUNGSSTABILITAET
+Browser und Host tauschen alle drei Sekunden eine Verbindungspruefung aus.
+Bei etwa 12 bis 15 Sekunden ohne Antwort versucht der Browser den Wiedereinstieg.
+Der Host reserviert nach erkanntem Abbruch weiterhin 30 Sekunden den Spielerplatz.
+Match und Zug bleiben beim erfolgreichen Wiedereinstieg erhalten.
+Ein zweiter Tab mit derselben Sitzung uebernimmt den Spieler; der alte Tab bleibt
+getrennt und zeigt einen Hinweis. Zum bewussten Uebernehmen dort neu laden.
+Die Hostsuche prueft TCP-Erreichbarkeit und Spielkennung vor dem Oeffnen.

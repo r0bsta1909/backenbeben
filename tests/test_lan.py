@@ -18,17 +18,17 @@ class Transport:
 
 class DiscoveryTests(unittest.TestCase):
     def test_launcher_joins_single_host_without_starting_another(self):
-        with patch.object(lan_play,'broadcast_targets',return_value=['127.0.0.1']), patch.object(lan_play,'discover',return_value=[dict(name='HOST',url='http://192.168.1.5:8765')]), patch.object(lan_play.webbrowser,'open') as opened, patch('builtins.input') as ask:
+        with patch.object(lan_play,'reachable_hosts',side_effect=lambda hosts:hosts), patch.object(lan_play,'broadcast_targets',return_value=['127.0.0.1']), patch.object(lan_play,'discover',return_value=[dict(name='HOST',url='http://192.168.1.5:8765')]), patch.object(lan_play.webbrowser,'open') as opened, patch('builtins.input') as ask:
             lan_play.main()
             opened.assert_called_once_with('http://192.168.1.5:8765');ask.assert_not_called()
 
     def test_launcher_does_not_create_a_host_without_user_intent(self):
-        with patch.object(lan_play,'broadcast_targets',return_value=[]), patch.object(lan_play,'discover',return_value=[]), patch.object(host,'main') as start, patch('builtins.input',return_value='q'):
+        with patch.object(lan_play,'reachable_hosts',side_effect=lambda hosts:hosts), patch.object(lan_play,'broadcast_targets',return_value=[]), patch.object(lan_play,'discover',return_value=[]), patch.object(host,'main') as start, patch('builtins.input',return_value='q'):
             lan_play.main();start.assert_not_called()
 
     def test_launcher_selects_between_multiple_hosts(self):
         hosts=[dict(name='A',url='http://192.168.1.5:8765'),dict(name='B',url='http://192.168.1.6:8765')]
-        with patch.object(lan_play,'broadcast_targets',return_value=[]), patch.object(lan_play,'discover',return_value=hosts), patch.object(lan_play.webbrowser,'open') as opened, patch('builtins.input',return_value='2'):
+        with patch.object(lan_play,'reachable_hosts',side_effect=lambda hosts:hosts), patch.object(lan_play,'broadcast_targets',return_value=[]), patch.object(lan_play,'discover',return_value=hosts), patch.object(lan_play.webbrowser,'open') as opened, patch('builtins.input',return_value='2'):
             lan_play.main();opened.assert_called_once_with(hosts[1]['url'])
 
     def test_scoped_versioned_request_reply(self):

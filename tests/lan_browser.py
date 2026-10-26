@@ -9,12 +9,14 @@ from playwright.async_api import async_playwright
 from tournament_network import Peer,wait_for,ROOT,URL
 sys.path.insert(0,str(ROOT/'server'))
 from lan_discovery import discover
+from lan_play import reachable_hosts
 
 
 async def main():
     assert not await asyncio.to_thread(discover,.5,8924,['127.0.0.1'])
     hosts=await asyncio.to_thread(discover,1.2,int(os.environ.get('BACKENBEBEN_DISCOVERY_PORT','8923')),['127.0.0.1'])
     assert any(h['port']==int(URL.rsplit(':',1)[1]) for h in hosts),hosts
+    assert await asyncio.to_thread(reachable_hosts,hosts)
     errors=[]
     async with ClientSession() as session,async_playwright() as pw:
         browser=await pw.chromium.launch(executable_path=str(ROOT/'tools/playwright-browsers/chromium-1243/chrome-win64/chrome.exe'),headless=True)

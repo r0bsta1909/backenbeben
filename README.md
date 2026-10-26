@@ -87,6 +87,12 @@ Die automatische Suche benötigt die aktuelle Version auf beiden PCs und einen
 vorbereiteten Python-Start über `SETUP_HOST.bat`. Sie funktioniert innerhalb des
 Broadcast-Netzes; Gast-WLAN mit Geräteisolierung, getrennte VLANs und Router können
 sie verhindern. Der direkte LAN-Link bleibt als Alternative verfügbar.
+Die Verbindung wird regelmäßig geprüft. Bei ausbleibenden Antworten startet
+innerhalb von etwa 12–15 Sekunden ein Wiederverbindungsversuch. Nach einem vom
+Host erkannten Abbruch bleibt der Spielerplatz weiterhin 30 Sekunden reserviert.
+Ein duplizierter Browser-Tab übernimmt die Sitzung; der alte Tab stoppt seine
+Wiederverbindungsversuche. Die Hostsuche zeigt nur per HTTP geprüfte Spielserver.
+
 Es ist keine Windows-Store-App erforderlich. Die neuen LAN-Funktionen sind im
 aktuellen Quellstand und lokalen Build enthalten; ältere Releasepakete enthalten
 sie noch nicht.

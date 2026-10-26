@@ -1,0 +1,58 @@
+NETWORK STABILITY REVIEW — 2026-10-26
+
+Corrections
+1. Broadcasts now send to recipients concurrently with a 1.5-second write limit.
+   A timed-out/failed receiver transport closes instead of blocking indefinitely.
+   Room snapshots are copied before asynchronous dispatch. This bounds the send
+   wait; it does not promise zero latency or eliminate CPU/OS scheduling delays.
+2. Application ping/pong every 3 seconds. A browser silent-receive watchdog starts
+   reconnect after roughly 12–15 seconds, without waiting for a TCP close event.
+   Old socket callbacks are ignored and retries are scheduled once. Resume token
+   remains available in memory if sessionStorage is inaccessible.
+3. Duplicate tabs: the former active socket receives close code 4001 and stops
+   reconnecting. Live takeovers send hello before awaiting the old socket close;
+   superseded sockets cannot continue issuing commands. Handshake failures now
+   enter the same expiry/pause cleanup as ordinary disconnects.
+4. Expired identities are claimed atomically before awaiting cleanup. Tournament
+   deletion is deferred through a simultaneous-expiry batch, preventing orphan
+   rooms and accidental removal of a replacement identity. Normal abandoned
+   duels cancel queued solves. Replay inspection budget survives pause/resume.
+5. Discovery verifies TCP /health and the Backenbeben game identifier, without
+   following redirects. Verification uses four bounded workers. A public server
+   instance ID deduplicates its network adapters, retaining distinct hosts with
+   equal names. Local loopback is preferred when available. UDP replies require
+   the discovery source port; candidate list is bounded to 64. Adapter-enumeration
+   and socket errors are handled; blocked/dead/non-game hosts are filtered out.
+6. LAN roster clears stale rows on disconnect and refreshes controls when the
+   renderer becomes ready. German server notice encoding was reviewed/restored.
+
+Completed checks
+PASS checked Godot import and Web release export.
+PASS 233 Python tests in 48.242 seconds, including stalled send vs healthy peer,
+     atomic expiry, simultaneous tournament expiry for every size 2..20 with
+     room reclamation, ping, replay budget, and dead/wrong/redirected HTTP hosts.
+PASS real TCP proxy dropping server-to-browser traffic while leaving the socket
+     open: automatic resume with unchanged player ID, room, turn and hits.
+PASS duplicated rendered tab: former tab stops, new tab retains the sole seat.
+PASS 12 concurrent live resumes: hello first, same ID, exactly one live seat,
+     all displaced sockets close 4001.
+PASS 20 real WebSockets: 19 forfeit matches, 12 byes, 5 rounds, one champion,
+     capacity rejection, private resume, owner guard and public-ID protection.
+PASS actual 30-second grace expiry, active resume, automatic final and champion.
+PASS LAN browser: UDP + verified HTTP host, two rendered players, 20 entries,
+     code-free join, 21st observer, mobile390, automatic duel, resume, errors[].
+PASS three-rendered-client production-physics tournament: two four-hit points
+     matches, bye/resume, common champion, mobile layout, errors[]. These were
+     recorded input trajectories, not injected results or a human controls test.
+
+PASS targeted production-physics combat browser: KO on hit5, replay HUD, recovery,
+     rematch/reset, draw and mobile HUD; errors[]. Recorded inputs, no forced KO.
+PASS final host ZIP CRC and current frontend/server assets verified.
+
+Limits
+All clients and the fault proxy ran on one physical Windows machine. These tests
+exercise real sockets and rendering but do not establish router compatibility,
+Wi-Fi interference tolerance, 20-PC physics throughput, or human gameplay/art
+acceptance. Guest-network isolation/VLANs and a full host restart remain relevant
+limits: host restart does not persist matches or tournaments. Firewall unchanged
+by this review. Historical release downloads remain older than this source/build.

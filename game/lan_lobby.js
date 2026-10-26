@@ -42,7 +42,8 @@
     window.announceLan = () => { if (socket?.readyState === 1) sendAction({...characterPayload(), action: 'presence'}); };
     window.lanNotice = text => { if (panel.open) { $('lanNotice').hidden = false; $('lanNotice').textContent = text; } };
     window.onLanLobby = d => { snapshot = d; render(); };
-    window.lanConnection = value => { connected = value; render(); if (value) window.announceLan(); };
+    window.addEventListener('game-ready', render);
+    window.lanConnection = value => { connected = value; if (!value) snapshot = {players: [], tournaments: []}; render(); if (value) window.announceLan(); };
     window.addEventListener('character-changed', () => { clearTimeout(timer); timer = setTimeout(window.announceLan, 250); });
     $('lanOpen').onclick = () => { $('lanNotice').hidden = true; render(); panel.showModal(); window.announceLan(); };
     $('lanClose').onclick = () => panel.close();

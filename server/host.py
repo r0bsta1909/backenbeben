@@ -38,6 +38,7 @@ SEQ = 0
 MATCHES = 0
 LOG = ROOT/'logs/matches.jsonl'
 WINDUP_SECONDS = 1.4
+SEND_TIMEOUT = 1.5
 
 
 def lan_addresses():
@@ -61,11 +62,22 @@ def lobby_snapshot():
     return dict(type='lan_lobby',players=players,tournaments=tournaments)
 
 
+async def send_client(client, message):
+    # A blocked receiver must not stop every match on the host.
+    ws=client['ws']
+    if ws.closed:return False
+    try:
+        await asyncio.wait_for(ws.send_json(message),SEND_TIMEOUT)
+        return True
+    except (OSError,TimeoutError):
+        if client['ws'] is ws:
+            transport=client.get('transport')
+            if transport:transport.close()
+        return False
+
+
 async def broadcast_lobby(snapshot):
-    for c in list(CLIENTS.values()):
-        if not c['ws'].closed:
-            try: await c['ws'].send_json(snapshot)
-            except ConnectionError: pass
+    await asyncio.gather(*(send_client(c,snapshot) for c in list(CLIENTS.values()) if not c['ws'].closed))
 
 
 def record(event):
@@ -106,15 +118,16 @@ def public(room):
 
 
 async def broadcast(room):
-    state=public(room)
+    state=copy.deepcopy(public(room))
     state['tournament']=room.get('tournament')
     state['tournament_match']=room.get('tournament_match')
     state['cancel_reason']=room.get('cancel_reason','')
+    messages=[]
     for uid in list(room['members']):
         c=CLIENTS.get(uid)
         if c and c.get('room')==room['id'] and not c['ws'].closed:
-            try: await c['ws'].send_json({'type':'state', 'you':next(i for i,p in enumerate(room['players']) if p['id']==uid), 'state':state})
-            except ConnectionError: pass
+            messages.append(send_client(c,{'type':'state', 'you':next(i for i,p in enumerate(room['players']) if p['id']==uid), 'state':state}))
+    await asyncio.gather(*messages)
 
 
 def event(room, kind, **kwargs):
@@ -122,7 +135,7 @@ def event(room, kind, **kwargs):
     room['event']=dict(kind=kind, **kwargs)
 
 
-async def leave(c):
+async def leave(c,prune=True):
     tid=c.pop('tournament',None)
     if tid in TOURNAMENTS:
         tournament=TOURNAMENTS[tid]
@@ -143,15 +156,17 @@ async def leave(c):
                 await broadcast(room)
             c['room']=None
             await broadcast_tournament(tournament)
-            if not any(x.get('tournament')==tid for x in CLIENTS.values()):TOURNAMENTS.pop(tid,None)
+            if prune and not any(x.get('tournament')==tid for x in CLIENTS.values()):TOURNAMENTS.pop(tid,None)
             return
         await broadcast_tournament(tournament)
-        if not any(x.get('tournament')==tid for x in CLIENTS.values()):TOURNAMENTS.pop(tid,None)
+        if prune and not any(x.get('tournament')==tid for x in CLIENTS.values()):TOURNAMENTS.pop(tid,None)
     room=ROOMS.get(c.get('room'))
     c['room']=None
     if not room: return
     if c['id'] in room['members']: room['members'].remove(c['id'])
     room.pop('suspended',None)
+    room.pop('_replay_remaining',None)
+    if 'solve' in room:room['solve'].cancel()
     if room['members']:
         room['phase']='disconnected'; room['deadline']=0
         event(room,'disconnect',text='Gegner hat das Duell verlassen. Zur Lobby für ein neues Duell.')
@@ -177,8 +192,11 @@ async def expire_clients(now):
             if room.get('tournament')==t.id and any(uid in batch for uid in room['members']):
                 freeze_tournament_result(room,t)
         t.withdraw_many(batch)
-    for uid,c in expired.items():
-        await leave(c);CLIENTS.pop(uid,None)
+    # Claim every expired identity before the first send can yield to a resume.
+    for uid in expired:CLIENTS.pop(uid,None)
+    for c in expired.values():await leave(c,prune=False)
+    for tid in list(TOURNAMENTS):
+        if not any(c.get('tournament')==tid for c in CLIENTS.values()):TOURNAMENTS.pop(tid,None)
 
 
 def cancel_tournament(t,reason):
@@ -209,10 +227,8 @@ async def broadcast_tournament(t):
     for entry in snapshot['entries']:
         c=CLIENTS.get(entry['id'])
         entry['connected']=bool(c and not c['ws'].closed)
-    for c in list(CLIENTS.values()):
-        if c.get('tournament')==t.id and not c['ws'].closed:
-            try:await c['ws'].send_json(dict(type='tournament',you=c['id'],tournament=snapshot,in_match=c.get('room') in ROOMS))
-            except ConnectionError:pass
+    await asyncio.gather(*(send_client(c,dict(type='tournament',you=c['id'],tournament=snapshot,in_match=c.get('room') in ROOMS))
+                           for c in list(CLIENTS.values()) if c.get('tournament')==t.id and not c['ws'].closed))
 
 
 async def schedule_tournaments(now):
@@ -272,6 +288,9 @@ def start_braced_solve(room):
 
 async def command(c, d):
     action=d.get('action')
+    if action=='ping':
+        await send_client(c,dict(type='pong'))
+        return
     if action=='presence':
         if not c.get('tournament') and c.get('room') not in ROOMS:character(c,d)
         return
@@ -407,6 +426,13 @@ async def command(c, d):
         else: await c['ws'].send_json({'type':'notice','text':'Revanche angefragt – warte auf den Gegner.'})
 
 
+def resume_room(room,now):
+    phase,remaining=room.pop('suspended')
+    room['phase']=phase;room['deadline']=now+remaining
+    if room.get('brace') is not None:room['brace']=room['deadline']-room.pop('_brace_offset',0)
+    if '_replay_remaining' in room:room['replay_limit']=now+room.pop('_replay_remaining')
+
+
 async def socket_handler(request):
     origin=request.headers.get('Origin')
     if origin and origin not in ('http://'+request.host,'https://'+request.host): return web.Response(status=403)
@@ -416,24 +442,28 @@ async def socket_handler(request):
     if len(token)!=64 or any(ch not in '0123456789abcdef' for ch in token):token=''
     # Public bracket/player IDs must never serve as reconnection credentials.
     old=next((c for c in CLIENTS.values() if token and secrets.compare_digest(c.get('resume_token',''),token)),None)
+    previous_ws=None
     if old and old.get('expires',time.monotonic()+1)>time.monotonic():
         previous_ws=old['ws'];c=old;uid=c['id'];c['ws']=ws;c.pop('expires',None)
-        if not previous_ws.closed:await previous_ws.close()
     else:
         uid=secrets.token_hex(16);c=dict(id=uid,resume_token=secrets.token_hex(32),ws=ws,room=None,name='CHALLENGER',skin=0,hair=0,shirt=0)
         CLIENTS[uid]=c
-    await ws.send_json({'type':'hello','id':uid,'resume':c['resume_token']})
-    room=ROOMS.get(c.get('room'))
-    if room:
-        if room['phase']=='disconnected' and room.get('suspended') and all(not CLIENTS[m]['ws'].closed for m in room['members'] if m in CLIENTS):
-            phase,remaining=room.pop('suspended');room['phase']=phase;room['deadline']=time.monotonic()+remaining
-            if room.get('brace') is not None:room['brace']=room['deadline']-room.pop('_brace_offset',0)
-        await broadcast(room)
-    if c.get('tournament') in TOURNAMENTS:await broadcast_tournament(TOURNAMENTS[c['tournament']])
-    await ws.send_json(lobby_snapshot())
-    recent=[]
     try:
+        c['transport']=request.transport
+        await ws.send_json({'type':'hello','id':uid,'resume':c['resume_token']})
+        if previous_ws and not previous_ws.closed:await previous_ws.close(code=4001,message=b'Spiel in anderem Tab fortgesetzt')
+        if c['ws'] is not ws:
+            await ws.close(code=4001);return ws
+        room=ROOMS.get(c.get('room'))
+        if room:
+            if room['phase']=='disconnected' and room.get('suspended') and all(not CLIENTS[m]['ws'].closed for m in room['members'] if m in CLIENTS):
+                resume_room(room,time.monotonic())
+            await broadcast(room)
+        if c.get('tournament') in TOURNAMENTS:await broadcast_tournament(TOURNAMENTS[c['tournament']])
+        await ws.send_json(lobby_snapshot())
+        recent=[]
         async for msg in ws:
+            if c['ws'] is not ws:break
             if msg.type==WSMsgType.TEXT:
                 now=time.monotonic();recent=[t for t in recent if now-t<1]
                 if len(recent)>25: continue
@@ -444,13 +474,16 @@ async def socket_handler(request):
                     await command(c,d)
                 except (ValueError,TypeError,OverflowError,KeyError) as e:
                     await ws.send_json({'type':'notice','text':str(e)[:100]})
+    except ConnectionError:pass
     finally:
         if c['ws'] is ws:
             c['expires']=time.monotonic()+30
             room=ROOMS.get(c.get('room'))
             if room:
                 if room['phase'] not in ('disconnected','over'):
-                    room['suspended']=(room['phase'],max(0,room['deadline']-time.monotonic()))
+                    paused_at=time.monotonic()
+                    room['suspended']=(room['phase'],max(0,room['deadline']-paused_at))
+                    if room['phase']=='replay':room['_replay_remaining']=max(0,room.get('replay_limit',room['deadline'])-paused_at)
                     if room.get('brace') is not None:room['_brace_offset']=room['deadline']-room['brace']
                     room['phase']='disconnected'
                 await broadcast(room)

@@ -2939,3 +2939,22 @@ in release package allowlist; build copies lan_lobby.js/css.
 2-rendered-client/20-entry LAN browser test PASS,errors[]. Native interface
 broadcast PASS; second physical PC still untested. Full details:
 validation/LAN_DISCOVERY_2026-10-26.txt. Older release packages remain historical.
+
+2026-10-26 / network stability review
+Review fixes: bounded concurrent recipient sends (1.5s) and copied room snapshots;
+application ping/pong3s + silent-receive watchdog12..15s with one retry schedule;
+private resume memory fallback; duplicate tabs close4001 and stop reconnecting.
+Hello precedes live socket replacement; superseded handlers stop commands and
+handshake failures use expiry cleanup. Expired identities claimed before yields,
+tournament pruning deferred through each expiry batch. All-expire2..20 no longer
+leaves orphan rooms. Replay inspection budget pauses; abandoned queued solves
+cancel. Native discovery verifies HTTP game health, deduplicates by instance ID,
+checks UDP reply port, caps64 candidates, handles adapter/socket failures.
+LAN stale roster clears on loss, ready controls refresh on game-ready.
+PASS checked Web export;233Python tests48.242s; actual silent-loss TCP proxy +
+duplicate rendered tab;12competing live resumes one seat;20WS/19forfeit matches;
+real30s expiry/final; LAN20/mobile/verifiedhost; actual3-rendered-client tournament
+with2points matches/bye-resume/champion/errors[]. No second physical PC claimed.
+Details validation/NETWORK_STABILITY_2026-10-26.txt. Targeted combat browser PASS5hitKO/replay/recovery/reset/draw/mobile,errors[].
+Local dist/backenbeben-stability-20261026-host.zip verified CRC/currentassets.
+Physics/art assets and firewall unchanged.

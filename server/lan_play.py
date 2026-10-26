@@ -1,5 +1,7 @@
 """Find a LAN host and open its game; create a host only when requested."""
 import ipaddress
+from http.client import HTTPConnection, HTTPException
+from concurrent.futures import ThreadPoolExecutor
 import json
 import os
 import subprocess
@@ -20,8 +22,31 @@ def broadcast_targets():
                 network = ipaddress.IPv4Network(f"{entry['IPAddress']}/{entry['PrefixLength']}", strict=False)
                 if not network.is_loopback and network.prefixlen < 31:
                     targets.add(str(network.broadcast_address))
-        except (OSError, ValueError, KeyError, subprocess.SubprocessError): pass
+        except (OSError, ValueError, TypeError, KeyError, subprocess.SubprocessError): pass
     return sorted(targets)
+
+
+def reachable_hosts(hosts):
+    def reachable(host):
+        connection=HTTPConnection(host['address'],host['port'],timeout=1.2)
+        try:
+            connection.request('GET','/health')
+            response=connection.getresponse()
+            data=json.loads(response.read(512))
+            return response.status==200 and isinstance(data,dict) and data.get('ok') is True and data.get('game')=='backenbeben'
+        except (OSError,ValueError,HTTPException):
+            # HTTP protocol errors and sockets failing between UDP and TCP are ordinary misses.
+            return False
+        finally:connection.close()
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        verified=[h for h,ok in zip(hosts,pool.map(reachable,hosts)) if ok]
+    result={}
+    # For a local server use loopback, retaining local admin access. Public instance
+    # IDs merge a server's adapters without merging different PCs with equal names.
+    for host in sorted(verified,key=lambda h:h['address']!='127.0.0.1'):
+        identity=host.get('host_id') or (host['address'],host['port'])
+        result.setdefault(identity,host)
+    return list(result.values())
 
 
 def main():
@@ -29,7 +54,9 @@ def main():
     targets = broadcast_targets()
     while True:
         print('\nSuche Spiele im lokalen Netzwerk ...', flush=True)
-        hosts = discover(targets=targets)
+        try:hosts = reachable_hosts(discover(targets=targets))
+        except OSError as exc:
+            print('Netzwerksuche voruebergehend nicht moeglich: '+str(exc));hosts=[]
         if len(hosts) == 1:
             print('Verbinde mit '+hosts[0]['name']+' / '+hosts[0]['url'])
             webbrowser.open(hosts[0]['url']); return
