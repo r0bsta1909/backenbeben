@@ -1,0 +1,48 @@
+LAN DISCOVERY / FINAL BUILD — 2026-10-26
+
+Implementation
+LAN_SPIELEN.bat + server/lan_play.py discover existing hosts using the versioned
+UDP request/reply protocol on 8766. One host opens directly, multiple hosts are
+listed; no host is created without choosing H. Host continues serving HTTP/WS
+on 0.0.0.0:8765. Broadcast addresses come from actual IPv4 interface prefixes.
+Responses require the request nonce and a local IPv4 source; navigation uses the
+packet source address and validated port, never a supplied arbitrary URL.
+Malformed/public requests are ignored; replies are rate limited per source.
+Windows UDP connection-reset responses are handled during an empty search.
+
+The browser receives a public roster and joinable tournament list, updated at
+most once per second when changed. Profiles use the existing character validator.
+Public snapshots exclude private resume credentials and disconnected players.
+Active event identity cannot be changed through presence. Full/running events
+are omitted from joinable results; the server remains authoritative on entry.
+LAN modal supports direct tournament joins, automatic duel pairing, reconnect
+state, visible rejected-join notices, Escape and narrow screens.
+
+Firewall setup resolves the actual base Python executable behind the Windows
+venv launcher. TCP 8765 + UDP 8766 are limited to LocalSubnet and that executable.
+Default setup covers Private only; IncludePublic is an explicit opt-in. The user
+explicitly approved that extension on 2026-10-20. All four enabled rules, ports,
+profiles, application path and LocalSubnet filters were inspected after setup.
+No global Windows network-category change was made.
+
+Validation
+PASS checked Godot import + release Web export with current LAN frontend.
+PASS 227 Python regression tests, 39.876 seconds.
+PASS real UDP discovery + no-host scan, two isolated rendered browser clients,
+     automatic named roster, code-free tournament join, 20-entry capacity,
+     21st observer, mobile 390px, duel pairing and private-token reconnect with
+     unchanged public player ID and no duplicate roster entry. Browser errors [].
+PASS UDP broadcast through the machine's actual LAN interface/prefix to the
+     standard discovery port, with a valid non-loopback host result.
+
+PASS existing tournament UI regression: 20 real connections, keyboard controls,
+     390px forfeit result, no duplicate names, return to creator, errors [].
+PASS locally packaged host ZIP CRC and byte-for-byte final LAN assets; runtime,
+     credentials, local balance and raw logs excluded by allowlist.
+
+Limits
+All automated clients ran on one Windows PC. Broadcast through its LAN adapter
+is not a two-physical-PC or router-isolation test. Guest Wi-Fi isolation/VLANs
+can prevent discovery and gameplay. Direct host URL remains available.
+No new combat, physics-performance, art-quality or human-controls acceptance is
+claimed. Historical release packages are older than this source/build.

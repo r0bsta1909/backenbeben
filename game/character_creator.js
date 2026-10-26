@@ -19,6 +19,7 @@
     }
     function update(save = true) {
         const data = read();
+        if (save) window.dispatchEvent(new Event('character-changed'));
         window.previewFighter = {...data, view, yaw};
         get('characterName').textContent = data.name.trim() || 'CHALLENGER';
         get('characterSummary').textContent = `${get('face_style').selectedOptions[0].text} · ${get('hair_style').selectedOptions[0].text} · ${get('beard_style').selectedOptions[0].text}`;

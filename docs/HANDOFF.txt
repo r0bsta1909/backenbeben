@@ -2922,3 +2922,20 @@ final,same champion/errors[]. Backend221tests already PASS36.959s earlier in the
 interrupted check; no backend changes since. Human art/controls acceptance and
 second physical LAN-PC remain open. Details validation/TOURNAMENT_UI_DESIGN_2026-10-20.txt.
 Workspace captures Arena-Design/54-ui-*-2026-10-20.png, not committed raw logs.
+
+2026-10-26 / LAN discovery milestone
+User requested LAN availability + automatic same-network player discovery and
+approved TCP8765/UDP8766 LocalSubnet rules for this game's base interpreter,
+including Public profile on this machine. Setup was applied and inspected on
+2026-10-20; network category itself unchanged. Default script remains Private;
+IncludePublic requires explicit use. No broad shared Python firewall exception.
+LAN_SPIELEN.bat finds hosts over UDP8766, opens one directly, offers selection
+for multiple, requires H to create one. Launcher uses IPv4 prefix broadcasts.
+Host publishes sanitized live public roster + joinable waiting events (2..20).
+LAN dialog supports code-free join, quick automatic duels, visible errors,
+resume and mobile. Existing code-based entry remains. New launcher is included
+in release package allowlist; build copies lan_lobby.js/css.
+2026-10-26 checked Web export PASS; 227 Python tests PASS39.876s; real UDP and
+2-rendered-client/20-entry LAN browser test PASS,errors[]. Native interface
+broadcast PASS; second physical PC still untested. Full details:
+validation/LAN_DISCOVERY_2026-10-26.txt. Older release packages remain historical.

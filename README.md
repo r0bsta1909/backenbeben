@@ -64,13 +64,32 @@ Die [Konzeptbilder](docs/art-direction-v3/03-first-person.png) bleiben das Stilz
 1. Das Host-Paket aus den [Releases](https://github.com/r0bsta1909/backenbeben/releases) entpacken.
 2. Python 3.12 installieren, falls noch nicht vorhanden.
 3. `SETUP_HOST.bat` einmal ausführen: installiert nur die Host-Abhängigkeiten in `.venv`.
-4. `START_HOST.bat` starten. Der Browser öffnet sich, das Terminal zeigt die LAN-Adresse.
-5. Gäste öffnen diese Adresse im selben Netzwerk. Kein Python beim Gast nötig.
+4. `LAN_SPIELEN.bat` auf beiden PCs starten: vorhandene Hosts werden automatisch gesucht.
+   Auf dem ersten PC bei leerer Suche `H` wählen. Bei genau einem gefundenen Host
+   öffnet sich das Spiel direkt; bei mehreren Hosts wählt ihr einen aus.
+5. Im Spiel **LAN SPIELEN** öffnen: Spielerstatus und offene Turniere erscheinen
+   automatisch. Turnieren direkt per Klick beitreten; für Duelle wählen beide
+   **DUELL SUCHEN**. Pro Turnier sind 2 bis 20 Spieler möglich.
+6. Alternativ `START_HOST.bat` starten und den angezeigten LAN-Link an Gäste geben.
+   Über diesen Link brauchen Gäste nur ihren Browser, keine Python-Installation.
 
 Das Paket enthält den fertigen Webbuild. Der normale Git-Checkout enthält die editierbaren
 Quellen; vor dem Spielen daraus den Webbuild erstellen. Der Host bindet das lokale Netzwerk,
 nicht für öffentliche Internetbereitstellung gedacht. Windows-Firewall ggf. für das private
-Netzwerk freigeben; `ALLOW_LAN.bat` richtet eine begrenzte Regel für Port 8765 ein.
+Netzwerk freigeben; `ALLOW_LAN.bat` erlaubt dem tatsächlichen Spiel-Pythonprozess
+TCP 8765 (Spiel) und UDP 8766 (Hostsuche), ausschließlich im lokalen Subnetz.
+Standardmäßig gilt das nur für private Windows-Netzwerke. Wenn ein vertrauenswürdiges
+LAN als öffentlich eingestuft ist, kann die Freigabe ausdrücklich mit
+`powershell -File scripts/allow_lan.ps1 -IncludePublic` als Administrator ergänzt werden.
+Die Netzwerkeinstufung selbst wird dabei nicht geändert.
+
+Die automatische Suche benötigt die aktuelle Version auf beiden PCs und einen
+vorbereiteten Python-Start über `SETUP_HOST.bat`. Sie funktioniert innerhalb des
+Broadcast-Netzes; Gast-WLAN mit Geräteisolierung, getrennte VLANs und Router können
+sie verhindern. Der direkte LAN-Link bleibt als Alternative verfügbar.
+Es ist keine Windows-Store-App erforderlich. Die neuen LAN-Funktionen sind im
+aktuellen Quellstand und lokalen Build enthalten; ältere Releasepakete enthalten
+sie noch nicht.
 
 [Steuerung und Host-Befehle](SPIELEN.txt) · [Technische Tests](docs/GAUNTLET.txt)
 

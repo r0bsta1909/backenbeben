@@ -9,6 +9,7 @@ from face_effects import build_face_effects
 from contact_v3 import score as v3_score, input_target, collision as arm_collision, decorate as decorate_arm
 from arm import Arm, DT, lab_collision
 from tournament import Tournament, decision as match_decision
+from lan_discovery import serve as serve_discovery
 
 def bot_stroke():
     return {'version':3,'points':[[.19+.34*i/60,.60,800*i/60,0,-18,0] for i in range(61)]}
@@ -45,6 +46,26 @@ def lan_addresses():
     except OSError:
         return []
     return sorted(address for address in addresses if not (ipaddress.ip_address(address).is_loopback or ipaddress.ip_address(address).is_link_local or ipaddress.ip_address(address).is_unspecified))
+
+
+def lobby_snapshot():
+    players = []
+    for c in CLIENTS.values():
+        if c['ws'].closed or not c.get('announced'): continue
+        room = ROOMS.get(c.get('room'))
+        status = 'tournament' if c.get('tournament') in TOURNAMENTS else ('waiting' if room and room['phase']=='waiting' else 'playing' if room else 'available')
+        players.append(dict(id=c['id'],name=c['name'],status=status))
+    tournaments = [dict(id=t.id,name=t.entries.get(t.owner,{}).get('name','HOST'),
+                        count=len(t.entries),capacity=20)
+                   for t in TOURNAMENTS.values() if t.status=='waiting' and len(t.entries)<20]
+    return dict(type='lan_lobby',players=players,tournaments=tournaments)
+
+
+async def broadcast_lobby(snapshot):
+    for c in list(CLIENTS.values()):
+        if not c['ws'].closed:
+            try: await c['ws'].send_json(snapshot)
+            except ConnectionError: pass
 
 
 def record(event):
@@ -231,6 +252,7 @@ async def schedule_tournaments(now):
 
 def character(c,d):
     check_character_version(d)
+    c['announced']=True
     c['name']=str(d.get('name','CHALLENGER')).strip()[:18] or 'CHALLENGER'
     for key,maximum in [('skin',6),('hair',2),('shirt',3),('hair_style',5),('face_style',5),('beard_style',5),('beard_color',2)]:
         value=d.get(key,1 if key=='beard_style' else 0)
@@ -250,6 +272,9 @@ def start_braced_solve(room):
 
 async def command(c, d):
     action=d.get('action')
+    if action=='presence':
+        if not c.get('tournament') and c.get('room') not in ROOMS:character(c,d)
+        return
     if action in ('tournament_create','tournament_join'):
         if c.get('tournament') or c.get('room') in ROOMS:raise ValueError('Zuerst das aktuelle Spiel oder Turnier verlassen.')
         character(c,d)
@@ -405,6 +430,7 @@ async def socket_handler(request):
             if room.get('brace') is not None:room['brace']=room['deadline']-room.pop('_brace_offset',0)
         await broadcast(room)
     if c.get('tournament') in TOURNAMENTS:await broadcast_tournament(TOURNAMENTS[c['tournament']])
+    await ws.send_json(lobby_snapshot())
     recent=[]
     try:
         async for msg in ws:
@@ -433,12 +459,17 @@ async def socket_handler(request):
 
 
 async def tick(app):
+    lobby_last=0.;lobby_previous=None
     last=0.
     while True:
         await asyncio.sleep(.04)
         now=time.monotonic()
         await expire_clients(now)
         await schedule_tournaments(now)
+        if now-lobby_last>=1:
+            snapshot=lobby_snapshot();lobby_last=now
+            if snapshot!=lobby_previous:
+                await broadcast_lobby(snapshot);lobby_previous=snapshot
         for r in list(ROOMS.values()):
             phase=r['phase']
             if phase=='aim' and r['players'][r['turn']]['bot'] and r['deadline']-now < r['settings']['turn_seconds']-2.0:
@@ -614,8 +645,15 @@ async def lifecycle(app):
         if isinstance(exc,ConnectionResetError) and getattr(exc,'winerror',None)==10054:return
         loop.default_exception_handler(context)
     asyncio.get_running_loop().set_exception_handler(connection_error)
+    discovery=None
+    if app.get('discovery_port') is not None:
+        try:
+            discovery=await serve_discovery(app['http_port'],lambda:dict(players=sum(not c['ws'].closed for c in CLIENTS.values())),app['discovery_port'])
+        except OSError as exc:
+            print('LAN-Suche nicht verfuegbar: '+str(exc)+'. Beitritt ueber LAN-Link bleibt moeglich.',flush=True)
     task=asyncio.create_task(tick(app))
     yield
+    if discovery:discovery.close()
     task.cancel()
     try:await task
     except asyncio.CancelledError:pass
@@ -625,7 +663,7 @@ async def lifecycle(app):
 
 def main():
     global simulate,PHYSICS_BACKEND
-    parser=argparse.ArgumentParser();parser.add_argument('--port',type=int,default=8765);parser.add_argument('--no-browser',action='store_true');parser.add_argument('--no-console',action='store_true');parser.add_argument('--physics',choices=['legacy','coupled','coupled-moving','coupled-spatial','coupled-friction'],default='coupled-friction');args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--port',type=int,default=8765);parser.add_argument('--discovery-port',type=int,default=8766);parser.add_argument('--no-browser',action='store_true');parser.add_argument('--no-console',action='store_true');parser.add_argument('--physics',choices=['legacy','coupled','coupled-moving','coupled-spatial','coupled-friction'],default='coupled-friction');args=parser.parse_args()
     PHYSICS_BACKEND=args.physics
     if args.physics in ('coupled','coupled-moving','coupled-spatial','coupled-friction'):
         try:
@@ -641,14 +679,14 @@ def main():
             raise SystemExit('Host-Abhaengigkeit fehlt: '+str(exc.name)+'. Bitte SETUP_HOST.bat ausfuehren.') from exc
         simulate=coupled_simulate
     if not (ROOT/'build/web/index.pck').exists():raise SystemExit('Web-Build fehlt. Zuerst BUILD_GAME.bat ausführen.')
-    app=web.Application(client_max_size=32768);app['physics_backend']=args.physics;app.cleanup_ctx.append(lifecycle)
+    app=web.Application(client_max_size=32768);app['physics_backend']=args.physics;app['http_port']=args.port;app['discovery_port']=args.discovery_port;app.cleanup_ctx.append(lifecycle)
     app.router.add_get('/api/replay/{rid}',replay);app.router.add_get('/ws',socket_handler);app.router.add_get('/api/info',info);app.router.add_post('/api/admin',admin);app.router.add_get('/health',health);app.router.add_get('/',index)
     app.router.add_static('/',ROOT/'build/web',show_index=False)
     async def start(app):
         url=f'http://localhost:{args.port}'
         addresses=lan_addresses()
         links='\n'.join(f'LAN: http://{address}:{args.port}' for address in addresses) or 'LAN: Keine aktive IPv4-Adresse gefunden. Netzwerkverbindung prüfen.'
-        print('\nBACKENBEBEN / HOST\n'+url+'\n'+links+'\nDiese LAN-Adresse auf dem Client öffnen.\nAdmin: help, get, set base_damage 35, save, load, reset, status\n',flush=True)
+        print('\nBACKENBEBEN / HOST\n'+url+'\n'+links+'\nLAN_SPIELEN.bat findet diesen Host automatisch. Alternativ diese LAN-Adresse auf dem Client öffnen.\nAdmin: help, get, set base_damage 35, save, load, reset, status\n',flush=True)
         if not args.no_browser:asyncio.get_running_loop().call_later(1,webbrowser.open,url)
         if not args.no_console:
             import threading

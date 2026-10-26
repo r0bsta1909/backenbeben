@@ -6,7 +6,10 @@ START
    powershell -File scripts/setup-host.ps1 -PythonPath C:\Pfad\python.exe
    Das Setup prüft Python 3.12 vor der Installation.
    Die Einrichtung benötigt Internet; danach läuft das Spiel im lokalen Netz.
-2. START_HOST.bat doppelklicken. Der erste Start bereitet die Physik vor.
+2. LAN_SPIELEN.bat auf beiden PCs starten. Die Suche findet vorhandene Hosts.
+   Beim ersten PC H wählen, falls noch kein Host läuft. Ein gefundener Host wird
+   direkt geöffnet; mehrere Hosts werden zur Auswahl angezeigt.
+   Alternativ START_HOST.bat doppelklicken. Der erste Start bereitet die Physik vor.
 3. Der Browser öffnet http://localhost:8765. Beim ersten Laden kurz warten.
 4. TRAINING GEGEN BRUNO startet sofort ein vollständiges Duell gegen den Bot.
 5. Für zwei Menschen wählen beide LAN-DUELL BEITRETEN. Der Host zeigt die
@@ -17,14 +20,19 @@ START
 Falls Windows den Zugriff abfragt, das private Netzwerk erlauben.
 Falls ein anderer LAN-PC nicht verbinden kann, ALLOW_LAN.bat einmal ausführen.
 Diese optionale Datei fragt Windows-Administratorrechte ausschließlich für eine
-Firewallregel ab: TCP 8765, privates Netz, lokales Subnetz, Spiel-Pythonprogramm.
+Firewallregeln ab: TCP 8765 und UDP 8766, privates Netz, lokales Subnetz,
+   tatsächliches Spiel-Pythonprogramm. Bei vertrauenswürdigem, aber von Windows
+   als öffentlich eingestuftem LAN ist eine ausdrückliche Erweiterung möglich:
+   powershell -File scripts/allow_lan.ps1 -IncludePublic
+   Diesen Befehl nur nach eigener Entscheidung als Administrator ausführen.
 Spielserver und Browser laufen anschließend normal ohne Windows-Elevation.
 Nicht für öffentliche Internet-Server gedacht. Keine Portweiterleitung erforderlich.
 
 TURNIER (2–20 SPIELER)
-Ein Spieler wählt TURNIER ERSTELLEN und teilt den sechsstelligen Code mit den
-anderen. Alle öffnen dieselbe LAN-Adresse, gestalten ihren Charakter und treten
-mit dem Code bei. Der Veranstalter startet, sobald 2 bis 20 Spieler dabei sind.
+Im Spiel LAN SPIELEN öffnen. Die Liste zeigt automatisch alle angemeldeten
+Spieler dieses Hosts und deren Status. Ein Spieler wählt TURNIER ERSTELLEN;
+andere treten dem offenen Turnier in der LAN-Liste direkt bei. Alternativ ist
+weiterhin ein Beitritt über den sechsstelligen Code möglich. Der Veranstalter startet, sobald 2 bis 20 Spieler dabei sind.
 Es ist keine feste Teilnehmerzahl und keine Zweierpotenz erforderlich.
 Die Auslosung ist zufällig, Freilose werden automatisch vergeben. Eine Niederlage
 bedeutet Ausscheiden. Ausgeschiedene können den Turnierbaum weiter verfolgen.
@@ -151,3 +159,14 @@ Prüfstand und offene Anforderungen: docs/PROTOTYPE_GAUNTLET.txt im Repository.
 Replay: Pausieren, Spulen und Kamerwechsel geben erneut bis zu 12 Sekunden
 Betrachtungszeit, insgesamt hoechstens 45 Sekunden pro Replay. Mit WEITER
 setzen beide Spieler gemeinsam sofort fort (im Training reicht ein Klick).
+
+AUTOMATISCHE LAN-SUCHE
+LAN_SPIELEN.bat sucht per UDP 8766 nach Hosts und öffnet deren Spiel auf TCP 8765.
+Die Suche benötigt die aktuelle Projektversion und die eingerichtete Python-
+Umgebung auf dem suchenden PC. Ein Gast mit direktem LAN-Link benötigt nur einen
+Browser. Kein Windows-Store-Download erforderlich. Hostfenster geöffnet lassen.
+Spielerliste und offene Turniere aktualisieren sich automatisch etwa jede Sekunde.
+Für Duelle wählen beide Spieler DUELL SUCHEN; der Host ordnet sie automatisch zu.
+Ein Tab entspricht einem Spieler. Für einen Spieler nicht mehrere Tabs öffnen.
+Gast-WLAN-Isolierung oder getrennte Netze können Discovery und Spiel blockieren.
+Keine automatische Suche über das Internet; kein Router-Portforwarding nötig.
